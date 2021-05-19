@@ -1,0 +1,36 @@
+
+.imageContainer{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    outline: none;
+    .container{
+        height: 100%;
+    }
+    .dropZone{
+        background-color: #F1F1F1;
+        border: 1px dashed #c7c7c7;
+        border-style: dashed;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #8c8888;
+        width: 100%;
+        outline: none;
+    }
+    .droppedImage{
+    
+    }
+}
+
+.tokenModeCard{
+    height: 250px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    cursor: pointer;
+    flex-direction: initial;
+    &:hover{
+        
+    }
+}

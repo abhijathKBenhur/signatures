@@ -1,0 +1,25 @@
+.userPane{
+    height: 250px;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    padding: 0;
+    border-bottom: 1px solid #F1F1F1;
+    .userInfo{
+        display: flex;
+        align-content: center;
+        text-align: center;
+    }
+    .profileHolder{
+        height: 150px;
+        width: 150px;
+        border-radius: 150px;
+        border: 2px solid #F1F1F1;
+        position: absolute;
+        top: 300px;
+        background-color: white;
+        justify-content: center;
+        align-items: center;
+        display: flex;
+    }
+}

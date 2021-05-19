@@ -1,0 +1,19 @@
+
+.cardDeck{
+    flex-flow: nowrap;
+    .tokenCard{
+        width: 200px;
+        height: 300px;
+        .rack-card-body, .rack-card-footer{
+            padding: 0.5rem;
+        }
+        .tokenCardImage{
+            height: 180px;
+        }
+    }
+}
+.rackTitle{
+    text-transform: capitalize;
+    font-family: serif;
+    color: grey;
+}
