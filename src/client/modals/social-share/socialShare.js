@@ -4,7 +4,7 @@ import "./socialShare.scss";
 import * as reactShare from "react-share";
 import {  toast } from 'react-toastify';
 
-import exampleImage from '../../../assets/logo/Fingerprints.png'
+import exampleImage from '../../../assets/logo/signatures.png'
 import {  Copy } from 'react-feather';
 class SocialShare extends Component {
   constructor(props) {

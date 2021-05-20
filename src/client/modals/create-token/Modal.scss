@@ -1,36 +1,54 @@
 
-.imageContainer{
+
+.fileContainers{
     display: flex;
-    align-items: center;
-    justify-content: center;
-    outline: none;
-    .container{
-        height: 100%;
-    }
-    .dropZone{
-        background-color: #F1F1F1;
-        border: 1px dashed #c7c7c7;
-        border-style: dashed;
+    flex-direction: column;
+    .imageContainer, .pdfContainer{
+        align-items: stretch;
+        flex: 0.9;
         display: flex;
         justify-content: center;
-        align-items: center;
-        color: #8c8888;
-        width: 100%;
         outline: none;
+        .container{
+            padding: 0;
+            margin-left: 0;
+        }
+        .dropZone{
+            background-color: #F1F1F1;
+            border: 1px dashed #c7c7c7;
+            border-style: dashed;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #8c8888;
+            width: 100%;
+            outline: none;
+        }
+        .pdfUploaded{
+            padding: 15px;
+            width: 100%;
+        }
+        .droppedImage{
+            flex: 0.2;
+        }
     }
-    .droppedImage{
+    .pdfContainer{
+        flex: 0.1;
+        margin-top: 10px;
+        .uploadedPDF{
+            background-color: #FFFFFF;
+        }
+    }
     
-    }
-}
-
-.tokenModeCard{
-    height: 250px;
-    display: flex;
-    align-items: center;
-    text-align: center;
-    cursor: pointer;
-    flex-direction: initial;
-    &:hover{
-        
+    .tokenModeCard{
+        height: 250px;
+        display: flex;
+        align-items: center;
+        text-align: center;
+        cursor: pointer;
+        flex-direction: initial;
+        &:hover{
+            
+        }
     }
 }

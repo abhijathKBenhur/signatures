@@ -1,17 +1,16 @@
-const  CARD_CATEGORIES = {
-    CONTEMPORARY: "Contemporary",
-    MORDERN: "Mordern",
-    ABSTRACT: "Abstract",
+const  IDEA_CATEGORIES = {
+    TECHNOLOGY: "Technology",
+    BUSINESS: "Business",
+    SCIENCE: "Science",
 }
-
-const CARD_TYPES = {
-    LICENCE: "Licence",
-    COLLECTIBLE: "Collectible"
+const  PRIORITIES = {
+    LOW: "Low",
+    HIGH: "High",
 }
 
 const CONSTANTS = {
-    CARD_CATEGORIES,
-    CARD_TYPES
+    IDEA_CATEGORIES,
+    PRIORITIES
 }
 
 export default CONSTANTS

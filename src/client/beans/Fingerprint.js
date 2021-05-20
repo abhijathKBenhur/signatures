@@ -1,13 +1,13 @@
-export default class Fingerprint{
+export default class Idea{
     constructor(options){
-        this.account = options.account
-        this.name = options.name
-        this.category = options.category
-        this.description = options.description
-        this.price = Number(window.web3.utils.fromWei(options.price.toString(), 'ether')).toFixed(2)  
-        this.amount = Number(options.amount)  
-        this.uri = options.uri
-        this.tokenId = options.tokenId
         this.owner = options.owner
+        this.title = options.title
+        this.category = options.category
+        this.priority = options.priority
+        this.description = options.description
+        this.price = Number(window.web3.utils.fromWei(options.price.toString(), 'ether')).toFixed(2)   || 0
+        this.docURL = options.docURL
+        this.docHash = options.docHash
+        this.thumbnailURL = options.thumbnailURL
     }
 }
