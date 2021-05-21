@@ -1,16 +1,28 @@
 import React from 'react';
-import { Container, Row, Col } from "react-bootstrap";
-import CONSTANTS from '../../commons/Constants'
+import MongoDBInterface from '../../interface/MongoDBInterface'
+import _ from "lodash";
 import Rack from '../../components/Rack/Rack'
 import './gallery.scss'
+
+function refreshTokens(){
+    MongoDBInterface.getTokens().then(tokens =>{
+      this.setState({
+            tokens: _.get(tokens,'data.data')
+          })
+      })
+    // BlockchainInterface.initialize().then(tokens => {
+    //   this.setState({
+    //     tokens
+    //   })
+    // })
+  }
+
+
 function gallery(props) {
     return (
         <div className="gallery">
-            <Row className="w-100 rackRow ">
-                <Rack category={CONSTANTS.IDEA_CATEGORIES.TECHNOLOGY} cards={props.fingerprints.filter(card => card.category == CONSTANTS.IDEA_CATEGORIES.TECHNOLOGY)} ></Rack>
-            </Row>
+            
         </div>
-      
     )
 }
 

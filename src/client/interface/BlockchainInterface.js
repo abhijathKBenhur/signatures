@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import Web3 from 'web3'
-import NFTTokenBean from '../beans/Fingerprint'
+import NFTTokenBean from '../beans/Signature'
 import tokenJSON from '../../abis/Fingerprints.json'
 import IPFS from '../config/ipfs'
 

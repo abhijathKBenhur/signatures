@@ -65,7 +65,6 @@ const Header = (props) => {
       <AddTokenModal
         show={showCreateModal}
         onHide={() => setShowCreateModal(false)}
-        onSubmit={props.submitForm}
       ></AddTokenModal>
 
       <nav className="navbar navbar-light bg-light flex-md-nowrap shadow appHeader">

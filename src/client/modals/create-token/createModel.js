@@ -1,11 +1,11 @@
 import React, { Component, useState } from "react";
 import { Modal, Button, Row, Col, Form, InputGroup } from "react-bootstrap";
-import { Card, CardDeck, Image } from "react-bootstrap";
+import MongoDBInterface from "../../interface/MongoDBInterface";
 import Dropzone from "react-dropzone";
 import CONSTANTS from "../../../client/commons/Constants";
 import "./Modal.scss";
-import { DollarSign, Award } from "react-feather";
 import { FileText } from "react-feather";
+import md5 from "md5";
 
 import _ from "lodash";
 class AddTokenModal extends Component {
@@ -16,9 +16,8 @@ class AddTokenModal extends Component {
       category: _.values(CONSTANTS.IDEA_CATEGORIES)[0],
       description: "",
       price: 0,
-      priority: _.values(CONSTANTS.PRIORITIES)[0],
-      thumbnailURL: undefined,
-      PDFURL: undefined,
+      thumbnail: undefined,
+      PDFFile: undefined,
       PDFHash: undefined,
       callback: props.onSubmit,
     };
@@ -28,7 +27,7 @@ class AddTokenModal extends Component {
 
     this.onImageDrop = (acceptedFiles) => {
       this.setState({
-        thumbnailURL: Object.assign(acceptedFiles[0], {
+        thumbnail: Object.assign(acceptedFiles[0], {
           preview: URL.createObjectURL(acceptedFiles[0]),
         }),
       });
@@ -36,8 +35,16 @@ class AddTokenModal extends Component {
 
     this.onPDFDrop = (acceptedFiles) => {
       this.setState({
-        PDFURL: acceptedFiles[0],
+        PDFFile: acceptedFiles[0],
       });
+      const reader = new window.FileReader();
+      reader.readAsArrayBuffer(acceptedFiles[0]);
+      reader.onloadend = () => {
+        let PDFHashValue = md5(Buffer(reader.result));
+        this.setState({
+          PDFHash: PDFHashValue,
+        });
+      };
     };
   }
 
@@ -62,11 +69,24 @@ class AddTokenModal extends Component {
       description: "",
       price: 0,
       priority: _.values(CONSTANTS.PRIORITIES)[0],
-      thumbnailURL: undefined,
-      PDFURL: undefined,
+      thumbnail: undefined,
+      PDFFile: undefined,
       PDFHash: undefined,
     });
-    this.state.callback(stateCopy);
+    this.onSubmit(stateCopy);
+  }
+
+  async onSubmit(form) {
+    // BlockchainInterface.getFilePath(form.file).then(path => {
+    //   form.file = path
+    //   BlockchainInterface.createToken({options:form})
+    // })
+    MongoDBInterface.getFilePath(form.uri).then((filePath) => {
+      form.uri = filePath.data.data;
+      MongoDBInterface.addToken(form).then((success) => {
+        this.refreshTokens();
+      });
+    });
   }
 
   render() {
@@ -76,8 +96,9 @@ class AddTokenModal extends Component {
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
+        className="createModal"
       >
-        <Modal.Header closeButton>
+        <Modal.Header>
           <Modal.Title id="contained-modal-title-vcenter">
             Let the world know!
           </Modal.Title>
@@ -90,8 +111,13 @@ class AddTokenModal extends Component {
               onSubmit={this.handleSubmit}
             >
               <Form.Row>
-                <Form.Group as={Col} md="6">
-                  <Form.Group as={Col} md="12" controlId="name">
+                <Form.Group as={Col} md="6" className="formEntries mb-0">
+                  <Form.Group
+                    as={Col}
+                    className="formEntry"
+                    md="12"
+                    controlId="name"
+                  >
                     <Form.Label>Title</Form.Label>
                     <Form.Control
                       type="text"
@@ -100,7 +126,12 @@ class AddTokenModal extends Component {
                     />
                     <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                   </Form.Group>
-                  <Form.Group as={Col} md="12" controlId="category">
+                  <Form.Group
+                    as={Col}
+                    className="formEntry"
+                    md="12"
+                    controlId="category"
+                  >
                     <Form.Label>Category</Form.Label>
                     <Form.Control
                       as="select"
@@ -120,55 +151,38 @@ class AddTokenModal extends Component {
 
                     <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                   </Form.Group>
-                  <Form.Group as={Col} md="12" controlId="description">
+                  <Form.Group
+                    as={Col}
+                    className="formEntry"
+                    md="12"
+                    controlId="description"
+                  >
                     <Form.Label>Description</Form.Label>
                     <InputGroup hasValidation size="lg">
                       <Form.Control
                         type="textarea"
-                        rows={2}
+                        rows={5}
                         aria-describedby="inputGroupAppend"
                         name="description"
                         onChange={this.handleChange}
                       />
                     </InputGroup>
                   </Form.Group>
-                  <Form.Group as={Col} md="12" controlId="price">
-                    <Form.Row>
-                      <Form.Group as={Col} md="6">
-                        <Form.Label>Price</Form.Label>
-                        <InputGroup className="mb-3">
-                          <Form.Control
-                            type="number"
-                            placeholder="0.0"
-                            min={1}
-                            aria-label="Amount (ether)"
-                            name="price"
-                            onChange={this.handleChange}
-                          />
-                          <InputGroup.Append>
-                            <InputGroup.Text>ETH</InputGroup.Text>
-                          </InputGroup.Append>
-                        </InputGroup>
-                      </Form.Group>
-                      <Form.Group as={Col} md="6" controlId="priority">
-                        <Form.Label>Priority</Form.Label>
-                        <Form.Control
-                          as="select"
-                          className="mr-sm-2"
-                          custom
-                          name="priority"
-                          onChange={this.handleChange}
-                        >
-                          {_.values(CONSTANTS.PRIORITIES).map((priority) => {
-                            return (
-                              <option key={priority} value={priority}>
-                                {priority}
-                              </option>
-                            );
-                          })}
-                        </Form.Control>
-                      </Form.Group>
-                    </Form.Row>
+                  <Form.Group as={Col} className="formEntry" md="12">
+                    <Form.Label>Price</Form.Label>
+                    <InputGroup className="mb-3">
+                      <Form.Control
+                        type="number"
+                        placeholder="0.0"
+                        min={1}
+                        aria-label="Amount (ether)"
+                        name="price"
+                        onChange={this.handleChange}
+                      />
+                      <InputGroup.Append>
+                        <InputGroup.Text>ETH</InputGroup.Text>
+                      </InputGroup.Append>
+                    </InputGroup>
                   </Form.Group>
                 </Form.Group>
                 <Form.Group as={Col} md="6" className="fileContainers">
@@ -180,18 +194,18 @@ class AddTokenModal extends Component {
                     >
                       {({ getRootProps, getInputProps }) => (
                         <section className="container">
-                          {!this.state.thumbnailURL && (
+                          {!this.state.thumbnail && (
                             <div {...getRootProps()} className="dropZone h-100">
                               <input {...getInputProps()} />
-                              <p>Drop files here</p>
+                              <p>Thumbnail</p>
                             </div>
                           )}
                         </section>
                       )}
                     </Dropzone>
-                    {this.state.thumbnailURL && (
+                    {this.state.thumbnail && (
                       <img
-                        src={this.state.thumbnailURL.preview}
+                        src={this.state.thumbnail.preview}
                         alt="preview"
                         className="droppedImage"
                         style={{ width: "90%" }}
@@ -206,8 +220,11 @@ class AddTokenModal extends Component {
                     >
                       {({ getRootProps, getInputProps }) => (
                         <section className="container">
-                          {!this.state.PDFURL && (
-                            <div {...getRootProps()} className="dropZone h-100">
+                          {!this.state.PDFFile && (
+                            <div
+                              {...getRootProps()}
+                              className="emptypdf dropZone h-100"
+                            >
                               <input {...getInputProps()} />
                               <p className="m-0">Drop files here</p>
                             </div>
@@ -216,10 +233,10 @@ class AddTokenModal extends Component {
                       )}
                     </Dropzone>
                     <Form.Row className="w-100 p15 ">
-                      {this.state.PDFURL && (
+                      {this.state.PDFFile && (
                         <div className="dropZone pdfUploaded">
                           <FileText size={20}></FileText>
-                          <div className="">{this.state.PDFURL.name}</div>
+                          <div className="">{this.state.PDFFile.name}</div>
                         </div>
                       )}
                     </Form.Row>
@@ -234,7 +251,7 @@ class AddTokenModal extends Component {
             Cancel
           </Button>
           <Button variant="danger" value="Submit" onClick={this.handleSubmit}>
-            Create
+            Publish
           </Button>
         </Modal.Footer>
       </Modal>
