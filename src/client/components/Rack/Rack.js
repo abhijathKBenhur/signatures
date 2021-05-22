@@ -1,17 +1,19 @@
 import React from "react";
-import { Card, CardDeck, Image } from "react-bootstrap";
+import { Card, CardDeck } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
 import { Feather, User } from "react-feather";
+import Image, { Shimmer } from "react-shimmer";
+
 import "./Rack.scss";
 const Rack = (props) => {
   let history = useHistory();
   function openCardView(tokenId, owner) {
     history.push("/card/" + tokenId + "?owner=" + owner);
   }
-
+  let sideSize = props.classType == "primary" ? 424 : 280;
   return (
     <div className={"vertical-shelf " + props.classType}>
-      {[1,2,3,4,5,6,7,78,9,10].map((signature, index) => {
+      {props.deck.map((signature, index) => {
         return (
           <Card
             key={index}
@@ -20,24 +22,23 @@ const Rack = (props) => {
               openCardView(signature.tokenId, signature.owner);
             }}
           >
-            <Card.Img
-              className="signature-thumbnail"
-              variant="top"
-            //   src={window.location.origin + signature.uri}
-              src={"https://source.unsplash.com/random/50x50?sig=1" + index}
+            <Image
+              src={"https://source.unsplash.com/random/100x100?sig=1" + index}
+              fallback={<Shimmer width={sideSize} height={sideSize} />}
             />
             <Card.Body className="rack-card-body">
               <div className="signature-title">
-                <Card.Title>{signature.name || "Title"}</Card.Title>
+                <Card.Title>
+                  {signature.name ||
+                    "This is a ling snentence titl with lorem ipsum and whwatebe rshit that they can user klajbsdlkanldkan ldskans"}
+                </Card.Title>
               </div>
-
               <div className="signature-content">
                 <Card.Text className="">
-                  {signature.owner || "Owner"}
+                  {signature.owner || "Owner name can also be a "}
                 </Card.Text>
               </div>
             </Card.Body>
-            
           </Card>
         );
       })}

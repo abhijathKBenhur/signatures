@@ -13,13 +13,12 @@ class AddTokenModal extends Component {
     super(props);
     this.state = {
       title: "",
-      category: _.values(CONSTANTS.IDEA_CATEGORIES)[0],
+      category: _.values(CONSTANTS.CATEGORIES)[0],
       description: "",
       price: 0,
       thumbnail: undefined,
       PDFFile: undefined,
-      PDFHash: undefined,
-      callback: props.onSubmit,
+      PDFHash: undefined
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -63,16 +62,16 @@ class AddTokenModal extends Component {
     event.preventDefault();
     this.props.onHide();
     let stateCopy = _.cloneDeep(this.state);
-    this.setState({
-      title: "",
-      category: _.values(CONSTANTS.IDEA_CATEGORIES)[0],
-      description: "",
-      price: 0,
-      priority: _.values(CONSTANTS.PRIORITIES)[0],
-      thumbnail: undefined,
-      PDFFile: undefined,
-      PDFHash: undefined,
-    });
+    // this.setState({
+    //   title: "",
+    //   category: _.values(CONSTANTS.CATEGORIES)[0],
+    //   description: "",
+    //   price: 0,
+    //   priority: _.values(CONSTANTS.PRIORITIES)[0],
+    //   thumbnail: undefined,
+    //   PDFFile: undefined,
+    //   PDFHash: undefined,
+    // });
     this.onSubmit(stateCopy);
   }
 
@@ -81,11 +80,14 @@ class AddTokenModal extends Component {
     //   form.file = path
     //   BlockchainInterface.createToken({options:form})
     // })
-    MongoDBInterface.getFilePath(form.uri).then((filePath) => {
-      form.uri = filePath.data.data;
-      MongoDBInterface.addToken(form).then((success) => {
-        this.refreshTokens();
-      });
+    console.log("getting gile path")
+    MongoDBInterface.getFilePath(form.thumbnail).then((filePath) => {
+      form.PDFFile = filePath.data.PDFFile;
+      form.thumbnail = filePath.data.thumbnail;
+      console.log(form)
+      // MongoDBInterface.addToken(form).then((success) => {
+      //   this.refreshTokens();
+      // });
     });
   }
 
@@ -140,7 +142,7 @@ class AddTokenModal extends Component {
                       name="category"
                       onChange={this.handleChange}
                     >
-                      {_.values(CONSTANTS.IDEA_CATEGORIES).map((category) => {
+                      {_.values(CONSTANTS.CATEGORIES).map((category) => {
                         return (
                           <option key={category} value={category}>
                             {category}

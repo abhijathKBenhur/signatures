@@ -4,6 +4,12 @@ const api = axios.create({
     baseURL: 'http://localhost:4000/api',
 })
 
+const fileAPI = axios.create({
+    baseURL: 'http://localhost:4000/api',
+    headers: {
+        'Content-Type': 'multipart/form-data'
+    }
+})
 
 export const signup = payload => {
     return api.post(`/signup`,{
@@ -11,7 +17,6 @@ export const signup = payload => {
         password: payload.password,
     })
 }
-
 
 export const login = payload => {
     return api.post(`/login`,{
@@ -31,7 +36,7 @@ export const updatePrice = payload => {
 
 
 export const addToken = payload => {
-    return api.post(`/token`,{
+    return api.post(`/addIdea`,{
         account: localStorage.getItem("userInfo"),
         owner: localStorage.getItem("userInfo"),
         name: payload.name,
@@ -52,9 +57,10 @@ export const getTokenById = (tokenId, owner) => {
     return api.get(`/token/${tokenId}/${owner}`) 
 }
 
-export const getFilePath = file => { 
+export const getFilePath = form => { 
     let formData = new FormData();
-    formData.append('fileData',file )
+    // formData.append('PDFFile',form.PDFFile )
+    formData.append('thumbnail',form.thumbnail )
     return axios({
         method: 'post',
         url: 'http://localhost:4000/api/getFilePath',
@@ -65,10 +71,10 @@ export const getFilePath = file => {
       });
 }
 
+
 export const buyToken = payload => { 
     return api.post(`/buyToken`,payload) 
 }
-
 
 export const buyUserToken = payload => { 
     return api.post(`/buyUserToken`,payload) 

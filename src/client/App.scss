@@ -1,9 +1,25 @@
+
 /* Styles go here */
-.appContainer{
-  .btn:focus,.btn:active {
-    outline: none !important;
-    box-shadow: none;
+
+.btn:focus,.btn:active {
+  outline: none !important;
+  box-shadow: none;
+}
+.form-group{
+  .form-control{
+    border: 0;
+    border-radius: 0;
+    border-bottom: 1px solid #ced4da;
+    &:focus{
+      box-shadow: none;
+    }  
   }
+  
+}
+
+
+
+.appContainer{
   .content{
       padding-top: 6.25rem !important;
   }

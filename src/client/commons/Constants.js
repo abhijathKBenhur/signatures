@@ -4,9 +4,15 @@ const  CATEGORIES = {
     SCIENCE: "Science",
 }
 
+const  PRIORITIES = {
+    HIGH: "1",
+    LOW: "0",
+}
+
 
 const CONSTANTS = {
-    CATEGORIES
+    CATEGORIES,
+    PRIORITIES
 }
 
 export default CONSTANTS

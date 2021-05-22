@@ -36,8 +36,6 @@ const NFT = (props) => {
         setShowShareModal(true)
     }
 
-    
-
     function editPrice(){
         confirm("Set sell price.","Please enter the sell price","Ok","Cancel",true).then(success => {
             if(success.proceed){
