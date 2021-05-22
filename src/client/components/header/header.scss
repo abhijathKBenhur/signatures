@@ -1,6 +1,9 @@
 .appHeader{
-    position: fixed;
+    position: absolute;
     width: 100%;
     z-index: 10000;
     height: 60px;
+    .create-token{
+        margin-right: 20px;
+    }
 }

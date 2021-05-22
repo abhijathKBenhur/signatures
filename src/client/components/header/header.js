@@ -9,7 +9,7 @@ import { User } from "react-feather";
 import "./header.scss";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+import { Container, Row, Col } from "react-bootstrap";
 const Header = (props) => {
   let history = useHistory();
 
@@ -68,73 +68,74 @@ const Header = (props) => {
       ></AddTokenModal>
 
       <nav className="navbar navbar-light bg-light flex-md-nowrap shadow appHeader">
-        <a className="navbar-brand" target="_blank" rel="noopener noreferrer">
-          <img
-            src={logo}
-            width="50"
-            height="50"
-            alt=""
-            onClick={() => gotoGallery()}
-          ></img>
-        </a>
+        <Container>
+          <a className="navbar-brand" target="_blank" rel="noopener noreferrer">
+            <img
+              src={logo}
+              width="50"
+              height="50"
+              alt=""
+              onClick={() => gotoGallery()}
+            ></img>
+          </a>
 
-        <form className="buttonGroup">
-          <Button
-            variant="outline-danger"
-            className="nav-button create-token"
-            type="button"
-            onClick={() => setShowCreateModal(true)}
-          >
-            Publish
-          </Button>
+          <form className="buttonGroup">
+            <Button
+              variant="outline-danger"
+              className="nav-button create-token"
+              type="button"
+              onClick={() => setShowCreateModal(true)}
+            >
+              Publish
+            </Button>
 
-          <Button
-            variant="outline-dark"
-            className="nav-button connect-wallet"
-            type="button"
-            onClick={() => {
-              connectWallet();
-            }}
-          >
-            Connect Wallet
-          </Button>
-        </form>
-
-
-        {/* <Dropdown>
-          <Dropdown.Toggle as={ProfileDropDown} id="dropdown-custom-components"/>
-
-          <Dropdown.Menu>
-            <Dropdown.Item
-              eventKey="1"
+            <Button
+              variant="outline-dark"
+              className="nav-button connect-wallet"
+              type="button"
               onClick={() => {
-                gotoPortfolio();
+                connectWallet();
               }}
             >
-              Profile
-            </Dropdown.Item>
-            <Dropdown.Item eventKey="2">Settings</Dropdown.Item>
-            {!_.isEmpty(localStorage.getItem("userInfo")) ? (
+              Connect Wallet
+            </Button>
+          </form>
+
+          {/* <Dropdown>
+            <Dropdown.Toggle as={ProfileDropDown} id="dropdown-custom-components"/>
+
+            <Dropdown.Menu>
               <Dropdown.Item
                 eventKey="1"
                 onClick={() => {
-                  logoutUser();
+                  gotoPortfolio();
                 }}
               >
-                Logout
+                Profile
               </Dropdown.Item>
-            ) : (
-              <Dropdown.Item
-                eventKey="1"
-                onClick={() => {
-                  setShowLoginModal(true);
-                }}
-              >
-                Login
-              </Dropdown.Item>
-            )}
-          </Dropdown.Menu>
-        </Dropdown> */}
+              <Dropdown.Item eventKey="2">Settings</Dropdown.Item>
+              {!_.isEmpty(localStorage.getItem("userInfo")) ? (
+                <Dropdown.Item
+                  eventKey="1"
+                  onClick={() => {
+                    logoutUser();
+                  }}
+                >
+                  Logout
+                </Dropdown.Item>
+              ) : (
+                <Dropdown.Item
+                  eventKey="1"
+                  onClick={() => {
+                    setShowLoginModal(true);
+                  }}
+                >
+                  Login
+                </Dropdown.Item>
+              )}
+            </Dropdown.Menu>
+          </Dropdown> */}
+        </Container>
       </nav>
     </div>
   );

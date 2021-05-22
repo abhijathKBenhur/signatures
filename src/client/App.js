@@ -23,7 +23,7 @@ class App extends Component {
         <div className="appContainer">
           <ToastContainer></ToastContainer>
           <Header></Header>
-          <Container  className="cardSection p-5">
+          <Container className="content p-5">
               <Switch>
                 <Route
                   path='/home'

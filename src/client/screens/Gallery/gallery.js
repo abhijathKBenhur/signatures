@@ -20,8 +20,10 @@ function refreshTokens(){
 
 function gallery(props) {
     return (
-        <div className="gallery">
-            
+        <div className="gallery d-flex flex-column flex-md-row flex-lg-row flex-xl-row">
+            <Rack classType="secondary"></Rack>
+            <Rack classType="primary"></Rack>
+            <Rack classType="secondary"></Rack>
         </div>
     )
 }
