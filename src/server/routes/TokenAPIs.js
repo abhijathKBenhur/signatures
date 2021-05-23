@@ -228,112 +228,53 @@ getTokens = async (req, res) => {
   }
 };
 
+
 const storage = multer.diskStorage({
-  destination: "./public/uploads/",
-  filename: function(req, file, cb) {
-    cb(
-      null,
-      file.fieldname + "-" + Date.now() + path.extname(file.originalname)
-    );
-  },
-});
-
-const PDFUpload = multer({
-  storage: storage,
-  limits: { fileSize: 5000000 },
-  fileFilter: function(req, file, cb) {
-    checkFileType(file, cb);
-  },
-}).single("PDFFile");
-
-const thumbnailUpload = multer({
-  storage: storage,
-  limits: { fileSize: 5000000 },
-  fileFilter: function(req, file, cb) {
-    checkFileType(file, cb);
-  },
-}).single("thumbnail");
-
-// Check File Type
-function checkFileType(file, cb) {
-  // Allowed ext
-  const filetypes = /jpeg|jpg|png|pdf/;
-  // Check ext
-  const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
-  // Check mime
-  const mimetype = filetypes.test(file.mimetype);
-
-  if (mimetype && extname) {
-    return cb(null, true);
-  } else {
-    cb("Error: invalid file type!");
-  }
-}
-
-getFilePath1 = async (req, res) => {
-  let promises = [];
-  promises.push(
-    new Promise((resolve, reject) => {
-      PDFUpload(req, res, (err) => {
-        console.log(err);
-        if (err) {
-          reject(err);
-          return res.status(200).json({ success: false, error: "err" });
-        } else {
-          if (req.PDFFile == undefined || req.thumbnail == undefined) {
-            reject("no file selected");
-          } else {
-            resolve(req);
-          }
-        }
-      });
-    })
-  );
-  promises.push(
-    new Promise((resolve, reject) => {
-      thumbnailUpload(req, res, (err) => {
-        console.log(err);
-        if (err) {
-          reject(err);
-        } else {
-          if (req.PDFFile == undefined || req.thumbnail == undefined) {
-            reject("no file selected");
-          } else {
-            resolve(req);
-          }
-        }
-      });
-    })
-  );
-  Promise.all(promises)
-    .then((values) => {
-      console.log("sucsdsdcess",values);
-      // return res
-      // .status(200)
-      // .json({ values: true, data: "/uploads/" + req.file.filename });
-    })
-    .catch((err) => {
-      console.log("rrerer",err);
-      // return res
-      // .status(200)
-      // .json({ success: false, error: "no file selected" });
-    });
-};
-
-getFilePath = async (req, res) => {
-  console.log("getting file path",req.body)
-  PDFUpload(req, res, (err) => {
-      console.log(err)
-    if(err){
-      return res.status(404).json({ success: false, error: "err" })
-    } else {
-      if(req.file == undefined){
-          return res.status(404).json({ success: false, error: "no file selected" })
-      } else {
-          return res.status(200).json({ success: true, data: "/uploads/"+req.file.filename })
-      }
+    destination: './public/uploads/',
+    filename: function(req, file, cb){
+      cb(null,file.fieldname + '-' + Date.now() + path.extname(file.originalname));
     }
   });
+  
+  // Init Upload
+  const upload = multer({
+    storage: storage,
+    limits:{fileSize: 5000000},
+    fileFilter: function(req, file, cb){
+      checkFileType(file, cb);
+    }
+  }).single('fileData');
+  
+  // Check File Type
+  function checkFileType(file, cb){
+    // Allowed ext
+    const filetypes = /jpeg|jpg|png|pdf/;
+    // Check ext
+    const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+    // Check mime
+    const mimetype = filetypes.test(file.mimetype);
+  
+    if(mimetype && extname){
+      return cb(null,true);
+    } else {
+      cb('Error: Images Only!');
+    }
+  }
+
+getFilePath = async (req, res) => {
+    console.log("getting file path", req.body)
+    upload(req, res, (err) => {
+        console.log(err)
+      if(err){
+        return res.status(200).json({ success: false, error: "err" })
+      } else {
+        if(req.file == undefined){
+            return res.status(200).json({ success: false, error: "no file selected" })
+        } else {
+            return res.status(200).json({ success: true, data: "/uploads/"+req.file.filename })
+        }
+      }
+    });
 }
 router.post("/getFilePath", getFilePath);
 router.post("/addIdea", addIdea);

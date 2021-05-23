@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { File } from 'react-feather'
 import {uuid} from 'uuidv4'
 const api = axios.create({
     baseURL: 'http://localhost:4000/api',
@@ -59,8 +60,9 @@ export const getTokenById = (tokenId, owner) => {
 
 export const getFilePath = form => { 
     let formData = new FormData();
-    // formData.append('PDFFile',form.PDFFile )
+    formData.append('PDFFile',form.PDFFile )
     formData.append('thumbnail',form.thumbnail )
+    formData.append('PDFHash',form.PDFHash )
     return axios({
         method: 'post',
         url: 'http://localhost:4000/api/getFilePath',
