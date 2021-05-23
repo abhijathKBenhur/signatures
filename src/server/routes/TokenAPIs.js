@@ -1,21 +1,21 @@
-const Token = require("../db-config/token.schema");
+const Signature = require("../db-config/Signature.schema");
 const express = require("express");
 const router = express.Router();
 const multer = require("multer");
 const path = require("path");
 var fs = require("fs");
 
-addIdea = (req, res) => {
+addSignature = (req, res) => {
   console.log("Adding an idea", req.body);
   const body = req.body;
 
   if (!body) {
     return res.status(400).json({
       success: false,
-      error: "You must provide a token",
+      error: "Hollow idea",
     });
   }
-  const newIdea = new Token(body);
+  const newIdea = new Signature(body);
 
   if (!newIdea) {
     return res.status(400).json({ success: false, error: err });
@@ -27,46 +27,16 @@ addIdea = (req, res) => {
       return res.status(201).json({
         success: true,
         tokenId: newIdea.tokenId,
-        message: "New idea created!",
+        message: "New idea posted!",
       });
     })
     .catch((error) => {
       return res.status(400).json({
         error,
-        message: "New idea not created!",
+        message: "New idea not posted!",
       });
     });
 };
-
-function clearEmptyTokens(sellerCriteria) {
-  Token.findOneAndUpdate(
-    sellerCriteria,
-    { $inc: { amount: -1 } },
-    { new: true }
-  )
-    .then((user, err) => {
-      console.log("reduc to store");
-      if (err) {
-        console.log("Error reduc to store");
-        return res.status(400).json({ success: false, error: err });
-      }
-      if (!user) {
-        return res.status(404).json({ success: true, data: [] });
-      }
-      Token.deleteMany({ amount: { $eq: 0 } })
-        .then(function(token) {
-          console.log("Data deleted");
-          // return res.status(200).json({ success: true, data: token }) // Success
-        })
-        .catch(function(error) {
-          console.log(error); // Failure
-        });
-    })
-    .catch((err) => {
-      console.log("Error reduced store");
-      // return res.status(200).json({ success: false, data: err })
-    });
-}
 
 buyToken = async (req, res) => {
   console.log("Buying token", req.body);
@@ -308,7 +278,7 @@ getFilePath = async (req, res) => {
   });
 };
 router.post("/getFilePath", getFilePath);
-router.post("/addIdea", addIdea);
+router.post("/addSignature", addSignature);
 router.get("/token/:tokenId/:owner", getTokenById);
 router.post("/tokens", getTokens);
 router.post("/buyToken", buyToken);

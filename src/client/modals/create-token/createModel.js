@@ -12,6 +12,7 @@ class AddTokenModal extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      owner: "owner",
       title: "",
       category: _.values(CONSTANTS.CATEGORIES)[0],
       description: "",
@@ -90,6 +91,11 @@ class AddTokenModal extends Component {
       form.PDFFile = paths.PDFFile;
       form.thumbnail = paths.thumbnail;
       console.log(form)
+      MongoDBInterface.addSignature(form).then(success => {
+        console.log(success)
+      }).catch(err => {
+        console.log(err)
+      })
       }).catch(error => {
           return {
               PDFFile: "error",
@@ -125,12 +131,12 @@ class AddTokenModal extends Component {
                     as={Col}
                     className="formEntry"
                     md="12"
-                    controlId="name"
+                    controlId="title"
                   >
                     <Form.Label>Title</Form.Label>
                     <Form.Control
                       type="text"
-                      name="name"
+                      name="title"
                       onChange={this.handleChange}
                     />
                     <Form.Control.Feedback>Looks good!</Form.Control.Feedback>

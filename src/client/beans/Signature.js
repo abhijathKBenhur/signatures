@@ -6,12 +6,9 @@ export default class Signature{
         this.category = options.category
         this.description = options.description
         this.price = Number(window.web3.utils.fromWei(options.price.toString(), 'ether')).toFixed(2)   || 0
-        this.docHash = options.docHash
-
-        //Properties after save
-        this.docURL = options.docURL
+        this.PDFHash = options.PDFHash
+        this.PDFFile = options.PDFFile
+        this.thumbnail = options.thumbnail
         this.DB_ID = options.DB_ID
-        this.transactionHash = options.transactionHash
-        this.thumbnailURL = options.thumbnailURL
     }
 }

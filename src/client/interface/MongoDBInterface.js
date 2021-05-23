@@ -36,20 +36,16 @@ export const updatePrice = payload => {
     })
 }
 
-
-
-export const addToken = payload => {
-    return api.post(`/addIdea`,{
-        account: localStorage.getItem("userInfo"),
-        owner: localStorage.getItem("userInfo"),
-        name: payload.name,
+export const addSignature = payload => {
+    return api.post(`/addSignature`,{
+        owner: payload.owner,
+        title: payload.title,
         category: payload.category,
         description: payload.description,
-        amount: parseFloat(payload.amount),
         price:  payload.price,
-        uri: payload.uri,
-        type: payload.type,
-        tokenId:uuid()
+        thumbnail: payload.thumbnail,
+        PDFHash: payload.PDFHash,
+        PDFFile: payload.PDFFile,
     })
 }
 export const getTokens = (payload) =>  { 
@@ -92,7 +88,7 @@ export const getUserInfo = payload => {
 
 
 const MongoDBInterface = {
-    addToken,
+    addSignature,
     getTokens,
     getTokenById,
     getFilePath,
