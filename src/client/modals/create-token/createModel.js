@@ -81,14 +81,21 @@ class AddTokenModal extends Component {
     //   BlockchainInterface.createToken({options:form})
     // })
     console.log("getting gile path")
-    MongoDBInterface.getFilePath(form).then((filePath) => {
-      form.PDFFile = filePath.data.PDFFile;
-      form.thumbnail = filePath.data.thumbnail;
+    MongoDBInterface.getFilePath(form)
+    .then(success =>{
+      let paths = {
+          PDFFile: _.get(success[0],'data.path'),
+          thumbnail: _.get(success[1],'data.path')
+      }
+      form.PDFFile = paths.PDFFile;
+      form.thumbnail = paths.thumbnail;
       console.log(form)
-      // MongoDBInterface.addToken(form).then((success) => {
-      //   this.refreshTokens();
-      // });
-    });
+      }).catch(error => {
+          return {
+              PDFFile: "error",
+              thumbnail: "error"
+          }
+      })
   }
 
   render() {

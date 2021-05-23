@@ -3,6 +3,7 @@ const express = require("express");
 const router = express.Router();
 const multer = require("multer");
 const path = require("path");
+var fs = require("fs");
 
 addIdea = (req, res) => {
   console.log("Adding an idea", req.body);
@@ -228,54 +229,84 @@ getTokens = async (req, res) => {
   }
 };
 
-
-const storage = multer.diskStorage({
-    destination: './public/uploads/',
-    filename: function(req, file, cb){
-      cb(null,file.fieldname + '-' + Date.now() + path.extname(file.originalname));
-    }
-  });
-  
-  // Init Upload
+getFilePath = async (req, res) => {
   const upload = multer({
-    storage: storage,
-    limits:{fileSize: 5000000},
-    fileFilter: function(req, file, cb){
+    req,
+    res,
+    storage: multer.diskStorage({
+      destination: "./public/uploads/",
+      filename: function(req, file, cb) {
+        cb(null, "temp" + path.extname(file.originalname));
+      },
+    }),
+    limits: { fileSize: 5000000 },
+    fileFilter: function(req, file, cb) {
       checkFileType(file, cb);
-    }
-  }).single('fileData');
-  
+    },
+  }).single("fileData");
+
   // Check File Type
-  function checkFileType(file, cb){
+  function checkFileType(file, cb) {
     // Allowed ext
     const filetypes = /jpeg|jpg|png|pdf/;
     // Check ext
-    const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+    const extname = filetypes.test(
+      path.extname(file.originalname).toLowerCase()
+    );
     // Check mime
     const mimetype = filetypes.test(file.mimetype);
-  
-    if(mimetype && extname){
-      return cb(null,true);
+
+    if (mimetype && extname) {
+      return cb(null, true);
     } else {
-      cb('Error: Images Only!');
+      cb("Error: Images Only!");
     }
   }
 
-getFilePath = async (req, res) => {
-    console.log("getting file path", req.body)
-    upload(req, res, (err) => {
-        console.log(err)
-      if(err){
-        return res.status(200).json({ success: false, error: "err" })
+  upload(req, res, (err) => {
+    console.log(err);
+    if (err) {
+      return res.status(400).json({ success: false, error: err });
+    } else {
+      if (req.file == undefined) {
+        return res.status(400).json({ success: false, error: "File missing" });
       } else {
-        if(req.file == undefined){
-            return res.status(200).json({ success: false, error: "no file selected" })
-        } else {
-            return res.status(200).json({ success: true, data: "/uploads/"+req.file.filename })
+        let __dirname = "./public/uploads";
+        let hashCode = req.body.hash;
+        
+        var targetDir = __dirname + '/' + hashCode;
+        if (!fs.existsSync(targetDir)) {
+            fs.mkdirSync(targetDir, 0744);
         }
+
+        const files = fs.readdirSync(__dirname);
+        for (const file of files) {
+          if(file.endsWith(".jpeg") || file.endsWith(".jpg") || file.endsWith(".png") || file.endsWith(".pdf")){
+              fs.rename(
+                __dirname + '/' + file,
+                targetDir + '/' + hashCode + "." + file.split(".")[1] ,
+                err => {
+                  console.log(err)
+                }
+              )
+          }
+        }
+        return res
+          .status(200)
+          .json({
+            success: true,
+            path:
+              "/uploads/" +
+              hashCode +
+              "/" +
+              hashCode +
+              "." +
+              req.file.filename.split(".")[1],
+          });
       }
-    });
-}
+    }
+  });
+};
 router.post("/getFilePath", getFilePath);
 router.post("/addIdea", addIdea);
 router.get("/token/:tokenId/:owner", getTokenById);

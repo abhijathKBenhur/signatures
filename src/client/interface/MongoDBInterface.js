@@ -1,5 +1,7 @@
 import axios from 'axios'
 import { File } from 'react-feather'
+import _ from "lodash";
+
 import {uuid} from 'uuidv4'
 const api = axios.create({
     baseURL: 'http://localhost:4000/api',
@@ -59,18 +61,20 @@ export const getTokenById = (tokenId, owner) => {
 }
 
 export const getFilePath = form => { 
-    let formData = new FormData();
-    formData.append('PDFFile',form.PDFFile )
-    formData.append('thumbnail',form.thumbnail )
-    formData.append('PDFHash',form.PDFHash )
-    return axios({
-        method: 'post',
-        url: 'http://localhost:4000/api/getFilePath',
-        data: formData,
-        headers: {
-            'Content-Type': 'multipart/form-data'
-          }
-      });
+    let promiseList = []
+    let PDFformData = new FormData();
+    PDFformData.append('fileData',form.PDFFile )
+    PDFformData.append('hash',form.PDFHash )
+
+
+    let IMGformData = new FormData();
+    IMGformData.append('fileData',form.thumbnail )
+    IMGformData.append('hash',form.PDFHash )
+
+
+    promiseList.push(fileAPI.post("/getFilePath",PDFformData))
+    promiseList.push(fileAPI.post("/getFilePath",IMGformData))
+    return Promise.all(promiseList)
 }
 
 
