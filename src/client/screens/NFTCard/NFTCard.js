@@ -10,7 +10,7 @@ import _ from 'lodash'
 import { ToastContainer, toast } from 'react-toastify';
 import { Share2, ShoppingCart, Feather, User, Edit, DollarSign, Award } from 'react-feather';
 
-import './NFTCard.scss'
+import './Create.scss'
 import 'react-toastify/dist/ReactToastify.css';
 
 const NFT = (props) => {

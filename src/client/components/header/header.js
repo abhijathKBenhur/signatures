@@ -28,6 +28,10 @@ const Header = (props) => {
     window.location.reload();
   }
 
+  function createnew() {
+    history.push("/create");
+  }
+
   function gotoGallery() {
     history.push("/home");
   }
@@ -94,7 +98,7 @@ const Header = (props) => {
               className="nav-button connect-wallet"
               type="button"
               onClick={() => {
-                connectWallet();
+                createnew();
               }}
             >
               Connect Wallet

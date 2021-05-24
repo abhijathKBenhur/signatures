@@ -5,7 +5,7 @@ import React, { Component } from 'react';
 import './App.scss';
 import './commons/Common.scss'
 
-import NFTCard from './screens/NFTCard/NFTCard'
+import Create from './screens/Create/Create'
 import Gallery from './screens/Gallery/gallery'
 import Profile from './screens/Profile/profile'
 import Header from './components/header/header'
@@ -31,8 +31,8 @@ class App extends Component {
                     <Gallery/>
                   )}
                 />
-                <Route path="/card/:tokenId" children={<NFTCard />} />
-                <Route path="/profile" children={<Profile />} />
+                {/* <Route path="/card/:tokenId" children={<NFTCard />} /> */}
+                <Route path="/create" children={<Create />} />
               </Switch>
           </Container>
         </div>
