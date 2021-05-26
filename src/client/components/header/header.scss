@@ -3,7 +3,22 @@
     width: 100%;
     z-index: 10000;
     height: 60px;
-    .create-token{
-        margin-right: 20px;
+    .dropdown-menu{
+        padding: 3px;
+        top: 15px;
+        border-radius: 3px;
+        box-shadow: 0 0.5rem 1rem #F1F1F1 !important;
+        transform: translate(-120px, 37px);
+        .dropdown-item{
+            
+            font-size: 16px;
+            padding: 10px 6px;
+            width: 100%;
+            border-bottom: 1px solid #e2e2e2;
+            &:last-child{
+                border-bottom: 0
+            }
+        }
+
     }
 }

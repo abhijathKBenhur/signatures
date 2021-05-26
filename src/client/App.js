@@ -6,6 +6,7 @@ import './App.scss';
 import './commons/Common.scss'
 
 import Create from './screens/Create/Create'
+import Signature from './screens/Signature/Signature'
 import Gallery from './screens/Gallery/gallery'
 import Profile from './screens/Profile/profile'
 import Header from './components/header/header'
@@ -31,7 +32,7 @@ class App extends Component {
                     <Gallery/>
                   )}
                 />
-                {/* <Route path="/card/:tokenId" children={<NFTCard />} /> */}
+                <Route path="/signature/:hashId" children={<Signature />} />
                 <Route path="/create" children={<Create />} />
               </Switch>
           </Container>

@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Button, Dropdown, Image } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
 import logo from "../../../assets/logo/signatures.png";
-import AddTokenModal from "../../modals/create-token/createModel";
 import LoginModal from "../../modals/login-modal/loginModal";
 import _ from "lodash";
 import { User } from "react-feather";
@@ -61,16 +60,6 @@ const Header = (props) => {
 
   return (
     <div>
-      <LoginModal
-        show={showLoginModal}
-        onHide={() => setShowLoginModal(false)}
-      ></LoginModal>
-
-      <AddTokenModal
-        show={showCreateModal}
-        onHide={() => setShowCreateModal(false)}
-      ></AddTokenModal>
-
       <nav className="navbar navbar-light bg-light flex-md-nowrap shadow appHeader">
         <Container>
           <a className="navbar-brand" target="_blank" rel="noopener noreferrer">
@@ -82,63 +71,40 @@ const Header = (props) => {
               onClick={() => gotoGallery()}
             ></img>
           </a>
-
-          <form className="buttonGroup">
-            <Button
-              variant="outline-danger"
-              className="nav-button create-token"
-              type="button"
-              onClick={() => setShowCreateModal(true)}
-            >
-              Publish
-            </Button>
-
-            <Button
-              variant="outline-dark"
-              className="nav-button connect-wallet"
-              type="button"
-              onClick={() => {
-                createnew();
-              }}
-            >
-              Connect Wallet
-            </Button>
-          </form>
-
-          {/* <Dropdown>
-            <Dropdown.Toggle as={ProfileDropDown} id="dropdown-custom-components"/>
+          <Dropdown>
+            <Dropdown.Toggle
+              as={ProfileDropDown}
+              id="dropdown-custom-components"
+            />
 
             <Dropdown.Menu>
               <Dropdown.Item
                 eventKey="1"
+                onClick={() => {
+                  createnew();
+                }}
+              >
+                Publish
+              </Dropdown.Item>
+              <Dropdown.Item
+                eventKey="2"
                 onClick={() => {
                   gotoPortfolio();
                 }}
               >
                 Profile
               </Dropdown.Item>
-              <Dropdown.Item eventKey="2">Settings</Dropdown.Item>
-              {!_.isEmpty(localStorage.getItem("userInfo")) ? (
-                <Dropdown.Item
-                  eventKey="1"
-                  onClick={() => {
-                    logoutUser();
-                  }}
-                >
-                  Logout
-                </Dropdown.Item>
-              ) : (
-                <Dropdown.Item
-                  eventKey="1"
-                  onClick={() => {
-                    setShowLoginModal(true);
-                  }}
-                >
-                  Login
-                </Dropdown.Item>
-              )}
+
+              <Dropdown.Item
+                eventKey="2"
+                onClick={() => {
+                  gotoPortfolio();
+                }}
+              >
+                Settings
+              </Dropdown.Item>
             </Dropdown.Menu>
-          </Dropdown> */}
+          </Dropdown>
         </Container>
       </nav>
     </div>

@@ -48,9 +48,8 @@ export const addSignature = payload => {
         PDFFile: payload.PDFFile,
     })
 }
-export const getTokens = (payload) =>  { 
-    // return api.post("/tokens",payload) 
-    return api.post("/tokens",payload) 
+export const getSignatures = (payload) =>  { 
+    return api.post("/getSignatures",payload) 
 }
 export const getTokenById = (tokenId, owner) => { 
     return api.get(`/token/${tokenId}/${owner}`) 
@@ -89,7 +88,7 @@ export const getUserInfo = payload => {
 
 const MongoDBInterface = {
     addSignature,
-    getTokens,
+    getSignatures,
     getTokenById,
     getFilePath,
     signup,

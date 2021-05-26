@@ -7,10 +7,11 @@ import Image, { Shimmer } from "react-shimmer";
 import "./Rack.scss";
 const Rack = (props) => {
   let history = useHistory();
-  function openCardView(tokenId, owner) {
-    history.push("/card/" + tokenId + "?owner=" + owner);
+  function openCardView(signature) {
+    history.push({pathname:"/signature/" + signature.PDFHash, state:signature});
   }
-  let sideSize = props.classType == "primary" ? 424 : 280;
+  let placeHolderSize = props.classType == "primary" ? 424 : 280;
+  let containerSize = props.classType == "primary" ? { width:424} : { width:280};
   return (
     <div className={"vertical-shelf " + props.classType}>
       {props.deck.map((signature, index) => {
@@ -18,24 +19,26 @@ const Rack = (props) => {
           <Card
             key={index}
             className="signature"
+            style={containerSize}
             onClick={() => {
-              openCardView(signature.tokenId, signature.owner);
+              openCardView(signature);
             }}
           >
             <Image
-              src={"https://source.unsplash.com/random/100x100?sig=1" + index}
-              fallback={<Shimmer width={sideSize} height={sideSize} />}
+              // src={"https://source.unsplash.com/random/100x100?sig=1" + index}
+              src={signature.thumbnail}
+              fallback={<Shimmer width={placeHolderSize} height={placeHolderSize} />}
             />
             <Card.Body className="rack-card-body">
               <div className="signature-title">
                 <Card.Title>
-                  {signature.name ||
-                    "This is a ling snentence titl with lorem ipsum and whwatebe rshit that they can user klajbsdlkanldkan ldskans"}
+                  {signature.description.length > 50 ? signature.description.substring(0,50) +"...": signature.description || "Click to see this idea"}
+                    
                 </Card.Title>
               </div>
               <div className="signature-content">
                 <Card.Text className="">
-                  {signature.owner || "Owner name can also be a "}
+                  {signature.owner || "Anonymous"}
                 </Card.Text>
               </div>
             </Card.Body>

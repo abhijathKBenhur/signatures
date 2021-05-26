@@ -130,7 +130,7 @@ updatePrice = async (req, res) => {
   });
 };
 
-getTokenById = async (req, res) => {
+getSignatureByHash = async (req, res) => {
   console.log("Getting token", req.params.tokenId, req.params.owner);
   console.log(Token);
 
@@ -140,7 +140,6 @@ getTokenById = async (req, res) => {
       if (err) {
         return res.status(400).json({ success: false, error: err });
       }
-
       if (!token) {
         return res.status(404).json({ success: true, data: [] });
       }
@@ -151,50 +150,37 @@ getTokenById = async (req, res) => {
   });
 };
 
-getTokens = async (req, res) => {
-  console.log("Getting tokens for ", req.body.userName);
+getSignatures = async (req, res) => {
+  let userName = req.body.userName
+  
   payLoad = {};
-  if (req.body.userName) {
-    payLoad.owner = req.body.userName;
-    await Token.find(payLoad, (err, token) => {
+  
+  if (userName) {
+    payLoad.owner = userName;
+    console.log("Getting signatures for ", userName);
+    await Signature.find(payLoad, (err, signatures) => {
       if (err) {
         return res.status(404).json({ success: false, error: "here" });
       }
-      if (!token.length) {
+      if (!signatures.length) {
         return res
           .status(404)
-          .json({ success: false, error: `token not found` });
+          .json({ success: false, error: `signature not found` });
       }
-      return res.status(200).json({ success: true, data: token });
+      return res.status(200).json({ success: true, data: signatures });
     }).catch((err) => {
-      return res.status(404).json({ success: false, error: "err" });
+      return res.status(404).json({ success: false, error: err });
     });
   } else {
-    Token.aggregate([
-      {
-        $group: {
-          _id: {
-            tokenId: "$tokenId",
-          },
-          price: { $min: "$price" },
-          account: { $first: "$account" },
-          owner: { $first: "$owner" },
-          name: { $first: "$name" },
-          category: { $first: "$category" },
-          description: { $first: "$description" },
-          amount: { $first: "$amount" },
-          type: { $first: "$type" },
-          uri: { $first: "$uri" },
-          tokenId: { $first: "$tokenId" },
-        },
-      },
-    ])
-      .then((token) => {
-        return res.status(200).json({ success: true, data: token });
+    console.log("Getting signatures for all");
+    let limit = req.body.limit 
+    Signature.find(payLoad).limit(limit)
+      .then((signatures) => {
+        return res.status(200).json({ success: true, data: signatures });
       })
       .catch((err) => {
         console.log(err);
-        return res.status(404).json({ success: false, error: "err" });
+        return res.status(404).json({ success: false, error: err });
       });
   }
 };
@@ -279,8 +265,8 @@ getFilePath = async (req, res) => {
 };
 router.post("/getFilePath", getFilePath);
 router.post("/addSignature", addSignature);
-router.get("/token/:tokenId/:owner", getTokenById);
-router.post("/tokens", getTokens);
+router.get("/token/:hashId/", getSignatureByHash);
+router.post("/getSignatures", getSignatures);
 router.post("/buyToken", buyToken);
 router.post("/updatePrice", updatePrice);
 

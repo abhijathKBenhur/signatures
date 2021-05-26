@@ -1,5 +1,6 @@
 
 /* Styles go here */
+@import url('https://fonts.googleapis.com/css?family=Patrick+Hand+SC|Roboto&display=swap');
 
 .btn:focus,.btn:active {
   outline: none !important;
@@ -20,6 +21,7 @@
 
 
 .appContainer{
+  font-family: 'Roboto';
   .content{
       padding-top: 6.25rem !important;
   }
