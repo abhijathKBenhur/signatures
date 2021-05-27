@@ -1,12 +1,14 @@
 import React, { Component, useState } from "react";
 import { Modal, Button, Row, Col, Form, InputGroup } from "react-bootstrap";
 import MongoDBInterface from "../../interface/MongoDBInterface";
+import BlockChainInterface from "../../interface/BlockchainInterface"
 import Dropzone from "react-dropzone";
 import CONSTANTS from "../../../client/commons/Constants";
 import { withRouter } from "react-router-dom";
 import "./Create.scss";
 import { FileText } from "react-feather";
-import md5 from "md5";
+import  Hash from 'ipfs-only-hash'
+
 import { Document, Page, pdfjs } from "react-pdf";
 import _ from "lodash";
 import { toast } from "react-toastify";
@@ -16,8 +18,15 @@ class Create extends Component {
   constructor(props) {
     super(props);
     pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
+    BlockChainInterface.getAccountDetails().then(metamaskID => {
+      this.setState({
+        owner: metamaskID
+      })
+    }).catch(error =>{
+      console.log(error)
+    })
     this.state = {
-      owner: "owner",
+      owner: "",
       title: "",
       category: [],
       description: "",
@@ -47,10 +56,11 @@ class Create extends Component {
       const reader = new window.FileReader();
       reader.readAsArrayBuffer(acceptedFiles[0]);
       reader.onloadend = () => {
-        let PDFHashValue = md5(Buffer(reader.result));
-        this.setState({
-          PDFHash: PDFHashValue,
-        });
+        Hash.of(Buffer(reader.result)).then(PDFHashValue => {
+          this.setState({
+            PDFHash: PDFHashValue
+          });
+        })
       };
     };
   }
@@ -238,8 +248,8 @@ class Create extends Component {
               </Col>
             </Row>
           </Col>
-          <Col md="1"></Col>
-          <Col md="5" className="right-container">
+          <Col md="1" className="separator"></Col>
+          <Col md="5" className="right-container d-flex justify-content-end">
               {!this.state.PDFFile && (
                 <Form.Row className="pdfContainer">
                   <Dropzone
@@ -262,7 +272,7 @@ class Create extends Component {
                 </Form.Row>
               )}
               {this.state.PDFFile && (
-                <Form.Row className="w-100 p15 ">
+                <Form.Row className="w-100 p15 d-flex justify-content-end">
                   {this.state.PDFFile && (
                     <div className="pdfUploaded h-100">
                       <Document

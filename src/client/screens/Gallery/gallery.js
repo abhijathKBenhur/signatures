@@ -27,7 +27,7 @@ function gallery(props) {
     return (
         <div className="gallery d-flex flex-column flex-md-row flex-lg-row flex-xl-row">
             <Rack deck={rackList[0] || []} classType="secondary"></Rack>
-            <Rack deck={rackList[1] || []} classType="primary"></Rack>
+            <Rack deck={rackList[1] || []} classType="secondary"></Rack>
             <Rack deck={rackList[2] || []} classType="secondary"></Rack>
         </div>
     )

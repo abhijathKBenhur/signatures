@@ -3,6 +3,9 @@
     .right-container{
         display: flex;
     }
+    .separator{
+        border-right: 1px solid #F1F1F1;
+    }
     .footerComponent{
         display: flex;
         justify-content: center;
