@@ -9,6 +9,7 @@ export default class Signature{
         this.PDFHash = options.PDFHash
         this.PDFFile = options.PDFFile
         this.thumbnail = options.thumbnail
-        this.DB_ID = options.DB_ID
+        this.transactionID = options.transactionID
+        this.ideaID = options.ideaID
     }
 }

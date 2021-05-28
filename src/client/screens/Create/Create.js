@@ -34,6 +34,8 @@ class Create extends Component {
       thumbnail: undefined,
       PDFFile: undefined,
       PDFHash: undefined,
+      ideaID: undefined,
+      transactionID: undefined
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleTagsChange = this.handleTagsChange.bind(this);
@@ -91,11 +93,10 @@ class Create extends Component {
     this.onSubmit(stateCopy);
   }
 
-
-  saveToMongo(form){
-    MongoDBInterface.addSignature(form)
+  updateIdeaIDToMongo(payload){
+    MongoDBInterface.updateIdeaID(payload)
     .then((success) => {
-      toast.dark("Your thoughts have been pusblished!", {
+      toast.dark("Your thoughts are live on blockchain.", {
         position: "bottom-right",
         autoClose: 3000,
         hideProgressBar: true,
@@ -104,18 +105,35 @@ class Create extends Component {
         draggable: true,
         progress: undefined,
       });
+      this.props.history.push("/home");
     })
     .catch((err) => {
       console.log(err);
     });
   }
 
-  saveToBlockChain(form){
-    BlockChainInterface.publishIdea(form).then(success => {
-
-    }).catch(err => {
-      
+  saveToMongo(form){
+    MongoDBInterface.addSignature(form)
+    .then((success) => {
+      toast.dark("Your thoughts have been submitted!", {
+        position: "bottom-right",
+        autoClose: 3000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      this.props.history.push("/home");
     })
+    .catch((err) => {
+      console.log(err);
+    });
+  }
+  
+
+  saveToBlockChain(form){
+        BlockChainInterface.publishIdea(form, this.saveToMongo, this.updateIdeaIDToMongo  )
   }
 
   async onSubmit(form) {
@@ -134,10 +152,9 @@ class Create extends Component {
         form.PDFFile = paths.PDFFile;
         form.thumbnail = paths.thumbnail;
         console.log(form);
-        this.saveToMongo(form)
         this.saveToBlockChain(form)
-      })
 
+      })
       .catch((error) => {
         return {
           PDFFile: "error",

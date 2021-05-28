@@ -10,6 +10,13 @@ const Rack = (props) => {
   function openCardView(signature) {
     history.push({pathname:"/signature/" + signature.PDFHash, state:signature});
   }
+
+  function getRandomTileSize(){
+    let classTypes = ["small","square","medium","large"];
+    var pick = classTypes[Math.floor(Math.random() * classTypes.length)];
+  }
+
+
   let placeHolderSize = props.classType == "primary" ? 424 : 280;
   let containerSize = props.classType == "primary" ? { width:424} : { width:280};
   return (

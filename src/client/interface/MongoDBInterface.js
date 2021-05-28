@@ -46,8 +46,19 @@ export const addSignature = payload => {
         thumbnail: payload.thumbnail,
         PDFHash: payload.PDFHash,
         PDFFile: payload.PDFFile,
+        transactionID: payload.transactionID,
+        ideaID: payload.ideaID,
     })
 }
+
+export const updateIdeaID = payload => {
+    return api.post(`/updateIdeaID`,{
+        PDFHash: payload.PDFHash,
+        transactionID: payload.transactionID,
+        ideaID: payload.ideaID,
+    })
+}
+
 export const getSignatures = (payload) =>  { 
     return api.post("/getSignatures",payload) 
 }
@@ -87,16 +98,10 @@ export const getUserInfo = payload => {
 
 
 const MongoDBInterface = {
-    addSignature,
     getSignatures,
-    getTokenById,
-    getFilePath,
-    signup,
-    login,
-    buyToken,
-    buyUserToken,
-    getUserInfo,
-    updatePrice
+    addSignature,
+    updateIdeaID,
+    getFilePath
 }
 
 export default MongoDBInterface

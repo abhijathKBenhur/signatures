@@ -79,17 +79,32 @@ class BlockchainInterface {
     return promise;
   }
 
-  publishIdea(payLoad) {
-    debugger;
+  publishIdea(payLoad, saveToMongoCallback, udpateIDCallback) {
     payLoad.price = this.web3.utils.toWei(payLoad.price, "ether");
-    console.log("publishIdea in publish idea")
+    
+    const transactionObject = {
+      value: this.web3.utils.toWei("0.05", "ether"),
+      from: payLoad.owner
+    };
     this.contract.methods
       .publish(payLoad.title, payLoad.PDFHash, payLoad.price)
-      .value(this.web3.utils.toWei("0.05", "ether"))
-      .send({ from: payLoad.owner })
-      .once("receipt", (receipt) => {
-        console.log("receipt" + receipt)
-      });
+      .send(transactionObject)
+      .on('transactionHash', function(hash){
+          payLoad.transactionID = hash
+          saveToMongoCallback(payLoad)
+      })
+      .on('receipt', function(receipt){
+        let tokenReturns = _.get(receipt.events,'Transfer.returnValues.tokenId')
+        let tokenID = tokenReturns && _.get(receipt.events,'Transfer.returnValues.tokenId').toNumber()
+        payLoad.ideaID = tokenID
+        if(tokenID){
+          udpateIDCallback(payLoad)
+        }
+      })
+      .on('confirmation', function(confirmationNumber, receipt){
+        // console.log("confirmation :: " + confirmationNumber)
+      })
+      .on('error', console.error);
   }
 
   getTokens() {

@@ -64,7 +64,7 @@ const Header = (props) => {
   return (
     <div>
       <nav className="navbar navbar-light bg-light flex-md-nowrap shadow appHeader justify-content-center">
-        <Container fuild>
+        <Container fluid>
           <div className="left-section">
             <a
               className="navbar-brand"

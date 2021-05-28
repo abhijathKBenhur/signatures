@@ -38,6 +38,46 @@ addSignature = (req, res) => {
     });
 };
 
+updateIdeaID = (req, res) => {
+  console.log("updating ID to an idea", req.body);
+  const body = req.body;
+
+  if (!body) {
+    return res.status(400).json({
+      success: false,
+      error: "Hollow idea",
+    });
+  }
+  const ideaToUpdate = new Signature(body);
+
+  if (!ideaToUpdate) {
+    return res.status(400).json({ success: false, error: err });
+  }
+  let findCriteria = {PDFHash: body.PDFHash, transactionID : body.transactionID}
+
+  ideaToUpdate.findOneAndUpdate(
+    findCriteria,
+    {ideaID:body.ideaID}
+  )
+    .then((idea, err) => {
+      console.log("Updating idea", idea);
+      if (err) {
+        console.log("Error updating idea");
+        return res.status(400).json({ success: false, error: err });
+      }
+      if (!idea) {
+        console.log(" failed Update");
+        return res.status(404).json({ success: true, data: [] });
+      }
+      console.log(" Updated to store");
+      return res.status(200).json({ success: true, data: idea });
+    })
+    .catch((err) => {
+      console.log("Error updating store");
+      return res.status(200).json({ success: false, data: err });
+    });
+};
+
 buyToken = async (req, res) => {
   console.log("Buying token", req.body);
   let buyer = req.body.buyer;
@@ -269,5 +309,7 @@ router.get("/token/:hashId/", getSignatureByHash);
 router.post("/getSignatures", getSignatures);
 router.post("/buyToken", buyToken);
 router.post("/updatePrice", updatePrice);
+router.post("/updateIdeaID", updateIdeaID);
+
 
 module.exports = router;

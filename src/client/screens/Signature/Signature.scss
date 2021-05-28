@@ -1,114 +1,64 @@
-
+@import "../../App.scss";
 .viewSignature{
-    .footerComponent{
-        display: flex;
-        justify-content: center;
-        padding: 0;
-        .publish-btn{
-            width: 100%;
-            border-radius: 5px;
-            padding: 10px;
-            position: relative;
-            top: 75px
+    .signature-container{
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        border-radius: 30px;
+        height: 80vh;
+        .left-side{
+            padding: 20px;
+            background-color: #2e49591c;
+            border-radius: 30px 0 0 30px;
         }
-    }
-    .form-row{
-        margin-bottom: 30px;
-        .additionaText{
-            text-align: center;
-        }
-        &.additional-row{
-            margin-top: 60px;
-            margin-bottom: 40px;
-        }
-        &.title-row{
-            margin-bottom: 0;
-        }
-        &.tags-row{
+        .right-side{
+            padding: 20px;
+            padding-left: 50px;
             display: flex;
-            gap:10px;
-            .tagpill{
-                padding: 5px;
-                background-color: #bfbfbf;
-                color: #2E495A;
-            }
-        }
-        &.input-row{
-            display: flex;
+            flex-direction: column;
             justify-content: space-between;
         }
-    }
-    
-        .imageContainer{
-            margin-bottom: 0;
-            height: 200px;
-            width: 200px;
-            .droppedImage{
-                flex: 0.2;
-            }
-            .container{
-                padding: 0;
-                margin-left: 0;
-            }
-            .dropZone{
-                background-color: #F1F1F1;
-                border: 1px dashed #c7c7c7;
-                border-style: dashed;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                color: #8c8888;
-                width: 100%;
-                outline: none;
-            }
-        }
-        .pdfContainer{
-            flex: 0.1;
-            margin-top: 10px;
-            border: 10px solid #f1f1f1;
-            .uploadedPDF{
-                background-color: #FFFFFF;
-            }
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            .container{
-                padding: 0;
-                margin-left: 0;
-            }
-            .dropZone{
-                background-color: #F1F1F1;
-                border: 1px dashed #c7c7c7;
-                border-style: dashed;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                color: #8c8888;
-                width: 100%;
-                outline: none;
-            }
-            .emptypdf{
+        .middle-side{
 
+        }
+        .signature-footer{
+            display: flex;
+            justify-content: space-between;
+            .left-end{
+                display: flex;
+                gap: 30px;
+                .ThumbsDown{
+                    color:"#F3C972";
+                }
+                .ThumbsUp{
+                    color:"#60B6A8";
+                }
             }
-            .pdfUploaded{
-                padding: 15px;
-                width: 100%;
-                .react-pdf__Page__canvas{
+            .right-end{
+                .ChevronsDown{
+                    color:"#60B6A8";
                 }
             }
         }
-        
-        .tokenModeCard{
-            height: 250px;
-            display: flex;
-            align-items: center;
-            text-align: center;
-            cursor: pointer;
-            flex-direction: initial;
-            &:hover{
-                
+        .form-row{
+            margin-bottom: 30px;
+          
+            &.title-row{
+                margin-bottom: 0;
+            }
+            &.tags-row{
+                display: flex;
+                gap:10px;
+                .tagpill{
+                    padding: 5px;
+                    background-color: #bfbfbf;
+                    color: #2E495A;
+                }
+            }
+            &.input-row{
+                display: flex;
+                justify-content: space-between;
             }
         }
+    }
 }
 
 

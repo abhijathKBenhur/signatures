@@ -17,9 +17,12 @@ function buySignature() {}
 const Signature = (props) => {
   let { hashId } = useParams();
   const location = useLocation();
-  const [signature, setSignature] = useState(location.state);
+  const [signature, setSignature] = useState({});
   useEffect(() => {
-    if (!signature) {
+    let signature = location.state
+    if(signature){
+      setSignature(signature)
+    }else{
       MongoDBInterface.getTokenById(hashId).then((signature) => {
         setSignature(_.get(signature, "data.data"));
       });
@@ -31,8 +34,8 @@ const Signature = (props) => {
   }
   return (
     <Form noValidate encType="multipart/form-data" className="viewSignature">
-      <Row>
-        <Col md="5">
+      <Row className="signature-container">
+        <Col md="5" className="left-side">
           {signature.PDFFile && (
             <Form.Row className="w-100 p15 ">
               {signature.PDFFile && (
@@ -49,51 +52,47 @@ const Signature = (props) => {
             </Form.Row>
           )}
         </Col>
-        <Col md="1"></Col>
-        <Col md="6">
-          <Row className="form-row title-row">
-            <h1>{signature.title}</h1>
-          </Row>
-          <Row className="form-row  tags-row">
-            {signature.category &&
-              JSON.parse(signature.category).map((tag) => {
-                return (
-                  <Badge className="tagpill" variant="secondary">
-                    {tag.label}
-                  </Badge>
-                );
-              })}
-          </Row>
-          <Row className="form-row">
-            <span> {signature.description}</span>
-          </Row>
-
-          <Row className="form-row input-row">
-            {/* <Col md="5">
-              <Form.Row className="imageContainer">
-                {signature.thumbnail && (
-                  <img
-                    src={signature.thumbnail}
-                    alt="preview"
-                    className="droppedImage"
-                    style={{ width: "90%" }}
-                  />
-                )}
-              </Form.Row>
-            </Col> */}
+        <Col md="7 right-side">
+          <div className="top-section">
+            <Row className="form-row title-row">
+              <h1>{signature.title}</h1>
+            </Row>
+            <Row className="form-row  tags-row">
+              {signature.category &&
+                JSON.parse(signature.category).map((tag) => {
+                  return (
+                    <Badge className="tagpill" variant="secondary">
+                      {tag.label}
+                    </Badge>
+                  );
+                })}
+            </Row>
             <Row className="form-row">
-              <Form.Group as={Col} className="formEntry" md="12">
-                <InputGroup className="">
-                  <span>{signature.price}</span>
-                </InputGroup>
-              </Form.Group>
+              <span> {signature.description}</span>
             </Row>
-            <Row>
-              <ThumbsDown></ThumbsDown>
-              <ThumbsUp></ThumbsUp>
-              <ChevronsDown></ChevronsDown>
+          </div>
+          <div className="bottom-section">
+            <Row className="form-row signature-footer">
+              <div class="left-end">
+                <ThumbsDown
+                  className="cursor-pointer ThumbsDown"
+                  color="#F3C972"
+                ></ThumbsDown>
+                <ThumbsUp
+                  className="cursor-pointer ThumbsUp"
+                  color="#60B6A8"
+                ></ThumbsUp>
+              </div>
+              <div class="right-end">
+                <div>
+                  <ChevronsDown
+                    className="cursor-pointer ChevronsDown"
+                    color="#D96C5D"
+                  ></ChevronsDown>
+                </div>
+              </div>
             </Row>
-          </Row>
+          </div>
         </Col>
       </Row>
     </Form>
