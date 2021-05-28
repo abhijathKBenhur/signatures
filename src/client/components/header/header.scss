@@ -1,8 +1,28 @@
 .appHeader{
+    background-color: #2E495A !important;
     position: absolute;
     width: 100%;
     z-index: 10000;
     height: 60px;
+    .header-icons{
+        color: white;
+    }
+    .left-section{
+        display: flex;
+        align-items: flex-end;
+        .nav-link {
+                color: white !important;
+                border-bottom: 4px solid #2E495A;
+                &.active{
+                    border-bottom: 4px solid white;
+                }
+        }
+    }
+    .right-section{
+        display: flex;
+        gap: 20px;
+        
+    }
     .dropdown-menu{
         padding: 3px;
         top: 15px;

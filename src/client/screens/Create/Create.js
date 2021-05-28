@@ -91,6 +91,33 @@ class Create extends Component {
     this.onSubmit(stateCopy);
   }
 
+
+  saveToMongo(form){
+    MongoDBInterface.addSignature(form)
+    .then((success) => {
+      toast.dark("Your thoughts have been pusblished!", {
+        position: "bottom-right",
+        autoClose: 3000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  }
+
+  saveToBlockChain(form){
+    BlockChainInterface.publishIdea(form).then(success => {
+
+    }).catch(err => {
+      
+    })
+  }
+
   async onSubmit(form) {
     // BlockchainInterface.getFilePath(form.file).then(path => {
     //   form.file = path
@@ -107,24 +134,10 @@ class Create extends Component {
         form.PDFFile = paths.PDFFile;
         form.thumbnail = paths.thumbnail;
         console.log(form);
-        MongoDBInterface.addSignature(form)
-          .then((success) => {
-            toast.dark("Your thoughts have been pusblished!", {
-              position: "bottom-right",
-              autoClose: 3000,
-              hideProgressBar: true,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-            });
-            debugger;
-            this.props.history.push("/home");
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+        this.saveToMongo(form)
+        this.saveToBlockChain(form)
       })
+
       .catch((error) => {
         return {
           PDFFile: "error",
@@ -170,7 +183,8 @@ class Create extends Component {
               >
                 <InputGroup>
                   <Form.Control
-                    type="textarea"
+                    className="descriptionArea"
+                    as="textarea"
                     rows={5}
                     aria-describedby="inputGroupAppend"
                     name="description"

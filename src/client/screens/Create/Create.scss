@@ -19,7 +19,14 @@
         }
     }
     .form-row{
+        textarea {
+            resize: none;
+         }
         margin-bottom: 30px;
+        .descriptionArea{
+            border: 1px solid #ced4da;
+          
+        }
         &:last-child{
             margin-bottom: -5px;
 
@@ -65,7 +72,7 @@
             }
             .dropZone{
                 background-color: #F1F1F1;
-                border: 1px dashed #c7c7c7;
+                border: 1px dashed #2e495a;
                 border-style: dashed;
                 display: flex;
                 justify-content: center;
@@ -93,7 +100,7 @@
             }
             .dropZone{
                 background-color: #F1F1F1;
-                border: 1px dashed #c7c7c7;
+                border: 1px dashed #2e495a;
                 border-style: dashed;
                 display: flex;
                 justify-content: center;

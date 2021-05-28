@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { Button, Dropdown, Image } from "react-bootstrap";
+import { Button, Dropdown, Form, Nav } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
 import logo from "../../../assets/logo/signatures.png";
 import LoginModal from "../../modals/login-modal/loginModal";
 import _ from "lodash";
-import { User } from "react-feather";
+import { User, Plus, Search } from "react-feather";
 import "./header.scss";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -29,19 +29,22 @@ const Header = (props) => {
 
   function createnew() {
     history.push("/create");
+    setAppLocatoin("create")
   }
 
   function gotoGallery() {
+    setAppLocatoin("home")
     history.push("/home");
   }
 
   function gotoPortfolio() {
+    setAppLocatoin("profile")
     history.push("/profile");
   }
 
   function connectWallet() {}
 
-  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [appLocation, setAppLocatoin] = useState("home");
   const [showLoginModal, setShowLoginModal] = useState(false);
   // const [loggedUserInfo, setLoggedUserInfo] = useState(undefined);
 
@@ -54,57 +57,90 @@ const Header = (props) => {
         onClick(e);
       }}
     >
-      <User size={35} color="black"></User>
+      <User className="cursor-pointer header-icons"></User>
     </a>
   ));
 
   return (
     <div>
-      <nav className="navbar navbar-light bg-light flex-md-nowrap shadow appHeader">
-        <Container>
-          <a className="navbar-brand" target="_blank" rel="noopener noreferrer">
-            <img
-              src={logo}
-              width="50"
-              height="50"
-              alt=""
-              onClick={() => gotoGallery()}
-            ></img>
-          </a>
-          <Dropdown>
-            <Dropdown.Toggle
-              as={ProfileDropDown}
-              id="dropdown-custom-components"
-            />
+      <nav className="navbar navbar-light bg-light flex-md-nowrap shadow appHeader justify-content-center">
+        <Container fuild>
+          <div className="left-section">
+            <a
+              className="navbar-brand"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img
+                src={logo}
+                width="50"
+                height="50"
+                alt=""
+                onClick={() => gotoGallery()}
+              ></img>
+            </a>
 
-            <Dropdown.Menu>
-              <Dropdown.Item
-                eventKey="1"
+            <Nav.Item>
+              <Nav.Link active={appLocation == "home" }
                 onClick={() => {
-                  createnew();
+                  gotoGallery()
                 }}
               >
-                Publish
-              </Dropdown.Item>
-              <Dropdown.Item
-                eventKey="2"
+                Discover
+              </Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+            <Nav.Link active={appLocation == "profile" }
                 onClick={() => {
                   gotoPortfolio();
                 }}
               >
-                Profile
-              </Dropdown.Item>
+                Collection
+              </Nav.Link>
+            </Nav.Item>
+          </div>
+          <div className="middle-section">
+            {/* <Form.Control size="sm" type="text" placeholder="Normal text" /> */}
+          </div>
 
-              <Dropdown.Item
-                eventKey="2"
-                onClick={() => {
-                  gotoPortfolio();
-                }}
-              >
-                Settings
-              </Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
+          <div className="right-section">
+            <Search className="cursor-pointer header-icons"  onClick={() => {createnew();}}></Search>
+            <Plus className="cursor-pointer header-icons"  onClick={() => {createnew();}}></Plus>
+            <Dropdown>
+              <Dropdown.Toggle
+                as={ProfileDropDown}
+                id="dropdown-custom-components"
+              />
+
+              <Dropdown.Menu>
+                <Dropdown.Item
+                  eventKey="1"
+                  onClick={() => {
+                    createnew();
+                  }}
+                >
+                  Publish
+                </Dropdown.Item>
+                <Dropdown.Item
+                  eventKey="2"
+                  onClick={() => {
+                    gotoPortfolio();
+                  }}
+                >
+                  Profile
+                </Dropdown.Item>
+
+                <Dropdown.Item
+                  eventKey="2"
+                  onClick={() => {
+                    gotoPortfolio();
+                  }}
+                >
+                  Settings
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
+          </div>
         </Container>
       </nav>
     </div>

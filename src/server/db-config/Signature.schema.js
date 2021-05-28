@@ -10,7 +10,9 @@ const Signature = new Schema(
         price: { type: Number , required: true},
         thumbnail: { type: String , required: true},
         PDFFile: { type: String ,required: true},
-        PDFHash: { type: String ,required: true}
+        PDFHash: { type: String ,required: true},
+        transactionID: { type: String},
+        ideaID: { type: String}
     },
     { timestamps: true },
 )

@@ -17,18 +17,28 @@ class BlockchainInterface {
   async getAccountDetails() {
     const promise = new Promise((resolve, reject) => {
       if (_.isUndefined(this.metamaskAccount) || _.isUndefined(this.contract)) {
-        this.loadWeb3().then((success) => {
-          this.loadBlockchainData()
-            .then((metamasId) => {
-              resolve(metamasId);
-            })
-            .catch((err) => {
-              defer(err);
-            });
-        }).catch(err =>{
-			defer(err)
-		})
+        console.log("returning loadWeb3");
+        this.loadWeb3()
+          .then((success) => {
+            this.metamaskAccount = success.accountId[0];
+            let metamaskNetwork = success.networkId;
+            const contractNetworkID = this.contractJSON.network;
+            if (contractNetworkID == metamaskNetwork) {
+              const abi = this.contractJSON.abi;
+              const contractAddress = this.contractJSON.address;
+              const contract = this.web3.eth.Contract(abi, contractAddress);
+              this.contract = contract;
+            } else {
+              window.alert("Smart contract not deployed to detected network.");
+            }
+            resolve(this.metamaskAccount);
+          })
+          .catch((err) => {
+            console.log("catch loadWeb3", err);
+            reject(err);
+          });
       } else {
+        console.log("a;lready present");
         resolve(this.metamaskAccount);
       }
     });
@@ -36,64 +46,50 @@ class BlockchainInterface {
     return promise;
   }
 
-  async loadWeb3() {
-    if (window.ethereum) {
-      this.web3 = new Web3(window.ethereum);
-      await window.ethereum.enable();
-    } else if (window.web3) {
-      this.web3 = new Web3(this.web3.currentProvider);
-    } else {
-      this.alert(
-        "Non-Ethereum browser detected. You should consider trying MetaMask!"
-      );
-    }
-    window.web3 = this.web3;
+  loadWeb3() {
+    let parentThis = window;
+    const promise = new Promise((resolve, reject) => {
+      if (window.ethereum) {
+        this.web3 = new Web3(window.ethereum);
+        window.web3 = this.web3;
+        window.ethereum
+          .enable()
+          .then((accountId) => {
+            window.web3.eth.net.getId().then((networkId) => {
+              resolve({
+                accountId,
+                networkId,
+              });
+            });
+          })
+          .catch((err) => {
+            reject(err);
+          });
+      } else if (window.web3) {
+        this.web3 = new Web3(this.web3.currentProvider);
+        window.web3 = this.web3;
+        resolve(this.web3);
+      } else {
+        let errorMessage =
+          "Non-Ethereum browser detected. You should consider trying MetaMask!";
+        parentThis.alert(errorMessage);
+        reject(errorMessage);
+      }
+    });
+    return promise;
   }
 
-  async loadBlockchainData() {
-    const web3 = this.web3;
-    const accounts = await web3.eth.getAccounts();
-    this.metamaskAccount = accounts[0];
-    web3.eth.net
-      .getId()
-      .then((metamaskNetwork) => {
-        const contractNetworkID = this.contractJSON.network;
-        if (contractNetworkID == metamaskNetwork) {
-          const abi = this.contractJSON.abi;
-          const contractAddress = this.contractJSON.address;
-          const contract = new web3.eth.Contract(abi, contractAddress);
-          this.contract = contract;
-        } else {
-          window.alert("Smart contract not deployed to detected network.");
-        }
-        return this.metamaskAccount;
-      })
-      .catch((err) => {
-        return err
-      });
-  }
-
-  createToken({ options }) {
-    let payLoad = {
-      account: this.metamaskAccount,
-      file: options.file,
-      name: options.tokenName,
-      category: options.tokenCategory,
-      amount: parseFloat(options.tokenSupply),
-      price: this.web3.utils.toWei(options.tokenCost, "ether"),
-      uri: options.file,
-    };
+  publishIdea(payLoad) {
+    debugger;
+    payLoad.price = this.web3.utils.toWei(payLoad.price, "ether");
+    console.log("publishIdea in publish idea")
     this.contract.methods
-      .mint(
-        payLoad.account,
-        payLoad.name,
-        payLoad.category,
-        payLoad.amount,
-        payLoad.price,
-        payLoad.uri
-      )
-      .send({ from: this.metamaskAccount })
-      .once("receipt", (receipt) => {});
+      .publish(payLoad.title, payLoad.PDFHash, payLoad.price)
+      .value(this.web3.utils.toWei("0.05", "ether"))
+      .send({ from: payLoad.owner })
+      .once("receipt", (receipt) => {
+        console.log("receipt" + receipt)
+      });
   }
 
   getTokens() {

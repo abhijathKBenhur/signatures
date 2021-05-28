@@ -13,7 +13,7 @@ const Rack = (props) => {
   let placeHolderSize = props.classType == "primary" ? 424 : 280;
   let containerSize = props.classType == "primary" ? { width:424} : { width:280};
   return (
-    <div className={"vertical-shelf " + props.classType}>
+    <div className={"cursor-pointer vertical-shelf " + props.classType}>
       {props.deck.map((signature, index) => {
         return (
           <Card
@@ -25,7 +25,6 @@ const Rack = (props) => {
             }}
           >
             <Image
-              // src={"https://source.unsplash.com/random/100x100?sig=1" + index}
               src={signature.thumbnail}
               fallback={<Shimmer width={placeHolderSize} height={placeHolderSize} />}
             />

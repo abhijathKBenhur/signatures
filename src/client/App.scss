@@ -2,6 +2,16 @@
 /* Styles go here */
 @import url('https://fonts.googleapis.com/css?family=Patrick+Hand+SC|Roboto&display=swap');
 
+.appContainer{
+  .content{
+      padding-top: 6.25rem !important;
+  }
+}
+body{
+  font-family: 'Roboto';
+}
+
+
 .btn:focus,.btn:active {
   outline: none !important;
   box-shadow: none;
@@ -15,14 +25,17 @@
       box-shadow: none;
     }  
   }
-  
+}
+
+.cursor-pointer{
+  cursor: pointer;
+}
+
+.btn-danger{
+  color: #fff;
+  background-color: #E3675A;
+  border-color: #E3675A;
 }
 
 
 
-.appContainer{
-  font-family: 'Roboto';
-  .content{
-      padding-top: 6.25rem !important;
-  }
-}
