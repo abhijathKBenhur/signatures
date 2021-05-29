@@ -1,0 +1,44 @@
+
+/* Styles go here */
+@import url('https://fonts.googleapis.com/css?family=Patrick+Hand+SC|Roboto&display=swap');
+$primaty-green:"#60B6A8";
+$primary-red:"#D96C5D";
+$primary-yellow:"#D96C5D";
+
+.appContainer{
+  .content{
+      padding-top: 6.25rem !important;
+  }
+}
+body{
+  font-family: 'Roboto';
+}
+
+
+.btn:focus,.btn:active {
+  outline: none !important;
+  box-shadow: none;
+}
+.form-group{
+  .form-control{
+    border: 0;
+    border-radius: 0;
+    border-bottom: 1px solid #ced4da;
+    &:focus{
+      box-shadow: none;
+    }  
+  }
+}
+
+.cursor-pointer{
+  cursor: pointer;
+}
+
+.btn-danger{
+  color: #fff;
+  background-color: #E3675A;
+  border-color: #E3675A;
+}
+
+
+

@@ -1,0 +1,68 @@
+@import "../../App.scss";
+.viewSignature{
+    .signature-container{
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        border-radius: 30px;
+        height: 80vh;
+        .left-side{
+            padding: 20px;
+            background-color: #2e49591c;
+            border-radius: 30px 0 0 30px;
+        }
+        .right-side{
+            padding: 20px;
+            padding-left: 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .middle-side{
+
+        }
+        .signature-footer{
+            display: flex;
+            justify-content: space-between;
+            .left-end{
+                display: flex;
+                gap: 30px;
+                .ThumbsDown{
+                    color:"#F3C972";
+                }
+                .ThumbsUp{
+                    color:"#60B6A8";
+                }
+            }
+            .right-end{
+                .ChevronsDown{
+                    color:"#60B6A8";
+                }
+            }
+        }
+        .form-row{
+            margin-bottom: 30px;
+          
+            &.title-row{
+                margin-bottom: 0;
+            }
+            &.owner-row{
+                color: grey;
+            }
+            &.tags-row{
+                display: flex;
+                gap:10px;
+                .tagpill{
+                    padding: 5px;
+                    background-color: #bfbfbf;
+                    color: #2E495A;
+                }
+            }
+            &.input-row{
+                display: flex;
+                justify-content: space-between;
+            }
+        }
+    }
+}
+
+
+

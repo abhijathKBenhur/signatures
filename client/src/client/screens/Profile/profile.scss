@@ -1,0 +1,38 @@
+.profile{
+    .mycollection{
+        border-right: 1px solid #F1F1F1;
+        .collection-container{
+            display: flex;
+            flex-direction: column;
+            gap:20px;
+            padding: 30px;
+            overflow: auto;
+            max-height: 100vh;
+            .long-card{
+                height: 160px;
+                padding: 10px;
+                border: 1px solid rgba(0, 0, 0, 0.125);
+                border-radius: 20px;
+                .image-container{
+                    border-right: 1px solid rgba(0, 0, 0, 0.125);
+                    padding-left: 0;
+                    img{
+                        height: 140px;
+                        width: 120px;
+                    }
+                }
+                .description-container{
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-between;
+                }
+                &:hover{
+                    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15)
+                }
+            }
+        }
+    }
+    .favorites{
+        padding-left: 30px;
+    }
+}
