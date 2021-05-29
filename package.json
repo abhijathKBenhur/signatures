@@ -54,6 +54,8 @@
   "scripts": {
     "start": "react-scripts start --no-cache",
     "build": "react-scripts build",
+    "install-client": "npm install",
+    "heroku-postbuild":"npm run install-client && npm run build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "server": "node-env-run server --exec nodemon",

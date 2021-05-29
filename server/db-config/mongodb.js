@@ -4,7 +4,7 @@ const MONGO_DB = "Signatures";
 
 console.log("Initializing mongo connection ");
 const baseUrl = "mongodb://127.0.0.1:27017/" + MONGO_DB;
-mongoose.connect(process.env.MONGO_URL || baseUrl, {
+mongoose.connect(process.env.MONGODB_URL || baseUrl, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
