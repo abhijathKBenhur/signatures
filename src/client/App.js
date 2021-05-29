@@ -27,6 +27,12 @@ class App extends Component {
           <Container fluid className="content p-5">
               <Switch>
                 <Route
+                  path='/'
+                  render={(props) => (
+                    <Gallery/>
+                  )}
+                />
+                <Route
                   path='/home'
                   render={(props) => (
                     <Gallery/>
