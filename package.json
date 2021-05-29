@@ -10,10 +10,13 @@
   "scripts": {
     "test": "echo 'Error: no test specified' && exit 1",
     "server": "node-env-run index.js --exec nodemon",
-    "install-client": "npm install",
-    "heroku-postbuild": "npm run install-client && npm run build",
+    "start": "node-env-run index.js --exec nodemon",
+    "build": "cd client && npm run build",
+    "install-client": "cd client && npm install",
+    
     "client": "cd client && npm start",
-    "dev": "run-p server client"
+    "dev": "run-p server client",
+    "heroku-postbuild": "npm run install-client && npm run build",
   },
   "keywords": [],
   "author": "",
