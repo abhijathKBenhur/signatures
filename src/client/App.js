@@ -34,6 +34,7 @@ class App extends Component {
                 />
                 <Route path="/signature/:hashId" children={<Signature />} />
                 <Route path="/create" children={<Create />} />
+                <Route path="/profile" children={<Profile />} />
               </Switch>
           </Container>
         </div>

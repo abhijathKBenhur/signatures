@@ -44,6 +44,9 @@
             &.title-row{
                 margin-bottom: 0;
             }
+            &.owner-row{
+                color: grey;
+            }
             &.tags-row{
                 display: flex;
                 gap:10px;

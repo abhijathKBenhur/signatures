@@ -1,62 +1,105 @@
-import React, { Component } from "react";
-import { Container, Row, Col } from "react-bootstrap";
-import MongoDBInterface from "../../interface/MongoDBInterface";
 import _ from "lodash";
-import Rack from "../../components/Rack/Rack";
+import Signature from "../../beans/Signature";
+import React, { useState, useEffect } from "react";
+import { Badge, Button, Row, Col, Form, InputGroup } from "react-bootstrap";
+import { useHistory } from "react-router-dom";
 import "./profile.scss";
-import { User } from "react-feather";
+import Image, { Shimmer } from "react-shimmer";
+import MongoDBInterface from "../../interface/MongoDBInterface";
+import BlockChainInterface from "../../interface/BlockchainInterface";
 
-class profile extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      myTokens: [],
-      userInfo: {},
-      loggedUser: localStorage.getItem("userInfo"),
-    };
+function Profile(props) {
+  const [collectionList, setCollectionList] = useState([]);
+  const [rackList, setRackList] = useState([]);
+  let history = useHistory();
+  function openCardView(signature) {
+    history.push({
+      pathname: "/signature/" + signature.PDFHash,
+      state: signature,
+    });
   }
+  useEffect(() => {
+    BlockChainInterface.getAccountDetails()
+      .then((metamaskID) => {
+        MongoDBInterface.getSignatures({ userName: metamaskID }).then(
+          (signatures) => {
+            let response = _.get(signatures, "data.data");
+            let rackValues = [];
+            setCollectionList(response);
+            _.forEach(response, (signature, index) => {
+              rackValues[index % 3] = rackValues[index % 3] || [];
+              rackValues[index % 3].push(new Signature(signature));
+            });
+            setRackList(rackValues);
+          }
+        );
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
 
-  componentWillMount() {
-    MongoDBInterface.getTokens({ userName: this.state.loggedUser }).then(
-      (tokens) => {
-        this.setState({
-          myTokens: _.get(tokens, "data.data").filter(
-            (card) => card.owner == localStorage.getItem("userInfo")
-          ),
-        });
-      }
-    );
-
-    MongoDBInterface.getUserInfo({ userName: this.state.loggedUser }).then(
-      (user) => {
-        this.setState({
-          userInfo: _.get(user, "data.data"),
-        });
-      }
-    );
-  }
-
-  render() {
-    return (
-      <div>
-        <Row className="w-100">
-          <div className="userPane">
-            <Row className="userInfo">
-              <Col md="12">{this.state.userInfo.userName}</Col>
-              <Col md="12">{this.state.userInfo.balance} ETH</Col>
-            </Row>
-            <div className="profileHolder">
-              <User size={50}></User>
-            </div>
-          </div>
+  return (
+    <Row className="profile">
+      <Col md="12">
+        <Row>
+          <Col md="6">
+            <h2>My collection</h2>
+          </Col>
+          <Col md="6">
+            <h2>Following</h2>
+          </Col>
         </Row>
+      </Col>
+      <Col md="6" className="mycollection">
+        <Row>
+          <Col md="12" className="collection-container">
+            {collectionList.map((collection, index) => {
+              return (
+                <Row
+                  className="long-card cursor-pointer"
+                  onClick={() => {
+                    openCardView(collection);
+                  }}
+                >
+                  <Col md="3" className="image-container">
+                    <Image
+                      src={collection.thumbnail}
+                      width={50}
+                      height={50}
+                      fallback={<Shimmer width={50} height={50} />}
+                    />
+                  </Col>
 
-        <Row className="w-100 mt-5">
-          <Rack category={"Collection"} cards={this.state.myTokens}></Rack>
+                  <Col md="8" className="description-container">
+                    <Row>
+                      <Col md="12">
+                        <h4>{collection.title}</h4>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col md="12">
+                        {collection.description.length > 50
+                          ? collection.description.substring(0, 50) + "..."
+                          : collection.description || "Click to see this idea"}
+                      </Col>
+                    </Row>
+                  </Col>
+                  <Col md="1">
+                    <Row></Row>
+                    <Row></Row>
+                    <Row></Row>
+                  </Col>
+                </Row>
+              );
+            })}
+          </Col>
         </Row>
-      </div>
-    );
-  }
+        <Row></Row>
+      </Col>
+      <Col md="6" className="favorites"></Col>
+    </Row>
+  );
 }
 
-export default profile;
+export default Profile;

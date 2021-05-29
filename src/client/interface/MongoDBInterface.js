@@ -14,23 +14,10 @@ const fileAPI = axios.create({
     }
 })
 
-export const signup = payload => {
-    return api.post(`/signup`,{
-        userName: payload.userName,
-        password: payload.password,
-    })
-}
-
-export const login = payload => {
-    return api.post(`/login`,{
-        userName: payload.userName,
-        password: payload.password,
-    })
-}
 
 export const updatePrice = payload => {
     return api.post(`/updatePrice`,{
-        setter: payload.setter,
+        setter: payload.owner,
         price: payload.price,
         tokenId: payload.tokenId,
     })
@@ -62,8 +49,9 @@ export const updateIdeaID = payload => {
 export const getSignatures = (payload) =>  { 
     return api.post("/getSignatures",payload) 
 }
-export const getTokenById = (tokenId, owner) => { 
-    return api.get(`/token/${tokenId}/${owner}`) 
+
+export const getSignatureByHash = (tokenId) => { 
+    return api.get(`/signature/${tokenId}`) 
 }
 
 export const getFilePath = form => { 
@@ -84,12 +72,8 @@ export const getFilePath = form => {
 }
 
 
-export const buyToken = payload => { 
-    return api.post(`/buyToken`,payload) 
-}
-
-export const buyUserToken = payload => { 
-    return api.post(`/buyUserToken`,payload) 
+export const buySignature = payload => { 
+    return api.post(`/buySignature`,payload) 
 }
 
 export const getUserInfo = payload => { 
@@ -101,7 +85,9 @@ const MongoDBInterface = {
     getSignatures,
     addSignature,
     updateIdeaID,
-    getFilePath
+    getFilePath,
+    getSignatureByHash,
+    buySignature
 }
 
 export default MongoDBInterface

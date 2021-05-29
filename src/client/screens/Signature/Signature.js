@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useLocation } from "react-router-dom";
 import { Badge, Button, Row, Col, Form, InputGroup } from "react-bootstrap";
+import BlockChainInterface from "../../interface/BlockchainInterface";
 import MongoDBInterface from "../../interface/MongoDBInterface";
+
 import Dropzone from "react-dropzone";
 import CONSTANTS from "../../../client/commons/Constants";
 import "./Signature.scss";
@@ -23,7 +25,7 @@ const Signature = (props) => {
     if(signature){
       setSignature(signature)
     }else{
-      MongoDBInterface.getTokenById(hashId).then((signature) => {
+      MongoDBInterface.getSignatureByHash(hashId).then((signature) => {
         setSignature(_.get(signature, "data.data"));
       });
     }
@@ -31,6 +33,25 @@ const Signature = (props) => {
 
   function onLoadError(error) {
     alert(error);
+  }
+
+  function buySignature(){
+    BlockChainInterface.getAccountDetails()
+      .then((metamaskID) => {
+        MongoDBInterface.buySignature({
+          buyer: metamaskID,
+          seller: signature.owner,
+          PDFHash: signature.PDFHash
+        }).then(
+          (signature) => {
+            debugger;
+           setSignature(_.get(signature,'data.data'))
+          }
+        );
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
   return (
     <Form noValidate encType="multipart/form-data" className="viewSignature">
@@ -57,11 +78,14 @@ const Signature = (props) => {
             <Row className="form-row title-row">
               <h1>{signature.title}</h1>
             </Row>
+            <Row className="form-row owner-row">
+              <span>{signature.owner}</span>
+            </Row>
             <Row className="form-row  tags-row">
               {signature.category &&
-                JSON.parse(signature.category).map((tag) => {
+                JSON.parse(signature.category).map((tag,key) => {
                   return (
-                    <Badge className="tagpill" variant="secondary">
+                    <Badge key={key} className="tagpill" variant="secondary">
                       {tag.label}
                     </Badge>
                   );
@@ -73,7 +97,7 @@ const Signature = (props) => {
           </div>
           <div className="bottom-section">
             <Row className="form-row signature-footer">
-              <div class="left-end">
+              <div className="left-end">
                 <ThumbsDown
                   className="cursor-pointer ThumbsDown"
                   color="#F3C972"
@@ -83,11 +107,12 @@ const Signature = (props) => {
                   color="#60B6A8"
                 ></ThumbsUp>
               </div>
-              <div class="right-end">
+              <div className="right-end">
                 <div>
                   <ChevronsDown
                     className="cursor-pointer ChevronsDown"
                     color="#D96C5D"
+                    onClick={() => {buySignature()}}
                   ></ChevronsDown>
                 </div>
               </div>

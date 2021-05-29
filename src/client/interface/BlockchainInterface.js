@@ -38,7 +38,7 @@ class BlockchainInterface {
             reject(err);
           });
       } else {
-        console.log("a;lready present");
+        console.log("already present");
         resolve(this.metamaskAccount);
       }
     });
