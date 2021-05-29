@@ -16,7 +16,7 @@
     
     "client": "cd client && npm start",
     "dev": "run-p server client",
-    "heroku-postbuild": "npm run install-client && npm run build",
+    "heroku-postbuild": "npm run install-client && npm run build"
   },
   "keywords": [],
   "author": "",
