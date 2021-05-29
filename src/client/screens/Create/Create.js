@@ -3,7 +3,7 @@ import { Modal, Button, Row, Col, Form, InputGroup } from "react-bootstrap";
 import MongoDBInterface from "../../interface/MongoDBInterface";
 import BlockChainInterface from "../../interface/BlockchainInterface";
 import Dropzone from "react-dropzone";
-import CONSTANTS from "../../../client/commons/Constants";
+import CONSTANTS from "../../commons/Constants";
 import { withRouter } from "react-router-dom";
 import "./Create.scss";
 import { FileText } from "react-feather";

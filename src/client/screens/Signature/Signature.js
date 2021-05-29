@@ -5,7 +5,6 @@ import BlockChainInterface from "../../interface/BlockchainInterface";
 import MongoDBInterface from "../../interface/MongoDBInterface";
 
 import Dropzone from "react-dropzone";
-import CONSTANTS from "../../../client/commons/Constants";
 import "./Signature.scss";
 import { ChevronsDown, ThumbsDown, ThumbsUp } from "react-feather";
 import md5 from "md5";
