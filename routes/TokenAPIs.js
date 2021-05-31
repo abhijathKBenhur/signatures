@@ -6,7 +6,7 @@ const path = require("path");
 var fs = require("fs");
 
 addSignature = (req, res) => {
-  console.log("Adding an idea", req.body);
+  console.log("Adding an idea  to mongoDB", req.body);
   const body = req.body;
 
   if (!body) {
@@ -135,15 +135,14 @@ getSignatures = async (req, res) => {
 };
 
 getFilePath = async (req, res) => {
-  let dest = "client/build/public/uploads/";
-  if (!fs.existsSync(dest)){
-    fs.mkdirSync(dest);
-  }
+  console.log(__dirname)
+  let dest = "./client/build/public/uploads/";
+ 
   const upload = multer({
     req,
     res,
     storage: multer.diskStorage({
-      destination: "client/build/public/uploads/",
+      destination: "./client/build/public/uploads/",
       filename: function(req, file, cb) {
         cb(null, "temp" + path.extname(file.originalname));
       },
@@ -180,7 +179,8 @@ getFilePath = async (req, res) => {
       if (req.file == undefined) {
         return res.status(400).json({ success: false, error: "File missing" });
       } else {
-        let __dirname = "client/build/public/uploads";
+        let __dirname = "./client/build/public/uploads";
+        console.log(req.body.type)
         let hashCode = req.body.hash;
         
         var targetDir = __dirname + '/' + hashCode;
@@ -204,8 +204,9 @@ getFilePath = async (req, res) => {
           .status(200)
           .json({
             success: true,
+            type:req.body.type,
             path:
-              "./uploads/" +
+              "./client/build/public/uploads/" +
               hashCode +
               "/" +
               hashCode +
@@ -238,7 +239,7 @@ buySignature = async (req, res) => {
     saleCriteria
   )
     .then((idea, err) => {
-      console.log("Updating idea", idea);
+      console.log("Updating idea to mongoDB", idea);
       if (err) {
         console.log("Error updating idea");
         return res.status(400).json({ success: false, error: err });

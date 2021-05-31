@@ -59,11 +59,13 @@ export const getFilePaths = form => {
     let PDFformData = new FormData();
     PDFformData.append('fileData',form.PDFFile )
     PDFformData.append('hash',form.PDFHash )
+    PDFformData.append('type',"PDFFile" )
 
 
     let IMGformData = new FormData();
     IMGformData.append('fileData',form.thumbnail )
     IMGformData.append('hash',form.PDFHash )
+    IMGformData.append('type',"thumbnail" )
 
 
     promiseList.push(fileAPI.post("/getFilePath",PDFformData))

@@ -1,4 +1,3 @@
-// import BlockchainInterface from './interface/BlockchainInterface'
 
 import _ from 'lodash'
 import React, { Component } from 'react';

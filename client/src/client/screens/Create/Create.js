@@ -146,10 +146,11 @@ class Create extends Component {
     console.log("form:", form);
     form.IPFS = true
     const parentThis = this;
-    BlockChainInterface.getFilePaths(form)
+    MongoDBInterface.getFilePaths(form)
+    // BlockChainInterface.getFilePaths(form)
       .then((success) => {
-        form.PDFFile = _.get(_.find(success,{type:"PDFFile"}),'path')
-        form.thumbnail = _.get(_.find(success,{type:"thumbnail"}),'path')
+        form.PDFFile = _.get(_.find(_.map(success,'data'),{type:"PDFFile"}),'path')
+        form.thumbnail = _.get(_.find(_.map(success,'data'),{type:"thumbnail"}),'path')
         console.log(form);
         this.saveToBlockChain(form);
       })
