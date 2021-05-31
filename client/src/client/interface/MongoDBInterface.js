@@ -4,11 +4,11 @@ import _ from "lodash";
 
 import {uuid} from 'uuidv4'
 const api = axios.create({
-    baseURL: 'http://localhost:4000/api',
+    // baseURL: 'http://localhost:4000/api',
 })
 
 const fileAPI = axios.create({
-    baseURL: 'http://localhost:4000/api',
+    // baseURL: 'http://localhost:4000/api',
     headers: {
         'Content-Type': 'multipart/form-data'
     }
