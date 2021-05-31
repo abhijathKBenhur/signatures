@@ -136,9 +136,11 @@ getSignatures = async (req, res) => {
 getFilePath = async (req, res) => {
   console.log(__dirname)
   let dest = "./client/public/uploads";
+  console.log("curr :: "+__dirname)
   if (!fs.existsSync(dest)) {
+    console.log("not exist :: "+dest)
     fs.mkdirSync(dest, 0744);
-}
+  }
   const upload = multer({
     req,
     res,
@@ -168,12 +170,12 @@ getFilePath = async (req, res) => {
     if (mimetype && extname) {
       return cb(null, true);
     } else {
-      cb("Error: Images Only!");
+      cb("Error: unsupported file!");
     }
   }
 
   upload(req, res, (err) => {
-    console.log(err);
+    console.log("in upload :: "+dest)
     if (err) {
       return res.status(400).json({ success: false, error: err });
     } else {
@@ -181,6 +183,8 @@ getFilePath = async (req, res) => {
         return res.status(400).json({ success: false, error: "File missing" });
       } else {
         let __dirname = "./client/public/uploads";
+        console.log("uploading the file");
+
         console.log(req.body.type)
         let hashCode = req.body.hash;
         
