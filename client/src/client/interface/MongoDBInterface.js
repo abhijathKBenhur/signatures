@@ -4,11 +4,11 @@ import _ from "lodash";
 
 import {uuid} from 'uuidv4'
 const api = axios.create({
-    baseURL: '/api',
+    baseURL: 'http://localhost:4000/api',
 })
 
 const fileAPI = axios.create({
-    baseURL: '/api',
+    baseURL: 'http://localhost:4000/api',
     headers: {
         'Content-Type': 'multipart/form-data'
     }
@@ -19,7 +19,7 @@ export const updatePrice = payload => {
     return api.post(`/updatePrice`,{
         setter: payload.owner,
         price: payload.price,
-        tokenId: payload.tokenId,
+        ideaID: payload.ideaID,
     })
 }
 
@@ -54,7 +54,7 @@ export const getSignatureByHash = (tokenId) => {
     return api.get(`/signature/${tokenId}`) 
 }
 
-export const getFilePath = form => { 
+export const getFilePaths = form => { 
     let promiseList = []
     let PDFformData = new FormData();
     PDFformData.append('fileData',form.PDFFile )
@@ -85,7 +85,7 @@ const MongoDBInterface = {
     getSignatures,
     addSignature,
     updateIdeaID,
-    getFilePath,
+    getFilePaths,
     getSignatureByHash,
     buySignature
 }

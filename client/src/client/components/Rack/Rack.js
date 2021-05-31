@@ -5,6 +5,7 @@ import { Feather, User } from "react-feather";
 import Image, { Shimmer } from "react-shimmer";
 
 import "./Rack.scss";
+import BlockchainInterface from "../../interface/BlockchainInterface";
 const Rack = (props) => {
   let history = useHistory();
   function openCardView(signature) {
@@ -14,6 +15,17 @@ const Rack = (props) => {
   function getRandomTileSize(){
     let classTypes = ["small","square","medium","large"];
     var pick = classTypes[Math.floor(Math.random() * classTypes.length)];
+  }
+
+  function getImageFromHash(hash){
+    BlockchainInterface.getImageFromIPFS(hash).then(files =>{
+      let file =  URL.createObjectURL(
+        new Blob([files[0].content], { type: 'image/png' } /* (1) */)
+      );
+      return file
+    }).catch(error =>{
+      console.log(error)
+    })
   }
 
 
@@ -32,6 +44,7 @@ const Rack = (props) => {
             }}
           >
             <Image
+              // src={getImageFromHash(signature.thumbnail)}
               src={signature.thumbnail}
               fallback={<Shimmer width={placeHolderSize} height={placeHolderSize} />}
             />
@@ -39,7 +52,6 @@ const Rack = (props) => {
               <div className="signature-title">
                 <Card.Title>
                   {signature.description.length > 50 ? signature.description.substring(0,50) +"...": signature.description || "Click to see this idea"}
-                    
                 </Card.Title>
               </div>
               <div className="signature-content">

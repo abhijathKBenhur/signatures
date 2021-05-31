@@ -68,7 +68,7 @@ class Confirmation extends React.Component {
             <Button variant="dark" onClick={() => proceed({proceed:false, input:this.state.input})}>{cancelLabel}</Button>
             <Button variant="danger"
               className="button-l"
-              bsStyle="primary"
+              bsstyle="primary"
               onClick={() => proceed({proceed:true,input:this.state.input})}
             >
               {proceedLabel}

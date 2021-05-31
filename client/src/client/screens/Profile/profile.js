@@ -7,7 +7,11 @@ import "./profile.scss";
 import Image, { Shimmer } from "react-shimmer";
 import MongoDBInterface from "../../interface/MongoDBInterface";
 import BlockChainInterface from "../../interface/BlockchainInterface";
-
+import { toast } from "react-toastify";
+import { confirm } from "../../modals/confirmation/confirmation";
+import {
+  Edit3,
+} from "react-feather";
 function Profile(props) {
   const [collectionList, setCollectionList] = useState([]);
   const [rackList, setRackList] = useState([]);
@@ -18,6 +22,49 @@ function Profile(props) {
       state: signature,
     });
   }
+
+  function updatePriceInMongo(signature) {
+    MongoDBInterface.updatePrice(signature).then((updatedSignature) => {
+      signature.price = _.get(updatedSignature, "data.data");
+    });
+  }
+
+  function feedbackMessage() {
+    toast.dark(
+      "Your order has been placed. Please wait a while for it to be processed.",
+      {
+        position: "bottom-right",
+        autoClose: 3000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      }
+    );
+  }
+
+  function editPrice(signature) {
+    confirm(
+      "Set your price.",
+      "Please enter the sell price",
+      "Ok",
+      "Cancel",
+      true
+    ).then((success) => {
+      if (success.proceed) {
+        signature.price = JSON.parse(success.input);
+        BlockChainInterface.updatePrice(
+          signature,
+          updatePriceInMongo,
+          feedbackMessage
+        );
+      } else {
+      }
+    });
+  }
+
+
   useEffect(() => {
     BlockChainInterface.getAccountDetails()
       .then((metamaskID) => {
@@ -57,6 +104,7 @@ function Profile(props) {
             {collectionList.map((collection, index) => {
               return (
                 <Row
+                  key={index}
                   className="long-card cursor-pointer"
                   onClick={() => {
                     openCardView(collection);
@@ -85,8 +133,13 @@ function Profile(props) {
                       </Col>
                     </Row>
                   </Col>
-                  <Col md="1">
-                    <Row></Row>
+                  <Col md="1" className="menu-bar">
+                    <Row className="justify-content-center">
+                      <Edit3 onClick={(e) => {
+                        e.stopPropagation();
+                        editPrice(collection)
+                        }}></Edit3>
+                    </Row>
                     <Row></Row>
                     <Row></Row>
                   </Col>

@@ -61,6 +61,7 @@ class Create extends Component {
       reader.readAsArrayBuffer(acceptedFiles[0]);
       reader.onloadend = () => {
         Hash.of(Buffer(reader.result)).then((PDFHashValue) => {
+          // Check for already existing PDF Hashes
           this.setState({
             PDFHash: PDFHashValue,
           });
@@ -142,20 +143,13 @@ class Create extends Component {
   }
 
   async onSubmit(form) {
-    // BlockchainInterface.getFilePath(form.file).then(path => {
-    //   form.file = path
-    //   BlockchainInterface.createToken({options:form})
-    // })
     console.log("form:", form);
+    form.IPFS = true
     const parentThis = this;
-    MongoDBInterface.getFilePath(form)
+    BlockChainInterface.getFilePaths(form)
       .then((success) => {
-        let paths = {
-          PDFFile: _.get(success[0], "data.path"),
-          thumbnail: _.get(success[1], "data.path"),
-        };
-        form.PDFFile = paths.PDFFile;
-        form.thumbnail = paths.thumbnail;
+        form.PDFFile = _.get(_.find(success,{type:"PDFFile"}),'path')
+        form.thumbnail = _.get(_.find(success,{type:"thumbnail"}),'path')
         console.log(form);
         this.saveToBlockChain(form);
       })

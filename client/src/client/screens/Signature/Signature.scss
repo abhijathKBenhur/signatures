@@ -19,23 +19,32 @@
         .middle-side{
 
         }
+        .menu-bar{
+            border-left: 2px solid #e8ebed;
+            border-radius: 0 30px 30px 0;
+            padding: 30px 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            .top-menu{
+                gap: 30px;
+                display: flex;
+                flex-direction: column;
+            }
+            .bottom-menu{
+
+            }
+        }
+
         .signature-footer{
             display: flex;
             justify-content: space-between;
             .left-end{
                 display: flex;
                 gap: 30px;
-                .ThumbsDown{
-                    color:"#F3C972";
-                }
-                .ThumbsUp{
-                    color:"#60B6A8";
-                }
             }
             .right-end{
-                .ChevronsDown{
-                    color:"#60B6A8";
-                }
+                
             }
         }
         .form-row{

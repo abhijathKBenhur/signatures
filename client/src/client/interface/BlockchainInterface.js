@@ -14,6 +14,10 @@ class BlockchainInterface {
     this.NFTTokenBean = NFTTokenBean;
   }
 
+  getImageFromIPFS(hash){
+    return IPFS.files.get(hash)
+  }
+
   async getAccountDetails() {
     const promise = new Promise((resolve, reject) => {
       if (_.isUndefined(this.metamaskAccount) || _.isUndefined(this.contract)) {
@@ -81,55 +85,198 @@ class BlockchainInterface {
 
   publishIdea(payLoad, saveToMongoCallback, udpateIDCallback) {
     payLoad.price = this.web3.utils.toWei(payLoad.price, "ether");
-    
+
     const transactionObject = {
       value: this.web3.utils.toWei("0.05", "ether"),
-      from: payLoad.owner
+      from: payLoad.owner,
     };
     this.contract.methods
       .publish(payLoad.title, payLoad.PDFHash, payLoad.price)
       .send(transactionObject)
-      .on('transactionHash', function(hash){
-          payLoad.transactionID = hash
-          saveToMongoCallback(payLoad)
+      .on("transactionHash", function(hash) {
+        payLoad.transactionID = hash;
+        saveToMongoCallback(payLoad);
       })
-      .on('receipt', function(receipt){
-        let tokenReturns = _.get(receipt.events,'Transfer.returnValues.tokenId')
-        let tokenID = tokenReturns && _.get(receipt.events,'Transfer.returnValues.tokenId').toNumber()
-        payLoad.ideaID = tokenID
-        if(tokenID){
-          udpateIDCallback(payLoad)
+      .on("receipt", function(receipt) {
+        let tokenReturns = _.get(
+          receipt.events,
+          "Transfer.returnValues.tokenId"
+        );
+        let tokenID =
+          tokenReturns &&
+          _.get(receipt.events, "Transfer.returnValues.tokenId").toNumber();
+        payLoad.ideaID = tokenID;
+        if (tokenID) {
+          udpateIDCallback(payLoad);
         }
       })
-      .on('confirmation', function(confirmationNumber, receipt){
+      .on("confirmation", function(confirmationNumber, receipt) {
         // console.log("confirmation :: " + confirmationNumber)
       })
-      .on('error', console.error);
+      .on("error", console.error);
   }
 
   getTokens() {
     return this.tokens;
   }
 
-  getFilePath(file) {
-    const promise = new Promise((resolve, reject) => {
-      const reader = new window.FileReader();
-      reader.readAsArrayBuffer(file);
-      reader.onloadend = () => {
-        IPFS.files.add(Buffer(reader.result), (error, result) => {
-          if (error) {
-            console.error(error);
-            reject(error);
-          }
-          resolve(result[0].path);
-        });
-      };
-    });
 
-    return promise;
+  getFilePathsFromMulter(file){
+    if(!file.IPFS){
+      
+    }
   }
 
-  buyToken() {}
+
+  getFilePathsFromIPFS(file) {
+    let uploadPromises = [];
+    uploadPromises.push(
+      new Promise((resolve, reject) => {
+        const reader = new window.FileReader();
+        reader.readAsArrayBuffer(file.thumbnail);
+        reader.onloadend = () => {
+          IPFS.files.add(Buffer(reader.result), (error, result) => {
+            if (error) {
+              console.error(error);
+              reject(error);
+            }
+            resolve({path:result[0].path,type: "thumbnail"});
+          });
+        };
+      })
+    );
+    uploadPromises.push(
+      new Promise((resolve, reject) => {
+        const reader = new window.FileReader();
+        reader.readAsArrayBuffer(file.PDFFile);
+        reader.onloadend = () => {
+          IPFS.files.add(Buffer(reader.result), (error, result) => {
+            if (error) {
+              console.error(error);
+              reject(error);
+            }
+            resolve({path:result[0].path,type: "PDFFile"});
+          });
+        };
+      })
+    );
+    
+    return Promise.all(uploadPromises);
+  }
+
+
+  getFilePathsFromIPFS(file) {
+    let uploadPromises = [];
+    uploadPromises.push(
+      new Promise((resolve, reject) => {
+        const reader = new window.FileReader();
+        reader.readAsArrayBuffer(file.thumbnail);
+        reader.onloadend = () => {
+          IPFS.files.add(Buffer(reader.result), (error, result) => {
+            if (error) {
+              console.error(error);
+              reject(error);
+            }
+            resolve({path:result[0].path,type: "thumbnail"});
+          });
+        };
+      })
+    );
+    uploadPromises.push(
+      new Promise((resolve, reject) => {
+        const reader = new window.FileReader();
+        reader.readAsArrayBuffer(file.PDFFile);
+        reader.onloadend = () => {
+          IPFS.files.add(Buffer(reader.result), (error, result) => {
+            if (error) {
+              console.error(error);
+              reject(error);
+            }
+            resolve({path:result[0].path,type: "PDFFile"});
+          });
+        };
+      })
+    );
+    
+    return Promise.all(uploadPromises);
+  }
+
+  buySignature(updatePayLoad,successCallback, feedbackCallback) {
+    const transactionObject = {
+      value: this.web3.utils.toWei(JSON.stringify(updatePayLoad.price), "ether"),
+      from: updatePayLoad.buyer,
+    };
+    this.contract.methods
+      .buy(updatePayLoad.ideaID)
+      .send(transactionObject)
+      .on("transactionHash", function(hash) {
+        feedbackCallback();
+      })
+      .on("receipt", function(receipt) {
+        updatePayLoad.price = 0;
+
+        let tokenReturns = _.get(
+          receipt.events,
+          "Transfer.returnValues.tokenId"
+        );
+          successCallback(updatePayLoad);
+      })
+      .on("confirmation", function(confirmationNumber, receipt) {
+        // console.log("confirmation :: " + confirmationNumber)
+      })
+      .on("error", console.error);
+  }
+
+  buySignature(updatePayLoad,successCallback, feedbackCallback) {
+    const transactionObject = {
+      value: this.web3.utils.toWei(JSON.stringify(updatePayLoad.price), "ether"),
+      from: updatePayLoad.buyer,
+    };
+    this.contract.methods
+      .buy(updatePayLoad.ideaID)
+      .send(transactionObject)
+      .on("transactionHash", function(hash) {
+        feedbackCallback();
+      })
+      .on("receipt", function(receipt) {
+        updatePayLoad.price = 0;
+
+        let tokenReturns = _.get(
+          receipt.events,
+          "Transfer.returnValues.tokenId"
+        );
+          successCallback(updatePayLoad);
+      })
+      .on("confirmation", function(confirmationNumber, receipt) {
+        // console.log("confirmation :: " + confirmationNumber)
+      })
+      .on("error", console.error);
+  }
+
+  updatePrice(updatePayLoad,successCallback, feedbackCallback) {
+    const transactionObject = {
+      from: updatePayLoad.owner,
+    };
+    this.contract.methods
+      .set_price(updatePayLoad.ideaID, updatePayLoad.price)
+      .send(transactionObject)
+      .on("transactionHash", function(hash) {
+        feedbackCallback();
+      })
+      .on("receipt", function(receipt) {
+        updatePayLoad.price = 0;
+
+        let tokenReturns = _.get(
+          receipt.events,
+          "Transfer.returnValues.tokenId"
+        );
+          successCallback(updatePayLoad);
+      })
+      .on("confirmation", function(confirmationNumber, receipt) {
+        // console.log("confirmation :: " + confirmationNumber)
+      })
+      .on("error", console.error);
+  }
 }
 
 export default new BlockchainInterface();

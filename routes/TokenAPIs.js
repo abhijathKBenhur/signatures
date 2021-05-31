@@ -55,7 +55,7 @@ updateIdeaID = (req, res) => {
   }
   let findCriteria = {PDFHash: body.PDFHash, transactionID : body.transactionID}
 
-  ideaToUpdate.findOneAndUpdate(
+  Signature.findOneAndUpdate(
     findCriteria,
     {ideaID:body.ideaID}
   )
@@ -135,11 +135,15 @@ getSignatures = async (req, res) => {
 };
 
 getFilePath = async (req, res) => {
+  let dest = "client/build/public/uploads/";
+  if (!fs.existsSync(dest)){
+    fs.mkdirSync(dest);
+  }
   const upload = multer({
     req,
     res,
     storage: multer.diskStorage({
-      destination: "./public/uploads/",
+      destination: "client/build/public/uploads/",
       filename: function(req, file, cb) {
         cb(null, "temp" + path.extname(file.originalname));
       },
@@ -176,7 +180,7 @@ getFilePath = async (req, res) => {
       if (req.file == undefined) {
         return res.status(400).json({ success: false, error: "File missing" });
       } else {
-        let __dirname = "./public/uploads";
+        let __dirname = "client/build/public/uploads";
         let hashCode = req.body.hash;
         
         var targetDir = __dirname + '/' + hashCode;
@@ -201,7 +205,7 @@ getFilePath = async (req, res) => {
           .json({
             success: true,
             path:
-              "/uploads/" +
+              "./uploads/" +
               hashCode +
               "/" +
               hashCode +
@@ -225,8 +229,8 @@ buySignature = async (req, res) => {
   let seller = req.body.account;
   let PDFHash = req.body.PDFHash;
 
-  const findCriteria = { owner: buyer, PDFHash: PDFHash };
-  const saleCriteria = { owner: seller};
+  const findCriteria = {  PDFHash: PDFHash };
+  const saleCriteria = { owner: buyer};
   const ideaToUpdate = new Signature(req.body);
 
   Signature.findOneAndUpdate(
@@ -262,8 +266,8 @@ updatePrice = async (req, res) => {
     req.body.price
   );
 
-  await Token.updateOne(
-    { PDFHash: req.body.PDFHash, owner: req.body.owner },
+  await Signature.updateOne(
+    { ideaID: req.body.ideaID, owner: req.body.owner },
     { price: req.body.price },
     { new: true },
     (err, token) => {
