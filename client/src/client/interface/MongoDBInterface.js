@@ -4,11 +4,11 @@ import _ from "lodash";
 
 import {uuid} from 'uuidv4'
 const api = axios.create({
-    baseURL: 'http://localhost:4000/api',
+    baseURL: '/api',
 })
 
 const fileAPI = axios.create({
-    baseURL: 'http://localhost:4000/api',
+    baseURL: '/api',
     headers: {
         'Content-Type': 'multipart/form-data'
     }
@@ -89,7 +89,8 @@ const MongoDBInterface = {
     updateIdeaID,
     getFilePaths,
     getSignatureByHash,
-    buySignature
+    buySignature,
+    updatePrice
 }
 
 export default MongoDBInterface

@@ -6,6 +6,7 @@ import Image, { Shimmer } from "react-shimmer";
 
 import "./Rack.scss";
 import BlockchainInterface from "../../interface/BlockchainInterface";
+import Signature from "../../beans/Signature";
 const Rack = (props) => {
   let history = useHistory();
   function openCardView(signature) {
@@ -33,7 +34,8 @@ const Rack = (props) => {
   let containerSize = props.classType == "primary" ? { width:424} : { width:280};
   return (
     <div className={"cursor-pointer vertical-shelf " + props.classType}>
-      {props.deck.map((signature, index) => {
+      {props.deck.map((signatureResponse, index) => {
+        let signature = new Signature(signatureResponse)
         return (
           <Card
             key={index}
@@ -51,12 +53,12 @@ const Rack = (props) => {
             <Card.Body className="rack-card-body">
               <div className="signature-title">
                 <Card.Title>
-                  {signature.description.length > 50 ? signature.description.substring(0,50) +"...": signature.description || "Click to see this idea"}
+                  {signature.title.length > 50 ? signature.title.substring(0,50) +"...": signature.title || "Click to see this idea"}
                 </Card.Title>
               </div>
               <div className="signature-content">
                 <Card.Text className="">
-                  {signature.owner || "Anonymous"}
+                {signature.owner.length > 50 ? signature.owner.substring(0,50) +"...": signature.owner || "Anonymous"}
                 </Card.Text>
               </div>
             </Card.Body>

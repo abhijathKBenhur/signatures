@@ -111,7 +111,7 @@ class BlockchainInterface {
         }
       })
       .on("confirmation", function(confirmationNumber, receipt) {
-        // console.log("confirmation :: " + confirmationNumber)
+        console.log("confirmation :: " + confirmationNumber)
       })
       .on("error", console.error);
   }
@@ -203,7 +203,7 @@ class BlockchainInterface {
 
   buySignature(updatePayLoad,successCallback, feedbackCallback) {
     const transactionObject = {
-      value: this.web3.utils.toWei(JSON.stringify(updatePayLoad.price), "ether"),
+      value: updatePayLoad.price,
       from: updatePayLoad.buyer,
     };
     this.contract.methods
@@ -222,14 +222,14 @@ class BlockchainInterface {
           successCallback(updatePayLoad);
       })
       .on("confirmation", function(confirmationNumber, receipt) {
-        // console.log("confirmation :: " + confirmationNumber)
+        console.log("confirmation :: " + confirmationNumber)
       })
       .on("error", console.error);
   }
 
   buySignature(updatePayLoad,successCallback, feedbackCallback) {
     const transactionObject = {
-      value: this.web3.utils.toWei(JSON.stringify(updatePayLoad.price), "ether"),
+      value:updatePayLoad.price,
       from: updatePayLoad.buyer,
     };
     this.contract.methods
@@ -248,7 +248,7 @@ class BlockchainInterface {
           successCallback(updatePayLoad);
       })
       .on("confirmation", function(confirmationNumber, receipt) {
-        // console.log("confirmation :: " + confirmationNumber)
+        console.log("confirmation :: " + confirmationNumber)
       })
       .on("error", console.error);
   }
@@ -264,7 +264,7 @@ class BlockchainInterface {
         feedbackCallback();
       })
       .on("receipt", function(receipt) {
-        updatePayLoad.price = 0;
+        updatePayLoad.price = "0";
 
         let tokenReturns = _.get(
           receipt.events,
@@ -273,7 +273,7 @@ class BlockchainInterface {
           successCallback(updatePayLoad);
       })
       .on("confirmation", function(confirmationNumber, receipt) {
-        // console.log("confirmation :: " + confirmationNumber)
+        console.log("confirmation :: " + confirmationNumber)
       })
       .on("error", console.error);
   }

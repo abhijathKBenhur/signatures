@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useLocation } from "react-router-dom";
+import SignatureBean from '../../beans/Signature'
 import { Badge, Button, Row, Col, Form, InputGroup } from "react-bootstrap";
 import BlockChainInterface from "../../interface/BlockchainInterface";
 import MongoDBInterface from "../../interface/MongoDBInterface";
-
+import Web3Utils from 'web3-utils';
 import Dropzone from "react-dropzone";
 import "./Signature.scss";
 import {
@@ -27,10 +28,11 @@ const Signature = (props) => {
   useEffect(() => {
     let signature = location.state;
     if (signature) {
-      setSignature(signature);
+      setSignature(new SignatureBean(signature));
     } else {
-      MongoDBInterface.getSignatureByHash(hashId).then((signature) => {
-        setSignature(_.get(signature, "data.data"));
+      MongoDBInterface.getSignatureByHash(hashId).then((response) => {
+        let signatureObject = new SignatureBean(_.get(response, "data.data"))
+        setSignature(signatureObject);
       });
     }
   }, []);
@@ -53,7 +55,7 @@ const Signature = (props) => {
   function updateMongoBuySignature(updatePayload) {
     MongoDBInterface.buySignature(updatePayload)
       .then((updatedSignature) => {
-        setSignature(_.get(updatedSignature, "data.data"));
+        setSignature(new SignatureBean(_.get(updatedSignature, "data.data")));
       })
       .catch((err) => {
         console.log("error");
@@ -129,7 +131,7 @@ const Signature = (props) => {
               <h1>{signature.title}</h1>
             </Row>
             <Row className="form-row owner-row">
-              <span>{signature.owner}</span>
+              <span>{signature.price && Web3Utils.fromWei(signature.price)}</span>
             </Row>
             <Row className="form-row  tags-row">
               {signature.category &&
@@ -143,6 +145,7 @@ const Signature = (props) => {
             </Row>
             <Row className="form-row">
               <span> {signature.description}</span>
+              <span> {signature.owner}</span>
             </Row>
           </div>
           <div className="bottom-section">

@@ -9,6 +9,7 @@ import MongoDBInterface from "../../interface/MongoDBInterface";
 import BlockChainInterface from "../../interface/BlockchainInterface";
 import { toast } from "react-toastify";
 import { confirm } from "../../modals/confirmation/confirmation";
+import Web3Utils from 'web3-utils';
 import {
   Edit3,
 } from "react-feather";
@@ -25,7 +26,7 @@ function Profile(props) {
 
   function updatePriceInMongo(signature) {
     MongoDBInterface.updatePrice(signature).then((updatedSignature) => {
-      signature.price = _.get(updatedSignature, "data.data");
+      signature.price = _.get(updatedSignature, "data.data.price");
     });
   }
 
@@ -53,7 +54,7 @@ function Profile(props) {
       true
     ).then((success) => {
       if (success.proceed) {
-        signature.price = JSON.parse(success.input);
+        signature.price = Web3Utils.toWei(success.input);
         BlockChainInterface.updatePrice(
           signature,
           updatePriceInMongo,
@@ -73,11 +74,6 @@ function Profile(props) {
             let response = _.get(signatures, "data.data");
             let rackValues = [];
             setCollectionList(response);
-            _.forEach(response, (signature, index) => {
-              rackValues[index % 3] = rackValues[index % 3] || [];
-              rackValues[index % 3].push(new Signature(signature));
-            });
-            setRackList(rackValues);
           }
         );
       })

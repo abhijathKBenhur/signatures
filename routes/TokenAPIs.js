@@ -48,9 +48,8 @@ updateIdeaID = (req, res) => {
       error: "Hollow idea",
     });
   }
-  const ideaToUpdate = new Signature(body);
 
-  if (!ideaToUpdate) {
+  if (!body.PDFHash) {
     return res.status(400).json({ success: false, error: err });
   }
   let findCriteria = {PDFHash: body.PDFHash, transactionID : body.transactionID}
@@ -136,13 +135,13 @@ getSignatures = async (req, res) => {
 
 getFilePath = async (req, res) => {
   console.log(__dirname)
-  let dest = "./client/build/public/uploads/";
+  let dest = "./client/public/uploads/";
  
   const upload = multer({
     req,
     res,
     storage: multer.diskStorage({
-      destination: "./client/build/public/uploads/",
+      destination: "./client/public/uploads/",
       filename: function(req, file, cb) {
         cb(null, "temp" + path.extname(file.originalname));
       },
@@ -179,7 +178,7 @@ getFilePath = async (req, res) => {
       if (req.file == undefined) {
         return res.status(400).json({ success: false, error: "File missing" });
       } else {
-        let __dirname = "./client/build/public/uploads";
+        let __dirname = "./client/public/uploads";
         console.log(req.body.type)
         let hashCode = req.body.hash;
         
@@ -206,7 +205,7 @@ getFilePath = async (req, res) => {
             success: true,
             type:req.body.type,
             path:
-              "./client/build/public/uploads/" +
+              "uploads/" +
               hashCode +
               "/" +
               hashCode +
@@ -260,18 +259,17 @@ buySignature = async (req, res) => {
 updatePrice = async (req, res) => {
   console.log(
     "updateing token price",
-    req.body.PDFHash,
+    req.body.ideaID,
     " ",
-    req.body.owner,
+    req.body.setter,
     " price ",
     req.body.price
   );
 
-  await Signature.updateOne(
-    { ideaID: req.body.ideaID, owner: req.body.owner },
+  await Signature.findOneAndUpdate(
+    { ideaID: req.body.ideaID, owner: req.body.setter },
     { price: req.body.price },
-    { new: true },
-    (err, token) => {
+    (  err,token) => {
       if (err) {
         return res.status(400).json({ success: false, error: err });
       }
