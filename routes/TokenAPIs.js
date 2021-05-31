@@ -135,8 +135,10 @@ getSignatures = async (req, res) => {
 
 getFilePath = async (req, res) => {
   console.log(__dirname)
-  let dest = "./client/public/uploads/";
- 
+  let dest = "./client/public/uploads";
+  if (!fs.existsSync(dest)) {
+    fs.mkdirSync(dest, 0744);
+}
   const upload = multer({
     req,
     res,
