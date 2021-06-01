@@ -201,11 +201,14 @@ updatePrice = async (req, res) => {
 getImagePathFromCloudinary = (req,res) => {
     console.log("file details: ", req.file);
     // cloudinary.v2.uploader.upload(file, options, callback);
-    cloudinary.uploader.upload(req.file.path).then(result =>{
+    cloudinary.uploader.upload(req.file.path,{
+      folder:"ThoughBlocks",
+      public_id:""
+    }).then(result =>{
       console.log("Image uplaoded to : ", result);
       const post_details = {
-        title: req.body.title,
-        image: result.public_id,
+        path: result.url,
+        type:"thumbnail"
       };
   
       res.status(200).json({ post_details });

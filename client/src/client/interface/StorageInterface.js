@@ -1,9 +1,6 @@
 import axios from "axios";
 import _ from "lodash";
 import IPFS from "../config/ipfs";
-const api = axios.create({
-  baseURL: "http://localhost:4000/api",
-});
 
 const fileAPI = axios.create({
   baseURL: "http://localhost:4000/api",

@@ -47,7 +47,6 @@ class Create extends Component {
     this.onDocumentLoadSuccess = this.onDocumentLoadSuccess.bind(this);
 
     this.onImageDrop = (acceptedFiles) => {
-      StorageInterface.getImagePath({hash:"hash",thumbnail:acceptedFiles[0]})
       this.setState({
         thumbnail: Object.assign(acceptedFiles[0], {
           preview: URL.createObjectURL(acceptedFiles[0]),
