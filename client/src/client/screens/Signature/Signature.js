@@ -20,22 +20,37 @@ import { Document, Page, pdfjs } from "react-pdf";
 import _ from "lodash";
 import { toast } from "react-toastify";
 import Select from "react-select";
+import StorageInterface from "../../interface/StorageInterface";
 
 const Signature = (props) => {
   let { hashId } = useParams();
   const location = useLocation();
   const [signature, setSignature] = useState({});
+  const [PDFFile, setPDFFile] = useState(undefined);
+  
   useEffect(() => {
-    let signature = location.state;
-    if (signature) {
-      setSignature(new SignatureBean(signature));
+    let signatureFromParent = location.state;
+    if (signatureFromParent) {
+      setSignature({...signature,...new SignatureBean(signatureFromParent)});
     } else {
       MongoDBInterface.getSignatureByHash(hashId).then((response) => {
         let signatureObject = new SignatureBean(_.get(response, "data.data"))
-        setSignature(signatureObject);
+        setSignature(...signature, ...signatureObject);
       });
     }
+    getIPSPDFFile(hashId)
+
   }, []);
+
+  function getIPSPDFFile(hash){
+    StorageInterface.getFileFromIPFS(hash).then(pdfFileResponse => {
+      let pdfData = new Blob(pdfFileResponse.content, {type: 'application/pdf'})
+      let pdfFile = new File([pdfData],"preview.pdf",{
+        type:"application/pdf"
+      })
+      setPDFFile(pdfFile)
+    })
+  }
 
   function feedbackMessage() {
     toast.dark(
@@ -113,17 +128,15 @@ const Signature = (props) => {
     <Form noValidate encType="multipart/form-data" className="viewSignature">
       <Row className="signature-container">
         <Col md="5" className="left-side">
-          {signature.PDFFile && (
             <Form.Row className="w-100 p15 ">
-              {signature.PDFFile && (
+              {PDFFile && (
                 <div className="pdfUploaded h-100">
-                  <Document file={signature.PDFFile}>
+                  <Document file={PDFFile}>
                     <Page pageNumber={1} width={window.innerWidth / 3} />
                   </Document>
                 </div>
               )}
             </Form.Row>
-          )}
         </Col>
         <Col md="6 right-side">
           <div className="top-section">

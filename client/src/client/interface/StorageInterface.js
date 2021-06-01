@@ -1,5 +1,6 @@
 import axios from "axios";
 import _ from "lodash";
+import { isDebuggerStatement } from "typescript";
 import IPFS from "../config/ipfs";
 
 const fileAPI = axios.create({
@@ -8,6 +9,22 @@ const fileAPI = axios.create({
     "Content-Type": "multipart/form-data",
   },
 });
+
+
+
+export const getFileFromIPFS = (hash) => {
+  return new Promise((resolve, reject) => {
+      IPFS.files.get(hash, (error, result) => {
+        if (error) {
+          console.error(error);
+          reject(error);
+        }
+        console.log("PDF fetched from IPFS",result)
+        resolve({ content: result[0].content, type: "PDFFile" });
+      });
+  });
+};
+
 
 const getFilePathsFromIPFS = (form) => {
   return new Promise((resolve, reject) => {
@@ -53,7 +70,8 @@ export const getPDFFilepath =(form) =>  {
 const StorageInterface = {
   getFilePaths,
   getImagePath,
-  getPDFFilepath
+  getPDFFilepath,
+  getFileFromIPFS
 };
 
 export default StorageInterface;

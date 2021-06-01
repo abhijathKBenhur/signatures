@@ -202,16 +202,13 @@ getImagePathFromCloudinary = (req,res) => {
     console.log("file details: ", req.file);
     // cloudinary.v2.uploader.upload(file, options, callback);
     cloudinary.uploader.upload(req.file.path,{
-      folder:"ThoughBlocks",
-      public_id:""
+      public_id:"ThoughBlocks/" + req.hash +"/" + req.hash
     }).then(result =>{
       console.log("Image uplaoded to : ", result);
-      const post_details = {
+      res.status(200).json( {
         path: result.url,
         type:"thumbnail"
-      };
-  
-      res.status(200).json({ post_details });
+      });
     }).catch(err => {
       return res.status(400).json({ success: false, error: err });
     })
