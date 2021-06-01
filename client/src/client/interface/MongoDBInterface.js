@@ -2,16 +2,8 @@ import axios from 'axios'
 import _ from "lodash";
 
 const api = axios.create({
-    baseURL: 'git /api',
+    baseURL: '/api',
 })
-
-const fileAPI = axios.create({
-    baseURL: 'git /api',
-    headers: {
-        'Content-Type': 'multipart/form-data'
-    }
-})
-
 
 export const updatePrice = payload => {
     return api.post(`/updatePrice`,{
@@ -52,26 +44,6 @@ export const getSignatureByHash = (tokenId) => {
     return api.get(`/signature/${tokenId}`) 
 }
 
-export const getFilePaths = form => { 
-    let promiseList = []
-    let PDFformData = new FormData();
-    PDFformData.append('fileData',form.PDFFile )
-    PDFformData.append('hash',form.PDFHash )
-    PDFformData.append('type',"PDFFile" )
-
-
-    let IMGformData = new FormData();
-    IMGformData.append('fileData',form.thumbnail )
-    IMGformData.append('hash',form.PDFHash )
-    IMGformData.append('type',"thumbnail" )
-
-
-    promiseList.push(fileAPI.post("/getFilePath",PDFformData))
-    promiseList.push(fileAPI.post("/getFilePath",IMGformData))
-    return Promise.all(promiseList)
-}
-
-
 export const buySignature = payload => { 
     return api.post(`/buySignature`,payload) 
 }
@@ -85,7 +57,6 @@ const MongoDBInterface = {
     getSignatures,
     addSignature,
     updateIdeaID,
-    getFilePaths,
     getSignatureByHash,
     buySignature,
     updatePrice

@@ -2,6 +2,7 @@ import React, { Component, useState } from "react";
 import { Modal, Button, Row, Col, Form, InputGroup } from "react-bootstrap";
 import MongoDBInterface from "../../interface/MongoDBInterface";
 import BlockChainInterface from "../../interface/BlockchainInterface";
+import StorageInterface from "../../interface/StorageInterface"
 import Dropzone from "react-dropzone";
 import CONSTANTS from "../../commons/Constants";
 import { withRouter } from "react-router-dom";
@@ -63,7 +64,7 @@ class Create extends Component {
         Hash.of(Buffer(reader.result)).then((PDFHashValue) => {
           // Check for already existing PDF Hashes
           this.setState({
-            PDFHash: PDFHashValue,
+            PDFHash: PDFHashValue
           });
         });
       };
@@ -144,10 +145,8 @@ class Create extends Component {
 
   async onSubmit(form) {
     console.log("form:", form);
-    form.IPFS = true
     const parentThis = this;
-    MongoDBInterface.getFilePaths(form)
-    // BlockChainInterface.getFilePaths(form)
+    StorageInterface.getFilePaths(form)
       .then((success) => {
         form.PDFFile = _.get(_.find(_.map(success,'data'),{type:"PDFFile"}),'path')
         form.thumbnail = _.get(_.find(_.map(success,'data'),{type:"thumbnail"}),'path')

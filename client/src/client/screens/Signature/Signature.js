@@ -20,22 +20,34 @@ import { Document, Page, pdfjs } from "react-pdf";
 import _ from "lodash";
 import { toast } from "react-toastify";
 import Select from "react-select";
+import StorageInterface from "../../interface/StorageInterface";
 
 const Signature = (props) => {
   let { hashId } = useParams();
   const location = useLocation();
   const [signature, setSignature] = useState({});
+  
   useEffect(() => {
-    let signature = location.state;
-    if (signature) {
-      setSignature(new SignatureBean(signature));
+    let signatureFromParent = location.state;
+    if (signatureFromParent) {
+      setSignature({...signature,...new SignatureBean(signatureFromParent)});
     } else {
       MongoDBInterface.getSignatureByHash(hashId).then((response) => {
         let signatureObject = new SignatureBean(_.get(response, "data.data"))
-        setSignature(signatureObject);
+        setSignature(...signature, ...signatureObject);
       });
     }
   }, []);
+
+  // function getIPSPDFFile(hash){
+  //   StorageInterface.getFileFromIPFS(hash).then(pdfFileResponse => {
+  //     let pdfData = new Blob(pdfFileResponse.content, {type: 'application/pdf'})
+  //     let pdfFile = new File([pdfData],"preview.pdf",{
+  //       type:"application/pdf"
+  //     })
+  //     setPDFFile(pdfFile)
+  //   })
+  // }
 
   function feedbackMessage() {
     toast.dark(
@@ -113,7 +125,6 @@ const Signature = (props) => {
     <Form noValidate encType="multipart/form-data" className="viewSignature">
       <Row className="signature-container">
         <Col md="5" className="left-side">
-          {signature.PDFFile && (
             <Form.Row className="w-100 p15 ">
               {signature.PDFFile && (
                 <div className="pdfUploaded h-100">
@@ -123,7 +134,6 @@ const Signature = (props) => {
                 </div>
               )}
             </Form.Row>
-          )}
         </Col>
         <Col md="6 right-side">
           <div className="top-section">
