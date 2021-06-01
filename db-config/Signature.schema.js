@@ -8,7 +8,7 @@ const Signature = new Schema(
         category: { type: String , required: true},
         description: { type: String, required: true },
         price: { type: String , required: true},
-        thumbnail: { type: String , required: true},
+        thumbnail: { type: Buffer },
         PDFFile: { type: String ,required: true},
         PDFHash: { type: String ,required: true},
         transactionID: { type: String},

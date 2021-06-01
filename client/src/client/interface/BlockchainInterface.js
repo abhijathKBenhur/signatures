@@ -2,7 +2,7 @@ import _, { defer } from "lodash";
 import Web3 from "web3";
 import NFTTokenBean from "../beans/Signature";
 import contractJSON from "../../contracts/ideaBlocks.json";
-import IPFS from "../config/ipfs";
+
 
 class BlockchainInterface {
   constructor() {
@@ -12,10 +12,6 @@ class BlockchainInterface {
     this.contract = undefined;
     this.tokens = [];
     this.NFTTokenBean = NFTTokenBean;
-  }
-
-  getImageFromIPFS(hash){
-    return IPFS.files.get(hash)
   }
 
   async getAccountDetails() {
@@ -118,87 +114,6 @@ class BlockchainInterface {
 
   getTokens() {
     return this.tokens;
-  }
-
-
-  getFilePathsFromMulter(file){
-    if(!file.IPFS){
-      
-    }
-  }
-
-
-  getFilePathsFromIPFS(file) {
-    let uploadPromises = [];
-    uploadPromises.push(
-      new Promise((resolve, reject) => {
-        const reader = new window.FileReader();
-        reader.readAsArrayBuffer(file.thumbnail);
-        reader.onloadend = () => {
-          IPFS.files.add(Buffer(reader.result), (error, result) => {
-            if (error) {
-              console.error(error);
-              reject(error);
-            }
-            resolve({path:result[0].path,type: "thumbnail"});
-          });
-        };
-      })
-    );
-    uploadPromises.push(
-      new Promise((resolve, reject) => {
-        const reader = new window.FileReader();
-        reader.readAsArrayBuffer(file.PDFFile);
-        reader.onloadend = () => {
-          IPFS.files.add(Buffer(reader.result), (error, result) => {
-            if (error) {
-              console.error(error);
-              reject(error);
-            }
-            resolve({path:result[0].path,type: "PDFFile"});
-          });
-        };
-      })
-    );
-    
-    return Promise.all(uploadPromises);
-  }
-
-
-  getFilePathsFromIPFS(file) {
-    let uploadPromises = [];
-    uploadPromises.push(
-      new Promise((resolve, reject) => {
-        const reader = new window.FileReader();
-        reader.readAsArrayBuffer(file.thumbnail);
-        reader.onloadend = () => {
-          IPFS.files.add(Buffer(reader.result), (error, result) => {
-            if (error) {
-              console.error(error);
-              reject(error);
-            }
-            resolve({path:result[0].path,type: "thumbnail"});
-          });
-        };
-      })
-    );
-    uploadPromises.push(
-      new Promise((resolve, reject) => {
-        const reader = new window.FileReader();
-        reader.readAsArrayBuffer(file.PDFFile);
-        reader.onloadend = () => {
-          IPFS.files.add(Buffer(reader.result), (error, result) => {
-            if (error) {
-              console.error(error);
-              reject(error);
-            }
-            resolve({path:result[0].path,type: "PDFFile"});
-          });
-        };
-      })
-    );
-    
-    return Promise.all(uploadPromises);
   }
 
   buySignature(updatePayLoad,successCallback, feedbackCallback) {

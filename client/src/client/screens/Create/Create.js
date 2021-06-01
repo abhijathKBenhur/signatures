@@ -2,6 +2,7 @@ import React, { Component, useState } from "react";
 import { Modal, Button, Row, Col, Form, InputGroup } from "react-bootstrap";
 import MongoDBInterface from "../../interface/MongoDBInterface";
 import BlockChainInterface from "../../interface/BlockchainInterface";
+import StorageInterface from "../../interface/StorageInterface"
 import Dropzone from "react-dropzone";
 import CONSTANTS from "../../commons/Constants";
 import { withRouter } from "react-router-dom";
@@ -46,6 +47,7 @@ class Create extends Component {
     this.onDocumentLoadSuccess = this.onDocumentLoadSuccess.bind(this);
 
     this.onImageDrop = (acceptedFiles) => {
+      StorageInterface.getImagePath({hash:"hash",thumbnail:acceptedFiles[0]})
       this.setState({
         thumbnail: Object.assign(acceptedFiles[0], {
           preview: URL.createObjectURL(acceptedFiles[0]),
@@ -146,8 +148,7 @@ class Create extends Component {
     console.log("form:", form);
     form.IPFS = true
     const parentThis = this;
-    MongoDBInterface.getFilePaths(form)
-    // BlockChainInterface.getFilePaths(form)
+    StorageInterface.getFilePaths(form)
       .then((success) => {
         form.PDFFile = _.get(_.find(_.map(success,'data'),{type:"PDFFile"}),'path')
         form.thumbnail = _.get(_.find(_.map(success,'data'),{type:"thumbnail"}),'path')
