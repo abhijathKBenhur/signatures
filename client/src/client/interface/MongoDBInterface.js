@@ -1,14 +1,12 @@
 import axios from 'axios'
-import { File } from 'react-feather'
 import _ from "lodash";
 
-import {uuid} from 'uuidv4'
 const api = axios.create({
-    baseURL: 'http://localhost:4000/api',
+    baseURL: 'git /api',
 })
 
 const fileAPI = axios.create({
-    baseURL: 'http://localhost:4000/api',
+    baseURL: 'git /api',
     headers: {
         'Content-Type': 'multipart/form-data'
     }
