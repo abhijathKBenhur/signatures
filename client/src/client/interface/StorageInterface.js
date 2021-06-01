@@ -4,7 +4,7 @@ import { isDebuggerStatement } from "typescript";
 import IPFS from "../config/ipfs";
 
 const fileAPI = axios.create({
-  baseURL: "http://localhost:4000/api",
+  baseURL: "/api",
   headers: {
     "Content-Type": "multipart/form-data",
   },
@@ -26,7 +26,7 @@ export const getFileFromIPFS = (hash) => {
 };
 
 
-const getFilePathsFromIPFS = (form) => {
+const getPathsFromIPFS = (form) => {
   return new Promise((resolve, reject) => {
     const reader = new window.FileReader();
     reader.readAsArrayBuffer(form.PDFFile);
@@ -36,7 +36,7 @@ const getFilePathsFromIPFS = (form) => {
           console.error(error);
           reject(error);
         }
-        console.log("PDF uploaded to IPFS")
+        console.log("PDF uploaded to IPFS ::" + result[0].path)
         resolve({ path: result[0].path, type: "PDFFile" });
       });
     };
@@ -56,7 +56,7 @@ export const getImagePath = (form) => {
   IMGformData.append("thumbnail", form.thumbnail);
   IMGformData.append("hash", form.PDFHash);
   IMGformData.append("type", "thumbnail");
-  return fileAPI.post(`/getCloundinaryPath`, IMGformData);
+  return fileAPI.post(`/getCloundinaryImagePath`, IMGformData);
 }
 
 export const getPDFFilepath =(form) =>  {
@@ -64,7 +64,8 @@ export const getPDFFilepath =(form) =>  {
   PDFformData.append("PDFFile", form.PDFFile);
   PDFformData.append("hash", form.PDFHash);
   PDFformData.append("type", "PDFFile");
-  return getFilePathsFromIPFS(form);
+  // getPathsFromIPFS(PDFformData)
+  return fileAPI.post(`/getCloundinaryPDFPath`, PDFformData);
 }
 
 const StorageInterface = {

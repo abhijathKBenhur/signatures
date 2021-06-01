@@ -145,12 +145,10 @@ class Create extends Component {
 
   async onSubmit(form) {
     console.log("form:", form);
-    form.IPFS = true
     const parentThis = this;
     StorageInterface.getFilePaths(form)
       .then((success) => {
-        debugger;
-        form.PDFFile = _.get(_.find(success,{type:"PDFFile"}),'path')
+        form.PDFFile = _.get(_.find(_.map(success,'data'),{type:"PDFFile"}),'path')
         form.thumbnail = _.get(_.find(_.map(success,'data'),{type:"thumbnail"}),'path')
         console.log(form);
         this.saveToBlockChain(form);

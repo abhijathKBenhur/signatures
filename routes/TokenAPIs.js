@@ -130,9 +130,6 @@ getSignatures = async (req, res) => {
   }
 };
 
-
-
-
 buySignature = async (req, res) => {
   if (!req.body) {
     return res.status(400).json({
@@ -196,25 +193,43 @@ updatePrice = async (req, res) => {
   });
 };
 
-
-
-getImagePathFromCloudinary = (req,res) => {
-    console.log("file details: ", req.file);
-    // cloudinary.v2.uploader.upload(file, options, callback);
-    cloudinary.uploader.upload(req.file.path,{
-      public_id:"ThoughBlocks/" + req.hash +"/" + req.hash
-    }).then(result =>{
-      console.log("Image uplaoded to : ", result);
-      res.status(200).json( {
-        path: result.url,
-        type:"thumbnail"
-      });
-    }).catch(err => {
-      return res.status(400).json({ success: false, error: err });
+getImagePathFromCloudinary = (req, res) => {
+  console.log("file details: ", req.file);
+  // cloudinary.v2.uploader.upload(file, options, callback);
+  cloudinary.uploader
+    .upload(req.file.path, {
+      public_id: "ThoughBlocks/" + req.hash + "/" + req.hash,
     })
+    .then((result) => {
+      console.log("Image uplaoded to : ", result);
+      res.status(200).json({
+        path: result.url,
+        type: "thumbnail",
+      });
+    })
+    .catch((err) => {
+      return res.status(400).json({ success: false, error: err });
+    });
 };
 
-
+getPDFPathFromCloudinary = (req, res) => {
+  console.log("file details: ", req.file);
+  // cloudinary.v2.uploader.upload(file, options, callback);
+  cloudinary.uploader
+    .upload(req.file.path, {
+      public_id: "ThoughBlocks/" + req.hash + "/" + req.hash,
+    })
+    .then((result) => {
+      console.log("PDF uplaoded to : ", result);
+      res.status(200).json({
+        path: result.url,
+        type: "PDFFile",
+      });
+    })
+    .catch((err) => {
+      return res.status(400).json({ success: false, error: err });
+    });
+};
 
 router.post("/addSignature", addSignature);
 router.get("/signature/:PDFHash/", getSignatureByHash);
@@ -222,6 +237,15 @@ router.post("/getSignatures", getSignatures);
 router.post("/buySignature", buySignature);
 router.post("/updatePrice", updatePrice);
 router.post("/updateIdeaID", updateIdeaID);
-router.post("/getCloundinaryPath",upload.single("thumbnail"), getImagePathFromCloudinary);
+router.post(
+  "/getCloundinaryImagePath",
+  upload.single("thumbnail"),
+  getImagePathFromCloudinary
+);
+router.post(
+  "/getCloundinaryPDFPath",
+  upload.single("PDFFile"),
+  getPDFPathFromCloudinary
+);
 
 module.exports = router;

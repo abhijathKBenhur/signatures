@@ -26,7 +26,6 @@ const Signature = (props) => {
   let { hashId } = useParams();
   const location = useLocation();
   const [signature, setSignature] = useState({});
-  const [PDFFile, setPDFFile] = useState(undefined);
   
   useEffect(() => {
     let signatureFromParent = location.state;
@@ -38,19 +37,17 @@ const Signature = (props) => {
         setSignature(...signature, ...signatureObject);
       });
     }
-    getIPSPDFFile(hashId)
-
   }, []);
 
-  function getIPSPDFFile(hash){
-    StorageInterface.getFileFromIPFS(hash).then(pdfFileResponse => {
-      let pdfData = new Blob(pdfFileResponse.content, {type: 'application/pdf'})
-      let pdfFile = new File([pdfData],"preview.pdf",{
-        type:"application/pdf"
-      })
-      setPDFFile(pdfFile)
-    })
-  }
+  // function getIPSPDFFile(hash){
+  //   StorageInterface.getFileFromIPFS(hash).then(pdfFileResponse => {
+  //     let pdfData = new Blob(pdfFileResponse.content, {type: 'application/pdf'})
+  //     let pdfFile = new File([pdfData],"preview.pdf",{
+  //       type:"application/pdf"
+  //     })
+  //     setPDFFile(pdfFile)
+  //   })
+  // }
 
   function feedbackMessage() {
     toast.dark(
@@ -129,9 +126,9 @@ const Signature = (props) => {
       <Row className="signature-container">
         <Col md="5" className="left-side">
             <Form.Row className="w-100 p15 ">
-              {PDFFile && (
+              {signature.PDFFile && (
                 <div className="pdfUploaded h-100">
-                  <Document file={PDFFile}>
+                  <Document file={signature.PDFFile}>
                     <Page pageNumber={1} width={window.innerWidth / 3} />
                   </Document>
                 </div>
