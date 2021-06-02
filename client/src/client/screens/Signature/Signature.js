@@ -26,8 +26,10 @@ const Signature = (props) => {
   let { hashId } = useParams();
   const location = useLocation();
   const [signature, setSignature] = useState({});
+  const [PDFFile , setPDFFile] = useState({})
   
   useEffect(() => {
+    pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
     let signatureFromParent = location.state;
     if (signatureFromParent) {
       setSignature({...signature,...new SignatureBean(signatureFromParent)});
@@ -39,15 +41,13 @@ const Signature = (props) => {
     }
   }, []);
 
-  // function getIPSPDFFile(hash){
-  //   StorageInterface.getFileFromIPFS(hash).then(pdfFileResponse => {
-  //     let pdfData = new Blob(pdfFileResponse.content, {type: 'application/pdf'})
-  //     let pdfFile = new File([pdfData],"preview.pdf",{
-  //       type:"application/pdf"
-  //     })
-  //     setPDFFile(pdfFile)
-  //   })
-  // }
+  function getIPSPDFFile(hash){
+    
+    StorageInterface.getFileFromIPFS(hash).then(pdfFileResponse => {
+      let pdfData = new Blob([pdfFileResponse.content.buffer])
+      setPDFFile(pdfData)
+    })
+  }
 
   function feedbackMessage() {
     toast.dark(
@@ -126,9 +126,9 @@ const Signature = (props) => {
       <Row className="signature-container">
         <Col md="5" className="left-side">
             <Form.Row className="w-100 p15 ">
-              {signature.PDFFile && (
+              {PDFFile && (
                 <div className="pdfUploaded h-100">
-                  <Document file={signature.PDFFile}>
+                  <Document file={PDFFile}>
                     <Page pageNumber={1} width={window.innerWidth / 3} />
                   </Document>
                 </div>

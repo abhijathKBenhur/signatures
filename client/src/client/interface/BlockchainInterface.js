@@ -128,33 +128,7 @@ class BlockchainInterface {
         feedbackCallback();
       })
       .on("receipt", function(receipt) {
-        updatePayLoad.price = 0;
-
-        let tokenReturns = _.get(
-          receipt.events,
-          "Transfer.returnValues.tokenId"
-        );
-          successCallback(updatePayLoad);
-      })
-      .on("confirmation", function(confirmationNumber, receipt) {
-        console.log("confirmation :: " + confirmationNumber)
-      })
-      .on("error", console.error);
-  }
-
-  buySignature(updatePayLoad,successCallback, feedbackCallback) {
-    const transactionObject = {
-      value:updatePayLoad.price,
-      from: updatePayLoad.buyer,
-    };
-    this.contract.methods
-      .buy(updatePayLoad.ideaID)
-      .send(transactionObject)
-      .on("transactionHash", function(hash) {
-        feedbackCallback();
-      })
-      .on("receipt", function(receipt) {
-        updatePayLoad.price = 0;
+        updatePayLoad.price = "0";
 
         let tokenReturns = _.get(
           receipt.events,
@@ -179,8 +153,6 @@ class BlockchainInterface {
         feedbackCallback();
       })
       .on("receipt", function(receipt) {
-        updatePayLoad.price = "0";
-
         let tokenReturns = _.get(
           receipt.events,
           "Transfer.returnValues.tokenId"

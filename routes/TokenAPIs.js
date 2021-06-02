@@ -140,10 +140,11 @@ buySignature = async (req, res) => {
   let buyer = req.body.buyer;
   let seller = req.body.account;
   let PDFHash = req.body.PDFHash;
+  let price = req.body.price;
 
   const findCriteria = { PDFHash: PDFHash };
-  const saleCriteria = { owner: buyer };
-  const ideaToUpdate = new Signature(req.body);
+  const saleCriteria = { owner: buyer, price:price  };
+  
 
   Signature.findOneAndUpdate(findCriteria, saleCriteria)
     .then((idea, err) => {
