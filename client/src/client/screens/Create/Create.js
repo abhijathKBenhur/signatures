@@ -149,7 +149,6 @@ class Create extends Component {
     const parentThis = this;
     StorageInterface.getFilePaths(form)
       .then((success) => {
-        debugger;
         form.PDFFile = _.get(_.find(success,{type:"PDFFile"}),'path')
         form.thumbnail = _.get(_.find(_.map(success,'data'),{type:"thumbnail"}),'path')
         console.log(form);
