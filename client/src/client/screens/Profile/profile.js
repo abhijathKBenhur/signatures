@@ -149,6 +149,7 @@ function Profile(props) {
       <Col md="6" className="favorites"></Col>
     </Row>
   );
+  
 }
 
 export default Profile;
