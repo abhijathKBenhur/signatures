@@ -1,17 +1,51 @@
 @import "../../commons/Common.scss";
 .collection-card{
-    padding:5px ;
     
     .content{
         border: 1px solid $grey-border;
-        margin: 10px;
-        .collection-preview{
-            .collection-image{
-                .img{
-                    max-width: 100% !important;
+        border-radius: 4px;
+        margin-top:30px;
+        &:hover{
+            box-shadow: 0 0.5rem 1rem $primary-lightest !important;
+            border-color: $primary-light;
+            transition: opacity 2s ease, border-color 1s ease;
+        }
+        .collection-header{
+            border-radius: 4px;
+            background-color: $primary-lightest;
+            height: 30px;
+            margin-bottom: 1px;
+            .dropdown-menu{
+                padding: 0;
+                .dropdown-item{
+                    border-bottom: 1px solid $primary-light;
+                    padding: 0.5rem;
+                    .signature-icons{
+                        margin-right: 5px;
+                    }
                 }
             }
+            
         }
+        .collection-preview{
+            padding: 2px;
+            .collection-image{
+                div{
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    img{
+                        max-width: 100% !important;
+                    }
+                }
+                
+            }
+            border-bottom: 1px solid #F1F1F1;
+        }
+        .collection-footer{
+            padding: 5px;
+        }
+
         
     }
     

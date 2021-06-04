@@ -1,6 +1,10 @@
 @import "../../commons/Common.scss";
 
 .profile{
+    .separator{
+        height: 70px;
+        border-bottom: 1px solid $grey-border;
+    }
     .userPane{
         height: 30vh;
         display: flex;
@@ -28,6 +32,6 @@
         }
     }
     .collections{
-        padding-top: 100px;
+        padding-top: 30px;
     }
 }

@@ -1,9 +1,6 @@
+@import './commons/Common.scss';
 
 /* Styles go here */
-
-$primaty-green:"#60B6A8";
-$primary-red:"#D96C5D";
-$primary-yellow:"#D96C5D";
 
 .appContainer{
   .content{
@@ -12,6 +9,9 @@ $primary-yellow:"#D96C5D";
 }
 body{
   font-family: Verdana, sans-serif;
+  .signature-icons{
+    color: $primary
+  }
 }
 
 

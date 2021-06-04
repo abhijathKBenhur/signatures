@@ -97,8 +97,10 @@ getSignatureByHash = async (req, res) => {
 getSignatures = async (req, res) => {
   let userName = req.body.userName;
   let limit = req.body.limit;
-  payLoad = { 
-    // ideaID: { $ne: null }
+  let getOnlyNulls = req.body.getOnlyNulls
+  payLoad = { }
+   if(getOnlyNulls){
+    payLoad.ideaID = null
    }
 
   if (userName) {
@@ -108,11 +110,6 @@ getSignatures = async (req, res) => {
     await Signature.find(payLoad, (err, signatures) => {
       if (err) {
         return res.status(404).json({ success: false, error: "here" });
-      }
-      if (!signatures.length) {
-        return res
-          .status(404)
-          .json({ success: false, error: `signature not found` });
       }
       return res.status(200).json({ success: true, data: signatures });
     }).catch((err) => {
