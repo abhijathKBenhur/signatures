@@ -177,13 +177,13 @@ const CollectionCard = (props) => {
           }}
         >
           <Col md="12 collection-image">
-            {/* <Image
+            <Image
               src={signature.thumbnail}
               height={200}
               style={{
                 background: "#f1f1f1",
               }}
-            /> */}
+            />
           </Col>
         </div>
         <div className="collection-footer">

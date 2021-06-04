@@ -5,6 +5,7 @@
         border: 1px solid $grey-border;
         border-radius: 4px;
         margin-top:30px;
+        background-color: white;
         &:hover{
             box-shadow: 0 0.5rem 1rem $primary-lightest !important;
             border-color: $primary-light;
@@ -28,8 +29,8 @@
             
         }
         .collection-preview{
-            padding: 2px;
             .collection-image{
+                ;
                 div{
                     display: flex;
                     justify-content: center;

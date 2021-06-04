@@ -1,53 +1,71 @@
 import React from "react";
+import _ from "lodash";
 import { Card, CardDeck } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
 import { Feather, User } from "react-feather";
-import Image, { Shimmer } from "react-shimmer";
-
+import Image from "react-image-resizer";
+import { Row, Col, Container } from "react-bootstrap";
 import "./Rack.scss";
 import BlockchainInterface from "../../interface/BlockchainInterface";
 import Signature from "../../beans/Signature";
 const Rack = (props) => {
   let history = useHistory();
   function openCardView(signature) {
-    history.push({pathname:"/signature/" + signature.PDFHash, state:signature});
+    history.push({
+      pathname: "/signature/" + signature.PDFHash,
+      state: signature,
+    });
   }
-
-  let placeHolderSize = props.classType == "primary" ? 424 : 280;
-  let containerSize = props.classType == "primary" ? { width:424} : { width:280};
   return (
-    <div className={"cursor-pointer vertical-shelf " + props.classType}>
-      {props.deck.map((signatureResponse, index) => {
-        let signature = new Signature(signatureResponse)
-        return (
-          <Card
-            key={index}
-            className="signature"
-            style={containerSize}
-            onClick={() => {
-              openCardView(signature);
-            }}
-          >
-            <Image
-              src={signature.thumbnail}
-              fallback={<Shimmer width={placeHolderSize} height={placeHolderSize} />}
-            />
-            <Card.Body className="rack-card-body">
-              <div className="signature-title">
-                <Card.Title>
-                  {signature.title.length > 50 ? signature.title.substring(0,50) +"...": signature.title || "Click to see this idea"}
-                </Card.Title>
-              </div>
-              <div className="signature-content">
-                <Card.Text className="">
-                {signature.owner.length > 50 ? signature.owner.substring(0,50) +"...": signature.owner || "Anonymous"}
-                </Card.Text>
-              </div>
-            </Card.Body>
-          </Card>
-        );
-      })}
-    </div>
+    <Container>
+      <Row className="profile">
+        <Col md="12" className="mycollection">
+          
+          <Row className="collections">
+            {props.deck.map((signature, index) => {
+              return (
+                <Col
+                  key={index}
+                  md="4"
+                  lg="3"
+                  sm="6"
+                  xs="12"
+                  className="collection-card col-md-offset-2"
+                >
+                  <div className="content cursor-pointer">
+                    <div className="collection-header d-flex justify-content-between align-items-center p-2">
+                      <div className="header-left"></div>
+                      <div className="header-right"></div>
+                    </div>
+                    <div
+                      className="collection-preview"
+                      onClick={() => {
+                        openCardView(signature);
+                      }}
+                    >
+                      <Col md="12 collection-image">
+                        <Image
+                          src={signature.thumbnail}
+                          height={200}
+                          style={{
+                            background: "#f1f1f1",
+                          }}
+                        />
+                      </Col>
+                    </div>
+                    <div className="collection-footer">
+                      <div md="12">
+                        <p className="text-left">{signature.title}</p>
+                      </div>
+                    </div>
+                  </div>
+                </Col>
+              );
+            })}
+          </Row>
+        </Col>
+      </Row>
+    </Container>
   );
 };
 export default Rack;

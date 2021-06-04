@@ -1,9 +1,9 @@
 import _ from "lodash";
-import Signature from "../../beans/Signature";
+import { Row, Col, Form, Image, Container } from "react-bootstrap";
 import React, { useState, useEffect } from "react";
 import Rack from "../../components/Rack/Rack";
 import "./gallery.scss";
-import { Container} from "react-bootstrap";
+import cover from "../../../assets/cover.jpeg";
 import MongoDBInterface from "../../interface/MongoDBInterface";
 
 function gallery(props) {
@@ -17,8 +17,13 @@ function gallery(props) {
   }, []);
 
   return (
-    <Container>
-      <div className="gallery p-3">
+    <Container fluid>
+      <div className="gallery d-flex flex-column">
+        <Row className="userPane">
+            <div className="profileHolder">
+            </div>
+          </Row>
+        <div className="separator"> </div>
         <Rack deck={signatureList}></Rack>
       </div>
     </Container>
