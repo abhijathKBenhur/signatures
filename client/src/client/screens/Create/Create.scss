@@ -1,15 +1,142 @@
 @import "../../commons/Common.scss";
-.createform{
-    border-color: $primary-light;
-    height: calc(100vh - 60px);
-    .responsive-content{
-        .create-form{
-            border: 1px solid $primary-light;
-            border-radius: 5px;
-            height: 600px;
-            box-shadow: 0 0.5rem 1rem $primary-lightest !important;
-            background-color: #FFFFFF;
+.createModal{
+    border-radius: 30px;
+    box-shadow: 0 0.5rem 1rem #F1F1F1 !important;
+    height: 75vh;
+    border: 1px solid #F1F1F1;
+    padding: 30px;
+    .form-col{
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+        .right-container{
+            display: flex;
         }
+        .separator{
+            box-shadow: 0 0.5rem 1rem $primary-lightest !important;
+        }
+        .footerComponent{
+            display: flex;
+            justify-content: center;
+            padding: 0;
+            .publish-btn{
+                width: 100%;
+                border-radius: 5px;
+                padding: 10px;
+            }
+        }
+        .form-row{
+            textarea {
+                resize: none;
+             }
+            margin-bottom: 30px;
+            .descriptionArea{
+                border: 1px solid #ced4da;
+                border-radius: 10px;
+            }
+            &:last-child{
+                margin-bottom: -5px;
+    
+            }
+            .additionaText{
+                text-align: center;
+            }
+            &.additional-row{
+                margin-top: 60px;
+                margin-bottom: 40px;
+            }
+            .css-yk16xz-control{
+                border: none;
+                border-bottom: 1px solid #CED4DA;
+                border-radius: 0;
+                
+            }
+            .css-g1d714-ValueContainer{
+                .css-1rhbuit-multiValue{
+                    &:first-child{
+                        // border: 1px solid blue;
+                    }
+                }
+            }
+            .css-1pahdxg-control{
+                box-shadow: none;
+                border: none;
+                border-bottom: 1px solid #CED4DA;
+                border-radius: 0;
+            }
+        }
+        
+            .imageContainer{
+                margin-bottom: 0;
+                height: 200px;
+                width: 200px;
+                .droppedImage{
+                    flex: 0.2;
+                }
+                .container{
+                    padding: 0;
+                    margin-left: 0;
+                }
+                .dropZone{
+                    background-color: #F1F1F1;
+                    border: 1px dashed #2e495a;
+                    border-style: dashed;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    color: #8c8888;
+                    width: 100%;
+                    outline: none;
+                }
+            }
+            .pdfContainer{
+                flex: 0.1;
+                margin-top: 10px;
+                
+                .uploadedPDF{
+                    background-color: #FFFFFF;
+                }
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                width: 75%;
+                border: 10px solid #f1f1f1;
+                .container{
+                    padding: 0;
+                    margin-left: 0;
+                }
+                .dropZone{
+                    background-color: #F1F1F1;
+                    border: 1px dashed #2e495a;
+                    border-style: dashed;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    color: #8c8888;
+                    outline: none;
+                }
+                .emptypdf{
+    
+                }
+                .pdfUploaded{
+                    padding: 15px;
+                    width: 100%;
+                    .react-pdf__Page__canvas{
+                    }
+                }
+            }
+            
+            .tokenModeCard{
+                height: 250px;
+                display: flex;
+                align-items: center;
+                text-align: center;
+                cursor: pointer;
+                flex-direction: initial;
+                &:hover{
+                    
+                }
+            }
     }
     
 }

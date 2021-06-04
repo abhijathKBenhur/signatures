@@ -1,13 +1,21 @@
-@import "../../App.scss";
+@import "../../commons/Common.scss";
 .viewSignature{
+    height: calc(100vh - 60px);
     .signature-container{
-        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
-        border-radius: 30px;
-        height: 80vh;
+        border: 1px solid $primary-light;
+        border-radius: 5px;
+        height: 600px;
+        box-shadow: 0 0.5rem 1rem $primary-lightest !important;
+        background-color: #FFFFFF;
         .left-side{
-            padding: 20px;
-            background-color: #2e49591c;
-            border-radius: 30px 0 0 30px;
+            padding: 0;
+            padding: 5px ;
+            background-color: $primary-lightest;
+            border-right: 1px solid $primary-light;
+            .pdfUploaded{
+                .pdf-document{
+                }
+            }
         }
         .right-side{
             padding: 20px;
@@ -48,8 +56,6 @@
             }
         }
         .form-row{
-            margin-bottom: 30px;
-          
             &.title-row{
                 margin-bottom: 0;
             }
