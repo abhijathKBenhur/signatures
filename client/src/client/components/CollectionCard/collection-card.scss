@@ -1,0 +1,18 @@
+@import "../../commons/Common.scss";
+.collection-card{
+    padding:5px ;
+    
+    .content{
+        border: 1px solid $grey-border;
+        margin: 10px;
+        .collection-preview{
+            .collection-image{
+                .img{
+                    max-width: 100% !important;
+                }
+            }
+        }
+        
+    }
+    
+}

@@ -1,20 +1,19 @@
+@import "../../commons/Common.scss";
 .appHeader{
-    background-color: #2E495A !important;
-    position: fixed;
     width: 100%;
     z-index: 10000;
     height: 60px;
+    border-bottom: 1.5px solid $primary;
     .header-icons{
-        color: white;
+        color: $primary;
     }
     .left-section{
         display: flex;
         align-items: flex-end;
         .nav-link {
-                color: white !important;
-                border-bottom: 4px solid #2E495A;
+                color: $primary !important;
                 &.active{
-                    border-bottom: 4px solid white;
+
                 }
         }
     }

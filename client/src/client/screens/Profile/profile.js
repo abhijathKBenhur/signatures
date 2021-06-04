@@ -1,7 +1,13 @@
 import _ from "lodash";
 import Signature from "../../beans/Signature";
 import React, { useState, useEffect } from "react";
-import { Badge, Button, Row, Col, Form, InputGroup } from "react-bootstrap";
+import {
+  Row,
+  Col,
+  Form,
+  InputGroup,
+  Container,
+} from "react-bootstrap";
 import { useHistory } from "react-router-dom";
 import "./profile.scss";
 import Image, { Shimmer } from "react-shimmer";
@@ -9,13 +15,15 @@ import MongoDBInterface from "../../interface/MongoDBInterface";
 import BlockChainInterface from "../../interface/BlockchainInterface";
 import { toast } from "react-toastify";
 import { confirm } from "../../modals/confirmation/confirmation";
-import Web3Utils from 'web3-utils';
-import {
-  Edit3,
-} from "react-feather";
+import Web3Utils from "web3-utils";
+import { Edit3, Award, User } from "react-feather";
+import StorageInterface from "../../interface/StorageInterface";
+import CollectionCard  from "../../components/CollectionCard/CollectionCard"
+
+
+
 function Profile(props) {
   const [collectionList, setCollectionList] = useState([]);
-  const [rackList, setRackList] = useState([]);
   let history = useHistory();
   function openCardView(signature) {
     history.push({
@@ -65,8 +73,16 @@ function Profile(props) {
     });
   }
 
+  function getPDFFile(signature){
+    let hash = signature.PDFFile
+    StorageInterface.getFileFromIPFS(hash).then(pdfFileResponse => {
+      let pdfData = new Blob([pdfFileResponse.content.buffer])
+      signature.pdfTempFile = pdfData
+    })
+  }
 
   useEffect(() => {
+    
     BlockChainInterface.getAccountDetails()
       .then((metamaskID) => {
         MongoDBInterface.getSignatures({ userName: metamaskID }).then(
@@ -83,73 +99,25 @@ function Profile(props) {
   }, []);
 
   return (
-    <Row className="profile">
-      <Col md="12">
-        <Row>
-          <Col md="6">
-            <h2>My collection</h2>
-          </Col>
-          <Col md="6">
-            <h2>Following</h2>
-          </Col>
-        </Row>
-      </Col>
-      <Col md="6" className="mycollection">
-        <Row>
-          <Col md="12" className="collection-container">
+    <Container>
+      <Row className="profile">
+        <Col md="12" className="mycollection">
+          <Row className="userPane">
+            <div className="profileHolder">
+              <Award size={50}></Award>
+            </div>
+          </Row>
+          <Row className="collections">
             {collectionList.map((collection, index) => {
               return (
-                <Row
-                  key={index}
-                  className="long-card cursor-pointer"
-                  onClick={() => {
-                    openCardView(collection);
-                  }}
-                >
-                  <Col md="3" className="image-container">
-                    <Image
-                      src={collection.thumbnail}
-                      width={50}
-                      height={50}
-                      fallback={<Shimmer width={50} height={50} />}
-                    />
-                  </Col>
-
-                  <Col md="8" className="description-container">
-                    <Row>
-                      <Col md="12">
-                        <h4>{collection.title}</h4>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col md="12">
-                        {collection.description.length > 50
-                          ? collection.description.substring(0, 50) + "..."
-                          : collection.description || "Click to see this idea"}
-                      </Col>
-                    </Row>
-                  </Col>
-                  <Col md="1" className="menu-bar">
-                    <Row className="justify-content-center">
-                      <Edit3 onClick={(e) => {
-                        e.stopPropagation();
-                        editPrice(collection)
-                        }}></Edit3>
-                    </Row>
-                    <Row></Row>
-                    <Row></Row>
-                  </Col>
-                </Row>
+                <CollectionCard card={collection}> </CollectionCard>
               );
             })}
-          </Col>
-        </Row>
-        <Row></Row>
-      </Col>
-      <Col md="6" className="favorites"></Col>
-    </Row>
+          </Row>
+        </Col>
+      </Row>
+    </Container>
   );
-  
 }
 
 export default Profile;

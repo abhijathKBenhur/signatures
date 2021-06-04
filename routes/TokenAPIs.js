@@ -97,7 +97,9 @@ getSignatureByHash = async (req, res) => {
 getSignatures = async (req, res) => {
   let userName = req.body.userName;
   let limit = req.body.limit;
-  payLoad = {};
+  payLoad = { 
+    // ideaID: { $ne: null }
+   }
 
   if (userName) {
     payLoad.owner = userName;

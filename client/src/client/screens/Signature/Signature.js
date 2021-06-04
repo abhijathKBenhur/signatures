@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useLocation } from "react-router-dom";
 import SignatureBean from '../../beans/Signature'
-import { Badge, Button, Row, Col, Form, InputGroup } from "react-bootstrap";
+import { Badge, Button, Row, Col, Form, Container } from "react-bootstrap";
 import BlockChainInterface from "../../interface/BlockchainInterface";
 import MongoDBInterface from "../../interface/MongoDBInterface";
 import Web3Utils from 'web3-utils';
@@ -124,6 +124,7 @@ const Signature = (props) => {
   }
 
   return (
+    <Container> 
     <Form noValidate encType="multipart/form-data" className="viewSignature">
       <Row className="signature-container">
         <Col md="5" className="left-side">
@@ -217,6 +218,7 @@ const Signature = (props) => {
         </Col>
       </Row>
     </Form>
+    </Container>
   );
 };
 export default Signature;

@@ -9,7 +9,7 @@ import { withRouter } from "react-router-dom";
 import "./Create.scss";
 import { FileText } from "react-feather";
 import Hash from "ipfs-only-hash";
-
+import { Container} from "react-bootstrap";
 import { Document, Page, pdfjs } from "react-pdf";
 import _ from "lodash";
 import { toast } from "react-toastify";
@@ -164,6 +164,7 @@ class Create extends Component {
 
   render() {
     return (
+      <Container> 
       <Form
         noValidate
         encType="multipart/form-data"
@@ -222,7 +223,7 @@ class Create extends Component {
               </Col>
             </Row> */}
               <Row className="form-row">
-                <Col md="5">
+                <Col md="7">
                   <Form.Row className="imageContainer">
                     <Dropzone
                       onDrop={this.onImageDrop}
@@ -250,7 +251,7 @@ class Create extends Component {
                     )}
                   </Form.Row>
                 </Col>
-                <Col md="7">
+                <Col md="5">
                   <Row className="form-row">
                     <Form.Group as={Col} className="formEntry" md="12">
                       <Select
@@ -335,6 +336,7 @@ class Create extends Component {
           </Row>
         </Col>
       </Form>
+      </Container>
     );
   }
 }

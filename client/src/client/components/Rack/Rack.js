@@ -13,23 +13,6 @@ const Rack = (props) => {
     history.push({pathname:"/signature/" + signature.PDFHash, state:signature});
   }
 
-  function getRandomTileSize(){
-    let classTypes = ["small","square","medium","large"];
-    var pick = classTypes[Math.floor(Math.random() * classTypes.length)];
-  }
-
-  function getImageFromHash(hash){
-    BlockchainInterface.getImageFromIPFS(hash).then(files =>{
-      let file =  URL.createObjectURL(
-        new Blob([files[0].content], { type: 'image/png' } /* (1) */)
-      );
-      return file
-    }).catch(error =>{
-      console.log(error)
-    })
-  }
-
-
   let placeHolderSize = props.classType == "primary" ? 424 : 280;
   let containerSize = props.classType == "primary" ? { width:424} : { width:280};
   return (
@@ -46,7 +29,6 @@ const Rack = (props) => {
             }}
           >
             <Image
-              // src={getImageFromHash(signature.thumbnail)}
               src={signature.thumbnail}
               fallback={<Shimmer width={placeHolderSize} height={placeHolderSize} />}
             />
