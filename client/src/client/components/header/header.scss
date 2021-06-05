@@ -2,6 +2,7 @@
 .appHeader{
     width: 100%;
     z-index: 10000;
+    position: fixed;
     height: 60px;
     border-bottom: 1.5px solid $primary;
     .header-icons{

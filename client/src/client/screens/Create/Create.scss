@@ -3,6 +3,7 @@
     border-color: $primary-light;
     height: calc(100vh - 60px);
     .responsive-content{
+        margin-top: 60px;
         .create-form{
             border: 1px solid $primary-light;
             border-radius: 5px;
@@ -38,7 +39,12 @@
                     align-items: flex-start;
                     border: 1px dashed $primary-light;
                     .imageUploaded{
-                        
+                        .removeImage{
+                            position: absolute;
+                            z-index: 1;
+                            right: 10px;
+                            
+                        }
                     }
                     .empty-image-row{
                         align-self: center;
@@ -61,6 +67,12 @@
                     align-items: flex-start;
                     border: 1px dashed $primary-light;
                     .pdfUploaded{
+                        .removePDF{
+                            position: absolute;
+                            z-index: 1;
+                            right: 10px;
+                            
+                        }
                         .react-pdf__Document{
                             margin: 0 auto;
                             width: 80% !important;

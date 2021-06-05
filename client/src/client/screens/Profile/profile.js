@@ -34,6 +34,7 @@ function Profile(props) {
           });
         })
         .catch((error) => {
+          clearInterval(fetchInterval);
           console.log(error);
         });
     }, 1000);
@@ -58,6 +59,7 @@ function Profile(props) {
         );
       })
       .catch((error) => {
+        clearInterval(fetchInterval);
         console.log(error);
       });
   }

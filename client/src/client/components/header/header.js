@@ -9,6 +9,7 @@ import "./header.scss";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Container, Row, Col } from "react-bootstrap";
+import BlockchainInterface from "../../interface/BlockchainInterface";
 const Header = (props) => {
   let history = useHistory();
 
@@ -29,20 +30,26 @@ const Header = (props) => {
 
   function createnew() {
     history.push("/create");
-    setAppLocatoin("create")
+    setAppLocatoin("create");
   }
 
   function gotoGallery() {
-    setAppLocatoin("home")
+    setAppLocatoin("home");
     history.push("/home");
   }
 
   function gotoPortfolio() {
-    setAppLocatoin("profile")
+    setAppLocatoin("profile");
     history.push("/profile");
   }
 
-  function connectWallet() {}
+  function connectWallet() {
+    BlockchainInterface.getAccountDetails().then(succ => {
+
+    }).catch(err =>{
+
+    })
+  }
 
   const [appLocation, setAppLocatoin] = useState("home");
   const [showLoginModal, setShowLoginModal] = useState(false);
@@ -81,16 +88,18 @@ const Header = (props) => {
             </a>
 
             <Nav.Item>
-              <Nav.Link active={appLocation == "home" }
+              <Nav.Link
+                active={appLocation == "home"}
                 onClick={() => {
-                  gotoGallery()
+                  gotoGallery();
                 }}
               >
                 Discover
               </Nav.Link>
             </Nav.Item>
             <Nav.Item>
-            <Nav.Link active={appLocation == "profile" }
+              <Nav.Link
+                active={appLocation == "profile"}
                 onClick={() => {
                   gotoPortfolio();
                 }}
@@ -104,8 +113,28 @@ const Header = (props) => {
           </div>
 
           <div className="right-section">
-            <Search className="cursor-pointer header-icons"  onClick={() => {createnew();}}></Search>
-            <Plus className="cursor-pointer header-icons"  onClick={() => {createnew();}}></Plus>
+            {/* <Button
+              variant="danger"
+              className="button"
+              bsstyle="primary"
+              onClick={() => {
+                connectWallet();
+              }}
+            >
+              Connect
+            </Button> */}
+            <Search
+              className="cursor-pointer header-icons"
+              onClick={() => {
+                createnew();
+              }}
+            ></Search>
+            <Plus
+              className="cursor-pointer header-icons"
+              onClick={() => {
+                createnew();
+              }}
+            ></Plus>
             <Dropdown>
               <Dropdown.Toggle
                 as={ProfileDropDown}

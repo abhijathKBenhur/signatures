@@ -49,9 +49,9 @@ const Signature = (props) => {
     });
   }
 
-  function feedbackMessage() {
-    toast.dark(
-      "Your order has been placed. Please wait a while for it to be processed.",
+  function feedbackMessage(signature) {
+    toast.info(
+      "Please wait a while we complete the transaction. Please note the transaction ID : " + signature && signature.transactionID,
       {
         position: "bottom-right",
         autoClose: 3000,
@@ -133,10 +133,10 @@ const Signature = (props) => {
         encType="multipart/form-data"
         className="viewSignature d-flex align-items-center justify-content-center"
       >
-        <Col md="10" sm="12" lg="10" xs="12" className="responsive-content">
+        <Col md="11" sm="12" lg="11" xs="12" className="responsive-content">
           <Row className="signature-container ">
-            <Col sm="12" lg="5" xs="12" md="5" className="left-side">
-              <Form.Row className=" p15 ">
+            <Col sm="12" lg="6" xs="12" md="6" className="left-side h-100">
+              <Form.Row className="h-100 ">
                 {PDFFile && (
                   <div className="pdfUploaded h-100 overflow-auto align-items-center justify-content-center d-flex">
                     <Document file={PDFFile} className="pdf-document">
@@ -146,14 +146,17 @@ const Signature = (props) => {
                 )}
               </Form.Row>
             </Col>
-            <Col sm="12" lg="6" xs="12" md="6"  className="right-side">
+            <Col sm="12" lg="5" xs="12" md="5"  className="right-side">
               <div className="top-section">
                 <Row className="form-row title-row">
-                  <h1>{signature.title}</h1>
+                  <span>{signature.title}</span>
                 </Row>
                 <Row className="form-row owner-row">
+                  <span> {signature.owner}</span>
+                </Row>
+                <Row className="form-row price-row">
                   <span>
-                    {signature.price && Web3Utils.fromWei(signature.price)}
+                    {signature.price && Web3Utils.fromWei(signature.price)} ETH
                   </span>
                 </Row>
                 <Row className="form-row  tags-row">
@@ -172,7 +175,7 @@ const Signature = (props) => {
                 </Row>
                 <Row className="form-row">
                   <span> {signature.description}</span>
-                  <span> {signature.owner}</span>
+                 
                 </Row>
               </div>
               <div className="bottom-section">

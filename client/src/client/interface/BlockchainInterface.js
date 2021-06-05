@@ -1,7 +1,9 @@
-import _, { defer } from "lodash";
+import _, { defer, has } from "lodash";
 import Web3 from "web3";
 import NFTTokenBean from "../beans/Signature";
 import contractJSON from "../../contracts/ideaBlocks.json";
+import { toast } from "react-toastify";
+
 
 
 class BlockchainInterface {
@@ -16,7 +18,6 @@ class BlockchainInterface {
 
   async getAccountDetails() {
     const promise = new Promise((resolve, reject) => {
-      if (_.isUndefined(this.metamaskAccount) || _.isUndefined(this.contract)) {
         console.log("returning loadWeb3");
         this.loadWeb3()
           .then((success) => {
@@ -35,12 +36,10 @@ class BlockchainInterface {
           })
           .catch((err) => {
             console.log("catch loadWeb3", err);
+            
             reject(err);
           });
-      } else {
-        console.log("already present");
-        resolve(this.metamaskAccount);
-      }
+      
     });
 
     return promise;
@@ -72,6 +71,14 @@ class BlockchainInterface {
       } else {
         let errorMessage =
           "Non-Ethereum browser detected. You should consider trying MetaMask!";
+          toast.dark(errorMessage, {
+            position: "bottom-right",
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
         parentThis.alert(errorMessage);
         reject(errorMessage);
       }
@@ -107,7 +114,6 @@ class BlockchainInterface {
         }
       })
       .on("confirmation", function(confirmationNumber, receipt) {
-        console.log("confirmation :: " + confirmationNumber)
       })
       .on("error", console.error);
   }
@@ -125,11 +131,14 @@ class BlockchainInterface {
       .buy(updatePayLoad.ideaID)
       .send(transactionObject)
       .on("transactionHash", function(hash) {
-        feedbackCallback();
+        console.log("updated with transaction id ::" , hash)
+        updatePayLoad.transactionID = hash;
+
+        feedbackCallback(updatePayLoad);
       })
       .on("receipt", function(receipt) {
+        console.log("contains with transaction id ::" , updatePayLoad.transactionID)
         updatePayLoad.price = "0";
-
         let tokenReturns = _.get(
           receipt.events,
           "Transfer.returnValues.tokenId"
@@ -137,7 +146,6 @@ class BlockchainInterface {
           successCallback(updatePayLoad);
       })
       .on("confirmation", function(confirmationNumber, receipt) {
-        console.log("confirmation :: " + confirmationNumber)
       })
       .on("error", console.error);
   }

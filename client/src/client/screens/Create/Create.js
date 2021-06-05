@@ -8,7 +8,7 @@ import CONSTANTS from "../../commons/Constants";
 import { useHistory } from "react-router-dom";
 import { withRouter } from "react-router-dom";
 import "./Create.scss";
-import { FilePlus, Image as ImageFile } from "react-feather";
+import { FilePlus,X, Image as ImageFile } from "react-feather";
 import Hash from "ipfs-only-hash";
 import Image from "react-image-resizer";
 import { Container } from "react-bootstrap";
@@ -33,8 +33,9 @@ function Create(props) {
     transactionID: undefined,
   });
   const [slideCount, setSlideCount] = useState(0);
+  const [billet, setBillet] = useState({});
   let history = useHistory();
-  const finalSlideCount = 2;
+  const finalSlideCount = 1;
   useEffect(() => {
     pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
     BlockChainInterface.getAccountDetails()
@@ -56,6 +57,18 @@ function Create(props) {
         preview: URL.createObjectURL(acceptedFiles[0]),
       }),
     });
+  }
+
+  function clearPDF(){
+    setFormData({
+      ...form, PDFFile: undefined
+    })
+  }
+
+  function clearImage(){
+    setFormData({
+      ...form, thumbnail: undefined
+    })
   }
 
   function onPDFDrop(acceptedFiles) {
@@ -105,7 +118,12 @@ function Create(props) {
           draggable: true,
           progress: undefined,
         });
-        history.push("/home");
+        debugger
+        setBillet({
+          transactionID: success.transactionID,
+          account: success.account,
+          PDFHash: success.PDFHash
+        })
       })
       .catch((err) => {
         console.log(err);
@@ -124,7 +142,7 @@ function Create(props) {
           draggable: true,
           progress: undefined,
         });
-        history.push("/home");
+        setSlideCount(finalSlideCount + 1)
       })
       .catch((err) => {
         console.log(err);
@@ -269,6 +287,7 @@ function Create(props) {
                       <Form.Row className="w-100 p15 d-flex justify-content-center">
                         {form.PDFFile && (
                           <div className="pdfUploaded w-100 h-100">
+                            <X className="removePDF cursor-pointer" onClick={() => {clearPDF()}}></X>
                             <Document
                               fillWidth
                               file={form.PDFFile}
@@ -326,6 +345,7 @@ function Create(props) {
                       <Form.Row className="w-100 p15 d-flex justify-content-center">
                         {form.thumbnail && (
                           <div className="imageUploaded w-100 h-100">
+                            <X  className="removeImage cursor-pointer" onClick={() => {clearImage()}}></X>
                             <Image
                               src={form.thumbnail.preview}
                               height={400}
@@ -373,16 +393,18 @@ function Create(props) {
                   md="12"
                   className="d-flex justify-content-between align-items-center "
                 >
+                  {slideCount == finalSlideCount + 1 ? <div></div> : 
                   <Button
-                    variant="danger"
-                    className="button"
-                    bsstyle="primary"
-                    onClick={() => {
-                      onBack();
-                    }}
-                  >
-                    {slideCount == 0 ? "Cancel" : "Back"}
-                  </Button>
+                  variant="danger"
+                  className="button"
+                  bsstyle="primary"
+                  onClick={() => {
+                    onBack();
+                  }}
+                >
+                  {getBackButtonText()}
+                </Button>}
+                  
                   <Button
                     variant="danger"
                     className="button"
@@ -391,7 +413,7 @@ function Create(props) {
                       onNext();
                     }}
                   >
-                    {slideCount != finalSlideCount ? "Next" : "Publish"}
+                    { getNextButtonText()}
                   </Button>
                 </Col>
               </Row>
@@ -402,10 +424,38 @@ function Create(props) {
     </Container>
   );
 
+  function getNextButtonText(){
+    if(slideCount == finalSlideCount) {
+      return "Publish";
+    }
+    else if(slideCount == finalSlideCount +1){
+      return "Done"
+    } 
+    else if(slideCount < finalSlideCount){
+      return "Next"
+    }
+  }
+
+  function getBackButtonText(){
+    if(slideCount == 0) {
+      return "Cancel";
+    }
+    else if(slideCount == finalSlideCount +1){
+      return ""
+    } 
+    else if(slideCount <= finalSlideCount){
+      return "Back"
+    }
+  }
+
   function onNext() {
     if (slideCount == finalSlideCount) {
       handleSubmit();
-    } else {
+    }
+    else if(slideCount == finalSlideCount +1){
+      gotoGallery();
+    } 
+    else if(slideCount < finalSlideCount){
       setSlideCount(slideCount + 1);
     }
   }

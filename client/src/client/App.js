@@ -23,8 +23,8 @@ class App extends Component {
         <div className="appContainer">
           <ToastContainer></ToastContainer>
           <Header></Header>
+          <div className="content">
               <Switch>
-             
                 <Route
                   path='/home'
                   render={(props) => (
@@ -35,7 +35,7 @@ class App extends Component {
                 <Route path="/create" children={<Create />} />
                 <Route path="/profile" children={<Profile />} />
               </Switch>
-          
+          </div>
         </div>
     );
   }
