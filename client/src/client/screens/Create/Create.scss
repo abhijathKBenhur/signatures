@@ -9,6 +9,10 @@
             height: 600px;
             box-shadow: 0 0.5rem 1rem $primary-lightest !important;
             background-color: #FFFFFF;
+            .create-wizard-bar{
+                height: 50px;
+                background-color: $primary-light;
+            }
         }
     }
     

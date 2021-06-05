@@ -1,10 +1,11 @@
-import React, { Component, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Modal, Button, Row, Col, Form, InputGroup } from "react-bootstrap";
 import MongoDBInterface from "../../interface/MongoDBInterface";
 import BlockChainInterface from "../../interface/BlockchainInterface";
 import StorageInterface from "../../interface/StorageInterface";
 import Dropzone from "react-dropzone";
 import CONSTANTS from "../../commons/Constants";
+import { useHistory } from "react-router-dom";
 import { withRouter } from "react-router-dom";
 import "./Create.scss";
 import { FileText } from "react-feather";
@@ -14,7 +15,6 @@ import { Document, Page, pdfjs } from "react-pdf";
 import _ from "lodash";
 import { toast } from "react-toastify";
 import Select from "react-select";
-
 
 function Create(props) {
   const [form, setFormData] = useState({
@@ -44,20 +44,18 @@ function Create(props) {
       .catch((error) => {
         console.log(error);
       });
-
   }, []);
 
-
-  onImageDrop = (acceptedFiles) => {
+  function onImageDrop(acceptedFiles) {
     setFormData({
       ...form,
       thumbnail: Object.assign(acceptedFiles[0], {
         preview: URL.createObjectURL(acceptedFiles[0]),
       }),
     });
-  };
+  }
 
-  onPDFDrop = (acceptedFiles) => {
+  function onPDFDrop(acceptedFiles) {
     setFormData({
       ...form,
       PDFFile: acceptedFiles[0],
@@ -73,36 +71,32 @@ function Create(props) {
         });
       });
     };
-  };
-
-  PDFLoadError = (error) => {
-
-  }
-  onDocumentLoadSuccess = (success) => {
-
   }
 
-  handleTagsChange = (tags) => {
+  function PDFLoadError(error) {}
+  function onDocumentLoadSuccess(success) {}
+
+  function handleTagsChange(tags) {
     setFormData({
       category: JSON.stringify(tags),
     });
   }
 
-  handleChange = (event)  => {
+  function handleChange(event) {
     var stateObject = function() {
       let returnObj = {};
       returnObj[this.target.name] = this.target.value;
       return returnObj;
     }.bind(event)();
-    this.setFormData({...form,stateObject});
+    setFormData({ ...form, stateObject });
   }
 
-  handleSubmit = (event) => {
+  function handleSubmit(event) {
     event.preventDefault();
     onSubmit(form);
   }
 
-  updateIdeaIDToMongo = (payload) => {
+  function updateIdeaIDToMongo(payload) {
     MongoDBInterface.updateIdeaID(payload)
       .then((success) => {
         toast.dark("Your thoughts are live on blockchain.", {
@@ -121,7 +115,7 @@ function Create(props) {
       });
   }
 
-  saveToMongo = (form) => {
+  function saveToMongo(form) {
     MongoDBInterface.addSignature(form)
       .then((success) => {
         toast.dark("Your thoughts have been submitted!", {
@@ -140,18 +134,13 @@ function Create(props) {
       });
   }
 
-  saveToBlockChain =(form) => {
-    BlockChainInterface.publishIdea(
-      form,
-      saveToMongo,
-      updateIdeaIDToMongo
-    );
+  function saveToBlockChain(form) {
+    BlockChainInterface.publishIdea(form, saveToMongo, updateIdeaIDToMongo);
   }
 
-  onSubmit = (form) => {
+  function onSubmit(form) {
     console.log("form:", form);
     form.IPFS = true;
-    const parentThis = this;
     StorageInterface.getFilePaths(form)
       .then((success) => {
         form.PDFFile = _.get(_.find(success, { type: "PDFFile" }), "path");
@@ -160,7 +149,7 @@ function Create(props) {
           "path"
         );
         console.log(form);
-        this.saveToBlockChain(form);
+        saveToBlockChain(form);
       })
       .catch((error) => {
         return {
@@ -170,27 +159,72 @@ function Create(props) {
       });
   }
 
-    return (
-      <Container>
-        <div className="createform  d-flex align-items-center justify-content-center">
-          <Col md="10" sm="12" lg="10" xs="12 responsive-content">
-            <Form
-              noValidate
-              encType="multipart/form-data"
-              onSubmit={handleSubmit}
-              className="create-form"
+  return (
+    <Container>
+      <div className="createform  d-flex align-items-center justify-content-center">
+        <Col md="10" sm="12" lg="10" xs="12" className="responsive-content">
+          <Form
+            noValidate
+            encType="multipart/form-data"
+            onSubmit={handleSubmit}
+            className="create-form"
+          >
+            <Col
+              md="12"
+              className="create-wizard-bar justify-content-center align-items-center d-flex"
             >
-              <Row>
-                <Col md="12">wizart guide</Col>
-                <Col md="6">b</Col>
-                <Col md="6">a</Col>
-                <Col md="12">button section</Col>
-              </Row>
-            </Form>
-          </Col>
-        </div>
-      </Container>
-    );
-  }
+              wizart guide
+            </Col>
+            <Row>
+              <Col md="12">
+                <Col md="6" sm="12" lg="6" xs="12" className="p-2">
+                  <Row className="form-row"></Row>
+                  <Row className="form-row">
+                    <Form.Group
+                      as={Col}
+                      className="formEntry"
+                      md="12"
+                      controlId="title"
+                    >
+                      <Form.Control
+                        type="text"
+                        name="title"
+                        placeholder="Title"
+                        onChange={handleChange}
+                      />
+                    </Form.Group>
+                  </Row>
+                  <Row className="form-row">
+                    <Form.Group
+                      as={Col}
+                      className="formEntry"
+                      md="12"
+                      controlId="description"
+                    >
+                      <InputGroup>
+                        <Form.Control
+                          className="descriptionArea"
+                          as="textarea"
+                          aria-describedby="inputGroupAppend"
+                          name="description"
+                          placeholder="Description"
+                          onChange={handleChange}
+                        />
+                      </InputGroup>
+                    </Form.Group>
+                  </Row>
+                </Col>
+                <Col md="6" sm="12" lg="6" xs="12">
+                  pdf
+                </Col>
+              </Col>
+            </Row>
+            <Col md="12">button section</Col>
+          </Form>
+        </Col>
+      </div>
+    </Container>
+  );
+}
 
 export default Create;
