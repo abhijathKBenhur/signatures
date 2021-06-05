@@ -38,12 +38,36 @@ body{
 .cursor-pointer{
   cursor: pointer;
 }
-
-.btn-danger{
-  color: #fff;
-  background-color: #E3675A;
-  border-color: #E3675A;
+.btn{
+  font-size: 12px;
+  line-height: 16px;
+  height: 26px;
+  -webkit-font-smoothing: antialiased!important;
+  -moz-osx-font-smoothing: grayscale;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -ms-flex-align: center;
+  align-items: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  text-align: center;
+  font-weight: 600;
+  padding: 4px 15px;
+  white-space: nowrap;
+  cursor: pointer;
+  text-decoration: none;
+  box-sizing: border-box;
+  border-radius: 4px;
+  border: 1px solid transparent;
+  &.btn-danger{
+    background-clip: border-box!important;
+    background-origin: border-box!important;
+    background: $primary;
+    color: #fff;
+    &:hover{
+      background: $primary-dark;
+    }
+  }
 }
-
 
 

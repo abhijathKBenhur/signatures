@@ -1,6 +1,6 @@
 import { useHistory } from "react-router-dom";
-import _ from "lodash"
-import Signature from '../../beans/Signature';
+import _ from "lodash";
+import Signature from "../../beans/Signature";
 import loader from "../../../assets/loader.gif";
 import { MoreHorizontal, Eye, Share, Crosshair, Edit3 } from "react-feather";
 import "./collection-card.scss";
@@ -113,8 +113,11 @@ const CollectionCard = (props) => {
       <div className="content cursor-pointer">
         <div className="collection-header d-flex justify-content-between align-items-center p-2">
           <div className="header-left">
-            {_.isEmpty(signature.ideaID) ? 
-            <img width={20} src={loader}></img>: <div></div>}
+            {_.isEmpty(signature.ideaID) ? (
+              <img width={20} src={loader}></img>
+            ) : (
+              <div></div>
+            )}
           </div>
           <div className="header-right">
             <Dropdown>
