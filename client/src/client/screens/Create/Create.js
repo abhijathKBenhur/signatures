@@ -78,17 +78,15 @@ function Create(props) {
 
   function handleTagsChange(tags) {
     setFormData({
+      ...form,
       category: JSON.stringify(tags),
     });
   }
 
   function handleChange(event) {
-    var stateObject = function() {
       let returnObj = {};
-      returnObj[this.target.name] = this.target.value;
-      return returnObj;
-    }.bind(event)();
-    setFormData({ ...form, stateObject });
+      returnObj[event.target.name] = event.target.value;
+      setFormData({ ...form, ...returnObj });
   }
 
   function handleSubmit(event) {
@@ -161,7 +159,7 @@ function Create(props) {
 
   return (
     <Container>
-      <div className="createform  d-flex align-items-center justify-content-center">
+      <Row className="createform  d-flex align-items-center justify-content-center">
         <Col md="10" sm="12" lg="10" xs="12" className="responsive-content">
           <Form
             noValidate
@@ -169,17 +167,18 @@ function Create(props) {
             onSubmit={handleSubmit}
             className="create-form"
           >
-            <Col
-              md="12"
-              className="create-wizard-bar justify-content-center align-items-center d-flex"
-            >
-              wizart guide
-            </Col>
-            <Row>
-              <Col md="12">
-                <Col md="6" sm="12" lg="6" xs="12" className="p-2">
-                  <Row className="form-row"></Row>
-                  <Row className="form-row">
+            <Col md="12">
+              <Row>
+                <Col
+                  md="12"
+                  className="create-wizard-bar justify-content-center align-items-center d-flex"
+                >
+                  wizart guide
+                </Col>
+              </Row>
+              <Row>
+                <Col md="6" sm="12" lg="6" xs="12" className="title-n-desc p-2">
+                  <Row className="">
                     <Form.Group
                       as={Col}
                       className="formEntry"
@@ -189,6 +188,7 @@ function Create(props) {
                       <Form.Control
                         type="text"
                         name="title"
+                        className="titleArea"
                         placeholder="Title"
                         onChange={handleChange}
                       />
@@ -208,6 +208,7 @@ function Create(props) {
                           aria-describedby="inputGroupAppend"
                           name="description"
                           placeholder="Description"
+                          style={{"resize": "none"}}
                           onChange={handleChange}
                         />
                       </InputGroup>
@@ -215,14 +216,16 @@ function Create(props) {
                   </Row>
                 </Col>
                 <Col md="6" sm="12" lg="6" xs="12">
-                  pdf
+                 
                 </Col>
-              </Col>
-            </Row>
-            <Col md="12">button section</Col>
+              </Row>
+            </Col>
+            <Col md="12" className="footer-class p-1">
+              footer 
+            </Col>
           </Form>
         </Col>
-      </div>
+      </Row>
     </Container>
   );
 }
