@@ -1,103 +1,112 @@
-import React, { Component, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Modal, Button, Row, Col, Form, InputGroup } from "react-bootstrap";
 import MongoDBInterface from "../../interface/MongoDBInterface";
 import BlockChainInterface from "../../interface/BlockchainInterface";
-import StorageInterface from "../../interface/StorageInterface"
+import StorageInterface from "../../interface/StorageInterface";
 import Dropzone from "react-dropzone";
 import CONSTANTS from "../../commons/Constants";
+import { useHistory } from "react-router-dom";
 import { withRouter } from "react-router-dom";
 import "./Create.scss";
-import { FileText } from "react-feather";
+import { FilePlus,X, Image as ImageFile } from "react-feather";
 import Hash from "ipfs-only-hash";
-
+import Image from "react-image-resizer";
+import { Container } from "react-bootstrap";
 import { Document, Page, pdfjs } from "react-pdf";
 import _ from "lodash";
 import { toast } from "react-toastify";
 import Select from "react-select";
+import "react-step-progress-bar/styles.css";
+import { ProgressBar, Step } from "react-step-progress-bar";
 
-class Create extends Component {
-  constructor(props) {
-    super(props);
+function Create(props) {
+  const [form, setFormData] = useState({
+    owner: "",
+    title: "",
+    category: [],
+    description: "",
+    price: 0,
+    thumbnail: undefined,
+    PDFFile: undefined,
+    PDFHash: undefined,
+    ideaID: undefined,
+    transactionID: undefined,
+  });
+  const [slideCount, setSlideCount] = useState(0);
+  const [billet, setBillet] = useState({});
+  let history = useHistory();
+  const finalSlideCount = 1;
+  useEffect(() => {
     pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
     BlockChainInterface.getAccountDetails()
       .then((metamaskID) => {
-        this.setState({
+        setFormData({
+          ...form,
           owner: metamaskID,
         });
       })
       .catch((error) => {
         console.log(error);
       });
-    this.state = {
-      owner: "",
-      title: "",
-      category: [],
-      description: "",
-      price: 0,
-      thumbnail: undefined,
-      PDFFile: undefined,
-      PDFHash: undefined,
-      ideaID: undefined,
-      transactionID: undefined,
-    };
-    this.handleChange = this.handleChange.bind(this);
-    this.handleTagsChange = this.handleTagsChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.PDFLoadError = this.PDFLoadError.bind(this);
-    this.onDocumentLoadSuccess = this.onDocumentLoadSuccess.bind(this);
+  }, []);
 
-    this.onImageDrop = (acceptedFiles) => {
-      this.setState({
-        thumbnail: Object.assign(acceptedFiles[0], {
-          preview: URL.createObjectURL(acceptedFiles[0]),
-        }),
-      });
-    };
+  function onImageDrop(acceptedFiles) {
+    setFormData({
+      ...form,
+      thumbnail: Object.assign(acceptedFiles[0], {
+        preview: URL.createObjectURL(acceptedFiles[0]),
+      }),
+    });
+  }
 
-    this.onPDFDrop = (acceptedFiles) => {
-      this.setState({
-        PDFFile: acceptedFiles[0],
-      });
-      const reader = new window.FileReader();
-      reader.readAsArrayBuffer(acceptedFiles[0]);
-      reader.onloadend = () => {
-        Hash.of(Buffer(reader.result)).then((PDFHashValue) => {
-          // Check for already existing PDF Hashes
-          this.setState({
-            PDFHash: PDFHashValue
-          });
+  function clearPDF(){
+    setFormData({
+      ...form, PDFFile: undefined
+    })
+  }
+
+  function clearImage(){
+    setFormData({
+      ...form, thumbnail: undefined
+    })
+  }
+
+  function onPDFDrop(acceptedFiles) {
+    const reader = new window.FileReader();
+    reader.readAsArrayBuffer(acceptedFiles[0]);
+    reader.onloadend = () => {
+      Hash.of(Buffer(reader.result)).then((PDFHashValue) => {
+        // Check for already existing PDF Hashes
+        setFormData({
+          ...form,
+          PDFFile: acceptedFiles[0],
+          PDFHash: PDFHashValue,
         });
-      };
+      });
     };
   }
 
-  PDFLoadError(error) {}
-  onDocumentLoadSuccess(success) {}
+  function PDFLoadError(error) {}
+  function onDocumentLoadSuccess(success) {}
 
-  handleTagsChange(tags) {
-    this.setState({
+  function handleTagsChange(tags) {
+    setFormData({
+      ...form,
       category: JSON.stringify(tags),
     });
   }
 
-  handleChange(event) {
-    var stateObject = function() {
-      let returnObj = {};
-      returnObj[this.target.name] = this.target.value;
-      return returnObj;
-    }.bind(event)();
-    this.setState(stateObject);
+  function handleChange(event) {
+    let returnObj = {};
+    returnObj[event.target.name] = event.target.value;
+    setFormData({ ...form, ...returnObj });
   }
 
-  closePopup() {}
-
-  handleSubmit(event) {
-    event.preventDefault();
-    let stateCopy = _.cloneDeep(this.state);
-    this.onSubmit(stateCopy);
+  function handleSubmit(event) {
+    onSubmit();
   }
 
-  updateIdeaIDToMongo(payload) {
+  function updateIdeaIDToMongo(payload) {
     MongoDBInterface.updateIdeaID(payload)
       .then((success) => {
         toast.dark("Your thoughts are live on blockchain.", {
@@ -109,14 +118,19 @@ class Create extends Component {
           draggable: true,
           progress: undefined,
         });
-        this.props.history.push("/home");
+        debugger
+        setBillet({
+          transactionID: success.transactionID,
+          account: success.account,
+          PDFHash: success.PDFHash
+        })
       })
       .catch((err) => {
         console.log(err);
       });
   }
 
-  saveToMongo(form) {
+  function saveToMongo(form) {
     MongoDBInterface.addSignature(form)
       .then((success) => {
         toast.dark("Your thoughts have been submitted!", {
@@ -128,30 +142,29 @@ class Create extends Component {
           draggable: true,
           progress: undefined,
         });
-        this.props.history.push("/home");
+        setSlideCount(finalSlideCount + 1)
       })
       .catch((err) => {
         console.log(err);
       });
   }
 
-  saveToBlockChain(form) {
-    BlockChainInterface.publishIdea(
-      form,
-      this.saveToMongo,
-      this.updateIdeaIDToMongo
-    );
+  function saveToBlockChain(form) {
+    BlockChainInterface.publishIdea(form, saveToMongo, updateIdeaIDToMongo);
   }
 
-  async onSubmit(form) {
+  function onSubmit() {
     console.log("form:", form);
-    const parentThis = this;
+    form.IPFS = true;
     StorageInterface.getFilePaths(form)
       .then((success) => {
-        form.PDFFile = _.get(_.find(success,{type:"PDFFile"}),'path')
-        form.thumbnail = _.get(_.find(_.map(success,'data'),{type:"thumbnail"}),'path')
+        form.PDFFile = _.get(_.find(success, { type: "PDFFile" }), "path");
+        form.thumbnail = _.get(
+          _.find(_.map(success, "data"), { type: "thumbnail" }),
+          "path"
+        );
         console.log(form);
-        this.saveToBlockChain(form);
+        saveToBlockChain(form);
       })
       .catch((error) => {
         return {
@@ -161,180 +174,302 @@ class Create extends Component {
       });
   }
 
-  render() {
-    return (
-      <Form
-        noValidate
-        encType="multipart/form-data"
-        onSubmit={this.handleSubmit}
-        className="createModal"
-      >
-        <Col md="12" className="form-col">
-          <Row>
-            <Col md="6">
-              <Row className="form-row">
-                <h1>Post us your idea</h1>
-              </Row>
-              <Row className="form-row">
-                <Form.Group
-                  as={Col}
-                  className="formEntry"
+  return (
+    <Container>
+      <Row className="createform  d-flex align-items-center justify-content-center">
+        <Col md="10" sm="12" lg="10" xs="12" className="responsive-content">
+          <Form
+            noValidate
+            encType="multipart/form-data"
+            onSubmit={handleSubmit}
+            className="create-form"
+          >
+            <Col md="12" className="overflow-auto h-100">
+              <Row>
+                <Col
                   md="12"
-                  controlId="title"
-                >
-                  <Form.Control
-                    type="text"
-                    name="title"
-                    placeholder="Title"
-                    onChange={this.handleChange}
-                  />
-                </Form.Group>
+                  className="create-wizard-bar justify-content-center align-items-center d-flex"
+                ></Col>
               </Row>
-              <Row className="form-row">
-                <Form.Group
-                  as={Col}
-                  className="formEntry"
-                  md="12"
-                  controlId="description"
-                >
-                  <InputGroup>
-                    <Form.Control
-                      className="descriptionArea"
-                      as="textarea"
-                      rows={5}
-                      aria-describedby="inputGroupAppend"
-                      name="description"
-                      placeholder="Description"
-                      onChange={this.handleChange}
-                    />
-                  </InputGroup>
-                </Form.Group>
-              </Row>
-
-              {/* <Row className="form-row additional-row">
-              <Col md="4">
-                <hr></hr>
-              </Col>
-              <Col md="4" className="additionaText">Additional information</Col>
-              <Col md="4">
-                <hr></hr>
-              </Col>
-            </Row> */}
-              <Row className="form-row">
-                <Col md="5">
-                  <Form.Row className="imageContainer">
-                    <Dropzone
-                      onDrop={this.onImageDrop}
-                      acceptedFiles={".jpeg"}
-                      className="dropzoneContainer"
-                    >
-                      {({ getRootProps, getInputProps }) => (
-                        <section className="container">
-                          {!this.state.thumbnail && (
-                            <div {...getRootProps()} className="dropZone h-100">
-                              <input {...getInputProps()} />
-                              <p>Thumbnail</p>
-                            </div>
-                          )}
-                        </section>
-                      )}
-                    </Dropzone>
-                    {this.state.thumbnail && (
-                      <img
-                        src={this.state.thumbnail.preview}
-                        alt="preview"
-                        className="droppedImage"
-                        style={{ width: "90%" }}
-                      />
-                    )}
-                  </Form.Row>
-                </Col>
-                <Col md="7">
-                  <Row className="form-row">
-                    <Form.Group as={Col} className="formEntry" md="12">
-                      <Select
-                        closeMenuOnSelect={true}
-                        isMulti
-                        options={CONSTANTS.CATEGORIES}
-                        onChange={this.handleTagsChange}
-                        placeholder="Tags"
-                      />
-                    </Form.Group>
-                  </Row>
-                  <Row className="form-row">
-                    <Form.Group as={Col} className="formEntry" md="12">
-                      <InputGroup className="">
-                        <Form.Control
-                          type="number"
-                          placeholder="Price"
-                          min={1}
-                          aria-label="Amount (ether)"
-                          name="price"
-                          onChange={this.handleChange}
-                        />
-                      </InputGroup>
-                    </Form.Group>
-                  </Row>
-                </Col>
-              </Row>
-            </Col>
-            <Col md="1" className="separator"></Col>
-            <Col md="5" className="right-container d-flex justify-content-end">
-              {!this.state.PDFFile && (
-                <Form.Row className="pdfContainer">
-                  <Dropzone
-                    onDrop={this.onPDFDrop}
-                    acceptedFiles={".pdf"}
-                    className="dropzoneContainer"
+              <Row className="content-container">
+                {slideCount == 0 ? (
+                  <Col
+                    md="6"
+                    sm="12"
+                    lg="6"
+                    xs="12"
+                    className="title-n-desc p-2"
                   >
-                    {({ getRootProps, getInputProps }) => (
-                      <section className="container h-100 ">
-                        <div
-                          {...getRootProps()}
-                          className="emptypdf dropZone h-100"
-                        >
-                          <input {...getInputProps()} />
-                          <p className="m-0">Drop files here</p>
-                        </div>
-                      </section>
-                    )}
-                  </Dropzone>
-                </Form.Row>
-              )}
-              {this.state.PDFFile && (
-                <Form.Row className="w-100 p15 d-flex justify-content-end">
-                  {this.state.PDFFile && (
-                    <div className="pdfUploaded h-100">
-                      <Document
-                        file={this.state.PDFFile}
-                        onLoadError={this.PDFLoadError}
-                        onLoadSuccess={this.onDocumentLoadSuccess}
+                    <Row className="">
+                      <Form.Group
+                        as={Col}
+                        className="formEntry"
+                        md="12"
+                        controlId="title"
                       >
-                        <Page pageNumber={1} width={window.innerWidth / 4} />
-                      </Document>
-                    </div>
-                  )}
-                </Form.Row>
-              )}
+                        <Form.Control
+                          type="text"
+                          name="title"
+                          className="titleArea"
+                          placeholder="Title"
+                          onChange={handleChange}
+                        />
+                      </Form.Group>
+                    </Row>
+                    <Row className="form-row">
+                      <Form.Group
+                        as={Col}
+                        className="formEntry"
+                        md="12"
+                        controlId="description"
+                      >
+                        <InputGroup>
+                          <Form.Control
+                            className="descriptionArea"
+                            as="textarea"
+                            rows={17}
+                            aria-describedby="inputGroupAppend"
+                            name="description"
+                            placeholder="Description"
+                            style={{ resize: "none" }}
+                            onChange={handleChange}
+                          />
+                        </InputGroup>
+                      </Form.Group>
+                    </Row>
+                  </Col>
+                ) : (
+                  <Col
+                    md="6"
+                    sm="12"
+                    lg="6"
+                    xs="12"
+                    className="price-n-category p-2"
+                  >
+                    <Row className="">
+                      <Form.Group as={Col} className="formEntry" md="12">
+                        <Select
+                          closeMenuOnSelect={true}
+                          isMulti
+                          className="tag-selector"
+                          options={CONSTANTS.CATEGORIES}
+                          onChange={handleTagsChange}
+                          placeholder="Tags"
+                        />
+                      </Form.Group>
+                    </Row>
+                    <Row className="">
+                      <Form.Group as={Col} className="formEntry" md="12">
+                        <InputGroup className="">
+                          <Form.Control
+                            type="number"
+                            placeholder="how much do you think your idea is worth ?"
+                            min={1}
+                            className="price-selector"
+                            aria-label="Amount (ether)"
+                            name="price"
+                            onChange={handleChange}
+                          />
+                        </InputGroup>
+                      </Form.Group>
+                    </Row>
+                  </Col>
+                )}
+                {slideCount == 0 ? (
+                  <Col
+                    md="6"
+                    sm="12"
+                    lg="6"
+                    xs="12"
+                    className="pdf-container p-0"
+                  >
+                    {form.PDFFile && (
+                      <Form.Row className="w-100 p15 d-flex justify-content-center">
+                        {form.PDFFile && (
+                          <div className="pdfUploaded w-100 h-100">
+                            <X className="removePDF cursor-pointer" onClick={() => {clearPDF()}}></X>
+                            <Document
+                              fillWidth
+                              file={form.PDFFile}
+                              onLoadError={PDFLoadError}
+                              onLoadSuccess={onDocumentLoadSuccess}
+                            >
+                              <Page
+                                fillWidth
+                                pageNumber={1}
+                                width={window.innerWidth / 4}
+                              />
+                            </Document>
+                          </div>
+                        )}
+                      </Form.Row>
+                    )}
+                    {!form.PDFFile && (
+                      <Form.Row className="empty-pdf-row">
+                        <Dropzone
+                          onDrop={onPDFDrop}
+                          acceptedFiles={".pdf"}
+                          className="dropzoneContainer"
+                        >
+                          {({ getRootProps, getInputProps }) => (
+                            <section className="container h-100 ">
+                              <div
+                                {...getRootProps()}
+                                className="emptypdf dropZone h-100 d-flex flex-column align-items-center"
+                              >
+                                <input {...getInputProps()} />
+                                <p className="m-0 dropfile-text">
+                                  Drop your PDF File here
+                                </p>
+                                <FilePlus
+                                  size={30}
+                                  className="dropfile-icon"
+                                  color="#79589F"
+                                ></FilePlus>
+                              </div>
+                            </section>
+                          )}
+                        </Dropzone>
+                      </Form.Row>
+                    )}
+                  </Col>
+                ) : (
+                  <Col
+                    md="6"
+                    sm="12"
+                    lg="6"
+                    xs="12"
+                    className="image-container p-0"
+                  >
+                    {form.thumbnail && (
+                      <Form.Row className="w-100 p15 d-flex justify-content-center">
+                        {form.thumbnail && (
+                          <div className="imageUploaded w-100 h-100">
+                            <X  className="removeImage cursor-pointer" onClick={() => {clearImage()}}></X>
+                            <Image
+                              src={form.thumbnail.preview}
+                              height={400}
+                              style={{
+                                background: "#FFFFFF",
+                              }}
+                            />
+                          </div>
+                        )}
+                      </Form.Row>
+                    )}
+                    {!form.thumbnail && (
+                      <Form.Row className="empty-image-row">
+                        <Dropzone
+                          onDrop={onImageDrop}
+                          acceptedFiles={".jpeg"}
+                          className="dropzoneContainer"
+                        >
+                          {({ getRootProps, getInputProps }) => (
+                            <section className="container h-100 ">
+                              <div
+                                {...getRootProps()}
+                                className="emptyImage dropZone h-100 d-flex flex-column align-items-center"
+                              >
+                                <input {...getInputProps()} />
+                                <p className="m-0 dropfile-text">
+                                  Drop your thumbnail here
+                                </p>
+                                <ImageFile
+                                  size={30}
+                                  className="dropfile-icon"
+                                  color="#79589F"
+                                ></ImageFile>
+                              </div>
+                            </section>
+                          )}
+                        </Dropzone>
+                      </Form.Row>
+                    )}
+                  </Col>
+                )}
+              </Row>
+              <Row className="footer-class p-1">
+                <Col
+                  md="12"
+                  className="d-flex justify-content-between align-items-center "
+                >
+                  {slideCount == finalSlideCount + 1 ? <div></div> : 
+                  <Button
+                  variant="danger"
+                  className="button"
+                  bsstyle="primary"
+                  onClick={() => {
+                    onBack();
+                  }}
+                >
+                  {getBackButtonText()}
+                </Button>}
+                  
+                  <Button
+                    variant="danger"
+                    className="button"
+                    bsstyle="primary"
+                    onClick={() => {
+                      onNext();
+                    }}
+                  >
+                    { getNextButtonText()}
+                  </Button>
+                </Col>
+              </Row>
             </Col>
-          </Row>
-          <Row>
-            <Col md="4"></Col>
-            <Col md="4 footerComponent">
-              <Button
-                variant="danger"
-                className="publish-btn"
-                value="Submit"
-                onClick={this.handleSubmit}
-              >
-                Publish
-              </Button>
-            </Col>
-            <Col md="4"></Col>
-          </Row>
+          </Form>
         </Col>
-      </Form>
-    );
+      </Row>
+    </Container>
+  );
+
+  function getNextButtonText(){
+    if(slideCount == finalSlideCount) {
+      return "Publish";
+    }
+    else if(slideCount == finalSlideCount +1){
+      return "Done"
+    } 
+    else if(slideCount < finalSlideCount){
+      return "Next"
+    }
+  }
+
+  function getBackButtonText(){
+    if(slideCount == 0) {
+      return "Cancel";
+    }
+    else if(slideCount == finalSlideCount +1){
+      return ""
+    } 
+    else if(slideCount <= finalSlideCount){
+      return "Back"
+    }
+  }
+
+  function onNext() {
+    if (slideCount == finalSlideCount) {
+      handleSubmit();
+    }
+    else if(slideCount == finalSlideCount +1){
+      gotoGallery();
+    } 
+    else if(slideCount < finalSlideCount){
+      setSlideCount(slideCount + 1);
+    }
+  }
+
+  function onBack() {
+    if (slideCount == 0) {
+      gotoGallery();
+    } else {
+      setSlideCount(slideCount - 1);
+    }
+  }
+
+  function gotoGallery() {
+    history.push("/home");
   }
 }
 

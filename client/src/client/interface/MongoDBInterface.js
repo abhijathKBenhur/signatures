@@ -5,6 +5,14 @@ const api = axios.create({
     baseURL: '/api',
 })
 
+const fileAPI = axios.create({
+    baseURL: '/api',
+    headers: {
+        'Content-Type': 'multipart/form-data'
+    }
+})
+
+
 export const updatePrice = payload => {
     return api.post(`/updatePrice`,{
         setter: payload.owner,

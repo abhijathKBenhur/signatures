@@ -97,7 +97,11 @@ getSignatureByHash = async (req, res) => {
 getSignatures = async (req, res) => {
   let userName = req.body.userName;
   let limit = req.body.limit;
-  payLoad = {};
+  let getOnlyNulls = req.body.getOnlyNulls
+  payLoad = { }
+   if(getOnlyNulls){
+    payLoad.ideaID = null
+   }
 
   if (userName) {
     payLoad.owner = userName;
@@ -106,11 +110,6 @@ getSignatures = async (req, res) => {
     await Signature.find(payLoad, (err, signatures) => {
       if (err) {
         return res.status(404).json({ success: false, error: "here" });
-      }
-      if (!signatures.length) {
-        return res
-          .status(404)
-          .json({ success: false, error: `signature not found` });
       }
       return res.status(200).json({ success: true, data: signatures });
     }).catch((err) => {
@@ -141,9 +140,10 @@ buySignature = async (req, res) => {
   let seller = req.body.account;
   let PDFHash = req.body.PDFHash;
   let price = req.body.price;
+  let transactionID = req.body.transactionID;
 
   const findCriteria = { PDFHash: PDFHash };
-  const saleCriteria = { owner: buyer, price:price  };
+  const saleCriteria = { owner: buyer, price:price , transactionID:transactionID };
   
 
   Signature.findOneAndUpdate(findCriteria, saleCriteria)

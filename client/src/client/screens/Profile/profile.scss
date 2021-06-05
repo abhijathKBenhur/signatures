@@ -1,41 +1,37 @@
+@import "../../commons/Common.scss";
+
 .profile{
-    .mycollection{
-        border-right: 1px solid #F1F1F1;
-        .collection-container{
+    .separator{
+        height: 70px;
+    }
+    .userPane{
+        margin-top: 60px;
+        height: 30vh;
+        display: flex;
+        justify-content: center;
+        padding: 0;
+        border-bottom: 1px solid #E5E5E5;
+        background-color: #F7F4FB;
+        .userInfo{
             display: flex;
-            flex-direction: column;
-            gap:20px;
-            padding: 30px;
-            overflow: auto;
-            max-height: 100vh;
-            .long-card{
-                height: 160px;
-                padding: 10px;
-                border: 1px solid rgba(0, 0, 0, 0.125);
-                border-radius: 20px;
-                .image-container{
-                    border-right: 1px solid rgba(0, 0, 0, 0.125);
-                    padding-left: 0;
-                    img{
-                        height: 140px;
-                        width: 120px;
-                    }
-                }
-                .description-container{
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: space-between;
-                }
-                &:hover{
-                    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15)
-                }
-                .menu-bar{
-                    border-left: 1px solid #E8EBED  ;
-                }
-            }
+            align-content: center;
+            text-align: center;
+        }
+        .profileHolder{
+            height: 75px;
+            width: 75px;
+            border-radius: 150px;
+            border: 2px solid #F1F1F1;
+            align-self: flex-end;
+            position: relative;
+            background-color: white;
+            top: 35px;
+            justify-content: center;
+            -webkit-align-items: center;
+            display: flex;
         }
     }
-    .favorites{
-        padding-left: 30px;
+    .collections{
+        padding-top: 30px;
     }
 }
