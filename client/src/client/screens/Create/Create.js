@@ -142,7 +142,7 @@ function Create(props) {
           draggable: true,
           progress: undefined,
         });
-        gotoGallery()
+        gotoProfile()
         // setSlideCount(finalSlideCount + 1)
       })
       .catch((err) => {
@@ -471,6 +471,9 @@ function Create(props) {
 
   function gotoGallery() {
     history.push("/home");
+  }
+  function gotoProfile() {
+    history.push("/profile");
   }
 }
 

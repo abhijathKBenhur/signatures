@@ -112,8 +112,10 @@ class BlockchainInterface {
         if (tokenID) {
           udpateIDCallback(payLoad);
         }
+        console.log("receipt received")
       })
       .on("confirmation", function(confirmationNumber, receipt) {
+        console.log("confirmationNumber ::" + confirmationNumber)
       })
       .on("error", console.error);
   }
@@ -132,12 +134,12 @@ class BlockchainInterface {
       .send(transactionObject)
       .on("transactionHash", function(hash) {
         console.log("updated with transaction id ::" , hash)
+        
         updatePayLoad.transactionID = hash;
 
         feedbackCallback(updatePayLoad);
       })
       .on("receipt", function(receipt) {
-        console.log("contains with transaction id ::" , updatePayLoad.transactionID)
         updatePayLoad.price = "0";
         let tokenReturns = _.get(
           receipt.events,
@@ -146,6 +148,7 @@ class BlockchainInterface {
           successCallback(updatePayLoad);
       })
       .on("confirmation", function(confirmationNumber, receipt) {
+        console.log("confirmation :: " + confirmationNumber)
       })
       .on("error", console.error);
   }

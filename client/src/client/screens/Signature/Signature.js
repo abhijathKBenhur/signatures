@@ -54,7 +54,7 @@ const Signature = (props) => {
       "Please wait a while we complete the transaction. Please note the transaction ID : " + signature && signature.transactionID,
       {
         position: "bottom-right",
-        autoClose: 3000,
+        autoClose: false,
         hideProgressBar: true,
         closeOnClick: true,
         pauseOnHover: true,
@@ -67,6 +67,18 @@ const Signature = (props) => {
   function updateMongoBuySignature(updatePayload) {
     MongoDBInterface.buySignature(updatePayload)
       .then((updatedSignature) => {
+        toast.info(
+          "Purchase updated on blockchain",
+          {
+            position: "bottom-right",
+            autoClose: 3000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          }
+        );
         setSignature(new SignatureBean(_.get(updatedSignature, "data.data")));
       })
       .catch((err) => {
