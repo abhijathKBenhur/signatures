@@ -142,7 +142,8 @@ function Create(props) {
           draggable: true,
           progress: undefined,
         });
-        setSlideCount(finalSlideCount + 1)
+        gotoGallery()
+        // setSlideCount(finalSlideCount + 1)
       })
       .catch((err) => {
         console.log(err);

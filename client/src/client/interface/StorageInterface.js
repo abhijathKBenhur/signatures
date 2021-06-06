@@ -64,8 +64,7 @@ export const getPDFFilepath =(form) =>  {
   PDFformData.append("PDFFile", form.PDFFile);
   PDFformData.append("hash", form.PDFHash);
   PDFformData.append("type", "PDFFile");
-  // getPathsFromIPFS(PDFformData)
-  return fileAPI.post(`/getCloundinaryPDFPath`, PDFformData);
+  return getPathsFromIPFS(form);
 }
 
 const StorageInterface = {
