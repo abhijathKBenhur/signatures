@@ -67,7 +67,7 @@ const CollectionCard = (props) => {
   function editPrice(signature) {
     confirm(
       "Set your price.",
-      "Please enter the sell price",
+      "How much do you think your idea is worth?",
       "Ok",
       "Cancel",
       true
@@ -141,7 +141,7 @@ const CollectionCard = (props) => {
                   className="dropdown-item"
                   eventKey="2"
                   onClick={() => {
-                    editPrice();
+                    editPrice(signature);
                   }}
                 >
                   <Edit3 className="signature-icons" size={15}></Edit3>

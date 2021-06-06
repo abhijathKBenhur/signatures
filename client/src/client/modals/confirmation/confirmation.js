@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
-import './confirmation.scss'
-import {Modal, Button } from "react-bootstrap";
+import "./confirmation.scss";
+import { Modal, Button } from "react-bootstrap";
 import { Card, Row, Col, Form, InputGroup } from "react-bootstrap";
 import { confirmable, createConfirmation } from "react-confirm";
 
@@ -19,9 +19,9 @@ class Confirmation extends React.Component {
     var stateObject = function() {
       let returnObj = {};
       returnObj[this.target.name] = this.target.value;
-         return returnObj;
+      return returnObj;
     }.bind(event)();
-    this.setState(stateObject)
+    this.setState(stateObject);
   }
 
   render() {
@@ -40,36 +40,54 @@ class Confirmation extends React.Component {
         <Modal
           dialogClassName="confirmationModal"
           show={show}
-          onHide={() => proceed({proceed:false})}
+          onHide={() => proceed({ proceed: false })}
           backdrop={enableEscape ? true : "static"}
           keyboard={enableEscape}
         >
           <Modal.Header>
             <Modal.Title>{title}</Modal.Title>
           </Modal.Header>
-          <Modal.Body>{confirmation}</Modal.Body>
-          {showInput  ?
-          <Form.Group as={Col} md="6">
-            <Form.Label>Price</Form.Label>
-            <InputGroup className="mb-3">
-              <Form.Control
-                type="number"
-                placeholder="0.0"
-                min={1}
-                aria-label="Amount (ether)"
-                name="input"
-                onChange={this.handleChange}
-              />
-            </InputGroup>
-          </Form.Group>
-          : <div></div>
-          }
+
+          {showInput ? (
+            <Modal.Body>
+              <Row>
+                <Form.Group as={Col} md="6">
+                  <span>{confirmation}</span>
+                </Form.Group>
+
+                <Form.Group as={Col} md="6">
+                  <InputGroup className="mb-3">
+                    <Form.Control
+                      type="number"
+                      placeholder="0.0"
+                      min={1}
+                      aria-label="Amount (ether)"
+                      name="input"
+                      onChange={this.handleChange}
+                    />
+                  </InputGroup>
+                </Form.Group>
+              </Row>
+            </Modal.Body>
+          ) : (
+            <Modal.Body> <span>{confirmation}</span></Modal.Body>
+          )}
           <Modal.Footer>
-            <Button variant="dark" onClick={() => proceed({proceed:false, input:this.state.input})}>{cancelLabel}</Button>
-            <Button variant="danger"
+            <Button
+              variant="dark"
+              onClick={() =>
+                proceed({ proceed: false, input: this.state.input })
+              }
+            >
+              {cancelLabel}
+            </Button>
+            <Button
+              variant="danger"
               className="button-l"
               bsstyle="primary"
-              onClick={() => proceed({proceed:true,input:this.state.input})}
+              onClick={() =>
+                proceed({ proceed: true, input: this.state.input })
+              }
             >
               {proceedLabel}
             </Button>
@@ -87,7 +105,7 @@ Confirmation.propTypes = {
   confirmation: PropTypes.string,
   show: PropTypes.bool,
   proceed: PropTypes.func, // called when ok button is clicked.
-  enableEscape: PropTypes.bool
+  enableEscape: PropTypes.bool,
 };
 
 export function confirm(
@@ -95,7 +113,7 @@ export function confirm(
   title,
   proceedLabel = "OK",
   cancelLabel = "cancel",
-  showInput,
+  showInput
 ) {
   return createConfirmation(confirmable(Confirmation))({
     confirmation,
