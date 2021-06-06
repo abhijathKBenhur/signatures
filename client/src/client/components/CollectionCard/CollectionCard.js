@@ -25,7 +25,7 @@ const CollectionCard = (props) => {
 
   function copyClipBoard() {
     let shareURL =
-      window.location.href + "?referrer=" + localStorage.getItem("userInfo");
+      window.location.href + "/signature/" + signature.PDFHash;
     navigator.clipboard.writeText(shareURL);
 
     toast.dark("Copied to clipboard!", {

@@ -124,7 +124,7 @@ class BlockchainInterface {
     return this.tokens;
   }
 
-  buySignature(updatePayLoad,successCallback, feedbackCallback) {
+  buySignature(updatePayLoad,successCallback, feedbackCallback, errorCallback) {
     const transactionObject = {
       value: updatePayLoad.price,
       from: updatePayLoad.buyer,
@@ -150,7 +150,10 @@ class BlockchainInterface {
       .on("confirmation", function(confirmationNumber, receipt) {
         console.log("confirmation :: " + confirmationNumber)
       })
-      .on("error", console.error);
+      .on("error", (err) => {
+        console.log(err)
+        errorCallback()
+      });
   }
 
   updatePrice(updatePayLoad,successCallback, feedbackCallback) {

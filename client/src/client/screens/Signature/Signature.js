@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useLocation } from "react-router-dom";
+import { useParams, useLocation, useHistory } from "react-router-dom";
 import SignatureBean from "../../beans/Signature";
 import { Badge, Button, Row, Col, Form, Container } from "react-bootstrap";
 import BlockChainInterface from "../../interface/BlockchainInterface";
@@ -27,7 +27,7 @@ const Signature = (props) => {
   const location = useLocation();
   const [signature, setSignature] = useState({});
   const [PDFFile, setPDFFile] = useState(undefined);
-
+  let history = useHistory();
   useEffect(() => {
     pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
     let signatureFromParent = location.state;
@@ -50,8 +50,23 @@ const Signature = (props) => {
   }
 
   function feedbackMessage(signature) {
-    toast.info(
+    toast.dark(
       "Please wait a while we complete the transaction. Please note the transaction ID : " + signature && signature.transactionID,
+      {
+        position: "bottom-right",
+        autoClose: false,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      }
+    );
+  }
+
+  function errorMessage() {
+    toast.error(
+      "There was an error in processing your request in blockchain " ,
       {
         position: "bottom-right",
         autoClose: false,
@@ -80,6 +95,7 @@ const Signature = (props) => {
           }
         );
         setSignature(new SignatureBean(_.get(updatedSignature, "data.data")));
+        gotoGallery()
       })
       .catch((err) => {
         console.log("error");
@@ -88,7 +104,7 @@ const Signature = (props) => {
 
   function copyClipBoard() {
     let shareURL =
-      window.location.href + "?referrer=" + localStorage.getItem("userInfo");
+      window.location.href + "/signature/" + signature.PDFHash;
     navigator.clipboard.writeText(shareURL);
 
     toast.dark("Copied to clipboard!", {
@@ -121,7 +137,8 @@ const Signature = (props) => {
         BlockChainInterface.buySignature(
           updatePayload,
           updateMongoBuySignature,
-          feedbackMessage
+          feedbackMessage,
+          errorMessage
         );
       })
       .catch((error) => {
@@ -138,6 +155,9 @@ const Signature = (props) => {
     window.open(fileURL);
   }
 
+  function gotoGallery() {
+    history.push("/home");
+  }
   return (
     <Container>
       <Form
