@@ -1,9 +1,11 @@
 import _, { defer, has } from "lodash";
+import  React from 'react';
 import Web3 from "web3";
 import NFTTokenBean from "../beans/Signature";
 import contractJSON from "../../contracts/ideaBlocks.json";
 import { toast } from "react-toastify";
-
+import store from '../redux/store';
+import { setMetaMaskID } from "../redux/actions";
 
 
 class BlockchainInterface {
@@ -23,6 +25,7 @@ class BlockchainInterface {
           .then((success) => {
             this.metamaskAccount = success.accountId[0];
             let metamaskNetwork = success.networkId;
+            store.dispatch(setMetaMaskID(this.metamaskAccount))
             const contractNetworkID = this.contractJSON.network;
             if (contractNetworkID == metamaskNetwork) {
               const abi = this.contractJSON.abi;
@@ -68,17 +71,21 @@ class BlockchainInterface {
         window.web3 = this.web3;
         resolve(this.web3);
       } else {
+        store.dispatch(setMetaMaskID())
         let errorMessage =
-          "Non-Ethereum browser detected. You should consider trying MetaMask!";
-          toast.dark(errorMessage, {
+          <div>Non-Ethereum browser detected. You should consider trying MetaMask!
+            <br />
+            <a style={{textDecoration: 'underline', color:'white'}} target="blank" href="https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn?hl=en">Add Metamask from here</a>
+          </div>
+          toast.error(errorMessage, {
             position: "bottom-right",
             hideProgressBar: true,
             closeOnClick: true,
             pauseOnHover: true,
             draggable: true,
             progress: undefined,
+            autoClose: false
           });
-        parentThis.alert(errorMessage);
         reject(errorMessage);
       }
     });
