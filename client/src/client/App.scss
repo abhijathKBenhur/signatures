@@ -57,14 +57,25 @@ body{
   text-decoration: none;
   box-sizing: border-box;
   border-radius: 4px;
-  border: 1px solid transparent;
+  border: 1px solid $primary !important;
+  outline: none;
   &.btn-danger{
     background-clip: border-box!important;
     background-origin: border-box!important;
     background: $primary;
     color: #fff;
     &:hover{
-      background: $primary-dark;
+      background: $primary-dark !important;
+    }
+    &:active{
+      background: $primary-dark !important;
+      box-shadow: none
+    }
+    &:focus{
+      box-shadow: none
+    }
+    &:focus, &:active{
+      box-shadow: none
     }
   }
 }

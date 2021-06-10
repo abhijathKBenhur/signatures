@@ -44,11 +44,9 @@ const Header = (props) => {
   }
 
   function connectWallet() {
-    BlockchainInterface.getAccountDetails().then(succ => {
-
-    }).catch(err =>{
-
-    })
+    BlockchainInterface.getAccountDetails()
+      .then((succ) => {})
+      .catch((err) => {});
   }
 
   const [appLocation, setAppLocatoin] = useState("home");
@@ -123,19 +121,26 @@ const Header = (props) => {
             >
               Connect
             </Button> */}
-            <Search
-              className="cursor-pointer header-icons"
+
+            <Button
+              variant="danger"
+              className="button"
+              bsstyle="primary"
               onClick={() => {
                 createnew();
               }}
-            ></Search>
-            <Plus
+            >
+              Create
+            </Button>
+
+            <User
               className="cursor-pointer header-icons"
               onClick={() => {
-                createnew();
+                gotoPortfolio();
               }}
-            ></Plus>
-            <Dropdown>
+            ></User>
+
+            {/* <Dropdown>
               <Dropdown.Toggle
                 as={ProfileDropDown}
                 id="dropdown-custom-components"
@@ -168,7 +173,7 @@ const Header = (props) => {
                   Settings
                 </Dropdown.Item>
               </Dropdown.Menu>
-            </Dropdown>
+            </Dropdown> */}
           </div>
         </Container>
       </nav>

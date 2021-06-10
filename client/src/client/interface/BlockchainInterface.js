@@ -36,7 +36,6 @@ class BlockchainInterface {
           })
           .catch((err) => {
             console.log("catch loadWeb3", err);
-            
             reject(err);
           });
       
