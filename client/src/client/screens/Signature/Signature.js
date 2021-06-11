@@ -21,12 +21,15 @@ import _ from "lodash";
 import { toast } from "react-toastify";
 import Select from "react-select";
 import StorageInterface from "../../interface/StorageInterface";
+import { shallowEqual, useSelector } from "react-redux";
 
 const Signature = (props) => {
   let { hashId } = useParams();
   const location = useLocation();
   const [signature, setSignature] = useState({});
   const [PDFFile, setPDFFile] = useState(undefined);
+  const [currentMetamaskAccount, setCurrentMetamaskAccount] = useState(undefined);
+  const reduxState = useSelector((state) => state, shallowEqual);
   let history = useHistory();
   useEffect(() => {
     pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
@@ -41,6 +44,13 @@ const Signature = (props) => {
     }
     getIPSPDFFile(hashId);
   }, []);
+
+  useEffect(() => {
+    const { metamaskID = undefined } = reduxState;
+    if (metamaskID) {
+      setCurrentMetamaskAccount(metamaskID)
+    }
+  }, [reduxState]);
 
   function getIPSPDFFile(hash) {
     StorageInterface.getFileFromIPFS(hash).then((pdfFileResponse) => {
@@ -125,10 +135,8 @@ const Signature = (props) => {
   }
 
   function buySignature() {
-    BlockChainInterface.getAccountDetails()
-      .then((metamaskID) => {
         let updatePayload = {
-          buyer: metamaskID,
+          buyer: currentMetamaskAccount,
           seller: signature.owner,
           PDFHash: signature.PDFHash,
           price: signature.price,
@@ -140,10 +148,7 @@ const Signature = (props) => {
           feedbackMessage,
           errorMessage
         );
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+      
   }
 
   function openInEtherscan() {

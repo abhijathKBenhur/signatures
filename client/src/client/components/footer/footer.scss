@@ -1,0 +1,9 @@
+@import "../../commons/Common.scss";
+.appFooter{
+    width: 100%;
+    z-index: 10000;
+    position: fixed;
+    height: 60px;
+    border-top: 1.5px solid $primary;
+    bottom:0;
+}

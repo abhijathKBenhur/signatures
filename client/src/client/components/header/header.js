@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState ,useEffect} from "react";
 import { Button, Dropdown, Form, Nav } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
 import logo from "../../../assets/logo/signatures.png";
@@ -12,7 +12,9 @@ import { Container, Row, Col } from "react-bootstrap";
 import BlockchainInterface from "../../interface/BlockchainInterface";
 const Header = (props) => {
   let history = useHistory();
-
+  useEffect(() => {
+    connectWallet()
+  }, []);
   function logoutUser() {
     console.log("logging out");
     localStorage.removeItem("userInfo");
@@ -78,14 +80,15 @@ const Header = (props) => {
             >
               <img
                 src={logo}
-                width="50"
+                width="200"
                 height="50"
                 alt=""
+                className="cursor-pointer"
                 onClick={() => gotoGallery()}
               ></img>
             </a>
 
-            <Nav.Item>
+            {/* <Nav.Item>
               <Nav.Link
                 active={appLocation == "home"}
                 onClick={() => {
@@ -94,8 +97,8 @@ const Header = (props) => {
               >
                 Discover
               </Nav.Link>
-            </Nav.Item>
-            <Nav.Item>
+            </Nav.Item> */}
+            {/* <Nav.Item>
               <Nav.Link
                 active={appLocation == "profile"}
                 onClick={() => {
@@ -104,7 +107,7 @@ const Header = (props) => {
               >
                 Collection
               </Nav.Link>
-            </Nav.Item>
+            </Nav.Item> */}
           </div>
           <div className="middle-section">
             {/* <Form.Control size="sm" type="text" placeholder="Normal text" /> */}
