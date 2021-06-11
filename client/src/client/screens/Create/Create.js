@@ -34,6 +34,14 @@ function Create(props) {
     ideaID: undefined,
     transactionID: undefined,
   });
+  const [formErrors, setFormErrors] = useState({
+    title: false,
+    description: false,
+    pdf: false,
+    category: false,
+    price: false,
+    thumbnail: false
+  })
   const [slideCount, setSlideCount] = useState(0);
   const [billet, setBillet] = useState({});
   let history = useHistory();
@@ -43,6 +51,17 @@ function Create(props) {
     BlockChainInterface.getAccountDetails();
   }, []);
 
+  useEffect(() => {
+    if(!_.isEmpty(form.owner)) {
+      console.log('change in form ', form)
+        if(!_.isEmpty(form.category) || !_.isEmpty(JSON.parse(form.category))) {
+          setFormErrors({...formErrors, category: false})
+        } else {
+          setFormErrors({...formErrors, category: true})
+
+        }
+    }
+  },[ form.category]);
   useEffect(() => {
     const {metamaskID = undefined}  = reduxState;
     if(metamaskID) {
@@ -104,6 +123,7 @@ function Create(props) {
   function handleChange(event) {
     let returnObj = {};
     returnObj[event.target.name] = event.target.value;
+    setFormErrors({...formErrors, [event.target.name]: _.isEmpty(event.target.value)})
     setFormData({ ...form, ...returnObj });
   }
 
@@ -180,6 +200,39 @@ function Create(props) {
       });
   }
 
+
+  const checkValidationOnButtonClick = (page) => {
+      const {
+        title,
+        description,
+        PDFFile,
+        category,
+        price,
+        thumbnail
+      } = form;
+          switch (page) {
+            case 0: 
+            if(_.isEmpty(title) || _.isEmpty(description) || _.isEmpty(PDFFile)) {
+              
+              setFormErrors({...formErrors, title: _.isEmpty(title) ,description: _.isEmpty(description), pdf:  _.isEmpty(PDFFile)})
+            } else {
+              setSlideCount(slideCount + 1);
+              setFormErrors({...formErrors, title: false, description: false, pdf: false});
+            }
+            
+            break;
+            case 1: 
+            if(_.isEmpty(price) || _.isEmpty(category) || _.isEmpty(thumbnail)) {
+              setFormErrors({...formErrors, price: _.isEmpty(price), category:  _.isEmpty(category), thumbnail: _.isEmpty(thumbnail)})
+            } else {
+              handleSubmit();
+              setFormErrors({...formErrors, price: false, category: false, thumbnail: false})
+            }
+            break
+
+          }
+  }
+
   return (
     <Container>
       <Row className="createform  d-flex align-items-center justify-content-center">
@@ -216,8 +269,9 @@ function Create(props) {
                         <Form.Control
                           type="text"
                           name="title"
-                          className="titleArea"
-                          placeholder="Title"
+                          value={form.title}
+                          className={formErrors.title ? 'input-err titleArea' : "titleArea"}
+                          placeholder="Title*"
                           onChange={handleChange}
                         />
                       </Form.Group>
@@ -231,12 +285,13 @@ function Create(props) {
                       >
                         <InputGroup>
                           <Form.Control
-                            className="descriptionArea"
+                           value={form.description}
+                            className={formErrors.description ? 'input-err descriptionArea': "descriptionArea"}
                             as="textarea"
                             rows={17}
                             aria-describedby="inputGroupAppend"
                             name="description"
-                            placeholder="Description"
+                            placeholder="Description*"
                             style={{ resize: "none" }}
                             onChange={handleChange}
                           />
@@ -257,10 +312,10 @@ function Create(props) {
                         <Select
                           closeMenuOnSelect={true}
                           isMulti
-                          className="tag-selector"
+                          className={formErrors.category ? "input-err tag-selector" : "tag-selector"}
                           options={CONSTANTS.CATEGORIES}
                           onChange={handleTagsChange}
-                          placeholder="Tags"
+                          placeholder="Tags*"
                         />
                       </Form.Group>
                     </Row>
@@ -269,9 +324,9 @@ function Create(props) {
                         <InputGroup className="">
                           <Form.Control
                             type="number"
-                            placeholder="how much do you think your idea is worth ?"
+                            placeholder="how much do you think your idea is worth ?*"
                             min={1}
-                            className="price-selector"
+                            className={formErrors.price ? "input-err price-selector" : "price-selector"}
                             aria-label="Amount (ether)"
                             name="price"
                             onChange={handleChange}
@@ -332,6 +387,9 @@ function Create(props) {
                                   className="dropfile-icon"
                                   color="#79589F"
                                 ></FilePlus>
+                                {
+                                formErrors.pdf && <p className="invalid-paragraph"> PDF is required </p>
+                                }
                               </div>
                             </section>
                           )}
@@ -385,6 +443,9 @@ function Create(props) {
                                   className="dropfile-icon"
                                   color="#79589F"
                                 ></ImageFile>
+                                {
+                                formErrors.thumbnail && <p className="invalid-paragraph"> Thumbnail is required </p>
+                                }
                               </div>
                             </section>
                           )}
@@ -456,13 +517,13 @@ function Create(props) {
 
   function onNext() {
     if (slideCount == finalSlideCount) {
-      handleSubmit();
+      checkValidationOnButtonClick(slideCount)
     }
     else if(slideCount == finalSlideCount +1){
       gotoGallery();
     } 
     else if(slideCount < finalSlideCount){
-      setSlideCount(slideCount + 1);
+      checkValidationOnButtonClick(slideCount)
     }
   }
 
