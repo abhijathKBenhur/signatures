@@ -107,7 +107,14 @@
             }
         }
     }
-    
+    .input-err{
+        border-bottom: 1px solid $danger !important;
+    }
+    .invalid-paragraph{
+        color: $danger;
+        margin: 1rem 0;
+        font-size: 12px;
+    }
 }
 
 
