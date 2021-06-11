@@ -18,8 +18,10 @@ import { toast } from "react-toastify";
 import Select from "react-select";
 import "react-step-progress-bar/styles.css";
 import { ProgressBar, Step } from "react-step-progress-bar";
+import { shallowEqual, useSelector } from "react-redux";
 
 function Create(props) {
+  const reduxState = useSelector(state => state, shallowEqual);
   const [form, setFormData] = useState({
     owner: "",
     title: "",
@@ -46,16 +48,7 @@ function Create(props) {
   const finalSlideCount = 1;
   useEffect(() => {
     pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
-    BlockChainInterface.getAccountDetails()
-      .then((metamaskID) => {
-        setFormData({
-          ...form,
-          owner: metamaskID,
-        });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    BlockChainInterface.getAccountDetails();
   }, []);
 
   useEffect(() => {
@@ -68,7 +61,18 @@ function Create(props) {
 
         }
     }
-  },[ form.category])
+  },[ form.category]);
+  useEffect(() => {
+    const {metamaskID = undefined}  = reduxState;
+    if(metamaskID) {
+    console.log('metamaskID = ',metamaskID)
+    setFormData({
+      ...form,
+      owner: metamaskID,
+    });
+    }
+   
+  },[reduxState])
 
   function onImageDrop(acceptedFiles) {
     setFormData({
