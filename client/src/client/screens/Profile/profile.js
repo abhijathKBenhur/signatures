@@ -7,7 +7,7 @@ import "./profile.scss";
 import Image, { Shimmer } from "react-shimmer";
 import MongoDBInterface from "../../interface/MongoDBInterface";
 import BlockChainInterface from "../../interface/BlockchainInterface";
-
+import { shallowEqual, useSelector } from "react-redux";
 import { Edit3, Award, User } from "react-feather";
 import StorageInterface from "../../interface/StorageInterface";
 import CollectionCard from "../../components/CollectionCard/CollectionCard";
@@ -15,53 +15,48 @@ import CollectionCard from "../../components/CollectionCard/CollectionCard";
 function Profile(props) {
   const [collectionList, setCollectionList] = useState([]);
   const [fetchInterval, setFetchInterval] = useState(0);
+  const [currentMetamaskAccount, setCurrentMetamaskAccount] = useState(undefined);
+  const reduxState = useSelector((state) => state, shallowEqual);
   let history = useHistory();
+
+  useEffect(() => {
+    const { metamaskID = undefined } = reduxState;
+    if (metamaskID) {
+      setCurrentMetamaskAccount(metamaskID);
+    }
+  }, [reduxState]);
 
   useEffect(() => {
     fetchSignatures();
     const fetchInterval = setInterval(() => {
-      BlockChainInterface.getAccountDetails()
-        .then((metamaskID) => {
-          MongoDBInterface.getSignatures({
-            userName: metamaskID,
-            getOnlyNulls: true,
-          }).then((signatures) => {
-            let response = _.get(signatures, "data.data");
-            if (response.length == 0) {
-              clearInterval(fetchInterval);
-              fetchSignatures();
-            }
-          });
-        })
-        .catch((error) => {
+      MongoDBInterface.getSignatures({
+        userName: currentMetamaskAccount,
+        getOnlyNulls: true,
+      }).then((signatures) => {
+        let response = _.get(signatures, "data.data");
+        if (response.length == 0) {
           clearInterval(fetchInterval);
-          console.log(error);
-        });
+          fetchSignatures();
+        }
+      });
     }, 1000);
     setFetchInterval(fetchInterval);
     return () => clearInterval(fetchInterval);
   }, []);
 
   function fetchSignatures() {
-    BlockChainInterface.getAccountDetails()
-      .then((metamaskID) => {
-        MongoDBInterface.getSignatures({ userName: metamaskID }).then(
-          (signatures) => {
-            let response = _.get(signatures, "data.data");
-            let isEmptyPresent = _.find(response, (responseItem) => {
-              return _.isEmpty(responseItem.ideaID);
-            });
-            // if(isEmptyPresent){
-            //   clearInterval(fetchInterval)
-            // }
-            setCollectionList(response);
-          }
-        );
-      })
-      .catch((error) => {
-        clearInterval(fetchInterval);
-        console.log(error);
-      });
+    MongoDBInterface.getSignatures({ userName: currentMetamaskAccount }).then(
+      (signatures) => {
+        let response = _.get(signatures, "data.data");
+        let isEmptyPresent = _.find(response, (responseItem) => {
+          return _.isEmpty(responseItem.ideaID);
+        });
+        // if(isEmptyPresent){
+        //   clearInterval(fetchInterval)
+        // }
+        setCollectionList(response);
+      }
+    );
   }
 
   return (

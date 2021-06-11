@@ -16,6 +16,10 @@ class BlockchainInterface {
     this.contract = undefined;
     this.tokens = [];
     this.NFTTokenBean = NFTTokenBean;
+    let parentThis = this
+    window.ethereum && window.ethereum.on('accountsChanged', function (accounts) {
+      parentThis.getAccountDetails();
+    })
   }
 
   async getAccountDetails() {

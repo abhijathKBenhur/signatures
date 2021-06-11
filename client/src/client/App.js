@@ -9,6 +9,7 @@ import Signature from './screens/Signature/Signature'
 import Gallery from './screens/Gallery/gallery'
 import Profile from './screens/Profile/profile'
 import Header from './components/header/header'
+import Banner from './components/footer/footer'
 
 import {  Switch, Route } from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
@@ -23,6 +24,7 @@ class App extends Component {
         <div className="appContainer">
           <ToastContainer></ToastContainer>
           <Header></Header>
+          <Banner></Banner>
           <div className="content">
               <Switch>
                 <Route

@@ -8,7 +8,7 @@ import CONSTANTS from "../../commons/Constants";
 import { useHistory } from "react-router-dom";
 import { withRouter } from "react-router-dom";
 import "./Create.scss";
-import { FilePlus,X, Image as ImageFile } from "react-feather";
+import { FilePlus, X, Image as ImageFile } from "react-feather";
 import Hash from "ipfs-only-hash";
 import Image from "react-image-resizer";
 import { Container } from "react-bootstrap";
@@ -21,9 +21,10 @@ import { ProgressBar, Step } from "react-step-progress-bar";
 import { shallowEqual, useSelector } from "react-redux";
 
 function Create(props) {
-  const reduxState = useSelector(state => state, shallowEqual);
+  const reduxState = useSelector((state) => state, shallowEqual);
+  const { metamaskID = undefined } = reduxState;
   const [form, setFormData] = useState({
-    owner: "",
+    owner: metamaskID,
     title: "",
     category: [],
     description: "",
@@ -40,20 +41,17 @@ function Create(props) {
   const finalSlideCount = 1;
   useEffect(() => {
     pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
-    BlockChainInterface.getAccountDetails();
   }, []);
 
   useEffect(() => {
-    const {metamaskID = undefined}  = reduxState;
-    if(metamaskID) {
-    console.log('metamaskID = ',metamaskID)
-    setFormData({
-      ...form,
-      owner: metamaskID,
-    });
+    const { metamaskID = undefined } = reduxState;
+    if (metamaskID) {
+      setFormData({
+        ...form,
+        owner: metamaskID,
+      });
     }
-   
-  },[reduxState])
+  }, [reduxState]);
 
   function onImageDrop(acceptedFiles) {
     setFormData({
@@ -64,16 +62,18 @@ function Create(props) {
     });
   }
 
-  function clearPDF(){
+  function clearPDF() {
     setFormData({
-      ...form, PDFFile: undefined
-    })
+      ...form,
+      PDFFile: undefined,
+    });
   }
 
-  function clearImage(){
+  function clearImage() {
     setFormData({
-      ...form, thumbnail: undefined
-    })
+      ...form,
+      thumbnail: undefined,
+    });
   }
 
   function onPDFDrop(acceptedFiles) {
@@ -123,12 +123,12 @@ function Create(props) {
           draggable: true,
           progress: undefined,
         });
-        debugger
+        debugger;
         setBillet({
           transactionID: success.transactionID,
           account: success.account,
-          PDFHash: success.PDFHash
-        })
+          PDFHash: success.PDFHash,
+        });
       })
       .catch((err) => {
         console.log(err);
@@ -147,7 +147,7 @@ function Create(props) {
           draggable: true,
           progress: undefined,
         });
-        gotoProfile()
+        gotoProfile();
         // setSlideCount(finalSlideCount + 1)
       })
       .catch((err) => {
@@ -293,7 +293,12 @@ function Create(props) {
                       <Form.Row className="w-100 p15 d-flex justify-content-center">
                         {form.PDFFile && (
                           <div className="pdfUploaded w-100 h-100">
-                            <X className="removePDF cursor-pointer" onClick={() => {clearPDF()}}></X>
+                            <X
+                              className="removePDF cursor-pointer"
+                              onClick={() => {
+                                clearPDF();
+                              }}
+                            ></X>
                             <Document
                               fillWidth
                               file={form.PDFFile}
@@ -351,7 +356,12 @@ function Create(props) {
                       <Form.Row className="w-100 p15 d-flex justify-content-center">
                         {form.thumbnail && (
                           <div className="imageUploaded w-100 h-100">
-                            <X  className="removeImage cursor-pointer" onClick={() => {clearImage()}}></X>
+                            <X
+                              className="removeImage cursor-pointer"
+                              onClick={() => {
+                                clearImage();
+                              }}
+                            ></X>
                             <Image
                               src={form.thumbnail.preview}
                               height={400}
@@ -399,18 +409,21 @@ function Create(props) {
                   md="12"
                   className="d-flex justify-content-between align-items-center "
                 >
-                  {slideCount == finalSlideCount + 1 ? <div></div> : 
-                  <Button
-                  variant="danger"
-                  className="button"
-                  bsstyle="primary"
-                  onClick={() => {
-                    onBack();
-                  }}
-                >
-                  {getBackButtonText()}
-                </Button>}
-                  
+                  {slideCount == finalSlideCount + 1 ? (
+                    <div></div>
+                  ) : (
+                    <Button
+                      variant="danger"
+                      className="button"
+                      bsstyle="primary"
+                      onClick={() => {
+                        onBack();
+                      }}
+                    >
+                      {getBackButtonText()}
+                    </Button>
+                  )}
+
                   <Button
                     variant="danger"
                     className="button"
@@ -419,7 +432,7 @@ function Create(props) {
                       onNext();
                     }}
                   >
-                    { getNextButtonText()}
+                    {getNextButtonText()}
                   </Button>
                 </Col>
               </Row>
@@ -430,38 +443,32 @@ function Create(props) {
     </Container>
   );
 
-  function getNextButtonText(){
-    if(slideCount == finalSlideCount) {
+  function getNextButtonText() {
+    if (slideCount == finalSlideCount) {
       return "Publish";
-    }
-    else if(slideCount == finalSlideCount +1){
-      return "Done"
-    } 
-    else if(slideCount < finalSlideCount){
-      return "Next"
+    } else if (slideCount == finalSlideCount + 1) {
+      return "Done";
+    } else if (slideCount < finalSlideCount) {
+      return "Next";
     }
   }
 
-  function getBackButtonText(){
-    if(slideCount == 0) {
+  function getBackButtonText() {
+    if (slideCount == 0) {
       return "Cancel";
-    }
-    else if(slideCount == finalSlideCount +1){
-      return ""
-    } 
-    else if(slideCount <= finalSlideCount){
-      return "Back"
+    } else if (slideCount == finalSlideCount + 1) {
+      return "";
+    } else if (slideCount <= finalSlideCount) {
+      return "Back";
     }
   }
 
   function onNext() {
     if (slideCount == finalSlideCount) {
       handleSubmit();
-    }
-    else if(slideCount == finalSlideCount +1){
+    } else if (slideCount == finalSlideCount + 1) {
       gotoGallery();
-    } 
-    else if(slideCount < finalSlideCount){
+    } else if (slideCount < finalSlideCount) {
       setSlideCount(slideCount + 1);
     }
   }
