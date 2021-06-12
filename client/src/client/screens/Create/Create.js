@@ -61,7 +61,7 @@ function Create(props) {
     }
     if(!_.isEmpty(form.owner)) {
       console.log('change in form ', form)
-        if(!_.isEmpty(form.category) || !_.isEmpty(JSON.parse(form.category))) {
+        if(!_.isEmpty(form.category) ) {
           setFormErrors({...formErrors, category: false})
         } else {
           setFormErrors({...formErrors, category: true})
@@ -124,14 +124,14 @@ function Create(props) {
   function handleTagsChange(tags) {
     setFormData({
       ...form,
-      category: JSON.stringify(tags),
+      category: tags,
     });
   }
 
   function handleChange(event) {
     let returnObj = {};
-    returnObj[event.target.name] = event.target.value;
-    setFormErrors({...formErrors, [event.target.name]: _.isEmpty(event.target.value)})
+    returnObj[event.target.name] = _.get(event, 'target.name') === 'price' ? Number(event.target.value):  event.target.value;
+    setFormErrors({...formErrors, [event.target.name]: _.get(event, 'target.name') === 'price'? event.target.value <= 0 :  _.isEmpty(event.target.value)})
     setFormData({ ...form, ...returnObj });
   }
 
@@ -189,16 +189,18 @@ function Create(props) {
 
   function onSubmit() {
     console.log("form:", form);
-    form.IPFS = true;
-    StorageInterface.getFilePaths(form)
+    const params = {...form}
+    params.category = JSON.stringify(params.category)
+    params.IPFS = true;
+    StorageInterface.getFilePaths(params)
       .then((success) => {
-        form.PDFFile = _.get(_.find(success, { type: "PDFFile" }), "path");
-        form.thumbnail = _.get(
+        params.PDFFile = _.get(_.find(success, { type: "PDFFile" }), "path");
+        params.thumbnail = _.get(
           _.find(_.map(success, "data"), { type: "thumbnail" }),
           "path"
         );
-        console.log(form);
-        saveToBlockChain(form);
+        console.log(params);
+        saveToBlockChain(params);
       })
       .catch((error) => {
         return {
@@ -230,8 +232,8 @@ function Create(props) {
             
             break;
             case 1: 
-            if(_.isEmpty(price) || _.isEmpty(category) || _.isEmpty(thumbnail)) {
-              setFormErrors({...formErrors, price: _.isEmpty(price), category:  _.isEmpty(category), thumbnail: _.isEmpty(thumbnail)})
+            if(price <= 0 || _.isEmpty(category) || _.isEmpty(thumbnail)) {
+              setFormErrors({...formErrors, price: price <= 0, category:  _.isEmpty(category), thumbnail: _.isEmpty(thumbnail)})
             } else {
               handleSubmit();
               setFormErrors({...formErrors, price: false, category: false, thumbnail: false})
@@ -318,6 +320,7 @@ function Create(props) {
                     <Row className="">
                       <Form.Group as={Col} className="formEntry" md="12">
                         <Select
+                          value={form.category}
                           closeMenuOnSelect={true}
                           isMulti
                           className={formErrors.category ? "input-err tag-selector" : "tag-selector"}
@@ -334,6 +337,7 @@ function Create(props) {
                             type="number"
                             placeholder="how much do you think your idea is worth ?*"
                             min={1}
+                            value={form.price ? form.price : undefined}
                             className={formErrors.price ? "input-err price-selector" : "price-selector"}
                             aria-label="Amount (ether)"
                             name="price"
@@ -534,11 +538,11 @@ function Create(props) {
 
   function onNext() {
     if (slideCount == finalSlideCount) {
-      handleSubmit();
+      checkValidationOnButtonClick(slideCount)
+      // handleSubmit();
     } else if (slideCount == finalSlideCount + 1) {
       gotoGallery();
     } else if (slideCount < finalSlideCount) {
-      setSlideCount(slideCount + 1);
       checkValidationOnButtonClick(slideCount)
     }
   }

@@ -111,6 +111,31 @@ const CollectionCard = (props) => {
       className="collection-card col-md-offset-2"
     >
       <div className="content cursor-pointer">
+       <div
+          className="collection-preview"
+          onClick={() => {
+            openCardView(signature);
+          }}
+        >
+          <Col md="12 collection-image">
+            <Image
+              src={signature.thumbnail}
+              height={200}
+              style={{
+                background: "#f1f1f1",
+              }}
+            />
+          </Col>
+        </div>
+        <div className="collection-footer">
+          <div md="12" className="idea-title">
+            <p className="text-left title">{signature.title}</p>
+          </div>
+          <div className="idea-details">
+          <span className="placeholder">Dummy</span>
+                      <span className="price">{signature.price}</span>
+
+        </div>
         <div className="collection-header d-flex justify-content-between align-items-center p-2">
           <div className="header-left">
             {_.isEmpty(signature.ideaID) ? (
@@ -173,26 +198,7 @@ const CollectionCard = (props) => {
             </Dropdown>
           </div>
         </div>
-        <div
-          className="collection-preview"
-          onClick={() => {
-            openCardView(signature);
-          }}
-        >
-          <Col md="12 collection-image">
-            <Image
-              src={signature.thumbnail}
-              height={200}
-              style={{
-                background: "#f1f1f1",
-              }}
-            />
-          </Col>
-        </div>
-        <div className="collection-footer">
-          <div md="12">
-            <p className="text-left">{signature.title}</p>
-          </div>
+       
         </div>
       </div>
     </Col>
