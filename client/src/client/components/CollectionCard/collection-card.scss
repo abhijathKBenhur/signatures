@@ -2,7 +2,7 @@
 .collection-card{
     
     .content{
-        border: 1px solid $grey-border;
+        // border: 1px solid $grey-border;
         border-radius: 4px;
         margin-top:30px;
         background-color: white;
@@ -13,7 +13,7 @@
         }
         .collection-header{
             border-radius: 4px;
-            background-color: $primary-lightest;
+            // background-color: $primary-lightest;
             height: 30px;
             margin-bottom: 1px;
             .dropdown-menu{
@@ -30,7 +30,7 @@
         }
         .collection-preview{
             .collection-image{
-                ;
+                padding: 0;
                 div{
                     display: flex;
                     justify-content: center;
@@ -45,6 +45,27 @@
         }
         .collection-footer{
             padding: 5px;
+           .idea-title{
+                .title{
+                font-size: 19px;
+                font-weight: 600;
+                line-height: 1.263;
+                &:hover{
+                    text-decoration: underline;
+                }
+            }
+        }
+        .idea-details{
+          .placeholder{
+              color: #666;
+              &:hover{
+                  text-decoration: underline;
+              }
+          }
+          .price{
+              margin-left: 5px;
+          }
+        }
         }
 
         

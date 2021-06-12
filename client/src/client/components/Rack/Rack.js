@@ -33,10 +33,10 @@ const Rack = (props) => {
                   className="collection-card col-md-offset-2"
                 >
                   <div className="content cursor-pointer">
-                    <div className="collection-header d-flex justify-content-between align-items-center p-2">
+                    {/* <div className="collection-header d-flex justify-content-between align-items-center p-2">
                       <div className="header-left"></div>
                       <div className="header-right"></div>
-                    </div>
+                    </div> */}
                     <div
                       className="collection-preview"
                       onClick={() => {
@@ -54,8 +54,12 @@ const Rack = (props) => {
                       </Col>
                     </div>
                     <div className="collection-footer">
-                      <div md="12">
-                        <p className="text-left">{signature.title}</p>
+                      <div md="12" className="idea-title">
+                        <p className="text-left title">{signature.title}</p>
+                      </div>
+                      <div className="idea-details">
+                      <span className="placeholder">Dummy</span>
+                      <span className="price">{signature.price}</span>
                       </div>
                     </div>
                   </div>

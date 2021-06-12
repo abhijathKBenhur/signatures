@@ -6,6 +6,7 @@ import "./gallery.scss";
 import MongoDBInterface from "../../interface/MongoDBInterface";
 import Image from "react-image-resizer";
 import cover from "../../../assets/cover.jpeg";
+import DiscoverMore from "../../components/discover-more/discover-more";
 function gallery(props) {
   const [signatureList, setSignatureList] = useState([]);
   useEffect(() => {
@@ -27,6 +28,7 @@ function gallery(props) {
         <div className="separator"> </div>
         <Rack deck={signatureList}></Rack>
       </div>
+      <DiscoverMore />
     </Container>
   );
 }

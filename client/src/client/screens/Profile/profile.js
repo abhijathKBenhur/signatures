@@ -11,6 +11,7 @@ import { shallowEqual, useSelector } from "react-redux";
 import { Edit3, Award, User } from "react-feather";
 import StorageInterface from "../../interface/StorageInterface";
 import CollectionCard from "../../components/CollectionCard/CollectionCard";
+import DiscoverMore from "../../components/discover-more/discover-more";
 
 function Profile(props) {
   const [collectionList, setCollectionList] = useState([]);
@@ -82,6 +83,7 @@ function Profile(props) {
           </Container>
         </Col>
       </Row>
+      <DiscoverMore />
     </Container>
   );
 }

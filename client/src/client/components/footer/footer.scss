@@ -2,8 +2,49 @@
 .appFooter{
     width: 100%;
     z-index: 10000;
-    position: fixed;
-    height: 60px;
+    // position: fixed;
+    // height: 60px;
     border-top: 1.5px solid $primary;
-    bottom:0;
+    // bottom:0;
+    .container-fluid{
+        flex-flow: column;
+       
+        .footer-info{
+            display: flex;
+            align-items: center;
+            flex-flow: column;
+            margin: 0 auto;
+            max-width: 800px;
+            width: 100%;
+            margin-top: 20px;
+            .footer-info-wrapper{
+                display: flex;
+                width: 100%;
+                .products, .company, .resources{
+                    flex: 1;
+                    h6{
+                        font-weight: 600;
+                        width: 100%;
+                        margin-bottom: 16px;
+                    }
+                    ul {
+                        list-style-type: none;
+                        padding: 0;
+                        li{
+                            line-height: 1.5em;
+                            margin-bottom: 1rem;
+                            color:#666;
+                        }
+                    }
+                }
+            }
+        }
+        .metamask-id{
+            width: 100%;
+            margin: 20px 0;
+            text-align: center;
+            padding: 10px 0;
+        }
+    }
+    
 }

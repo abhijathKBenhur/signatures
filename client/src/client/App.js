@@ -24,7 +24,6 @@ class App extends Component {
         <div className="appContainer">
           <ToastContainer></ToastContainer>
           <Header></Header>
-          <Banner></Banner>
           <div className="content">
               <Switch>
                 <Route
@@ -37,6 +36,8 @@ class App extends Component {
                 <Route path="/create" children={<Create />} />
                 <Route path="/profile" children={<Profile />} />
               </Switch>
+          <Banner></Banner>
+
           </div>
         </div>
     );

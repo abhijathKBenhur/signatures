@@ -1,0 +1,33 @@
+.discover-topics-section{
+    display: flex;
+    align-items: center;
+    flex-flow: column;
+    margin: 0 auto;
+    max-width: 800px;
+    padding: 40px 24px;
+    border-top: 1px solid #d9d9d9;
+    margin-top: 40px;
+    .card-topics-nav{
+        h4{
+            font-weight: 500;
+            margin-bottom: 24px;
+        }
+    }
+    .topics-list{
+        ul {
+            list-style-type: none;
+            padding: 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            li{
+                padding: 8px 16px;
+                margin: 0 8px 12px 0;
+                border: 1px solid #8c8c8c;
+                border-radius: 25px;
+                font-size: 12px;
+                font-weight: 500;
+            }
+        }
+    }
+}
