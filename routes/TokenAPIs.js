@@ -111,15 +111,12 @@ getSignatures = async (req, res) => {
   //search string block start
   
   if(tags){
-    console.log("testing tag")
     searchOrArray.push({'category':{ $regex: tags }})
   }
   if(searchString){
-    console.log("testing string")
     searchOrArray.push({'title':{ $regex: searchString }})
     searchOrArray.push({'description':{ $regex: searchString }})
   }
-  console.log("searchOrArray",searchOrArray.length)
   if(searchOrArray.length > 0){
     payLoad.$or = searchOrArray;
   }

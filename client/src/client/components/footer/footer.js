@@ -27,7 +27,7 @@ const Header = (props) => {
                     <h6>Products</h6>
                     <div className="products-list">
                       <ul>
-                        {['Must-read articles', 'Daily newsletter','Pocket Premium','Save to Pocket extensions'].map(product => <li>{product}</li>)}
+                        {['Our daily reads', 'Tutorials','ICO','Roadmap'].map(product => <li>{product}</li>)}
                       </ul>
                     </div>
                     </div>
@@ -35,7 +35,7 @@ const Header = (props) => {
                     <h6>Company</h6>
                     <div className="company-list">
                       <ul>
-                        {['About', 'Careers','Blog'].map(company => <li>{company}</li>)}
+                        {['About', 'Newsletter','Blog'].map(company => <li>{company}</li>)}
                       </ul>
                     </div>
                     </div>
@@ -43,7 +43,7 @@ const Header = (props) => {
                     <h6>Resources</h6>
                     <div className="resources-list">
                       <ul>
-                        {['Get help', 'Developer API','Pocket for publishers','Advertise'].map(resource => <li>{resource}</li>)}
+                        {['Get help', 'Validation support','Partner with us','Contact us'].map(resource => <li>{resource}</li>)}
                       </ul>
                     </div>
                     </div>
