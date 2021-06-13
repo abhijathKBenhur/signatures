@@ -1,10 +1,10 @@
 import _ from "lodash";
 import Signature from "../../beans/Signature";
 import React, { useState, useEffect } from "react";
-import { Row, Col, Form, InputGroup, Container } from "react-bootstrap";
+import { Row, Col, Form, InputGroup, Container, Button, Tabs, Tab  } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
 import "./profile.scss";
-import Image, { Shimmer } from "react-shimmer";
+import  { Shimmer } from "react-shimmer";
 import MongoDBInterface from "../../interface/MongoDBInterface";
 import BlockChainInterface from "../../interface/BlockchainInterface";
 import { shallowEqual, useSelector } from "react-redux";
@@ -12,6 +12,7 @@ import { Edit3, Award, User } from "react-feather";
 import StorageInterface from "../../interface/StorageInterface";
 import CollectionCard from "../../components/CollectionCard/CollectionCard";
 import DiscoverMore from "../../components/discover-more/discover-more";
+import Collections from "./collections";
 
 function Profile(props) {
   const [collectionList, setCollectionList] = useState([]);
@@ -19,6 +20,7 @@ function Profile(props) {
   const [currentMetamaskAccount, setCurrentMetamaskAccount] = useState(undefined);
   const reduxState = useSelector((state) => state, shallowEqual);
   let history = useHistory();
+  const [key, setKey] = useState('collections');
 
   useEffect(() => {
     const { metamaskID = undefined } = reduxState;
@@ -64,23 +66,65 @@ function Profile(props) {
     <Container fluid>
       <Row className="profile">
         <Col md="12" className="mycollection">
-          <Row className="userPane">
-            <div className="profileHolder">
-              <Award size={50}></Award>
+          <div className="userPane">
+            <div className="first-section">
+              <div className="image-part">
+                <img src='http://res.cloudinary.com/thoughtblocks/image/upload/v1623506941/h8jbaj1sbtihi81jdthy.jpg' />
+              </div>
+              <div className="user-personal-info">
+                <h5>John Doe</h5>
+                <p style={{margin: '0'}}>Full stack developer</p>
+                <p style={{color: '#5252f3', cursor:'pointer'}}>Epic Coders</p>
+                <div className="buttons-block">
+                <Button variant="success">Success</Button>{' '}
+                <Button variant="outline-primary">Primary</Button>{' '}
+
+                </div>
+              </div>
+
             </div>
-          </Row>
-          <div className="separator"> </div>
-          <Container>
-            <Row className="collections">
-              {collectionList.map((collection, index) => {
-                return (
-                  <CollectionCard key={index} card={collection}>
-                    {" "}
-                  </CollectionCard>
-                );
-              })}
-            </Row>
-          </Container>
+            <div className="second-section">
+                <div className="detail">
+                  <div className="key-name">Availability:</div>
+                  <div className="value">Full time</div>
+                </div>
+                <div className="detail">
+                  <div className="key-name">Age:</div>
+                  <div className="value">30</div>
+                </div>
+                <div className="detail">
+                  <div className="key-name">Location:</div>
+                  <div className="value">Idaho, Boise</div>
+                </div>
+                <div className="detail">
+                  <div className="key-name">Year's Experience:</div>
+                  <div className="value">6</div>
+                </div>
+            </div>
+            {/* <div className="profileHolder">
+              <Award size={50}></Award>
+            </div> */}
+          </div>
+          <div className="separator">
+          <Tabs
+        id="controlled-tab-example"
+        activeKey={key}
+        onSelect={(k) => setKey(k)}
+      >
+        <Tab eventKey="collections" title="Collection">
+            <Collections collectionList={collectionList} />
+        </Tab>
+        <Tab eventKey="profile" title="Profile">
+                 <h1>Profile tab</h1>
+
+        </Tab>
+        <Tab eventKey="contact" title="Contact" >
+                 <h1>COntact tab</h1>
+
+        </Tab>
+      </Tabs>
+             </div>
+          
         </Col>
       </Row>
       <DiscoverMore />
