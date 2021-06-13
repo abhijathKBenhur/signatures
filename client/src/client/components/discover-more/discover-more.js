@@ -1,4 +1,5 @@
 import React from 'react';
+import { Button } from "react-bootstrap";
 import CONSTANTS from '../../commons/Constants';
 import './discover-more.scss';
 
@@ -12,7 +13,18 @@ const DiscoverMore = () => {
           <div className="topics-list">
             <ul>
               {
-              CONSTANTS.CATEGORIES.map(item => <li>{item.value}</li>)
+              CONSTANTS.CATEGORIES.map(item => <li>
+                <Button
+                  className="btn-secondary"
+                  bsstyle="primary"
+                  onClick={() => {
+                    
+                  }}
+                >
+                   {item.value}
+                </Button>
+               
+                </li>)
               }
             </ul>
           </div>

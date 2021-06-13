@@ -83,6 +83,29 @@ body{
       box-shadow: none
     }
   }
+  &.btn-secondary{
+    background-clip: border-box!important;
+    background-origin: border-box!important;
+    color: $primary;
+    background-color: transparent;
+    &:hover{
+      background: $primary !important;
+      color: white;
+    }
+    &:active{
+      background: $primary !important;
+      box-shadow: none;
+      color: white;
+    }
+    &:focus{
+      box-shadow: none;
+      color: white;
+    }
+    &:focus, &:active{
+      box-shadow: none;
+      color: white;
+    }
+  }
 }
 
 

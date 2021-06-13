@@ -49,9 +49,6 @@ const Header = (props) => {
                     </div>
                 </div>
           </div>
-          <div className="metamask-id">
-            here is the mask ID {currentMetamaskAccount}
-          </div>
         </Container>
       </nav>
     </div>

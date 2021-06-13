@@ -4,21 +4,28 @@ import React, { useState, useEffect } from "react";
 import Rack from "../../components/Rack/Rack";
 import "./gallery.scss";
 import MongoDBInterface from "../../interface/MongoDBInterface";
-import Image from "react-image-resizer";
+import Cookies from 'universal-cookie';
 import cover from "../../../assets/cover.jpeg";
 import DiscoverMore from "../../components/discover-more/discover-more";
 function gallery(props) {
+  const cookies = new Cookies();
   const [signatureList, setSignatureList] = useState([]);
+  const [visitedUser, setIsVisitedUser] = useState(cookies.get('visitedUser'))
   useEffect(() => {
     console.log("getting signatures ");
     MongoDBInterface.getSignatures({ limit: 14 }).then((signatures) => {
       let response = _.get(signatures, "data.data");
       setSignatureList(response);
     });
+    return function cleanup() {
+      cookies.set('visitedUser', true)
+      setIsVisitedUser(true)
+    };
   }, []);
 
   return (
     <Container fluid>
+      
       <div className="gallery d-flex flex-column">
         <Row className="userPane">
           <div className="profileHolder">

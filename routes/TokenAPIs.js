@@ -97,12 +97,35 @@ getSignatureByHash = async (req, res) => {
 getSignatures = async (req, res) => {
   let userName = req.body.userName;
   let limit = req.body.limit;
-  let getOnlyNulls = req.body.getOnlyNulls
-  payLoad = { }
-   if(getOnlyNulls){
-    payLoad.ideaID = null
-   }
+  let getOnlyNulls = req.body.getOnlyNulls;
+  let tags = req.body.tags;
+  let searchString = req.body.searchString;
+  let searchOrArray = []
+  let payLoad = {};
 
+  if (getOnlyNulls) {
+    payLoad.ideaID = null;
+  }
+  console.log(req.body)
+
+  //search string block start
+  
+  if(tags){
+    console.log("testing tag")
+    searchOrArray.push({'category':{ $regex: tags }})
+  }
+  if(searchString){
+    console.log("testing string")
+    searchOrArray.push({'title':{ $regex: searchString }})
+    searchOrArray.push({'description':{ $regex: searchString }})
+  }
+  console.log("searchOrArray",searchOrArray.length)
+  if(searchOrArray.length > 0){
+    payLoad.$or = searchOrArray;
+  }
+
+  //search string block end
+  
   if (userName) {
     payLoad.owner = userName;
   }
@@ -143,8 +166,11 @@ buySignature = async (req, res) => {
   let transactionID = req.body.transactionID;
 
   const findCriteria = { PDFHash: PDFHash };
-  const saleCriteria = { owner: buyer, price:price , transactionID:transactionID };
-  
+  const saleCriteria = {
+    owner: buyer,
+    price: price,
+    transactionID: transactionID,
+  };
 
   Signature.findOneAndUpdate(findCriteria, saleCriteria)
     .then((idea, err) => {

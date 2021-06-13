@@ -1,4 +1,4 @@
-import React, { useState ,useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Dropdown, Form, Nav } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
 import logo from "../../../assets/logo/signatures.png";
@@ -10,10 +10,24 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Container, Row, Col } from "react-bootstrap";
 import BlockchainInterface from "../../interface/BlockchainInterface";
+
+import { shallowEqual, useSelector } from "react-redux";
+
 const Header = (props) => {
   let history = useHistory();
+  const [currentMetamaskAccount, setCurrentMetamaskAccount] = useState(
+    undefined
+  );
+  const reduxState = useSelector((state) => state, shallowEqual);
   useEffect(() => {
-    connectWallet()
+    const { metamaskID = undefined } = reduxState;
+    if (metamaskID) {
+      setCurrentMetamaskAccount(metamaskID);
+    }
+  }, [reduxState]);
+
+  useEffect(() => {
+    connectWallet();
   }, []);
   function logoutUser() {
     console.log("logging out");
@@ -80,7 +94,7 @@ const Header = (props) => {
             >
               <img
                 src={logo}
-                width="200"
+                width="50"
                 height="50"
                 alt=""
                 className="cursor-pointer"
@@ -124,17 +138,29 @@ const Header = (props) => {
             >
               Connect
             </Button> */}
-
+            {_.isEmpty(currentMetamaskAccount) ? 
             <Button
-              variant="danger"
-              className="button"
-              bsstyle="primary"
-              onClick={() => {
-                createnew();
-              }}
-            >
-              Create
-            </Button>
+            variant="danger"
+            className="button"
+            bsstyle="primary"
+            onClick={() => {
+              createnew();
+            }}
+          >
+            Connect Wallet
+          </Button>:
+            <Button
+            variant="danger"
+            className="button"
+            bsstyle="primary"
+            onClick={() => {
+              createnew();
+            }}
+          >
+            Publish
+          </Button>
+          }
+            
 
             <User
               className="cursor-pointer header-icons"
