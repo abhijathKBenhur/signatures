@@ -18,7 +18,7 @@ const Rack = (props) => {
   }
   return (
     <Container>
-      <Row className="profile">
+      <Row className="rack">
         <Col md="12" className="mycollection">
           
           <Row className="collections">
