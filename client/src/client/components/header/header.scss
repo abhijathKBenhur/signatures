@@ -12,7 +12,7 @@
     .left-section{
         display: flex;
         flex: .6;
-        align-items: flex-end;
+        align-items: center;
         .nav-link {
                 color: $primary !important;
                 &.active{

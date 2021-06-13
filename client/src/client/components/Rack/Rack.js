@@ -47,8 +47,10 @@ const Rack = (props) => {
                         <Image
                           src={signature.thumbnail}
                           height={200}
+                          className="discover-image-container"
                           style={{
                             background: "#f1f1f1",
+                            borderRadius: "7px"
                           }}
                         />
                       </Col>

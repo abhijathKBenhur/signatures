@@ -106,12 +106,16 @@ getSignatures = async (req, res) => {
   if (getOnlyNulls) {
     payLoad.ideaID = null;
   }
-  console.log(req.body)
+  console.log(tags)
 
   //search string block start
   
   if(tags){
-    searchOrArray.push({'category':{ $regex: tags }})
+    for(let i=0; i < tags.length; i++) {
+      let tag = tags[0];
+      searchOrArray.push({'category':{ $regex: tag }})
+    }
+    console.log(searchOrArray)
   }
   if(searchString){
     searchOrArray.push({'title':{ $regex: searchString }})
@@ -238,7 +242,6 @@ getImagePathFromCloudinary = (req, res) => {
 
 getPDFPathFromCloudinary = (req, res) => {
   console.log("file details: ", req.file);
-  // cloudinary.v2.uploader.upload(file, options, callback);
   cloudinary.uploader
     .upload(req.file.path, {
       public_id: "ThoughBlocks/" + req.hash + "/" + req.hash,

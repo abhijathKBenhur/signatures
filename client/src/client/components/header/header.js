@@ -102,7 +102,7 @@ const Header = (props) => {
                 onClick={() => gotoGallery()}
               ></img>
             </a>
-
+            <SearchBar />
             {/* <Nav.Item>
               <Nav.Link
                 active={appLocation == "home"}
@@ -125,7 +125,7 @@ const Header = (props) => {
             </Nav.Item> */}
           </div>
           <div className="middle-section">
-            <SearchBar />
+            
             {/* <Form.Control size="sm" type="text" placeholder="Normal text" /> */}
           </div>
 

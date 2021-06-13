@@ -1,15 +1,22 @@
+@import "../../commons/Common.scss";
 .search-bar-container {
     .search-dropdown-container {
         position: relative;
         width:500px;
         .search-box {
             width: 100%;
-            border: 2px solid #6a7ddb73;
+            border: 1px solid $primary-light;
             border-radius: 5px;
             height: 35px;
             padding: 5px 10px;
             font-size: 12px;
             outline: none;
+        }
+        .search-tag{
+            position: absolute;
+            right: 3px;
+            top: 7px;
+            cursor: pointer;
         }
         .tags-pills{
             position: absolute;
