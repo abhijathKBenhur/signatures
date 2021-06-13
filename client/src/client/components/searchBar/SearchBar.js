@@ -11,6 +11,7 @@ function Search() {
     const wrapperRef = useRef(null);
     const [tags, setTags] = useState([...CONSTANTS.CATEGORIES]);
     const tagsCopy = [...tags];
+    const [searchText, setSearchText] = useState('');
     const [showDropdown, setShowDropdown] = useState(false);
     useEffect( ()=> {
         function handleClickOutside(event) {
@@ -22,13 +23,11 @@ function Search() {
         document.addEventListener("mousedown", handleClickOutside);
     },[wrapperRef])
 
-    const search = (event) => {
+    useEffect( () => {
         const { metamaskID = undefined } = reduxState;
-        let searchText = event && event.target.value;
         let postObj = { userName: metamaskID , searchString: searchText}
         let selectedTags = tags.filter(val => val.isSelected);
         if(selectedTags.length) postObj.tags = selectedTags.map( item => item.value)
-
         try {
             MongoDBInterface.getSignatures(postObj).then(
             (signatures) => {
@@ -45,13 +44,14 @@ function Search() {
             console.log(e)
             
         }
+    }, [searchText, tags])
+    const search = (event) => {
+        if(event) setSearchText(event.target.value);  
     }
 
     const setTagsList = (item, key) => {
         tagsCopy[key].isSelected = !item.isSelected;             
         setTags([...tagsCopy])
-       
-        search()
     }
     return (
         <div className="search-bar-container">
