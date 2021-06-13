@@ -3,8 +3,8 @@
 .profile{
     background-color: #F7F4FB;
     .mycollection{
-        max-width: 90%;
-        margin: 150px auto 100px auto;
+        margin-top: 60px;
+        padding:0;
         .separator{
         margin-top: 25px;
         .nav-tabs{
@@ -18,11 +18,12 @@
         }
             .tab-content{
                 margin-top: 15px;
+                padding:20px;
             }
         }
         .userPane{
            padding: 20px;
-            // height: 30vh;
+           height:230px;
             display: flex;
             border-bottom: 1px solid #E5E5E5;
              background-color: #fff;
