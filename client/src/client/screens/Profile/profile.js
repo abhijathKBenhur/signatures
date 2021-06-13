@@ -112,14 +112,31 @@ function Profile(props) {
         onSelect={(k) => setKey(k)}
       >
         <Tab eventKey="collections" title="Collection">
+          <div className="collection-wrapper">
+            <div className="intial-block">
+              <h5>Website</h5>
+              <div className="options">
+              <p>Website</p>
+              <p>Blog</p>
+              <p>Portfolio</p>
+              </div>
+            </div>
+            <div className="middle-block">
             <Collections collectionList={collectionList} />
+
+          </div>
+          <div className="right-block">
+              <h5>Website</h5>
+              <div className="options">
+              <p>Website</p>
+              <p>Blog</p>
+              <p>Portfolio</p>
+              </div>
+          </div>
+          </div>
         </Tab>
         <Tab eventKey="profile" title="Profile">
                  <h1>Profile tab</h1>
-
-        </Tab>
-        <Tab eventKey="contact" title="Contact" >
-                 <h1>COntact tab</h1>
 
         </Tab>
       </Tabs>

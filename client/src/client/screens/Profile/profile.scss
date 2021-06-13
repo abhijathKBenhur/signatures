@@ -94,6 +94,48 @@
                 display: flex;
             }
         }
+        .collection-wrapper{
+            display: flex;
+            .intial-block{
+                flex: 1;
+                max-height: 300px;
+                padding: 20px;
+                background-color: #fff;
+                margin-right: 20px;
+                h5{
+                    text-transform: uppercase;
+                    font-size: 17px;
+                    font-weight: 500;
+                }
+               .options{
+                margin-top: 20px;
+                   p{
+                    //    margin: 0;
+                   }
+               }
+            }
+            .middle-block {
+                flex: 4;
+            }
+            .right-block{
+                flex: 1;
+                max-height: 300px;
+                padding: 20px;
+                background-color: #fff;
+                margin-left: 20px;
+                h5{
+                    text-transform: uppercase;
+                    font-size: 17px;
+                    font-weight: 500;
+                }
+               .options{
+                margin-top: 20px;
+                   p{
+                    //    margin: 0;
+                   }
+               }
+            }
+        }
         .collection-container{
             padding-top: 30px;
             margin-bottom: 10px;
