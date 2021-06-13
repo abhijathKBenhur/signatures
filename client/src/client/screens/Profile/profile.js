@@ -106,14 +106,7 @@ function Profile(props) {
             </div> */}
           </div>
           <div className="separator">
-          <Tabs
-        id="controlled-tab-example"
-        activeKey={key}
-        onSelect={(k) => setKey(k)}
-      >
-        <Tab eventKey="collections" title="Collection">
-          <div className="collection-wrapper">
-            <div className="intial-block">
+          <div className="intial-block">
               <h5>Website</h5>
               <div className="options">
               <p>Website</p>
@@ -121,11 +114,30 @@ function Profile(props) {
               <p>Portfolio</p>
               </div>
             </div>
+            <div className="tabs-wrapper">
+            <Tabs
+        id="controlled-tab-example"
+        activeKey={key}
+        onSelect={(k) => setKey(k)}
+      >
+        <Tab eventKey="collections" title="Collection">
+          <div className="collection-wrapper">
+           
             <div className="middle-block">
             <Collections collectionList={collectionList} />
 
           </div>
-          <div className="right-block">
+         
+          </div>
+        </Tab>
+        <Tab eventKey="profile" title="Profile">
+                 <h1>Profile tab</h1>
+
+        </Tab>
+      </Tabs>
+            
+            </div>
+            <div className="right-block">
               <h5>Website</h5>
               <div className="options">
               <p>Website</p>
@@ -134,13 +146,6 @@ function Profile(props) {
               </div>
           </div>
           </div>
-        </Tab>
-        <Tab eventKey="profile" title="Profile">
-                 <h1>Profile tab</h1>
-
-        </Tab>
-      </Tabs>
-             </div>
           
         </Col>
       </Row>
