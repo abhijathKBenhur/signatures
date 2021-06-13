@@ -12,6 +12,7 @@ import { Container, Row, Col } from "react-bootstrap";
 import BlockchainInterface from "../../interface/BlockchainInterface";
 
 import { shallowEqual, useSelector } from "react-redux";
+import SearchBar from "../searchBar/SearchBar";
 
 const Header = (props) => {
   let history = useHistory();
@@ -124,6 +125,7 @@ const Header = (props) => {
             </Nav.Item> */}
           </div>
           <div className="middle-section">
+            <SearchBar />
             {/* <Form.Control size="sm" type="text" placeholder="Normal text" /> */}
           </div>
 

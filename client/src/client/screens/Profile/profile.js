@@ -7,23 +7,25 @@ import "./profile.scss";
 import  { Shimmer } from "react-shimmer";
 import MongoDBInterface from "../../interface/MongoDBInterface";
 import BlockChainInterface from "../../interface/BlockchainInterface";
-import { shallowEqual, useSelector } from "react-redux";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { Edit3, Award, User } from "react-feather";
 import StorageInterface from "../../interface/StorageInterface";
 import CollectionCard from "../../components/CollectionCard/CollectionCard";
 import DiscoverMore from "../../components/discover-more/discover-more";
 import Collections from "./collections";
+import { setCollectionList } from "../../redux/actions";
 
 function Profile(props) {
-  const [collectionList, setCollectionList] = useState([]);
+  //const [collectionList, setCollectionList] = useState([]);
   const [fetchInterval, setFetchInterval] = useState(0);
   const [currentMetamaskAccount, setCurrentMetamaskAccount] = useState(undefined);
   const reduxState = useSelector((state) => state, shallowEqual);
+  const { metamaskID = undefined, collectionList = [] } = reduxState;
   let history = useHistory();
   const [key, setKey] = useState('collections');
 
+  const dispatch = useDispatch()
   useEffect(() => {
-    const { metamaskID = undefined } = reduxState;
     if (metamaskID) {
       setCurrentMetamaskAccount(metamaskID);
     }
@@ -31,7 +33,7 @@ function Profile(props) {
 
   useEffect(() => {
     fetchSignatures();
-    const fetchInterval = setInterval(() => {
+   // const fetchInterval = setInterval(() => {
       MongoDBInterface.getSignatures({
         userName: currentMetamaskAccount,
         getOnlyNulls: true,
@@ -42,7 +44,7 @@ function Profile(props) {
           fetchSignatures();
         }
       });
-    }, 1000);
+  //  }, 1000);
     setFetchInterval(fetchInterval);
     return () => clearInterval(fetchInterval);
   }, []);
@@ -57,7 +59,7 @@ function Profile(props) {
         // if(isEmptyPresent){
         //   clearInterval(fetchInterval)
         // }
-        setCollectionList(response);
+        dispatch(setCollectionList(response));
       }
     );
   }

@@ -10,6 +10,7 @@
     }
     .left-section{
         display: flex;
+        flex: .6;
         align-items: flex-end;
         .nav-link {
                 color: $primary !important;
@@ -17,6 +18,9 @@
 
                 }
         }
+    }
+    .middle-section {
+        flex: 1
     }
     .right-section{
         display: flex;
