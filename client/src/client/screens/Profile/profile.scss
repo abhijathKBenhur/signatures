@@ -38,8 +38,6 @@
             }
         }
             .tab-content{
-                margin-top: 15px;
-                padding:20px;
             }
         }
         .userPane{
@@ -122,6 +120,10 @@
             }
             
         }
+        .transactions-wrapper{
+            min-height: 300px;
+            text-align: center;
+        }
         .right-block{
             flex: 1;
             max-height: 300px;
@@ -141,8 +143,6 @@
            }
         }
         .collection-container{
-            padding-top: 30px;
-            margin-bottom: 10px;
             max-width: 100%;
         }
     }

@@ -19,14 +19,15 @@ import BlockChainInterface from "../../interface/BlockchainInterface";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { Edit3, Award, User } from "react-feather";
 import StorageInterface from "../../interface/StorageInterface";
-import { GoogleLogin } from 'react-google-login';
+import { GoogleLogin } from "react-google-login";
 import DiscoverMore from "../../components/discover-more/discover-more";
 import Collections from "./collections";
 import { setCollectionList } from "../../redux/actions";
-
+import store from "../../redux/store";
 function Profile(props) {
   //const [collectionList, setCollectionList] = useState([]);
   const [fetchInterval, setFetchInterval] = useState(0);
+  const [userDetails, setUserDetails] = useState(0);
   const [currentMetamaskAccount, setCurrentMetamaskAccount] = useState(
     undefined
   );
@@ -74,8 +75,17 @@ function Profile(props) {
       }
     );
   }
-  function responseGoogle(response){
-    console.log(response)
+  function responseGoogle(response) {
+    let userDetailsObject = {
+      firstName: _.get(response.profileObj, "givenName"),
+      LastName: _.get(response.profileObj, "givenName"),
+      email: _.get(response.profileObj, "email"),
+      fullName: _.get(response.profileObj, "givenName"),
+      imageUrl: _.get(response.profileObj, "imageUrl"),
+    };
+    store.dispatch(setUserDetails(userDetailsObject));
+    setUserDetails(userDetailsObject);
+    console.log(response);
   }
 
   return (
@@ -83,32 +93,40 @@ function Profile(props) {
       <Row className="profile">
         <Col md="12" className="mycollection">
           <div className="userPane">
-            <div className="first-section">
-              <div className="image-part">
-                <img src="http://res.cloudinary.com/thoughtblocks/image/upload/v1623506941/h8jbaj1sbtihi81jdthy.jpg" />
+            {userDetails && userDetails.email ? (
+              <div>
+                <div className="first-section">
+                  <div className="image-part">
+                    <img src={userDetails.imageUrl} />
+                  </div>
+                  <div className="user-personal-info">
+                    <h5>{userDetails.fullName}</h5>
+                    <p style={{ margin: "0" }}>{userDetails.email}</p>
+                    <p style={{ color: "#5252f3", cursor: "pointer" }}>
+                      Epic Coders
+                    </p>
+                    <div className="buttons-block"></div>
+                  </div>
+                </div>
+                <div className="second-section"></div>
               </div>
-              <div className="user-personal-info">
-                <h5>John Doe</h5>
-                <p style={{ margin: "0" }}>Full stack developer</p>
-                <p style={{ color: "#5252f3", cursor: "pointer" }}>
-                  Epic Coders
-                </p>
-                <div className="buttons-block"></div>
-              </div>
-            </div>
-            <div className="second-section">
-            <GoogleLogin
-            // secretKey:I0YMKAriMhc6dB7bN44fHuKj
-              clientId="639340003430-d17oardcjjpo9qnj0m02330l5orgn8sp.apps.googleusercontent.com"
-              buttonText="Login with Google"
-              onSuccess={responseGoogle}
-              onFailure={responseGoogle}
-              cookiePolicy="single_host_origin"
-            />
-            </div>
-            {/* <div className="profileHolder">
-              <Award size={50}></Award>
-            </div> */}
+            ) : (
+              <Row>
+                <Col md={12}>
+                  <h4>Welcome aboard Idea tribe</h4>
+                </Col>
+                <Col md={12}>
+                  <GoogleLogin
+                    // secretKey:I0YMKAriMhc6dB7bN44fHuKj
+                    clientId="639340003430-d17oardcjjpo9qnj0m02330l5orgn8sp.apps.googleusercontent.com"
+                    buttonText="Login with Google"
+                    onSuccess={responseGoogle}
+                    onFailure={responseGoogle}
+                    cookiePolicy="single_host_origin"
+                  />
+                </Col>
+              </Row>
+            )}
           </div>
           <div className="separator">
             {/* <div className="intial-block">
@@ -133,7 +151,9 @@ function Profile(props) {
                   </div>
                 </Tab>
                 <Tab eventKey="profile" title="Transactions">
-                  <h1>Profile tab</h1>
+                  <div className="transactions-wrapper">
+                    <h6>No transactions yet</h6>
+                  </div>
                 </Tab>
               </Tabs>
             </div>

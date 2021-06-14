@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
+import { Modal, Button, Row, Col, Form, InputGroup } from "react-bootstrap";
 import "./SearchBar.scss";
+import Select from "react-select";
 import { Tag } from "react-feather";
 import _ from "lodash";
 import MongoDBInterface from "../../interface/MongoDBInterface";
@@ -10,8 +12,7 @@ function Search() {
   const reduxState = useSelector((state) => state, shallowEqual);
   const dispatch = useDispatch();
   const wrapperRef = useRef(null);
-  const [tags, setTags] = useState([...CONSTANTS.CATEGORIES]);
-  const tagsCopy = [...tags];
+  const [tags, setTags] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [showDropdown, setShowDropdown] = useState(false);
   useEffect(() => {
@@ -30,10 +31,10 @@ function Search() {
 
   useEffect(() => {
     const { metamaskID = undefined } = reduxState;
-    let postObj = { userName: metamaskID, searchString: searchText };
-    let selectedTags = tags.filter((val) => val.isSelected);
-    if (selectedTags.length)
-      postObj.tags = selectedTags.map((item) => item.value);
+    let postObj = { searchString: searchText };
+    if (tags.length)
+    debugger;
+      postObj.tags = tags.map(tag => tag.value)
     try {
       MongoDBInterface.getSignatures(postObj).then(
         (signatures) => {
@@ -55,10 +56,11 @@ function Search() {
     if (event) setSearchText(event.target.value);
   };
 
-  const setTagsList = (item, key) => {
-    tagsCopy[key].isSelected = !item.isSelected;
-    setTags([...tagsCopy]);
+  const handleTagsChange = (selectedtags) => {
+    setTags(selectedtags);
   };
+
+  
   return (
     <div className="search-bar-container">
       <div className="search-dropdown-container">
@@ -69,12 +71,16 @@ function Search() {
           autoComplete="off"
           className="search-box"
           placeholder="Search Collections"
-          
         />
-        <Tag className="search-tag" color="#56288c" size={20} onClick={(event) => {
+        <Tag
+          className="search-tag"
+          color="#56288c"
+          size={20}
+          onClick={(event) => {
             event.stopPropagation();
             setShowDropdown(!showDropdown);
-          }}></Tag>
+          }}
+        ></Tag>
         {/* <div className="tags-pills">
           {tags
             .filter((item) => item.isSelected)
@@ -83,18 +89,17 @@ function Search() {
             ))}
         </div> */}
         {showDropdown && (
-          <ul className="dropdown" ref={wrapperRef}>
-            {tags.map((item, key) => (
-              <li
-                className={item.isSelected ? "selected" : ""}
-                onClick={(event) => {
-                  setTagsList(item, key);
-                }}
-              >
-                {item.value}
-              </li>
-            ))}
-          </ul>
+          <Form.Group as={Col} className="dropdown" md="12">
+            <Select
+              value={tags}
+              closeMenuOnSelect={true}
+              isMulti
+              className="tag-selector"
+              options={CONSTANTS.CATEGORIES}
+              onChange={handleTagsChange}
+              placeholder="Tags*"
+            />
+          </Form.Group>
         )}
       </div>
     </div>
