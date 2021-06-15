@@ -1,11 +1,15 @@
-.mycollection {
-  .collections {
-    .collection-card {
-      .collection-image {
-          img{
-            border-radius: 5px;
-          }
+.rack{
+  min-height: calc(100vh - 230px);
+  .mycollection {
+    .collections {
+      .collection-card {
+        .collection-image {
+            img{
+              border-radius: 5px;
+            }
+        }
       }
     }
   }
 }
+

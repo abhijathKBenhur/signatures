@@ -23,7 +23,6 @@ const DiscoverMore = () => {
                 >
                    {item.value}
                 </Button>
-               
                 </li>)
               }
             </ul>
