@@ -1,5 +1,6 @@
 @import "../../commons/Common.scss";
 .appHeader{
+    background-color: $primary-lightest !important;
     width: 100%;
     z-index: 10000;
     position: fixed;
@@ -12,7 +13,7 @@
     .left-section{
         display: flex;
         flex: .6;
-        align-items: flex-end;
+        align-items: center;
         .nav-link {
                 color: $primary !important;
                 &.active{

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Button, Dropdown, Form, Nav } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
 import logo from "../../../assets/logo/signatures.png";
-import LoginModal from "../../modals/login-modal/loginModal";
 import _ from "lodash";
 import { User, Plus, Search } from "react-feather";
 import "./header.scss";
@@ -67,7 +66,6 @@ const Header = (props) => {
   }
 
   const [appLocation, setAppLocatoin] = useState("home");
-  const [showLoginModal, setShowLoginModal] = useState(false);
   // const [loggedUserInfo, setLoggedUserInfo] = useState(undefined);
 
   const ProfileDropDown = React.forwardRef(({ children, onClick }, ref) => (
@@ -102,7 +100,7 @@ const Header = (props) => {
                 onClick={() => gotoGallery()}
               ></img>
             </a>
-
+            <SearchBar />
             {/* <Nav.Item>
               <Nav.Link
                 active={appLocation == "home"}
@@ -125,7 +123,7 @@ const Header = (props) => {
             </Nav.Item> */}
           </div>
           <div className="middle-section">
-            <SearchBar />
+            
             {/* <Form.Control size="sm" type="text" placeholder="Normal text" /> */}
           </div>
 

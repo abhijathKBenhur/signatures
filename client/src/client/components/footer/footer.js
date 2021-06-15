@@ -7,7 +7,7 @@ import { Container, Row, Col } from "react-bootstrap";
 import { shallowEqual, useSelector } from "react-redux";
 import CONSTANTS from '../../commons/Constants';
 
-const Header = (props) => {
+const Footer = (props) => {
   const [currentMetamaskAccount, setCurrentMetamaskAccount] = useState(undefined);
   const reduxState = useSelector((state) => state, shallowEqual);
   useEffect(() => {
@@ -55,4 +55,4 @@ const Header = (props) => {
   );
 };
 
-export default Header;
+export default Footer;
