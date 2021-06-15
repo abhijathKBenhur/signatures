@@ -4,16 +4,73 @@
   .userPane{
     height: 230px;
     border-bottom: 1px solid $primary;
-    .profileHolder{
-      color: black;
-      .carousel{
-        .carousel-inner{
-          height: 100%;
-          .carousel-item{
-            height: 100%;
-          }
+  }
+  .profile-row{
+    justify-content: center;
+  }
+      .profileHolder {
+        width: 80%;
+        height: 250px;
+        border: 2px solid #79589F;
+        border-radius: 5px;
+        margin: 40px 0px;
+        background: #f7f7f7;
+        .carousel {
+            height: 200px;
+            .carousel-control-prev-icon, .carousel-control-next-icon {
+                display: none;
+            }
         }
-      }
+        .carousel-inner {
+            .row {
+                margin: 10px;
+                align-items: center;
+                height: 200px;
+            }
+            .content{
+                position: relative;
+                height: 200px;
+                .content-profile {
+                    position: absolute;
+                    right:-50px;
+                    bottom: 0;
+                    height: 100px;
+                    width: 100px;
+                    border-radius: 50px;
+                    img {
+                        height: 90px;  
+                        width: 90px;
+                    }
+                }
+            }
+            .button-label {
+                background-image: linear-gradient(140deg, #EADEDB 0%, #f1bbe0 50%, #b3ba8c6e 75%);
+                height: 40px;
+                margin: 10px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                cursor: pointer;
+                background-size: 300% 100%;
+                box-shadow: 0px 0px 20px 0px #7a7272;
+                -o-transition: all .4s ease-in-out;
+                -webkit-transition: all .4s ease-in-out;
+                transition: all .4s ease-in-out;
+                &:hover{
+                    background-position: 100% 0;
+                    -o-transition: all .4s ease-in-out;
+                    -webkit-transition: all .4s ease-in-out;
+                    transition: all .4s ease-in-out;
+                }
+            }
+            
+        }
+        .carousel-control-prev-icon {
+            content: "<";
+            background-image: "";
+            color: red
+        }
+    }
       .cover{
         width: 100%;
         height: 230px;
@@ -21,6 +78,4 @@
         
         opacity: 0.3;
       }
-    }
-  }
 }
