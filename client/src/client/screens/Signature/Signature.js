@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useLocation, useHistory } from "react-router-dom";
 import SignatureBean from "../../beans/Signature";
-import { Badge, Button, Row, Col, Form, Container } from "react-bootstrap";
+import { Badge, Button, Row, Col, Form, Container, Dropdown } from "react-bootstrap";
 import BlockChainInterface from "../../interface/BlockchainInterface";
 import MongoDBInterface from "../../interface/MongoDBInterface";
 import Web3Utils from "web3-utils";
@@ -14,6 +14,7 @@ import {
   ShoppingCart,
   Share,
   Crosshair,
+  MoreHorizontal,
 } from "react-feather";
 import md5 from "md5";
 import { Document, Page, pdfjs } from "react-pdf";
@@ -163,14 +164,91 @@ const Signature = (props) => {
   function gotoGallery() {
     history.push("/home");
   }
+
+  const getMenuActions = () => {
+    return (
+      <Dropdown className="action-dropdwn">
+      <Dropdown.Toggle variant="success" id="dropdown-basic">
+       <MoreHorizontal />
+      </Dropdown.Toggle>
+
+      <Dropdown.Menu>
+        <Dropdown.Item >
+        <ShoppingCart
+                    className="cursor-pointer signature-icons ShoppingCart"
+                    color="#79589F"
+                    onClick={() => {
+                      buySignature();
+                    }}
+                  ></ShoppingCart>
+                  <span className="txt">
+                     Buy
+                  </span>
+        </Dropdown.Item>
+        <Dropdown.Item>
+        <Share
+                    className="cursor-pointer signature-icons"
+                    color="#79589F"
+                    onClick={() => {
+                      copyClipBoard();
+                    }}
+                  ></Share>
+                  <span className="txt">
+                  Copy
+                  </span>
+        </Dropdown.Item>
+        <Dropdown.Item >
+        <Crosshair
+                    className="cursor-pointer signature-icons"
+                    color="#79589F"
+                    onClick={() => {
+                      openInEtherscan();
+                    }}
+                  ></Crosshair>
+                 <span className="txt">View</span>  
+        </Dropdown.Item>
+
+        <Dropdown.Item >
+        <ThumbsUp
+                    className="cursor-pointer signature-icons ThumbsUp"
+                    color="#79589F"
+                  ></ThumbsUp>
+                   <span className="txt">Like</span>
+        </Dropdown.Item>
+
+
+        <Dropdown.Item >
+        <ExternalLink
+                    className="cursor-pointer signature-icons ExternalLink"
+                    onClick={() => {
+                      openInNewTab();
+                    }}
+                    color="#79589F"
+                  ></ExternalLink>
+                  <span className="txt">Open</span>  
+        </Dropdown.Item>
+
+        <Dropdown.Item >
+        <ThumbsDown
+                    className="cursor-pointer signature-icons ThumbsDown"
+                    color="#79589F"
+                  ></ThumbsDown>
+                 <span className="txt">Dislike</span>  
+        </Dropdown.Item>
+
+      </Dropdown.Menu>
+    </Dropdown>
+    )
+  }
+
   return (
-    <Container>
+    <Container fluid>
       <Form
         noValidate
         encType="multipart/form-data"
-        className="viewSignature d-flex align-items-center justify-content-center"
+        className="viewSignature d-flex "
       >
-        <Col md="11" sm="12" lg="11" xs="12" className="responsive-content">
+        <Col md="12" sm="12" lg="12" xs="12" className="responsive-content">
           <Row className="signature-container ">
             <Col sm="12" lg="6" xs="12" md="6" className="left-side h-100">
               <Form.Row className="h-100 ">
@@ -183,7 +261,7 @@ const Signature = (props) => {
                 )}
               </Form.Row>
             </Col>
-            <Col sm="12" lg="5" xs="12" md="5"  className="right-side">
+            <Col sm="12" lg="6" xs="12" md="6"  className="right-side">
               <div className="top-section">
                 <Row className="form-row title-row">
                   <span>{signature.title}</span>
@@ -223,8 +301,9 @@ const Signature = (props) => {
                   </div>
                 </Row>
               </div>
+              {getMenuActions()}
             </Col>
-            <Col md="1" lg="1" className="menu-bar">
+             {/* <Col md="1" lg="1" className="menu-bar">
               <div className="top-menu">
                 <Col md="12">
                   <ShoppingCart
@@ -279,8 +358,8 @@ const Signature = (props) => {
                 </Col>
               </div>
               
-            </Col>
-          </Row>
+            </Col>  */}
+          </Row> 
         </Col>
       </Form>
     </Container>
