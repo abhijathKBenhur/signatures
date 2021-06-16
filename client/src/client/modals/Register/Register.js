@@ -3,7 +3,8 @@ import React, { useState, useEffect } from "react";
 import { GoogleLogin } from "react-google-login";
 import { Row, Col, Form, Modal, Button } from "react-bootstrap";
 import "./Register.scss";
-import { ProgressBar } from "react-step-progress-bar";
+import "react-step-progress-bar/styles.css";
+import { ProgressBar } from "react-step-progress-bar"
 
 const Register = (props) => {
   const [appLocation, setAppLocatoin] = useState("home");
