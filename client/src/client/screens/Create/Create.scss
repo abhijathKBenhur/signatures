@@ -1,13 +1,15 @@
 @import "../../commons/Common.scss";
 .createform{
     border-color: $primary-light;
-    height: calc(100vh - 60px);
+    height: calc(100vh - 120px);
+    margin-top: 60px;
+
     .responsive-content{
         margin-top: 60px;
         .create-form{
             border: 1px solid $primary-light;
             border-radius: 5px;
-            height: 600px;
+            height: 90%;
             box-shadow: 0 0.5rem 1rem $primary-lightest !important;
             background-color: #FFFFFF;
             

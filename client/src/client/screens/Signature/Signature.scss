@@ -1,8 +1,9 @@
 @import "../../commons/Common.scss";
 .viewSignature{
-    height: calc(100vh - 60px);
+    // height: calc(100vh - 60px);
+    margin-top: 60px;
     .signature-container{
-        margin-top: 60px;
+        margin: 60px 0;
         border: 1px solid $primary-light;
         border-radius: 5px;
         height: 600px;
@@ -88,6 +89,28 @@
             &.input-row{
                 display: flex;
                 justify-content: space-between;
+            }
+        }
+        .action-dropdwn{
+            position: absolute;
+            right: 10px;
+            top: 5px;
+            .dropdown-item {
+                padding: 0.5rem 1.5rem;
+                .txt {
+                    padding-left: 10px;
+                    font-size: 14px;
+                }
+            }
+            .btn {
+                background: transparent;
+                border: none !important;
+                svg {
+                    color: #79589f;
+                }
+                &:focus {
+                    box-shadow: none;
+                }
             }
         }
     }

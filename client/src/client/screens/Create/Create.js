@@ -244,9 +244,9 @@ function Create(props) {
   }
 
   return (
-    <Container>
-      <Row className="createform  d-flex align-items-center justify-content-center">
-        <Col md="10" sm="12" lg="10" xs="12" className="responsive-content">
+    <Container fluid>
+      <Row className="createform  d-flex">
+        <Col md="12" sm="12" lg="12" xs="12" className="responsive-content">
           <Form
             noValidate
             encType="multipart/form-data"
@@ -261,93 +261,6 @@ function Create(props) {
                 ></Col>
               </Row>
               <Row className="content-container">
-                {slideCount == 0 ? (
-                  <Col
-                    md="6"
-                    sm="12"
-                    lg="6"
-                    xs="12"
-                    className="title-n-desc p-2"
-                  >
-                    <Row className="">
-                      <Form.Group
-                        as={Col}
-                        className="formEntry"
-                        md="12"
-                        controlId="title"
-                      >
-                        <Form.Control
-                          type="text"
-                          name="title"
-                          value={form.title}
-                          className={formErrors.title ? 'input-err titleArea' : "titleArea"}
-                          placeholder="Title*"
-                          onChange={handleChange}
-                        />
-                      </Form.Group>
-                    </Row>
-                    <Row className="form-row">
-                      <Form.Group
-                        as={Col}
-                        className="formEntry"
-                        md="12"
-                        controlId="description"
-                      >
-                        <InputGroup>
-                          <Form.Control
-                           value={form.description}
-                            className={formErrors.description ? 'input-err descriptionArea': "descriptionArea"}
-                            as="textarea"
-                            rows={17}
-                            aria-describedby="inputGroupAppend"
-                            name="description"
-                            placeholder="Description*"
-                            style={{ resize: "none" }}
-                            onChange={handleChange}
-                          />
-                        </InputGroup>
-                      </Form.Group>
-                    </Row>
-                  </Col>
-                ) : (
-                  <Col
-                    md="6"
-                    sm="12"
-                    lg="6"
-                    xs="12"
-                    className="price-n-category p-2"
-                  >
-                    <Row className="">
-                      <Form.Group as={Col} className="formEntry" md="12">
-                        <Select
-                          value={form.category}
-                          closeMenuOnSelect={true}
-                          isMulti
-                          className={formErrors.category ? "input-err tag-selector" : "tag-selector"}
-                          options={CONSTANTS.CATEGORIES}
-                          onChange={handleTagsChange}
-                          placeholder="Tags*"
-                        />
-                      </Form.Group>
-                    </Row>
-                    <Row className="">
-                      <Form.Group as={Col} className="formEntry" md="12">
-                        <InputGroup className="">
-                          <Form.Control
-                            type="number"
-                            placeholder="how much do you think your idea is worth ?*"
-                            min={1}
-                            value={form.price ? form.price : undefined}
-                            className={formErrors.price ? "input-err price-selector" : "price-selector"}
-                            aria-label="Amount (ether)"
-                            name="price"
-                            onChange={handleChange}
-                          />
-                        </InputGroup>
-                      </Form.Group>
-                    </Row>
-                  </Col>
-                )}
                 {slideCount == 0 ? (
                   <Col
                     md="6"
@@ -414,7 +327,8 @@ function Create(props) {
                       </Form.Row>
                     )}
                   </Col>
-                ) : (
+                )   : 
+                (
                   <Col
                     md="6"
                     sm="12"
@@ -474,6 +388,94 @@ function Create(props) {
                         </Dropzone>
                       </Form.Row>
                     )}
+                  </Col>
+                )
+                }
+                {slideCount == 0 ? (
+                  <Col
+                    md="6"
+                    sm="12"
+                    lg="6"
+                    xs="12"
+                    className="title-n-desc p-2"
+                  >
+                    <Row className="">
+                      <Form.Group
+                        as={Col}
+                        className="formEntry"
+                        md="12"
+                        controlId="title"
+                      >
+                        <Form.Control
+                          type="text"
+                          name="title"
+                          value={form.title}
+                          className={formErrors.title ? 'input-err titleArea' : "titleArea"}
+                          placeholder="Title*"
+                          onChange={handleChange}
+                        />
+                      </Form.Group>
+                    </Row>
+                    <Row className="form-row">
+                      <Form.Group
+                        as={Col}
+                        className="formEntry"
+                        md="12"
+                        controlId="description"
+                      >
+                        <InputGroup>
+                          <Form.Control
+                           value={form.description}
+                            className={formErrors.description ? 'input-err descriptionArea': "descriptionArea"}
+                            as="textarea"
+                            rows={17}
+                            aria-describedby="inputGroupAppend"
+                            name="description"
+                            placeholder="Description*"
+                            style={{ resize: "none" }}
+                            onChange={handleChange}
+                          />
+                        </InputGroup>
+                      </Form.Group>
+                    </Row>
+                  </Col>
+                ): (
+                  <Col
+                    md="6"
+                    sm="12"
+                    lg="6"
+                    xs="12"
+                    className="price-n-category p-2"
+                  >
+                    <Row className="">
+                      <Form.Group as={Col} className="formEntry" md="12">
+                        <Select
+                          value={form.category}
+                          closeMenuOnSelect={true}
+                          isMulti
+                          className={formErrors.category ? "input-err tag-selector" : "tag-selector"}
+                          options={CONSTANTS.CATEGORIES}
+                          onChange={handleTagsChange}
+                          placeholder="Tags*"
+                        />
+                      </Form.Group>
+                    </Row>
+                    <Row className="">
+                      <Form.Group as={Col} className="formEntry" md="12">
+                        <InputGroup className="">
+                          <Form.Control
+                            type="number"
+                            placeholder="how much do you think your idea is worth ?*"
+                            min={1}
+                            value={form.price ? form.price : undefined}
+                            className={formErrors.price ? "input-err price-selector" : "price-selector"}
+                            aria-label="Amount (ether)"
+                            name="price"
+                            onChange={handleChange}
+                          />
+                        </InputGroup>
+                      </Form.Group>
+                    </Row>
                   </Col>
                 )}
               </Row>
