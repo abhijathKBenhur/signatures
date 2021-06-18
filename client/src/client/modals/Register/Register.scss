@@ -1,4 +1,18 @@
 
 .register-wizard{
-    min-height: calc(100vh - 230px)
+    .register-modal{
+        .modal-content{
+            .modal-header{
+                .close{
+                    display: none !important;
+                }
+            }
+            .modal-body{
+            }
+            .modal-footer{
+            }
+
+        }
+        
+    }
 }
