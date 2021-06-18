@@ -27,9 +27,8 @@ function gallery(props) {
   return (
     <Container fluid>
       <div className="gallery d-flex flex-column">
-        <Row className="userPane"></Row>
-        <Row className="profile-row">
-          {!_.isEmpty(visitedUser) && visitedUser ? (
+        <Row className="userPane profile-row">
+          {true ? (
             <div className="profileHolder">
               <Carousel interval={5000}>
                 <Carousel.Item>
