@@ -4,12 +4,54 @@ import { GoogleLogin } from "react-google-login";
 import { Row, Col, Form, Modal, Button } from "react-bootstrap";
 import "./Register.scss";
 import "react-step-progress-bar/styles.css";
-import { ProgressBar } from "react-step-progress-bar"
+import { shallowEqual, useSelector } from "react-redux";
+import CONSTANTS from '../../commons/Constants';
+// MetamaskID and userDetails are stored in separate redux stores
+// userDetails are stored as state 
+
+
+function reEvaluateUserStage(){
+  if(!userDetails.metamaskId){
+    setRegistrationLevel(CONSTANTS.REGISTRATION_LEVEL.BASE_1)
+  }else{
+    if(!userDetails.email){
+      setRegistrationLevel(CONSTANTS.REGISTRATION_LEVEL.BASE_2)
+    }else{
+      if(!userDetails.userID){
+        setRegistrationLevel(CONSTANTS.REGISTRATION_LEVEL.BASE_3)
+      }else{
+        setRegistrationLevel(CONSTANTS.REGISTRATION_LEVEL.BASE_4)
+      }
+    }
+  }
+}
 
 const Register = (props) => {
-  const [appLocation, setAppLocatoin] = useState("home");
-  function responseGoogle(response) {
-    let userDetailsObject = {
+  const reduxState = useSelector((state) => state, shallowEqual);
+  const [userDetails, setUserDetails] = useState({
+    firstName: _.get(reduxState, "firstName"),
+    LastName: _.get(reduxState, "LastName"),
+    email: _.get(reduxState, "email"),
+    fullName: _.get(reduxState, "fullName"),
+    imageUrl: _.get(reduxState, "imageUrl"),
+    metamaskId: _.get(reduxState, "metamaskID"),
+    userID: _.get(reduxState, "userID"),
+  });
+
+
+  useEffect(() => {
+    const { metamaskID = undefined } = reduxState;
+    if (metamaskID) {
+      setUserDetails({
+        ...userDetails,
+        metamaskId: metamaskID,
+      });
+    }
+    reEvaluateUserStage();
+  }, [reduxState]);
+
+  function googleLogIn(response) {
+    let googleFormResponseObject = {
       firstName: _.get(response.profileObj, "givenName"),
       LastName: _.get(response.profileObj, "givenName"),
       email: _.get(response.profileObj, "email"),
@@ -27,6 +69,7 @@ const Register = (props) => {
       keyboard={false}
       centered
       showClose="false"
+      size="lg"
     >
       <Modal.Header closeButton>
         <Modal.Title>Hi, you are not yet registered with us.</Modal.Title>
@@ -49,8 +92,8 @@ const Register = (props) => {
                     //secretKey:I0YMKAriMhc6dB7bN44fHuKj
                     clientId="639340003430-d17oardcjjpo9qnj0m02330l5orgn8sp.apps.googleusercontent.com"
                     buttonText="Login with Google"
-                    onSuccess={responseGoogle}
-                    onFailure={responseGoogle}
+                    onSuccess={googleLogIn}
+                    onFailure={googleLogIn}
                     cookiePolicy="single_host_origin"
                   />
                 </div>
@@ -61,8 +104,8 @@ const Register = (props) => {
                     //secretKey:I0YMKAriMhc6dB7bN44fHuKj
                     clientId="639340003430-d17oardcjjpo9qnj0m02330l5orgn8sp.apps.googleusercontent.com"
                     buttonText="Login with Google"
-                    onSuccess={responseGoogle}
-                    onFailure={responseGoogle}
+                    onSuccess={googleLogIn}
+                    onFailure={googleLogIn}
                     cookiePolicy="single_host_origin"
                   />
                 </div>
