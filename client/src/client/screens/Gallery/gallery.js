@@ -6,7 +6,7 @@ import "./gallery.scss";
 import MongoDBInterface from "../../interface/MongoDBInterface";
 import Cookies from "universal-cookie";
 import cover from "../../../assets/cover.jpeg";
-import user from "../../../assets/user.png";
+import user from "../../../assets/user1.png";
 import DiscoverMore from "../../components/discover-more/discover-more";
 function gallery(props) {
   const cookies = new Cookies();
@@ -32,14 +32,14 @@ function gallery(props) {
             <div className="profileHolder">
               <Carousel interval={5000}>
                 <Carousel.Item>
-                  <Container>
+                  <Container fluid>
                     <Row>
                       <Col sm={3}>
                         <div>
                           <div className="button-label">Getting Started</div>
                         </div>
                       </Col>
-                      <Col sm={9}>
+                      <Col sm={8}>
                         <div className="content">
                           Lorem ipsum dolor sit amet, consectetur adipiscing
                           elit, sed do eiusmod tempor incididunt ut labore et
@@ -50,23 +50,26 @@ function gallery(props) {
                           fugiat nulla pariatur. Excepteur sint occaecat
                           cupidatat non proident, sunt in culpa qui officia
                           deserunt mollit anim id est laborum.
+                        
+                        </div>
+                      </Col>
+                      <Col sm={1}>
                           <div className="content-profile">
                             <img src={user} />
                           </div>
-                        </div>
                       </Col>
                     </Row>
                   </Container>
                 </Carousel.Item>
                 <Carousel.Item>
-                  <Container>
+                  <Container fluid>
                     <Row>
                       <Col sm={3}>
                         <div>
                           <div className="button-label">Validate</div>
                         </div>
                       </Col>
-                      <Col sm={9}>
+                      <Col sm={8}>
                         <div className="content">
                           Lorem ipsum dolor sit amet, consectetur adipiscing
                           elit, sed do eiusmod tempor incididunt ut labore et
@@ -77,23 +80,26 @@ function gallery(props) {
                           fugiat nulla pariatur. Excepteur sint occaecat
                           cupidatat non proident, sunt in culpa qui officia
                           deserunt mollit anim id est laborum.
+                         
+                        </div>
+                      </Col>
+                      <Col sm={1}>
                           <div className="content-profile">
                             <img src={user} />
                           </div>
-                        </div>
                       </Col>
                     </Row>
                   </Container>
                 </Carousel.Item>
                 <Carousel.Item>
-                  <Container>
+                  <Container fluid>
                     <Row>
                       <Col sm={3}>
                         <div>
                           <div className="button-label">View Contact</div>
                         </div>
                       </Col>
-                      <Col sm={9}>
+                      <Col sm={8}>
                         <div className="content">
                           Lorem ipsum dolor sit amet, consectetur adipiscing
                           elit, sed do eiusmod tempor incididunt ut labore et
@@ -104,10 +110,13 @@ function gallery(props) {
                           fugiat nulla pariatur. Excepteur sint occaecat
                           cupidatat non proident, sunt in culpa qui officia
                           deserunt mollit anim id est laborum.
+                        
+                        </div>
+                      </Col>
+                      <Col sm={1}>
                           <div className="content-profile">
                             <img src={user} />
                           </div>
-                        </div>
                       </Col>
                     </Row>
                   </Container>
