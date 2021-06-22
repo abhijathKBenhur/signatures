@@ -27,7 +27,6 @@ import store from "../../redux/store";
 function Profile(props) {
   //const [collectionList, setCollectionList] = useState([]);
   const [fetchInterval, setFetchInterval] = useState(0);
-  const [userDetails, setUserDetails] = useState(0);
   const [currentMetamaskAccount, setCurrentMetamaskAccount] = useState(
     undefined
   );
@@ -76,12 +75,21 @@ function Profile(props) {
     );
   }
 
+  function registerCallBacks(params) {
+    switch (params.action) {
+      case "googleLogin":
+        break;
+      case "FacebookLogin":
+        break;
+    }
+  }
+
   return (
     <Container fluid>
       <Row className="profile">
         {true ? (
           <Row className="register-modal">
-            <Register></Register>
+            <Register ></Register>
           </Row>
         ) : (
           <div className="separator">
@@ -91,11 +99,11 @@ function Profile(props) {
                   <div>
                     <div className="first-section">
                       <div className="image-part">
-                        <img src={userDetails.imageUrl} />
+                        {/* <img src={userDetails.imageUrl} /> */}
                       </div>
                       <div className="user-personal-info">
-                        <h5>{userDetails.fullName}</h5>
-                        <p style={{ margin: "0" }}>{userDetails.email}</p>
+                        {/* <h5>{userDetails.fullName}</h5> */}
+                        {/* <p style={{ margin: "0" }}>{userDetails.email}</p> */}
                         <p style={{ color: "#5252f3", cursor: "pointer" }}>
                           Epic Coders
                         </p>

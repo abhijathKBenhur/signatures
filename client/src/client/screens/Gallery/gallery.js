@@ -5,8 +5,8 @@ import Rack from "../../components/Rack/Rack";
 import "./gallery.scss";
 import MongoDBInterface from "../../interface/MongoDBInterface";
 import Cookies from "universal-cookie";
-import cover from "../../../assets/cover.jpeg";
-import user from "../../../assets/user.png";
+import cover from "../../../assets/images/cover.jpeg";
+import user from "../../../assets/images/user1.png";
 import DiscoverMore from "../../components/discover-more/discover-more";
 function gallery(props) {
   const cookies = new Cookies();
@@ -27,79 +27,103 @@ function gallery(props) {
   return (
     <Container fluid>
       <div className="gallery d-flex flex-column">
-        <Row className="userPane">
-        </Row>
-          <Row className="profile-row"> 
-          {!_.isEmpty(visitedUser) && visitedUser ? (
+        <Row className="userPane profile-row">
+          {true ? (
             <div className="profileHolder">
               <Carousel interval={5000}>
-            <Carousel.Item >
-            <Container>
-              <Row>
-                <Col sm={3}>
-                  <div>
-                    
-                     <div className="button-label">
-                     Getting Started
-                    </div>
-                  </div>
-                </Col>
-                <Col sm={9}>
-                  <div className="content">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                    <div className="content-profile">
-                    <img src={user} />
-                    </div>
-                  </div>
-                </Col>
-              </Row>
-            </Container>
-            </Carousel.Item>
-            <Carousel.Item>
-            <Container>
-              <Row>
-                <Col sm={3}>
-                  <div>
-                     <div className="button-label">
-                        Validate
-                    </div>
-                  </div>
-                </Col>
-                <Col sm={9}>
-                <div className="content">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                    <div className="content-profile">
-                      <img src={user} />
-                    </div>
-                  </div>
-                </Col>
-              </Row>
-            </Container>
-            </Carousel.Item>
-            <Carousel.Item>
-            <Container>
-              <Row>
-                <Col sm={3}>
-                  <div>
-                     <div className="button-label">
-                        View Contact
-                    </div>
-                  </div>
-                </Col>
-                <Col sm={9}>
-                <div className="content">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                    <div className="content-profile">
-                    <img src={user} />
-                    </div>
-                  </div>
-                </Col>
-              </Row>
-            </Container>
-            </Carousel.Item>
-          </Carousel>
+                <Carousel.Item>
+                  <Container fluid>
+                    <Row>
+                      <Col sm={3}>
+                        <div>
+                          <div className="button-label">Getting Started</div>
+                        </div>
+                      </Col>
+                      <Col sm={8}>
+                        <div className="content">
+                          Lorem ipsum dolor sit amet, consectetur adipiscing
+                          elit, sed do eiusmod tempor incididunt ut labore et
+                          dolore magna aliqua. Ut enim ad minim veniam, quis
+                          nostrud exercitation ullamco laboris nisi ut aliquip
+                          ex ea commodo consequat. Duis aute irure dolor in
+                          reprehenderit in voluptate velit esse cillum dolore eu
+                          fugiat nulla pariatur. Excepteur sint occaecat
+                          cupidatat non proident, sunt in culpa qui officia
+                          deserunt mollit anim id est laborum.
+                        
+                        </div>
+                      </Col>
+                      <Col sm={1}>
+                          <div className="content-profile">
+                            <img src={user} />
+                          </div>
+                      </Col>
+                    </Row>
+                  </Container>
+                </Carousel.Item>
+                <Carousel.Item>
+                  <Container fluid>
+                    <Row>
+                      <Col sm={3}>
+                        <div>
+                          <div className="button-label">Validate</div>
+                        </div>
+                      </Col>
+                      <Col sm={8}>
+                        <div className="content">
+                          Lorem ipsum dolor sit amet, consectetur adipiscing
+                          elit, sed do eiusmod tempor incididunt ut labore et
+                          dolore magna aliqua. Ut enim ad minim veniam, quis
+                          nostrud exercitation ullamco laboris nisi ut aliquip
+                          ex ea commodo consequat. Duis aute irure dolor in
+                          reprehenderit in voluptate velit esse cillum dolore eu
+                          fugiat nulla pariatur. Excepteur sint occaecat
+                          cupidatat non proident, sunt in culpa qui officia
+                          deserunt mollit anim id est laborum.
+                         
+                        </div>
+                      </Col>
+                      <Col sm={1}>
+                          <div className="content-profile">
+                            <img src={user} />
+                          </div>
+                      </Col>
+                    </Row>
+                  </Container>
+                </Carousel.Item>
+                <Carousel.Item>
+                  <Container fluid>
+                    <Row>
+                      <Col sm={3}>
+                        <div>
+                          <div className="button-label">View Contact</div>
+                        </div>
+                      </Col>
+                      <Col sm={8}>
+                        <div className="content">
+                          Lorem ipsum dolor sit amet, consectetur adipiscing
+                          elit, sed do eiusmod tempor incididunt ut labore et
+                          dolore magna aliqua. Ut enim ad minim veniam, quis
+                          nostrud exercitation ullamco laboris nisi ut aliquip
+                          ex ea commodo consequat. Duis aute irure dolor in
+                          reprehenderit in voluptate velit esse cillum dolore eu
+                          fugiat nulla pariatur. Excepteur sint occaecat
+                          cupidatat non proident, sunt in culpa qui officia
+                          deserunt mollit anim id est laborum.
+                        
+                        </div>
+                      </Col>
+                      <Col sm={1}>
+                          <div className="content-profile">
+                            <img src={user} />
+                          </div>
+                      </Col>
+                    </Row>
+                  </Container>
+                </Carousel.Item>
+              </Carousel>
             </div>
-          ) : null }
+          ) : null}
         </Row>
         <div className="separator"> </div>
         <Rack deck={signatureList}></Rack>

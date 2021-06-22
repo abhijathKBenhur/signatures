@@ -129,7 +129,7 @@ const Header = (props) => {
 
           <div className="right-section">
             {/* <Button
-              variant="danger"
+              variant="primary"
               className="button"
               bsstyle="primary"
               onClick={() => {
@@ -140,7 +140,7 @@ const Header = (props) => {
             </Button> */}
             {_.isEmpty(currentMetamaskAccount) ? 
             <Button
-            variant="danger"
+            variant="primary"
             className="button"
             bsstyle="primary"
             onClick={() => {
@@ -150,7 +150,7 @@ const Header = (props) => {
             Connect Wallet
           </Button>:
             <Button
-            variant="danger"
+            variant="primary"
             className="button"
             bsstyle="primary"
             onClick={() => {

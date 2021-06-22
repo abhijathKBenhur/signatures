@@ -12,15 +12,22 @@ const CATEGORIES = [
     { value: 'Parenting', label: 'Parenting' }
   ]
 
-const  PRIORITIES = {
+  const  PRIORITIES = {
     HIGH: "1",
     LOW: "0",
 }
 
+const REGISTRATION_LEVEL = {
+    BASE_1: "BASE_1",
+    BASE_2: "BASE_1",
+    BASE_3: "BASE_3",
+    BASE_4: "BASE_4"
+}
 
 const CONSTANTS = {
     CATEGORIES,
-    PRIORITIES
+    PRIORITIES,
+    REGISTRATION_LEVEL
 }
 
 export default CONSTANTS

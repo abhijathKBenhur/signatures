@@ -5,7 +5,7 @@ import NFTTokenBean from "../beans/Signature";
 import contractJSON from "../../contracts/ideaBlocks.json";
 import { toast } from "react-toastify";
 import store from '../redux/store';
-import { setMetaMaskID } from "../redux/actions";
+import { setReduxMetaMaskID } from "../redux/actions";
 
 
 class BlockchainInterface {
@@ -29,7 +29,7 @@ class BlockchainInterface {
           .then((success) => {
             this.metamaskAccount = success.accountId[0];
             let metamaskNetwork = success.networkId;
-            store.dispatch(setMetaMaskID(this.metamaskAccount))
+            store.dispatch(setReduxMetaMaskID(this.metamaskAccount))
             const contractNetworkID = this.contractJSON.network;
             if (contractNetworkID == metamaskNetwork) {
               const abi = this.contractJSON.abi;
@@ -75,7 +75,7 @@ class BlockchainInterface {
         window.web3 = this.web3;
         resolve(this.web3);
       } else {
-        store.dispatch(setMetaMaskID())
+        store.dispatch(setReduxMetaMaskID())
         let errorMessage =
           <div>Non-Ethereum browser detected. You should consider trying MetaMask!
             <br />
