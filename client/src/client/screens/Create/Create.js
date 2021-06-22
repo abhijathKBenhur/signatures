@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Modal, Button, Row, Col, Form, InputGroup } from "react-bootstrap";
 import MongoDBInterface from "../../interface/MongoDBInterface";
 import BlockChainInterface from "../../interface/BlockchainInterface";
 import StorageInterface from "../../interface/StorageInterface";
-import Dropzone from "react-dropzone";
+import Dropzone, { useDropzone } from "react-dropzone";
 import CONSTANTS from "../../commons/Constants";
 import { useHistory } from "react-router-dom";
 import { withRouter } from "react-router-dom";
 import "./Create.scss";
-import { FilePlus, X, Image as ImageFile } from "react-feather";
+import { FilePlus, X, Image as ImageFile, Plus } from "react-feather";
 import Hash from "ipfs-only-hash";
 import Image from "react-image-resizer";
 import { Container } from "react-bootstrap";
@@ -23,6 +23,7 @@ import { shallowEqual, useSelector } from "react-redux";
 function Create(props) {
   const reduxState = useSelector((state) => state, shallowEqual);
   const { metamaskID = undefined } = reduxState;
+  const imageRef = useRef()
   const [form, setFormData] = useState({
     owner: metamaskID,
     title: "",
@@ -47,6 +48,10 @@ function Create(props) {
   const [billet, setBillet] = useState({});
   let history = useHistory();
   const finalSlideCount = 1;
+  const [fileData, setFileData] = useState({
+    fileType: '',
+    fileData: undefined
+  });
   useEffect(() => {
     pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
   }, []);
@@ -60,7 +65,6 @@ function Create(props) {
       });
     }
     if(!_.isEmpty(form.owner)) {
-      console.log('change in form ', form)
         if(!_.isEmpty(form.category) ) {
           setFormErrors({...formErrors, category: false})
         } else {
@@ -72,7 +76,6 @@ function Create(props) {
   useEffect(() => {
     const {metamaskID = undefined}  = reduxState;
     if(metamaskID) {
-    console.log('metamaskID = ',metamaskID)
     setFormData({
       ...form,
       owner: metamaskID,
@@ -188,10 +191,12 @@ function Create(props) {
   }
 
   function onSubmit() {
-    console.log("form:", form);
-    const params = {...form}
+    const params = _.clone({...form})
     params.category = JSON.stringify(params.category)
     params.IPFS = true;
+    params.fileType = fileData.fileType;
+    params.price =  typeof params.price === 'number' ? JSON.stringify(params.price) : params.price;
+    params.fileType = fileData.fileType
     StorageInterface.getFilePaths(params)
       .then((success) => {
         params.PDFFile = _.get(_.find(success, { type: "PDFFile" }), "path");
@@ -199,7 +204,6 @@ function Create(props) {
           _.find(_.map(success, "data"), { type: "thumbnail" }),
           "path"
         );
-        console.log(params);
         saveToBlockChain(params);
       })
       .catch((error) => {
@@ -239,8 +243,67 @@ function Create(props) {
               setFormErrors({...formErrors, price: false, category: false, thumbnail: false})
             }
             break
-
+            default : break;
           }
+  }
+
+  const onDrop = useCallback((acceptedFiles) => {
+    loadFile(acceptedFiles)
+  }, [])
+  const {getRootProps, getInputProps} = useDropzone({onDrop, maxFiles: 1, accept: ['image/png', 'image/jpg', 'image/jpeg','.pdf', '.mp3']})
+
+  const loadFile = (file) => {
+    const fr = new window.FileReader();
+      fr.onloadend = (e) => {
+          setFileData({
+            ...fileData,
+            fileType: _.get(file, '[0].name').split('.')[1], 
+            fileData: e.target.result
+          })
+          onPDFDrop(file);
+     };
+     fr.readAsDataURL(file[0]);
+  }
+
+
+  const getFileViewer =  () => {
+      switch(fileData.fileType) {
+        case 'pdf':
+         return (
+          <Document
+          fillWidth
+          file={form.PDFFile}
+          onLoadError={PDFLoadError}
+          onLoadSuccess={onDocumentLoadSuccess}
+        >
+          <Page
+            fillWidth
+            pageNumber={1}
+            width={window.innerWidth / 4}
+          />
+        </Document>
+         )
+         case 'mp3':
+           return (
+            <audio
+            controls
+            >
+              <source src={fileData.fileData}>
+              </source>
+                Your browser does not support the
+                <code>audio</code> element.
+        </audio>
+           )
+           case 'jpg':
+           case 'jpeg':
+            case 'png':
+              return  (
+                <img src={`${fileData.fileData}`} />
+               )
+  
+        default: return null;
+      }
+   
   }
 
   return (
@@ -254,12 +317,12 @@ function Create(props) {
             className="create-form"
           >
             <Col md="12" className="overflow-auto h-100">
-              <Row>
+              {/* <Row>
                 <Col
                   md="12"
                   className="create-wizard-bar justify-content-center align-items-center d-flex"
                 ></Col>
-              </Row>
+              </Row> */}
               <Row className="content-container">
                 {slideCount == 0 ? (
                   <Col
@@ -270,8 +333,6 @@ function Create(props) {
                     className="pdf-container p-0"
                   >
                     {form.PDFFile && (
-                      <Form.Row className="w-100 p15 d-flex justify-content-center">
-                        {form.PDFFile && (
                           <div className="pdfUploaded w-100 h-100">
                             <X
                               className="removePDF cursor-pointer"
@@ -279,25 +340,25 @@ function Create(props) {
                                 clearPDF();
                               }}
                             ></X>
-                            <Document
-                              fillWidth
-                              file={form.PDFFile}
-                              onLoadError={PDFLoadError}
-                              onLoadSuccess={onDocumentLoadSuccess}
-                            >
-                              <Page
-                                fillWidth
-                                pageNumber={1}
-                                width={window.innerWidth / 4}
-                              />
-                            </Document>
+                            {fileData.fileData && getFileViewer()}
+                            
                           </div>
-                        )}
-                      </Form.Row>
+                        
+                       
                     )}
                     {!form.PDFFile && (
                       <Form.Row className="empty-pdf-row">
-                        <Dropzone
+                        <div className="file-drop-contatiner"  {...getRootProps()}>
+                              <input {...getInputProps()} />
+                              <p>Drag 'n' drop some files here, or click to select files</p>
+                             <div>
+                             <Plus />
+                               </div> 
+                            </div>
+                            {
+                                formErrors.pdf && <p className="invalid-paragraph"> PDF is required </p>
+                                }
+                        {/* <Dropzone
                           onDrop={onPDFDrop}
                           acceptedFiles={".pdf"}
                           className="dropzoneContainer"
@@ -323,7 +384,7 @@ function Create(props) {
                               </div>
                             </section>
                           )}
-                        </Dropzone>
+                        </Dropzone> */}
                       </Form.Row>
                     )}
                   </Col>
@@ -336,9 +397,7 @@ function Create(props) {
                     xs="12"
                     className="image-container p-0"
                   >
-                    {form.thumbnail && (
-                      <Form.Row className="w-100 p15 d-flex justify-content-center">
-                        {form.thumbnail && (
+                    {form.thumbnail &&(
                           <div className="imageUploaded w-100 h-100">
                             <X
                               className="removeImage cursor-pointer"
@@ -346,16 +405,11 @@ function Create(props) {
                                 clearImage();
                               }}
                             ></X>
-                            <Image
+                            <img
                               src={form.thumbnail.preview}
-                              height={400}
-                              style={{
-                                background: "#FFFFFF",
-                              }}
+                              
                             />
                           </div>
-                        )}
-                      </Form.Row>
                     )}
                     {!form.thumbnail && (
                       <Form.Row className="empty-image-row">
@@ -397,7 +451,7 @@ function Create(props) {
                     sm="12"
                     lg="6"
                     xs="12"
-                    className="title-n-desc p-2"
+                    className="title-n-desc "
                   >
                     <Row className="">
                       <Form.Group
