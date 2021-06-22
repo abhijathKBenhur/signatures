@@ -31,6 +31,9 @@ const Rack = (props) => {
                   sm="6"
                   xs="12"
                   className="collection-card col-md-offset-2"
+                  onClick={() => {
+                    openCardView(signature);
+                  }}
                 >
                   <div className="content cursor-pointer">
                     {/* <div className="collection-header d-flex justify-content-between align-items-center p-2">
@@ -39,9 +42,7 @@ const Rack = (props) => {
                     </div> */}
                     <div
                       className="collection-preview"
-                      onClick={() => {
-                        openCardView(signature);
-                      }}
+                      
                     >
                       <Col md="12 collection-image">
                         <Image

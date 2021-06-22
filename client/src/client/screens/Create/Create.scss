@@ -5,11 +5,12 @@
     margin-top: 60px;
 
     .responsive-content{
-        margin-top: 60px;
+        // margin-top: 60px;
+        padding: 0;
         .create-form{
             border: 1px solid $primary-light;
             border-radius: 5px;
-            height: 90%;
+            height: 100%;
             box-shadow: 0 0.5rem 1rem $primary-lightest !important;
             background-color: #FFFFFF;
             
@@ -23,6 +24,7 @@
 
                 height: calc(100% - 50px);
                 .title-n-desc{
+                    padding: 30px 0 !important;
                     .titleArea, .descriptionArea{
                         border: 0
                     }
@@ -41,11 +43,18 @@
                     align-items: flex-start;
                     border: 1px dashed $primary-light;
                     .imageUploaded{
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
                         .removeImage{
                             position: absolute;
                             z-index: 1;
                             right: 10px;
-                            
+                            top: 10px;
+                        }
+                        img {
+                            max-width: 100%;
+                            max-height: 100%;
                         }
                     }
                     .empty-image-row{
@@ -66,19 +75,29 @@
                 .pdf-container{
                     display: flex;
                     justify-content: center;
-                    align-items: flex-start;
-                    border: 1px dashed $primary-light;
+                    align-items: center;
+                    // border: 1px dashed $primary-light;
+                    border-right: 1px dashed $primary-light;
                     .pdfUploaded{
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        flex-basis: 100%;
                         .removePDF{
                             position: absolute;
                             z-index: 1;
                             right: 10px;
+                            top: 10px;
                             
                         }
                         .react-pdf__Document{
                             margin: 0 auto;
                             width: 80% !important;
                             height: 90% !important;
+                        }
+                        img {
+                            max-width: 100%;
+                            max-height: 100%;
                         }
                     }
                     .empty-pdf-row{
@@ -93,6 +112,18 @@
                             .dropfile-icon{
                                 margin-top: 10px;
                             }
+                        }
+                        .file-drop-contatiner{
+                            border: 1px dashed $primary;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            cursor: pointer;
+                            flex-flow: column;
+                            height: 300px;
+                            width: 500px;
+                            border-radius: 20px;
+                            padding: 10px;
                         }
                     }
                     

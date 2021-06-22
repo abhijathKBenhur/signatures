@@ -33,6 +33,7 @@ export const addSignature = payload => {
         PDFFile: payload.PDFFile,
         transactionID: payload.transactionID,
         ideaID: payload.ideaID,
+        fileType: payload.fileType
     })
 }
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useLocation, useHistory } from "react-router-dom";
 import SignatureBean from "../../beans/Signature";
-import { Badge, Button, Row, Col, Form, Container, Dropdown } from "react-bootstrap";
+import { Badge, Button, Row, Col, Form, Container, Dropdown, Spinner } from "react-bootstrap";
 import BlockChainInterface from "../../interface/BlockchainInterface";
 import MongoDBInterface from "../../interface/MongoDBInterface";
 import Web3Utils from "web3-utils";
@@ -46,6 +46,10 @@ const Signature = (props) => {
     getIPSPDFFile(hashId);
   }, []);
 
+  // useEffect(() => {
+  //   getIPSPDFFile(hashId);
+  // },[signature.fileType])
+
   useEffect(() => {
     const { metamaskID = undefined } = reduxState;
     if (metamaskID) {
@@ -56,8 +60,22 @@ const Signature = (props) => {
   function getIPSPDFFile(hash) {
     StorageInterface.getFileFromIPFS(hash).then((pdfFileResponse) => {
       let pdfData = new Blob([pdfFileResponse.content.buffer]);
-      setPDFFile(pdfData);
+      // if(signature.fileType === 'pdf') {
+      //   setPDFFile(pdfData);
+      // } else {
+        loadFile(pdfData)
+      // }
     });
+  }
+
+  const loadFile = (pdfData) => {
+    var reader = new FileReader();
+    reader.readAsDataURL(pdfData); 
+    reader.onloadend = function() {
+        var base64data = reader.result;   
+      setPDFFile(base64data);
+
+    }
   }
 
   function feedbackMessage(signature) {
@@ -241,6 +259,39 @@ const Signature = (props) => {
     )
   }
 
+  const getDocumnetViewer = () => {
+    const {fileType } = signature;
+    switch(fileType) {
+      case 'pdf':
+        return (
+          <Document file={PDFFile} className="pdf-document">
+          <Page pageNumber={1}  />
+        </Document>
+        )
+        case 'mp3':
+          const file = PDFFile.split(',')[1];
+          return (
+           <audio
+           controls
+           >
+             <source src={`data:audio/mpeg;base64,` + file}>
+             </source>
+               Your browser does not support the
+               <code>audio</code> element.
+       </audio>
+          )
+          case 'jpg':
+          case 'jpeg':
+           case 'png':
+             return  (
+               <img src={`${PDFFile}`} />
+              )
+ 
+       default: return null;
+
+    }
+  }
+
   return (
     <Container fluid>
       <Form
@@ -251,15 +302,14 @@ const Signature = (props) => {
         <Col md="12" sm="12" lg="12" xs="12" className="responsive-content">
           <Row className="signature-container ">
             <Col sm="12" lg="6" xs="12" md="6" className="left-side h-100">
-              <Form.Row className="h-100 ">
-                {PDFFile && (
+                {PDFFile ?  (
                   <div className="pdfUploaded h-100 overflow-auto align-items-center justify-content-center d-flex">
-                    <Document file={PDFFile} className="pdf-document">
+                    {/* <Document file={PDFFile} className="pdf-document">
                       <Page pageNumber={1} width={window.innerWidth / 3} />
-                    </Document>
+                    </Document> */}
+                    { getDocumnetViewer()}
                   </div>
-                )}
-              </Form.Row>
+                ): <Spinner animation="border" />}
             </Col>
             <Col sm="12" lg="6" xs="12" md="6"  className="right-side">
               <div className="top-section">
