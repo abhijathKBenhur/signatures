@@ -11,6 +11,7 @@ const Signature = new Schema(
         thumbnail: { type: String , required: true},
         PDFFile: { type: String ,required: true},
         PDFHash: { type: String ,required: true},
+        fileType: { type: String ,required: true},
         transactionID: { type: String},
         ideaID: { type: String}
     },

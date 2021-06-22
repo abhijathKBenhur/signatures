@@ -10,6 +10,7 @@ export default class Signature{
         this.price = options.price
         this.PDFHash = options.PDFHash
         this.PDFFile = options.PDFFile
+        this.fileType = options.fileType
         this.thumbnail = options.thumbnail
         this.transactionID = options.transactionID
         this.ideaID = options.ideaID
