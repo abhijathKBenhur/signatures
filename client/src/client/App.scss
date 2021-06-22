@@ -1,8 +1,9 @@
-@import './commons/Common.scss';
+@import "./commons/Common.scss";
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@200&display=swap");
 
 /* Styles go here */
 
-.appContainer{
+.appContainer {
   // .content{
   //   // max-height: calc(100% - 100px);
   //   max-height: 90vh;
@@ -11,42 +12,44 @@
   //   }
   // }
 }
-body{
-  font-family: Verdana, sans-serif;
-  .signature-icons{
-    color: $primary !important
+body {
+  font-family: "Roboto", sans-serif;
+  .signature-icons {
+    color: $primary !important;
   }
   background-color: #ffffff;
   opacity: 1;
-  background-image: radial-gradient(#f1f1f1 0.35000000000000003px, #ffffff 0.35000000000000003px);
+  background-image: radial-gradient(
+    #f1f1f1 0.35000000000000003px,
+    #ffffff 0.35000000000000003px
+  );
   background-size: 7px 7px;
-
 }
 
-
-.btn:focus,.btn:active {
+.btn:focus,
+.btn:active {
   outline: none !important;
   box-shadow: none;
 }
-.form-group{
-  .form-control{
+.form-group {
+  .form-control {
     border: 0;
     border-radius: 0;
     border-bottom: 1px solid #ced4da;
-    &:focus{
+    &:focus {
       box-shadow: none;
-    }  
+    }
   }
 }
 
-.cursor-pointer{
+.cursor-pointer {
   cursor: pointer;
 }
-.btn{
+.btn {
   font-size: 12px;
   line-height: 16px;
   height: 26px;
-  -webkit-font-smoothing: antialiased!important;
+  -webkit-font-smoothing: antialiased !important;
   -moz-osx-font-smoothing: grayscale;
   display: -ms-inline-flexbox;
   display: inline-flex;
@@ -64,48 +67,44 @@ body{
   border-radius: 4px;
   border: 1px solid $primary !important;
   outline: none;
-  &.btn-danger{
-    background-clip: border-box!important;
-    background-origin: border-box!important;
+  background-clip: border-box !important;
+  background-origin: border-box !important;
+  &:focus {
+    box-shadow: none;
+    color: white;
+  }
+  &:focus,
+  &:active {
+    box-shadow: none;
+    color: white;
+  }
+  &.btn-primary {
     background: $primary;
     color: #fff;
-    &:hover{
+    &:hover {
       background: $primary-dark !important;
     }
-    &:active{
+    &:active {
       background: $primary-dark !important;
-      box-shadow: none
-    }
-    &:focus{
-      box-shadow: none
-    }
-    &:focus, &:active{
-      box-shadow: none
+      box-shadow: none;
     }
   }
-  &.btn-secondary{
-    background-clip: border-box!important;
-    background-origin: border-box!important;
+  &.btn-secondary {
     color: $primary;
     background-color: transparent;
-    &:hover{
+    &:hover {
       background: $primary !important;
       color: white;
     }
-    &:active{
+    &:active {
       background: $primary !important;
-      box-shadow: none;
-      color: white;
-    }
-    &:focus{
-      box-shadow: none;
-      color: white;
-    }
-    &:focus, &:active{
       box-shadow: none;
       color: white;
     }
   }
+  &.btn-disabled {
+    color: $primary;
+    background-color: $primary-light;
+    pointer-events: none;
+  }
 }
-
-

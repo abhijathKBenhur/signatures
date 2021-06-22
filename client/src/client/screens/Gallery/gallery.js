@@ -5,8 +5,8 @@ import Rack from "../../components/Rack/Rack";
 import "./gallery.scss";
 import MongoDBInterface from "../../interface/MongoDBInterface";
 import Cookies from "universal-cookie";
-import cover from "../../../assets/cover.jpeg";
-import user from "../../../assets/user1.png";
+import cover from "../../../assets/images/cover.jpeg";
+import user from "../../../assets/images/user1.png";
 import DiscoverMore from "../../components/discover-more/discover-more";
 function gallery(props) {
   const cookies = new Cookies();

@@ -488,7 +488,7 @@ function Create(props) {
                     <div></div>
                   ) : (
                     <Button
-                      variant="danger"
+                      variant="secondary"
                       className="button"
                       bsstyle="primary"
                       onClick={() => {
@@ -500,7 +500,7 @@ function Create(props) {
                   )}
 
                   <Button
-                    variant="danger"
+                    variant="primary"
                     className="button"
                     bsstyle="primary"
                     onClick={() => {

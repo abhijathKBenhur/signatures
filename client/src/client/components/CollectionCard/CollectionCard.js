@@ -1,7 +1,7 @@
 import { useHistory } from "react-router-dom";
 import _ from "lodash";
 import Signature from "../../beans/Signature";
-import loader from "../../../assets/loader.gif";
+import loader from "../../../assets/images/loader.gif";
 import { MoreHorizontal, Eye, Share, Crosshair, Edit3 } from "react-feather";
 import "./collection-card.scss";
 import { confirm } from "../../modals/confirmation/confirmation";

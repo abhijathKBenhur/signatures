@@ -82,7 +82,7 @@ class Confirmation extends React.Component {
               {cancelLabel}
             </Button>
             <Button
-              variant="danger"
+              variant="primary"
               className="button-l"
               bsstyle="primary"
               onClick={() =>
