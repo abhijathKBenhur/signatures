@@ -33,7 +33,6 @@ function Search() {
     const { metamaskID = undefined } = reduxState;
     let postObj = { searchString: searchText };
     if (tags.length)
-    debugger;
       postObj.tags = tags.map(tag => tag.value)
     try {
       MongoDBInterface.getSignatures(postObj).then(

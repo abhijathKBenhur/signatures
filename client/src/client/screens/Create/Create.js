@@ -151,7 +151,6 @@ function Create(props) {
           draggable: true,
           progress: undefined,
         });
-        debugger;
         setBillet({
           transactionID: success.transactionID,
           account: success.account,

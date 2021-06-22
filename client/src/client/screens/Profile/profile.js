@@ -22,43 +22,26 @@ import { Edit3, Award, User } from "react-feather";
 import StorageInterface from "../../interface/StorageInterface";
 
 import Collections from "./collections";
-import { setCollectionList } from "../../redux/actions";
 import store from "../../redux/store";
 function Profile(props) {
-  //const [collectionList, setCollectionList] = useState([]);
-  const [fetchInterval, setFetchInterval] = useState(0);
-  const [currentMetamaskAccount, setCurrentMetamaskAccount] = useState(
-    undefined
-  );
   const reduxState = useSelector((state) => state, shallowEqual);
-  const { metamaskID = undefined, collectionList = [] } = reduxState;
+  const { metamaskID = undefined, userDetails = {} } = reduxState;
+  const [currentMetamaskAccount, setCurrentMetamaskAccount] = useState(
+    metamaskID
+  );
+  const [profileCollection, setProfileCollection] = useState([]);
   let history = useHistory();
   const [key, setKey] = useState("collections");
 
-  const dispatch = useDispatch();
   useEffect(() => {
+    const { metamaskID = undefined } = reduxState;
     if (metamaskID) {
       setCurrentMetamaskAccount(metamaskID);
+      fetchSignatures()
     }
   }, [reduxState]);
 
-  useEffect(() => {
-    fetchSignatures();
-    // const fetchInterval = setInterval(() => {
-    MongoDBInterface.getSignatures({
-      userName: currentMetamaskAccount,
-      getOnlyNulls: true,
-    }).then((signatures) => {
-      let response = _.get(signatures, "data.data");
-      if (response.length == 0) {
-        clearInterval(fetchInterval);
-        fetchSignatures();
-      }
-    });
-    //  }, 1000);
-    setFetchInterval(fetchInterval);
-    return () => clearInterval(fetchInterval);
-  }, []);
+
 
   function fetchSignatures() {
     MongoDBInterface.getSignatures({ userName: currentMetamaskAccount }).then(
@@ -67,10 +50,10 @@ function Profile(props) {
         let isEmptyPresent = _.find(response, (responseItem) => {
           return _.isEmpty(responseItem.ideaID);
         });
+        setProfileCollection(response)
         // if(isEmptyPresent){
         //   clearInterval(fetchInterval)
         // }
-        dispatch(setCollectionList(response));
       }
     );
   }
@@ -87,26 +70,24 @@ function Profile(props) {
   return (
     <Container fluid>
       <Row className="profile">
-        {true ? (
+        {!_.isEmpty(userDetails.userID) ? (
           <Row className="register-modal">
             <Register ></Register>
           </Row>
         ) : (
-          <div className="separator">
+          <div className="separator w-100">
             <Col md="12" className="mycollection">
               <Row>
                 <div className="userPane">
                   <div>
                     <div className="first-section">
                       <div className="image-part">
-                        {/* <img src={userDetails.imageUrl} /> */}
+                        {JSON.stringify(userDetails)}
+                        <img src={userDetails.imageUrl} />
                       </div>
                       <div className="user-personal-info">
-                        {/* <h5>{userDetails.fullName}</h5> */}
-                        {/* <p style={{ margin: "0" }}>{userDetails.email}</p> */}
-                        <p style={{ color: "#5252f3", cursor: "pointer" }}>
-                          Epic Coders
-                        </p>
+                        <h5>{userDetails.fullName}</h5>
+                        <p style={{ margin: "0" }}>{userDetails.email}</p>
                         <div className="buttons-block"></div>
                       </div>
                     </div>
@@ -135,7 +116,7 @@ function Profile(props) {
                       <Tab eventKey="collections" title="Collection">
                         <div className="collection-wrapper">
                           <div className="middle-block">
-                            <Collections collectionList={collectionList} />
+                            <Collections collectionList={profileCollection} />
                           </div>
                         </div>
                       </Tab>

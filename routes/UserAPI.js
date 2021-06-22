@@ -3,7 +3,7 @@ const express = require('express')
 const router = express.Router()
 
 
-signup = (req, res) => {
+registerUser = (req, res) => {
     console.log("signing up",req.body)
     const body = req.body
     body.balance = 1000;
@@ -37,7 +37,14 @@ signup = (req, res) => {
 }
 
 getUserInfo = async (req, res) => {
-    await User.findOne({ userName: req.body.userName }, (err, user) => {
+    let findCriteria = {}
+    if(req.body.metamaskId){
+        findCriteria.metamaskId = req.body.metamaskId
+    }
+    if(req.body.userID){
+        findCriteria.userID = req.body.userID
+    }
+    await User.findOne(findCriteria, (err, user) => {
         if (err) {
             return res.status(400).json({ success: false, error: err })
         }
@@ -72,7 +79,7 @@ login = async (req, res) => {
     })
 }
 
-router.post('/signup', signup)
+router.post('/registerUser', registerUser)
 router.post('/login', login)
 router.post('/getUserInfo', getUserInfo)
 

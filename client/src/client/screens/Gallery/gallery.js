@@ -30,7 +30,7 @@ function gallery(props) {
         <Row className="userPane profile-row">
           {true ? (
             <div className="profileHolder">
-              <Carousel interval={5000}>
+              <Carousel interval={5000} className="d-flex align-items-center">
                 <Carousel.Item>
                   <Container fluid>
                     <Row>

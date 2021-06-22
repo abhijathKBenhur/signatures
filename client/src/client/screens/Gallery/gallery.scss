@@ -15,7 +15,7 @@
         border-top: none;
         background-color: $primary-light;
         .carousel {
-            height: 200px;
+            height: 100%;
             .carousel-control-prev-icon, .carousel-control-next-icon {
                 display: none;
             }
@@ -24,15 +24,12 @@
             .row {
                 margin: 10px;
                 align-items: center;
-                height: 200px;
             }
             .content{
-                height: 200px;
                 display: flex;
                 align-items: center;
             }
             .content-profile {
-                height: 200px;
                 width: 100px;
                 display: flex;
                 align-items: flex-end;

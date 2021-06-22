@@ -29,6 +29,7 @@ class BlockchainInterface {
           .then((success) => {
             this.metamaskAccount = success.accountId[0];
             let metamaskNetwork = success.networkId;
+            console.log("setting in redux user info")
             store.dispatch(setReduxMetaMaskID(this.metamaskAccount))
             const contractNetworkID = this.contractJSON.network;
             if (contractNetworkID == metamaskNetwork) {

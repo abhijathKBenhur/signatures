@@ -9,7 +9,6 @@ const User = new Schema(
     fullName: { type: String },
     imageUrl: { type: String },
     metamaskId: { type: String },
-    
     userID: { type: String },
     loginMode: { type: String },
   },

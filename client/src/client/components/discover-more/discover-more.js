@@ -7,7 +7,7 @@ const DiscoverMore = () => {
 
     return (
         <div className="discover-topics-section">
-          <div class="card-topics-nav">
+          <div className="card-topics-nav">
                 <h4>Discover More Topics</h4>
           </div>
           <div className="topics-list">

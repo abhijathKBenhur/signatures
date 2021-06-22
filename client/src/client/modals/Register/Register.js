@@ -9,6 +9,8 @@ import CONSTANTS from "../../commons/Constants";
 import { setReduxUserDetails } from "../../redux/actions";
 import metamaskLogo from "../../../assets/images/metamask.png";
 import coinBaseLogo from "../../../assets/images/coinbase.png";
+import MongoDBInterface from "../../interface/MongoDBInterface";
+import store from '../../redux/store';
 // MetamaskID and userDetails are stored in separate redux stores
 // userDetails are stored as state
 
@@ -37,7 +39,7 @@ const Register = (props) => {
       index: 2,
     },
   ]);
-  const [activeStep, setActiveStep] = useState(steps[1]);
+  const [activeStep, setActiveStep] = useState(steps[0]);
   const [userDetails, setUserDetails] = useState({
     firstName: _.get(reduxState, "firstName"),
     LastName: _.get(reduxState, "LastName"),
@@ -51,11 +53,16 @@ const Register = (props) => {
 
 
   function registerUser(){
-
+    MongoDBInterface.registerUser(userDetails).then(success => {
+      store.dispatch(setReduxUserDetails(userDetails))
+      console.log(success)
+    }).catch(error => {
+      console.log(error)
+    })
   }
 
   const handleNext = () => {
-    if (steps[steps.length - 1].key === activeStep.key) {
+    if (steps[steps.length - 1].key == activeStep.key) {
       registerUser()
       return;
     }
@@ -124,7 +131,6 @@ const Register = (props) => {
   }
 
   function metamaskGuide() {
-    debugger;
     let metamaskAvailable = window.ethereum || window.web3;
     if (metamaskAvailable) {
       window.ethereum.enable();
@@ -226,16 +232,16 @@ const Register = (props) => {
                 as={Col}
                 className="formEntry"
                 md="12"
-                controlId="userId"
+                controlId="userID"
               >
                 <Form.Control
                   type="text"
-                  name="userId"
+                  name="userID"
                   label="Set your user name"
                   value={userDetails.userID}
-                  className={"titleArea"}
+                  className={"userID"}
                   placeholder="User name"
-                  // onChange={handleChange}
+                  onChange={handleChange}
                 />
               </Form.Group>
             </Row>
@@ -243,6 +249,15 @@ const Register = (props) => {
         );
         break;
     }
+  }
+
+  function handleChange(event){
+    let returnObj = {};
+    returnObj[event.target.name] = _.get(event, 'target.name') === 'price' ? Number(event.target.value):  event.target.value;
+    setUserDetails({
+      ...userDetails,
+      ...returnObj
+    })
   }
 
   return (

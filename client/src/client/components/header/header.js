@@ -9,10 +9,11 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Container, Row, Col } from "react-bootstrap";
 import BlockchainInterface from "../../interface/BlockchainInterface";
-
+import store from '../../redux/store'
 import { shallowEqual, useSelector } from "react-redux";
 import SearchBar from "../searchBar/SearchBar";
-
+import MongoDBInterface from "../../interface/MongoDBInterface";
+import { setReduxUserDetails } from "../../redux/actions"
 const Header = (props) => {
   let history = useHistory();
   const [currentMetamaskAccount, setCurrentMetamaskAccount] = useState(
@@ -23,12 +24,23 @@ const Header = (props) => {
     const { metamaskID = undefined } = reduxState;
     if (metamaskID) {
       setCurrentMetamaskAccount(metamaskID);
+      refreshUserDetails();
     }
-  }, [reduxState]);
+  }, [reduxState.metamaskID]);
 
   useEffect(() => {
+    console.log("getting user ingo")
     connectWallet();
   }, []);
+
+  function refreshUserDetails(){
+    MongoDBInterface.getUserInfo({metamaskID: currentMetamaskAccount}).then(userDetails =>{
+      store.dispatch(setReduxUserDetails(userDetails))
+    }).catch(success =>{
+      
+    })
+  }
+  
   function logoutUser() {
     console.log("logging out");
     localStorage.removeItem("userInfo");

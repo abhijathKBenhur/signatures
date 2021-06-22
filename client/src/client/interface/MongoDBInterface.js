@@ -56,8 +56,13 @@ export const buySignature = payload => {
     return api.post(`/buySignature`,payload) 
 }
 
+
 export const getUserInfo = payload => { 
     return api.post(`/getUserInfo`,payload) 
+}
+
+export const registerUser = payload => { 
+    return api.post(`/registerUser`,payload) 
 }
 
 
@@ -67,7 +72,9 @@ const MongoDBInterface = {
     updateIdeaID,
     getSignatureByHash,
     buySignature,
-    updatePrice
+    updatePrice,
+    registerUser,
+    getUserInfo
 }
 
 export default MongoDBInterface

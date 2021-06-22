@@ -5,6 +5,7 @@
     min-height: 100vh;
   }
   .mycollection {
+    min-height: calc(100vh - 60px);
     margin-top: 60px;
     padding: 0;
     .separator {
