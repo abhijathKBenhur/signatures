@@ -11,7 +11,7 @@ import "./Create.scss";
 import { FilePlus, X, Image as ImageFile, Plus } from "react-feather";
 import Hash from "ipfs-only-hash";
 import Image from "react-image-resizer";
-import { Container } from "react-bootstrap";
+import { Container, Spinner } from "react-bootstrap";
 import { Document, Page, pdfjs } from "react-pdf";
 import _ from "lodash";
 import { toast } from "react-toastify";
@@ -52,6 +52,7 @@ function Create(props) {
     fileType: '',
     fileData: undefined
   });
+  const [isPublishing, setIsPublishing] = useState(false);
   useEffect(() => {
     pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
   }, []);
@@ -168,6 +169,7 @@ function Create(props) {
   function saveToMongo(form) {
     MongoDBInterface.addSignature(form)
       .then((success) => {
+        setIsPublishing(false)
         toast.dark("Your thoughts have been submitted!", {
           position: "bottom-right",
           autoClose: 3000,
@@ -181,6 +183,7 @@ function Create(props) {
         // setSlideCount(finalSlideCount + 1)
       })
       .catch((err) => {
+        setIsPublishing(false)
         console.log(err);
       });
   }
@@ -198,6 +201,7 @@ function Create(props) {
     params.price =  typeof params.price === 'number' ? JSON.stringify(params.price) : params.price;
     params.fileType = fileData.fileType
     params.userID = reduxState.userDetails.userID
+    setIsPublishing(true)
     StorageInterface.getFilePaths(params)
       .then((success) => {
         params.PDFFile = _.get(_.find(success, { type: "PDFFile" }), "path");
@@ -558,11 +562,14 @@ function Create(props) {
                     variant="primary"
                     className="button"
                     bsstyle="primary"
+                    style={{ gap: '2px'}}
                     onClick={() => {
                       onNext();
                     }}
+                    disabled={slideCount === finalSlideCount && isPublishing}
                   >
-                    {getNextButtonText()}
+                    {getNextButtonText()} {"  "}
+                    {slideCount === finalSlideCount && isPublishing && <Spinner style={{width:'15px', height:'15px'}} animation="border" />}
                   </Button>
                 </Col>
               </Row>
