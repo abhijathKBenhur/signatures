@@ -51,9 +51,13 @@
     background-color: #fff;
     .first-section {
       flex: 1;
-      display: flex;
+      // display: flex;
       align-items: center;
       height: 100%;
+      padding: 10px;
+      h4{
+        text-transform: capitalize;
+      }
       .image-part {
         img {
           width: 130px;
@@ -126,6 +130,7 @@
     text-align: center;
   }
   .left-block {
+    margin-top: 10px;
     .left-block-content {
       flex: 1;
       max-height: 300px;

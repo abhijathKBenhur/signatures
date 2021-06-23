@@ -81,7 +81,7 @@ function Profile(props) {
             <Col md="12" className="mycollection">
               <Row className="loggedIn">
                 <Col md="2" className="left-block">
-                  <Row className="profile-section">
+                  {/* <Row className="profile-section"> */}
                   <Image
                           src={currentUserDetails.imageUrl}
                           height={150}
@@ -91,8 +91,8 @@ function Profile(props) {
                             borderRadius: "7px"
                           }}
                         />
-                  </Row>
-                  <Row className="profile-section">
+                  {/* </Row>  */}
+                  {/* <Row className="profile-section"> */}
                     <div className="left-block-content">
                       <h5>Website</h5>
                       <div className="options">
@@ -101,16 +101,19 @@ function Profile(props) {
                         <p>Portfolio</p>
                       </div>
                     </div>
-                  </Row>
+                  {/* </Row> */}
                 </Col>
                 <Col md="7" className="p-0">
                   <div className="userPane">
                     <div>
                       <div className="first-section">
-                        <div className="image-part">
+                        <h4>{_.get(currentUserDetails, 'userID')}</h4>
+                        <p>{_.get(currentUserDetails, 'email')}</p>
+                      {_.get(currentUserDetails, 'metamaskId') && <p>Meta mask ID- {_.get(currentUserDetails, 'metamaskId')}</p>}
+                        {/* <div className="image-part">
                           {JSON.stringify(currentUserDetails)}
                         </div>
-                       
+                        */}
                       </div>
                       <div className="second-section"></div>
                     </div>
