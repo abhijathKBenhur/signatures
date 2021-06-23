@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Button, Dropdown, Form, Nav } from "react-bootstrap";
+import { Button, Image, Form, Nav } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
 import logo from "../../../assets/logo/signatures.png";
 import _ from "lodash";
@@ -9,26 +9,29 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Container, Row, Col } from "react-bootstrap";
 import BlockchainInterface from "../../interface/BlockchainInterface";
-import store from '../../redux/store'
+import store from "../../redux/store";
 import { shallowEqual, useSelector } from "react-redux";
 import SearchBar from "../searchBar/SearchBar";
 import MongoDBInterface from "../../interface/MongoDBInterface";
-import { setReduxUserDetails } from "../../redux/actions"
+import { setReduxUserDetails } from "../../redux/actions";
 const Header = (props) => {
   let history = useHistory();
-  const [currentMetamaskAccount, setCurrentMetamaskAccount] = useState(
-    undefined
-  );
   const reduxState = useSelector((state) => state, shallowEqual);
+  const { metamaskID = undefined, userDetails = {} } = reduxState;
+  const [currentMetamaskAccount, setCurrentMetamaskAccount] = useState(
+    metamaskID
+  );
+  const [currentUserDetails, setCurrentUserDetails] = useState(userDetails);
+
   useEffect(() => {
     const { metamaskID = undefined } = reduxState;
     if (metamaskID) {
       setCurrentMetamaskAccount(metamaskID);
     }
-  }, [reduxState.metamaskID]);
+  }, [reduxState]);
 
   useEffect(() => {
-    console.log("getting user ingo")
+    console.log("getting user ingo");
     connectWallet();
   }, []);
 
@@ -36,16 +39,20 @@ const Header = (props) => {
     refreshUserDetails();
   }, [currentMetamaskAccount]);
 
-  function refreshUserDetails(){
-    if(!_.isEmpty(currentMetamaskAccount)){
-      MongoDBInterface.getUserInfo({metamaskId: currentMetamaskAccount}).then(userDetails =>{
-        store.dispatch(setReduxUserDetails(_.get(userDetails,'data.data')))
-      }).catch(success =>{
-        store.dispatch(setReduxUserDetails({}))
-      })
+  function refreshUserDetails() {
+    if (!_.isEmpty(currentMetamaskAccount)) {
+      MongoDBInterface.getUserInfo({ metamaskId: currentMetamaskAccount })
+        .then((userDetails) => {
+          store.dispatch(setReduxUserDetails(_.get(userDetails, "data.data")));
+          setCurrentUserDetails(_.get(userDetails, "data.data"));
+        })
+        .catch((success) => {
+          setCurrentUserDetails({});
+          store.dispatch(setReduxUserDetails({}));
+        });
     }
   }
-  
+
   function logoutUser() {
     console.log("logging out");
     localStorage.removeItem("userInfo");
@@ -140,7 +147,6 @@ const Header = (props) => {
             </Nav.Item> */}
           </div>
           <div className="middle-section">
-            
             {/* <Form.Control size="sm" type="text" placeholder="Normal text" /> */}
           </div>
 
@@ -155,36 +161,48 @@ const Header = (props) => {
             >
               Connect
             </Button> */}
-            {_.isEmpty(currentMetamaskAccount) ? 
-            <Button
-            variant="primary"
-            className="button"
-            bsstyle="primary"
-            onClick={() => {
-              createnew();
-            }}
-          >
-            Connect Wallet
-          </Button>:
-            <Button
-            variant="primary"
-            className="button"
-            bsstyle="primary"
-            onClick={() => {
-              createnew();
-            }}
-          >
-            Publish
-          </Button>
-          }
-            
+            {_.isEmpty(currentMetamaskAccount) ? (
+              <Button
+                variant="primary"
+                className="button"
+                bsstyle="primary"
+                onClick={() => {
+                  createnew();
+                }}
+              >
+                Connect Wallet
+              </Button>
+            ) : (
+              <Button
+                variant="primary"
+                className="button"
+                bsstyle="primary"
+                onClick={() => {
+                  createnew();
+                }}
+              >
+                Publish
+              </Button>
+            )}
 
-            <User
-              className="cursor-pointer header-icons"
-              onClick={() => {
-                gotoPortfolio();
-              }}
-            ></User>
+            {_.isEmpty(currentUserDetails.imageUrl) ? (
+              <User
+                className="cursor-pointer header-icons"
+                onClick={() => {
+                  gotoPortfolio();
+                }}
+              ></User>
+            ) : (
+              <Image
+                className="cursor-pointer header-icons"
+                src={currentUserDetails.imageUrl}
+                roundedCircle
+                width="20px"
+                onClick={() => {
+                  gotoPortfolio();
+                }}
+              ></Image>
+            )}
 
             {/* <Dropdown>
               <Dropdown.Toggle

@@ -24,8 +24,7 @@ const CollectionCard = (props) => {
   }
 
   function copyClipBoard() {
-    let shareURL =
-      window.location.href + "/signature/" + signature.PDFHash;
+    let shareURL = window.location.href + "/signature/" + signature.PDFHash;
     navigator.clipboard.writeText(shareURL);
 
     toast.dark("Copied to clipboard!", {
@@ -111,7 +110,73 @@ const CollectionCard = (props) => {
       className="collection-card col-md-offset-2"
     >
       <div className="content cursor-pointer">
-       <div
+      <div className="collection-header d-flex justify-content-between align-items-center p-2">
+            <div className="header-left">
+              {_.isEmpty(signature.ideaID) ? (
+                <img width={20} src={loader}></img>
+              ) : (
+                <div></div>
+              )}
+            </div>
+            <div className="header-right">
+              <Dropdown>
+                <Dropdown.Toggle
+                  as={CollectionMenu}
+                  id="collection-dropdown"
+                ></Dropdown.Toggle>
+                <Dropdown.Menu>
+                  <Dropdown.Item
+                    className="dropdown-item"
+                    eventKey="1"
+                    onClick={() => {
+                      openCardView(signature);
+                    }}
+                  >
+                    <Eye className="signature-icons" size={15}></Eye>
+                    View
+                  </Dropdown.Item>
+
+                  <Dropdown.Item
+                    className="dropdown-item"
+                    eventKey="2"
+                    onClick={() => {
+                      editPrice(signature);
+                    }}
+                  >
+                    <Edit3 className="signature-icons" size={15}></Edit3>
+                    Edit Price
+                  </Dropdown.Item>
+
+                  <Dropdown.Item
+                    className="dropdown-item"
+                    eventKey="2"
+                    onClick={() => {
+                      copyClipBoard();
+                    }}
+                  >
+                    <Share className="signature-icons" size={15}></Share>
+                    Share
+                  </Dropdown.Item>
+
+                  <Dropdown.Item
+                    className="dropdown-item"
+                    eventKey="2"
+                    onClick={() => {
+                      openInEtherscan();
+                    }}
+                  >
+                    <Crosshair
+                      className="signature-icons"
+                      size={15}
+                    ></Crosshair>
+                    View transaction
+                  </Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+            </div>
+          </div>
+        
+        <div
           className="collection-preview"
           onClick={() => {
             openCardView(signature);
@@ -132,74 +197,12 @@ const CollectionCard = (props) => {
             <p className="text-left title">{signature.title}</p>
           </div>
           <div className="idea-details">
-          <span className="placeholder">Dummy</span>
-                      <span className="price">{signature.price}</span>
-
-        </div>
-        <div className="collection-header d-flex justify-content-between align-items-center p-2">
-          <div className="header-left">
-            {_.isEmpty(signature.ideaID) ? (
-              <img width={20} src={loader}></img>
-            ) : (
-              <div></div>
-            )}
+            <span className="placeholder">{signature.userID}</span>
+            <span className="price">
+              {signature.price && Web3Utils.fromWei(signature.price)} ETH
+            </span>
           </div>
-          <div className="header-right">
-            <Dropdown>
-              <Dropdown.Toggle
-                as={CollectionMenu}
-                id="collection-dropdown"
-              ></Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item
-                  className="dropdown-item"
-                  eventKey="1"
-                  onClick={() => {
-                    openCardView(signature);
-                  }}
-                >
-                  <Eye className="signature-icons" size={15}></Eye>
-                  View
-                </Dropdown.Item>
-
-                <Dropdown.Item
-                  className="dropdown-item"
-                  eventKey="2"
-                  onClick={() => {
-                    editPrice(signature);
-                  }}
-                >
-                  <Edit3 className="signature-icons" size={15}></Edit3>
-                  Edit Price
-                </Dropdown.Item>
-
-                <Dropdown.Item
-                  className="dropdown-item"
-                  eventKey="2"
-                  onClick={() => {
-                    copyClipBoard();
-                  }}
-                >
-                  <Share className="signature-icons" size={15}></Share>
-                  Share
-                </Dropdown.Item>
-
-                <Dropdown.Item
-                  className="dropdown-item"
-                  eventKey="2"
-                  onClick={() => {
-                    openInEtherscan();
-                  }}
-                >
-                  <Crosshair className="signature-icons" size={15}></Crosshair>
-                  View transaction
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
           </div>
-        </div>
-       
-        </div>
       </div>
     </Col>
   );

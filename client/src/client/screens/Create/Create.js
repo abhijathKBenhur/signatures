@@ -22,7 +22,7 @@ import { shallowEqual, useSelector } from "react-redux";
 
 function Create(props) {
   const reduxState = useSelector((state) => state, shallowEqual);
-  const { metamaskID = undefined } = reduxState;
+  const { metamaskID = undefined , userDetails = {}} = reduxState;
   const imageRef = useRef()
   const [form, setFormData] = useState({
     owner: metamaskID,
@@ -186,6 +186,7 @@ function Create(props) {
   }
 
   function saveToBlockChain(form) {
+
     BlockChainInterface.publishIdea(form, saveToMongo, updateIdeaIDToMongo);
   }
 
@@ -196,6 +197,7 @@ function Create(props) {
     params.fileType = fileData.fileType;
     params.price =  typeof params.price === 'number' ? JSON.stringify(params.price) : params.price;
     params.fileType = fileData.fileType
+    params.userID = reduxState.userDetails.userID
     StorageInterface.getFilePaths(params)
       .then((success) => {
         params.PDFFile = _.get(_.find(success, { type: "PDFFile" }), "path");

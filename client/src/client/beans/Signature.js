@@ -13,6 +13,7 @@ export default class Signature{
         this.fileType = options.fileType
         this.thumbnail = options.thumbnail
         this.transactionID = options.transactionID
+        this.userID = options.userID
         this.ideaID = options.ideaID
     }
 }

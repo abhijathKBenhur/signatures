@@ -103,7 +103,7 @@ function Profile(props) {
                     </div>
                   </Row>
                 </Col>
-                <Col md="8" className="p-0">
+                <Col md="7" className="p-0">
                   <div className="userPane">
                     <div>
                       <div className="first-section">
@@ -136,7 +136,7 @@ function Profile(props) {
                     </Tabs>
                   </div>
                 </Col>
-                <Col md="2" className="right-block">
+                <Col md="3" className="right-block">
                   <div className="right-block-content">
                     <h5>Awards</h5>
                     <div className="options">

@@ -13,7 +13,8 @@ const Signature = new Schema(
         PDFHash: { type: String ,required: true},
         fileType: { type: String ,required: true},
         transactionID: { type: String},
-        ideaID: { type: String}
+        ideaID: { type: String},
+        userID: { type: String }
     },
     { timestamps: true },
 )

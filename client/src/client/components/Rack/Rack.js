@@ -8,6 +8,7 @@ import { Row, Col, Container } from "react-bootstrap";
 import "./Rack.scss";
 import BlockchainInterface from "../../interface/BlockchainInterface";
 import Signature from "../../beans/Signature";
+import Web3Utils from "web3-utils";
 const Rack = (props) => {
   let history = useHistory();
   function openCardView(signature) {
@@ -20,7 +21,6 @@ const Rack = (props) => {
     <Container>
       <Row className="rack">
         <Col md="12" className="mycollection">
-          
           <Row className="collections">
             {props.deck.map((signature, index) => {
               return (
@@ -40,10 +40,7 @@ const Rack = (props) => {
                       <div className="header-left"></div>
                       <div className="header-right"></div>
                     </div> */}
-                    <div
-                      className="collection-preview"
-                      
-                    >
+                    <div className="collection-preview">
                       <Col md="12 collection-image">
                         <Image
                           src={signature.thumbnail}
@@ -51,7 +48,7 @@ const Rack = (props) => {
                           className=""
                           style={{
                             background: "#f1f1f1",
-                            borderRadius: "7px"
+                            borderRadius: "7px",
                           }}
                         />
                       </Col>
@@ -61,8 +58,12 @@ const Rack = (props) => {
                         <p className="text-left title">{signature.title}</p>
                       </div>
                       <div className="idea-details">
-                      <span className="placeholder">Dummy</span>
-                      <span className="price">{signature.price}</span>
+                        <span className="placeholder">{signature.userID}</span>
+                        <span className="price">
+                          {signature.price &&
+                            Web3Utils.fromWei(signature.price)}{" "}
+                          ETH
+                        </span>
                       </div>
                     </div>
                   </div>
