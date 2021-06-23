@@ -24,7 +24,6 @@ const Header = (props) => {
     const { metamaskID = undefined } = reduxState;
     if (metamaskID) {
       setCurrentMetamaskAccount(metamaskID);
-      refreshUserDetails();
     }
   }, [reduxState.metamaskID]);
 
@@ -33,12 +32,18 @@ const Header = (props) => {
     connectWallet();
   }, []);
 
+  useEffect(() => {
+    refreshUserDetails();
+  }, [currentMetamaskAccount]);
+
   function refreshUserDetails(){
-    MongoDBInterface.getUserInfo({metamaskID: currentMetamaskAccount}).then(userDetails =>{
-      store.dispatch(setReduxUserDetails(userDetails))
-    }).catch(success =>{
-      
-    })
+    if(!_.isEmpty(currentMetamaskAccount)){
+      MongoDBInterface.getUserInfo({metamaskId: currentMetamaskAccount}).then(userDetails =>{
+        store.dispatch(setReduxUserDetails(_.get(userDetails,'data.data')))
+      }).catch(success =>{
+        store.dispatch(setReduxUserDetails({}))
+      })
+    }
   }
   
   function logoutUser() {

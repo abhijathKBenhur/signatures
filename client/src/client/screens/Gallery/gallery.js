@@ -1,14 +1,16 @@
 import _ from "lodash";
-import { Row, Col, Carousel, Container } from "react-bootstrap";
+import { Row, Col, Carousel, Container,Button } from "react-bootstrap";
 import React, { useState, useEffect } from "react";
 import Rack from "../../components/Rack/Rack";
 import "./gallery.scss";
 import MongoDBInterface from "../../interface/MongoDBInterface";
+import { useHistory } from "react-router-dom";
 import Cookies from "universal-cookie";
 import cover from "../../../assets/images/cover.jpeg";
 import user from "../../../assets/images/user1.png";
 import DiscoverMore from "../../components/discover-more/discover-more";
 function gallery(props) {
+  let history = useHistory();
   const cookies = new Cookies();
   const [signatureList, setSignatureList] = useState([]);
   const [visitedUser, setIsVisitedUser] = useState(cookies.get("visitedUser"));
@@ -24,6 +26,10 @@ function gallery(props) {
     };
   }, []);
 
+  function gotoProfile(){
+    history.push("/profile");
+  }
+
   return (
     <Container fluid>
       <div className="gallery d-flex flex-column">
@@ -36,7 +42,16 @@ function gallery(props) {
                     <Row>
                       <Col sm={3}>
                         <div>
-                          <div className="button-label">Getting Started</div>
+                          <Button
+                            variant="secondary"
+                            className="button"
+                            bsstyle="primary"
+                            onClick={() => {
+                              gotoProfile();
+                            }}
+                          >
+                            Getting Started
+                          </Button>
                         </div>
                       </Col>
                       <Col sm={8}>
@@ -50,13 +65,12 @@ function gallery(props) {
                           fugiat nulla pariatur. Excepteur sint occaecat
                           cupidatat non proident, sunt in culpa qui officia
                           deserunt mollit anim id est laborum.
-                        
                         </div>
                       </Col>
                       <Col sm={1}>
-                          <div className="content-profile">
-                            <img src={user} />
-                          </div>
+                        <div className="content-profile">
+                          <img src={user} />
+                        </div>
                       </Col>
                     </Row>
                   </Container>
@@ -66,7 +80,16 @@ function gallery(props) {
                     <Row>
                       <Col sm={3}>
                         <div>
-                          <div className="button-label">Validate</div>
+                        <Button
+                      variant="secondary"
+                      className="button"
+                      bsstyle="primary"
+                      onClick={() => {
+                        gotoProfile();
+                      }}
+                    >
+                      View our contract
+                    </Button>
                         </div>
                       </Col>
                       <Col sm={8}>
@@ -80,13 +103,12 @@ function gallery(props) {
                           fugiat nulla pariatur. Excepteur sint occaecat
                           cupidatat non proident, sunt in culpa qui officia
                           deserunt mollit anim id est laborum.
-                         
                         </div>
                       </Col>
                       <Col sm={1}>
-                          <div className="content-profile">
-                            <img src={user} />
-                          </div>
+                        <div className="content-profile">
+                          <img src={user} />
+                        </div>
                       </Col>
                     </Row>
                   </Container>
@@ -96,7 +118,16 @@ function gallery(props) {
                     <Row>
                       <Col sm={3}>
                         <div>
-                          <div className="button-label">View Contact</div>
+                        <Button
+                      variant="secondary"
+                      className="button"
+                      bsstyle="primary"
+                      onClick={() => {
+                        gotoProfile();
+                      }}
+                    >
+                      What is metamask
+                    </Button>
                         </div>
                       </Col>
                       <Col sm={8}>
@@ -110,13 +141,12 @@ function gallery(props) {
                           fugiat nulla pariatur. Excepteur sint occaecat
                           cupidatat non proident, sunt in culpa qui officia
                           deserunt mollit anim id est laborum.
-                        
                         </div>
                       </Col>
                       <Col sm={1}>
-                          <div className="content-profile">
-                            <img src={user} />
-                          </div>
+                        <div className="content-profile">
+                          <img src={user} />
+                        </div>
                       </Col>
                     </Row>
                   </Container>

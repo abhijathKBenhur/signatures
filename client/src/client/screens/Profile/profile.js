@@ -7,10 +7,10 @@ import {
   Form,
   InputGroup,
   Container,
-  Button,
   Tabs,
   Tab,
 } from "react-bootstrap";
+import Image from "react-image-resizer";
 import { useHistory } from "react-router-dom";
 import "./profile.scss";
 import { Shimmer } from "react-shimmer";
@@ -29,19 +29,21 @@ function Profile(props) {
   const [currentMetamaskAccount, setCurrentMetamaskAccount] = useState(
     metamaskID
   );
+  const [currentUserDetails, setCurrentUserDetails] = useState(userDetails);
   const [profileCollection, setProfileCollection] = useState([]);
   let history = useHistory();
   const [key, setKey] = useState("collections");
 
   useEffect(() => {
-    const { metamaskID = undefined } = reduxState;
+    const { metamaskID = undefined, userDetails = {} } = reduxState;
     if (metamaskID) {
       setCurrentMetamaskAccount(metamaskID);
-      fetchSignatures()
+      fetchSignatures();
+    }
+    if (userDetails) {
+      setCurrentUserDetails(userDetails);
     }
   }, [reduxState]);
-
-
 
   function fetchSignatures() {
     MongoDBInterface.getSignatures({ userName: currentMetamaskAccount }).then(
@@ -50,7 +52,7 @@ function Profile(props) {
         let isEmptyPresent = _.find(response, (responseItem) => {
           return _.isEmpty(responseItem.ideaID);
         });
-        setProfileCollection(response)
+        setProfileCollection(response);
         // if(isEmptyPresent){
         //   clearInterval(fetchInterval)
         // }
@@ -70,43 +72,49 @@ function Profile(props) {
   return (
     <Container fluid>
       <Row className="profile">
-        {!_.isEmpty(userDetails.userID) ? (
+        {_.isEmpty(currentUserDetails.userID) ? (
           <Row className="register-modal">
-            <Register ></Register>
+            <Register></Register>
           </Row>
         ) : (
           <div className="separator w-100">
             <Col md="12" className="mycollection">
-              <Row>
-                <div className="userPane">
-                  <div>
-                    <div className="first-section">
-                      <div className="image-part">
-                        {JSON.stringify(userDetails)}
-                        <img src={userDetails.imageUrl} />
-                      </div>
-                      <div className="user-personal-info">
-                        <h5>{userDetails.fullName}</h5>
-                        <p style={{ margin: "0" }}>{userDetails.email}</p>
-                        <div className="buttons-block"></div>
-                      </div>
-                    </div>
-                    <div className="second-section"></div>
-                  </div>
-                </div>
-              </Row>
               <Row className="loggedIn">
-                <Col md="2">
-                  <div className="right-block">
-                    <h5>Website</h5>
-                    <div className="options">
-                      <p>Website</p>
-                      <p>Blog</p>
-                      <p>Portfolio</p>
+                <Col md="2" className="left-block">
+                  <Row className="profile-section">
+                  <Image
+                          src={currentUserDetails.imageUrl}
+                          height={150}
+                          className=""
+                          style={{
+                            background: "#f1f1f1",
+                            borderRadius: "7px"
+                          }}
+                        />
+                  </Row>
+                  <Row className="profile-section">
+                    <div className="left-block-content">
+                      <h5>Website</h5>
+                      <div className="options">
+                        <p>Website</p>
+                        <p>Blog</p>
+                        <p>Portfolio</p>
+                      </div>
+                    </div>
+                  </Row>
+                </Col>
+                <Col md="8" className="p-0">
+                  <div className="userPane">
+                    <div>
+                      <div className="first-section">
+                        <div className="image-part">
+                          {JSON.stringify(currentUserDetails)}
+                        </div>
+                       
+                      </div>
+                      <div className="second-section"></div>
                     </div>
                   </div>
-                </Col>
-                <Col md="8">
                   <div className="tabs-wrapper">
                     <Tabs
                       id="controlled-tab-example"
@@ -128,9 +136,9 @@ function Profile(props) {
                     </Tabs>
                   </div>
                 </Col>
-                <Col md="2">
-                  <div className="right-block">
-                    <h5>Website</h5>
+                <Col md="2" className="right-block">
+                  <div className="right-block-content">
+                    <h5>Awards</h5>
                     <div className="options">
                       <p>Website</p>
                       <p>Blog</p>

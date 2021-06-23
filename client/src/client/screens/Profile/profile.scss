@@ -1,138 +1,19 @@
 @import "../../commons/Common.scss";
 
 .profile {
-  .register-modal{
+  .register-modal {
     min-height: 100vh;
   }
-  .mycollection {
-    min-height: calc(100vh - 60px);
+  .separator {
     margin-top: 60px;
-    padding: 0;
-    .separator {
-      margin-top: 25px;
-      display: flex;
-      min-height: calc(100vh - 230px);
-      .intial-block {
-        flex: 1;
-        max-height: 300px;
-        padding: 20px;
-        background-color: #fff;
-        margin-right: 20px;
-        h5 {
-          text-transform: uppercase;
-          font-size: 17px;
-          font-weight: 500;
-        }
-        .options {
-          margin-top: 20px;
-          p {
-            //    margin: 0;
-          }
-        }
-      }
-      .tabs-wrapper {
-        flex: 5;
-      }
-      .nav-tabs {
-        a {
-          color: #000;
-          &.active {
-            border-bottom: 2px solid #79589f;
-            color: #79589f;
-          }
-        }
-      }
-      .tab-content {
-      }
-    }
-    .userPane {
-      padding: 20px;
-      height: 230px;
-      display: flex;
-      border-bottom: 1px solid #e5e5e5;
-      background-color: #fff;
-      .first-section {
-        flex: 1;
-        display: flex;
-        align-items: center;
-        height: 100%;
-        .image-part {
-          img {
-            width: 130px;
-            height: 130px;
-            object-fit: cover;
-          }
-        }
-        .user-personal-info {
-          flex: 1;
-          height: inherit;
-          padding: 20px;
-          border-right: 1px solid #cdcdcd;
-          .buttons-block {
-            .btn {
-              padding: 15px;
-              &.btn-success {
-                border: none !important;
-              }
-              &.btn-outline-primary {
-                border-color: #7070f9;
-                color: #7070f9;
-              }
-            }
-          }
-        }
-      }
-      .second-section {
-        flex: 1;
-        padding: 20px;
-        .detail {
-          display: flex;
-          padding: 0 10px;
-          .key-name {
-            flex: 1;
-            font-weight: 600;
-          }
-          .value {
-            flex: 2;
-          }
-        }
-      }
-      .userInfo {
-        display: flex;
-        align-content: center;
-        text-align: center;
-      }
-      .profileHolder {
-        height: 75px;
-        width: 75px;
-        border-radius: 150px;
-        border: 2px solid #f1f1f1;
-        align-self: flex-end;
-        position: relative;
-        background-color: white;
-        top: 35px;
-        justify-content: center;
-        -webkit-align-items: center;
-        display: flex;
-      }
-    }
-    .collection-wrapper {
-      display: flex;
-
-      .middle-block {
-        flex: 4;
-      }
-    }
-    .transactions-wrapper {
-      min-height: 300px;
-      text-align: center;
-    }
-    .right-block {
+    display: flex;
+    min-height: calc(100vh - 60px);
+    .intial-block {
       flex: 1;
       max-height: 300px;
       padding: 20px;
       background-color: #fff;
-      margin-left: 20px;
+      margin-right: 20px;
       h5 {
         text-transform: uppercase;
         font-size: 17px;
@@ -145,8 +26,143 @@
         }
       }
     }
-    .collection-container {
-      max-width: 100%;
+
+    .tabs-wrapper {
+      flex: 5;
+      .nav-tabs {
+        a {
+          color: #000;
+          &.active {
+            border-bottom: 2px solid #79589f;
+            color: #79589f;
+          }
+        }
+      }
     }
+
+    .tab-content {
+    }
+  }
+  .userPane {
+    padding: 0px;
+    height: 230px;
+    display: flex;
+    background-color: #fff;
+    .first-section {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      height: 100%;
+      .image-part {
+        img {
+          width: 130px;
+          height: 130px;
+          object-fit: cover;
+        }
+      }
+      .user-personal-info {
+        flex: 1;
+        height: inherit;
+        padding: 20px;
+        border-right: 1px solid #cdcdcd;
+        .buttons-block {
+          .btn {
+            padding: 15px;
+            &.btn-success {
+              border: none !important;
+            }
+            &.btn-outline-primary {
+              border-color: #7070f9;
+              color: #7070f9;
+            }
+          }
+        }
+      }
+    }
+    .second-section {
+      flex: 1;
+      padding: 20px;
+      .detail {
+        display: flex;
+        padding: 0 10px;
+        .key-name {
+          flex: 1;
+          font-weight: 600;
+        }
+        .value {
+          flex: 2;
+        }
+      }
+    }
+    .userInfo {
+      display: flex;
+      align-content: center;
+      text-align: center;
+    }
+    .profileHolder {
+      height: 75px;
+      width: 75px;
+      border-radius: 150px;
+      border: 2px solid #f1f1f1;
+      align-self: flex-end;
+      position: relative;
+      background-color: white;
+      top: 35px;
+      justify-content: center;
+      -webkit-align-items: center;
+      display: flex;
+    }
+  }
+  .collection-wrapper {
+    display: flex;
+
+    .middle-block {
+      flex: 4;
+    }
+  }
+  .transactions-wrapper {
+    min-height: 300px;
+    text-align: center;
+  }
+  .left-block {
+    .left-block-content {
+      flex: 1;
+      max-height: 300px;
+      padding: 20px;
+      background-color: #fff;
+      h5 {
+        text-transform: uppercase;
+        font-size: 17px;
+        font-weight: 500;
+      }
+      .options {
+        margin-top: 20px;
+        p {
+          //    margin: 0;
+        }
+      }
+    }
+  }
+  .right-block {
+    .right-block-content {
+      flex: 1;
+      max-height: 300px;
+      padding: 20px;
+      background-color: #fff;
+      h5 {
+        text-transform: uppercase;
+        font-size: 17px;
+        font-weight: 500;
+      }
+      .options {
+        margin-top: 20px;
+        p {
+          //    margin: 0;
+        }
+      }
+    }
+  }
+  .collection-container {
+    max-width: 100%;
   }
 }

@@ -301,7 +301,7 @@ const Signature = (props) => {
       >
         <Col md="12" sm="12" lg="12" xs="12" className="responsive-content">
           <Row className="signature-container ">
-            <Col sm="12" lg="6" xs="12" md="6" className="left-side h-100">
+            <Col sm="12" lg="7" xs="12" md="6" className="left-side h-100">
                 {PDFFile ?  (
                   <div className="pdfUploaded h-100 overflow-auto align-items-center justify-content-center d-flex">
                     {/* <Document file={PDFFile} className="pdf-document">
@@ -311,7 +311,7 @@ const Signature = (props) => {
                   </div>
                 ): <Spinner animation="border" />}
             </Col>
-            <Col sm="12" lg="6" xs="12" md="6"  className="right-side">
+            <Col sm="12" lg="5" xs="12" md="6"  className="right-side">
               <div className="top-section">
                 <Row className="form-row title-row">
                   <span>{signature.title}</span>
