@@ -24,10 +24,25 @@ const REGISTRATION_LEVEL = {
     BASE_4: "BASE_4"
 }
 
+const STORAGE_TYPE = {
+    PUBLIC: "PUBLIC",
+    PRIVATE: "PRIVATE",
+    SELF: "SELF",
+}
+
+const PURPOSES = {
+    AUCTION: "AUCTION",
+    SELL: "SELL",
+    COLLAB: "COLLAB",
+    KEEP: "KEEP",
+}
+
 const CONSTANTS = {
     CATEGORIES,
     PRIORITIES,
-    REGISTRATION_LEVEL
+    REGISTRATION_LEVEL,
+    STORAGE_TYPE,
+    PURPOSES
 }
 
 export default CONSTANTS
