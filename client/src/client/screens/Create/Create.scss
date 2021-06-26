@@ -43,6 +43,7 @@
                             svg{
                                 color: $white;
                                 margin-left: 10px;
+                                width: 15px;
                             }
                             label{
                                 color: $white;
@@ -288,6 +289,12 @@
     }
     .select__menu {
         z-index: 9999;
+    }
+    .css-1pahdxg-control{
+        background: transparent;
+    }
+    .css-26l3qy-menu {
+        color: $dark;
     }
 }
 

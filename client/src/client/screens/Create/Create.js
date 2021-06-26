@@ -201,6 +201,7 @@ function Create(props) {
   function handleSubmit() {
     const params = _.clone({ ...form });
     params.category = JSON.stringify(params.category);
+    params.creator = metamaskID
     params.IPFS = true;
     params.fileType = fileData.fileType;
     params.price =
@@ -421,7 +422,7 @@ function Create(props) {
                           className="basic-single"
                           classNamePrefix="select"
                           name="color"
-                          defaultValue={form.storage}
+                          defaultValue={{value: form.storage, label: form.storage}}
                           options={CONSTANTS.FileStorageDropdownOptions}
                         />
                   </Form.Group>
