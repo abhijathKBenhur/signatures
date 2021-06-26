@@ -1,11 +1,17 @@
-import _, { defer, has } from "lodash";
-import  React from 'react';
+import _, { defer, has } from "lodash";import  React from 'react';
 import Web3 from "web3";
 import NFTTokenBean from "../beans/Signature";
 import contractJSON from "../../contracts/ideaBlocks.json";
 import { toast } from "react-toastify";
 import store from '../redux/store';
 import { setReduxMetaMaskID } from "../redux/actions";
+
+
+import axios from 'axios'
+
+const api = axios.create({
+    baseURL: 'http://localhost:4000/api',
+})
 
 
 class BlockchainInterface {
@@ -20,6 +26,10 @@ class BlockchainInterface {
     window.ethereum && window.ethereum.on('accountsChanged', function (accounts) {
       parentThis.getAccountDetails();
     })
+  }
+  register_user = payload => { 
+    console.log("register_user")
+    return api.post(`/register_user`,payload) 
   }
 
   async getAccountDetails() {
