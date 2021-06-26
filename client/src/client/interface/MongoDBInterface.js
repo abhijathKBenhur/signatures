@@ -34,7 +34,11 @@ export const addSignature = payload => {
         transactionID: payload.transactionID,
         ideaID: payload.ideaID,
         fileType: payload.fileType,
-        userID: payload.userID
+        userID: payload.userID,
+        creator: payload.creator,
+        storage: payload.storage,
+        purpose: payload.purpose,
+        creator: payload.creator
     })
 }
 

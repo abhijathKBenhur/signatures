@@ -53,6 +53,7 @@ function Profile(props) {
           return _.isEmpty(responseItem.ideaID);
         });
         setProfileCollection(response);
+        
         // if(isEmptyPresent){
         //   clearInterval(fetchInterval)
         // }

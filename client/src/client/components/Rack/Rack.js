@@ -6,8 +6,6 @@ import { Feather, User } from "react-feather";
 import Image from "react-image-resizer";
 import { Row, Col, Container } from "react-bootstrap";
 import "./Rack.scss";
-import BlockchainInterface from "../../interface/BlockchainInterface";
-import Signature from "../../beans/Signature";
 import Web3Utils from "web3-utils";
 const Rack = (props) => {
   let history = useHistory();
@@ -25,7 +23,7 @@ const Rack = (props) => {
             {props.deck.map((signature, index) => {
               return (
                 <Col
-                  key={index}
+                  key={signature._id}
                   md="4"
                   lg="3"
                   sm="6"
