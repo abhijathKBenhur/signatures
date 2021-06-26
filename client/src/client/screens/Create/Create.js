@@ -1,35 +1,27 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import { Modal, Button, Row, Col, Form, InputGroup } from "react-bootstrap";
+import React, { useCallback, useEffect,  useState } from "react";
+import {  Button, Row, Col, Form, InputGroup } from "react-bootstrap";
 import MongoDBInterface from "../../interface/MongoDBInterface";
 import BlockChainInterface from "../../interface/BlockchainInterface";
 import StorageInterface from "../../interface/StorageInterface";
 import Dropzone, { useDropzone } from "react-dropzone";
 import CONSTANTS from "../../commons/Constants";
 import { useHistory } from "react-router-dom";
-import { withRouter } from "react-router-dom";
 import "./Create.scss";
 import {  X, Image as ImageFile, Info, UploadCloud, Check } from "react-feather";
 import Hash from "ipfs-only-hash";
-import Image from "react-image-resizer";
 import { Container, Spinner } from "react-bootstrap";
 import { Document, Page, pdfjs } from "react-pdf";
 import _ from "lodash";
 import { toast } from "react-toastify";
 import Select from "react-select";
 import "react-step-progress-bar/styles.css";
-import { ProgressBar, Step } from "react-step-progress-bar";
 import { shallowEqual, useSelector } from "react-redux";
 
 function Create(props) {
-  const FileStorageDropdownOptions = [
-    { value: 'ipfs', label: 'IPFS' },
-    { value: 's3', label: 'S3' },
-    { value: 'noSave', label: 'No save' },
-  ];
+ 
   
   const reduxState = useSelector((state) => state, shallowEqual);
   const { metamaskID = undefined, userDetails = {} } = reduxState;
-  const imageRef = useRef();
   const [form, setFormData] = useState({
     owner: metamaskID,
     creator: metamaskID,
@@ -326,7 +318,7 @@ function Create(props) {
       case "jpg":
       case "jpeg":
       case "png":
-        return <img src={`${fileData.fileData}`} />;
+        return <img src={`${fileData.fileData}`} alt=""/>;
 
       default:
         return null;
@@ -336,6 +328,8 @@ function Create(props) {
   function setPurpose(purpose) {
     setFormData({ ...form, purpose });
   }
+  
+  const isSelectedPurpose = (purpose) => form.purpose === purpose
 
   return (
     <Container >
@@ -355,16 +349,20 @@ function Create(props) {
                 ></Col>
               </Row> */}
               <Row className="content-container">
-                {slideCount == 0 ? 
+                {slideCount === 0 ? 
                 (
                   <Col md="6" sm="12" lg="6" xs="12" className="title-n-desc ">
                     <Row className="">
+                      
                       <Form.Group
                         as={Col}
                         className="formEntry"
                         md="12"
                         controlId="title"
                       >
+                         <div className="title-label">
+                        <Form.Label>Title </Form.Label>
+                           </div>
                         <Form.Control
                           type="text"
                           name="title"
@@ -386,6 +384,9 @@ function Create(props) {
                         md="12"
                         controlId="description"
                       >
+                        <div className="description-label">
+                        <Form.Label>Description </Form.Label>
+                           </div>
                         <InputGroup>
                           <Form.Control
                             value={form.description}
@@ -420,7 +421,8 @@ function Create(props) {
                           className="basic-single"
                           classNamePrefix="select"
                           name="color"
-                          options={FileStorageDropdownOptions}
+                          defaultValue={form.storage}
+                          options={CONSTANTS.FileStorageDropdownOptions}
                         />
                   </Form.Group>
                     </Row>
@@ -436,6 +438,9 @@ function Create(props) {
                   >
                     <Row className="">
                       <Form.Group as={Col} className="formEntry" md="12">
+                      <div className="tags-label">
+                        <Form.Label>Tags </Form.Label>
+                           </div>
                         <Select
                           value={form.category}
                           closeMenuOnSelect={true}
@@ -452,8 +457,8 @@ function Create(props) {
                       </Form.Group>
                     </Row>
                     <Row className="purpose-selector-row">
-                      <Col md="12">
-                        <div className="purpose-lable">
+                      <Col md="12" className="p-0">
+                        <div className="purpose-label">
                         <Form.Label>What would you like to do ? </Form.Label>
                            </div>
                         <Row>
@@ -465,7 +470,10 @@ function Create(props) {
                                 setPurpose(CONSTANTS.PURPOSES.AUCTION);
                               }}
                             >
-                               <Check />
+                              {
+                               isSelectedPurpose(CONSTANTS.PURPOSES.AUCTION) && <Check />
+                              }
+                               
                               Auction
                             </Button>
                           </Col>
@@ -477,7 +485,9 @@ function Create(props) {
                                 setPurpose(CONSTANTS.PURPOSES.SELL);
                               }}
                             >
-                               <Check />
+                              {
+                               isSelectedPurpose(CONSTANTS.PURPOSES.SELL) && <Check />
+                              }
                               Sell
                             </Button>
                           </Col>
@@ -489,7 +499,9 @@ function Create(props) {
                                 setPurpose(CONSTANTS.PURPOSES.COLLAB);
                               }}
                             >
-                               <Check />
+                              {
+                               isSelectedPurpose(CONSTANTS.PURPOSES.COLLAB) && <Check />
+                              }
                               Collab
                             </Button>
                           </Col>
@@ -501,7 +513,9 @@ function Create(props) {
                                 setPurpose(CONSTANTS.PURPOSES.KEEP);
                               }}
                             >
-                              <Check />
+                             {
+                               isSelectedPurpose(CONSTANTS.PURPOSES.KEEP) && <Check />
+                              }
                               Keep
                             </Button>
                           </Col>
@@ -511,7 +525,10 @@ function Create(props) {
                  
                     <Row className="">
                       <Form.Group as={Col} className="formEntry" md="12">
-                        <InputGroup className="">
+                      <div className="price-label">
+                        <Form.Label>Price </Form.Label>
+                           </div>
+                        <InputGroup className="price-input-group">
                           <Form.Control
                             type="number"
                             placeholder="how much do you think your idea is worth ?*"
@@ -526,13 +543,14 @@ function Create(props) {
                             name="price"
                             onChange={handleChange}
                           />
+                          <InputGroup.Text>ETH</InputGroup.Text>
                         </InputGroup>
                       </Form.Group>
                     </Row>
                   </Col>
                 )
                 }
-                {slideCount == 0 ?  (
+                {slideCount === 0 ?  (
                   <Col
                     md="6"
                     sm="12"
@@ -572,7 +590,7 @@ function Create(props) {
                           </div>
                         </div>
                         {formErrors.pdf && (
-                          <p className="invalid-paragraph"> PDF is required </p>
+                          <p className="invalid-paragraph"> File  is required </p>
                         )}
                       </Form.Row>
                     )}
@@ -594,7 +612,7 @@ function Create(props) {
                             clearImage();
                           }}
                         ></X>
-                        <img src={form.thumbnail.preview} />
+                        <img src={form.thumbnail.preview} alt="" />
                       </div>
                     )}
                     {!form.thumbnail && (
@@ -636,12 +654,12 @@ function Create(props) {
                 )
                 }
               </Row>
-              <Row className="footer-class p-1">
+              <Row className="footer-class ">
                 <Col
-                  md="12"
+                  md="6"
                   className="d-flex justify-content-between align-items-center "
                 >
-                  {slideCount == finalSlideCount + 1 ? (
+                  {slideCount === finalSlideCount + 1 ? (
                     <div></div>
                   ) : (
                     <Button
@@ -656,7 +674,14 @@ function Create(props) {
                     </Button>
                   )}
 
-                  <Button
+                 
+                </Col>
+                <Col
+                  md="6"
+                  className="d-flex justify-content-end align-items-center right-btn-container"
+                 
+                > 
+                 <Button
                     variant="primary"
                     className="button"
                     bsstyle="primary"
@@ -684,9 +709,9 @@ function Create(props) {
   );
 
   function getNextButtonText() {
-    if (slideCount == finalSlideCount) {
+    if (slideCount === finalSlideCount) {
       return "Publish";
-    } else if (slideCount == finalSlideCount + 1) {
+    } else if (slideCount === finalSlideCount + 1) {
       return "Done";
     } else if (slideCount < finalSlideCount) {
       return "Next";
@@ -694,9 +719,9 @@ function Create(props) {
   }
 
   function getBackButtonText() {
-    if (slideCount == 0) {
+    if (slideCount === 0) {
       return "Cancel";
-    } else if (slideCount == finalSlideCount + 1) {
+    } else if (slideCount === finalSlideCount + 1) {
       return "";
     } else if (slideCount <= finalSlideCount) {
       return "Back";
@@ -704,10 +729,10 @@ function Create(props) {
   }
 
   function onNext() {
-    if (slideCount == finalSlideCount) {
+    if (slideCount === finalSlideCount) {
       checkValidationOnButtonClick(slideCount);
       // handleSubmit();
-    } else if (slideCount == finalSlideCount + 1) {
+    } else if (slideCount === finalSlideCount + 1) {
       gotoGallery();
     } else if (slideCount < finalSlideCount) {
       checkValidationOnButtonClick(slideCount);
@@ -715,7 +740,7 @@ function Create(props) {
   }
 
   function onBack() {
-    if (slideCount == 0) {
+    if (slideCount === 0) {
       gotoGallery();
     } else {
       setSlideCount(slideCount - 1);

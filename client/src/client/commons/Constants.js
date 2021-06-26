@@ -36,13 +36,20 @@ const PURPOSES = {
     COLLAB: "COLLAB",
     KEEP: "KEEP",
 }
+const FileStorageDropdownOptions = [
+    { value: 'PUBLIC', label: 'PUBLIC' },
+    { value: 'PRIVATE', label: 'PRIVATE' },
+    { value: 'SELF', label: 'SELF' },
+  ];
 
 const CONSTANTS = {
     CATEGORIES,
     PRIORITIES,
     REGISTRATION_LEVEL,
     STORAGE_TYPE,
-    PURPOSES
+    PURPOSES,
+    FileStorageDropdownOptions
 }
+
 
 export default CONSTANTS
