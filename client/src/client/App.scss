@@ -79,27 +79,20 @@ body {
     color: white;
   }
   &.btn-primary {
-    background: $primary;
-    color: #fff;
-    &:hover {
-      background: $primary-dark !important;
-    }
-    &:active {
-      background: $primary-dark !important;
-      box-shadow: none;
+    background-color: $dark-orange;
+    border-color: $dark-orange  !important;
+    &:focus, &:hover, &:active {
+        background-color: $dark-orange !important;
+        box-shadow: none;
     }
   }
   &.btn-secondary {
-    color: $primary;
-    background-color: transparent;
-    &:hover {
-      background: $primary !important;
-      color: white;
-    }
-    &:active {
-      background: $primary !important;
-      box-shadow: none;
-      color: white;
+    border-color: $dark-orange  !important;
+    color: $dark-orange;
+    background: transparent;
+    &:focus, &:hover, &:active {
+        background: $dark-orange !important;
+        color: $white !important;
     }
   }
   &.btn-disabled {

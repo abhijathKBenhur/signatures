@@ -10,6 +10,9 @@ import { setReduxUserDetails } from "../../redux/actions";
 import metamaskLogo from "../../../assets/images/metamask.png";
 import coinBaseLogo from "../../../assets/images/coinbase.png";
 import MongoDBInterface from "../../interface/MongoDBInterface";
+import BlockchainInterface from "../../interface/BlockchainInterface";
+
+
 import store from '../../redux/store';
 // MetamaskID and userDetails are stored in separate redux stores
 // userDetails are stored as state
@@ -21,20 +24,20 @@ const Register = (props) => {
   );
   const [steps, setSteps] = useState([
     {
-      key: "socialLogin",
-      label: "My First Step",
+      key: "chainAddress",
+      label: "Integrate wallet",
       isDone: true,
       index: 0,
     },
     {
-      key: "chainAddress",
-      label: "My Second Step",
+      key: "socialLogin",
+      label: "Social login",
       isDone: false,
       index: 1,
     },
     {
       key: "userID",
-      label: "My Final Step",
+      label: "Pick your username",
       isDone: false,
       index: 2,
     },
@@ -53,8 +56,10 @@ const Register = (props) => {
 
 
   function registerUser(){
-    MongoDBInterface.registerUser(userDetails).then(success => {
-      store.dispatch(setReduxUserDetails(userDetails))
+    BlockchainInterface.register_user(userDetails).then(success => {
+      MongoDBInterface.registerUser(userDetails).then(mongoSuccess => {
+        store.dispatch(setReduxUserDetails(userDetails))
+      })
       console.log(success)
     }).catch(error => {
       console.log(error)
@@ -199,7 +204,7 @@ const Register = (props) => {
                   </Button>
                   <p className="mt-1"></p>
                 </div>
-                <div
+                {/* <div
                   className="coinbaseLogin loginMode d-flex flex-column align-items-center cursor-pointer"
                   onClick={() => {
                     coinBase();
@@ -216,7 +221,7 @@ const Register = (props) => {
                   >
                     Connect Coinbase
                   </Button>
-                </div>
+                </div> */}
               </div>
             ) : (
               <div>you are connected with {userDetails.metamaskId}</div>
@@ -237,7 +242,6 @@ const Register = (props) => {
                 <Form.Control
                   type="text"
                   name="userID"
-                  label="Set your user name"
                   value={userDetails.userID}
                   className={"userID"}
                   placeholder="User name"

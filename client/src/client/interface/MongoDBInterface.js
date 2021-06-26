@@ -71,6 +71,11 @@ export const registerUser = payload => {
     return api.post(`/registerUser`,payload) 
 }
 
+export const register_user = payload => { 
+    console.log("register_user")
+    return api.post(`/register_user`,payload) 
+  }
+  
 
 const MongoDBInterface = {
     getSignatures,

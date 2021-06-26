@@ -4,7 +4,7 @@
     z-index: 10000;
     // position: fixed;
     // height: 60px;
-    background-color: $primary-lightest !important;
+    background-color: $charcoal-dark !important;
     border-top: 1.5px solid $primary;
     // bottom:0;
     .container-fluid{
@@ -29,6 +29,7 @@
                         width: 100%;
                         margin-bottom: 16px;
                         cursor: pointer;
+                        color: white;
                         &:hover{
                         }
                     }

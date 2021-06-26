@@ -256,21 +256,8 @@
                     background: $dark;
                     border-bottom-right-radius: 10px;
                 }
-                .btn-primary {
-                    background-color: $dark-orange;
-                    border-color: $dark-orange  !important;
-                    &:focus, &:hover, &:active {
-                        background-color: $dark-orange !important;
-                    }
-                }
-                .btn-secondary{
-                    border-color: $dark-orange  !important;
-                    color: $dark-orange;
-                    &:focus, &:hover, &:active {
-                        background: $dark-orange !important;
-                        color: $white !important;
-                    }
-                }
+              
+              
             }
         }
     }
