@@ -5,15 +5,13 @@
     margin-top: 60px;
 
     .responsive-content{
-        // margin-top: 60px;
+        margin: 60px 0;
         padding: 0;
+        border-radius: 10px;
+        box-shadow: rgba(0, 0, 0, 0.18) 0px 21px 41px -13px;
+        background: $charcoal-dark;
         .create-form{
-            border: 1px solid $primary-light;
-            border-radius: 5px;
             height: 100%;
-            box-shadow: 0 0.5rem 1rem $primary-lightest !important;
-            background-color: #FFFFFF;
-            
             .create-wizard-bar{
                 height: 50px;
                 background-color: $primary-lightest;
@@ -29,24 +27,87 @@
                     margin-top: 10px;
                 }
                 .title-n-desc{
-                    padding: 30px 0 !important;
+                    padding: 30px ;
                     .titleArea, .descriptionArea{
-                        border: 0
+                        background: transparent;
+                        color: $white;
+                        border-bottom: 1px solid #676e76 ;
                     }
+                    .file-storage-group{
+                       
+                        .file-storage-label{
+                            display: flex;
+                            align-items: center;
+                            margin-bottom: 10px;
+                            svg{
+                                color: $white;
+                                margin-left: 10px;
+                            }
+                            label{
+                                color: $white;
+                                margin: 0;
+                            }
+                        }
+                       
+                        .select__control{
+                            background: transparent;
+                            .select__single-value{
+                                color: $white;
+                            }
+                        }
+                        
+                    }
+
                 }
                 .price-n-category{
+                    margin-top: 10px;
                     .price-selector ,.tag-selector{
+
                         .css-yk16xz-control{
-                            border:0
+                            border-bottom: 1px solid $white;
+                            background: transparent;
                         }
-                        border:0 ;
+                        background: transparent;
+                        color: $white;
+                        .css-g1d714-ValueContainer{
+                            .css-1rhbuit-multiValue{
+                                background: transparent;
+                                border: 1px solid $white;
+                               
+                            }
+                            .css-12jo7m5{
+                                color: $white;
+                            }
+                        }
+                    }
+                    .purpose-selector-row{
+                        margin: 50px 0;
+                        .purpose-lable{
+                            label {
+                                color: $white;
+                            }
+                        }
+                        .purpose-button{
+                            color: $white;
+                            border: 1px solid $white !important;
+                            position: relative;
+                            &:hover, &:active, &:focus{
+                                background: transparent;
+                            }
+                            svg {
+                                position: absolute;
+                                left: 10px;
+                            }
+                        }
                     }
                 }
                 .image-container{
                     display: flex;
                     justify-content: center;
                     align-items: flex-start;
-                    border: 1px dashed $primary-light;
+                    // border: 1px dashed $primary-light;
+                    border-radius: 10px;
+                    background: $dark;
                     .imageUploaded{
                         display: flex;
                         justify-content: center;
@@ -56,6 +117,7 @@
                             z-index: 1;
                             right: 10px;
                             top: 10px;
+                            color: $white;
                         }
                         img {
                             max-width: 100%;
@@ -64,15 +126,22 @@
                     }
                     .empty-image-row{
                         align-self: center;
+                        border: 1px dashed $white;
+                        cursor: pointer;
+                        height: 300px;
+                        width: 500px;
+                        border-radius: 20px;
+                        padding: 10px;
                         .emptyImage{
                             cursor: pointer;
+                            justify-content: center;
                             .dropfile-text{
                                 font-size: 15px;
-                                color: $primary;
+                                color: $white;
                                 margin-bottom: 10px;
                             }
                             .dropfile-icon{
-                                margin-top: 10px;
+                                margin-bottom: 10px;
                             }
                         }
                     }
@@ -81,8 +150,8 @@
                     display: flex;
                     justify-content: center;
                     align-items: center;
-                    // border: 1px dashed $primary-light;
-                    border-right: 1px dashed $primary-light;
+                    background: $dark;
+                    border-radius: 10px;
                     .pdfUploaded{
                         display: flex;
                         align-items: center;
@@ -93,6 +162,7 @@
                             z-index: 1;
                             right: 10px;
                             top: 10px;
+                            color: $white;
                             
                         }
                         .react-pdf__Document{
@@ -107,6 +177,7 @@
                     }
                     .empty-pdf-row{
                         align-self: center;
+                        justify-content: center;
                         .emptypdf{
                             cursor: pointer;
                             .dropfile-text{
@@ -119,7 +190,7 @@
                             }
                         }
                         .file-drop-contatiner{
-                            border: 1px dashed $primary;
+                            border: 1px dashed $white;
                             display: flex;
                             align-items: center;
                             justify-content: center;
@@ -129,6 +200,16 @@
                             width: 500px;
                             border-radius: 20px;
                             padding: 10px;
+                            svg {
+                                color: $white;
+                                width: 30px;
+                                height: 30px;
+                                margin-bottom: 10px;
+                            }
+                            p{
+                                color: $white;
+                                margin: 0;
+                            }
                         }
                     }
                     
@@ -140,8 +221,8 @@
                 bottom: 0;
                 width: 100%;
                 height: 50px;
-                background-color: #FFFFFF;
-                border-top: 1px solid $primary-light;
+                background-color: transparent;
+                border-radius: 10px;
             }
         }
     }

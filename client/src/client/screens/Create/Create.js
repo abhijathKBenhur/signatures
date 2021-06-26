@@ -8,7 +8,7 @@ import CONSTANTS from "../../commons/Constants";
 import { useHistory } from "react-router-dom";
 import { withRouter } from "react-router-dom";
 import "./Create.scss";
-import { FilePlus, X, Image as ImageFile, Plus } from "react-feather";
+import {  X, Image as ImageFile, Info, UploadCloud, Check } from "react-feather";
 import Hash from "ipfs-only-hash";
 import Image from "react-image-resizer";
 import { Container, Spinner } from "react-bootstrap";
@@ -21,6 +21,12 @@ import { ProgressBar, Step } from "react-step-progress-bar";
 import { shallowEqual, useSelector } from "react-redux";
 
 function Create(props) {
+  const FileStorageDropdownOptions = [
+    { value: 'ipfs', label: 'IPFS' },
+    { value: 's3', label: 'S3' },
+    { value: 'noSave', label: 'No save' },
+  ];
+  
   const reduxState = useSelector((state) => state, shallowEqual);
   const { metamaskID = undefined, userDetails = {} } = reduxState;
   const imageRef = useRef();
@@ -332,7 +338,7 @@ function Create(props) {
   }
 
   return (
-    <Container fluid>
+    <Container >
       <Row className="createform  d-flex">
         <Col md="12" sm="12" lg="12" xs="12" className="responsive-content">
           <Form
@@ -349,129 +355,8 @@ function Create(props) {
                 ></Col>
               </Row> */}
               <Row className="content-container">
-                {slideCount == 0 ? (
-                  <Col
-                    md="6"
-                    sm="12"
-                    lg="6"
-                    xs="12"
-                    className="pdf-container"
-                  >
-                    {form.PDFFile && (
-                      <div className="pdfUploaded w-100 h-100">
-                        <X
-                          className="removePDF cursor-pointer"
-                          onClick={() => {
-                            clearPDF();
-                          }}
-                        ></X>
-                        {fileData.fileData && getFileViewer()}
-                      </div>
-                    )}
-                    {!form.PDFFile && (
-                      <Form.Row className="empty-pdf-row">
-                        <div
-                          className="file-drop-contatiner"
-                          {...getRootProps()}
-                        >
-                          <input {...getInputProps()} />
-                          <p>
-                            Drag 'n' drop some files here, or click to select
-                            files
-                          </p>
-                          <div>
-                            <Plus />
-                          </div>
-                        </div>
-                        {formErrors.pdf && (
-                          <p className="invalid-paragraph"> PDF is required </p>
-                        )}
-                        {/* <Dropzone
-                          onDrop={onPDFDrop}
-                          acceptedFiles={".pdf"}
-                          className="dropzoneContainer"
-                        >
-                          {({ getRootProps, getInputProps }) => (
-                            <section className="container h-100 ">
-                              <div
-                                {...getRootProps()}
-                                className="emptypdf dropZone h-100 d-flex flex-column align-items-center"
-                              >
-                                <input {...getInputProps()} />
-                                <p className="m-0 dropfile-text">
-                                  Drop your PDF File here
-                                </p>
-                                <FilePlus
-                                  size={30}
-                                  className="dropfile-icon"
-                                  color="#79589F"
-                                ></FilePlus>
-                                {
-                                formErrors.pdf && <p className="invalid-paragraph"> PDF is required </p>
-                                }
-                              </div>
-                            </section>
-                          )}
-                        </Dropzone> */}
-                      </Form.Row>
-                    )}
-                  </Col>
-                ) : (
-                  <Col
-                    md="6"
-                    sm="12"
-                    lg="6"
-                    xs="12"
-                    className="image-container p-0"
-                  >
-                    {form.thumbnail && (
-                      <div className="imageUploaded w-100 h-100">
-                        <X
-                          className="removeImage cursor-pointer"
-                          onClick={() => {
-                            clearImage();
-                          }}
-                        ></X>
-                        <img src={form.thumbnail.preview} />
-                      </div>
-                    )}
-                    {!form.thumbnail && (
-                      <Form.Row className="empty-image-row">
-                        <Dropzone
-                          onDrop={onImageDrop}
-                          acceptedFiles={".jpeg"}
-                          className="dropzoneContainer"
-                        >
-                          {({ getRootProps, getInputProps }) => (
-                            <section className="container h-100 ">
-                              <div
-                                {...getRootProps()}
-                                className="emptyImage dropZone h-100 d-flex flex-column align-items-center"
-                              >
-                                <input {...getInputProps()} />
-                                <p className="m-0 dropfile-text">
-                                  Drop your thumbnail here
-                                </p>
-                                <ImageFile
-                                  size={30}
-                                  className="dropfile-icon"
-                                  color="#79589F"
-                                ></ImageFile>
-                                {formErrors.thumbnail && (
-                                  <p className="invalid-paragraph">
-                                    {" "}
-                                    Thumbnail is required{" "}
-                                  </p>
-                                )}
-                              </div>
-                            </section>
-                          )}
-                        </Dropzone>
-                      </Form.Row>
-                    )}
-                  </Col>
-                )}
-                {slideCount == 0 ? (
+                {slideCount == 0 ? 
+                (
                   <Col md="6" sm="12" lg="6" xs="12" className="title-n-desc ">
                     <Row className="">
                       <Form.Group
@@ -520,8 +405,28 @@ function Create(props) {
                         </InputGroup>
                       </Form.Group>
                     </Row>
+                    <Row  className="form-row">
+                    <Form.Group
+                        as={Col}
+                        className="file-storage-group"
+                        md="12"
+                        controlId="fileStorage"
+                      >
+                        <div className="file-storage-label">
+                        <Form.Label>File Storage </Form.Label>
+                        <Info />
+                        </div>
+                         <Select
+                          className="basic-single"
+                          classNamePrefix="select"
+                          name="color"
+                          options={FileStorageDropdownOptions}
+                        />
+                  </Form.Group>
+                    </Row>
                   </Col>
-                ) : (
+                ):
+                (
                   <Col
                     md="6"
                     sm="12"
@@ -546,6 +451,64 @@ function Create(props) {
                         />
                       </Form.Group>
                     </Row>
+                    <Row className="purpose-selector-row">
+                      <Col md="12">
+                        <div className="purpose-lable">
+                        <Form.Label>What would you like to do ? </Form.Label>
+                           </div>
+                        <Row>
+                          <Col md="6">
+                            <Button
+                              variant="outline-primary"
+                              className="purpose-button"
+                              onClick={() => {
+                                setPurpose(CONSTANTS.PURPOSES.AUCTION);
+                              }}
+                            >
+                               <Check />
+                              Auction
+                            </Button>
+                          </Col>
+                          <Col md="6">
+                            <Button
+                              variant="outline-primary"
+                              className="purpose-button"
+                              onClick={() => {
+                                setPurpose(CONSTANTS.PURPOSES.SELL);
+                              }}
+                            >
+                               <Check />
+                              Sell
+                            </Button>
+                          </Col>
+                          <Col md="6">
+                            <Button
+                              variant="outline-primary"
+                              className="purpose-button"
+                              onClick={() => {
+                                setPurpose(CONSTANTS.PURPOSES.COLLAB);
+                              }}
+                            >
+                               <Check />
+                              Collab
+                            </Button>
+                          </Col>
+                          <Col md="6">
+                            <Button
+                              variant="outline-primary"
+                              className="purpose-button"
+                              onClick={() => {
+                                setPurpose(CONSTANTS.PURPOSES.KEEP);
+                              }}
+                            >
+                              <Check />
+                              Keep
+                            </Button>
+                          </Col>
+                        </Row>
+                      </Col>
+                    </Row>
+                 
                     <Row className="">
                       <Form.Group as={Col} className="formEntry" md="12">
                         <InputGroup className="">
@@ -566,59 +529,112 @@ function Create(props) {
                         </InputGroup>
                       </Form.Group>
                     </Row>
-                    <Row className="">
-                      <Col md="12">
-                        <Row>Set purpose </Row>
-                        <Row>
-                          <Col md="6">
-                            <Button
-                              variant="outline-primary"
-                              className="purpose-button"
-                              onClick={() => {
-                                setPurpose(CONSTANTS.PURPOSES.AUCTION);
-                              }}
-                            >
-                              Auction
-                            </Button>
-                          </Col>
-                          <Col md="6">
-                            <Button
-                              variant="outline-primary"
-                              className="purpose-button"
-                              onClick={() => {
-                                setPurpose(CONSTANTS.PURPOSES.SELL);
-                              }}
-                            >
-                              Sell
-                            </Button>
-                          </Col>
-                          <Col md="6">
-                            <Button
-                              variant="outline-primary"
-                              className="purpose-button"
-                              onClick={() => {
-                                setPurpose(CONSTANTS.PURPOSES.COLLAB);
-                              }}
-                            >
-                              Collab
-                            </Button>
-                          </Col>
-                          <Col md="6">
-                            <Button
-                              variant="outline-primary"
-                              className="purpose-button"
-                              onClick={() => {
-                                setPurpose(CONSTANTS.PURPOSES.KEEP);
-                              }}
-                            >
-                              Keep
-                            </Button>
-                          </Col>
-                        </Row>
-                      </Col>
-                    </Row>
                   </Col>
-                )}
+                )
+                }
+                {slideCount == 0 ?  (
+                  <Col
+                    md="6"
+                    sm="12"
+                    lg="6"
+                    xs="12"
+                    className="pdf-container"
+                  >
+                    {form.PDFFile && (
+                      <div className="pdfUploaded w-100 h-100">
+                        <X
+                          className="removePDF cursor-pointer"
+                          onClick={() => {
+                            clearPDF();
+                          }}
+                        ></X>
+                        {fileData.fileData && getFileViewer()}
+                      </div>
+                    )}
+                    {!form.PDFFile && (
+                      <Form.Row className="empty-pdf-row">
+                        <div
+                          className="file-drop-contatiner"
+                          {...getRootProps()}
+                        >
+                          <input {...getInputProps()} />
+                          <UploadCloud/>
+                          <p>
+                            Drag 'n' drop some files here, or click to select
+                            files
+                            
+                          </p>
+                          <p>
+                          (Upload pdf / mp3 / image)
+                          </p>
+                          <div>
+                            {/* <Plus /> */}
+                          </div>
+                        </div>
+                        {formErrors.pdf && (
+                          <p className="invalid-paragraph"> PDF is required </p>
+                        )}
+                      </Form.Row>
+                    )}
+                  </Col>
+                )  : 
+                (
+                  <Col
+                    md="6"
+                    sm="12"
+                    lg="6"
+                    xs="12"
+                    className="image-container p-0"
+                  >
+                    {form.thumbnail && (
+                      <div className="imageUploaded w-100 h-100">
+                        <X
+                          className="removeImage cursor-pointer"
+                          onClick={() => {
+                            clearImage();
+                          }}
+                        ></X>
+                        <img src={form.thumbnail.preview} />
+                      </div>
+                    )}
+                    {!form.thumbnail && (
+                      <Form.Row className="empty-image-row">
+                        <Dropzone
+                          onDrop={onImageDrop}
+                          acceptedFiles={".jpeg"}
+                          className="dropzoneContainer"
+                        >
+                          {({ getRootProps, getInputProps }) => (
+                            <section className="container h-100 ">
+                              <div
+                                {...getRootProps()}
+                                className="emptyImage dropZone h-100 d-flex flex-column align-items-center"
+                              >
+                                <input {...getInputProps()} />
+                                <ImageFile
+                                  size={30}
+                                  className="dropfile-icon"
+                                  color="#fff"
+                                ></ImageFile>
+                                <p className="m-0 dropfile-text">
+                                  Drop your thumbnail here
+                                </p>
+                               
+                                {formErrors.thumbnail && (
+                                  <p className="invalid-paragraph">
+                                    {" "}
+                                    Thumbnail is required{" "}
+                                  </p>
+                                )}
+                              </div>
+                            </section>
+                          )}
+                        </Dropzone>
+                      </Form.Row>
+                    )}
+                  </Col>
+                )
+                }
               </Row>
               <Row className="footer-class p-1">
                 <Col
