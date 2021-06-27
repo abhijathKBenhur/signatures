@@ -325,7 +325,7 @@ function Create(props) {
     fr.onloadend = (e) => {
       setFileData({
         ...fileData,
-        fileType: getFileName(_.get(file, "[0].name")),
+        fileType: String(getFileName(_.get(file, "[0].name"))).toLowerCase(),
         fileData: e.target.result,
       });
       setFormErrors({...formErrors, maxFileError: false})
