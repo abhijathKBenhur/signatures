@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useLocation, useHistory } from "react-router-dom";
+import moment from "moment"
+
 import SignatureBean from "../../beans/Signature";
 import {
   Badge,
@@ -12,12 +14,14 @@ import {
   Spinner,
   Tabs,
   Tab,
+  DropdownButton,
 } from "react-bootstrap";
 import BlockChainInterface from "../../interface/BlockchainInterface";
 import MongoDBInterface from "../../interface/MongoDBInterface";
 import Web3Utils from "web3-utils";
 import Dropzone from "react-dropzone";
 import "./Signature.scss";
+import user from "../../../assets/images/user.png";
 import {
   ExternalLink,
   ThumbsDown,
@@ -142,7 +146,13 @@ const Signature = (props) => {
         console.log("error");
       });
   }
-
+  const generateDate = (date) => {
+    const dateObj = new Date(date);
+    const month = dateObj.getMonth();
+    const day = String(dateObj.getDate()).padStart(2, '0');
+    const year = dateObj.getFullYear();
+    return `${day}-${month}-${year}`;
+  }
   function copyClipBoard() {
     let shareURL = window.location.href + "/signature/" + signature.PDFHash;
     navigator.clipboard.writeText(shareURL);
@@ -195,12 +205,10 @@ const Signature = (props) => {
 
   const getMenuActions = () => {
     return (
-      <Dropdown className="action-dropdwn">
-        <Dropdown.Toggle variant="success" id="dropdown-basic">
+      <DropdownButton id="dropdown-actions" title="Actions">
+        {/* <Dropdown.Toggle variant="success" id="dropdown-basic">
           <MoreHorizontal />
-        </Dropdown.Toggle>
-
-        <Dropdown.Menu>
+        </Dropdown.Toggle> */}
           <Dropdown.Item>
             <ShoppingCart
               className="cursor-pointer signature-icons ShoppingCart"
@@ -258,8 +266,7 @@ const Signature = (props) => {
             ></ThumbsDown>
             <span className="txt">Dislike</span>
           </Dropdown.Item>
-        </Dropdown.Menu>
-      </Dropdown>
+      </DropdownButton>
     );
   };
 
@@ -295,7 +302,7 @@ const Signature = (props) => {
   };
 
   return (
-    <Container fluid>
+    <Container fluid >
       <Form
         noValidate
         encType="multipart/form-data"
@@ -318,10 +325,22 @@ const Signature = (props) => {
             <Col sm="12" lg="5" xs="12" md="6" className="right-side">
               <div className="top-section">
                 <Row className="form-row title-row">
+                  <Col md="9">
                   <span>{signature.title}</span>
+                  </Col>
+                  <Col md="3">
+                    {moment(signature.createdAt).format("DD-MMM-YYYY")}
+                  </Col>
+                  <Col md="12" className="owner">
+                  <img src={user} alt="user" className="user-profile"/>
+                  </Col>
+                  <Col md="12">
+                        {signature.userID}
+                      </Col>
                 </Row>
-                <Row className="form-row owner-row">
-                  <span> {signature.userID}</span>
+                
+                <Row className="form-row created-at">
+                  
                 </Row>
                 <Row className="form-row price-row">
                   <span>
@@ -353,6 +372,9 @@ const Signature = (props) => {
                   <span> {signature.description}</span>
                 </Row>
               </div>
+              <div className="text-right">
+                {getMenuActions()}
+              </div>
               <div className="tabs-wrapper">
                 <Tabs
                   id="idea-tab-categories"
@@ -371,7 +393,7 @@ const Signature = (props) => {
                   </Tab>
                 </Tabs>
               </div>
-              {getMenuActions()}
+              {/* {getMenuActions()} */}
             </Col>
             {/* <Col md="1" lg="1" className="menu-bar">
               <div className="top-menu">

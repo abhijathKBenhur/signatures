@@ -30,6 +30,7 @@ class App extends Component {
             <Route path="/home" render={(props) => <Gallery />} />
             <Route path="/signature/:hashId" children={<Signature />} />
             <Route path="/create" children={<Create />} />
+            <Route path="/profile/:userId" children={<Profile />} />
             <Route path="/profile" children={<Profile />} />
             <Route exact path="/" render={() => <Redirect from="/" to="/home" />} />
           </Switch>

@@ -1,6 +1,6 @@
 import { useHistory } from "react-router-dom";
 import _ from "lodash";
-import SignatureBean from "../../beans/Signature";
+import Signature from "../../beans/Signature";
 import loader from "../../../assets/images/loader.gif";
 import { MoreHorizontal, Eye, Share, Crosshair, Edit3 } from "react-feather";
 import "./collection-card.scss";
@@ -12,10 +12,10 @@ import BlockChainInterface from "../../interface/BlockchainInterface";
 import MongoDBInterface from "../../interface/MongoDBInterface";
 import { toast } from "react-toastify";
 import Web3Utils from "web3-utils";
-
+import moment from "moment";
 const CollectionCard = (props) => {
   let history = useHistory();
-  const [signature, setSignature] = useState(new SignatureBean(props.card));
+  const [signature, setSignature] = useState(new Signature(props.card));
   function openCardView(signature) {
     history.push({
       pathname: "/signature/" + signature.PDFHash,
@@ -190,19 +190,34 @@ const CollectionCard = (props) => {
                 background: "#f1f1f1",
               }}
             />
+            <div className="description">
+                          <div className="heading">Description</div>
+                          <div className="text">
+                            {signature.description}
+                          </div>
+                          
+                        </div>
           </Col>
         </div>
-        <div className="collection-footer">
-          <div md="12" className="idea-title">
-            <p className="text-left title">{signature.title}</p>
-          </div>
-          <div className="idea-details">
+        <Row className="collection-footer">
+                      <Col md="12" className="idea-title">
+                        <p className="text-left title">{signature.title}</p>
+                      </Col>
+                     
+                      <Col md="6" className="idea-details">
+                        {moment(signature.createdAt).format("DD-MMM-YYYY")} 
+                      </Col>
+                      <Col md="6" className="idea-user text-right">
+                        {signature.userID} 
+                      </Col>
+          </Row>
+          {/* <div className="idea-details">
             <span className="placeholder">{signature.userID}</span>
             <span className="price">
               {signature.price && Web3Utils.fromWei(signature.price)} BNB
             </span>
-          </div>
-          </div>
+          </div> */}
+          
       </div>
     </Col>
   );

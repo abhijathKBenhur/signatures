@@ -41,7 +41,13 @@ body {
     }
   }
 }
-
+.no-padding-lr {
+  padding-left: 0px !important;
+  padding-right: 0px !important;
+}
+.no-padding-l {
+  padding-left: 0px !important;
+}
 .cursor-pointer {
   cursor: pointer;
 }
