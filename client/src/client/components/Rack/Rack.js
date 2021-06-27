@@ -60,7 +60,7 @@ const Rack = (props) => {
                         <span className="price">
                           {signature.price &&
                             Web3Utils.fromWei(signature.price)}{" "}
-                          ETH
+                          BNB
                         </span>
                       </div>
                     </div>

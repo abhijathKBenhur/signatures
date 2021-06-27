@@ -95,6 +95,15 @@ body {
         color: $white !important;
     }
   }
+  &.btn-ternary {
+    border-color: $dark-black  !important;
+    color: $dark-black;
+    background: transparent;
+    &:focus, &:hover, &:active {
+        background: $dark-black !important;
+        color: $white !important;
+    }
+  }
   &.btn-disabled {
     color: $primary;
     background-color: $primary-light;

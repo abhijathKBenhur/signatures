@@ -199,7 +199,7 @@ const CollectionCard = (props) => {
           <div className="idea-details">
             <span className="placeholder">{signature.userID}</span>
             <span className="price">
-              {signature.price && Web3Utils.fromWei(signature.price)} ETH
+              {signature.price && Web3Utils.fromWei(signature.price)} BNB
             </span>
           </div>
           </div>

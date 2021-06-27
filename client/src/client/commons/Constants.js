@@ -33,8 +33,8 @@ const STORAGE_TYPE = {
 const PURPOSES = {
     AUCTION: "AUCTION",
     SELL: "SELL",
-    COLLAB: "COLLAB",
-    KEEP: "KEEP",
+    COLLAB: "COLLABORATE",
+    KEEP: "Decide later",
 }
 const FileStorageDropdownOptions = [
     { value: 'PUBLIC', label: 'PUBLIC' },

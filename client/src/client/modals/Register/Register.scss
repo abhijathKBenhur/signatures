@@ -44,12 +44,12 @@
           z-index: 2;
         }
         .steps ul li.done div {
-          border-color: $primary-light !important;
+          border-color: $charcoal-dark !important;
           color: #fff !important;
-          background: $primary-light !important;
+          background: $charcoal-dark !important;
         }
         .steps ul li.done div::after {
-          border-left: 30px solid $primary-light;
+          border-left: 30px solid $charcoal-dark;
         }
         .steps ul li.active div {
           border-color: $primary !important;
@@ -83,6 +83,7 @@
         }
       }
       .modal-footer {
+        background-color: $dark-black;
       }
     }
   }
