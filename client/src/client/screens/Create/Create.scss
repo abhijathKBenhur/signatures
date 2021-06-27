@@ -17,10 +17,11 @@
                 background-color: $primary-lightest;
             }
             .content-container{
-                position: absolute;
+                // position: absolute;
                 width: 100%;
 
                 height: calc(100% - 50px);
+                margin: 0;
                 .purpose-button{
                     width: 100%;
                     padding: 5%;
@@ -28,6 +29,7 @@
                 }
                 .title-n-desc{
                     padding: 30px ;
+                    height: inherit;
                     .titleArea, .descriptionArea{
                         background: transparent;
                         color: $white;
@@ -64,6 +66,7 @@
                 .price-n-category{
                     margin-top: 40px;
                     padding: 10px 30px;
+                    height: inherit;
                     .price-selector ,.tag-selector{
 
                         .css-yk16xz-control{
@@ -193,12 +196,31 @@
                         }
                         .react-pdf__Document{
                             margin: 0 auto;
-                            width: 80% !important;
+                            width: 90% !important;
                             height: 90% !important;
+                            display: flex;
+                            align-items: center;
+                            .react-pdf__Page{
+                                width: 100%;
+                                height: 100%;
+                                .react-pdf__Page__canvas,.react-pdf__Page__textContent{
+                                    width: 100% !important;
+                                    height: 100% !important;
+                                }
+                            }
+                            
                         }
                         img {
                             max-width: 100%;
                             max-height: 100%;
+                        }
+                        .audio-wrapper{
+                            display: flex;
+                            flex-flow: column;
+                            align-items: center;
+                            img {
+                                width: 200px;
+                            }
                         }
                     }
                     .empty-pdf-row{
@@ -238,6 +260,11 @@
                             p{
                                 color: $white;
                                 margin: 0;
+                                &.invalid-paragraph{
+                                    color: $danger;
+                                    margin: 1rem 0;
+                                    font-size: 12px;
+                                }
                             }
                         }
                     }
@@ -246,12 +273,19 @@
             }
            
             .footer-class{
-                position: absolute;
-                bottom: 0;
+               margin: 0;
                 width: 100%;
                 height: 50px;
                 background-color: transparent;
                 border-radius: 10px;
+                .col-md-6{
+                    &:first-child {
+                        padding-left: 30px;
+                    }
+                    &:last-child {
+                        padding-right: 30px;
+                    }
+                }
                 .right-btn-container{
                     background: $dark;
                     border-bottom-right-radius: 10px;
@@ -295,6 +329,88 @@
     }
     .css-26l3qy-menu {
         color: $dark;
+    }
+    .preview-doc{
+        background: $charcoal-dark;
+        .pdf-container {
+            height: 315px;
+            min-width: 100%;
+            background: transparent !important;
+            margin: 20px 0;
+        }
+        .description-container{
+            margin-top: 10px;
+            p{
+                color: $white;
+            }
+        }
+    }
+    .preview-details{
+        background: $dark;
+        display: flex;
+        flex-flow: column;
+        flex-wrap: wrap;
+        .content-profile{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-flow: column;
+            margin: 20px 0;
+            p {
+                color: #fff;
+                text-transform: capitalize;
+                text-transform: capitalize;
+                margin: 10px;
+            }
+            img {
+                height: 90px;  
+                width: 90px;
+                border-radius: 100px;
+            }
+        }
+        .description{
+            margin: 10px;
+            p{
+                color: $white;
+                text-align: center;
+            }
+        }
+        .price{
+            margin: 10px;
+            p{
+                color: $white;
+            }
+        }
+    }
+    .published-wrapper{
+        display: flex;
+        align-items: center;
+        flex-flow: column;
+        .success-block{
+            display: flex;
+            align-items: center;
+            flex-flow: column;
+            margin: 100px;
+            justify-content: center;
+            color: $white;
+            p {
+                font-size: 40px;
+                text-align: center;
+            }
+            svg {
+                    width: 75px ;
+                    height: 75px;
+            }
+        }
+        .transaction-data{
+            .transaction-ids{
+                color: $white;
+                p {
+                    font-size: 25px;
+                }
+            }
+
+        }
     }
 }
 

@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect,  useState } from "react";
-import {  Button, Row, Col, Form, InputGroup } from "react-bootstrap";
+import React, { useCallback, useEffect,  useRef,  useState } from "react";
+import {  Button, Row, Col, Form, InputGroup, OverlayTrigger, Tooltip } from "react-bootstrap";
 import MongoDBInterface from "../../interface/MongoDBInterface";
 import BlockChainInterface from "../../interface/BlockchainInterface";
 import StorageInterface from "../../interface/StorageInterface";
@@ -16,6 +16,8 @@ import { toast } from "react-toastify";
 import Select from "react-select";
 import "react-step-progress-bar/styles.css";
 import { shallowEqual, useSelector } from "react-redux";
+import user from "../../../assets/images/user1.png";
+import audio from "../../../assets/images/audio.png";
 
 function Create(props) {
  
@@ -44,16 +46,19 @@ function Create(props) {
     category: false,
     price: false,
     thumbnail: false,
+    maxFileError: false
   });
   const [slideCount, setSlideCount] = useState(0);
   const [billet, setBillet] = useState({});
+  const priceRef = useRef(null);
   let history = useHistory();
-  const finalSlideCount = 1;
+  const finalSlideCount = 2;
   const [fileData, setFileData] = useState({
     fileType: "",
     fileData: undefined,
   });
   const [isPublishing, setIsPublishing] = useState(false);
+  const [isPublished, setIsPublished] = useState(false);
   useEffect(() => {
     pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
   }, []);
@@ -85,6 +90,19 @@ function Create(props) {
     }
   }, [reduxState]);
 
+  useEffect(() => {
+    if(priceRef.current)  {
+      if(checkDisablePrice()) {
+        priceRef.current.disabled = true;
+        priceRef.current.style.backgroundColor = '#565656'
+      } else {
+        priceRef.current.disabled = false;
+        priceRef.current.style.backgroundColor = ''
+  
+      }
+    }
+   
+  }, [form.purpose])
   function onImageDrop(acceptedFiles) {
     setFormData({
       ...form,
@@ -176,6 +194,7 @@ function Create(props) {
     MongoDBInterface.addSignature(form)
       .then((success) => {
         setIsPublishing(false);
+        setIsPublished(true);
         toast.dark("Your thoughts have been submitted!", {
           position: "bottom-right",
           autoClose: 3000,
@@ -185,7 +204,10 @@ function Create(props) {
           draggable: true,
           progress: undefined,
         });
-        gotoProfile();
+        // setTimeout(() => {
+        //   gotoProfile();
+        // },3000)
+       
         // setSlideCount(finalSlideCount + 1)
       })
       .catch((err) => {
@@ -251,22 +273,34 @@ function Create(props) {
 
         break;
       case 1:
-        if (price <= 0 || _.isEmpty(category) || _.isEmpty(thumbnail)) {
-          setFormErrors({
-            ...formErrors,
-            price: price <= 0,
-            category: _.isEmpty(category),
-            thumbnail: _.isEmpty(thumbnail),
-          });
+        if ( _.isEmpty(category) || _.isEmpty(thumbnail)) {
+          if(!checkDisablePrice()) {
+            setFormErrors({
+              ...formErrors,
+              price: price <= 0,
+              category: _.isEmpty(category),
+              thumbnail: _.isEmpty(thumbnail),
+            });
+          }  else {
+            setFormErrors({
+              ...formErrors,
+              price: false,
+              category: _.isEmpty(category),
+              thumbnail: _.isEmpty(thumbnail),
+            });
+          }
         } else {
-          handleSubmit();
-          setFormErrors({
-            ...formErrors,
-            price: false,
-            category: false,
-            thumbnail: false,
-          });
+          setSlideCount(slideCount + 1);
         }
+        break;
+        case 2:
+            handleSubmit();
+            setFormErrors({
+              ...formErrors,
+              price: false,
+              category: false,
+              thumbnail: false,
+            });
         break;
       default:
         break;
@@ -274,22 +308,29 @@ function Create(props) {
   };
 
   const onDrop = useCallback((acceptedFiles) => {
-    loadFile(acceptedFiles);
+    if(checkMaxFileSize(_.get(acceptedFiles, '[0]'))) {
+        setFormErrors({...formErrors, maxFileError: true})
+    } else {
+      loadFile(acceptedFiles);
+    }
   }, []);
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
     maxFiles: 1,
     accept: ["image/png", "image/jpg", "image/jpeg", ".pdf", ".mp3"],
   });
+  const getFileName = (filename) =>  filename.substring(filename.lastIndexOf('.')+1, filename.length) || filename;
+
 
   const loadFile = (file) => {
     const fr = new window.FileReader();
     fr.onloadend = (e) => {
       setFileData({
         ...fileData,
-        fileType: _.get(file, "[0].name").split(".")[1],
+        fileType: getFileName(_.get(file, "[0].name")),
         fileData: e.target.result,
       });
+      setFormErrors({...formErrors, maxFileError: false})
       onPDFDrop(file);
     };
     fr.readAsDataURL(file[0]);
@@ -310,11 +351,14 @@ function Create(props) {
         );
       case "mp3":
         return (
+          <div className="audio-wrapper">
+          <img src={audio} alt=""/>
           <audio controls>
             <source src={fileData.fileData}></source>
             Your browser does not support the
             <code>audio</code> element.
           </audio>
+          </div>
         );
       case "jpg":
       case "jpeg":
@@ -331,106 +375,172 @@ function Create(props) {
   }
   
   const isSelectedPurpose = (purpose) => form.purpose === purpose
+  const checkMaxFileSize = (file) => {
+    console.log('file = ', file)
+      try {
+        const size = Math.floor(file.size /1000000)
+          return size > 5 ? true : false
+      } catch (err) {
+        console.log('err = ', err)
+        return false
+      }
+    
+    
+  } 
 
-  return (
-    <Container >
-      <Row className="createform  d-flex">
-        <Col md="12" sm="12" lg="12" xs="12" className="responsive-content">
-          <Form
-            noValidate
-            encType="multipart/form-data"
-            onSubmit={handleSubmit}
-            className="create-form"
-          >
-            <Col md="12" className="overflow-auto h-100">
-              {/* <Row>
-                <Col
+  const checkDisablePrice = () => {
+    if((CONSTANTS.PURPOSES.COLLAB === form.purpose || CONSTANTS.PURPOSES.KEEP === form.purpose)) {
+      setFormData({...form, price: 0})
+      return true;
+    }
+    return false
+  }
+
+  const getViewBasedOnSteps = () => {
+    switch (slideCount) {
+      case 0 :
+        return (
+            <>
+            <Col md="6" sm="12" lg="6" xs="12" className="title-n-desc pb-0">
+              <Row className="">
+                
+                <Form.Group
+                  as={Col}
+                  className="formEntry"
                   md="12"
-                  className="create-wizard-bar justify-content-center align-items-center d-flex"
-                ></Col>
-              </Row> */}
-              <Row className="content-container">
-                {slideCount === 0 ? 
-                (
-                  <Col md="6" sm="12" lg="6" xs="12" className="title-n-desc ">
-                    <Row className="">
-                      
-                      <Form.Group
-                        as={Col}
-                        className="formEntry"
-                        md="12"
-                        controlId="title"
-                      >
-                         <div className="title-label">
-                        <Form.Label>Title </Form.Label>
-                           </div>
-                        <Form.Control
-                          type="text"
-                          name="title"
-                          value={form.title}
-                          className={
-                            formErrors.title
-                              ? "input-err titleArea"
-                              : "titleArea"
-                          }
-                          placeholder="Title*"
-                          onChange={handleChange}
-                        />
-                      </Form.Group>
-                    </Row>
-                    <Row className="form-row">
-                      <Form.Group
-                        as={Col}
-                        className="formEntry"
-                        md="12"
-                        controlId="description"
-                      >
-                        <div className="description-label">
-                        <Form.Label>Description </Form.Label>
-                           </div>
-                        <InputGroup>
-                          <Form.Control
-                            value={form.description}
-                            className={
-                              formErrors.description
-                                ? "input-err descriptionArea"
-                                : "descriptionArea"
-                            }
-                            as="textarea"
-                            rows={17}
-                            aria-describedby="inputGroupAppend"
-                            name="description"
-                            placeholder="Description*"
-                            style={{ resize: "none" }}
-                            onChange={handleChange}
-                          />
-                        </InputGroup>
-                      </Form.Group>
-                    </Row>
-                    <Row  className="form-row">
-                    <Form.Group
-                        as={Col}
-                        className="file-storage-group"
-                        md="12"
-                        controlId="fileStorage"
-                      >
-                        <div className="file-storage-label">
-                        <Form.Label>File Storage </Form.Label>
-                        <Info />
-                        </div>
-                         <Select
-                          className="basic-single"
-                          classNamePrefix="select"
-                          name="color"
-                          defaultValue={{value: form.storage, label: form.storage}}
-                          options={CONSTANTS.FileStorageDropdownOptions}
-                        />
-                  </Form.Group>
-                    </Row>
-                  </Col>
-                ):
-                (
-                  <Col
+                  controlId="title"
+                >
+                   <div className="title-label">
+                  <Form.Label>Title </Form.Label>
+                     </div>
+                  <Form.Control
+                    type="text"
+                    name="title"
+                    value={form.title}
+                    className={
+                      formErrors.title
+                        ? "input-err titleArea"
+                        : "titleArea"
+                    }
+                    placeholder="Title*"
+                    onChange={handleChange}
+                  />
+                </Form.Group>
+              </Row>
+              <Row className="form-row">
+                <Form.Group
+                  as={Col}
+                  className="formEntry"
+                  md="12"
+                  controlId="description"
+                >
+                  <div className="description-label">
+                  <Form.Label>Description </Form.Label>
+                     </div>
+                  <InputGroup>
+                    <Form.Control
+                      value={form.description}
+                      className={
+                        formErrors.description
+                          ? "input-err descriptionArea"
+                          : "descriptionArea"
+                      }
+                      as="textarea"
+                      rows={17}
+                      aria-describedby="inputGroupAppend"
+                      name="description"
+                      placeholder="Description*"
+                      style={{ resize: "none" }}
+                      onChange={handleChange}
+                    />
+                  </InputGroup>
+                </Form.Group>
+              </Row>
+              <Row  className="form-row">
+              <Form.Group
+                  as={Col}
+                  className="file-storage-group"
+                  md="12"
+                  controlId="fileStorage"
+                >
+                  <div className="file-storage-label">
+                  <Form.Label>File Storage </Form.Label>
+                  <OverlayTrigger
+                    placement="top"
+                    overlay={
+                      <Tooltip id={`tooltip-top`}>
+                        Choose file storage type
+                      </Tooltip>
+                    }
+                  >
+                  <Info />
+                  </OverlayTrigger>
+                  </div>
+                   <Select
+                    className="basic-single"
+                    classNamePrefix="select"
+                    name="color"
+                    defaultValue={{value: form.storage, label: form.storage}}
+                    options={CONSTANTS.FileStorageDropdownOptions}
+                  />
+            </Form.Group>
+              </Row>
+            </Col>
+            
+              <Col
+                md="6"
+                sm="12"
+                lg="6"
+                xs="12"
+                className="pdf-container"
+              >
+                {form.PDFFile && !formErrors.maxFileError &&  (
+                  <div className="pdfUploaded w-100 h-100">
+                    <X
+                      className="removePDF cursor-pointer"
+                      onClick={() => {
+                        clearPDF();
+                      }}
+                    ></X>
+                    {fileData.fileData && getFileViewer()}
+                  </div>
+                )}
+                {!form.PDFFile && (
+                  <Form.Row className="empty-pdf-row">
+                    <div
+                      className="file-drop-contatiner"
+                      {...getRootProps()}
+                    >
+                      <input {...getInputProps()} />
+                      <UploadCloud/>
+                      <p>
+                        Drag 'n' drop some files here, or click to select
+                        files
+                        
+                      </p>
+                      <p>
+                      (Upload pdf / mp3 / image)
+                      </p>
+                      <div>
+                        {/* <Plus /> */}
+                      </div>
+                      {formErrors.pdf && (
+                      <p className="invalid-paragraph"> File  is required </p>
+                    )}
+                    {
+                       formErrors.maxFileError && <p className="invalid-paragraph"> Max file size is 5MB </p>
+                    }
+                    </div>
+                   
+                  </Form.Row>
+                )}
+              </Col>
+              </>
+        )
+      case 1:
+     return (
+      <>
+            <Col
                     md="6"
                     sm="12"
                     lg="6"
@@ -527,7 +637,9 @@ function Create(props) {
                     <Row className="">
                       <Form.Group as={Col} className="formEntry" md="12">
                       <div className="price-label">
-                        <Form.Label>Price </Form.Label>
+                        <Form.Label>
+                          {CONSTANTS.PURPOSES.AUCTION === form.purpose ? 'Base price' : 'Price'}
+                           </Form.Label>
                            </div>
                         <InputGroup className="price-input-group">
                           <Form.Control
@@ -537,67 +649,19 @@ function Create(props) {
                             value={form.price ? form.price : undefined}
                             className={
                               formErrors.price
-                                ? "input-err price-selector"
-                                : "price-selector"
+                                ? `input-err price-selector `
+                                : `price-selector `
                             }
                             aria-label="Amount (ether)"
                             name="price"
                             onChange={handleChange}
+                            ref={priceRef}
                           />
                           <InputGroup.Text>ETH</InputGroup.Text>
                         </InputGroup>
                       </Form.Group>
                     </Row>
                   </Col>
-                )
-                }
-                {slideCount === 0 ?  (
-                  <Col
-                    md="6"
-                    sm="12"
-                    lg="6"
-                    xs="12"
-                    className="pdf-container"
-                  >
-                    {form.PDFFile && (
-                      <div className="pdfUploaded w-100 h-100">
-                        <X
-                          className="removePDF cursor-pointer"
-                          onClick={() => {
-                            clearPDF();
-                          }}
-                        ></X>
-                        {fileData.fileData && getFileViewer()}
-                      </div>
-                    )}
-                    {!form.PDFFile && (
-                      <Form.Row className="empty-pdf-row">
-                        <div
-                          className="file-drop-contatiner"
-                          {...getRootProps()}
-                        >
-                          <input {...getInputProps()} />
-                          <UploadCloud/>
-                          <p>
-                            Drag 'n' drop some files here, or click to select
-                            files
-                            
-                          </p>
-                          <p>
-                          (Upload pdf / mp3 / image)
-                          </p>
-                          <div>
-                            {/* <Plus /> */}
-                          </div>
-                        </div>
-                        {formErrors.pdf && (
-                          <p className="invalid-paragraph"> File  is required </p>
-                        )}
-                      </Form.Row>
-                    )}
-                  </Col>
-                )  : 
-                (
                   <Col
                     md="6"
                     sm="12"
@@ -652,10 +716,113 @@ function Create(props) {
                       </Form.Row>
                     )}
                   </Col>
-                )
-                }
+      </>
+     )
+      
+      default: 
+           return (
+             <>
+            <Col md="6" sm="12" lg="6" xs="12" className="preview-doc ">
+            <Row className="form-row">
+            <Col
+                md="6"
+                sm="12"
+                lg="6"
+                xs="12"
+                className="pdf-container"
+              >
+                {form.PDFFile && (
+                  <div className="pdfUploaded w-100 h-100">
+                    
+                    {fileData.fileData && getFileViewer()}
+                  </div>
+                )}
+                
+                </Col>
+                <Col 
+                  md="6"
+                  sm="12"
+                  lg="6"
+                  xs="12"
+                  className="description-container"
+                >
+                <p>
+                  {form.description}
+                </p>
+                </Col>
+            </Row>
+            </Col>
+            <Col md="6" sm="12" lg="6" xs="12" className="preview-details ">
+            <div className="content-profile">
+                          <img src={userDetails.imageUrl ? userDetails.imageUrl : user} alt="" />
+                          <p>
+                            {userDetails.userID}
+                          </p>
+                        </div>
+                        <div className="description">
+                          <p>
+                          Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                           Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown
+                            printer took a galley of type and scrambled it to make a type specimen book.
+                          </p>
+                        </div>
+                        <div className="price">
+                         <p>
+                        Price: {form.price} <span>ETH</span>
+                           </p> 
+                        </div>
+            </Col>
+             </>
+           )
+      
+    }
+  }
+
+  const getPublishedView = () => {
+    return (
+      <Col md="12" sm="12" lg="12" xs="12" className="published-wrapper ">
+        <div className="success-block">
+        <p>Your Idea is posted in blockchain</p>
+          <Check />
+        </div>
+          
+          <div className="transaction-data">
+            <div className="transaction-ids">
+              <p>Transaction ID- <span></span></p>
+              <p>File Hash ID- <span></span></p>
+              <p>* Please save both of these for future reference.</p>
+            </div>
+          </div>
+      </Col>
+    )
+  }
+
+
+  return (
+    <Container >
+      <Row className="createform  d-flex">
+        <Col md="12" sm="12" lg="12" xs="12" className="responsive-content">
+          <Form
+            noValidate
+            encType="multipart/form-data"
+            onSubmit={handleSubmit}
+            className="create-form"
+          >
+            <Col md="12" className="overflow-auto h-100 p-0">
+              {/* <Row>
+                <Col
+                  md="12"
+                  className="create-wizard-bar justify-content-center align-items-center d-flex"
+                ></Col>
+              </Row> */}
+              <Row className="content-container">
+                
+                {slideCount === finalSlideCount && isPublished ? getPublishedView() : getViewBasedOnSteps()}
+               
+           
               </Row>
-              <Row className="footer-class ">
+              {!isPublished && 
+                <Row className="footer-class ">
                 <Col
                   md="6"
                   className="d-flex justify-content-between align-items-center "
@@ -702,6 +869,8 @@ function Create(props) {
                   </Button>
                 </Col>
               </Row>
+            
+              }
             </Col>
           </Form>
         </Col>
@@ -712,11 +881,11 @@ function Create(props) {
   function getNextButtonText() {
     if (slideCount === finalSlideCount) {
       return "Publish";
-    } else if (slideCount === finalSlideCount + 1) {
-      return "Done";
-    } else if (slideCount < finalSlideCount) {
+    } else if (slideCount  === 0) {
       return "Next";
-    }
+    } else if (slideCount === 1) {
+      return "Preview";
+    } 
   }
 
   function getBackButtonText() {
