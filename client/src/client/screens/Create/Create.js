@@ -18,7 +18,7 @@ import "react-step-progress-bar/styles.css";
 import { shallowEqual, useSelector } from "react-redux";
 import user from "../../../assets/images/user1.png";
 import audio from "../../../assets/images/audio.png";
-import loadingGif from "../../../assets/Hourglass.gif";
+import loadingGif from "../../../assets/images/loader_blocks.gif";
 
 function Create(props) {
  
@@ -765,7 +765,7 @@ function Create(props) {
                         </div>
                         <div className="price">
                          <p>
-                        Price: {form.price} <span>ETH</span>
+                        Price: <span className="line-through">{form.price} BNB</span> <span> FREE</span>
                            </p> 
                         </div>
             </Col>
@@ -807,7 +807,7 @@ function Create(props) {
     return (
       <Col md="12" sm="12" lg="12" xs="12" className="publishing-wrapper ">
         <div className="publishing-block">
-        <p>Your Idea is processing. Please wait</p>
+        <p>We are processing your idea. Please wait!</p>
         </div>
           
           <div className="gif-wrapper">
@@ -836,7 +836,6 @@ function Create(props) {
                 ></Col>
               </Row> */}
               <Row className="content-container">
-                
                 {slideCount === finalSlideCount && isPublished ? getPublishedView() : slideCount === finalSlideCount && isPublishing ? getPublishingView() : getViewBasedOnSteps()}
                
            
