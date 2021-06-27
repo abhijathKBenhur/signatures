@@ -79,34 +79,34 @@ body {
     color: white;
   }
   &.btn-primary {
-    background-color: $dark-orange;
-    border-color: $dark-orange  !important;
+    background-color: $secondary;
+    border-color: $secondary  !important;
     &:focus, &:hover, &:active {
-        background-color: $dark-orange !important;
+        background-color: $secondary !important;
         box-shadow: none;
     }
   }
   &.btn-secondary {
-    border-color: $dark-orange  !important;
-    color: $dark-orange;
+    border-color: $secondary  !important;
+    color: $secondary;
     background: transparent;
     &:focus, &:hover, &:active {
-        background: $dark-orange !important;
+        background: $secondary !important;
         color: $white !important;
     }
   }
   &.btn-ternary {
-    border-color: $dark-black  !important;
-    color: $dark-black;
+    border-color: $primary-dark  !important;
+    color: $primary-dark;
     background: transparent;
     &:focus, &:hover, &:active {
-        background: $dark-black !important;
+        background: $primary-dark !important;
         color: $white !important;
     }
   }
   &.btn-disabled {
     color: $primary;
-    background-color: $primary-light;
+    background-color: $grey-border;
     pointer-events: none;
   }
 }

@@ -5,7 +5,7 @@
         width:500px;
         .search-box {
             width: 100%;
-            border: 1px solid $primary-light;
+            border: 1px solid $primary;
             border-radius: 5px;
             height: 35px;
             padding: 5px 10px;
@@ -47,7 +47,7 @@
                 cursor: pointer;
                 padding: 2px;
                 &.selected {
-                    background-color: $primary-light;
+                    background-color: $primary;
                     border: 1px solid $primary-dark ;
                 }
             }
