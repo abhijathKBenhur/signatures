@@ -51,7 +51,7 @@ function gallery(props) {
                       <Col sm={3}>
                         <div>
                           <Button
-                            variant="secondary"
+                            variant="dark"
                             className="button"
                             bsstyle="primary"
                             onClick={() => {
@@ -89,7 +89,7 @@ function gallery(props) {
                       <Col sm={3}>
                         <div>
                         <Button
-                      variant="secondary"
+                      variant="dark"
                       className="button"
                       bsstyle="primary"
                       onClick={() => {
@@ -127,7 +127,7 @@ function gallery(props) {
                       <Col sm={3}>
                         <div>
                         <Button
-                      variant="secondary"
+                      variant="dark"
                       className="button"
                       bsstyle="primary"
                       onClick={() => {

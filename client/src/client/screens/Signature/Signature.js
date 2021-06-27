@@ -325,7 +325,7 @@ const Signature = (props) => {
                 </Row>
                 <Row className="form-row price-row">
                   <span>
-                    {signature.price && Web3Utils.fromWei(signature.price)} ETH
+                    {signature.price && Web3Utils.fromWei(signature.price)} BNB
                   </span>
                 </Row>
                 <Row className="form-row  tags-row">
