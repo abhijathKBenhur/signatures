@@ -341,6 +341,13 @@ const Signature = (props) => {
                         </Badge>
                       );
                     })}
+                  <Badge
+                    key={key}
+                    className="tagpill purpose"
+                    variant="secondary"
+                  >
+                    {signature.purpose}
+                  </Badge>
                 </Row>
                 <Row className="form-row">
                   <span> {signature.description}</span>
