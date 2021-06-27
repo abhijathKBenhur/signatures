@@ -880,7 +880,7 @@ function Create(props) {
                 ></Col>
               </Row> */}
               <Row className="content-container">
-                {slideCount === finalSlideCount && isPublishing ? getPublishedView() : slideCount === finalSlideCount && isPublishing ? getPublishingView() : getViewBasedOnSteps()}
+                {slideCount === finalSlideCount && isPublished ? getPublishedView() : slideCount === finalSlideCount && isPublishing ? getPublishingView() : getViewBasedOnSteps()}
                
            
               </Row>
