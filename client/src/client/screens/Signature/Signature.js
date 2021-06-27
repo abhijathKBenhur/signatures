@@ -34,6 +34,7 @@ import { toast } from "react-toastify";
 import Select from "react-select";
 import StorageInterface from "../../interface/StorageInterface";
 import { shallowEqual, useSelector } from "react-redux";
+import audio from "../../../assets/images/audio.png";
 
 const Signature = (props) => {
   let { hashId } = useParams();
@@ -274,11 +275,14 @@ const Signature = (props) => {
       case "mp3":
         const file = PDFFile.split(",")[1];
         return (
+          <div className="audio-wrapper">
+          <img src={audio} alt=""/>
           <audio controls>
             <source src={`data:audio/mpeg;base64,` + file}></source>
             Your browser does not support the
             <code>audio</code> element.
           </audio>
+          </div>
         );
       case "jpg":
       case "jpeg":
