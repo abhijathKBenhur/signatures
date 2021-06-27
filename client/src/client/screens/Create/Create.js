@@ -19,6 +19,8 @@ import { shallowEqual, useSelector } from "react-redux";
 import user from "../../../assets/images/user1.png";
 import audio from "../../../assets/images/audio.png";
 import loadingGif from "../../../assets/images/loader_blocks.gif";
+import jspdf from 'jspdf';
+import domtoimage from 'dom-to-image';
 
 function Create(props) {
  
@@ -784,7 +786,7 @@ function Create(props) {
 
   const getPublishedView = () => {
     return (
-      <Col md="12" sm="12" lg="12" xs="12" className="published-wrapper ">
+      <Col md="12" sm="12" lg="12" xs="12" className="published-wrapper " id="published-wrapper-block">
         <div className="success-block">
         <p>Your Idea is posted in blockchain</p>
           <Check />
@@ -804,6 +806,14 @@ function Create(props) {
                     onClick={() => gotoProfile()}
                   > Done
                     </Button>
+                    <Button
+                    variant="primary"
+                    className="button ml-3"
+                    bsstyle="primary"
+                    onClick={() => exportToPdf()}
+                  > Export
+                    </Button>
+                    
             </div>
           </div>
       </Col>
@@ -824,6 +834,33 @@ function Create(props) {
     )
   }
 
+  const exportToPdf = () => {
+		var name =  "trasnaction.pdf";
+	
+		domtoimage.toJpeg(document.getElementById('published-wrapper-block'), {
+			quality: 0.95, style: {
+				"background-color": "#000",
+				"padding": "20px"
+			}, filter: function filter(node) {
+				return ['filterAddition', 'bottom-contents'].indexOf(node.className) < 0;
+			}
+		})
+			.then(function (dataUrl) {
+				var image = document.createElement('img');
+				image.addEventListener('load', function () {
+					var pdf = new jspdf('p', 'pt', 'a3');
+					pdf.internal.pageSize.setWidth(image.width * 0.75);
+					pdf.internal.pageSize.setHeight(image.height * 0.75);
+					pdf.addImage(dataUrl, 'JPG', 0, -80);
+					pdf.save(name);
+				});
+				image.src = dataUrl;
+			
+			}, error => {
+				console.log({ error })
+			});
+	}
+
 
   return (
     <Container >
@@ -843,7 +880,7 @@ function Create(props) {
                 ></Col>
               </Row> */}
               <Row className="content-container">
-                {slideCount === finalSlideCount && isPublished ? getPublishedView() : slideCount === finalSlideCount && isPublishing ? getPublishingView() : getViewBasedOnSteps()}
+                {slideCount === finalSlideCount && isPublishing ? getPublishedView() : slideCount === finalSlideCount && isPublishing ? getPublishingView() : getViewBasedOnSteps()}
                
            
               </Row>
