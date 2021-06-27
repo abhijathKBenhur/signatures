@@ -350,7 +350,7 @@ function Create(props) {
       case "mp3":
         return (
           <div className="audio-wrapper">
-          <img src={audio} alt=""/>
+          <img src={audio} alt="" className="mb-1"/>
           <audio controls>
             <source src={fileData.fileData}></source>
             Your browser does not support the

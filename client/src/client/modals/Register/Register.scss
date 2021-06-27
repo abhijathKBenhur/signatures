@@ -75,6 +75,11 @@
             &:hover{
             }
           }
+          .userIDSection{
+            display: flex;
+            align-items: center;
+            gap: 20px;
+          }
         }
         .btn-component {
           padding: 20px;

@@ -28,16 +28,16 @@ register_user = (req, res) => {
   deployedContract.methods
     .register_user(metamaskAddress, userName)
     .send(transactionObject)
-    .on("transactionHash", function (hash) {
-      console.log("receipt transactionHash", hash);
-    })
+    // .on("transactionHash", function (hash) {
+    //   console.log("receipt transactionHash", hash);
+    // })
     .on("receipt", function (receipt) {
       console.log("receipt received", receipt);
       return res.status(200).json({ success: true, data: receipt });
     })
     .on("error", function (error) {
       console.log("error received", error);
-      return res.status(200).json({ success: false, data: err });
+      return res.status(200).json({ success: false, data: error });
     });
 
   console.log("transaction id");

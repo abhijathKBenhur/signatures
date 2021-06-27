@@ -1,7 +1,7 @@
 import _ from "lodash";
 import React, { useState, useEffect } from "react";
 import { GoogleLogin } from "react-google-login";
-import { Row, Col, Form, Modal, Button } from "react-bootstrap";
+import { Row, Col, Form, Modal, Button, Image } from "react-bootstrap";
 import "./Register.scss";
 import "react-step-progress-bar/styles.css";
 import { shallowEqual, useSelector } from "react-redux";
@@ -11,9 +11,9 @@ import metamaskLogo from "../../../assets/images/metamask.png";
 import coinBaseLogo from "../../../assets/images/coinbase.png";
 import MongoDBInterface from "../../interface/MongoDBInterface";
 import BlockchainInterface from "../../interface/BlockchainInterface";
-
-
-import store from '../../redux/store';
+import { Check, X } from "react-feather";
+import { useHistory } from "react-router-dom";
+import store from "../../redux/store";
 // MetamaskID and userDetails are stored in separate redux stores
 // userDetails are stored as state
 
@@ -22,6 +22,7 @@ const Register = (props) => {
   const [registrationLevel, setRegistrationLevel] = useState(
     CONSTANTS.REGISTRATION_LEVEL.BASE_1
   );
+  let history = useHistory();
   const [steps, setSteps] = useState([
     {
       key: "chainAddress",
@@ -43,6 +44,8 @@ const Register = (props) => {
     },
   ]);
   const [activeStep, setActiveStep] = useState(steps[0]);
+  const [validated, setValidated] = useState(false);
+  const [registered, setRegistered] = useState(false);
   const [userDetails, setUserDetails] = useState({
     firstName: _.get(reduxState, "firstName"),
     LastName: _.get(reduxState, "LastName"),
@@ -54,21 +57,30 @@ const Register = (props) => {
     loginMode: _.get(reduxState, "loginMode"),
   });
 
-
-  function registerUser(){
-    BlockchainInterface.register_user(userDetails).then(success => {
-      MongoDBInterface.registerUser(userDetails).then(mongoSuccess => {
-        store.dispatch(setReduxUserDetails(userDetails))
+  function registerUser() {
+    BlockchainInterface.register_user(userDetails)
+      .then((success) => {
+        MongoDBInterface.registerUser(userDetails).then((mongoSuccess) => {
+          setRegistered(true);
+        });
+        console.log(success);
       })
-      console.log(success)
-    }).catch(error => {
-      console.log(error)
-    })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  function publishUserToApp() {
+    store.dispatch(setReduxUserDetails(userDetails));
   }
 
   const handleNext = () => {
     if (steps[steps.length - 1].key == activeStep.key) {
-      registerUser()
+      if(registered){
+        history.push("/profile");
+      }else{
+        registerUser();
+      }
       return;
     }
 
@@ -125,14 +137,13 @@ const Register = (props) => {
   function googleLogIn(googleFormResponseObject) {
     setUserDetails({
       ...userDetails,
-      firstName: _.get(googleFormResponseObject.profileObj, "firstName"),
-      LastName: _.get(googleFormResponseObject.profileObj, "LastName"),
+      firstName: _.get(googleFormResponseObject.profileObj, "givenName"),
+      LastName: _.get(googleFormResponseObject.profileObj, "familyName"),
       email: _.get(googleFormResponseObject.profileObj, "email"),
-      fullName: _.get(googleFormResponseObject.profileObj, "fullName"),
+      fullName: _.get(googleFormResponseObject.profileObj, "name"),
       imageUrl: _.get(googleFormResponseObject.profileObj, "imageUrl"),
       loginMode: "google",
     });
-    handleNext();
   }
 
   function metamaskGuide() {
@@ -172,8 +183,17 @@ const Register = (props) => {
                 cookiePolicy="single_host_origin"
               />
             ) : (
-              <div>
-                <span> You are logged in with </span>
+              <div className="d-flex align-items-center flex-column">
+                <Image
+                  roundedCircle
+                  src={userDetails.imageUrl}
+                  height={100}
+                  className=""
+                  style={{
+                    background: "#f1f1f1",
+                    borderRadius: "7px",
+                  }}
+                />
                 <span> {userDetails.email} </span>
               </div>
             )}
@@ -224,7 +244,11 @@ const Register = (props) => {
                 </div> */}
               </div>
             ) : (
-              <div>you are connected with {userDetails.metamaskId}</div>
+              <div className="d-flex align-items-center flex-column">
+                <img src={metamaskLogo} width="70"></img>
+                <div className="connected">Connected</div>
+                <div> {userDetails.metamaskId}</div>
+              </div>
             )}
           </Col>
         );
@@ -233,21 +257,46 @@ const Register = (props) => {
         return (
           <div>
             <Row className="">
-              <Form.Group
-                as={Col}
-                className="formEntry"
-                md="12"
-                controlId="userID"
-              >
-                <Form.Control
-                  type="text"
-                  name="userID"
-                  value={userDetails.userID}
-                  className={"userID"}
-                  placeholder="User name"
-                  onChange={handleChange}
-                />
-              </Form.Group>
+              {registered ? (
+                <div> Hi {userDetails.fullName}, Welcome to the tribe. You have signed up to the unlimited possibilities in the world of idea sharing.</div>
+              ) : (
+                <Form.Group
+                  as={Col}
+                  className="formEntry userIDSection"
+                  md="12"
+                  controlId="userID"
+                >
+                  <Image
+                    roundedCircle
+                    src={userDetails.imageUrl}
+                    height={100}
+                    className=""
+                    style={{
+                      background: "#f1f1f1",
+                      borderRadius: "7px",
+                    }}
+                  />
+                  <Form.Control
+                    type="text"
+                    name="userID"
+                    value={userDetails.userID}
+                    className={"userID"}
+                    placeholder="User name"
+                    onChange={handleChange}
+                  />
+                  {userDetails.userID &&
+                  userDetails.userID.length > 0 &&
+                  validated ? (
+                    <Check></Check>
+                  ) : userDetails.userID &&
+                    userDetails.userID.length > 0 &&
+                    !validated ? (
+                    <X></X>
+                  ) : (
+                    <div></div>
+                  )}
+                </Form.Group>
+              )}
             </Row>
           </div>
         );
@@ -255,13 +304,24 @@ const Register = (props) => {
     }
   }
 
-  function handleChange(event){
+  function handleChange(event) {
+    var key = event.keyCode;
     let returnObj = {};
-    returnObj[event.target.name] = _.get(event, 'target.name') === 'price' ? Number(event.target.value):  event.target.value;
+    returnObj[event.target.name] =
+      _.get(event, "target.name") === "price"
+        ? Number(event.target.value)
+        : event.target.value;
     setUserDetails({
       ...userDetails,
-      ...returnObj
-    })
+      ...returnObj,
+    });
+    MongoDBInterface.getUserInfo({ userID: event.target.value })
+      .then((userDetails) => {
+        setValidated(false);
+      })
+      .catch((error) => {
+        setValidated(true);
+      });
   }
 
   return (
@@ -311,7 +371,7 @@ const Register = (props) => {
           md="12"
           className="d-flex justify-content-between align-items-center "
         >
-          {activeStep.index == 0 ? (
+          {activeStep.index == 0  || registered? (
             <div></div>
           ) : (
             <Button
@@ -327,6 +387,7 @@ const Register = (props) => {
           )}
 
           <Button
+            disabled={!validated && activeStep.index == 2}
             variant="primary"
             className="button"
             bsstyle="primary"
@@ -334,7 +395,9 @@ const Register = (props) => {
               handleNext();
             }}
           >
-            {activeStep.index == steps.length - 1 ? "Register" : "Next"}
+            {activeStep.index == steps.length - 1 ? 
+            registered ? "Done" : "Register" 
+            : "Next"}
           </Button>
         </Col>
       </Modal.Footer>
