@@ -11,7 +11,7 @@ import Header from "./components/header/header";
 import Footer from "./components/footer/footer";
 import Banner from "./components/banner/banner";
 
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, Redirect } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 
 class App extends Component {
@@ -31,6 +31,7 @@ class App extends Component {
             <Route path="/signature/:hashId" children={<Signature />} />
             <Route path="/create" children={<Create />} />
             <Route path="/profile" children={<Profile />} />
+            <Route exact path="/" render={() => <Redirect from="/" to="/home" />} />
           </Switch>
           <Footer></Footer>
         </div>
