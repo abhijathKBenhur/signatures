@@ -350,7 +350,7 @@ function Create(props) {
       case "mp3":
         return (
           <div className="audio-wrapper">
-          <img src={audio} alt=""/>
+          <img src={audio} alt="" className="mb-1"/>
           <audio controls>
             <source src={fileData.fileData}></source>
             Your browser does not support the
@@ -567,7 +567,7 @@ function Create(props) {
                     <Row className="purpose-selector-row">
                       <Col md="12" className="p-0">
                         <div className="purpose-label">
-                        <Form.Label>What would you like to do ? </Form.Label>
+                        <Form.Label>What would you like to do with the idea ? </Form.Label>
                            </div>
                         <Row>
                           <Col md="6">
@@ -654,7 +654,7 @@ function Create(props) {
                             onChange={handleChange}
                             ref={priceRef}
                           />
-                          <InputGroup.Text>ETH</InputGroup.Text>
+                          <InputGroup.Text>BNB</InputGroup.Text>
                         </InputGroup>
                       </Form.Group>
                     </Row>

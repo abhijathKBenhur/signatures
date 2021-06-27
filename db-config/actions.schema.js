@@ -7,7 +7,7 @@ const Actions = new Schema(
     to: { type: String },
     action: { type: String },
     status: { type: String },
-    ideaID: { type: String },
+    ideaID: { type: String }
   },
   { timestamps: true }
 );

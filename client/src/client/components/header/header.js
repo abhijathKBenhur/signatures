@@ -172,7 +172,9 @@ const Header = (props) => {
               >
                 Connect Wallet
               </Button>
-            ) : (
+            ) : 
+            
+            (
               <Button
                 variant="primary"
                 className="button"
