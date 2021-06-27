@@ -305,13 +305,13 @@ function Create(props) {
     }
   };
 
-  const onDrop = useCallback((acceptedFiles) => {
+  const onDrop = (acceptedFiles) => {
     if(checkMaxFileSize(_.get(acceptedFiles, '[0]'))) {
         setFormErrors({...formErrors, maxFileError: true})
     } else {
       loadFile(acceptedFiles);
     }
-  }, []);
+  }
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
     maxFiles: 1,
@@ -374,7 +374,6 @@ function Create(props) {
   
   const isSelectedPurpose = (purpose) => form.purpose === purpose
   const checkMaxFileSize = (file) => {
-    console.log('file = ', file)
       try {
         const size = Math.floor(file.size /1000000)
           return size > 5 ? true : false
@@ -786,8 +785,8 @@ function Create(props) {
           
           <div className="transaction-data">
             <div className="transaction-ids">
-              <p>Transaction ID- <span></span></p>
-              <p>File Hash ID- <span></span></p>
+              <p>Transaction ID- <span>{billet.transactionID}</span></p>
+              <p>File Hash ID- <span>{billet.PDFHash}</span></p>
               <p>* Please save both of these for future reference.</p>
             </div>
             <div className="btn-block">
