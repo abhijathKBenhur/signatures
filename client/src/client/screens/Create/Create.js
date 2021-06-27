@@ -363,6 +363,7 @@ function Create(props) {
       case "jpg":
       case "jpeg":
       case "png":
+        case "PNG":
         return <img src={`${fileData.fileData}`} alt=""/>;
 
       default:
