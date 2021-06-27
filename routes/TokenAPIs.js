@@ -1,4 +1,4 @@
-const Signature = require("../db-config/Signature.schema");
+const SignatureSchema = require("../db-config/Signature.schema");
 const express = require("express");
 const router = express.Router();
 const upload = require("../db-config/multer");
@@ -16,7 +16,7 @@ addSignature = (req, res) => {
       error: "Hollow idea",
     });
   }
-  const newIdea = new Signature(body);
+  const newIdea = new SignatureSchema(body);
 
   if (!newIdea) {
     return res.status(400).json({ success: false, error: err });
@@ -58,7 +58,7 @@ updateIdeaID = (req, res) => {
     transactionID: body.transactionID,
   };
 
-  Signature.findOneAndUpdate(findCriteria, { ideaID: body.ideaID })
+  SignatureSchema.findOneAndUpdate(findCriteria, { ideaID: body.ideaID })
     .then((idea, err) => {
       console.log("Updating idea", idea);
       if (err) {
@@ -79,9 +79,9 @@ updateIdeaID = (req, res) => {
 };
 
 getSignatureByHash = async (req, res) => {
-  console.log("Getting Signature :: ", req.params.PDFHash);
+  console.log("Getting SignatureSchema :: ", req.params.PDFHash);
 
-  await Signature.findOne({ PDFHash: req.params.PDFHash }, (err, signature) => {
+  await SignatureSchema.findOne({ PDFHash: req.params.PDFHash }, (err, signature) => {
     if (err) {
       return res.status(400).json({ success: false, error: err });
     }
@@ -131,7 +131,7 @@ getSignatures = async (req, res) => {
     payLoad.owner = userName;
   }
   if (!limit) {
-    await Signature.find(payLoad, (err, signatures) => {
+    await SignatureSchema.find(payLoad, (err, signatures) => {
       if (err) {
         return res.status(404).json({ success: false, error: "here" });
       }
@@ -141,7 +141,7 @@ getSignatures = async (req, res) => {
     });
   } else {
     console.log("Getting signatures for all");
-    Signature.find(payLoad)
+    SignatureSchema.find(payLoad)
       .limit(limit)
       .then((signatures) => {
         return res.status(200).json({ success: true, data: signatures });
@@ -173,7 +173,7 @@ buySignature = async (req, res) => {
     transactionID: transactionID,
   };
 
-  Signature.findOneAndUpdate(findCriteria, saleCriteria)
+  SignatureSchema.findOneAndUpdate(findCriteria, saleCriteria)
     .then((idea, err) => {
       console.log("Updating idea to mongoDB", idea);
       if (err) {
@@ -203,7 +203,7 @@ updatePrice = async (req, res) => {
     req.body.price
   );
 
-  await Signature.findOneAndUpdate(
+  await SignatureSchema.findOneAndUpdate(
     { ideaID: req.body.ideaID, owner: req.body.setter },
     { price: req.body.price },
     (err, token) => {
