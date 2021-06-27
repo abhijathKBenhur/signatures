@@ -399,6 +399,26 @@
 
         }
     }
+    .publishing-wrapper{
+        display: flex;
+        align-items: center;
+        flex-flow: column;
+        .publishing-block{
+            display: flex;
+            align-items: center;
+            flex-flow: column;
+            margin: 100px;
+            justify-content: center;
+            color: $white;
+            p {
+                font-size: 40px;
+                text-align: center;
+            }
+        }
+        .gif-wrapper{
+
+        }
+    }
 }
 
 

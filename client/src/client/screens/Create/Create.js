@@ -18,6 +18,7 @@ import "react-step-progress-bar/styles.css";
 import { shallowEqual, useSelector } from "react-redux";
 import user from "../../../assets/images/user1.png";
 import audio from "../../../assets/images/audio.png";
+import loadingGif from "../../../assets/Hourglass.gif";
 
 function Create(props) {
  
@@ -170,6 +171,8 @@ function Create(props) {
   function updateIdeaIDToMongo(payload) {
     MongoDBInterface.updateIdeaID(payload)
       .then((success) => {
+        setIsPublishing(false);
+        setIsPublished(true);
         toast.dark("Your thoughts are live on blockchain.", {
           position: "bottom-right",
           autoClose: 3000,
@@ -186,6 +189,7 @@ function Create(props) {
         });
       })
       .catch((err) => {
+        setIsPublishing(false);
         console.log(err);
       });
   }
@@ -193,8 +197,6 @@ function Create(props) {
   function saveToMongo(form) {
     MongoDBInterface.addSignature(form)
       .then((success) => {
-        setIsPublishing(false);
-        setIsPublished(true);
         toast.dark("Your thoughts have been submitted!", {
           position: "bottom-right",
           autoClose: 3000,
@@ -204,14 +206,10 @@ function Create(props) {
           draggable: true,
           progress: undefined,
         });
-        // setTimeout(() => {
-        //   gotoProfile();
-        // },3000)
        
         // setSlideCount(finalSlideCount + 1)
       })
       .catch((err) => {
-        setIsPublishing(false);
         console.log(err);
       });
   }
@@ -792,6 +790,29 @@ function Create(props) {
               <p>File Hash ID- <span></span></p>
               <p>* Please save both of these for future reference.</p>
             </div>
+            <div className="btn-block">
+            <Button
+                    variant="primary"
+                    className="button"
+                    bsstyle="primary"
+                    onClick={() => gotoProfile()}
+                  > Done
+                    </Button>
+            </div>
+          </div>
+      </Col>
+    )
+  }
+
+  const getPublishingView = () => {
+    return (
+      <Col md="12" sm="12" lg="12" xs="12" className="publishing-wrapper ">
+        <div className="publishing-block">
+        <p>Your Idea is processing. Please wait</p>
+        </div>
+          
+          <div className="gif-wrapper">
+          <img src={loadingGif} alt="" />
           </div>
       </Col>
     )
@@ -817,11 +838,11 @@ function Create(props) {
               </Row> */}
               <Row className="content-container">
                 
-                {slideCount === finalSlideCount && isPublished ? getPublishedView() : getViewBasedOnSteps()}
+                {slideCount === finalSlideCount && isPublished ? getPublishedView() : slideCount === finalSlideCount && isPublishing ? getPublishingView() : getViewBasedOnSteps()}
                
            
               </Row>
-              {!isPublished && 
+              {!isPublished && !isPublishing && 
                 <Row className="footer-class ">
                 <Col
                   md="6"
@@ -857,15 +878,9 @@ function Create(props) {
                     onClick={() => {
                       onNext();
                     }}
-                    disabled={slideCount === finalSlideCount && isPublishing}
                   >
                     {getNextButtonText()} {"  "}
-                    {slideCount === finalSlideCount && isPublishing && (
-                      <Spinner
-                        style={{ width: "15px", height: "15px" }}
-                        animation="border"
-                      />
-                    )}
+                    
                   </Button>
                 </Col>
               </Row>
