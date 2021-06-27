@@ -305,6 +305,9 @@
     .purpose-label,.tags-label, .price-label,.description-label,.title-label{
         label {
             color: $white;
+            font-weight: 700;
+            font-size: 20px;
+
         }
     }
     .select__menu {
@@ -341,7 +344,7 @@
             align-items: center;
             justify-content: center;
             flex-flow: column;
-            margin: 20px 0;
+            margin: 50px 0;
             p {
                 color: #fff;
                 text-transform: capitalize;
@@ -365,6 +368,9 @@
             margin: 10px;
             p{
                 color: $white;
+            }
+            .line-through{
+                text-decoration: line-through;
             }
         }
     }

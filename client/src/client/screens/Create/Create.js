@@ -18,7 +18,7 @@ import "react-step-progress-bar/styles.css";
 import { shallowEqual, useSelector } from "react-redux";
 import user from "../../../assets/images/user1.png";
 import audio from "../../../assets/images/audio.png";
-import loadingGif from "../../../assets/Hourglass.gif";
+import loadingGif from "../../../assets/images/loader_blocks.gif";
 
 function Create(props) {
  
@@ -305,13 +305,13 @@ function Create(props) {
     }
   };
 
-  const onDrop = useCallback((acceptedFiles) => {
+  const onDrop = (acceptedFiles) => {
     if(checkMaxFileSize(_.get(acceptedFiles, '[0]'))) {
         setFormErrors({...formErrors, maxFileError: true})
     } else {
       loadFile(acceptedFiles);
     }
-  }, []);
+  }
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
     maxFiles: 1,
@@ -325,7 +325,7 @@ function Create(props) {
     fr.onloadend = (e) => {
       setFileData({
         ...fileData,
-        fileType: getFileName(_.get(file, "[0].name")),
+        fileType: String(getFileName(_.get(file, "[0].name"))).toLowerCase(),
         fileData: e.target.result,
       });
       setFormErrors({...formErrors, maxFileError: false})
@@ -374,7 +374,6 @@ function Create(props) {
   
   const isSelectedPurpose = (purpose) => form.purpose === purpose
   const checkMaxFileSize = (file) => {
-    console.log('file = ', file)
       try {
         const size = Math.floor(file.size /1000000)
           return size > 5 ? true : false
@@ -766,7 +765,7 @@ function Create(props) {
                         </div>
                         <div className="price">
                          <p>
-                        Price: {form.price} <span>ETH</span>
+                        Price: <span className="line-through">{form.price} BNB</span> <span> FREE</span>
                            </p> 
                         </div>
             </Col>
@@ -786,8 +785,8 @@ function Create(props) {
           
           <div className="transaction-data">
             <div className="transaction-ids">
-              <p>Transaction ID- <span></span></p>
-              <p>File Hash ID- <span></span></p>
+              <p>Transaction ID- <span>{billet.transactionID}</span></p>
+              <p>File Hash ID- <span>{billet.PDFHash}</span></p>
               <p>* Please save both of these for future reference.</p>
             </div>
             <div className="btn-block">
@@ -808,7 +807,7 @@ function Create(props) {
     return (
       <Col md="12" sm="12" lg="12" xs="12" className="publishing-wrapper ">
         <div className="publishing-block">
-        <p>Your Idea is processing. Please wait</p>
+        <p>We are processing your idea. Please wait!</p>
         </div>
           
           <div className="gif-wrapper">
@@ -837,7 +836,6 @@ function Create(props) {
                 ></Col>
               </Row> */}
               <Row className="content-container">
-                
                 {slideCount === finalSlideCount && isPublished ? getPublishedView() : slideCount === finalSlideCount && isPublishing ? getPublishingView() : getViewBasedOnSteps()}
                
            
