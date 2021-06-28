@@ -1,91 +1,168 @@
 import _ from "lodash";
 import Signature from "../../beans/Signature";
 import React, { useState, useEffect } from "react";
-import { Row, Col, Form, InputGroup, Container } from "react-bootstrap";
+import {
+  Row,
+  Col,
+  Form,
+  InputGroup,
+  Container,
+  Tabs,
+  Tab,
+} from "react-bootstrap";
+import Image from "react-image-resizer";
 import { useHistory } from "react-router-dom";
 import "./profile.scss";
-import Image, { Shimmer } from "react-shimmer";
+import { Shimmer } from "react-shimmer";
+import Register from "../../modals/Register/Register";
 import MongoDBInterface from "../../interface/MongoDBInterface";
 import BlockChainInterface from "../../interface/BlockchainInterface";
-
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { Edit3, Award, User } from "react-feather";
 import StorageInterface from "../../interface/StorageInterface";
-import CollectionCard from "../../components/CollectionCard/CollectionCard";
 
+import Collections from "./collections";
+import store from "../../redux/store";
 function Profile(props) {
-  const [collectionList, setCollectionList] = useState([]);
-  const [fetchInterval, setFetchInterval] = useState(0);
+  const reduxState = useSelector((state) => state, shallowEqual);
+  const { metamaskID = undefined, userDetails = {} } = reduxState;
+  const [currentMetamaskAccount, setCurrentMetamaskAccount] = useState(
+    metamaskID
+  );
+  const [currentUserDetails, setCurrentUserDetails] = useState(userDetails);
+  const [profileCollection, setProfileCollection] = useState([]);
   let history = useHistory();
-
+  const [key, setKey] = useState("collections");
+  const viewUser = _.get(history.location.state,'userId');
+  
   useEffect(() => {
-    fetchSignatures();
-    const fetchInterval = setInterval(() => {
-      BlockChainInterface.getAccountDetails()
-        .then((metamaskID) => {
-          MongoDBInterface.getSignatures({
-            userName: metamaskID,
-            getOnlyNulls: true,
-          }).then((signatures) => {
-            let response = _.get(signatures, "data.data");
-            if (response.length == 0) {
-              clearInterval(fetchInterval);
-              fetchSignatures();
-            }
-          });
-        })
-        .catch((error) => {
-          clearInterval(fetchInterval);
-          console.log(error);
-        });
-    }, 1000);
-    setFetchInterval(fetchInterval);
-    return () => clearInterval(fetchInterval);
-  }, []);
-
+    const { metamaskID = undefined, userDetails = {} } = reduxState;
+    if (metamaskID) {
+      setCurrentMetamaskAccount(metamaskID);
+      fetchSignatures();
+    }
+    if (userDetails) {
+      setCurrentUserDetails(userDetails);
+    }
+    if(viewUser && (viewUser.toLowerCase() !== metamaskID)){
+      setCurrentMetamaskAccount(viewUser);
+      getUserDetailsById(history.location.state.userId)
+    }
+  }, [reduxState]);
+  const getUserDetailsById = (id) => {
+    MongoDBInterface.getUserInfo({metamaskId: id}).then( response => {
+      setCurrentUserDetails(_.get(response, 'data.data'));
+    })
+  }
   function fetchSignatures() {
-    BlockChainInterface.getAccountDetails()
-      .then((metamaskID) => {
-        MongoDBInterface.getSignatures({ userName: metamaskID }).then(
-          (signatures) => {
-            let response = _.get(signatures, "data.data");
-            let isEmptyPresent = _.find(response, (responseItem) => {
-              return _.isEmpty(responseItem.ideaID);
-            });
-            // if(isEmptyPresent){
-            //   clearInterval(fetchInterval)
-            // }
-            setCollectionList(response);
-          }
-        );
-      })
-      .catch((error) => {
-        clearInterval(fetchInterval);
-        console.log(error);
-      });
+    MongoDBInterface.getSignatures({ userName: currentMetamaskAccount }).then(
+      (signatures) => {
+        let response = _.get(signatures, "data.data");
+        let isEmptyPresent = _.find(response, (responseItem) => {
+          return _.isEmpty(responseItem.ideaID);
+        });
+        setProfileCollection(response);
+        
+        // if(isEmptyPresent){
+        //   clearInterval(fetchInterval)
+        // }
+      }
+    );
+  }
+
+  function registerCallBacks(params) {
+    switch (params.action) {
+      case "googleLogin":
+        break;
+      case "FacebookLogin":
+        break;
+    }
   }
 
   return (
     <Container fluid>
       <Row className="profile">
-        <Col md="12" className="mycollection">
-          <Row className="userPane">
-            <div className="profileHolder">
-              <Award size={50}></Award>
-            </div>
+        {_.isEmpty(currentUserDetails.userID) ? (
+          <Row className="register-modal">
+            <Register></Register>
           </Row>
-          <div className="separator"> </div>
-          <Container>
-            <Row className="collections">
-              {collectionList.map((collection, index) => {
-                return (
-                  <CollectionCard key={index} card={collection}>
-                    {" "}
-                  </CollectionCard>
-                );
-              })}
-            </Row>
-          </Container>
-        </Col>
+        ) : (
+          <div className="separator w-100">
+            <Col md="12" className="mycollection">
+              <Row className="loggedIn">
+                <Col md="2" className="left-block">
+                  {/* <Row className="profile-section"> */}
+                  <Image
+                          src={currentUserDetails.imageUrl}
+                          height={150}
+                          className=""
+                          style={{
+                            background: "#f1f1f1",
+                            borderRadius: "7px"
+                          }}
+                        />
+                  {/* </Row>  */}
+                  {/* <Row className="profile-section"> */}
+                    <div className="left-block-content">
+                      <h5>Website</h5>
+                      <div className="options">
+                        <p>Website</p>
+                        <p>Blog</p>
+                        <p>Portfolio</p>
+                      </div>
+                    </div>
+                  {/* </Row> */}
+                </Col>
+                <Col md="7" className="p-0">
+                  <div className="userPane">
+                    <div>
+                      <div className="first-section">
+                        <h4>{_.get(currentUserDetails, 'userID')}</h4>
+                        <p>{_.get(currentUserDetails, 'email')}</p>
+                      {_.get(currentUserDetails, 'metamaskId') && <p>Meta mask ID- {_.get(currentUserDetails, 'metamaskId')}</p>}
+                        {/* <div className="image-part">
+                          {JSON.stringify(currentUserDetails)}
+                        </div>
+                        */}
+                      </div>
+                      <div className="second-section"></div>
+                    </div>
+                  </div>
+                  <div className="tabs-wrapper">
+                    <Tabs
+                      id="controlled-tab-example"
+                      activeKey={key}
+                      onSelect={(k) => setKey(k)}
+                    >
+                      <Tab eventKey="collections" title="Collection">
+                        <div className="collection-wrapper">
+                          <div className="middle-block">
+                            <Collections collectionList={profileCollection} />
+                          </div>
+                        </div>
+                      </Tab>
+                      <Tab eventKey="profile" title="Notifications">
+                        <div className="transactions-wrapper">
+                          <h6>No transactions yet</h6>
+                        </div>
+                      </Tab>
+                    </Tabs>
+                  </div>
+                </Col>
+                <Col md="3" className="right-block">
+                  <div className="right-block-content">
+                    <h5>Awards</h5>
+                    <div className="options">
+                      <p>Website</p>
+                      <p>Blog</p>
+                      <p>Portfolio</p>
+                    </div>
+                  </div>
+                </Col>
+              </Row>
+            </Col>
+          </div>
+        )}
       </Row>
     </Container>
   );

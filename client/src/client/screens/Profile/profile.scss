@@ -1,37 +1,174 @@
 @import "../../commons/Common.scss";
 
-.profile{
-    .separator{
-        height: 70px;
+.profile {
+  .register-modal {
+    min-height: 100vh;
+  }
+  .separator {
+    margin-top: 60px;
+    display: flex;
+    min-height: calc(100vh - 60px);
+    .intial-block {
+      flex: 1;
+      max-height: 300px;
+      padding: 20px;
+      background-color: #fff;
+      margin-right: 20px;
+      h5 {
+        text-transform: uppercase;
+        font-size: 17px;
+        font-weight: 500;
+      }
+      .options {
+        margin-top: 20px;
+        p {
+          //    margin: 0;
+        }
+      }
     }
-    .userPane{
-        margin-top: 60px;
-        height: 30vh;
+
+    .tabs-wrapper {
+      flex: 5;
+      .nav-tabs {
+        a {
+          color: #000;
+          border: 0;
+          &.active {
+            border-bottom: 2px solid #79589f;
+            color: #79589f;
+          }
+        }
+      }
+    }
+
+    .tab-content {
+    }
+  }
+  .userPane {
+    padding: 0px;
+    height: 230px;
+    display: flex;
+    background-color: #fff;
+    .first-section {
+      flex: 1;
+      // display: flex;
+      align-items: center;
+      height: 100%;
+      padding: 10px;
+      h4{
+        text-transform: capitalize;
+      }
+      .image-part {
+        img {
+          width: 130px;
+          height: 130px;
+          object-fit: cover;
+        }
+      }
+      .user-personal-info {
+        flex: 1;
+        height: inherit;
+        padding: 20px;
+        border-right: 1px solid #cdcdcd;
+        .buttons-block {
+          .btn {
+            padding: 15px;
+            &.btn-success {
+              border: none !important;
+            }
+            &.btn-outline-primary {
+              border-color: #7070f9;
+              color: #7070f9;
+            }
+          }
+        }
+      }
+    }
+    .second-section {
+      flex: 1;
+      padding: 20px;
+      .detail {
         display: flex;
-        justify-content: center;
-        padding: 0;
-        border-bottom: 1px solid #E5E5E5;
-        background-color: #F7F4FB;
-        .userInfo{
-            display: flex;
-            align-content: center;
-            text-align: center;
+        padding: 0 10px;
+        .key-name {
+          flex: 1;
+          font-weight: 600;
         }
-        .profileHolder{
-            height: 75px;
-            width: 75px;
-            border-radius: 150px;
-            border: 2px solid #F1F1F1;
-            align-self: flex-end;
-            position: relative;
-            background-color: white;
-            top: 35px;
-            justify-content: center;
-            -webkit-align-items: center;
-            display: flex;
+        .value {
+          flex: 2;
         }
+      }
     }
-    .collections{
-        padding-top: 30px;
+    .userInfo {
+      display: flex;
+      align-content: center;
+      text-align: center;
     }
+    .profileHolder {
+      height: 75px;
+      width: 75px;
+      border-radius: 150px;
+      border: 2px solid #f1f1f1;
+      align-self: flex-end;
+      position: relative;
+      background-color: white;
+      top: 35px;
+      justify-content: center;
+      -webkit-align-items: center;
+      display: flex;
+    }
+  }
+  .collection-wrapper {
+    display: flex;
+
+    .middle-block {
+      flex: 4;
+    }
+  }
+  .transactions-wrapper {
+    min-height: 300px;
+    text-align: center;
+  }
+  .left-block {
+    margin-top: 10px;
+    .left-block-content {
+      flex: 1;
+      max-height: 300px;
+      padding: 20px;
+      background-color: #fff;
+      h5 {
+        text-transform: uppercase;
+        font-size: 17px;
+        font-weight: 500;
+      }
+      .options {
+        margin-top: 20px;
+        p {
+          //    margin: 0;
+        }
+      }
+    }
+  }
+  .right-block {
+    .right-block-content {
+      flex: 1;
+      max-height: 300px;
+      padding: 20px;
+      background-color: #fff;
+      h5 {
+        text-transform: uppercase;
+        font-size: 17px;
+        font-weight: 500;
+      }
+      .options {
+        margin-top: 20px;
+        p {
+          //    margin: 0;
+        }
+      }
+    }
+  }
+  .collection-container {
+    max-width: 100%;
+  }
 }

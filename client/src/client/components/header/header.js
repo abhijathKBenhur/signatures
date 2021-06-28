@@ -1,8 +1,7 @@
-import React, { useState } from "react";
-import { Button, Dropdown, Form, Nav } from "react-bootstrap";
+import React, { useState, useEffect } from "react";
+import { Button, Image, Form, Nav } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
 import logo from "../../../assets/logo/signatures.png";
-import LoginModal from "../../modals/login-modal/loginModal";
 import _ from "lodash";
 import { User, Plus, Search } from "react-feather";
 import "./header.scss";
@@ -10,8 +9,49 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Container, Row, Col } from "react-bootstrap";
 import BlockchainInterface from "../../interface/BlockchainInterface";
+import store from "../../redux/store";
+import { shallowEqual, useSelector } from "react-redux";
+import SearchBar from "../searchBar/SearchBar";
+import MongoDBInterface from "../../interface/MongoDBInterface";
+import { setReduxUserDetails } from "../../redux/actions";
 const Header = (props) => {
   let history = useHistory();
+  const reduxState = useSelector((state) => state, shallowEqual);
+  const { metamaskID = undefined, userDetails = {} } = reduxState;
+  const [currentMetamaskAccount, setCurrentMetamaskAccount] = useState(
+    metamaskID
+  );
+  const [currentUserDetails, setCurrentUserDetails] = useState(userDetails);
+
+  useEffect(() => {
+    const { metamaskID = undefined } = reduxState;
+    if (metamaskID) {
+      setCurrentMetamaskAccount(metamaskID);
+    }
+  }, [reduxState]);
+
+  useEffect(() => {
+    console.log("getting user ingo");
+    connectWallet();
+  }, []);
+
+  useEffect(() => {
+    refreshUserDetails();
+  }, [currentMetamaskAccount]);
+
+  function refreshUserDetails() {
+    if (!_.isEmpty(currentMetamaskAccount)) {
+      MongoDBInterface.getUserInfo({ metamaskId: currentMetamaskAccount })
+        .then((userDetails) => {
+          store.dispatch(setReduxUserDetails(_.get(userDetails, "data.data")));
+          setCurrentUserDetails(_.get(userDetails, "data.data"));
+        })
+        .catch((success) => {
+          setCurrentUserDetails({});
+          store.dispatch(setReduxUserDetails({}));
+        });
+    }
+  }
 
   function logoutUser() {
     console.log("logging out");
@@ -44,15 +84,12 @@ const Header = (props) => {
   }
 
   function connectWallet() {
-    BlockchainInterface.getAccountDetails().then(succ => {
-
-    }).catch(err =>{
-
-    })
+    BlockchainInterface.getAccountDetails()
+      .then((succ) => {})
+      .catch((err) => {});
   }
 
   const [appLocation, setAppLocatoin] = useState("home");
-  const [showLoginModal, setShowLoginModal] = useState(false);
   // const [loggedUserInfo, setLoggedUserInfo] = useState(undefined);
 
   const ProfileDropDown = React.forwardRef(({ children, onClick }, ref) => (
@@ -83,11 +120,12 @@ const Header = (props) => {
                 width="50"
                 height="50"
                 alt=""
+                className="cursor-pointer"
                 onClick={() => gotoGallery()}
               ></img>
             </a>
-
-            <Nav.Item>
+            <SearchBar />
+            {/* <Nav.Item>
               <Nav.Link
                 active={appLocation == "home"}
                 onClick={() => {
@@ -96,8 +134,8 @@ const Header = (props) => {
               >
                 Discover
               </Nav.Link>
-            </Nav.Item>
-            <Nav.Item>
+            </Nav.Item> */}
+            {/* <Nav.Item>
               <Nav.Link
                 active={appLocation == "profile"}
                 onClick={() => {
@@ -106,7 +144,7 @@ const Header = (props) => {
               >
                 Collection
               </Nav.Link>
-            </Nav.Item>
+            </Nav.Item> */}
           </div>
           <div className="middle-section">
             {/* <Form.Control size="sm" type="text" placeholder="Normal text" /> */}
@@ -114,7 +152,7 @@ const Header = (props) => {
 
           <div className="right-section">
             {/* <Button
-              variant="danger"
+              variant="primary"
               className="button"
               bsstyle="primary"
               onClick={() => {
@@ -123,19 +161,52 @@ const Header = (props) => {
             >
               Connect
             </Button> */}
-            <Search
-              className="cursor-pointer header-icons"
-              onClick={() => {
-                createnew();
-              }}
-            ></Search>
-            <Plus
-              className="cursor-pointer header-icons"
-              onClick={() => {
-                createnew();
-              }}
-            ></Plus>
-            <Dropdown>
+            {_.isEmpty(currentMetamaskAccount) ? (
+              <Button
+                variant="primary"
+                className="button"
+                bsstyle="primary"
+                onClick={() => {
+                  createnew();
+                }}
+              >
+                Connect Wallet
+              </Button>
+            ) : 
+            
+            (
+              <Button
+                variant="primary"
+                className="button"
+                bsstyle="primary"
+                onClick={() => {
+                  createnew();
+                }}
+              >
+                Publish
+              </Button>
+            )}
+
+            {_.isEmpty(currentUserDetails.imageUrl) ? (
+              <User
+                className="cursor-pointer header-icons"
+                onClick={() => {
+                  gotoPortfolio();
+                }}
+              ></User>
+            ) : (
+              <Image
+                className="cursor-pointer header-icons"
+                src={currentUserDetails.imageUrl}
+                roundedCircle
+                width="20px"
+                onClick={() => {
+                  gotoPortfolio();
+                }}
+              ></Image>
+            )}
+
+            {/* <Dropdown>
               <Dropdown.Toggle
                 as={ProfileDropDown}
                 id="dropdown-custom-components"
@@ -168,7 +239,7 @@ const Header = (props) => {
                   Settings
                 </Dropdown.Item>
               </Dropdown.Menu>
-            </Dropdown>
+            </Dropdown> */}
           </div>
         </Container>
       </nav>

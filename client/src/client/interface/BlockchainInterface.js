@@ -1,8 +1,10 @@
-import _, { defer, has } from "lodash";
+import _, { defer, has } from "lodash";import  React from 'react';
 import Web3 from "web3";
 import NFTTokenBean from "../beans/Signature";
 import contractJSON from "../../contracts/ideaBlocks.json";
 import { toast } from "react-toastify";
+import store from '../redux/store';
+import { setReduxMetaMaskID } from "../redux/actions";
 
 
 import axios from 'axios'
@@ -20,6 +22,15 @@ class BlockchainInterface {
     this.contract = undefined;
     this.tokens = [];
     this.NFTTokenBean = NFTTokenBean;
+    let parentThis = this
+    window.ethereum && window.ethereum.on('accountsChanged', function (accounts) {
+      parentThis.getAccountDetails();
+    })
+  }
+
+  register_user = payload => { 
+    console.log("register_user")
+    return api.post(`/register_user`,payload) 
   }
 
   async getAccountDetails() {
@@ -29,6 +40,8 @@ class BlockchainInterface {
           .then((success) => {
             this.metamaskAccount = success.accountId[0];
             let metamaskNetwork = success.networkId;
+            console.log("setting in redux user info")
+            store.dispatch(setReduxMetaMaskID(this.metamaskAccount))
             const contractNetworkID = this.contractJSON.network;
             if (contractNetworkID == metamaskNetwork) {
               const abi = this.contractJSON.abi;
@@ -42,7 +55,6 @@ class BlockchainInterface {
           })
           .catch((err) => {
             console.log("catch loadWeb3", err);
-            
             reject(err);
           });
       
@@ -75,29 +87,40 @@ class BlockchainInterface {
         window.web3 = this.web3;
         resolve(this.web3);
       } else {
+        store.dispatch(setReduxMetaMaskID())
         let errorMessage =
-          "Non-Ethereum browser detected. You should consider trying MetaMask!";
-          toast.dark(errorMessage, {
+          <div>Non-Ethereum browser detected. You should consider trying MetaMask!
+            <br />
+            <a style={{textDecoration: 'underline', color:'white'}} target="blank" href="https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn?hl=en">Add Metamask from here</a>
+          </div>
+          toast.error(errorMessage, {
             position: "bottom-right",
             hideProgressBar: true,
             closeOnClick: true,
             pauseOnHover: true,
             draggable: true,
             progress: undefined,
+            autoClose: false
           });
-        parentThis.alert(errorMessage);
         reject(errorMessage);
       }
     });
     return promise;
   }
 
+  publishOnBehalf(payLoad){
+    payLoad.price = this.web3.utils.toWei(payLoad.price, "ether");
+    return api.post(`/publishOnBehalf`,{payLoad})
+  }
+
+
+
   publishIdea(payLoad, saveToMongoCallback, udpateIDCallback) {
     payLoad.price = this.web3.utils.toWei(payLoad.price, "ether");
 
     const transactionObject = {
       value: this.web3.utils.toWei("0.05", "ether"),
-      from: payLoad.owner,
+      from: payLoad.creator,
     };
     this.contract.methods
       .publish(payLoad.title, payLoad.PDFHash, payLoad.price)
@@ -106,7 +129,7 @@ class BlockchainInterface {
         payLoad.transactionID = hash;
         saveToMongoCallback(payLoad);
       })
-      .on("receipt", function(receipt) {
+      .once("receipt", function(receipt) {
         let tokenReturns = _.get(
           receipt.events,
           "Transfer.returnValues.tokenId"
@@ -120,7 +143,7 @@ class BlockchainInterface {
         }
         console.log("receipt received")
       })
-      .on("confirmation", function(confirmationNumber, receipt) {
+      .once("confirmation", function(confirmationNumber, receipt) {
         console.log("confirmationNumber ::" + confirmationNumber)
       })
       .on("error", console.error);
@@ -135,17 +158,16 @@ class BlockchainInterface {
       value: updatePayLoad.price,
       from: updatePayLoad.buyer,
     };
+    debugger
     this.contract.methods
       .buy(updatePayLoad.ideaID)
       .send(transactionObject)
       .on("transactionHash", function(hash) {
         console.log("updated with transaction id ::" , hash)
-        
         updatePayLoad.transactionID = hash;
-
         feedbackCallback(updatePayLoad);
       })
-      .on("receipt", function(receipt) {
+      .once("receipt", function(receipt) {
         updatePayLoad.price = "0";
         let tokenReturns = _.get(
           receipt.events,
@@ -153,7 +175,7 @@ class BlockchainInterface {
         );
           successCallback(updatePayLoad);
       })
-      .on("confirmation", function(confirmationNumber, receipt) {
+      .once("confirmation", function(confirmationNumber, receipt) {
         console.log("confirmation :: " + confirmationNumber)
       })
       .on("error", (err) => {
@@ -172,14 +194,14 @@ class BlockchainInterface {
       .on("transactionHash", function(hash) {
         feedbackCallback();
       })
-      .on("receipt", function(receipt) {
+      .once("receipt", function(receipt) {
         let tokenReturns = _.get(
           receipt.events,
           "Transfer.returnValues.tokenId"
         );
           successCallback(updatePayLoad);
       })
-      .on("confirmation", function(confirmationNumber, receipt) {
+      .once("confirmation", function(confirmationNumber, receipt) {
         console.log("confirmation :: " + confirmationNumber)
       })
       .on("error", console.error);

@@ -1,7 +1,7 @@
 import { useHistory } from "react-router-dom";
 import _ from "lodash";
 import Signature from "../../beans/Signature";
-import loader from "../../../assets/loader.gif";
+import loader from "../../../assets/images/loader.gif";
 import { MoreHorizontal, Eye, Share, Crosshair, Edit3 } from "react-feather";
 import "./collection-card.scss";
 import { confirm } from "../../modals/confirmation/confirmation";
@@ -12,7 +12,7 @@ import BlockChainInterface from "../../interface/BlockchainInterface";
 import MongoDBInterface from "../../interface/MongoDBInterface";
 import { toast } from "react-toastify";
 import Web3Utils from "web3-utils";
-
+import moment from "moment";
 const CollectionCard = (props) => {
   let history = useHistory();
   const [signature, setSignature] = useState(new Signature(props.card));
@@ -24,8 +24,7 @@ const CollectionCard = (props) => {
   }
 
   function copyClipBoard() {
-    let shareURL =
-      window.location.href + "/signature/" + signature.PDFHash;
+    let shareURL = window.location.href + "/signature/" + signature.PDFHash;
     navigator.clipboard.writeText(shareURL);
 
     toast.dark("Copied to clipboard!", {
@@ -111,68 +110,72 @@ const CollectionCard = (props) => {
       className="collection-card col-md-offset-2"
     >
       <div className="content cursor-pointer">
-        <div className="collection-header d-flex justify-content-between align-items-center p-2">
-          <div className="header-left">
-            {_.isEmpty(signature.ideaID) ? (
-              <img width={20} src={loader}></img>
-            ) : (
-              <div></div>
-            )}
+      <div className="collection-header d-flex justify-content-between align-items-center p-2">
+            <div className="header-left">
+              {_.isEmpty(signature.ideaID) ? (
+                <img width={20} src={loader}></img>
+              ) : (
+                <div></div>
+              )}
+            </div>
+            <div className="header-right">
+              <Dropdown>
+                <Dropdown.Toggle
+                  as={CollectionMenu}
+                  id="collection-dropdown"
+                ></Dropdown.Toggle>
+                <Dropdown.Menu>
+                  <Dropdown.Item
+                    className="dropdown-item"
+                    eventKey="1"
+                    onClick={() => {
+                      openCardView(signature);
+                    }}
+                  >
+                    <Eye className="signature-icons" size={15}></Eye>
+                    View
+                  </Dropdown.Item>
+
+                  <Dropdown.Item
+                    className="dropdown-item"
+                    eventKey="2"
+                    onClick={() => {
+                      editPrice(signature);
+                    }}
+                  >
+                    <Edit3 className="signature-icons" size={15}></Edit3>
+                    Edit Price
+                  </Dropdown.Item>
+
+                  <Dropdown.Item
+                    className="dropdown-item"
+                    eventKey="2"
+                    onClick={() => {
+                      copyClipBoard();
+                    }}
+                  >
+                    <Share className="signature-icons" size={15}></Share>
+                    Share
+                  </Dropdown.Item>
+
+                  <Dropdown.Item
+                    className="dropdown-item"
+                    eventKey="2"
+                    onClick={() => {
+                      openInEtherscan();
+                    }}
+                  >
+                    <Crosshair
+                      className="signature-icons"
+                      size={15}
+                    ></Crosshair>
+                    View transaction
+                  </Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+            </div>
           </div>
-          <div className="header-right">
-            <Dropdown>
-              <Dropdown.Toggle
-                as={CollectionMenu}
-                id="collection-dropdown"
-              ></Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item
-                  className="dropdown-item"
-                  eventKey="1"
-                  onClick={() => {
-                    openCardView(signature);
-                  }}
-                >
-                  <Eye className="signature-icons" size={15}></Eye>
-                  View
-                </Dropdown.Item>
-
-                <Dropdown.Item
-                  className="dropdown-item"
-                  eventKey="2"
-                  onClick={() => {
-                    editPrice(signature);
-                  }}
-                >
-                  <Edit3 className="signature-icons" size={15}></Edit3>
-                  Edit Price
-                </Dropdown.Item>
-
-                <Dropdown.Item
-                  className="dropdown-item"
-                  eventKey="2"
-                  onClick={() => {
-                    copyClipBoard();
-                  }}
-                >
-                  <Share className="signature-icons" size={15}></Share>
-                  Share
-                </Dropdown.Item>
-
-                <Dropdown.Item
-                  className="dropdown-item"
-                  eventKey="2"
-                  onClick={() => {
-                    openInEtherscan();
-                  }}
-                >
-                  <Crosshair className="signature-icons" size={15}></Crosshair>
-                  View transaction
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-          </div>
-        </div>
+        
         <div
           className="collection-preview"
           onClick={() => {
@@ -187,13 +190,34 @@ const CollectionCard = (props) => {
                 background: "#f1f1f1",
               }}
             />
+            <div className="description">
+                          <div className="heading">Description</div>
+                          <div className="text">
+                            {signature.description}
+                          </div>
+                          
+                        </div>
           </Col>
         </div>
-        <div className="collection-footer">
-          <div md="12">
-            <p className="text-left">{signature.title}</p>
-          </div>
-        </div>
+        <Row className="collection-footer">
+                      <Col md="12" className="idea-title">
+                        <p className="text-left title">{signature.title}</p>
+                      </Col>
+                     
+                      <Col md="6" className="idea-details">
+                        {moment(signature.createdAt).format("DD-MMM-YYYY")} 
+                      </Col>
+                      <Col md="6" className="idea-user text-right">
+                        {signature.userID} 
+                      </Col>
+          </Row>
+          {/* <div className="idea-details">
+            <span className="placeholder">{signature.userID}</span>
+            <span className="price">
+              {signature.price && Web3Utils.fromWei(signature.price)} BNB
+            </span>
+          </div> */}
+          
       </div>
     </Col>
   );
