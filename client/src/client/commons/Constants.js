@@ -12,22 +12,24 @@ const CATEGORIES = [
     { value: 'Parenting', label: 'Parenting' }
   ]
 
-  const  PRIORITIES = {
-    HIGH: "1",
-    LOW: "0",
+const PURPOSES = {
+    AUCTION: "AUCTION",
+    SELL: "SELL",
+    COLLAB: "COLLABORATE",
+    KEEP: "Decide later",
 }
 
-const REGISTRATION_LEVEL = {
-    BASE_1: "BASE_1",
-    BASE_2: "BASE_1",
-    BASE_3: "BASE_3",
-    BASE_4: "BASE_4"
-}
+const STORAGE_TYPE = [
+    { value: 'PUBLIC', label: 'PUBLIC - The files are stored in IPFS' },
+    { value: 'PRIVATE', label: 'PRIVATE - We securely store the file in private stores' },
+    { value: 'SELF', label: 'SELF - We wont be storing the file. Please save the has for reference.' },
+  ];
 
 const CONSTANTS = {
     CATEGORIES,
-    PRIORITIES,
-    REGISTRATION_LEVEL
+    PURPOSES,
+    STORAGE_TYPE
 }
+
 
 export default CONSTANTS

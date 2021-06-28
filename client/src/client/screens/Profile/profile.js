@@ -33,7 +33,8 @@ function Profile(props) {
   const [profileCollection, setProfileCollection] = useState([]);
   let history = useHistory();
   const [key, setKey] = useState("collections");
-
+  const viewUser = _.get(history.location.state,'userId');
+  
   useEffect(() => {
     const { metamaskID = undefined, userDetails = {} } = reduxState;
     if (metamaskID) {
@@ -43,8 +44,16 @@ function Profile(props) {
     if (userDetails) {
       setCurrentUserDetails(userDetails);
     }
+    if(viewUser && (viewUser.toLowerCase() !== metamaskID)){
+      setCurrentMetamaskAccount(viewUser);
+      getUserDetailsById(history.location.state.userId)
+    }
   }, [reduxState]);
-
+  const getUserDetailsById = (id) => {
+    MongoDBInterface.getUserInfo({metamaskId: id}).then( response => {
+      setCurrentUserDetails(_.get(response, 'data.data'));
+    })
+  }
   function fetchSignatures() {
     MongoDBInterface.getSignatures({ userName: currentMetamaskAccount }).then(
       (signatures) => {
@@ -53,6 +62,7 @@ function Profile(props) {
           return _.isEmpty(responseItem.ideaID);
         });
         setProfileCollection(response);
+        
         // if(isEmptyPresent){
         //   clearInterval(fetchInterval)
         // }
@@ -131,7 +141,7 @@ function Profile(props) {
                           </div>
                         </div>
                       </Tab>
-                      <Tab eventKey="profile" title="Transactions">
+                      <Tab eventKey="profile" title="Notifications">
                         <div className="transactions-wrapper">
                           <h6>No transactions yet</h6>
                         </div>

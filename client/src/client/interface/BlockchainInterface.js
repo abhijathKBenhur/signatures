@@ -1,5 +1,4 @@
-import _, { defer, has } from "lodash";
-import  React from 'react';
+import _, { defer, has } from "lodash";import  React from 'react';
 import Web3 from "web3";
 import NFTTokenBean from "../beans/Signature";
 import contractJSON from "../../contracts/ideaBlocks.json";
@@ -7,6 +6,12 @@ import { toast } from "react-toastify";
 import store from '../redux/store';
 import { setReduxMetaMaskID } from "../redux/actions";
 
+
+import axios from 'axios'
+
+const api = axios.create({
+    baseURL: 'http://localhost:4000/api',
+})
 
 class BlockchainInterface {
   constructor() {
@@ -20,6 +25,11 @@ class BlockchainInterface {
     window.ethereum && window.ethereum.on('accountsChanged', function (accounts) {
       parentThis.getAccountDetails();
     })
+  }
+
+  register_user = payload => { 
+    console.log("register_user")
+    return api.post(`/register_user`,payload) 
   }
 
   async getAccountDetails() {
@@ -97,12 +107,19 @@ class BlockchainInterface {
     return promise;
   }
 
+  publishOnBehalf(payLoad){
+    payLoad.price = this.web3.utils.toWei(payLoad.price, "ether");
+    return api.post(`/publishOnBehalf`,{payLoad})
+  }
+
+
+
   publishIdea(payLoad, saveToMongoCallback, udpateIDCallback) {
     payLoad.price = this.web3.utils.toWei(payLoad.price, "ether");
 
     const transactionObject = {
       value: this.web3.utils.toWei("0.05", "ether"),
-      from: payLoad.owner,
+      from: payLoad.creator,
     };
     this.contract.methods
       .publish(payLoad.title, payLoad.PDFHash, payLoad.price)
@@ -111,7 +128,7 @@ class BlockchainInterface {
         payLoad.transactionID = hash;
         saveToMongoCallback(payLoad);
       })
-      .on("receipt", function(receipt) {
+      .once("receipt", function(receipt) {
         let tokenReturns = _.get(
           receipt.events,
           "Transfer.returnValues.tokenId"
@@ -125,7 +142,7 @@ class BlockchainInterface {
         }
         console.log("receipt received")
       })
-      .on("confirmation", function(confirmationNumber, receipt) {
+      .once("confirmation", function(confirmationNumber, receipt) {
         console.log("confirmationNumber ::" + confirmationNumber)
       })
       .on("error", console.error);
@@ -140,17 +157,16 @@ class BlockchainInterface {
       value: updatePayLoad.price,
       from: updatePayLoad.buyer,
     };
+    debugger
     this.contract.methods
       .buy(updatePayLoad.ideaID)
       .send(transactionObject)
       .on("transactionHash", function(hash) {
         console.log("updated with transaction id ::" , hash)
-        
         updatePayLoad.transactionID = hash;
-
         feedbackCallback(updatePayLoad);
       })
-      .on("receipt", function(receipt) {
+      .once("receipt", function(receipt) {
         updatePayLoad.price = "0";
         let tokenReturns = _.get(
           receipt.events,
@@ -158,7 +174,7 @@ class BlockchainInterface {
         );
           successCallback(updatePayLoad);
       })
-      .on("confirmation", function(confirmationNumber, receipt) {
+      .once("confirmation", function(confirmationNumber, receipt) {
         console.log("confirmation :: " + confirmationNumber)
       })
       .on("error", (err) => {
@@ -177,14 +193,14 @@ class BlockchainInterface {
       .on("transactionHash", function(hash) {
         feedbackCallback();
       })
-      .on("receipt", function(receipt) {
+      .once("receipt", function(receipt) {
         let tokenReturns = _.get(
           receipt.events,
           "Transfer.returnValues.tokenId"
         );
           successCallback(updatePayLoad);
       })
-      .on("confirmation", function(confirmationNumber, receipt) {
+      .once("confirmation", function(confirmationNumber, receipt) {
         console.log("confirmation :: " + confirmationNumber)
       })
       .on("error", console.error);

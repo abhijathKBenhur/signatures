@@ -8,6 +8,7 @@ export default class Signature{
         this.category = options.category
         this.description = options.description
         this.price = options.price
+        this.createdAt = options.createdAt
         this.PDFHash = options.PDFHash
         this.PDFFile = options.PDFFile
         this.fileType = options.fileType

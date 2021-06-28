@@ -12,6 +12,33 @@
   //   }
   // }
 }
+input[type='radio']:after {
+  width: 15px;
+  height: 15px;
+  border-radius: 15px;
+  top: -2px;
+  left: -1px;
+  position: relative;
+  background-color: #d1d3d1;
+  content: '';
+  display: inline-block;
+  visibility: visible;
+  border: 2px solid white;
+}
+
+input[type='radio']:checked:after {
+  width: 15px;
+  height: 15px;
+  border-radius: 15px;
+  top: -2px;
+  left: -1px;
+  position: relative;
+  background-color: #ffa500;
+  content: '';
+  display: inline-block;
+  visibility: visible;
+  border: 2px solid white;
+}
 body {
   font-family: "Roboto", sans-serif;
   .signature-icons {
@@ -41,7 +68,13 @@ body {
     }
   }
 }
-
+.no-padding-lr {
+  padding-left: 0px !important;
+  padding-right: 0px !important;
+}
+.no-padding-l {
+  padding-left: 0px !important;
+}
 .cursor-pointer {
   cursor: pointer;
 }
@@ -79,32 +112,34 @@ body {
     color: white;
   }
   &.btn-primary {
-    background: $primary;
-    color: #fff;
-    &:hover {
-      background: $primary-dark !important;
-    }
-    &:active {
-      background: $primary-dark !important;
-      box-shadow: none;
+    background-color: $secondary;
+    border-color: $secondary  !important;
+    &:focus, &:hover, &:active {
+        background-color: $secondary !important;
+        box-shadow: none;
     }
   }
   &.btn-secondary {
-    color: $primary;
-    background-color: transparent;
-    &:hover {
-      background: $primary !important;
-      color: white;
+    border-color: $secondary  !important;
+    color: $secondary;
+    background: transparent;
+    &:focus, &:hover, &:active {
+        background: $secondary !important;
+        color: $white !important;
     }
-    &:active {
-      background: $primary !important;
-      box-shadow: none;
-      color: white;
+  }
+  &.btn-ternary {
+    border-color: $primary-dark  !important;
+    color: $primary-dark;
+    background: transparent;
+    &:focus, &:hover, &:active {
+        background: $primary-dark !important;
+        color: $white !important;
     }
   }
   &.btn-disabled {
     color: $primary;
-    background-color: $primary-light;
+    background-color: $grey-border;
     pointer-events: none;
   }
 }

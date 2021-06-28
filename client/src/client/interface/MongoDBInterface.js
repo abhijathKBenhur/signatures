@@ -34,7 +34,11 @@ export const addSignature = payload => {
         transactionID: payload.transactionID,
         ideaID: payload.ideaID,
         fileType: payload.fileType,
-        userID: payload.userID
+        userID: payload.userID,
+        creator: payload.creator,
+        storage: payload.storage,
+        purpose: payload.purpose,
+        creator: payload.creator
     })
 }
 
@@ -67,6 +71,11 @@ export const registerUser = payload => {
     return api.post(`/registerUser`,payload) 
 }
 
+export const register_user = payload => { 
+    console.log("register_user")
+    return api.post(`/register_user`,payload) 
+  }
+  
 
 const MongoDBInterface = {
     getSignatures,

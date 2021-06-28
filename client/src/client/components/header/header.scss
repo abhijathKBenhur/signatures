@@ -1,14 +1,14 @@
 @import "../../commons/Common.scss";
 .appHeader{
-    background-color: $primary-lightest !important;
+    background-color: $primary-dark !important;
     width: 100%;
     z-index: 10000;
     position: fixed;
     top:0;
     height: 60px;
-    border-bottom: 1.5px solid $primary;
+    border-bottom: 1.5px solid $grey-border;
     .header-icons{
-        color: $primary;
+        color: $secondary;
     }
     .left-section{
         display: flex;
@@ -33,7 +33,6 @@
         padding: 3px;
         top: 15px;
         border-radius: 3px;
-        box-shadow: 0 0.5rem 1rem $primary-lightest !important;
         transform: translate(-120px, 37px);
         .dropdown-item{
             

@@ -3,29 +3,37 @@ import { Row, Col, Carousel, Container,Button } from "react-bootstrap";
 import React, { useState, useEffect } from "react";
 import Rack from "../../components/Rack/Rack";
 import "./gallery.scss";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import MongoDBInterface from "../../interface/MongoDBInterface";
 import { useHistory } from "react-router-dom";
 import Cookies from "universal-cookie";
-import cover from "../../../assets/images/cover.jpeg";
 import user from "../../../assets/images/user1.png";
 import DiscoverMore from "../../components/discover-more/discover-more";
+
+import { setCollectionList } from "../../redux/actions";
+
 function gallery(props) {
   let history = useHistory();
   const cookies = new Cookies();
-  const [signatureList, setSignatureList] = useState([]);
-  const [visitedUser, setIsVisitedUser] = useState(cookies.get("visitedUser"));
+  const reduxState = useSelector((state) => state, shallowEqual);
+  const { collectionList = [] } = reduxState;
+  //const [visitedUser, setIsVisitedUser] = useState(cookies.get("visitedUser"));
+  const dispatch = useDispatch()
   useEffect(() => {
     console.log("getting signatures ");
     MongoDBInterface.getSignatures({ limit: 14 }).then((signatures) => {
       let response = _.get(signatures, "data.data");
-      setSignatureList(response);
+      dispatch(setCollectionList(response));
     });
-    return function cleanup() {
-      cookies.set("visitedUser", true);
-      setIsVisitedUser(true);
-    };
+    
   }, []);
 
+  useEffect(() => {
+    return function cleanup() {
+      cookies.set("visitedUser", true);
+      //setIsVisitedUser(true);
+    };
+  },[])
   function gotoProfile(){
     history.push("/profile");
   }
@@ -43,7 +51,7 @@ function gallery(props) {
                       <Col sm={3}>
                         <div>
                           <Button
-                            variant="secondary"
+                            variant="dark"
                             className="button"
                             bsstyle="primary"
                             onClick={() => {
@@ -81,7 +89,7 @@ function gallery(props) {
                       <Col sm={3}>
                         <div>
                         <Button
-                      variant="secondary"
+                      variant="dark"
                       className="button"
                       bsstyle="primary"
                       onClick={() => {
@@ -119,7 +127,7 @@ function gallery(props) {
                       <Col sm={3}>
                         <div>
                         <Button
-                      variant="secondary"
+                      variant="dark"
                       className="button"
                       bsstyle="primary"
                       onClick={() => {
@@ -156,7 +164,7 @@ function gallery(props) {
           ) : null}
         </Row>
         <div className="separator"> </div>
-        <Rack deck={signatureList}></Rack>
+        <Rack deck={collectionList}></Rack>
       </div>
       <DiscoverMore />
     </Container>
