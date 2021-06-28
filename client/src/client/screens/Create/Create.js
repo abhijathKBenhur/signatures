@@ -32,6 +32,15 @@ import domtoimage from "dom-to-image";
 
 function Create(props) {
   const reduxState = useSelector((state) => state, shallowEqual);
+  const PASSED = "PASSED",
+    FAILED = "FAILED",
+    PROGRESS = "PROGRESS",
+    INIT = "INIT";
+  const TITLE_SLIDE = 0,
+    THUMBNAIL_SLIDE = 1,
+    PREVIEW_SLIDE = 2,
+    LOADING_SLIDE = 3,
+    RESPONSE_SLIDE = 4;
   const { metamaskID = undefined, userDetails = {} } = reduxState;
   const [form, setFormData] = useState({
     owner: metamaskID,
@@ -56,16 +65,15 @@ function Create(props) {
     price: false,
     thumbnail: false,
     maxFileError: false,
+    publish: "",
   });
 
   const [slideCount, setSlideCount] = useState(0);
   const [billet, setBillet] = useState({});
-  const [isPublishing, setIsPublishing] = useState(false);
-  const [isPublished, setIsPublished] = useState(false);
+  const [publishState, setPublishState] = useState(INIT);
   const [publishError, setPublishError] = useState(undefined);
   const priceRef = useRef(null);
   let history = useHistory();
-  const finalSlideCount = 2;
   const [fileData, setFileData] = useState({
     fileType: "",
     fileData: undefined,
@@ -177,31 +185,31 @@ function Create(props) {
     setFormData({ ...form, ...returnObj });
   }
 
-  function updateIdeaIDToMongo(payload) {
-    MongoDBInterface.updateIdeaID(payload)
-      .then((success) => {
-        setIsPublishing(false);
-        setIsPublished(true);
-        toast.dark("Your thoughts are live on blockchain.", {
-          position: "bottom-right",
-          autoClose: 3000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-        setBillet({
-          transactionID: success.transactionID,
-          account: success.account,
-          PDFHash: success.PDFHash,
-        });
-      })
-      .catch((err) => {
-        setIsPublishing(false);
-        console.log(err);
-      });
-  }
+  // function updateIdeaIDToMongo(payload) {
+  //   MongoDBInterface.updateIdeaID(payload)
+  //     .then((success) => {
+  //       setPublishState(PASSED)
+  //
+  //       toast.dark("Your thoughts are live on blockchain.", {
+  //         position: "bottom-right",
+  //         autoClose: 3000,
+  //         hideProgressBar: true,
+  //         closeOnClick: true,
+  //         pauseOnHover: true,
+  //         draggable: true,
+  //         progress: undefined,
+  //       });
+  //       setBillet({
+  //         transactionID: success.transactionID,
+  //         account: success.account,
+  //         PDFHash: success.PDFHash,
+  //       });
+  //     })
+  //     .catch((err) => {
+  //       setPublishState(FAILED)
+  //       console.log(err);
+  //     });
+  // }
 
   function saveToMongo(form) {
     MongoDBInterface.addSignature(form)
@@ -215,8 +223,6 @@ function Create(props) {
           draggable: true,
           progress: undefined,
         });
-
-        // setSlideCount(finalSlideCount + 1)
       })
       .catch((err) => {
         console.log(err);
@@ -225,13 +231,20 @@ function Create(props) {
 
   function saveToBlockChain(form) {
     // BlockChainInterface.publishIdea(form, saveToMongo, updateIdeaIDToMongo);
-    BlockChainInterface.publishOnBehalf(form).then(success =>{
-      saveToMongo(success)
-      setIsPublishing(false)
-    }).catch(error => {
-      setIsPublishing(false)
-      setPublishError("The idea couldnt be published to blockchain. Please try again later.")
-    })
+    setPublishState(PROGRESS);
+    BlockChainInterface.publishOnBehalf(form)
+      .then((success) => {
+        saveToMongo(success);
+        setPublishState(PASSED);
+        setSlideCount(RESPONSE_SLIDE);
+      })
+      .catch((error) => {
+        setPublishState(FAILED);
+        setSlideCount(RESPONSE_SLIDE);
+        setPublishError(
+          "The idea couldnt be published to blockchain. Please try again later."
+        );
+      });
   }
 
   function handleSubmit() {
@@ -246,7 +259,8 @@ function Create(props) {
         : params.price;
     params.fileType = fileData.fileType;
     params.userID = reduxState.userDetails.userID;
-    setIsPublishing(true);
+    setPublishState(PROGRESS);
+    setSlideCount(LOADING_SLIDE);
     StorageInterface.getFilePaths(params)
       .then((success) => {
         params.PDFFile = _.get(_.find(success, { type: "PDFFile" }), "path");
@@ -267,7 +281,7 @@ function Create(props) {
   const checkValidationOnButtonClick = (page) => {
     const { title, description, PDFFile, category, price, thumbnail } = form;
     switch (page) {
-      case 0:
+      case TITLE_SLIDE:
         if (_.isEmpty(title) || _.isEmpty(description) || _.isEmpty(PDFFile)) {
           setFormErrors({
             ...formErrors,
@@ -276,7 +290,7 @@ function Create(props) {
             pdf: _.isEmpty(PDFFile),
           });
         } else {
-          setSlideCount(slideCount + 1);
+          setSlideCount(THUMBNAIL_SLIDE);
           setFormErrors({
             ...formErrors,
             title: false,
@@ -286,7 +300,7 @@ function Create(props) {
         }
 
         break;
-      case 1:
+      case THUMBNAIL_SLIDE:
         if (_.isEmpty(category) || _.isEmpty(thumbnail)) {
           if (!checkDisablePrice()) {
             setFormErrors({
@@ -304,10 +318,10 @@ function Create(props) {
             });
           }
         } else {
-          setSlideCount(slideCount + 1);
+          setSlideCount(PREVIEW_SLIDE);
         }
         break;
-      case 2:
+      case PREVIEW_SLIDE:
         handleSubmit();
         setFormErrors({
           ...formErrors,
@@ -414,7 +428,7 @@ function Create(props) {
 
   const getViewBasedOnSteps = () => {
     switch (slideCount) {
-      case 0:
+      case TITLE_SLIDE:
         return (
           <>
             <Col md="6" sm="12" lg="6" xs="12" className="title-n-desc pb-0">
@@ -490,7 +504,7 @@ function Create(props) {
                       <Info />
                     </OverlayTrigger>
                   </div>
-                {CONSTANTS.FileStorageDropdownOptions.map((item) => (
+                  {CONSTANTS.FileStorageDropdownOptions.map((item) => (
                     <Form.Check
                       id={item.value}
                       name="storageGroup"
@@ -552,7 +566,7 @@ function Create(props) {
             </Col>
           </>
         );
-      case 1:
+      case THUMBNAIL_SLIDE:
         return (
           <>
             <Col md="6" sm="12" lg="6" xs="12" className="price-n-category">
@@ -724,8 +738,7 @@ function Create(props) {
             </Col>
           </>
         );
-
-      default:
+      case PREVIEW_SLIDE:
         return (
           <>
             <Col md="6" sm="12" lg="6" xs="12" className="preview-doc ">
@@ -775,73 +788,84 @@ function Create(props) {
             </Col>
           </>
         );
+        break;
+      case LOADING_SLIDE:
+        return (
+          <Col md="12" sm="12" lg="12" xs="12" className="publishing-wrapper ">
+            <div className="publishing-block">
+              <p>We are posting your idea on the blockchain. Please wait!</p>
+            </div>
+
+            <div className="gif-wrapper">
+              <img src={loadingGif} alt="" />
+            </div>
+          </Col>
+        );
+        break;
+      case RESPONSE_SLIDE:
+        return publishState == FAILED ? (
+          <Col
+            md="12"
+            sm="12"
+            lg="12"
+            xs="12"
+            className="published-wrapper "
+            id="published-wrapper-block"
+          >
+            <div className="success-block">
+              <p>Failed to publish your Idea</p>
+              <X />
+            </div>
+          </Col>
+        ) : publishState == PASSED && (
+          <Col
+            md="12"
+            sm="12"
+            lg="12"
+            xs="12"
+            className="published-wrapper "
+            id="published-wrapper-block"
+          >
+            <div className="success-block">
+              <p>Your Idea is posted in blockchain</p>
+              <Check />
+            </div>
+
+            <div className="transaction-data">
+              <div className="transaction-ids">
+                <p>
+                  Transaction ID- <span>{billet.transactionID}</span>
+                </p>
+                <p>
+                  File Hash ID- <span>{billet.PDFHash}</span>
+                </p>
+                <p>* Please save both of these for future reference.</p>
+              </div>
+              <div className="btn-block">
+                <Button
+                  variant="primary"
+                  className="button"
+                  bsstyle="primary"
+                  onClick={() => gotoProfile()}
+                >
+                  {" "}
+                  Done
+                </Button>
+                <Button
+                  variant="primary"
+                  className="button ml-3"
+                  bsstyle="primary"
+                  onClick={() => exportToPdf()}
+                >
+                  {" "}
+                  Export
+                </Button>
+              </div>
+            </div>
+          </Col>
+        );
+        break;
     }
-  };
-
-  const getPublishedView = () => {
-    
-    return (
-       publishError ? <div>Failed to publish - {publishError}</div> : 
-      <Col
-        md="12"
-        sm="12"
-        lg="12"
-        xs="12"
-        className="published-wrapper "
-        id="published-wrapper-block"
-      >
-        <div className="success-block">
-          <p>Your Idea is posted in blockchain</p>
-          <Check />
-        </div>
-
-        <div className="transaction-data">
-          <div className="transaction-ids">
-            <p>
-              Transaction ID- <span>{billet.transactionID}</span>
-            </p>
-            <p>
-              File Hash ID- <span>{billet.PDFHash}</span>
-            </p>
-            <p>* Please save both of these for future reference.</p>
-          </div>
-          <div className="btn-block">
-            <Button
-              variant="primary"
-              className="button"
-              bsstyle="primary"
-              onClick={() => gotoProfile()}
-            >
-              {" "}
-              Done
-            </Button>
-            <Button
-              variant="primary"
-              className="button ml-3"
-              bsstyle="primary"
-              onClick={() => exportToPdf()}
-            >
-              {" "}
-              Export
-            </Button>
-          </div>
-        </div>
-      </Col>
-    )
-  };
-
-  const getPublishingView = () => {
-    return (
-      <Col md="12" sm="12" lg="12" xs="12" className="publishing-wrapper ">
-        <div className="publishing-block">
-          <p>We are posting your idea on the blockchain. Please wait!</p>
-        </div>
-
-        <div className="gif-wrapper">
-          <img src={loadingGif} alt="" />
-        </div>
-      </Col>
-    );
   };
 
   const exportToPdf = () => {
@@ -889,26 +913,14 @@ function Create(props) {
             className="create-form"
           >
             <Col md="12" className="overflow-auto h-100 p-0">
-              {/* <Row>
-                <Col
-                  md="12"
-                  className="create-wizard-bar justify-content-center align-items-center d-flex"
-                ></Col>
-              </Row> */}
-              <Row className="content-container">
-                {slideCount === finalSlideCount && isPublished
-                  ? getPublishedView()
-                  : slideCount === finalSlideCount && isPublishing
-                  ? getPublishingView()
-                  : getViewBasedOnSteps()}
-              </Row>
-              {!isPublished && !isPublishing && (
+              <Row className="content-container">{getViewBasedOnSteps()}</Row>
+              {publishState == INIT && (
                 <Row className="footer-class ">
                   <Col
                     md="6"
                     className="d-flex justify-content-between align-items-center "
                   >
-                    {slideCount === finalSlideCount + 1 ? (
+                    {slideCount >= LOADING_SLIDE ? (
                       <div></div>
                     ) : (
                       <Button
@@ -949,32 +961,29 @@ function Create(props) {
   );
 
   function getNextButtonText() {
-    if (slideCount === finalSlideCount) {
+    if (slideCount == PREVIEW_SLIDE) {
       return "Publish";
-    } else if (slideCount === 0) {
+    } else if (slideCount == TITLE_SLIDE) {
       return "Next";
-    } else if (slideCount === 1) {
+    } else if (slideCount == THUMBNAIL_SLIDE) {
       return "Preview";
     }
   }
 
   function getBackButtonText() {
-    if (slideCount === 0) {
+    if (slideCount === TITLE_SLIDE) {
       return "Cancel";
-    } else if (slideCount === finalSlideCount + 1) {
-      return "";
-    } else if (slideCount <= finalSlideCount) {
+    } else if (slideCount <= PREVIEW_SLIDE) {
       return "Back";
+    } else {
+      return "";
     }
   }
 
   function onNext() {
-    if (slideCount === finalSlideCount) {
-      checkValidationOnButtonClick(slideCount);
-      // handleSubmit();
-    } else if (slideCount === finalSlideCount + 1) {
+     if (slideCount === RESPONSE_SLIDE) {
       gotoGallery();
-    } else if (slideCount < finalSlideCount) {
+    } else {
       checkValidationOnButtonClick(slideCount);
     }
   }

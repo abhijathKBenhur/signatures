@@ -70,7 +70,7 @@ publishOnBehalf = async (req, res) => {
     //   console.log("receipt transactionHash",hash)
     //   return res.status(200).json({ success: true, data: hash });
     // })
-    .on("receipt", function (receipt) {
+    .once("receipt", function (receipt) {
       console.log("receipt received", receipt);
       let tokenID =
         receipt &&
