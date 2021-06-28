@@ -35,6 +35,7 @@
     }
     .right-side {
       padding: 0;
+      padding-bottom: 20px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -58,6 +59,7 @@
         padding: 20px;
         .form-row {
           &.title-row {
+            align-items: center;
             margin-bottom: 0;
             text-transform: capitalize;
             span {
@@ -65,28 +67,27 @@
               color: $primary;
               letter-spacing: -1px;
             }
-            .owner {
-              font-size: 12px;
-              overflow: hidden;
-              text-overflow: ellipsis;
-            }
-            img {
-              height: 30px;
-              width: 30px;
-              border-radius: 30px;
+            .created-at {
+              font-size: 16px;
+              text-align: end;
             }
           }
           &.owner-row {
             font-size: 12px;
             color: $primary;
+            .owner {
+              text-align: end;
+              font-size: 12px;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              img {
+                height: 30px;
+                width: 30px;
+                border-radius: 30px;
+              }
+            }
           }
-          &.created-at {
-            font-size: 16px;
-          }
-          &.price-row {
-            margin-top: 20px;
-            font-size: 20px;
-          }
+    
           &.tags-row {
             display: flex;
             margin-top: 2px;
@@ -94,8 +95,9 @@
             gap: 10px;
             .tagpill {
               padding: 5px;
-              background-color: #bfbfbf;
-              color: #2e495a;
+              background-color: white;
+              border: 1px solid $secondary;
+              color: $secondary;
             }
           }
           &.input-row {

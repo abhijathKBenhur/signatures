@@ -29,6 +29,7 @@ import audio from "../../../assets/images/audio.png";
 import loadingGif from "../../../assets/images/loader_blocks.gif";
 import jspdf from "jspdf";
 import domtoimage from "dom-to-image";
+import moment from "moment";
 
 function Create(props) {
   const reduxState = useSelector((state) => state, shallowEqual);
@@ -55,7 +56,7 @@ function Create(props) {
     ideaID: undefined,
     transactionID: undefined,
     purpose: CONSTANTS.PURPOSES.SELL,
-    storage: CONSTANTS.STORAGE_TYPE.PUBLIC,
+    storage: CONSTANTS.STORAGE_TYPE[0].value,
   });
   const [formErrors, setFormErrors] = useState({
     title: false,
@@ -234,13 +235,25 @@ function Create(props) {
     setPublishState(PROGRESS);
     BlockChainInterface.publishOnBehalf(form)
       .then((success) => {
-        saveToMongo(success);
+        debugger;
+        let response = _.get(success, "data.data");
+        saveToMongo(response);
+        setBillet({
+          creator: userDetails.userID,
+          fullName: userDetails.fullName,
+          title: response,
+          time: moment(new Date()).format("DD-MMM-YYYY"),
+          tokenID: response.ideaID,
+          transactionID: response.transactionID,
+          PDFHash: response.PDFHash,
+        });
         setPublishState(PASSED);
         setSlideCount(RESPONSE_SLIDE);
       })
       .catch((error) => {
         setPublishState(FAILED);
         setSlideCount(RESPONSE_SLIDE);
+        setPublishError(_.get(error, "data.data.errorreason"));
         setPublishError(
           "The idea couldnt be published to blockchain. Please try again later."
         );
@@ -393,7 +406,17 @@ function Create(props) {
       case "jpeg":
       case "png":
       case "PNG":
-        return <img src={`${fileData.fileData}`} alt="" />;
+        return (
+          <img
+            src={fileData.fileData}
+            height={400}
+            className="uploadedImage"
+            style={{
+              background: "#f1f1f1",
+              borderRadius: "7px",
+            }}
+          />
+        );
 
       default:
         return null;
@@ -473,7 +496,7 @@ function Create(props) {
                           : "descriptionArea"
                       }
                       as="textarea"
-                      rows={12}
+                      rows={7}
                       aria-describedby="inputGroupAppend"
                       name="description"
                       placeholder="Description*"
@@ -504,7 +527,7 @@ function Create(props) {
                       <Info />
                     </OverlayTrigger>
                   </div>
-                  {CONSTANTS.FileStorageDropdownOptions.map((item) => (
+                  {CONSTANTS.STORAGE_TYPE.map((item) => (
                     <Form.Check
                       id={item.value}
                       name="storageGroup"
@@ -523,7 +546,7 @@ function Create(props) {
                     classNamePrefix="select"
                     name="color"
                     defaultValue={{value: form.storage, label: form.storage}}
-                    options={CONSTANTS.FileStorageDropdownOptions}
+                    options={CONSTANTS.STORAGE_TYPE}
                   /> */}
                 </Form.Group>
               </Row>
@@ -697,7 +720,15 @@ function Create(props) {
                       clearImage();
                     }}
                   ></X>
-                  <img src={form.thumbnail.preview} alt="" />
+                  <img
+                    src={form.thumbnail.preview}
+                    height={400}
+                    className="uploadedImage"
+                    style={{
+                      background: "#f1f1f1",
+                      borderRadius: "7px",
+                    }}
+                  ></img>
                 </div>
               )}
               {!form.thumbnail && (
@@ -814,55 +845,59 @@ function Create(props) {
           >
             <div className="success-block">
               <p>Failed to publish your Idea</p>
-              <X />
+              <p>
+                Your publish failed with the following error - {publishError}
+              </p>
             </div>
           </Col>
-        ) : publishState == PASSED && (
-          <Col
-            md="12"
-            sm="12"
-            lg="12"
-            xs="12"
-            className="published-wrapper "
-            id="published-wrapper-block"
-          >
-            <div className="success-block">
-              <p>Your Idea is posted in blockchain</p>
-              <Check />
-            </div>
+        ) : (
+          publishState == PASSED && (
+            <Col
+              md="12"
+              sm="12"
+              lg="12"
+              xs="12"
+              className="published-wrapper "
+              id="published-wrapper-block"
+            >
+              <div className="success-block">
+                <p>Your Idea is posted in blockchain</p>
+                <Check />
+              </div>
 
-            <div className="transaction-data">
-              <div className="transaction-ids">
-                <p>
-                  Transaction ID- <span>{billet.transactionID}</span>
-                </p>
-                <p>
-                  File Hash ID- <span>{billet.PDFHash}</span>
-                </p>
-                <p>* Please save both of these for future reference.</p>
+              <div className="transaction-data">
+                <div className="transaction-ids">
+                  <p>
+                    Transaction ID- <span>{billet.transactionID}</span>
+                  </p>
+                  <p>
+                    File Hash ID- <span>{billet.PDFHash}</span>
+                  </p>
+                  <p>* Please save both of these for future reference.</p>
+                </div>
+                <div className="btn-block">
+                  <Button
+                    variant="primary"
+                    className="button"
+                    bsstyle="primary"
+                    onClick={() => gotoProfile()}
+                  >
+                    {" "}
+                    Done
+                  </Button>
+                  <Button
+                    variant="primary"
+                    className="button ml-3"
+                    bsstyle="primary"
+                    onClick={() => exportToPdf()}
+                  >
+                    {" "}
+                    Export
+                  </Button>
+                </div>
               </div>
-              <div className="btn-block">
-                <Button
-                  variant="primary"
-                  className="button"
-                  bsstyle="primary"
-                  onClick={() => gotoProfile()}
-                >
-                  {" "}
-                  Done
-                </Button>
-                <Button
-                  variant="primary"
-                  className="button ml-3"
-                  bsstyle="primary"
-                  onClick={() => exportToPdf()}
-                >
-                  {" "}
-                  Export
-                </Button>
-              </div>
-            </div>
-          </Col>
+            </Col>
+          )
         );
         break;
     }
@@ -981,7 +1016,7 @@ function Create(props) {
   }
 
   function onNext() {
-     if (slideCount === RESPONSE_SLIDE) {
+    if (slideCount === RESPONSE_SLIDE) {
       gotoGallery();
     } else {
       checkValidationOnButtonClick(slideCount);

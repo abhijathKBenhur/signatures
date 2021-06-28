@@ -6,7 +6,7 @@ import { Feather, User } from "react-feather";
 import Image from "react-image-resizer";
 import { Row, Col, Container } from "react-bootstrap";
 import "./Rack.scss";
-import moment from "moment"
+import moment from "moment";
 import Web3Utils from "web3-utils";
 const Rack = (props) => {
   let history = useHistory();
@@ -18,12 +18,12 @@ const Rack = (props) => {
   }
   const goToUserProfile = (id) => {
     history.push({
-      pathname: '/profile/' + id,
+      pathname: "/profile/" + id,
       state: {
-        userId: id
-      }
-    })
-  }
+        userId: id,
+      },
+    });
+  };
 
   return (
     <Container>
@@ -60,34 +60,40 @@ const Rack = (props) => {
                           }}
                         />
                         <div className="description">
-                          <div className="heading">Description</div>
-                          <div className="text">
-                          {signature.description}
-                          </div>
-                          
+                          <div className="text">{signature.description}</div>
                         </div>
                       </Col>
                     </div>
-                    <Row className="collection-footer">
-                      <Col md="12" className="idea-title">
-                        <p className="text-left title">{signature.title}</p>
-                      </Col>
-                     
-                      <Col md="6" className="idea-details">
-                        {moment(signature.createdAt).format("DD-MMM-YYYY")} 
-                      </Col>
-                      <Col md="6" className="idea-user text-right">
-                        <span onClick={ (event) => { event.stopPropagation(); goToUserProfile(signature.owner) }}>{signature.userID}</span> 
-                      </Col>
-                     
-                         
-                        {/* <span className="placeholder">{signature.userID}</span>
+                    <div className="collection-footer">
+                      <Row>
+                        <Col md="12" className="idea-title">
+                          <p className="text-left title">{signature.title}</p>
+                        </Col>
+                      </Row>
+
+                      <Row md="12">
+                        <Col md="6" className="idea-details">
+                          {moment(signature.createdAt).format("DD-MMM-YYYY")}
+                        </Col>
+                        <Col md="6" className="idea-user text-right">
+                          <span
+                            onClick={(event) => {
+                              event.stopPropagation();
+                              goToUserProfile(signature.owner);
+                            }}
+                          >
+                            {signature.userID}
+                          </span>
+                        </Col>
+                      </Row>
+
+                      {/* <span className="placeholder">{signature.userID}</span>
                         <span className="price">
                           {signature.price &&
                             Web3Utils.fromWei(signature.price)}{" "}
                           ETH
                         </span> */}
-                    </Row>
+                    </div>
                   </div>
                 </Col>
               );

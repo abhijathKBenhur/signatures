@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useLocation, useHistory } from "react-router-dom";
-import moment from "moment"
+import moment from "moment";
 
 import SignatureBean from "../../beans/Signature";
 import {
@@ -42,13 +42,15 @@ import audio from "../../../assets/images/audio.png";
 
 const Signature = (props) => {
   let { hashId } = useParams();
+  const reduxState = useSelector((state) => state, shallowEqual);
   const location = useLocation();
   const [signature, setSignature] = useState({});
   const [PDFFile, setPDFFile] = useState(undefined);
+  const [currentUser, setCurrentUser] = useState(reduxState.userDetails)
   const [currentMetamaskAccount, setCurrentMetamaskAccount] = useState(
     undefined
   );
-  const reduxState = useSelector((state) => state, shallowEqual);
+  
   const [key, setKey] = useState("Bids");
   let history = useHistory();
   useEffect(() => {
@@ -70,9 +72,12 @@ const Signature = (props) => {
   // },[signature.fileType])
 
   useEffect(() => {
-    const { metamaskID = undefined } = reduxState;
+    const { metamaskID = undefined, userDetails = {} } = reduxState;
     if (metamaskID) {
       setCurrentMetamaskAccount(metamaskID);
+    }
+    if(userDetails){
+      setCurrentUser(userDetails)
     }
   }, [reduxState]);
 
@@ -149,10 +154,10 @@ const Signature = (props) => {
   const generateDate = (date) => {
     const dateObj = new Date(date);
     const month = dateObj.getMonth();
-    const day = String(dateObj.getDate()).padStart(2, '0');
+    const day = String(dateObj.getDate()).padStart(2, "0");
     const year = dateObj.getFullYear();
     return `${day}-${month}-${year}`;
-  }
+  };
   function copyClipBoard() {
     let shareURL = window.location.href + "/signature/" + signature.PDFHash;
     navigator.clipboard.writeText(shareURL);
@@ -178,6 +183,7 @@ const Signature = (props) => {
     let updatePayload = {
       buyer: currentMetamaskAccount,
       seller: signature.owner,
+      buyerUserID: currentUser.userID,
       PDFHash: signature.PDFHash,
       price: signature.price,
       ideaID: signature.ideaID,
@@ -203,69 +209,70 @@ const Signature = (props) => {
     history.push("/home");
   }
 
+  const goToUserProfile = (id) => {
+    history.push({
+      pathname: '/profile/' + id,
+      state: {
+        userId: id
+      }
+    })
+  }
+
   const getMenuActions = () => {
     return (
       <DropdownButton id="dropdown-actions" title="Actions">
         {/* <Dropdown.Toggle variant="success" id="dropdown-basic">
           <MoreHorizontal />
         </Dropdown.Toggle> */}
-          <Dropdown.Item>
-            <ShoppingCart
-              className="cursor-pointer signature-icons ShoppingCart"
-              color="#79589F"
-              onClick={() => {
-                buySignature();
-              }}
-            ></ShoppingCart>
-            <span className="txt">Buy</span>
-          </Dropdown.Item>
-          <Dropdown.Item>
-            <Share
-              className="cursor-pointer signature-icons"
-              color="#79589F"
-              onClick={() => {
-                copyClipBoard();
-              }}
-            ></Share>
-            <span className="txt">Copy</span>
-          </Dropdown.Item>
-          <Dropdown.Item>
-            <Crosshair
-              className="cursor-pointer signature-icons"
-              color="#79589F"
-              onClick={() => {
-                openInEtherscan();
-              }}
-            ></Crosshair>
-            <span className="txt">View</span>
-          </Dropdown.Item>
+        <Dropdown.Item onClick={() => {
+              buySignature();
+            }}>
+          <ShoppingCart
+            className="cursor-pointer signature-icons ShoppingCart"
+            color="#79589F"
+          ></ShoppingCart>
+          <span className="txt">Buy</span>
+        </Dropdown.Item>
+        <Dropdown.Item>
+          <Share
+            className="cursor-pointer signature-icons"
+            color="#79589F"
+            onClick={() => {
+              copyClipBoard();
+            }}
+          ></Share>
+          <span className="txt">Copy</span>
+        </Dropdown.Item>
+        <Dropdown.Item>
+          <Crosshair
+            className="cursor-pointer signature-icons"
+            color="#79589F"
+            onClick={() => {
+              openInEtherscan();
+            }}
+          ></Crosshair>
+          <span className="txt">View</span>
+        </Dropdown.Item>
 
-          <Dropdown.Item>
-            <ThumbsUp
-              className="cursor-pointer signature-icons ThumbsUp"
-              color="#79589F"
-            ></ThumbsUp>
-            <span className="txt">Like</span>
-          </Dropdown.Item>
+        <Dropdown.Item>
+          <ThumbsUp
+            className="cursor-pointer signature-icons ThumbsUp"
+            color="#79589F"
+          ></ThumbsUp>
+          <span className="txt">Like</span>
+        </Dropdown.Item>
 
-          <Dropdown.Item>
-            <ExternalLink
-              className="cursor-pointer signature-icons ExternalLink"
-              onClick={() => {
-                openInNewTab();
-              }}
-              color="#79589F"
-            ></ExternalLink>
-            <span className="txt">Open</span>
-          </Dropdown.Item>
+        <Dropdown.Item>
+          <ExternalLink
+            className="cursor-pointer signature-icons ExternalLink"
+            onClick={() => {
+              openInNewTab();
+            }}
+            color="#79589F"
+          ></ExternalLink>
+          <span className="txt">Open</span>
+        </Dropdown.Item>
 
-          <Dropdown.Item>
-            <ThumbsDown
-              className="cursor-pointer signature-icons ThumbsDown"
-              color="#79589F"
-            ></ThumbsDown>
-            <span className="txt">Dislike</span>
-          </Dropdown.Item>
       </DropdownButton>
     );
   };
@@ -283,12 +290,12 @@ const Signature = (props) => {
         const file = PDFFile.split(",")[1];
         return (
           <div className="audio-wrapper">
-          <img src={audio} alt=""/>
-          <audio controls>
-            <source src={`data:audio/mpeg;base64,` + file}></source>
-            Your browser does not support the
-            <code>audio</code> element.
-          </audio>
+            <img src={audio} alt="" />
+            <audio controls>
+              <source src={`data:audio/mpeg;base64,` + file}></source>
+              Your browser does not support the
+              <code>audio</code> element.
+            </audio>
           </div>
         );
       case "jpg":
@@ -302,7 +309,7 @@ const Signature = (props) => {
   };
 
   return (
-    <Container fluid >
+    <Container fluid>
       <Form
         noValidate
         encType="multipart/form-data"
@@ -325,56 +332,49 @@ const Signature = (props) => {
             <Col sm="12" lg="5" xs="12" md="6" className="right-side">
               <div className="top-section">
                 <Row className="form-row title-row">
-                  <Col md="9">
-                  <span>{signature.title}</span>
+                  <Col md="9" className="pl-0">
+                    <span>{signature.title}</span>
                   </Col>
-                  <Col md="3">
+                  <Col md="3 created-at">
                     {moment(signature.createdAt).format("DD-MMM-YYYY")}
                   </Col>
-                  <Col md="12" className="owner">
-                  <img src={user} alt="user" className="user-profile"/>
+                </Row>
+                <Row className="form-row owner-row">
+                  <Col md="9" className="">
+                    <Row className="form-row  tags-row">
+                      {signature.category &&
+                        JSON.parse(signature.category).map((tag, key) => {
+                          return (
+                            <Badge
+                              key={key}
+                              className="tagpill"
+                              variant="secondary"
+                            >
+                              {tag.label}
+                            </Badge>
+                          );
+                        })}
+                      <Badge
+                        key={key}
+                        className="tagpill purpose"
+                        variant="secondary"
+                      >
+                        {signature.purpose}
+                      </Badge>
+                    </Row>
                   </Col>
-                  <Col md="12">
-                        {signature.userID}
-                      </Col>
-                </Row>
-                
-                <Row className="form-row created-at">
-                  
-                </Row>
-                <Row className="form-row price-row">
-                  <span>
-                    {signature.price && Web3Utils.fromWei(signature.price)} BNB
-                  </span>
-                </Row>
-                <Row className="form-row  tags-row">
-                  {signature.category &&
-                    JSON.parse(signature.category).map((tag, key) => {
-                      return (
-                        <Badge
-                          key={key}
-                          className="tagpill"
-                          variant="secondary"
-                        >
-                          {tag.label}
-                        </Badge>
-                      );
-                    })}
-                  <Badge
-                    key={key}
-                    className="tagpill purpose"
-                    variant="secondary"
-                  >
-                    {signature.purpose}
-                  </Badge>
+                  <Col md="3" className="owner" onClick={() => {
+                    goToUserProfile(signature.userID)
+                  }}>
+                    <img src={user} alt="user" className="user-profile mr-1" />
+                    {signature.userID}
+                  </Col>
                 </Row>
                 <Row className="form-row">
                   <span> {signature.description}</span>
                 </Row>
               </div>
-              <div className="text-right">
-                {getMenuActions()}
-              </div>
+              <div className="text-right">{getMenuActions()}</div>
               <div className="tabs-wrapper">
                 <Tabs
                   id="idea-tab-categories"

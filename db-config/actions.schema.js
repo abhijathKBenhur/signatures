@@ -7,9 +7,12 @@ const Actions = new Schema(
     to: { type: String },
     action: { type: String },
     status: { type: String },
-    ideaID: { type: String }
+    ideaID: { type: String },
+    message: { type: String },
+    type: { type: String },
+    
   },
   { timestamps: true }
 );
 
-module.exports = mongoose.model("user", User);
+module.exports = mongoose.model("Actions", Actions);

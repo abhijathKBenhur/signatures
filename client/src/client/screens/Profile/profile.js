@@ -141,7 +141,7 @@ function Profile(props) {
                           </div>
                         </div>
                       </Tab>
-                      <Tab eventKey="profile" title="Transactions">
+                      <Tab eventKey="profile" title="Notifications">
                         <div className="transactions-wrapper">
                           <h6>No transactions yet</h6>
                         </div>

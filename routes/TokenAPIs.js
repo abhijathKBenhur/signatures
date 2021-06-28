@@ -80,7 +80,6 @@ updateIdeaID = (req, res) => {
 
 getSignatureByHash = async (req, res) => {
   console.log("Getting SignatureSchema :: ", req.params.PDFHash);
-
   await SignatureSchema.findOne({ PDFHash: req.params.PDFHash }, (err, signature) => {
     if (err) {
       return res.status(400).json({ success: false, error: err });

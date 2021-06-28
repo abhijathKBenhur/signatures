@@ -5,7 +5,7 @@ const Web3 = require("web3");
 const contractJSON = require("../client/src/contracts/ideaBlocks.json");
 const privateKey = process.env.PROGRAMMER_KEY;
 const HDWalletProvider = require("@truffle/hdwallet-provider");
-
+const _ = require("lodash")
 const networkURL = process.env.NETWORK_URL;
 
 const web3Instance = new Web3(new HDWalletProvider(privateKey, networkURL));
@@ -44,7 +44,7 @@ register_user = (req, res) => {
       console.log("error transactionHash", transactionHash);
       getRevertReason(transactionHash, process.env.NETWORK_NAME).then(
         (errorReason) => {
-          error.errorReason = errorReason
+          error.errorReason = errorReason;
           console.log("error errorReason", errorReason);
           return res.status(400).json({ success: false, data: errorReason });
         }
@@ -55,14 +55,11 @@ register_user = (req, res) => {
 };
 
 publishOnBehalf = async (req, res) => {
-  let metamaskAddress = req.body.creator;
-  let title = req.body.title;
-  let PDFHash = req.body.PDFHash;
-  let price = req.body.price;
-  console.log("title", title);
-  console.log("PDFHash", PDFHash);
-  console.log("price", price);
-  console.log("metamaskAddress", metamaskAddress);
+  let payLoad = req.body.payLoad
+  let metamaskAddress = payLoad.creator;
+  let title = payLoad.title;
+  let PDFHash = payLoad.PDFHash;
+  let price = payLoad.price;
   deployedContract.methods
     .publishOnBehalf(title, PDFHash, price, metamaskAddress)
     .send(transactionObject)
@@ -72,13 +69,18 @@ publishOnBehalf = async (req, res) => {
     // })
     .once("receipt", function (receipt) {
       console.log("receipt received", receipt);
-      let tokenID =
-        receipt &&
-        _.get(receipt.events, "Transfer.returnValues.tokenId").toNumber();
-      let hash = receipt && _.get(receipt.events, "Transfer.transactionHash");
-      payLoad.ideaID = tokenID;
-      payLoad.transactionID = hash;
-      return res.status(200).json({ success: true, data: payLoad });
+      try {
+        let tokenID =
+          receipt &&
+          _.get(receipt.events, "Transfer.returnValues.tokenId")
+
+        let hash = receipt && _.get(receipt.events, "Transfer.transactionHash");
+        payLoad.ideaID = tokenID
+        payLoad.transactionID = hash;
+        return res.status(200).json({ success: true, data: payLoad });
+      } catch (e) {
+        console.log("error", e);
+      }
     })
     .on("error", function (error) {
       console.log("error received", error);
@@ -86,7 +88,7 @@ publishOnBehalf = async (req, res) => {
       getRevertReason(transactionHash, process.env.NETWORK_NAME).then(
         (errorReason) => {
           console.log("error errorReason", errorReason);
-          error.errorReason = errorReason
+          error.errorReason = errorReason;
           return res.status(400).json({ success: false, data: error });
         }
       );

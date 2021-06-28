@@ -13,8 +13,9 @@ const DiscoverMore = () => {
           <div className="topics-list">
             <ul>
               {
-              CONSTANTS.CATEGORIES.map(item => <li>
+              CONSTANTS.CATEGORIES.map((item,i) => <li>
                 <Button
+                key={i}
                   className="btn-secondary"
                   bsstyle="primary"
                   onClick={() => {

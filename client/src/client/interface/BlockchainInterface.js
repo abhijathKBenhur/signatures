@@ -109,7 +109,7 @@ class BlockchainInterface {
 
   publishOnBehalf(payLoad){
     payLoad.price = this.web3.utils.toWei(payLoad.price, "ether");
-    return api.post(`/publishOnBehalf`,payLoad)
+    return api.post(`/publishOnBehalf`,{payLoad})
   }
 
 
@@ -128,7 +128,7 @@ class BlockchainInterface {
         payLoad.transactionID = hash;
         saveToMongoCallback(payLoad);
       })
-      .on("receipt", function(receipt) {
+      .once("receipt", function(receipt) {
         let tokenReturns = _.get(
           receipt.events,
           "Transfer.returnValues.tokenId"
@@ -142,7 +142,7 @@ class BlockchainInterface {
         }
         console.log("receipt received")
       })
-      .on("confirmation", function(confirmationNumber, receipt) {
+      .once("confirmation", function(confirmationNumber, receipt) {
         console.log("confirmationNumber ::" + confirmationNumber)
       })
       .on("error", console.error);
@@ -157,17 +157,16 @@ class BlockchainInterface {
       value: updatePayLoad.price,
       from: updatePayLoad.buyer,
     };
+    debugger
     this.contract.methods
       .buy(updatePayLoad.ideaID)
       .send(transactionObject)
       .on("transactionHash", function(hash) {
         console.log("updated with transaction id ::" , hash)
-        
         updatePayLoad.transactionID = hash;
-
         feedbackCallback(updatePayLoad);
       })
-      .on("receipt", function(receipt) {
+      .once("receipt", function(receipt) {
         updatePayLoad.price = "0";
         let tokenReturns = _.get(
           receipt.events,
@@ -175,7 +174,7 @@ class BlockchainInterface {
         );
           successCallback(updatePayLoad);
       })
-      .on("confirmation", function(confirmationNumber, receipt) {
+      .once("confirmation", function(confirmationNumber, receipt) {
         console.log("confirmation :: " + confirmationNumber)
       })
       .on("error", (err) => {
@@ -194,14 +193,14 @@ class BlockchainInterface {
       .on("transactionHash", function(hash) {
         feedbackCallback();
       })
-      .on("receipt", function(receipt) {
+      .once("receipt", function(receipt) {
         let tokenReturns = _.get(
           receipt.events,
           "Transfer.returnValues.tokenId"
         );
           successCallback(updatePayLoad);
       })
-      .on("confirmation", function(confirmationNumber, receipt) {
+      .once("confirmation", function(confirmationNumber, receipt) {
         console.log("confirmation :: " + confirmationNumber)
       })
       .on("error", console.error);

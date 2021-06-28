@@ -1,8 +1,12 @@
+@import "../../commons/Common.scss";
 .rack{
   min-height: calc(100vh - 230px);
   .mycollection {
     .collections {
       .collection-card {
+        .content{
+          border: 1px solid $primary;
+        }
         .collection-image {
             img{
               border-radius: 5px;
@@ -38,6 +42,8 @@
     }
   }
   .collection-footer {
+    background-color: $primary;
+    color: $grey-border;
     .owner {
       text-overflow: ellipsis;
       overflow: hidden;
