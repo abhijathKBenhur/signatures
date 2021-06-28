@@ -49,7 +49,6 @@ getUserInfo = async (req, res) => {
     if (!user) {
       return res.status(404).json({ success: true, data: [] });
     }
-    console.log("Found user with ", req.body.userName, req.body.password);
     return res.status(200).json({ success: true, data: user });
   }).catch((err) => {
     return res.status(200).json({ success: false, data: err });
@@ -67,7 +66,6 @@ login = async (req, res) => {
       if (!user) {
         return res.status(404).json({ success: true, data: [] });
       }
-      console.log("Found user with ", req.body.userName, req.body.password);
       return res.status(200).json({ success: true, data: user });
     }
   ).catch((err) => {

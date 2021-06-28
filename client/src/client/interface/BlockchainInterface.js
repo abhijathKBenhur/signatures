@@ -26,6 +26,7 @@ class BlockchainInterface {
       parentThis.getAccountDetails();
     })
   }
+
   register_user = payload => { 
     console.log("register_user")
     return api.post(`/register_user`,payload) 
@@ -106,12 +107,19 @@ class BlockchainInterface {
     return promise;
   }
 
+  publishOnBehalf(payLoad){
+    payLoad.price = this.web3.utils.toWei(payLoad.price, "ether");
+    return api.post(`/publishOnBehalf`,payLoad)
+  }
+
+
+
   publishIdea(payLoad, saveToMongoCallback, udpateIDCallback) {
     payLoad.price = this.web3.utils.toWei(payLoad.price, "ether");
 
     const transactionObject = {
       value: this.web3.utils.toWei("0.05", "ether"),
-      from: payLoad.owner,
+      from: payLoad.creator,
     };
     this.contract.methods
       .publish(payLoad.title, payLoad.PDFHash, payLoad.price)

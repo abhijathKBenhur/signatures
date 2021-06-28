@@ -19,10 +19,11 @@ import store from "../../redux/store";
 
 const Register = (props) => {
   const reduxState = useSelector((state) => state, shallowEqual);
-  const [registrationLevel, setRegistrationLevel] = useState(
-    CONSTANTS.REGISTRATION_LEVEL.BASE_1
-  );
   let history = useHistory();
+  const PASSED = "PASSED";
+  const FAILED = "FAILED";
+  const PENDING = "PENDING";
+
   const [steps, setSteps] = useState([
     {
       key: "chainAddress",
@@ -45,7 +46,8 @@ const Register = (props) => {
   ]);
   const [activeStep, setActiveStep] = useState(steps[0]);
   const [validated, setValidated] = useState(false);
-  const [registered, setRegistered] = useState(false);
+  const [registration, setRegistration] = useState("false");
+
   const [userDetails, setUserDetails] = useState({
     firstName: _.get(reduxState, "firstName"),
     LastName: _.get(reduxState, "LastName"),
@@ -61,12 +63,13 @@ const Register = (props) => {
     BlockchainInterface.register_user(userDetails)
       .then((success) => {
         MongoDBInterface.registerUser(userDetails).then((mongoSuccess) => {
-          setRegistered(true);
+          setRegistration(PASSED);
         });
         console.log(success);
       })
       .catch((error) => {
-        console.log(error);
+        setRegistration(FAILED);
+        console.log(error.data);
       });
   }
 
@@ -76,9 +79,11 @@ const Register = (props) => {
 
   const handleNext = () => {
     if (steps[steps.length - 1].key == activeStep.key) {
-      if(registered){
+      if(registration == PASSED){
+        publishUserToApp()
         history.push("/profile");
       }else{
+        setRegistration(PENDING)
         registerUser();
       }
       return;
@@ -115,24 +120,8 @@ const Register = (props) => {
         metamaskId: metamaskID,
       });
     }
-    reEvaluateUserStage();
   }, [reduxState]);
 
-  function reEvaluateUserStage() {
-    if (!userDetails.metamaskId) {
-      setRegistrationLevel(CONSTANTS.REGISTRATION_LEVEL.BASE_1);
-    } else {
-      if (!userDetails.email) {
-        setRegistrationLevel(CONSTANTS.REGISTRATION_LEVEL.BASE_2);
-      } else {
-        if (!userDetails.userID) {
-          setRegistrationLevel(CONSTANTS.REGISTRATION_LEVEL.BASE_3);
-        } else {
-          setRegistrationLevel(CONSTANTS.REGISTRATION_LEVEL.BASE_4);
-        }
-      }
-    }
-  }
 
   function googleLogIn(googleFormResponseObject) {
     setUserDetails({
@@ -257,9 +246,13 @@ const Register = (props) => {
         return (
           <div>
             <Row className="">
-              {registered ? (
+              {registration == PASSED ? (
                 <div> Hi {userDetails.fullName}, Welcome to the tribe. You have signed up to the unlimited possibilities in the world of idea sharing.</div>
-              ) : (
+              ) :
+              registration == FAILED ? (
+                <div> Hi {userDetails.fullName}, We were unable to onboard you on the tribe this time. Please try again.</div>
+              )
+              : (
                 <Form.Group
                   as={Col}
                   className="formEntry userIDSection"
@@ -371,7 +364,7 @@ const Register = (props) => {
           md="12"
           className="d-flex justify-content-between align-items-center "
         >
-          {activeStep.index == 0  || registered? (
+          {activeStep.index == 0  || registration == PASSED? (
             <div></div>
           ) : (
             <Button
@@ -387,7 +380,7 @@ const Register = (props) => {
           )}
 
           <Button
-            disabled={!validated && activeStep.index == 2}
+            disabled={!validated && activeStep.index == 2 || registration == PENDING}
             variant="primary"
             className="button"
             bsstyle="primary"
@@ -396,7 +389,7 @@ const Register = (props) => {
             }}
           >
             {activeStep.index == steps.length - 1 ? 
-            registered ? "Done" : "Register" 
+            registration == PASSED ? "Done" : "Register" 
             : "Next"}
           </Button>
         </Col>

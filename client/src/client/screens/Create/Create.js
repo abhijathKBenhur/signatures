@@ -1,5 +1,13 @@
-import React, { useCallback, useEffect,  useRef,  useState } from "react";
-import {  Button, Row, Col, Form, InputGroup, OverlayTrigger, Tooltip } from "react-bootstrap";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import {
+  Button,
+  Row,
+  Col,
+  Form,
+  InputGroup,
+  OverlayTrigger,
+  Tooltip,
+} from "react-bootstrap";
 import MongoDBInterface from "../../interface/MongoDBInterface";
 import BlockChainInterface from "../../interface/BlockchainInterface";
 import StorageInterface from "../../interface/StorageInterface";
@@ -7,7 +15,7 @@ import Dropzone, { useDropzone } from "react-dropzone";
 import CONSTANTS from "../../commons/Constants";
 import { useHistory } from "react-router-dom";
 import "./Create.scss";
-import {  X, Image as ImageFile, Info, UploadCloud, Check } from "react-feather";
+import { X, Image as ImageFile, Info, UploadCloud, Check } from "react-feather";
 import Hash from "ipfs-only-hash";
 import { Container, Spinner } from "react-bootstrap";
 import { Document, Page, pdfjs } from "react-pdf";
@@ -19,12 +27,10 @@ import { shallowEqual, useSelector } from "react-redux";
 import user from "../../../assets/images/user1.png";
 import audio from "../../../assets/images/audio.png";
 import loadingGif from "../../../assets/images/loader_blocks.gif";
-import jspdf from 'jspdf';
-import domtoimage from 'dom-to-image';
+import jspdf from "jspdf";
+import domtoimage from "dom-to-image";
 
 function Create(props) {
- 
-  
   const reduxState = useSelector((state) => state, shallowEqual);
   const { metamaskID = undefined, userDetails = {} } = reduxState;
   const [form, setFormData] = useState({
@@ -49,10 +55,14 @@ function Create(props) {
     category: false,
     price: false,
     thumbnail: false,
-    maxFileError: false
+    maxFileError: false,
   });
+
   const [slideCount, setSlideCount] = useState(0);
   const [billet, setBillet] = useState({});
+  const [isPublishing, setIsPublishing] = useState(false);
+  const [isPublished, setIsPublished] = useState(false);
+  const [publishError, setPublishError] = useState(undefined);
   const priceRef = useRef(null);
   let history = useHistory();
   const finalSlideCount = 2;
@@ -60,8 +70,7 @@ function Create(props) {
     fileType: "",
     fileData: undefined,
   });
-  const [isPublishing, setIsPublishing] = useState(false);
-  const [isPublished, setIsPublished] = useState(false);
+
   useEffect(() => {
     pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
   }, []);
@@ -94,18 +103,16 @@ function Create(props) {
   }, [reduxState]);
 
   useEffect(() => {
-    if(priceRef.current)  {
-      if(checkDisablePrice()) {
+    if (priceRef.current) {
+      if (checkDisablePrice()) {
         priceRef.current.disabled = true;
-        priceRef.current.style.backgroundColor = '#565656'
+        priceRef.current.style.backgroundColor = "#565656";
       } else {
         priceRef.current.disabled = false;
-        priceRef.current.style.backgroundColor = ''
-  
+        priceRef.current.style.backgroundColor = "";
       }
     }
-   
-  }, [form.purpose])
+  }, [form.purpose]);
   function onImageDrop(acceptedFiles) {
     setFormData({
       ...form,
@@ -208,7 +215,7 @@ function Create(props) {
           draggable: true,
           progress: undefined,
         });
-       
+
         // setSlideCount(finalSlideCount + 1)
       })
       .catch((err) => {
@@ -217,13 +224,20 @@ function Create(props) {
   }
 
   function saveToBlockChain(form) {
-    BlockChainInterface.publishIdea(form, saveToMongo, updateIdeaIDToMongo);
+    // BlockChainInterface.publishIdea(form, saveToMongo, updateIdeaIDToMongo);
+    BlockChainInterface.publishOnBehalf(form).then(success =>{
+      saveToMongo(success)
+      setIsPublishing(false)
+    }).catch(error => {
+      setIsPublishing(false)
+      setPublishError("The idea couldnt be published to blockchain. Please try again later.")
+    })
   }
 
   function handleSubmit() {
     const params = _.clone({ ...form });
     params.category = JSON.stringify(params.category);
-    params.creator = metamaskID
+    params.creator = metamaskID;
     params.IPFS = true;
     params.fileType = fileData.fileType;
     params.price =
@@ -273,15 +287,15 @@ function Create(props) {
 
         break;
       case 1:
-        if ( _.isEmpty(category) || _.isEmpty(thumbnail)) {
-          if(!checkDisablePrice()) {
+        if (_.isEmpty(category) || _.isEmpty(thumbnail)) {
+          if (!checkDisablePrice()) {
             setFormErrors({
               ...formErrors,
               price: price <= 0,
               category: _.isEmpty(category),
               thumbnail: _.isEmpty(thumbnail),
             });
-          }  else {
+          } else {
             setFormErrors({
               ...formErrors,
               price: false,
@@ -293,14 +307,14 @@ function Create(props) {
           setSlideCount(slideCount + 1);
         }
         break;
-        case 2:
-            handleSubmit();
-            setFormErrors({
-              ...formErrors,
-              price: false,
-              category: false,
-              thumbnail: false,
-            });
+      case 2:
+        handleSubmit();
+        setFormErrors({
+          ...formErrors,
+          price: false,
+          category: false,
+          thumbnail: false,
+        });
         break;
       default:
         break;
@@ -308,19 +322,20 @@ function Create(props) {
   };
 
   const onDrop = (acceptedFiles) => {
-    if(checkMaxFileSize(_.get(acceptedFiles, '[0]'))) {
-        setFormErrors({...formErrors, maxFileError: true})
+    if (checkMaxFileSize(_.get(acceptedFiles, "[0]"))) {
+      setFormErrors({ ...formErrors, maxFileError: true });
     } else {
       loadFile(acceptedFiles);
     }
-  }
+  };
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
     maxFiles: 1,
     accept: ["image/png", "image/jpg", "image/jpeg", ".pdf", ".mp3"],
   });
-  const getFileName = (filename) =>  filename.substring(filename.lastIndexOf('.')+1, filename.length) || filename;
-
+  const getFileName = (filename) =>
+    filename.substring(filename.lastIndexOf(".") + 1, filename.length) ||
+    filename;
 
   const loadFile = (file) => {
     const fr = new window.FileReader();
@@ -330,7 +345,7 @@ function Create(props) {
         fileType: String(getFileName(_.get(file, "[0].name"))).toLowerCase(),
         fileData: e.target.result,
       });
-      setFormErrors({...formErrors, maxFileError: false})
+      setFormErrors({ ...formErrors, maxFileError: false });
       onPDFDrop(file);
     };
     fr.readAsDataURL(file[0]);
@@ -352,19 +367,19 @@ function Create(props) {
       case "mp3":
         return (
           <div className="audio-wrapper">
-          <img src={audio} alt="" className="mb-1"/>
-          <audio controls>
-            <source src={fileData.fileData}></source>
-            Your browser does not support the
-            <code>audio</code> element.
-          </audio>
+            <img src={audio} alt="" className="mb-1" />
+            <audio controls>
+              <source src={fileData.fileData}></source>
+              Your browser does not support the
+              <code>audio</code> element.
+            </audio>
           </div>
         );
       case "jpg":
       case "jpeg":
       case "png":
-        case "PNG":
-        return <img src={`${fileData.fileData}`} alt=""/>;
+      case "PNG":
+        return <img src={`${fileData.fileData}`} alt="" />;
 
       default:
         return null;
@@ -374,53 +389,51 @@ function Create(props) {
   function setPurpose(purpose) {
     setFormData({ ...form, purpose });
   }
-  
-  const isSelectedPurpose = (purpose) => form.purpose === purpose
+
+  const isSelectedPurpose = (purpose) => form.purpose === purpose;
   const checkMaxFileSize = (file) => {
-      try {
-        const size = Math.floor(file.size /1000000)
-          return size > 5 ? true : false
-      } catch (err) {
-        console.log('err = ', err)
-        return false
-      }
-    
-    
-  } 
+    try {
+      const size = Math.floor(file.size / 1000000);
+      return size > 5 ? true : false;
+    } catch (err) {
+      console.log("err = ", err);
+      return false;
+    }
+  };
 
   const checkDisablePrice = () => {
-    if((CONSTANTS.PURPOSES.COLLAB === form.purpose || CONSTANTS.PURPOSES.KEEP === form.purpose)) {
-      setFormData({...form, price: 0})
+    if (
+      CONSTANTS.PURPOSES.COLLAB === form.purpose ||
+      CONSTANTS.PURPOSES.KEEP === form.purpose
+    ) {
+      setFormData({ ...form, price: 0 });
       return true;
     }
-    return false
-  }
+    return false;
+  };
 
   const getViewBasedOnSteps = () => {
     switch (slideCount) {
-      case 0 :
+      case 0:
         return (
-            <>
+          <>
             <Col md="6" sm="12" lg="6" xs="12" className="title-n-desc pb-0">
               <Row className="">
-                
                 <Form.Group
                   as={Col}
                   className="formEntry"
                   md="12"
                   controlId="title"
                 >
-                   <div className="title-label">
-                  <Form.Label>Title </Form.Label>
-                     </div>
+                  <div className="title-label">
+                    <Form.Label>Title </Form.Label>
+                  </div>
                   <Form.Control
                     type="text"
                     name="title"
                     value={form.title}
                     className={
-                      formErrors.title
-                        ? "input-err titleArea"
-                        : "titleArea"
+                      formErrors.title ? "input-err titleArea" : "titleArea"
                     }
                     placeholder="Title*"
                     onChange={handleChange}
@@ -435,8 +448,8 @@ function Create(props) {
                   controlId="description"
                 >
                   <div className="description-label">
-                  <Form.Label>Description </Form.Label>
-                     </div>
+                    <Form.Label>Description </Form.Label>
+                  </div>
                   <InputGroup>
                     <Form.Control
                       value={form.description}
@@ -446,7 +459,7 @@ function Create(props) {
                           : "descriptionArea"
                       }
                       as="textarea"
-                      rows={17}
+                      rows={12}
                       aria-describedby="inputGroupAppend"
                       name="description"
                       placeholder="Description*"
@@ -457,414 +470,416 @@ function Create(props) {
                   </InputGroup>
                 </Form.Group>
               </Row>
-              <Row  className="form-row">
-              <Form.Group
+              <Row className="form-row">
+                <Form.Group
                   as={Col}
                   className="file-storage-group"
                   md="12"
                   controlId="fileStorage"
                 >
                   <div className="file-storage-label">
-                  <Form.Label>File Storage </Form.Label>
-                  <OverlayTrigger
-                    placement="top"
-                    overlay={
-                      <Tooltip id={`tooltip-top`}>
-                        Choose file storage type
-                      </Tooltip>
-                    }
-                  >
-                  <Info />
-                  </OverlayTrigger>
+                    <Form.Label>File Storage </Form.Label>
+                    <OverlayTrigger
+                      placement="top"
+                      overlay={
+                        <Tooltip id={`tooltip-top`}>
+                          Choose file storage type
+                        </Tooltip>
+                      }
+                    >
+                      <Info />
+                    </OverlayTrigger>
                   </div>
-                  {
-                  CONSTANTS.FileStorageDropdownOptions.map(item =>  <Form.Check id={item.value} name="storageGroup" inline type="radio" value={form.storage} checked={form.storage === item.value} onChange={() => setFormData({...form, storage: item.value})}  label={item.label}  /> )
-                    }
-                   {/* <Select
+                {CONSTANTS.FileStorageDropdownOptions.map((item) => (
+                    <Form.Check
+                      id={item.value}
+                      name="storageGroup"
+                      type="radio"
+                      value={form.storage}
+                      checked={form.storage === item.value}
+                      onChange={() =>
+                        setFormData({ ...form, storage: item.value })
+                      }
+                      disabled
+                      label={item.label}
+                    />
+                  ))}
+                  {/* <Select
                     className="basic-single"
                     classNamePrefix="select"
                     name="color"
                     defaultValue={{value: form.storage, label: form.storage}}
                     options={CONSTANTS.FileStorageDropdownOptions}
                   /> */}
-            </Form.Group>
+                </Form.Group>
               </Row>
             </Col>
-            
-              <Col
-                md="6"
-                sm="12"
-                lg="6"
-                xs="12"
-                className="pdf-container"
-              >
-                {form.PDFFile && !formErrors.maxFileError &&  (
-                  <div className="pdfUploaded w-100 h-100">
-                    <X
-                      className="removePDF cursor-pointer"
-                      onClick={() => {
-                        clearPDF();
-                      }}
-                    ></X>
-                    {fileData.fileData && getFileViewer()}
-                  </div>
-                )}
-                {!form.PDFFile && (
-                  <Form.Row className="empty-pdf-row">
-                    <div
-                      className="file-drop-contatiner"
-                      {...getRootProps()}
-                    >
-                      <input {...getInputProps()} />
-                      <UploadCloud/>
-                      <p>
-                        Drag 'n' drop some files here, or click to select
-                        files
-                        
-                      </p>
-                      <p>
-                      (Upload pdf / mp3 / image)
-                      </p>
-                      <div>
-                        {/* <Plus /> */}
-                      </div>
-                      {formErrors.pdf && (
-                      <p className="invalid-paragraph"> File  is required </p>
+
+            <Col md="6" sm="12" lg="6" xs="12" className="pdf-container">
+              {form.PDFFile && !formErrors.maxFileError && (
+                <div className="pdfUploaded w-100 h-100">
+                  <X
+                    className="removePDF cursor-pointer"
+                    onClick={() => {
+                      clearPDF();
+                    }}
+                  ></X>
+                  {fileData.fileData && getFileViewer()}
+                </div>
+              )}
+              {!form.PDFFile && (
+                <Form.Row className="empty-pdf-row">
+                  <div className="file-drop-contatiner" {...getRootProps()}>
+                    <input {...getInputProps()} />
+                    <UploadCloud />
+                    <p>
+                      Drag 'n' drop some files here, or click to select files
+                    </p>
+                    <p>(Upload pdf / mp3 / image)</p>
+                    <div>{/* <Plus /> */}</div>
+                    {formErrors.pdf && (
+                      <p className="invalid-paragraph"> File is required </p>
                     )}
-                    {
-                       formErrors.maxFileError && <p className="invalid-paragraph"> Max file size is 5MB </p>
-                    }
-                    </div>
-                   
-                  </Form.Row>
-                )}
-              </Col>
-              </>
-        )
+                    {formErrors.maxFileError && (
+                      <p className="invalid-paragraph">
+                        {" "}
+                        Max file size is 5MB{" "}
+                      </p>
+                    )}
+                  </div>
+                </Form.Row>
+              )}
+            </Col>
+          </>
+        );
       case 1:
-     return (
-      <>
-            <Col
-                    md="6"
-                    sm="12"
-                    lg="6"
-                    xs="12"
-                    className="price-n-category"
-                  >
-                    <Row className="">
-                      <Form.Group as={Col} className="formEntry" md="12">
-                      <div className="tags-label">
-                        <Form.Label>Tags </Form.Label>
-                           </div>
-                        <Select
-                          value={form.category}
-                          closeMenuOnSelect={true}
-                          isMulti
-                          className={
-                            formErrors.category
-                              ? "input-err tag-selector"
-                              : "tag-selector"
-                          }
-                          options={CONSTANTS.CATEGORIES}
-                          onChange={handleTagsChange}
-                          placeholder="Tags*"
-                        />
-                      </Form.Group>
-                    </Row>
-                    <Row className="purpose-selector-row">
-                      <Col md="12" className="p-0">
-                        <div className="purpose-label">
-                        <Form.Label>What would you like to do with the idea ? </Form.Label>
-                           </div>
-                        <Row>
-                          <Col md="6">
-                            <Button
-                              variant="outline-primary"
-                              className="purpose-button"
-                              onClick={() => {
-                                setPurpose(CONSTANTS.PURPOSES.AUCTION);
-                              }}
-                            >
-                              {
-                               isSelectedPurpose(CONSTANTS.PURPOSES.AUCTION) && <Check />
-                              }
-                               
-                              Auction
-                            </Button>
-                          </Col>
-                          <Col md="6">
-                            <Button
-                              variant="outline-primary"
-                              className="purpose-button"
-                              onClick={() => {
-                                setPurpose(CONSTANTS.PURPOSES.SELL);
-                              }}
-                            >
-                              {
-                               isSelectedPurpose(CONSTANTS.PURPOSES.SELL) && <Check />
-                              }
-                              Sell
-                            </Button>
-                          </Col>
-                          <Col md="6">
-                            <Button
-                              variant="outline-primary"
-                              className="purpose-button"
-                              onClick={() => {
-                                setPurpose(CONSTANTS.PURPOSES.COLLAB);
-                              }}
-                            >
-                              {
-                               isSelectedPurpose(CONSTANTS.PURPOSES.COLLAB) && <Check />
-                              }
-                              Collab
-                            </Button>
-                          </Col>
-                          <Col md="6">
-                            <Button
-                              variant="outline-primary"
-                              className="purpose-button"
-                              onClick={() => {
-                                setPurpose(CONSTANTS.PURPOSES.KEEP);
-                              }}
-                            >
-                             {
-                               isSelectedPurpose(CONSTANTS.PURPOSES.KEEP) && <Check />
-                              }
-                              Keep
-                            </Button>
-                          </Col>
-                        </Row>
-                      </Col>
-                    </Row>
-                 
-                    <Row className="">
-                      <Form.Group as={Col} className="formEntry" md="12">
-                      <div className="price-label">
-                        <Form.Label>
-                          {CONSTANTS.PURPOSES.AUCTION === form.purpose ? 'Base price' : 'Price'}
-                           </Form.Label>
-                           </div>
-                        <InputGroup className="price-input-group">
-                          <Form.Control
-                            type="number"
-                            placeholder="how much do you think your idea is worth ?*"
-                            min={1}
-                            value={form.price ? form.price : undefined}
-                            className={
-                              formErrors.price
-                                ? `input-err price-selector `
-                                : `price-selector `
-                            }
-                            aria-label="Amount (ether)"
-                            name="price"
-                            onChange={handleChange}
-                            ref={priceRef}
-                          />
-                          <InputGroup.Text>BNB</InputGroup.Text>
-                        </InputGroup>
-                      </Form.Group>
-                    </Row>
-                  </Col>
-                  <Col
-                    md="6"
-                    sm="12"
-                    lg="6"
-                    xs="12"
-                    className="image-container p-0"
-                  >
-                    {form.thumbnail && (
-                      <div className="imageUploaded w-100 h-100">
-                        <X
-                          className="removeImage cursor-pointer"
-                          onClick={() => {
-                            clearImage();
-                          }}
-                        ></X>
-                        <img src={form.thumbnail.preview} alt="" />
-                      </div>
-                    )}
-                    {!form.thumbnail && (
-                      <Form.Row className="empty-image-row">
-                        <Dropzone
-                          onDrop={onImageDrop}
-                          acceptedFiles={".jpeg"}
-                          className="dropzoneContainer"
-                        >
-                          {({ getRootProps, getInputProps }) => (
-                            <section className="container h-100 ">
-                              <div
-                                {...getRootProps()}
-                                className="emptyImage dropZone h-100 d-flex flex-column align-items-center"
-                              >
-                                <input {...getInputProps()} />
-                                <ImageFile
-                                  size={30}
-                                  className="dropfile-icon"
-                                  color="#fff"
-                                ></ImageFile>
-                                <p className="m-0 dropfile-text">
-                                  Drop your thumbnail here
-                                </p>
-                               
-                                {formErrors.thumbnail && (
-                                  <p className="invalid-paragraph">
-                                    {" "}
-                                    Thumbnail is required{" "}
-                                  </p>
-                                )}
-                              </div>
-                            </section>
-                          )}
-                        </Dropzone>
-                      </Form.Row>
-                    )}
-                  </Col>
-      </>
-     )
-      
-      default: 
-           return (
-             <>
-            <Col md="6" sm="12" lg="6" xs="12" className="preview-doc ">
-            <Row className="form-row">
-            <Col
-                md="12"
-                sm="12"
-                lg="12"
-                xs="12"
-                className="pdf-container"
-              >
-                {form.PDFFile && (
-                  <div className="pdfUploaded w-100 h-100">
-                    
-                    {fileData.fileData && getFileViewer()}
+        return (
+          <>
+            <Col md="6" sm="12" lg="6" xs="12" className="price-n-category">
+              <Row className="">
+                <Form.Group as={Col} className="formEntry" md="12">
+                  <div className="tags-label">
+                    <Form.Label>Tags </Form.Label>
                   </div>
-                )}
-                
+                  <Select
+                    value={form.category}
+                    closeMenuOnSelect={true}
+                    isMulti
+                    className={
+                      formErrors.category
+                        ? "input-err tag-selector"
+                        : "tag-selector"
+                    }
+                    options={CONSTANTS.CATEGORIES}
+                    onChange={handleTagsChange}
+                    placeholder="Tags*"
+                  />
+                </Form.Group>
+              </Row>
+              <Row className="purpose-selector-row">
+                <Col md="12" className="p-0">
+                  <div className="purpose-label">
+                    <Form.Label>
+                      What would you like to do with the idea ?{" "}
+                    </Form.Label>
+                  </div>
+                  <Row>
+                    <Col md="6">
+                      <Button
+                        variant="outline-primary"
+                        className="purpose-button"
+                        onClick={() => {
+                          setPurpose(CONSTANTS.PURPOSES.AUCTION);
+                        }}
+                      >
+                        {isSelectedPurpose(CONSTANTS.PURPOSES.AUCTION) && (
+                          <Check />
+                        )}
+                        Auction
+                      </Button>
+                    </Col>
+                    <Col md="6">
+                      <Button
+                        variant="outline-primary"
+                        className="purpose-button"
+                        onClick={() => {
+                          setPurpose(CONSTANTS.PURPOSES.SELL);
+                        }}
+                      >
+                        {isSelectedPurpose(CONSTANTS.PURPOSES.SELL) && (
+                          <Check />
+                        )}
+                        Sell
+                      </Button>
+                    </Col>
+                    <Col md="6">
+                      <Button
+                        variant="outline-primary"
+                        className="purpose-button"
+                        onClick={() => {
+                          setPurpose(CONSTANTS.PURPOSES.COLLAB);
+                        }}
+                      >
+                        {isSelectedPurpose(CONSTANTS.PURPOSES.COLLAB) && (
+                          <Check />
+                        )}
+                        Collab
+                      </Button>
+                    </Col>
+                    <Col md="6">
+                      <Button
+                        variant="outline-primary"
+                        className="purpose-button"
+                        onClick={() => {
+                          setPurpose(CONSTANTS.PURPOSES.KEEP);
+                        }}
+                      >
+                        {isSelectedPurpose(CONSTANTS.PURPOSES.KEEP) && (
+                          <Check />
+                        )}
+                        Keep
+                      </Button>
+                    </Col>
+                  </Row>
                 </Col>
-                <Col 
+              </Row>
+
+              <Row className="">
+                <Form.Group as={Col} className="formEntry" md="12">
+                  <div className="price-label">
+                    <Form.Label>
+                      {CONSTANTS.PURPOSES.AUCTION === form.purpose
+                        ? "Base price"
+                        : "Price"}
+                    </Form.Label>
+                  </div>
+                  <InputGroup className="price-input-group">
+                    <Form.Control
+                      type="number"
+                      placeholder="how much do you think your idea is worth ?*"
+                      min={1}
+                      value={form.price ? form.price : undefined}
+                      className={
+                        formErrors.price
+                          ? `input-err price-selector `
+                          : `price-selector `
+                      }
+                      aria-label="Amount (ether)"
+                      name="price"
+                      onChange={handleChange}
+                      ref={priceRef}
+                    />
+                    <InputGroup.Text>BNB</InputGroup.Text>
+                  </InputGroup>
+                </Form.Group>
+              </Row>
+            </Col>
+            <Col md="6" sm="12" lg="6" xs="12" className="image-container p-0">
+              {form.thumbnail && (
+                <div className="imageUploaded w-100 h-100">
+                  <X
+                    className="removeImage cursor-pointer"
+                    onClick={() => {
+                      clearImage();
+                    }}
+                  ></X>
+                  <img src={form.thumbnail.preview} alt="" />
+                </div>
+              )}
+              {!form.thumbnail && (
+                <Form.Row className="empty-image-row">
+                  <Dropzone
+                    onDrop={onImageDrop}
+                    acceptedFiles={".jpeg"}
+                    className="dropzoneContainer"
+                  >
+                    {({ getRootProps, getInputProps }) => (
+                      <section className="container h-100 ">
+                        <div
+                          {...getRootProps()}
+                          className="emptyImage dropZone h-100 d-flex flex-column align-items-center"
+                        >
+                          <input {...getInputProps()} />
+                          <ImageFile
+                            size={30}
+                            className="dropfile-icon"
+                            color="#fff"
+                          ></ImageFile>
+                          <p className="m-0 dropfile-text">
+                            Drop your thumbnail here
+                          </p>
+
+                          {formErrors.thumbnail && (
+                            <p className="invalid-paragraph">
+                              {" "}
+                              Thumbnail is required{" "}
+                            </p>
+                          )}
+                        </div>
+                      </section>
+                    )}
+                  </Dropzone>
+                </Form.Row>
+              )}
+            </Col>
+          </>
+        );
+
+      default:
+        return (
+          <>
+            <Col md="6" sm="12" lg="6" xs="12" className="preview-doc ">
+              <Row className="form-row">
+                <Col md="12" sm="12" lg="12" xs="12" className="pdf-container">
+                  {form.PDFFile && (
+                    <div className="pdfUploaded w-100 h-100">
+                      {fileData.fileData && getFileViewer()}
+                    </div>
+                  )}
+                </Col>
+                <Col
                   md="12"
                   sm="12"
                   lg="12"
                   xs="12"
                   className="description-container"
                 >
-                  <p>
-                    {form.title}
-                  </p>
-                <p>
-                  {form.description}
-                </p>
+                  <p>{form.title}</p>
+                  <p>{form.description}</p>
                 </Col>
-            </Row>
+              </Row>
             </Col>
             <Col md="6" sm="12" lg="6" xs="12" className="preview-details ">
-            <div className="content-profile">
-                          <img src={userDetails.imageUrl ? userDetails.imageUrl : user} alt="" />
-                          <p>
-                            {userDetails.userID}
-                          </p>
-                        </div>
-                        <div className="description">
-                          <p>
-                          Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                           Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown
-                            printer took a galley of type and scrambled it to make a type specimen book.
-                          </p>
-                        </div>
-                        <div className="price">
-                         <p>
-                        Price: <span className="line-through">{form.price} BNB</span> <span> FREE</span>
-                           </p> 
-                        </div>
+              <div className="content-profile">
+                <img
+                  src={userDetails.imageUrl ? userDetails.imageUrl : user}
+                  alt=""
+                />
+                <p>{userDetails.userID}</p>
+              </div>
+              <div className="description">
+                <p>
+                  Lorem Ipsum is simply dummy text of the printing and
+                  typesetting industry. Lorem Ipsum has been the industry's
+                  standard dummy text ever since the 1500s, when an unknown
+                  printer took a galley of type and scrambled it to make a type
+                  specimen book.
+                </p>
+              </div>
+              <div className="price">
+                <p>
+                  Price: <span className="line-through">{form.price} BNB</span>{" "}
+                  <span> FREE</span>
+                </p>
+              </div>
             </Col>
-             </>
-           )
-      
+          </>
+        );
     }
-  }
+  };
 
   const getPublishedView = () => {
+    
     return (
-      <Col md="12" sm="12" lg="12" xs="12" className="published-wrapper " id="published-wrapper-block">
+       publishError ? <div>Failed to publish - {publishError}</div> : 
+      <Col
+        md="12"
+        sm="12"
+        lg="12"
+        xs="12"
+        className="published-wrapper "
+        id="published-wrapper-block"
+      >
         <div className="success-block">
-        <p>Your Idea is posted in blockchain</p>
+          <p>Your Idea is posted in blockchain</p>
           <Check />
         </div>
-          
-          <div className="transaction-data">
-            <div className="transaction-ids">
-              <p>Transaction ID- <span>{billet.transactionID}</span></p>
-              <p>File Hash ID- <span>{billet.PDFHash}</span></p>
-              <p>* Please save both of these for future reference.</p>
-            </div>
-            <div className="btn-block">
-            <Button
-                    variant="primary"
-                    className="button"
-                    bsstyle="primary"
-                    onClick={() => gotoProfile()}
-                  > Done
-                    </Button>
-                    <Button
-                    variant="primary"
-                    className="button ml-3"
-                    bsstyle="primary"
-                    onClick={() => exportToPdf()}
-                  > Export
-                    </Button>
-                    
-            </div>
+
+        <div className="transaction-data">
+          <div className="transaction-ids">
+            <p>
+              Transaction ID- <span>{billet.transactionID}</span>
+            </p>
+            <p>
+              File Hash ID- <span>{billet.PDFHash}</span>
+            </p>
+            <p>* Please save both of these for future reference.</p>
           </div>
+          <div className="btn-block">
+            <Button
+              variant="primary"
+              className="button"
+              bsstyle="primary"
+              onClick={() => gotoProfile()}
+            >
+              {" "}
+              Done
+            </Button>
+            <Button
+              variant="primary"
+              className="button ml-3"
+              bsstyle="primary"
+              onClick={() => exportToPdf()}
+            >
+              {" "}
+              Export
+            </Button>
+          </div>
+        </div>
       </Col>
     )
-  }
+  };
 
   const getPublishingView = () => {
     return (
       <Col md="12" sm="12" lg="12" xs="12" className="publishing-wrapper ">
         <div className="publishing-block">
-        <p>We are processing your idea. Please wait!</p>
+          <p>We are posting your idea on the blockchain. Please wait!</p>
         </div>
-          
-          <div className="gif-wrapper">
+
+        <div className="gif-wrapper">
           <img src={loadingGif} alt="" />
-          </div>
+        </div>
       </Col>
-    )
-  }
+    );
+  };
 
   const exportToPdf = () => {
-		var name =  "trasnaction.pdf";
-	
-		domtoimage.toJpeg(document.getElementById('published-wrapper-block'), {
-			quality: 0.95, style: {
-				"background-color": "#000",
-				"padding": "20px"
-			}, filter: function filter(node) {
-				return ['filterAddition', 'bottom-contents'].indexOf(node.className) < 0;
-			}
-		})
-			.then(function (dataUrl) {
-				var image = document.createElement('img');
-				image.addEventListener('load', function () {
-					var pdf = new jspdf('p', 'pt', 'a3');
-					pdf.internal.pageSize.setWidth(image.width * 0.75);
-					pdf.internal.pageSize.setHeight(image.height * 0.75);
-					pdf.addImage(dataUrl, 'JPG', 0, -80);
-					pdf.save(name);
-				});
-				image.src = dataUrl;
-			
-			}, error => {
-				console.log({ error })
-			});
-	}
+    var name = "trasnaction.pdf";
 
+    domtoimage
+      .toJpeg(document.getElementById("published-wrapper-block"), {
+        quality: 0.95,
+        style: {
+          "background-color": "#000",
+          padding: "20px",
+        },
+        filter: function filter(node) {
+          return (
+            ["filterAddition", "bottom-contents"].indexOf(node.className) < 0
+          );
+        },
+      })
+      .then(
+        function(dataUrl) {
+          var image = document.createElement("img");
+          image.addEventListener("load", function() {
+            var pdf = new jspdf("p", "pt", "a3");
+            pdf.internal.pageSize.setWidth(image.width * 0.75);
+            pdf.internal.pageSize.setHeight(image.height * 0.75);
+            pdf.addImage(dataUrl, "JPG", 0, -80);
+            pdf.save(name);
+          });
+          image.src = dataUrl;
+        },
+        (error) => {
+          console.log({ error });
+        }
+      );
+  };
 
   return (
-    <Container >
+    <Container>
       <Row className="createform  d-flex">
         <Col md="12" sm="12" lg="12" xs="12" className="responsive-content">
           <Form
@@ -881,54 +896,51 @@ function Create(props) {
                 ></Col>
               </Row> */}
               <Row className="content-container">
-                {slideCount === finalSlideCount && isPublished ? getPublishedView() : slideCount === finalSlideCount && isPublishing ? getPublishingView() : getViewBasedOnSteps()}
-               
-           
+                {slideCount === finalSlideCount && isPublished
+                  ? getPublishedView()
+                  : slideCount === finalSlideCount && isPublishing
+                  ? getPublishingView()
+                  : getViewBasedOnSteps()}
               </Row>
-              {!isPublished && !isPublishing && 
+              {!isPublished && !isPublishing && (
                 <Row className="footer-class ">
-                <Col
-                  md="6"
-                  className="d-flex justify-content-between align-items-center "
-                >
-                  {slideCount === finalSlideCount + 1 ? (
-                    <div></div>
-                  ) : (
+                  <Col
+                    md="6"
+                    className="d-flex justify-content-between align-items-center "
+                  >
+                    {slideCount === finalSlideCount + 1 ? (
+                      <div></div>
+                    ) : (
+                      <Button
+                        variant="secondary"
+                        className="button"
+                        bsstyle="primary"
+                        onClick={() => {
+                          onBack();
+                        }}
+                      >
+                        {getBackButtonText()}
+                      </Button>
+                    )}
+                  </Col>
+                  <Col
+                    md="6"
+                    className="d-flex justify-content-end align-items-center right-btn-container"
+                  >
                     <Button
-                      variant="secondary"
+                      variant="primary"
                       className="button"
                       bsstyle="primary"
+                      style={{ gap: "2px" }}
                       onClick={() => {
-                        onBack();
+                        onNext();
                       }}
                     >
-                      {getBackButtonText()}
+                      {getNextButtonText()} {"  "}
                     </Button>
-                  )}
-
-                 
-                </Col>
-                <Col
-                  md="6"
-                  className="d-flex justify-content-end align-items-center right-btn-container"
-                 
-                > 
-                 <Button
-                    variant="primary"
-                    className="button"
-                    bsstyle="primary"
-                    style={{ gap: "2px" }}
-                    onClick={() => {
-                      onNext();
-                    }}
-                  >
-                    {getNextButtonText()} {"  "}
-                    
-                  </Button>
-                </Col>
-              </Row>
-            
-              }
+                  </Col>
+                </Row>
+              )}
             </Col>
           </Form>
         </Col>
@@ -939,11 +951,11 @@ function Create(props) {
   function getNextButtonText() {
     if (slideCount === finalSlideCount) {
       return "Publish";
-    } else if (slideCount  === 0) {
+    } else if (slideCount === 0) {
       return "Next";
     } else if (slideCount === 1) {
       return "Preview";
-    } 
+    }
   }
 
   function getBackButtonText() {

@@ -37,9 +37,9 @@ const PURPOSES = {
     KEEP: "Decide later",
 }
 const FileStorageDropdownOptions = [
-    { value: 'PUBLIC', label: 'PUBLIC' },
-    { value: 'PRIVATE', label: 'PRIVATE' },
-    { value: 'SELF', label: 'SELF' },
+    { value: 'PUBLIC', label: 'PUBLIC - The files are stored in IPFS' },
+    { value: 'PRIVATE', label: 'PRIVATE - We securely store the file in private stores' },
+    { value: 'SELF', label: 'SELF - We wont be storing the file. Please save the has for reference.' },
   ];
 
 const CONSTANTS = {

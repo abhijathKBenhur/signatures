@@ -49,9 +49,11 @@
                             label{
                                 color: $white;
                                 margin: 0;
-                                font-weight: 700;
                                 font-size: 20px;
                             }
+                        }
+                        .form-check{
+                            margin-top: 15px !important;
                         }
                        
                         .select__control{
@@ -315,7 +317,6 @@
     .purpose-label,.tags-label, .price-label,.description-label,.title-label{
         label {
             color: $white;
-            font-weight: 700;
             font-size: 20px;
 
         }
@@ -340,7 +341,7 @@
         }
         .description-container{
             margin-top: 10px;
-            p{
+            p{  word-break: break-word;
                 color: $white;
                 &:first-child{
                     text-align: center;
