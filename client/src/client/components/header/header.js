@@ -105,6 +105,24 @@ const Header = (props) => {
     </a>
   ));
 
+  const isUserAuthForPublish = () => {
+    if(!window.location.href.includes('create') && !_.isEmpty(userDetails)) {
+     return  (
+        <Button
+          variant="primary"
+          className="button"
+          bsstyle="primary"
+          onClick={() => {
+            createnew();
+          }}
+        >
+          Publish
+        </Button>
+      )
+    }
+    return null
+  }
+
   return (
     <div>
       <nav className="navbar navbar-light bg-light flex-md-nowrap shadow appHeader justify-content-center">
@@ -173,19 +191,8 @@ const Header = (props) => {
                 Connect Wallet
               </Button>
             ) : 
-            
-            (
-              <Button
-                variant="primary"
-                className="button"
-                bsstyle="primary"
-                onClick={() => {
-                  createnew();
-                }}
-              >
-                Publish
-              </Button>
-            )}
+                isUserAuthForPublish()
+            }
 
             {_.isEmpty(currentUserDetails.imageUrl) ? (
               <User
