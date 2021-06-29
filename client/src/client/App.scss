@@ -143,3 +143,12 @@ body {
     pointer-events: none;
   }
 }
+.generic-cls{
+  color: $secondary !important;
+  background-color: $primary !important;
+  .Toastify__close-button{
+    svg {
+      color: $secondary;
+    }
+  }
+}

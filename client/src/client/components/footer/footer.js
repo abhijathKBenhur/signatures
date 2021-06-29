@@ -1,11 +1,9 @@
-import React, {  useEffect, useState  } from "react";
+import React from "react";
 import _ from "lodash";
 import "./footer.scss";
-import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Container, Row, Col } from "react-bootstrap";
-import { shallowEqual, useSelector } from "react-redux";
-import CONSTANTS from '../../commons/Constants';
+import { Container} from "react-bootstrap";
+
 
 const Footer = (props) => {
  
