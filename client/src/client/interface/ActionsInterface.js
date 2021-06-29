@@ -12,7 +12,7 @@ export const postAction = payload => {
 
 
 export const getActions = (payload) =>  { 
-    return api.get("/getActions",payload) 
+    return api.post("/getActions",payload) 
 }
 
 export const markAllAsRead = (payload) =>  { 

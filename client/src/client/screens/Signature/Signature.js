@@ -214,6 +214,8 @@ const Signature = (props) => {
       if (success.proceed) {
         let updatePayload = {
           from: currentMetamaskAccount,
+          fromUserName: currentUser.userID,
+          toUserName: signature.userID,
           to: signature.owner,
           action: CONSTANTS.ACTIONS.COLLAB_INTEREST,
           status: CONSTANTS.ACTION_STATUS.PENDING,

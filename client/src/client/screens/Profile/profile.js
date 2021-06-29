@@ -38,15 +38,14 @@ function Profile(props) {
   const viewUser = _.get(history.location.state, "userID");
 
   useEffect(() => {
-    fetchNotifications()
     const { userDetails = {} } = reduxState;
     if (userDetails) {
-      setCurrentUserDetails(userDetails)
+      setCurrentUserDetails(userDetails);
       fetchSignatures();
     }
     if (viewUser && viewUser.toLowerCase() !== userDetails.userID) {
       let payLoad = {};
-      payLoad.userID = viewUser
+      payLoad.userID = viewUser;
       getUserDetails(payLoad);
     }
   }, [reduxState.userDetails]);
@@ -61,32 +60,33 @@ function Profile(props) {
   const getUserDetails = (payLoad) => {
     MongoDBInterface.getUserInfo(payLoad).then((response) => {
       setCurrentUserDetails(_.get(response, "data.data"));
-      fetchSignatures()
+      fetchSignatures();
     });
   };
 
   function fetchSignatures() {
-    MongoDBInterface.getSignatures({ ownerAddress: currentUserDetails.metamaskId }).then(
-      (signatures) => {
-        let response = _.get(signatures, "data.data");
-        let isEmptyPresent = _.find(response, (responseItem) => {
-          return _.isEmpty(responseItem.ideaID);
-        });
-        setProfileCollection(response);
+    fetchNotifications();
+    MongoDBInterface.getSignatures({
+      ownerAddress: currentUserDetails.metamaskId,
+    }).then((signatures) => {
+      let response = _.get(signatures, "data.data");
+      let isEmptyPresent = _.find(response, (responseItem) => {
+        return _.isEmpty(responseItem.ideaID);
+      });
+      setProfileCollection(response);
 
-        // if(isEmptyPresent){
-        //   clearInterval(fetchInterval)
-        // }
-      }
-    );
+      // if(isEmptyPresent){
+      //   clearInterval(fetchInterval)
+      // }
+    });
   }
 
-  function fetchNotifications(){
+  function fetchNotifications() {
     ActionsInterface.getActions({ to: currentUserDetails.metamaskId }).then(
       (signatures) => {
         let response = _.get(signatures, "data.data");
         setMyNotifications(response);
-        console.log(response)
+        console.log(response);
       }
     );
   }
@@ -191,9 +191,26 @@ function Profile(props) {
                           </div>
                         </div>
                       </Tab>
-                       <Tab eventKey="profile" title="Notifications">
+                      <Tab eventKey="profile" title="Notifications">
                         <div className="transactions-wrapper">
-                          <h6>No transactions yet</h6>
+                          <table>
+                              <tr>
+                                <td>From</td>
+                                <td>Action</td>
+                                <td>ideaID</td>
+                                <td>message</td>
+                              </tr>
+                          {myNotifications.map((notification) => {
+                            return (
+                              <tr>
+                                <td>{notification.from}</td>
+                                <td>{notification.action}</td>
+                                <td>{notification.ideaID}</td>
+                                <td>{notification.message}</td>
+                              </tr>
+                            )
+                          })}
+                          </table>
                         </div>
                       </Tab>
                     </Tabs>

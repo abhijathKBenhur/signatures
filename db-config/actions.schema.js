@@ -4,7 +4,9 @@ const Schema = mongoose.Schema;
 const Actions = new Schema(
   {
     from : { type: String },
+    fromUserName : { type: String },
     to: { type: String },
+    toUserName: { type: String },
     action: { type: String },
     status: { type: String },
     ideaID: { type: String },
