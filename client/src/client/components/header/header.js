@@ -116,7 +116,7 @@ const Header = (props) => {
             createnew();
           }}
         >
-          Publish
+          Register your Idea
         </Button>
       )
     }
@@ -135,8 +135,8 @@ const Header = (props) => {
             >
               <img
                 src={logo}
-                width="50"
-                height="50"
+                width="35"
+                height="35"
                 alt=""
                 className="cursor-pointer"
                 onClick={() => gotoGallery()}
@@ -180,7 +180,7 @@ const Header = (props) => {
             >
               Connect
             </Button> */}
-            {_.isEmpty(currentMetamaskAccount) ? (
+            {_.isEmpty(currentMetamaskAccount) || _.isEmpty(currentUserDetails) ? (
               <Button
                 variant="primary"
                 className="button"

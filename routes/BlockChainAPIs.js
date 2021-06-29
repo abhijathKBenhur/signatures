@@ -7,8 +7,8 @@ const privateKey = process.env.PROGRAMMER_KEY;
 const HDWalletProvider = require("@truffle/hdwallet-provider");
 const _ = require("lodash");
 const networkURL = process.env.NETWORK_URL;
-
-const web3Instance = new Web3(new HDWalletProvider(privateKey, networkURL));
+let hdWallet = new HDWalletProvider({privateKeys:[privateKey] , providerOrUrl : "wss://eth-kovan.ws.alchemyapi.io/v2/x1UTqgj7k4xlcyFzkFza6b2m1PZbqeZx", pollingInterval : 20000})
+const web3Instance = new Web3(hdWallet);
 // web3Instance.eth.getAccounts().then((e) => console.log(e));
 const publicKey =
   web3Instance.eth.accounts.privateKeyToAccount(privateKey).address;

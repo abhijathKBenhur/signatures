@@ -24,7 +24,7 @@ import { toast } from "react-toastify";
 import Select from "react-select";
 import "react-step-progress-bar/styles.css";
 import { shallowEqual, useSelector } from "react-redux";
-import user from "../../../assets/images/user1.png";
+import user from "../../../assets/images/user.png";
 import audio from "../../../assets/images/audio.png";
 import loadingGif from "../../../assets/images/loader_blocks.gif";
 import jspdf from "jspdf";
@@ -570,7 +570,7 @@ function Create(props) {
                     <input {...getInputProps()} />
                     <UploadCloud />
                     <p>
-                      Drag 'n' drop some files here, or click to select files
+                    Drag 'n Drop or Upload the file containing your idea
                     </p>
                     <p>(Upload pdf / mp3 / image)</p>
                     <div>{/* <Plus /> */}</div>

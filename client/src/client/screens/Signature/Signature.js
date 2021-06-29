@@ -55,7 +55,7 @@ const Signature = (props) => {
     undefined
   );
 
-  const [key, setKey] = useState("Bids");
+  const [key, setKey] = useState("Details");
   let history = useHistory();
   useEffect(() => {
     pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
@@ -444,14 +444,20 @@ const Signature = (props) => {
                   activeKey={key}
                   onSelect={(k) => setKey(k)}
                 >
-                  <Tab eventKey="Bids" title="Bids">
+                  <Tab eventKey="Details" title="Details">
                     <div className="collection-wrapper">
-                      <div className="middle-block"></div>
+                      <div className="middle-block">
+                        <Row>
+                          <Col md={6}>Status of idea : </Col>
+                          <Col md={6}>{signature.purpose}</Col>
+                          <Col md={6}>Price : </Col>
+                          <Col md={6}>{signature.price && Web3Utils.fromWei(signature.price)} BNB</Col>
+                        </Row>
+                      </div>
                     </div>
                   </Tab>
                   <Tab eventKey="History" title="History">
                     <div className="transactions-wrapper">
-                      <h6>No transactions yet</h6>
                     </div>
                   </Tab>
                 </Tabs>

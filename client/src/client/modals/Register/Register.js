@@ -83,7 +83,7 @@ const Register = (props) => {
     if (steps[steps.length - 1].key == activeStep.key) {
       if (registration == PASSED) {
         publishUserToApp();
-        history.push("/profile");
+        window.location.reload()
       } else {
         setRegistration(PENDING);
         registerUser();
