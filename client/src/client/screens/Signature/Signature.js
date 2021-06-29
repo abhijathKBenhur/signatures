@@ -368,6 +368,7 @@ const Signature = (props) => {
                   }}>
                     <img src={user} alt="user" className="user-profile mr-1" />
                     {signature.userID}
+                    {signature.metamaskId}
                   </Col>
                 </Row>
                 <Row className="form-row">

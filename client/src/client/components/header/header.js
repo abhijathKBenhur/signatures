@@ -185,7 +185,7 @@ const Header = (props) => {
                 className="button"
                 bsstyle="primary"
                 onClick={() => {
-                  createnew();
+                  gotoPortfolio();
                 }}
               >
                 Connect Wallet

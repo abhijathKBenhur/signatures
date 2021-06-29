@@ -88,20 +88,11 @@ class BlockchainInterface {
       } else {
         store.dispatch(setReduxMetaMaskID())
         let errorMessage =
-          <div>Non-Ethereum browser detected. You should consider trying MetaMask!
+          <div>
             <br />
             <a style={{textDecoration: 'underline', color:'white'}} target="blank" href="https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn?hl=en">Add Metamask from here</a>
           </div>
-          toast.error(errorMessage, {
-            position: "bottom-right",
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            autoClose: false
-          });
-        reject(errorMessage);
+        reject("Non-Ethereum browser detected. You should consider trying MetaMask!");
       }
     });
     return promise;
