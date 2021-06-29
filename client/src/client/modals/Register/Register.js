@@ -379,7 +379,6 @@ const Register = (props) => {
               Back
             </Button>
           )}
-
           <Button
             disabled={!validated && activeStep.index == 2 || registration == PENDING || _.isEmpty(userDetails.metamaskId) || (_.isEmpty(userDetails.email) && activeStep.index == 1)}
             variant="primary"
