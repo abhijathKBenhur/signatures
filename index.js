@@ -4,6 +4,7 @@ const cors = require("cors");
 const mongotConnection = require("./db-config/mongodb");
 const tokenAPI = require("./routes/TokenAPIs");
 const userAPI = require("./routes/UserAPI");
+const actionAPI = require("./routes/actionsAPI")
 const blockChainAPI = require("./routes/BlockChainAPIs");
 const dotenv = require("dotenv");
 const path = require("path");
@@ -19,6 +20,9 @@ app.use(cors());
 app.use("/api", tokenAPI);
 app.use("/api", userAPI);
 app.use("/api", blockChainAPI);
+app.use("/api", actionAPI);
+
+
 
 console.log("Checking node environment ::" + process.env.NODE_ENV)
 if (process.env.NODE_ENV == "production") {

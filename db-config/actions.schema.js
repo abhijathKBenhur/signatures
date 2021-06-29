@@ -9,7 +9,6 @@ const Actions = new Schema(
     status: { type: String },
     ideaID: { type: String },
     message: { type: String },
-    type: { type: String },
     
   },
   { timestamps: true }

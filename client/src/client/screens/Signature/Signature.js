@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useLocation, useHistory } from "react-router-dom";
+import {confirm} from '../../modals/confirmation/confirmation'
 import moment from "moment";
 
 import SignatureBean from "../../beans/Signature";
@@ -18,6 +19,7 @@ import {
 } from "react-bootstrap";
 import BlockChainInterface from "../../interface/BlockchainInterface";
 import MongoDBInterface from "../../interface/MongoDBInterface";
+import ActionsInterface from "../../interface/ActionsInterface";
 import Web3Utils from "web3-utils";
 import Dropzone from "react-dropzone";
 import "./Signature.scss";
@@ -39,6 +41,7 @@ import Select from "react-select";
 import StorageInterface from "../../interface/StorageInterface";
 import { shallowEqual, useSelector } from "react-redux";
 import audio from "../../../assets/images/audio.png";
+import CONSTANTS from "../../commons/Constants";
 
 const Signature = (props) => {
   let { hashId } = useParams();
@@ -198,6 +201,35 @@ const Signature = (props) => {
     );
   }
 
+
+  function showInterest(){
+    confirm(
+      "Set your price.",
+      "Would you like to express your interest?",
+      "Ok",
+      "Cancel",
+      false,
+      "Message"
+    ).then((success) => {
+      if (success.proceed) {
+        let updatePayload = {
+          from: currentMetamaskAccount,
+          to: signature.owner,
+          action: CONSTANTS.ACTIONS.COLLAB_INTEREST,
+          status: CONSTANTS.ACTION_STATUS.PENDING,
+          ideaID: signature.ideaID,
+          message: success.text,
+        };
+        ActionsInterface.postAction(updatePayload).then(success =>{
+          
+        })
+      } else {
+
+      }
+    });
+    
+  }
+
   function openInEtherscan() {
     window.open("https://kovan.etherscan.io/tx/" + signature.transactionID);
   }
@@ -215,7 +247,7 @@ const Signature = (props) => {
     history.push({
       pathname: "/profile/" + id,
       state: {
-        userId: id,
+        userID: id,
       },
     });
   };
@@ -230,23 +262,36 @@ const Signature = (props) => {
           <div></div>
         ) : (
           <div>
-            <Dropdown.Item
-              onClick={() => {
-                buySignature();
-              }}
-            >
-              <ShoppingCart
-                className="cursor-pointer signature-icons ShoppingCart"
-                color="#79589F"
-              ></ShoppingCart>
-              <span className="txt">Buy</span>
-            </Dropdown.Item>
+          { signature.purpose == CONSTANTS.PURPOSES.SELL && <Dropdown.Item
+            onClick={() => {
+              buySignature();
+            }}
+          >
+            <ShoppingCart
+              className="cursor-pointer signature-icons ShoppingCart"
+              color="#79589F"
+            ></ShoppingCart>
+            <span className="txt">Buy</span>
+          </Dropdown.Item>
+          }
+          { signature.purpose == CONSTANTS.PURPOSES.COLLAB && <Dropdown.Item
+            onClick={() => {
+              showInterest();
+            }}
+          >
+            <ShoppingCart
+              className="cursor-pointer signature-icons ShoppingCart"
+              color="#79589F"
+            ></ShoppingCart>
+            <span className="txt">Collaborate</span>
+          </Dropdown.Item>
+          }
             <Dropdown.Item>
               <ThumbsUp
                 className="cursor-pointer signature-icons ThumbsUp"
                 color="#79589F"
               ></ThumbsUp>
-              <span className="txt">Like</span>
+              <span className="txt">Like </span>
             </Dropdown.Item>
           </div>
         )}
@@ -259,7 +304,7 @@ const Signature = (props) => {
               copyClipBoard();
             }}
           ></Share>
-          <span className="txt">Copy</span>
+          <span className="txt">Copy link</span>
         </Dropdown.Item>
         <Dropdown.Item>
           <Crosshair
@@ -363,13 +408,13 @@ const Signature = (props) => {
                             </Badge>
                           );
                         })}
-                      <Badge
+                      {/* <Badge
                         key={key}
                         className="tagpill purpose"
                         variant="secondary"
                       >
                         {signature.purpose}
-                      </Badge>
+                      </Badge> */}
                     </Row>
                   </Col>
                   <Col
@@ -382,8 +427,8 @@ const Signature = (props) => {
                     <img src={user} alt="user" className="user-profile mr-1" />
                     {signature.userID}
                     <br></br>
-                    {/* {currentUser.metamaskId} */}
-                    {currentUser.metamaskId.substring(0,3) + " ... " + currentUser.metamaskId.substring(currentUser.metamaskId.length - 4,currentUser.metamaskId)}
+                    {currentUser.metamaskId}
+                    {/* {currentUser.metamaskId.substring(0,3) + " ... " + currentUser.metamaskId.substring(currentUser.metamaskId.length - 4,currentUser.metamaskId)} */}
                   </Col>
                 </Row>
                 <Row className="form-row">
