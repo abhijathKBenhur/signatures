@@ -1,9 +1,9 @@
 import axios from 'axios'
 import _ from "lodash";
+import ENDPOINTS from '../commons/Endpoints';
 
 const api = axios.create({
-    baseURL: 'http://localhost:4000/api',
-    // baseURL: '/api',
+    baseURL: process.env.NODE_ENV == "production" ? ENDPOINTS.REMOTE_ENDPOINTS: ENDPOINTS.LOCAL_ENDPOINTS
 })
 
 export const postAction = payload => {

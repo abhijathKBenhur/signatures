@@ -1,11 +1,10 @@
 import axios from "axios";
 import _ from "lodash";
-import { isDebuggerStatement } from "typescript";
-import IPFS from "../config/ipfs";
 
+import IPFS from "../config/ipfs";
+import ENDPOINTS from '../commons/Endpoints';
 const fileAPI = axios.create({
-  baseURL: 'http://localhost:4000/api',
-  // baseURL: '/api',
+  baseURL: process.env.NODE_ENV == "production" ? ENDPOINTS.REMOTE_ENDPOINTS: ENDPOINTS.LOCAL_ENDPOINTS,
   headers: {
     "Content-Type": "multipart/form-data",
   },

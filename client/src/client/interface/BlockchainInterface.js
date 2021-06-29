@@ -5,13 +5,12 @@ import contractJSON from "../../contracts/ideaBlocks.json";
 import { toast } from "react-toastify";
 import store from '../redux/store';
 import { setReduxMetaMaskID } from "../redux/actions";
-
+import ENDPOINTS from '../commons/Endpoints';
 
 import axios from 'axios'
 
 const api = axios.create({
-    baseURL: 'http://localhost:4000/api',
-    // baseURL: '/api',
+  baseURL: process.env.NODE_ENV == "production" ? ENDPOINTS.REMOTE_ENDPOINTS: ENDPOINTS.LOCAL_ENDPOINTS
 })
 
 class BlockchainInterface {
