@@ -6,7 +6,6 @@ import moment from "moment";
 import SignatureBean from "../../beans/Signature";
 import {
   Badge,
-  Button,
   Row,
   Col,
   Form,
@@ -20,28 +19,23 @@ import {
 import BlockChainInterface from "../../interface/BlockchainInterface";
 import MongoDBInterface from "../../interface/MongoDBInterface";
 import ActionsInterface from "../../interface/ActionsInterface";
-import Web3Utils from "web3-utils";
-import Dropzone from "react-dropzone";
+
 import "./Signature.scss";
 import user from "../../../assets/images/user.png";
 import {
-  ExternalLink,
-  ThumbsDown,
   ThumbsUp,
   ShoppingCart,
   Share,
   Crosshair,
-  MoreHorizontal,
 } from "react-feather";
-import md5 from "md5";
 import { Document, Page, pdfjs } from "react-pdf";
 import _ from "lodash";
-import { toast } from "react-toastify";
-import Select from "react-select";
+
 import StorageInterface from "../../interface/StorageInterface";
 import { shallowEqual, useSelector } from "react-redux";
 import audio from "../../../assets/images/audio.png";
 import CONSTANTS from "../../commons/Constants";
+import { showToaster } from "../../commons/common.utils";
 
 const Signature = (props) => {
   let { hashId } = useParams();
@@ -107,48 +101,18 @@ const Signature = (props) => {
   };
 
   function feedbackMessage(signature) {
-    toast.dark(
-      "Please wait a while we complete the transaction. Please note the transaction ID : " +
-        signature && signature.transactionID,
-      {
-        position: "bottom-right",
-        autoClose: false,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      }
-    );
+    showToaster("Please wait a while we complete the transaction. Please note the transaction ID : " +
+    signature && signature.transactionID, {type:'dark'})
   }
 
   function errorMessage() {
-    toast.error(
-      "There was an error in processing your request in blockchain ",
-      {
-        position: "bottom-right",
-        autoClose: false,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      }
-    );
+    showToaster("There was an error in processing your request in blockchain ", {type: 'error'})
   }
 
   function updateMongoBuySignature(updatePayload) {
     MongoDBInterface.buySignature(updatePayload)
       .then((updatedSignature) => {
-        toast.info("Purchase updated on blockchain", {
-          position: "bottom-right",
-          autoClose: 3000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
+        showToaster("Purchase updated on blockchain", {type: 'info'})
         setSignature(new SignatureBean(_.get(updatedSignature, "data.data")));
         gotoGallery();
       })
@@ -166,16 +130,7 @@ const Signature = (props) => {
   function copyClipBoard() {
     let shareURL = window.location.href + "/signature/" + signature.PDFHash;
     navigator.clipboard.writeText(shareURL);
-
-    toast.dark("Copied to clipboard!", {
-      position: "bottom-right",
-      autoClose: 3000,
-      hideProgressBar: true,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
+    showToaster("Copied to clipboard!", {type: 'dark'})
   }
 
   function updatePriceInMongo() {

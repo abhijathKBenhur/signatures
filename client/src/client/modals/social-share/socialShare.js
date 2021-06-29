@@ -1,10 +1,10 @@
-import React, { Component, useState } from "react";
+import React, { Component } from "react";
 import { Modal} from "react-bootstrap";
 import "./socialShare.scss";
 import * as reactShare from "react-share";
-import {  toast } from 'react-toastify';
 
 import {  Copy } from 'react-feather';
+import { showToaster } from "../../commons/common.utils";
 class SocialShare extends Component {
   constructor(props) {
     super(props);
@@ -18,16 +18,7 @@ class SocialShare extends Component {
   copyClipBoard(){
     let shareURL = window.location.href + "?referrer="+ localStorage.getItem("userInfo")
     navigator.clipboard.writeText(shareURL)
-    
-    toast.dark('Copied to clipboard!', {
-      position: "bottom-right",
-      autoClose: 3000,
-      hideProgressBar: true,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
+    showToaster('Copied to clipboard!', {type: 'dark'})
   }
 
   render() {

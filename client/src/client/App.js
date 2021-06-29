@@ -12,7 +12,7 @@ import Footer from "./components/footer/footer";
 import Banner from "./components/banner/banner";
 
 import { Switch, Route, Redirect } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 
 class App extends Component {
   constructor(props) {

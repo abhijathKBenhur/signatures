@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, {  useEffect, useRef, useState } from "react";
 import {
   Button,
   Row,
@@ -17,11 +17,11 @@ import { useHistory } from "react-router-dom";
 import "./Create.scss";
 import { X, Image as ImageFile, Info, UploadCloud, Check } from "react-feather";
 import Hash from "ipfs-only-hash";
-import { Container, Spinner } from "react-bootstrap";
+import { Container} from "react-bootstrap";
 import { Document, Page, pdfjs } from "react-pdf";
 import _ from "lodash";
-import { toast } from "react-toastify";
 import Select from "react-select";
+
 import "react-step-progress-bar/styles.css";
 import { shallowEqual, useSelector } from "react-redux";
 import user from "../../../assets/images/user1.png";
@@ -30,6 +30,7 @@ import loadingGif from "../../../assets/images/loader_blocks.gif";
 import jspdf from "jspdf";
 import domtoimage from "dom-to-image";
 import moment from "moment";
+import { showToaster } from "../../commons/common.utils";
 
 function Create(props) {
   const reduxState = useSelector((state) => state, shallowEqual);
@@ -215,15 +216,7 @@ function Create(props) {
   function saveToMongo(form) {
     MongoDBInterface.addSignature(form)
       .then((success) => {
-        toast.dark("Your thoughts have been submitted!", {
-          position: "bottom-right",
-          autoClose: 3000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
+        showToaster("Your thoughts have been submitted!", {type: 'dark'})
       })
       .catch((err) => {
         console.log(err);
@@ -899,7 +892,7 @@ function Create(props) {
             </Col>
           )
         );
-        break;
+       default: return null;
     }
   };
 
