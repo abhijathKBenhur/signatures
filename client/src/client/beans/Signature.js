@@ -15,6 +15,7 @@ export default class Signature{
         this.thumbnail = options.thumbnail
         this.transactionID = options.transactionID
         this.userID = options.userID
-        this.ideaID = options.ideaID
+        this.storage = options.storage
+        this.purpose = options.purpose
     }
 }

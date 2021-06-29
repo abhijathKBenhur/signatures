@@ -5,7 +5,7 @@ const Web3 = require("web3");
 const contractJSON = require("../client/src/contracts/ideaBlocks.json");
 const privateKey = process.env.PROGRAMMER_KEY;
 const HDWalletProvider = require("@truffle/hdwallet-provider");
-const _ = require("lodash")
+const _ = require("lodash");
 const networkURL = process.env.NETWORK_URL;
 
 const web3Instance = new Web3(new HDWalletProvider(privateKey, networkURL));
@@ -55,7 +55,7 @@ register_user = (req, res) => {
 };
 
 publishOnBehalf = async (req, res) => {
-  let payLoad = req.body.payLoad
+  let payLoad = req.body.payLoad;
   let metamaskAddress = payLoad.creator;
   let title = payLoad.title;
   let PDFHash = payLoad.PDFHash;
@@ -71,11 +71,10 @@ publishOnBehalf = async (req, res) => {
       console.log("receipt received", receipt);
       try {
         let tokenID =
-          receipt &&
-          _.get(receipt.events, "Transfer.returnValues.tokenId")
+          receipt && _.get(receipt.events, "Transfer.returnValues.tokenId");
 
         let hash = receipt && _.get(receipt.events, "Transfer.transactionHash");
-        payLoad.ideaID = tokenID
+        payLoad.ideaID = tokenID;
         payLoad.transactionID = hash;
         return res.status(200).json({ success: true, data: payLoad });
       } catch (e) {
@@ -83,15 +82,19 @@ publishOnBehalf = async (req, res) => {
       }
     })
     .on("error", function (error) {
-      console.log("error received", error);
-      let transactionHash = error.receipt.transactionHash;
-      getRevertReason(transactionHash, process.env.NETWORK_NAME).then(
-        (errorReason) => {
-          console.log("error errorReason", errorReason);
-          error.errorReason = errorReason;
-          return res.status(400).json({ success: false, data: error });
-        }
-      );
+      try {
+        console.log("error received", error);
+        let transactionHash = error.receipt.transactionHash;
+        getRevertReason(transactionHash, process.env.NETWORK_NAME).then(
+          (errorReason) => {
+            console.log("error errorReason", errorReason);
+            error.errorReason = errorReason;
+            return res.status(400).json({ success: false, data: error });
+          }
+        );
+      } catch (e) {
+        console.log("error", e);
+      }
     });
 };
 

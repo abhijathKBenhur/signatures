@@ -47,6 +47,7 @@ const Register = (props) => {
   const [activeStep, setActiveStep] = useState(steps[0]);
   const [validated, setValidated] = useState(false);
   const [registration, setRegistration] = useState("false");
+  const [registrationErrorMessage, setregistrationErrorMessage] = useState("");
 
   const [userDetails, setUserDetails] = useState({
     firstName: _.get(reduxState, "firstName"),
@@ -69,6 +70,7 @@ const Register = (props) => {
       })
       .catch((error) => {
         setRegistration(FAILED);
+        setregistrationErrorMessage(error.data);
         console.log(error.data);
       });
   }
@@ -79,11 +81,11 @@ const Register = (props) => {
 
   const handleNext = () => {
     if (steps[steps.length - 1].key == activeStep.key) {
-      if(registration == PASSED){
-        publishUserToApp()
+      if (registration == PASSED) {
+        publishUserToApp();
         history.push("/profile");
-      }else{
-        setRegistration(PENDING)
+      } else {
+        setRegistration(PENDING);
         registerUser();
       }
       return;
@@ -121,7 +123,6 @@ const Register = (props) => {
       });
     }
   }, [reduxState]);
-
 
   function googleLogIn(googleFormResponseObject) {
     setUserDetails({
@@ -341,9 +342,7 @@ const Register = (props) => {
                     step.isDone ? "done" : ""
                   }`}
                 >
-                  <div className="step-content">
-                    Step {i + 1}
-                    <br />
+                  <div className="step-content d-flex align-items-center">
                     <span>{step.label}</span>
                   </div>
                 </li>
@@ -366,7 +365,7 @@ const Register = (props) => {
           md="12"
           className="d-flex justify-content-between align-items-center "
         >
-          {activeStep.index == 0  || registration == PASSED? (
+          {activeStep.index == 0 || registration == PASSED ? (
             <div></div>
           ) : (
             <Button
@@ -390,9 +389,11 @@ const Register = (props) => {
               handleNext();
             }}
           >
-            {activeStep.index == steps.length - 1 ? 
-            registration == PASSED ? "Done" : "Register" 
-            : "Next"}
+            {activeStep.index == steps.length - 1
+              ? registration == PASSED
+                ? "Done"
+                : "Register"
+              : "Next"}
           </Button>
         </Col>
       </Modal.Footer>

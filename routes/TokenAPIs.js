@@ -94,7 +94,7 @@ getSignatureByHash = async (req, res) => {
 };
 
 getSignatures = async (req, res) => {
-  let userName = req.body.userName;
+  let ownerAddress = req.body.ownerAddress;
   let limit = req.body.limit;
   let getOnlyNulls = req.body.getOnlyNulls;
   let tags = req.body.tags;
@@ -126,8 +126,8 @@ getSignatures = async (req, res) => {
 
   //search string block end
   
-  if (userName) {
-    payLoad.owner = userName;
+  if (ownerAddress) {
+    payLoad.owner = ownerAddress;
   }
   if (!limit) {
     await SignatureSchema.find(payLoad, (err, signatures) => {
@@ -169,6 +169,7 @@ buySignature = async (req, res) => {
   const saleCriteria = {
     owner: buyer,
     price: price,
+    transactionID: transactionID,
     transactionID: transactionID,
   };
 

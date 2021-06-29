@@ -112,11 +112,6 @@ const CollectionCard = (props) => {
       <div className="content cursor-pointer">
       <div className="collection-header d-flex justify-content-between align-items-center p-2">
             <div className="header-left">
-              {_.isEmpty(signature.ideaID) ? (
-                <img width={20} src={loader}></img>
-              ) : (
-                <div></div>
-              )}
             </div>
             <div className="header-right">
               <Dropdown>

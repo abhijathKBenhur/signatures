@@ -8,15 +8,7 @@ import { shallowEqual, useSelector } from "react-redux";
 import CONSTANTS from '../../commons/Constants';
 
 const Footer = (props) => {
-  const [currentMetamaskAccount, setCurrentMetamaskAccount] = useState(undefined);
-  const reduxState = useSelector((state) => state, shallowEqual);
-  useEffect(() => {
-    const { metamaskID = undefined } = reduxState;
-    if (metamaskID) {
-      setCurrentMetamaskAccount(metamaskID);
-    }
-  }, [reduxState]);
-
+ 
   return (
     <div>
       <nav className="navbar navbar-light bg-light flex-md-nowrap shadow appFooter justify-content-center">

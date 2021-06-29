@@ -4,7 +4,8 @@ import { isDebuggerStatement } from "typescript";
 import IPFS from "../config/ipfs";
 
 const fileAPI = axios.create({
-  baseURL: "http://localhost:4000/api",
+  baseURL: 'http://localhost:4000/api',
+  // baseURL: '/api',
   headers: {
     "Content-Type": "multipart/form-data",
   },

@@ -169,6 +169,7 @@ const Header = (props) => {
           </div>
 
           <div className="right-section">
+            {currentMetamaskAccount}
             {/* <Button
               variant="primary"
               className="button"

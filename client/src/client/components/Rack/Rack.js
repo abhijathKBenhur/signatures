@@ -20,7 +20,7 @@ const Rack = (props) => {
     history.push({
       pathname: "/profile/" + id,
       state: {
-        userId: id,
+        userID: id,
       },
     });
   };
@@ -52,15 +52,17 @@ const Rack = (props) => {
                       <Col md="12 collection-image">
                         <Image
                           src={signature.thumbnail}
-                          height={200}
+                          height={300}
                           className=""
                           style={{
                             background: "#f1f1f1",
                             borderRadius: "7px",
+                            justifyItems: "center"
                           }}
                         />
                         <div className="description">
-                          <div className="text">{signature.description}</div>
+                          <div className="actions w-100"></div>
+                          <div className="description-text">{signature.description}</div>
                         </div>
                       </Col>
                     </div>
@@ -86,6 +88,15 @@ const Rack = (props) => {
                           </span>
                         </Col>
                       </Row>
+
+                      {/* <Row md="12">
+                        <Col md="6" className="idea-details">
+                        {signature.purpose}
+                        </Col>
+                        <Col md="6" className="idea-user text-right">
+                          {signature.category}
+                        </Col>
+                      </Row> */}
 
                       {/* <span className="placeholder">{signature.userID}</span>
                         <span className="price">

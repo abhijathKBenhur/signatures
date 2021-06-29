@@ -3,19 +3,16 @@ import _ from "lodash";
 
 const api = axios.create({
     baseURL: 'http://localhost:4000/api',
+    // baseURL: '/api',
 })
-
-
-
 
 export const postAction = payload => {
     return api.post(`/postAction`,payload)
 }
 
 
-
 export const getActions = (payload) =>  { 
-    return api.get("/getActions",payload) 
+    return api.post("/getActions",payload) 
 }
 
 export const markAllAsRead = (payload) =>  { 

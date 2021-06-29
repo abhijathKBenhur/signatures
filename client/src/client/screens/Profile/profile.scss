@@ -128,21 +128,16 @@
   .transactions-wrapper {
     min-height: 300px;
     text-align: center;
+    margin-top: -2px;
   }
   .left-block {
-    margin-top: 10px;
+    height: 100vh;
+    background-color: $primary;
+    color: $secondary;
     .left-block-content {
-      flex: 1;
-      max-height: 300px;
-      padding: 20px;
-      background-color: #fff;
       h5 {
-        text-transform: uppercase;
-        font-size: 17px;
-        font-weight: 500;
       }
       .options {
-        margin-top: 20px;
         p {
           //    margin: 0;
         }
@@ -150,11 +145,12 @@
     }
   }
   .right-block {
+    background-color: $primary;
+    color: $secondary;    
     .right-block-content {
       flex: 1;
       max-height: 300px;
       padding: 20px;
-      background-color: #fff;
       h5 {
         text-transform: uppercase;
         font-size: 17px;

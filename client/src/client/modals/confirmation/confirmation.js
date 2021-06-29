@@ -4,6 +4,7 @@ import "./confirmation.scss";
 import { Modal, Button } from "react-bootstrap";
 import { Card, Row, Col, Form, InputGroup } from "react-bootstrap";
 import { confirmable, createConfirmation } from "react-confirm";
+import _ from "lodash";
 
 class Confirmation extends React.Component {
   constructor(props) {
@@ -31,6 +32,7 @@ class Confirmation extends React.Component {
       title,
       confirmation,
       showInput,
+      showText,
       show,
       proceed,
       enableEscape = true,
@@ -47,36 +49,41 @@ class Confirmation extends React.Component {
           <Modal.Header>
             <Modal.Title>{title}</Modal.Title>
           </Modal.Header>
-
-          {showInput ? (
-            <Modal.Body>
-              <Row>
-                <Form.Group as={Col} md="6">
-                  <span>{confirmation}</span>
-                </Form.Group>
-
-                <Form.Group as={Col} md="6">
+          <Modal.Body>
+            <div>
+              {!_.isEmpty(showInput) ? (
                   <InputGroup className="mb-3">
                     <Form.Control
                       type="number"
-                      placeholder="0.0"
+                      placeholder={showInput}
                       min={1}
-                      aria-label="Amount (ether)"
                       name="input"
                       onChange={this.handleChange}
                     />
                   </InputGroup>
-                </Form.Group>
-              </Row>
-            </Modal.Body>
-          ) : (
-            <Modal.Body> <span>{confirmation}</span></Modal.Body>
-          )}
+              ) : (
+                <div></div>
+              )}
+              {!_.isEmpty(showText) ? (
+                  <InputGroup className="mb-3">
+                    <Form.Control
+                      type="text"
+                      placeholder={showText}
+                      min={1}
+                      name="text"
+                      onChange={this.handleChange}
+                    />
+                  </InputGroup>
+              ) : (
+                <div></div>
+              )}
+            </div>
+          </Modal.Body>
           <Modal.Footer>
             <Button
               variant="dark"
               onClick={() =>
-                proceed({ proceed: false, input: this.state.input })
+                proceed({ proceed: false })
               }
             >
               {cancelLabel}
@@ -86,7 +93,7 @@ class Confirmation extends React.Component {
               className="button-l"
               bsstyle="primary"
               onClick={() =>
-                proceed({ proceed: true, input: this.state.input })
+                proceed({ proceed: true, input: this.state.input, text:this.state.text })
               }
             >
               {proceedLabel}
@@ -113,7 +120,8 @@ export function confirm(
   title,
   proceedLabel = "OK",
   cancelLabel = "cancel",
-  showInput
+  showInput,
+  showText
 ) {
   return createConfirmation(confirmable(Confirmation))({
     confirmation,
@@ -121,5 +129,6 @@ export function confirm(
     proceedLabel,
     cancelLabel,
     showInput,
+    showText,
   });
 }

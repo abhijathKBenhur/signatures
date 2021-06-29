@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useLocation, useHistory } from "react-router-dom";
+import {confirm} from '../../modals/confirmation/confirmation'
 import moment from "moment";
 
 import SignatureBean from "../../beans/Signature";
@@ -18,6 +19,7 @@ import {
 } from "react-bootstrap";
 import BlockChainInterface from "../../interface/BlockchainInterface";
 import MongoDBInterface from "../../interface/MongoDBInterface";
+import ActionsInterface from "../../interface/ActionsInterface";
 import Web3Utils from "web3-utils";
 import Dropzone from "react-dropzone";
 import "./Signature.scss";
@@ -39,6 +41,7 @@ import Select from "react-select";
 import StorageInterface from "../../interface/StorageInterface";
 import { shallowEqual, useSelector } from "react-redux";
 import audio from "../../../assets/images/audio.png";
+import CONSTANTS from "../../commons/Constants";
 
 const Signature = (props) => {
   let { hashId } = useParams();
@@ -46,11 +49,12 @@ const Signature = (props) => {
   const location = useLocation();
   const [signature, setSignature] = useState({});
   const [PDFFile, setPDFFile] = useState(undefined);
-  const [currentUser, setCurrentUser] = useState(reduxState.userDetails)
+  const [currentUser, setCurrentUser] = useState(reduxState.userDetails);
+  const [isCurrentUserOwner, setIsCurrentUserOwner] = useState(true);
   const [currentMetamaskAccount, setCurrentMetamaskAccount] = useState(
     undefined
   );
-  
+
   const [key, setKey] = useState("Bids");
   let history = useHistory();
   useEffect(() => {
@@ -64,20 +68,21 @@ const Signature = (props) => {
         setSignature(...signature, ...signatureObject);
       });
     }
+
     getIPSPDFFile(hashId);
   }, []);
 
-  // useEffect(() => {
-  //   getIPSPDFFile(hashId);
-  // },[signature.fileType])
+  useEffect(() => {
+    setIsCurrentUserOwner(signature.owner == currentUser.metamaskId);
+  }, [signature, currentUser]);
 
   useEffect(() => {
     const { metamaskID = undefined, userDetails = {} } = reduxState;
     if (metamaskID) {
       setCurrentMetamaskAccount(metamaskID);
     }
-    if(userDetails){
-      setCurrentUser(userDetails)
+    if (userDetails) {
+      setCurrentUser(userDetails);
     }
   }, [reduxState]);
 
@@ -196,6 +201,37 @@ const Signature = (props) => {
     );
   }
 
+
+  function showInterest(){
+    confirm(
+      "Set your price.",
+      "Would you like to express your interest?",
+      "Ok",
+      "Cancel",
+      false,
+      "Message"
+    ).then((success) => {
+      if (success.proceed) {
+        let updatePayload = {
+          from: currentMetamaskAccount,
+          fromUserName: currentUser.userID,
+          toUserName: signature.userID,
+          to: signature.owner,
+          action: CONSTANTS.ACTIONS.COLLAB_INTEREST,
+          status: CONSTANTS.ACTION_STATUS.PENDING,
+          ideaID: signature.ideaID,
+          message: success.text,
+        };
+        ActionsInterface.postAction(updatePayload).then(success =>{
+          
+        })
+      } else {
+
+      }
+    });
+    
+  }
+
   function openInEtherscan() {
     window.open("https://kovan.etherscan.io/tx/" + signature.transactionID);
   }
@@ -211,12 +247,12 @@ const Signature = (props) => {
 
   const goToUserProfile = (id) => {
     history.push({
-      pathname: '/profile/' + id,
+      pathname: "/profile/" + id,
       state: {
-        userId: id
-      }
-    })
-  }
+        userID: id,
+      },
+    });
+  };
 
   const getMenuActions = () => {
     return (
@@ -224,15 +260,44 @@ const Signature = (props) => {
         {/* <Dropdown.Toggle variant="success" id="dropdown-basic">
           <MoreHorizontal />
         </Dropdown.Toggle> */}
-        <Dropdown.Item onClick={() => {
+        {isCurrentUserOwner ? (
+          <div></div>
+        ) : (
+          <div>
+          { signature.purpose == CONSTANTS.PURPOSES.SELL && <Dropdown.Item
+            onClick={() => {
               buySignature();
-            }}>
-          <ShoppingCart
-            className="cursor-pointer signature-icons ShoppingCart"
-            color="#79589F"
-          ></ShoppingCart>
-          <span className="txt">Buy</span>
-        </Dropdown.Item>
+            }}
+          >
+            <ShoppingCart
+              className="cursor-pointer signature-icons ShoppingCart"
+              color="#79589F"
+            ></ShoppingCart>
+            <span className="txt">Buy</span>
+          </Dropdown.Item>
+          }
+          { signature.purpose == CONSTANTS.PURPOSES.COLLAB && <Dropdown.Item
+            onClick={() => {
+              showInterest();
+            }}
+          >
+            <ShoppingCart
+              className="cursor-pointer signature-icons ShoppingCart"
+              color="#79589F"
+            ></ShoppingCart>
+            <span className="txt">Collaborate</span>
+          </Dropdown.Item>
+          }
+            <Dropdown.Item>
+              <ThumbsUp
+                className="cursor-pointer signature-icons ThumbsUp"
+                color="#79589F"
+              ></ThumbsUp>
+              <span className="txt">Like </span>
+            </Dropdown.Item>
+          </div>
+        )}
+
         <Dropdown.Item>
           <Share
             className="cursor-pointer signature-icons"
@@ -241,7 +306,7 @@ const Signature = (props) => {
               copyClipBoard();
             }}
           ></Share>
-          <span className="txt">Copy</span>
+          <span className="txt">Copy link</span>
         </Dropdown.Item>
         <Dropdown.Item>
           <Crosshair
@@ -254,15 +319,7 @@ const Signature = (props) => {
           <span className="txt">View</span>
         </Dropdown.Item>
 
-        <Dropdown.Item>
-          <ThumbsUp
-            className="cursor-pointer signature-icons ThumbsUp"
-            color="#79589F"
-          ></ThumbsUp>
-          <span className="txt">Like</span>
-        </Dropdown.Item>
-
-        <Dropdown.Item>
+        {/* <Dropdown.Item>
           <ExternalLink
             className="cursor-pointer signature-icons ExternalLink"
             onClick={() => {
@@ -271,8 +328,7 @@ const Signature = (props) => {
             color="#79589F"
           ></ExternalLink>
           <span className="txt">Open</span>
-        </Dropdown.Item>
-
+        </Dropdown.Item> */}
       </DropdownButton>
     );
   };
@@ -354,21 +410,27 @@ const Signature = (props) => {
                             </Badge>
                           );
                         })}
-                      <Badge
+                      {/* <Badge
                         key={key}
                         className="tagpill purpose"
                         variant="secondary"
                       >
                         {signature.purpose}
-                      </Badge>
+                      </Badge> */}
                     </Row>
                   </Col>
-                  <Col md="3" className="owner" onClick={() => {
-                    goToUserProfile(signature.userID)
-                  }}>
+                  <Col
+                    md="3"
+                    className="owner"
+                    onClick={() => {
+                      goToUserProfile(signature.userID);
+                    }}
+                  >
                     <img src={user} alt="user" className="user-profile mr-1" />
                     {signature.userID}
-                    {signature.metamaskId}
+                    <br></br>
+                    {currentUser.metamaskId}
+                    {/* {currentUser.metamaskId.substring(0,3) + " ... " + currentUser.metamaskId.substring(currentUser.metamaskId.length - 4,currentUser.metamaskId)} */}
                   </Col>
                 </Row>
                 <Row className="form-row">
@@ -396,62 +458,6 @@ const Signature = (props) => {
               </div>
               {/* {getMenuActions()} */}
             </Col>
-            {/* <Col md="1" lg="1" className="menu-bar">
-              <div className="top-menu">
-                <Col md="12">
-                  <ShoppingCart
-                    className="cursor-pointer signature-icons ShoppingCart"
-                    color="#79589F"
-                    onClick={() => {
-                      buySignature();
-                    }}
-                  ></ShoppingCart>
-                </Col>
-
-                <Col md="12">
-                  <Share
-                    className="cursor-pointer signature-icons"
-                    color="#79589F"
-                    onClick={() => {
-                      copyClipBoard();
-                    }}
-                  ></Share>
-                </Col>
-                <Col md="12">
-                  <Crosshair
-                    className="cursor-pointer signature-icons"
-                    color="#79589F"
-                    onClick={() => {
-                      openInEtherscan();
-                    }}
-                  ></Crosshair>
-                </Col>
-                <Col md="12">
-                  <ThumbsUp
-                    className="cursor-pointer signature-icons ThumbsUp"
-                    color="#79589F"
-                  ></ThumbsUp>
-                </Col>
-                <Col md="12">
-                  <ExternalLink
-                    className="cursor-pointer signature-icons ExternalLink"
-                    onClick={() => {
-                      openInNewTab();
-                    }}
-                    color="#79589F"
-                  ></ExternalLink>
-                </Col>
-              </div>
-              <div className="bottom-menu">
-                <Col md="12">
-                  <ThumbsDown
-                    className="cursor-pointer signature-icons ThumbsDown"
-                    color="#79589F"
-                  ></ThumbsDown>
-                </Col>
-              </div>
-              
-            </Col>  */}
           </Row>
         </Col>
       </Form>

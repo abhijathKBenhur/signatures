@@ -12,11 +12,21 @@ const CATEGORIES = [
     { value: 'Parenting', label: 'Parenting' }
   ]
 
-const PURPOSES = {
+  const PURPOSES = {
     AUCTION: "AUCTION",
     SELL: "SELL",
     COLLAB: "COLLABORATE",
     KEEP: "Decide later",
+}
+const ACTIONS = {
+    AUCTION_REQUEST: "Auction Request",
+    BUY_INIT: "Initiate Buy",
+    COLLAB_INTEREST: "Interest to collaborate",
+}
+const ACTION_STATUS = {
+    PENDING: "PENDING",
+    COMPLETED: "COMPLETED",
+    DECLINED: "DECLINED",
 }
 
 const STORAGE_TYPE = [
@@ -28,7 +38,9 @@ const STORAGE_TYPE = [
 const CONSTANTS = {
     CATEGORIES,
     PURPOSES,
-    STORAGE_TYPE
+    STORAGE_TYPE,
+    ACTIONS,
+    ACTION_STATUS
 }
 
 
