@@ -201,6 +201,7 @@ const Register = (props) => {
                     metamaskGuide();
                   }}
                 >
+                  <p>We could not recognize any connected wallet on this app. Please install, login with an account and connect to this app to continue.You might have to refresh the page after installation</p>
                   <img src={metamaskLogo} width="70"></img>
                   <Button
                     variant="secondary"
@@ -235,6 +236,7 @@ const Register = (props) => {
               </div>
             ) : (
               <div className="d-flex align-items-center flex-column">
+
                 <img src={metamaskLogo} width="70"></img>
                 <div className="connected">Connected</div>
                 <div> {userDetails.metamaskId}</div>
@@ -248,19 +250,12 @@ const Register = (props) => {
           <div>
             <Row className="">
               {registration == PASSED ? (
-                <div>
-                  {" "}
-                  Hi {userDetails.fullName}, Welcome to the tribe. You have
-                  signed up to the unlimited possibilities in the world of idea
-                  sharing.
-                </div>
-              ) : registration == FAILED ? (
-                <div>
-                  {" "}
-                  Hi {userDetails.fullName}, We were unable to onboard you on
-                  the tribe this time. {registrationErrorMessage}.
-                </div>
-              ) : (
+                <div> Hi {userDetails.fullName}, Welcome to the tribe. You have signed up to the unlimited possibilities in the world of idea sharing.</div>
+              ) :
+              registration == FAILED ? (
+                <div> Hi {userDetails.fullName}, We were unable to onboard you to the tribe this time. Please try again.</div>
+              )
+              : (
                 <Form.Group
                   as={Col}
                   className="formEntry userIDSection"
@@ -386,9 +381,7 @@ const Register = (props) => {
           )}
 
           <Button
-            disabled={
-              (!validated && activeStep.index == 2) || registration == PENDING
-            }
+            disabled={!validated && activeStep.index == 2 || registration == PENDING || _.isEmpty(userDetails.metamaskId) || (_.isEmpty(userDetails.email) && activeStep.index == 1)}
             variant="primary"
             className="button"
             bsstyle="primary"
