@@ -2,12 +2,9 @@ import axios from 'axios'
 import _ from "lodash";
 
 const api = axios.create({
-    // baseURL: 'http://localhost:4000/api',
-    baseURL: '/api',
+    baseURL: 'http://localhost:4000/api',
+    // baseURL: '/api',
 })
-
-
-
 
 export const postAction = payload => {
     return api.post(`/postAction`,payload)

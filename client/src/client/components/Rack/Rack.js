@@ -52,7 +52,7 @@ const Rack = (props) => {
                       <Col md="12 collection-image">
                         <Image
                           src={signature.thumbnail}
-                          height={200}
+                          width={200}
                           className=""
                           style={{
                             background: "#f1f1f1",
@@ -60,7 +60,8 @@ const Rack = (props) => {
                           }}
                         />
                         <div className="description">
-                          <div className="text">{signature.description}</div>
+                          <div className="actions"></div>
+                          <div className="description-text">{signature.description}</div>
                         </div>
                       </Col>
                     </div>

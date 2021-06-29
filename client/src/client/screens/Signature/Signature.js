@@ -46,11 +46,12 @@ const Signature = (props) => {
   const location = useLocation();
   const [signature, setSignature] = useState({});
   const [PDFFile, setPDFFile] = useState(undefined);
-  const [currentUser, setCurrentUser] = useState(reduxState.userDetails)
+  const [currentUser, setCurrentUser] = useState(reduxState.userDetails);
+  const [isCurrentUserOwner, setIsCurrentUserOwner] = useState(true);
   const [currentMetamaskAccount, setCurrentMetamaskAccount] = useState(
     undefined
   );
-  
+
   const [key, setKey] = useState("Bids");
   let history = useHistory();
   useEffect(() => {
@@ -64,20 +65,21 @@ const Signature = (props) => {
         setSignature(...signature, ...signatureObject);
       });
     }
+
     getIPSPDFFile(hashId);
   }, []);
 
-  // useEffect(() => {
-  //   getIPSPDFFile(hashId);
-  // },[signature.fileType])
+  useEffect(() => {
+    setIsCurrentUserOwner(signature.owner == currentUser.metamaskId);
+  }, [signature, currentUser]);
 
   useEffect(() => {
     const { metamaskID = undefined, userDetails = {} } = reduxState;
     if (metamaskID) {
       setCurrentMetamaskAccount(metamaskID);
     }
-    if(userDetails){
-      setCurrentUser(userDetails)
+    if (userDetails) {
+      setCurrentUser(userDetails);
     }
   }, [reduxState]);
 
@@ -211,12 +213,12 @@ const Signature = (props) => {
 
   const goToUserProfile = (id) => {
     history.push({
-      pathname: '/profile/' + id,
+      pathname: "/profile/" + id,
       state: {
-        userId: id
-      }
-    })
-  }
+        userId: id,
+      },
+    });
+  };
 
   const getMenuActions = () => {
     return (
@@ -224,15 +226,31 @@ const Signature = (props) => {
         {/* <Dropdown.Toggle variant="success" id="dropdown-basic">
           <MoreHorizontal />
         </Dropdown.Toggle> */}
-        <Dropdown.Item onClick={() => {
-              buySignature();
-            }}>
-          <ShoppingCart
-            className="cursor-pointer signature-icons ShoppingCart"
-            color="#79589F"
-          ></ShoppingCart>
-          <span className="txt">Buy</span>
-        </Dropdown.Item>
+        {isCurrentUserOwner ? (
+          <div></div>
+        ) : (
+          <div>
+            <Dropdown.Item
+              onClick={() => {
+                buySignature();
+              }}
+            >
+              <ShoppingCart
+                className="cursor-pointer signature-icons ShoppingCart"
+                color="#79589F"
+              ></ShoppingCart>
+              <span className="txt">Buy</span>
+            </Dropdown.Item>
+            <Dropdown.Item>
+              <ThumbsUp
+                className="cursor-pointer signature-icons ThumbsUp"
+                color="#79589F"
+              ></ThumbsUp>
+              <span className="txt">Like</span>
+            </Dropdown.Item>
+          </div>
+        )}
+
         <Dropdown.Item>
           <Share
             className="cursor-pointer signature-icons"
@@ -254,15 +272,7 @@ const Signature = (props) => {
           <span className="txt">View</span>
         </Dropdown.Item>
 
-        <Dropdown.Item>
-          <ThumbsUp
-            className="cursor-pointer signature-icons ThumbsUp"
-            color="#79589F"
-          ></ThumbsUp>
-          <span className="txt">Like</span>
-        </Dropdown.Item>
-
-        <Dropdown.Item>
+        {/* <Dropdown.Item>
           <ExternalLink
             className="cursor-pointer signature-icons ExternalLink"
             onClick={() => {
@@ -271,8 +281,7 @@ const Signature = (props) => {
             color="#79589F"
           ></ExternalLink>
           <span className="txt">Open</span>
-        </Dropdown.Item>
-
+        </Dropdown.Item> */}
       </DropdownButton>
     );
   };
@@ -363,11 +372,18 @@ const Signature = (props) => {
                       </Badge>
                     </Row>
                   </Col>
-                  <Col md="3" className="owner" onClick={() => {
-                    goToUserProfile(signature.userID)
-                  }}>
+                  <Col
+                    md="3"
+                    className="owner"
+                    onClick={() => {
+                      goToUserProfile(signature.userID);
+                    }}
+                  >
                     <img src={user} alt="user" className="user-profile mr-1" />
                     {signature.userID}
+                    <br></br>
+                    {/* {currentUser.metamaskId} */}
+                    {currentUser.metamaskId.substring(0,3) + " ... " + currentUser.metamaskId.substring(currentUser.metamaskId.length - 4,currentUser.metamaskId)}
                   </Col>
                 </Row>
                 <Row className="form-row">
@@ -395,62 +411,6 @@ const Signature = (props) => {
               </div>
               {/* {getMenuActions()} */}
             </Col>
-            {/* <Col md="1" lg="1" className="menu-bar">
-              <div className="top-menu">
-                <Col md="12">
-                  <ShoppingCart
-                    className="cursor-pointer signature-icons ShoppingCart"
-                    color="#79589F"
-                    onClick={() => {
-                      buySignature();
-                    }}
-                  ></ShoppingCart>
-                </Col>
-
-                <Col md="12">
-                  <Share
-                    className="cursor-pointer signature-icons"
-                    color="#79589F"
-                    onClick={() => {
-                      copyClipBoard();
-                    }}
-                  ></Share>
-                </Col>
-                <Col md="12">
-                  <Crosshair
-                    className="cursor-pointer signature-icons"
-                    color="#79589F"
-                    onClick={() => {
-                      openInEtherscan();
-                    }}
-                  ></Crosshair>
-                </Col>
-                <Col md="12">
-                  <ThumbsUp
-                    className="cursor-pointer signature-icons ThumbsUp"
-                    color="#79589F"
-                  ></ThumbsUp>
-                </Col>
-                <Col md="12">
-                  <ExternalLink
-                    className="cursor-pointer signature-icons ExternalLink"
-                    onClick={() => {
-                      openInNewTab();
-                    }}
-                    color="#79589F"
-                  ></ExternalLink>
-                </Col>
-              </div>
-              <div className="bottom-menu">
-                <Col md="12">
-                  <ThumbsDown
-                    className="cursor-pointer signature-icons ThumbsDown"
-                    color="#79589F"
-                  ></ThumbsDown>
-                </Col>
-              </div>
-              
-            </Col>  */}
           </Row>
         </Col>
       </Form>

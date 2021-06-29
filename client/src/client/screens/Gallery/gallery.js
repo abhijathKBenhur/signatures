@@ -41,7 +41,7 @@ function gallery(props) {
   return (
     <Container fluid>
       <div className="gallery d-flex flex-column">
-        <Row className="userPane profile-row">
+        <Row className="userPane profile-row" >
           {true ? (
             <div className="profileHolder">
               <Carousel interval={5000} className="d-flex align-items-center">

@@ -35,7 +35,16 @@
             transform: translateY(80%);
           }
           .description {
-            top: 0px
+            background-color: $primary;
+            height: 100%;
+            .actions{
+              height: 40px;
+              background-color: $primary-dark;
+            }
+            .description-text{
+              padding: 3px;
+              color: white;
+            }
           }
         }
       }

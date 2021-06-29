@@ -2,13 +2,13 @@ import axios from 'axios'
 import _ from "lodash";
 
 const api = axios.create({
-    // baseURL: 'http://localhost:4000/api',
-    baseURL: '/api',
+    baseURL: 'http://localhost:4000/api',
+    // baseURL: '/api',
 })
 
 const fileAPI = axios.create({
-    // baseURL: 'http://localhost:4000/api',
-    baseURL: '/api',
+    baseURL: 'http://localhost:4000/api',
+    // baseURL: '/api',
     headers: {
         'Content-Type': 'multipart/form-data'
     }

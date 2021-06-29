@@ -170,6 +170,7 @@ buySignature = async (req, res) => {
     owner: buyer,
     price: price,
     transactionID: transactionID,
+    transactionID: transactionID,
   };
 
   SignatureSchema.findOneAndUpdate(findCriteria, saleCriteria)
