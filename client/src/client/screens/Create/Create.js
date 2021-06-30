@@ -32,6 +32,7 @@ import domtoimage from "dom-to-image";
 import moment from "moment";
 import { showToaster } from "../../commons/common.utils";
 
+import responseImage from "../../../assets/images/response.jpeg";
 function Create(props) {
   const reduxState = useSelector((state) => state, shallowEqual);
   const PASSED = "PASSED",
@@ -443,7 +444,7 @@ function Create(props) {
   };
 
   const getViewBasedOnSteps = () => {
-    switch (slideCount) {
+    switch (4) {
       case TITLE_SLIDE:
         return (
           <>
@@ -827,7 +828,7 @@ function Create(props) {
         );
         break;
       case RESPONSE_SLIDE:
-        return publishState == FAILED ? (
+        return publishState == FAILED && false ? (
           <Col
             md="12"
             sm="12"
@@ -844,56 +845,81 @@ function Create(props) {
             </div>
           </Col>
         ) : (
-          publishState == PASSED && (
-            <Col
-              md="12"
-              sm="12"
-              lg="12"
-              xs="12"
-              className="published-wrapper "
-              id="published-wrapper-block"
-            >
-              <div className="success-block">
-                <p>Your Idea is posted in blockchain</p>
-                <Check />
-              </div>
-
-              <div className="transaction-data">
-                <div className="transaction-ids">
-                  <p>
-                    Transaction ID- <span>{billet.transactionID}</span>
-                  </p>
-                  <p>
-                    File Hash ID- <span>{billet.PDFHash}</span>
-                  </p>
-                  <p>* Please save both of these for future reference.</p>
-                </div>
-                <div className="btn-block">
-                  <Button
-                    variant="primary"
-                    className="button"
-                    bsstyle="primary"
-                    onClick={() => gotoProfile()}
-                  >
-                    {" "}
-                    Done
-                  </Button>
-                  <Button
-                    variant="primary"
-                    className="button ml-3"
-                    bsstyle="primary"
-                    onClick={() => exportToPdf()}
-                  >
-                    {" "}
-                    Export
-                  </Button>
-                </div>
-              </div>
+          publishState == PASSED || true && (
+            <Col md="12" id="published-wrapper-block" style={{ 
+                  backgroundImage: `url(${responseImage})` 
+              }}
+              className="published-wrapper ">
+                <Row>
+                <Col md="10">
+                    <div className="success-block">
+                      @abhiajht
+                    </div>
+                </Col>
+                <Col md="2">
+asdsada
+                </Col>
+                </Row>
+                
             </Col>
+            // <Col
+            //   md="12"
+            //   sm="12"
+            //   lg="12"
+            //   xs="12"
+            //   className="published-wrapper "
+            //   style={{ 
+            //     backgroundImage: `url(${responseImage})` 
+            //   }}
+            //   id="published-wrapper-block"
+            // >
+            //   <Col md="8">
+            //   <div className="success-block">
+            //     <p>Your Idea is posted in blockchain</p>
+            //     <Check />
+            //   </div>
+            //   </Col>
+            //   <Col md="12">
+            //   <div className="transaction-data">
+            //     <div className="transaction-ids">
+            //       <p>
+            //         Transaction ID- <span>{billet.transactionID}</span>
+            //       </p>
+            //       <p>
+            //         File Hash ID- <span>{billet.PDFHash}</span>
+            //       </p>
+            //       <p>* Please save both of these for future reference.</p>
+            //     </div>
+            //     <div className="btn-block">
+            //       <Button
+            //         variant="primary"
+            //         className="button"
+            //         bsstyle="primary"
+            //         onClick={() => gotoProfile()}
+            //       >
+            //         {" "}
+            //         Done
+            //       </Button>
+            //       <Button
+            //         variant="primary"
+            //         className="button ml-3"
+            //         bsstyle="primary"
+            //         onClick={() => exportToPdf()}
+            //       >
+            //         {" "}
+            //         Export
+            //       </Button>
+            //     </div>
+            //     </div>
+            //   </Col>
+              
+             
+            // </Col>
           )
         );
        default: return null;
     }
+    
   };
 
   const exportToPdf = () => {

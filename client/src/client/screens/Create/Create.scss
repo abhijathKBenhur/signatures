@@ -391,24 +391,13 @@
         }
     }
     .published-wrapper{
-        display: flex;
-        align-items: center;
-        flex-flow: column;
+        background-size: cover;
+
         .success-block{
             display: flex;
             align-items: center;
-            flex-flow: column;
-            margin: 100px;
-            justify-content: center;
+            margin: 100px 10px;
             color: $white;
-            p {
-                font-size: 40px;
-                text-align: center;
-            }
-            svg {
-                    width: 75px ;
-                    height: 75px;
-            }
         }
         .transaction-data{
             .transaction-ids{
