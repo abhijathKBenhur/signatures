@@ -69,7 +69,7 @@ function Create(props) {
     publish: "",
   });
 
-  const [slideCount, setSlideCount] = useState(5);
+  const [slideCount, setSlideCount] = useState(2);
   const [billet, setBillet] = useState({});
   const [publishState, setPublishState] = useState(INIT);
   const [publishError, setPublishError] = useState(undefined);
@@ -569,9 +569,7 @@ function Create(props) {
                   <div className="file-drop-contatiner" {...getRootProps()}>
                     <input {...getInputProps()} />
                     <UploadCloud />
-                    <p>
-                    Drag 'n Drop or Upload the file containing your idea
-                    </p>
+                    <p>Drag 'n Drop or Upload the file containing your idea</p>
                     <p>(Upload pdf / mp3 / image)</p>
                     <div>{/* <Plus /> */}</div>
                     {formErrors.pdf && (
@@ -772,7 +770,7 @@ function Create(props) {
       case PREVIEW_SLIDE:
         return (
           <>
-            <Col md="6" sm="12" lg="6" xs="12" className="preview-doc ">
+            <Col md="12" sm="12" lg="6" xs="12" className="preview-doc ">
               <Row className="form-row">
                 <Col md="12" sm="12" lg="12" xs="12" className="pdf-container">
                   {form.PDFFile && (
@@ -793,7 +791,7 @@ function Create(props) {
                 </Col>
               </Row>
             </Col>
-            <Col md="6" sm="12" lg="6" xs="12" className="preview-details ">
+            <Col md="12" sm="12" lg="6" xs="12" className="preview-details ">
               <div className="content-profile">
                 <img
                   src={userDetails.imageUrl ? userDetails.imageUrl : user}
@@ -802,19 +800,37 @@ function Create(props) {
                 <p>{userDetails.userID}</p>
               </div>
               <div className="description">
-                <p>
-                  Lorem Ipsum is simply dummy text of the printing and
-                  typesetting industry. Lorem Ipsum has been the industry's
-                  standard dummy text ever since the 1500s, when an unknown
-                  printer took a galley of type and scrambled it to make a type
-                  specimen book.
-                </p>
-              </div>
-              <div className="price">
-                <p>
-                  Price: <span className="line-through">{form.price} BNB</span>{" "}
-                  <span> FREE</span>
-                </p>
+                <Row>
+                  <Col md="12" className="message">
+                    The Tribe is looking up for the idea that you are about to
+                    post. We appreciate the effort that you have put in to
+                    contribute. Being one of the eary bird, we are taking your
+                    expenses to get your idea sailing. This one is on us.
+                  </Col>
+                </Row>
+                <div className="gas-fee-block">
+                  <div className="gas_fee">
+                    <p>Binance chain gas Fee : </p>
+                  </div>
+                  <div className="gas_fee_value">
+                    <p>2$ </p>
+                  </div>
+                  <div className="gas_free">
+                    <p> This is on us. </p>
+                  </div>
+                </div>
+                <div className="service_fee_block">
+                  <div className="serice_fee">
+                    <p> Service fee : </p>
+                  </div>
+                  <div className="serice_fee_value">
+                    <p> 2$ </p>
+                  </div>
+                  <div className="serice_free">
+                    <p> Free for early members</p>
+                  </div>
+                </div>
+                <p></p>
               </div>
             </Col>
           </>
@@ -824,7 +840,10 @@ function Create(props) {
         return (
           <Col md="12" sm="12" lg="12" xs="12" className="publishing-wrapper ">
             <div className="publishing-block">
-              <p>We are posting your idea on the binance blockchain. Hold on tight!</p>
+              <p>
+                We are posting your idea on the binance blockchain. Hold on
+                tight!
+              </p>
             </div>
 
             <div className="gif-wrapper">

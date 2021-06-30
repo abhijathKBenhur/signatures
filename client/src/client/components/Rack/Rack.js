@@ -34,7 +34,7 @@ const Rack = (props) => {
         return "BID";
       case CONSTANTS.PURPOSES.COLLAB:
         return "COLLABORATE";
-      case CONSTANTS.PURPOSES.COLLAB:
+      case CONSTANTS.PURPOSES.KEEP:
         return "NOT FOR SALE";
     }
   }

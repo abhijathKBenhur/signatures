@@ -375,19 +375,42 @@
         }
         .description{
             margin: 10px;
-            p{
-                color: $white;
+            .message{
+                color: $grey-border;
                 text-align: center;
+                margin-bottom: 30px;
             }
-        }
-        .price{
-            margin: 10px;
-            p{
-                color: $white;
+            .gas-fee-block{
+                font-size: 20px;
+                display: flex;
+                .gas_fee{
+                    color: #946214;
+                }
+                .gas_free{
+                    color: $secondary;
+                    margin-left: 5px;
+                }
+                .gas_fee_value{
+                    color: #946214;
+                    text-decoration: line-through;
+                }
             }
-            .line-through{
-                text-decoration: line-through;
+            .service_fee_block{
+                font-size: 20px;
+                display: flex;
+                .serice_fee{
+                    color: #946214;
+                }
+                .serice_fee_value{
+                    color: #946214;
+                    text-decoration: line-through;
+                }
+                .serice_free{
+                    color: $secondary;
+                    margin-left: 5px;
+                }
             }
+           
         }
     }
     .published-wrapper{
