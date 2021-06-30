@@ -69,7 +69,7 @@ function Create(props) {
     publish: "",
   });
 
-  const [slideCount, setSlideCount] = useState(2);
+  const [slideCount, setSlideCount] = useState(0);
   const [billet, setBillet] = useState({});
   const [publishState, setPublishState] = useState(INIT);
   const [publishError, setPublishError] = useState(undefined);

@@ -1,11 +1,15 @@
-import React, {  useEffect, useState  } from "react";
+import React, { useEffect, useState } from "react";
 import _ from "lodash";
 import "./banner.scss";
-import { Container, Row, Col,Carousel, Button } from "react-bootstrap";
+import { Container, Row, Col, Carousel, Button } from "react-bootstrap";
 import { shallowEqual, useSelector } from "react-redux";
-import cover from "../../../assets/images/cover.jpeg"
+import cover from "../../../assets/images/cover.jpeg";
+import bg1 from "../../../assets/banners/background1.jpg";
+import bg2 from "../../../assets/banners/background2.jpg";
 const Banner = (props) => {
-  const [currentMetamaskAccount, setCurrentMetamaskAccount] = useState(undefined);
+  const [currentMetamaskAccount, setCurrentMetamaskAccount] = useState(
+    undefined
+  );
   const reduxState = useSelector((state) => state, shallowEqual);
   useEffect(() => {
     const { metamaskID = undefined } = reduxState;
@@ -14,126 +18,105 @@ const Banner = (props) => {
     }
   }, [reduxState]);
 
-  function gotoProfile(){
-    console.log("clicked")
+  function gotoProfile() {
+    console.log("clicked");
   }
   return (
-    <Carousel interval={5000} className="d-flex align-items-center banner">
-    <Carousel.Item>
-      <Container fluid className="carousal-global">
-        <Row className="carousal-row1">
-          <Col sm={3}>
-            <div>
-              <Button
-                variant="dark"
-                className="button"
-                bsstyle="primary"
-                onClick={() => {
-                  gotoProfile();
-                }}
-              >
-                Getting Started
-              </Button>
-            </div>
-          </Col>
-          <Col sm={8}>
-            <div className="content">
-              Lorem ipsum dolor sit amet, consectetur adipiscing
-              elit, sed do eiusmod tempor incididunt ut labore et
-              dolore magna aliqua. Ut enim ad minim veniam, quis
-              nostrud exercitation ullamco laboris nisi ut aliquip
-              ex ea commodo consequat. Duis aute irure dolor in
-              reprehenderit in voluptate velit esse cillum dolore eu
-              fugiat nulla pariatur. Excepteur sint occaecat
-              cupidatat non proident, sunt in culpa qui officia
-              deserunt mollit anim id est laborum.
-            </div>
-          </Col>
-          <Col sm={1}>
-            <div className="content-profile">
-              {/* <img src={user} /> */}
-            </div>
-          </Col>
-        </Row>
-      </Container>
-    </Carousel.Item>
-    <Carousel.Item>
-      <Container fluid>
-        <Row>
-          <Col sm={3}>
-            <div>
-            <Button
-          variant="dark"
-          className="button"
-          bsstyle="primary"
-          onClick={() => {
-            gotoProfile();
-          }}
-        >
-          View our contract
-        </Button>
-            </div>
-          </Col>
-          <Col sm={8}>
-            <div className="content">
-              Lorem ipsum dolor sit amet, consectetur adipiscing
-              elit, sed do eiusmod tempor incididunt ut labore et
-              dolore magna aliqua. Ut enim ad minim veniam, quis
-              nostrud exercitation ullamco laboris nisi ut aliquip
-              ex ea commodo consequat. Duis aute irure dolor in
-              reprehenderit in voluptate velit esse cillum dolore eu
-              fugiat nulla pariatur. Excepteur sint occaecat
-              cupidatat non proident, sunt in culpa qui officia
-              deserunt mollit anim id est laborum.
-            </div>
-          </Col>
-          <Col sm={1}>
-            <div className="content-profile">
-              {/* <img src={user} /> */}
-            </div>
-          </Col>
-        </Row>
-      </Container>
-    </Carousel.Item>
-    <Carousel.Item>
-      <Container fluid>
-        <Row>
-          <Col sm={3}>
-            <div>
-            <Button
-          variant="dark"
-          className="button"
-          bsstyle="primary"
-          onClick={() => {
-            gotoProfile();
-          }}
-        >
-          What is metamask
-        </Button>
-            </div>
-          </Col>
-          <Col sm={8}>
-            <div className="content">
-              Lorem ipsum dolor sit amet, consectetur adipiscing
-              elit, sed do eiusmod tempor incididunt ut labore et
-              dolore magna aliqua. Ut enim ad minim veniam, quis
-              nostrud exercitation ullamco laboris nisi ut aliquip
-              ex ea commodo consequat. Duis aute irure dolor in
-              reprehenderit in voluptate velit esse cillum dolore eu
-              fugiat nulla pariatur. Excepteur sint occaecat
-              cupidatat non proident, sunt in culpa qui officia
-              deserunt mollit anim id est laborum.
-            </div>
-          </Col>
-          <Col sm={1}>
-            <div className="content-profile">
-              {/* <img src={user} /> */}
-            </div>
-          </Col>
-        </Row>
-      </Container>
-    </Carousel.Item>
-  </Carousel>
+    <Carousel
+      interval={5000}
+      className="d-flex align-items-center banner"
+      style={{ backgroundImage: `url(${bg2})` }}
+      cover
+    >
+      {/* <Carousel.Item style={{background:`url(${cover})`}}> */}
+      <Carousel.Item>
+        <Container fluid className="carousal-first">
+          <Row className="carousal-row1">
+            <Col sm={8}>
+              <Row className="header">What is IdeaTribe?</Row>
+              <Row></Row>
+              <div className="content">
+                IdeaTribe is first and foremost, a registry of original ideas.
+                You can register your original idea with IdeaTribe and it is
+                stored in your name on a blockchain forever. Like a provisional
+                patent, registering your idea with us helps you claim priority -
+                as the real creator.
+              </div>
+            </Col>
+            <Col sm={4}>
+              <div className="content-profile">{/* <img src={user} /> */}</div>
+            </Col>
+          </Row>
+        </Container>
+      </Carousel.Item>
+      <Carousel.Item>
+        <Container fluid className="carousal-first">
+          <Row className="carousal-row1">
+            <Col sm={8}>
+              <Row>How should I use it?.</Row>
+              <Row>It’s simple, really.</Row>
+              <Row>
+                <ul>
+                  <li>
+                    Sign up and connect your crypto wallet [Metamask] with
+                    IdeaTribe{" "}
+                  </li>
+                  <li>Upload PDF, JPEG or .mp3 file of your idea</li>
+                  <li>
+                    Click Register Idea. [We pay the registration fee for early
+                    adopters!]
+                  </li>
+                  <li>Get your Billet of Registration</li>
+                  <li>Share your idea with the world!</li>
+                </ul>
+              </Row>
+            </Col>
+          </Row>
+        </Container>
+      </Carousel.Item>
+
+      {/* <Carousel.Item style={{background:`url(${bg2})`}}> */}
+      <Carousel.Item>
+        <Container fluid className="carousal-third">
+          <Row>
+            <Col sm={8}>
+              <Row>What is blockchain and crypto wallet?</Row>
+              <Row>
+                <div className="content">
+                  Blockchain is revolutionary technology that helps create
+                  un-hackable registers and smart contracts. Records registered
+                  in blockchain are stored forever and cannot be changed. To
+                  register in a blockchain, you need crypto currencies - like
+                  Bitcoin, Ethereum or Binance. A crypto wallet is simply where
+                  you buy and store your crypto currencies.
+                </div>
+              </Row>
+            </Col>
+            <Col sm={4}>
+              <div className="content-profile">{/* <img src={user} /> */}</div>
+            </Col>
+          </Row>
+        </Container>
+      </Carousel.Item>
+      <Carousel.Item>
+        <Container fluid className="carousal-third">
+          <Row>
+            <Col sm={8}>
+              <Row>What is TribeCoin?</Row>
+              <div className="content">
+                TribeCoin is the currency of IdeaTribe. You earn TribeCoins when
+                you use our app in a way that benefits the community. So, you
+                earn TribeCoins for registering an idea, sharing it with people
+                and collaborating with others.
+              </div>
+            </Col>
+            <Col sm={4}>
+              <div className="content-profile">{/* <img src={user} /> */}</div>
+            </Col>
+          </Row>
+        </Container>
+      </Carousel.Item>
+    </Carousel>
   );
 };
 
