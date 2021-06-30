@@ -31,8 +31,12 @@ import jspdf from "jspdf";
 import domtoimage from "dom-to-image";
 import moment from "moment";
 import { showToaster } from "../../commons/common.utils";
+import QRCode from "qrcode"
 
 import responseImage from "../../../assets/images/response.jpeg";
+import signatureImage from "../../../assets/logo/signatures.png";
+
+
 function Create(props) {
   const reduxState = useSelector((state) => state, shallowEqual);
   const PASSED = "PASSED",
@@ -81,7 +85,17 @@ function Create(props) {
     fileType: "",
     fileData: undefined,
   });
-
+  const getQrcode = () => {
+    QRCode.toCanvas(document.getElementById('canvas'),
+    'sample text', { color: {
+      dark: '#1b1919',  // black dots
+      light: '#0000' // Transparent background
+    }, toSJISFunc: QRCode.toSJIS }, function (error) {
+    if (error) console.error(error)
+    console.log('success!')
+    })
+  }
+  
   useEffect(() => {
     pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
   }, []);
@@ -444,7 +458,7 @@ function Create(props) {
   };
 
   const getViewBasedOnSteps = () => {
-    switch (4) {
+    switch (slideCount) {
       case TITLE_SLIDE:
         return (
           <>
@@ -828,7 +842,7 @@ function Create(props) {
         );
         break;
       case RESPONSE_SLIDE:
-        return publishState == FAILED && false ? (
+        return publishState == FAILED ? (
           <Col
             md="12"
             sm="12"
@@ -845,22 +859,77 @@ function Create(props) {
             </div>
           </Col>
         ) : (
-          publishState == PASSED || true && (
+          publishState == PASSED  && (
             <Col md="12" id="published-wrapper-block" style={{ 
                   backgroundImage: `url(${responseImage})` 
               }}
-              className="published-wrapper ">
-                <Row>
-                <Col md="10">
-                    <div className="success-block">
-                      @abhiajht
+              className="published-wrapper billet">
+                <Row className="row1">
+                <Col md="8">
+                    <div className="billet-item">
+                      <div className="user">
+                        @abhiajht
+                      </div>
+                      <div className="name">
+                        Abhijath Benhur
+                      </div>
+                      <div>
+                        idea tripe .com
+                      </div>
                     </div>
                 </Col>
-                <Col md="2">
-asdsada
+                <Col md="4">
+                <img src={signatureImage} alt="logo" height="250px" width="200px"/>
                 </Col>
                 </Row>
-                
+                <Row className="row2">
+                <Col md="8">
+                    <div className="billet-item">
+                      
+                      <div className="item">
+                       Smart revolving chair
+                      </div>
+                      <div className="time">
+                        At: 11th May 2021 8:29 PM
+                      </div>
+                    </div>
+                </Col>
+                <Col md="4">
+                  
+                </Col>
+                </Row>
+                <Row  className="row3">
+                <Col md="8">
+                    <div className="billet-item">
+                      
+                      <div className="trasnection-details">
+                        <div >
+                          TRANSACTION ID
+                        </div>
+                        {billet.transactionID}
+                      </div>
+                      <div className="trasnection-details">
+                        <div>
+                          FILE HASH 
+                        </div>
+                        {billet.PDFHash}
+                      </div>
+                      <div className="trasnection-details">
+                        <div>
+                          TOKEN ID
+                        </div>
+                        42342v342342v234234v2vvfgdttrw
+                      </div>
+                    </div>
+                </Col>
+                <Col md="4 text-center">
+                <canvas id="canvas"></canvas>
+                {
+                setTimeout(()=>{
+                  getQrcode()
+                })}
+                </Col>
+                </Row>
             </Col>
             // <Col
             //   md="12"
