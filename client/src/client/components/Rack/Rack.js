@@ -70,7 +70,7 @@ const Rack = (props) => {
                           className=""
                           style={{
                             background: "#f1f1f1",
-                            borderRadius: "5px",
+                            borderRadius: "5px 5px 0 0",
                             justifyItems: "center",
                           }}
                         />
@@ -95,6 +95,22 @@ const Rack = (props) => {
                     </div>
                     <div className="collection-footer">
                       <Row>
+                        <Col md="12">
+                          <Col md="12" className="tags">
+                              {JSON.parse(signature.category) &&
+                                JSON.parse(signature.category)
+                                  .slice(0, 2)
+                                  .map((category) => {
+                                    return (
+                                      <Button disabled variant="pill">
+                                        {category.value}
+                                      </Button>
+                                    );
+                                  })}
+                            </Col>
+                          </Col>
+                      </Row>
+                      <Row>
                         <Col md="12" className="idea-title">
                           <p className="text-left title">{signature.title}</p>
                         </Col>
@@ -108,7 +124,7 @@ const Rack = (props) => {
                           <span
                             onClick={(event) => {
                               event.stopPropagation();
-                              goToUserProfile(signature.owner);
+                              goToUserProfile(signature.userID);
                             }}
                           >
                             {signature.userID}
@@ -126,18 +142,7 @@ const Rack = (props) => {
                             {getActionForPurpose(signature.purpose)}
                           </Button>
                         </Col>
-                        <Col md="6" className="idea-user text-right">
-                          {JSON.parse(signature.category) &&
-                            JSON.parse(signature.category)
-                              .slice(0, 2)
-                              .map((category) => {
-                                return (
-                                  <Button disabled variant="ternary">
-                                    {category.value}
-                                  </Button>
-                                );
-                              })}
-                        </Col>
+                       
                       </Row>
                     </div>
                   </div>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useLocation, useHistory } from "react-router-dom";
-import {confirm} from '../../modals/confirmation/confirmation'
+import { confirm } from "../../modals/confirmation/confirmation";
 import moment from "moment";
 
 import SignatureBean from "../../beans/Signature";
@@ -201,8 +201,7 @@ const Signature = (props) => {
     );
   }
 
-
-  function showInterest(){
+  function showInterest() {
     confirm(
       "Set your price.",
       "Would you like to express your interest?",
@@ -222,14 +221,10 @@ const Signature = (props) => {
           ideaID: signature.ideaID,
           message: success.text,
         };
-        ActionsInterface.postAction(updatePayload).then(success =>{
-          
-        })
+        ActionsInterface.postAction(updatePayload).then((success) => {});
       } else {
-
       }
     });
-    
   }
 
   function openInEtherscan() {
@@ -264,30 +259,32 @@ const Signature = (props) => {
           <div></div>
         ) : (
           <div>
-          { signature.purpose == CONSTANTS.PURPOSES.SELL && <Dropdown.Item
-            onClick={() => {
-              buySignature();
-            }}
-          >
-            <ShoppingCart
-              className="cursor-pointer signature-icons ShoppingCart"
-              color="#79589F"
-            ></ShoppingCart>
-            <span className="txt">Buy</span>
-          </Dropdown.Item>
-          }
-          { signature.purpose == CONSTANTS.PURPOSES.COLLAB && <Dropdown.Item
-            onClick={() => {
-              showInterest();
-            }}
-          >
-            <ShoppingCart
-              className="cursor-pointer signature-icons ShoppingCart"
-              color="#79589F"
-            ></ShoppingCart>
-            <span className="txt">Collaborate</span>
-          </Dropdown.Item>
-          }
+            {signature.purpose == CONSTANTS.PURPOSES.SELL && (
+              <Dropdown.Item
+                onClick={() => {
+                  buySignature();
+                }}
+              >
+                <ShoppingCart
+                  className="cursor-pointer signature-icons ShoppingCart"
+                  color="#79589F"
+                ></ShoppingCart>
+                <span className="txt">Buy</span>
+              </Dropdown.Item>
+            )}
+            {signature.purpose == CONSTANTS.PURPOSES.COLLAB && (
+              <Dropdown.Item
+                onClick={() => {
+                  showInterest();
+                }}
+              >
+                <ShoppingCart
+                  className="cursor-pointer signature-icons ShoppingCart"
+                  color="#79589F"
+                ></ShoppingCart>
+                <span className="txt">Collaborate</span>
+              </Dropdown.Item>
+            )}
             <Dropdown.Item>
               <ThumbsUp
                 className="cursor-pointer signature-icons ThumbsUp"
@@ -401,13 +398,9 @@ const Signature = (props) => {
                       {signature.category &&
                         JSON.parse(signature.category).map((tag, key) => {
                           return (
-                            <Badge
-                              key={key}
-                              className="tagpill"
-                              variant="secondary"
-                            >
+                            <Button disabled variant="pill">
                               {tag.label}
-                            </Badge>
+                            </Button>
                           );
                         })}
                       {/* <Badge
@@ -451,14 +444,17 @@ const Signature = (props) => {
                           <Col md={6}>Status of idea : </Col>
                           <Col md={6}>{signature.purpose}</Col>
                           <Col md={6}>Price : </Col>
-                          <Col md={6}>{signature.price && Web3Utils.fromWei(signature.price)} BNB</Col>
+                          <Col md={6}>
+                            {signature.price &&
+                              Web3Utils.fromWei(signature.price)}{" "}
+                            BNB
+                          </Col>
                         </Row>
                       </div>
                     </div>
                   </Tab>
                   <Tab eventKey="History" title="History">
-                    <div className="transactions-wrapper">
-                    </div>
+                    <div className="transactions-wrapper"></div>
                   </Tab>
                 </Tabs>
               </div>

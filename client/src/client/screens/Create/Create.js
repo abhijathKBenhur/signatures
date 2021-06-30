@@ -69,7 +69,7 @@ function Create(props) {
     publish: "",
   });
 
-  const [slideCount, setSlideCount] = useState(0);
+  const [slideCount, setSlideCount] = useState(5);
   const [billet, setBillet] = useState({});
   const [publishState, setPublishState] = useState(INIT);
   const [publishError, setPublishError] = useState(undefined);
@@ -824,7 +824,7 @@ function Create(props) {
         return (
           <Col md="12" sm="12" lg="12" xs="12" className="publishing-wrapper ">
             <div className="publishing-block">
-              <p>We are posting your idea on the blockchain. Please wait!</p>
+              <p>We are posting your idea on the binance blockchain. Hold on tight!</p>
             </div>
 
             <div className="gif-wrapper">

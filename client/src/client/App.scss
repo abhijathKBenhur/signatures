@@ -137,6 +137,16 @@ body {
         color: $white !important;
     }
   }
+  &.btn-pill {
+    border-color: $secondary  !important;
+    color: $secondary;
+    background: transparent;
+    height: 20px;
+    border-radius: 15px ;
+    &:focus, &:hover, &:active {
+        pointer-events: none;
+    }
+  }
   &.btn-disabled {
     color: $primary;
     background-color: $grey-border;

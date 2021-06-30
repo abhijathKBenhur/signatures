@@ -66,6 +66,13 @@
   .collection-footer {
     background-color: $primary;
     color: $grey-border;
+    .tags{
+      padding: 10px 0;
+      display: flex;
+      gap: 5px;
+      overflow: scroll;
+      width: 100%;
+    }
     .owner {
       text-overflow: ellipsis;
       overflow: hidden;
