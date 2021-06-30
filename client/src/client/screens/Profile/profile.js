@@ -45,7 +45,7 @@ function Profile(props) {
     }
     if (viewUser && viewUser.toLowerCase() !== userDetails.userID) {
       let payLoad = {};
-      payLoad.userID = viewUser;
+      payLoad.metamaskId = viewUser;
       getUserDetails(payLoad);
     }
   }, [reduxState.userDetails]);
