@@ -169,7 +169,7 @@ const Header = (props) => {
           </div>
 
           <div className="right-section">
-            {currentMetamaskAccount}
+            <span className="loggedinaccount">{currentMetamaskAccount}</span>
             {/* <Button
               variant="primary"
               className="button"

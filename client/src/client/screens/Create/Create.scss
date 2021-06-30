@@ -384,14 +384,14 @@
                 font-size: 20px;
                 display: flex;
                 .gas_fee{
-                    color: #946214;
+                    color: $dark-brown;
                 }
                 .gas_free{
                     color: $secondary;
                     margin-left: 5px;
                 }
                 .gas_fee_value{
-                    color: #946214;
+                    color: $dark-brown;
                     text-decoration: line-through;
                 }
             }
@@ -399,10 +399,10 @@
                 font-size: 20px;
                 display: flex;
                 .serice_fee{
-                    color: #946214;
+                    color: $dark-brown;
                 }
                 .serice_fee_value{
-                    color: #946214;
+                    color: $dark-brown;
                     text-decoration: line-through;
                 }
                 .serice_free{

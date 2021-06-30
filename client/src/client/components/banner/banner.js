@@ -33,15 +33,16 @@ const Banner = (props) => {
         <Container fluid className="carousal-first">
           <Row className="carousal-row1">
             <Col sm={8}>
-              <Row className="header">What is IdeaTribe?</Row>
-              <Row></Row>
-              <div className="content">
-                IdeaTribe is first and foremost, a registry of original ideas.
-                You can register your original idea with IdeaTribe and it is
-                stored in your name on a blockchain forever. Like a provisional
-                patent, registering your idea with us helps you claim priority -
-                as the real creator.
-              </div>
+              <Row className="banner_header">What is IdeaTribe?</Row>
+              <Row>
+                <div className="content">
+                  IdeaTribe is first and foremost, a registry of original ideas.
+                  You can register your original idea with IdeaTribe and it is
+                  stored in your name on a blockchain forever. Like a
+                  provisional patent, registering your idea with us helps you
+                  claim priority - as the real creator.
+                </div>
+              </Row>
             </Col>
             <Col sm={4}>
               <div className="content-profile">{/* <img src={user} /> */}</div>
@@ -53,7 +54,7 @@ const Banner = (props) => {
         <Container fluid className="carousal-first">
           <Row className="carousal-row1">
             <Col sm={8}>
-              <Row>How should I use it?.</Row>
+              <Row className="banner_header">How should I use it?.</Row>
               <Row>It’s simple, really.</Row>
               <Row>
                 <ul>
@@ -80,7 +81,9 @@ const Banner = (props) => {
         <Container fluid className="carousal-third">
           <Row>
             <Col sm={8}>
-              <Row>What is blockchain and crypto wallet?</Row>
+              <Row className="banner_header">
+                What is blockchain and crypto wallet?
+              </Row>
               <Row>
                 <div className="content">
                   Blockchain is revolutionary technology that helps create
@@ -102,13 +105,15 @@ const Banner = (props) => {
         <Container fluid className="carousal-third">
           <Row>
             <Col sm={8}>
-              <Row>What is TribeCoin?</Row>
-              <div className="content">
-                TribeCoin is the currency of IdeaTribe. You earn TribeCoins when
-                you use our app in a way that benefits the community. So, you
-                earn TribeCoins for registering an idea, sharing it with people
-                and collaborating with others.
-              </div>
+              <Row className="banner_header">What is TribeCoin?</Row>
+              <Row>
+                <div className="content">
+                  TribeCoin is the currency of IdeaTribe. You earn TribeCoins
+                  when you use our app in a way that benefits the community. So,
+                  you earn TribeCoins for registering an idea, sharing it with
+                  people and collaborating with others.
+                </div>
+              </Row>
             </Col>
             <Col sm={4}>
               <div className="content-profile">{/* <img src={user} /> */}</div>
