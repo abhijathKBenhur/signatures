@@ -153,3 +153,17 @@ body {
     pointer-events: none;
   }
 }
+.generic-cls{
+  color: $secondary !important;
+  background-color: $primary !important;
+  .Toastify__close-button{
+    svg {
+      color: $secondary;
+    }
+  }
+}
+.main-content-component{
+  margin-top: 60px;
+  height: calc(100vh - 100px);
+  width: 100%;
+}

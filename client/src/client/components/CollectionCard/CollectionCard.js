@@ -10,9 +10,9 @@ import Image from "react-image-resizer";
 import React, { useState, useEffect } from "react";
 import BlockChainInterface from "../../interface/BlockchainInterface";
 import MongoDBInterface from "../../interface/MongoDBInterface";
-import { toast } from "react-toastify";
 import Web3Utils from "web3-utils";
 import moment from "moment";
+import { showToaster } from "../../commons/common.utils";
 const CollectionCard = (props) => {
   let history = useHistory();
   const [signature, setSignature] = useState(new Signature(props.card));
@@ -26,16 +26,7 @@ const CollectionCard = (props) => {
   function copyClipBoard() {
     let shareURL = window.location.href + "/signature/" + signature.PDFHash;
     navigator.clipboard.writeText(shareURL);
-
-    toast.dark("Copied to clipboard!", {
-      position: "bottom-right",
-      autoClose: 3000,
-      hideProgressBar: true,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
+      showToaster('Copied to clipboard!', {type: 'dark'})
   }
 
   function openInEtherscan() {
@@ -49,18 +40,8 @@ const CollectionCard = (props) => {
   }
 
   function feedbackMessage() {
-    toast.dark(
-      "Your order has been placed. Please wait a while for it to be processed.",
-      {
-        position: "bottom-right",
-        autoClose: 3000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      }
-    );
+    showToaster("Your order has been placed. Please wait a while for it to be processed.", {type: 'dark'})
+   
   }
 
   function editPrice(signature) {

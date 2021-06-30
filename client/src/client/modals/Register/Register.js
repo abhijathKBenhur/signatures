@@ -47,6 +47,7 @@ const Register = (props) => {
   const [activeStep, setActiveStep] = useState(steps[0]);
   const [validated, setValidated] = useState(false);
   const [registration, setRegistration] = useState("false");
+  const [userNameError, setuserNameError] = useState(false);
   const [registrationErrorMessage, setregistrationErrorMessage] = useState("");
 
   const [userDetails, setUserDetails] = useState({
@@ -248,7 +249,7 @@ const Register = (props) => {
       case "userID":
         return (
           <div>
-            <Row className="">
+            <Row className="user-name-row">
               {registration == PASSED ? (
                 <div> Hi {userDetails.fullName}, Welcome to the tribe. You have signed up to the unlimited possibilities in the world of idea sharing.</div>
               ) :
@@ -256,6 +257,7 @@ const Register = (props) => {
                 <div> Hi {userDetails.fullName}, We were unable to onboard you to the tribe this time. Please try again.</div>
               )
               : (
+                <>
                 <Form.Group
                   as={Col}
                   className="formEntry userIDSection"
@@ -276,48 +278,58 @@ const Register = (props) => {
                     type="text"
                     name="userID"
                     value={userDetails.userID}
-                    className={"userID"}
+                    className={userNameError ? "username-error userID" : "userID"}
                     placeholder="User name"
                     onChange={handleChange}
                   />
-                  {userDetails.userID &&
+                  {!userNameError && userDetails.userID &&
                   userDetails.userID.length > 0 &&
                   validated ? (
                     <Check></Check>
-                  ) : userDetails.userID &&
+                  ) : !userNameError&& userDetails.userID &&
                     userDetails.userID.length > 0 &&
                     !validated ? (
                     <X></X>
-                  ) : (
-                    <div></div>
-                  )}
+                  ) :null}
                 </Form.Group>
+                {userNameError && <span className="username-error-txt">
+                  Invalid username please use lowercase with no special charaters
+    
+                </span> }
+                </>
               )}
             </Row>
           </div>
         );
-        break;
+        
+        default: return null;
     }
   }
 
   function handleChange(event) {
     var key = event.keyCode;
     let returnObj = {};
-    returnObj[event.target.name] =
-      _.get(event, "target.name") === "price"
-        ? Number(event.target.value)
-        : event.target.value;
+    const value = String(event.target.value).toLowerCase()
+    returnObj[event.target.name] = value;
     setUserDetails({
       ...userDetails,
       ...returnObj,
     });
-    MongoDBInterface.getUserInfo({ userID: event.target.value })
-      .then((userDetails) => {
-        setValidated(false);
-      })
-      .catch((error) => {
-        setValidated(true);
-      });
+      if(/^[A-Z0-9]+$/i.test(value) ) {
+       
+        setuserNameError(false);
+        MongoDBInterface.getUserInfo({ userID: value })
+          .then((userDetails) => {
+            setValidated(false);
+          })
+          .catch((error) => {
+            setValidated(true);
+          });
+        } else {
+          setuserNameError(true);
+        }
+    
+   
   }
 
   return (
@@ -380,7 +392,7 @@ const Register = (props) => {
             </Button>
           )}
           <Button
-            disabled={!validated && activeStep.index == 2 || registration == PENDING || _.isEmpty(userDetails.metamaskId) || (_.isEmpty(userDetails.email) && activeStep.index == 1)}
+            disabled={!validated && activeStep.index == 2 || registration == PENDING || _.isEmpty(userDetails.metamaskId) || (_.isEmpty(userDetails.email) && activeStep.index == 1) || userNameError}
             variant="primary"
             className="button"
             bsstyle="primary"

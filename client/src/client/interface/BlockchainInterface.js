@@ -2,7 +2,6 @@ import _, { defer, has } from "lodash";import  React from 'react';
 import Web3 from "web3";
 import NFTTokenBean from "../beans/Signature";
 import contractJSON from "../../contracts/ideaBlocks.json";
-import { toast } from "react-toastify";
 import store from '../redux/store';
 import { setReduxMetaMaskID } from "../redux/actions";
 import ENDPOINTS from '../commons/Endpoints';
