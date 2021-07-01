@@ -81,6 +81,29 @@ class BlockchainInterface {
     }
   }
 
+  addToken(type, address, symbol, decimals) {
+    window.ethereum
+        .request({
+          method: 'wallet_watchAsset',
+          params: {
+            type: type,
+            options: {
+              address: address,
+              symbol: symbol,
+              decimals: decimals
+            },
+          },
+        })
+        .then((success) => {
+          if (success) {
+            console.log(symbol + ' successfully added to wallet!')
+          } else {
+            throw new Error('Something went wrong.')
+          }
+        })
+        .catch(console.error)
+  }
+
   register_user = payload => { 
     console.log("register_user")
     return api.post(`/register_user`,payload) 
