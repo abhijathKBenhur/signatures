@@ -74,7 +74,7 @@ function Create(props) {
     publish: "",
   });
 
-  const [slideCount, setSlideCount] = useState(0);
+  const [slideCount, setSlideCount] = useState(3);
   const [billet, setBillet] = useState({
     creator: form.owner,
     fullName: userDetails.fullName,
@@ -85,7 +85,7 @@ function Create(props) {
     // PDFHash: billet.PDFHash,
   });
 
-  const [publishState, setPublishState] = useState(INIT);
+  const [publishState, setPublishState] = useState(PROGRESS);
   const [publishError, setPublishError] = useState(undefined);
   const priceRef = useRef(null);
   let history = useHistory();
@@ -862,16 +862,17 @@ function Create(props) {
         break;
       case LOADING_SLIDE:
         return (
-          <Col md="12" sm="12" lg="12" xs="12" className="publishing-wrapper ">
-            <div className="publishing-block">
+          <Col md="12" sm="12" lg="12" xs="12" className="publishing-wrapper d-flex flex-column justify-content-center">
+            
+
+            <div className="gif-wrapper d-flex justify-content-center">
+              <img src={loadingGif} alt="" />
+            </div>
+            <div className="publishing-block-text">
               <p>
                 We are posting your idea on the binance blockchain. Hold on
                 tight!
               </p>
-            </div>
-
-            <div className="gif-wrapper">
-              <img src={loadingGif} alt="" />
             </div>
           </Col>
         );

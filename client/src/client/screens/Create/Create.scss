@@ -513,15 +513,17 @@
   }
   .failed-wrapper {
     display: flex;
-    align-items: center;
     flex-flow: column;
-    .publishing-block {
-      display: flex;
-      align-items: center;
-      flex-flow: column;
-      margin: 100px;
-      justify-content: center;
-      color: $white;
+    color: white;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    .publishing-wrapper {
+      .publishing-block-text{
+        color: $secondary-light;
+        text-align: center;
+      }
       p {
         font-size: 40px;
         text-align: center;
