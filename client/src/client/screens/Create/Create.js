@@ -74,8 +74,17 @@ function Create(props) {
     publish: "",
   });
 
-  const [slideCount, setSlideCount] = useState(4);
-  const [billet, setBillet] = useState({});
+  const [slideCount, setSlideCount] = useState(0);
+  const [billet, setBillet] = useState({
+    creator: form.owner,
+    fullName: userDetails.fullName,
+    title: form.title,
+    time: moment(new Date()).format("MMMM Do YYYY, h:mm:ss a"),
+    // tokenID: billet.tokenID,
+    // transactionID: billet.tokenID,
+    // PDFHash: billet.PDFHash,
+  });
+
   const [publishState, setPublishState] = useState(INIT);
   const [publishError, setPublishError] = useState(undefined);
   const priceRef = useRef(null);
@@ -87,7 +96,8 @@ function Create(props) {
   const getQrcode = () => {
     QRCode.toCanvas(
       document.getElementById("canvas"),
-      "sample text",
+      "https://kovan.etherscan.io/address/" +
+                                  _.get(billet, "transactionID"),
       {
         color: {
           dark: "#1b1919", // black dots
@@ -873,8 +883,8 @@ function Create(props) {
             sm="12"
             lg="12"
             xs="12"
-            className="published-wrapper "
-            id="published-wrapper-block"
+            className="failed-wrapper"
+            id="failed-wrapper-block"
           >
             <div className="success-block">
               <p>Failed to publish your Idea</p>
@@ -888,113 +898,75 @@ function Create(props) {
             <Col
               md="12"
               id="published-wrapper-block"
-              style={{
-                backgroundImage: `url(${responseImage})`,
-              }}
-              className="published-wrapper billet"
+              className="published-wrapper p-0 d-flex flex-row justify-content-space-around"
             >
-              <Row className="row1">
-                <Col md="8">
-                  <div className="billet-item">
-                    <div className="user"></div>
-                    <div className="name">{billet.fullName}</div>
-                    <div>ideaTripe</div>
-                  </div>
-                </Col>
-                <Col md="4">
-                  <img
-                    src={signatureImage}
-                    alt="logo"
-                    height="250px"
-                    width="200px"
-                  />
-                </Col>
-              </Row>
-              <Row className="row2">
-                <Col md="8">
-                  <div className="billet-item">
-                    <div className="item">{billet.title}</div>
-                    <div className="time">{billet.time}</div>
-                  </div>
-                </Col>
-                <Col md="4"></Col>
-              </Row>
-              <Row className="row3">
-                <Col md="8">
-                  <div className="billet-item">
-                    <div className="trasnection-details">
-                      <div>{billet.transactionID}</div>
+              <div className="left-strip"> </div>
+              <Col
+                md="9"
+                className="center-strip d-flex flex-column justify-content-around"
+              >
+                <Row className="row1">
+                  <Col md="12">
+                    <div className="billet-item">
+                      <div className="user">@{billet.creator}</div>
+                      <div className="name">{billet.fullName}</div>
+                      <div>ideaTribe.com</div>
                     </div>
-                    <div className="trasnection-details">
-                      <div>FILE HASH</div>
-                      {billet.PDFHash}
+                  </Col>
+                </Row>
+                <Row className="row2">
+                  <Col md="12">
+                    <div className="billet-item">
+                      <div className="item">{billet.title}</div>
+                      <div className="time">at {billet.time}</div>
                     </div>
-                    <div className="trasnection-details">
-                      <div>TOKEN ID</div>
-                      {billet.tokenID}
+                  </Col>
+                  <Col md="12"></Col>
+                </Row>
+                <Row className="row3">
+                  <Col md="12">
+                    <div className="billet-item">
+                      <div className="trasnection-details">
+                        <div>TRANSACTION ID:</div>
+                        <span className="hashValue">
+                          {billet.transactionID}
+                        </span>
+                      </div>
+                      <div className="trasnection-details">
+                        <div>FILE HASH:</div>
+                        <span className="hashValue">
+                        {billet.PDFHash}
+                        </span>
+                      </div>
+                      <div className="trasnection-details">
+                        <div>TOKEN ID:</div>
+                        <span className="hashValue">{billet.tokenID}</span>
+                      </div>
                     </div>
-                  </div>
-                </Col>
-                <Col md="4 text-center">
-                  <canvas id="canvas"></canvas>
-                  {setTimeout(() => {
-                    getQrcode();
-                  })}
-                </Col>
-              </Row>
+                  </Col>
+                </Row>
+              </Col>
+              <Col md="3" className="right-strip   d-flex flex-column justify-content-around">
+                <div className="brand">
+                  <Col md="12"className="p-0">BILLET</Col>
+                  <Col md="12" className="p-0">
+                    <img
+                      src={signatureImage}
+                      alt="logo"
+                      width="100%"
+                    />
+                  </Col>
+                </div>
+                <div class="code-n-share">
+                  <Col md="12">
+                    <canvas id="canvas"></canvas>
+                    {setTimeout(() => {
+                      getQrcode();
+                    })}
+                  </Col>
+                </div>
+              </Col>
             </Col>
-            // <Col
-            //   md="12"
-            //   sm="12"
-            //   lg="12"
-            //   xs="12"
-            //   className="published-wrapper "
-            //   style={{
-            //     backgroundImage: `url(${responseImage})`
-            //   }}
-            //   id="published-wrapper-block"
-            // >
-            //   <Col md="8">
-            //   <div className="success-block">
-            //     <p>Your Idea is posted in blockchain</p>
-            //     <Check />
-            //   </div>
-            //   </Col>
-            //   <Col md="12">
-            //   <div className="transaction-data">
-            //     <div className="transaction-ids">
-            //       <p>
-            //         Transaction ID- <span>{billet.transactionID}</span>
-            //       </p>
-            //       <p>
-            //         File Hash ID- <span>{billet.PDFHash}</span>
-            //       </p>
-            //       <p>* Please save both of these for future reference.</p>
-            //     </div>
-            //     <div className="btn-block">
-            //       <Button
-            //         variant="primary"
-            //         className="button"
-            //         bsstyle="primary"
-            //         onClick={() => gotoProfile()}
-            //       >
-            //         {" "}
-            //         Done
-            //       </Button>
-            //       <Button
-            //         variant="primary"
-            //         className="button ml-3"
-            //         bsstyle="primary"
-            //         onClick={() => exportToPdf()}
-            //       >
-            //         {" "}
-            //         Export
-            //       </Button>
-            //     </div>
-            //     </div>
-            //   </Col>
-
-            // </Col>
           )
         );
       default:
@@ -1047,18 +1019,26 @@ function Create(props) {
             className="create-form"
           >
             <Col md="12" className="overflow-auto h-100 p-0">
-              <Row className="content-container">{getViewBasedOnSteps()}</Row>
+              <Row
+                className={
+                  publishState == PASSED
+                    ? "content-container h-100"
+                    : "content-container"
+                }
+              >
+                {getViewBasedOnSteps()}
+              </Row>
               {publishState == INIT && (
                 <Row className="footer-class ">
                   <Col
                     md="6"
-                    className="d-flex justify-content-between align-items-center "
+                    className="d-flex justify-content-between align-items-center left-btn-container"
                   >
                     {slideCount >= LOADING_SLIDE ? (
                       <div></div>
                     ) : (
                       <Button
-                        variant="secondary"
+                        variant="ternary"
                         className="button"
                         bsstyle="primary"
                         onClick={() => {
@@ -1074,7 +1054,7 @@ function Create(props) {
                     className="d-flex justify-content-end align-items-center right-btn-container"
                   >
                     <Button
-                      variant="primary"
+                      variant="fourth"
                       className="button"
                       bsstyle="primary"
                       style={{ gap: "2px" }}

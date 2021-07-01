@@ -119,6 +119,7 @@ body {
         box-shadow: none;
     }
   }
+  
   &.btn-secondary {
     border-color: $secondary  !important;
     color: $secondary;
@@ -135,6 +136,15 @@ body {
     &:focus, &:hover, &:active {
         background: $primary-dark !important;
         color: $white !important;
+    }
+  }
+  &.btn-fourth {
+    background-color: $primary;
+    border-color: $primary  !important;
+    color: $secondary;
+    &:focus, &:hover, &:active {
+        background-color: $primary !important;
+        box-shadow: none;
     }
   }
   &.btn-pill {
