@@ -12,6 +12,32 @@ const api = axios.create({
   baseURL: process.env.NODE_ENV == "production" ? ENDPOINTS.REMOTE_ENDPOINTS: ENDPOINTS.LOCAL_ENDPOINTS
 })
 
+export const AVALANCHE_MAINNET_PARAMS = {
+  chainId: '43114',
+  chainName: 'Avalanche Mainnet C-Chain',
+  nativeCurrency: {
+      name: 'Avalanche',
+      symbol: 'AVAX',
+      decimals: 18
+  },
+  rpcUrls: ['https://api.avax.network/ext/bc/C/rpc'],
+  blockExplorerUrls: ['https://cchain.explorer.avax.network/']
+}
+
+export const AVALANCHE_TESTNET_PARAMS = {
+  chainId: '43113',
+  chainName: 'Avalanche Testnet C-Chain',
+  nativeCurrency: {
+      name: 'Avalanche',
+      symbol: 'AVAX',
+      decimals: 18
+  },
+  rpcUrls: ['https://api.avax-test.network/ext/bc/C/rpc'],
+  blockExplorerUrls: ['https://cchain.explorer.avax-test.network/']
+}
+
+
+
 class BlockchainInterface {
   constructor() {
     this.web3 = undefined;
@@ -23,6 +49,19 @@ class BlockchainInterface {
     let parentThis = this
     window.ethereum && window.ethereum.on('accountsChanged', function (accounts) {
       parentThis.getAccountDetails();
+    })
+  }
+
+  addAvalancheNetwork() {
+    this.web3.getProvider().then(provider => {
+      provider
+        .request({
+          method: 'wallet_addEthereumChain',
+          params: [AVALANCHE_MAINNET_PARAMS]
+        })
+        .catch((error) => {
+          console.log(error)
+        })
     })
   }
 

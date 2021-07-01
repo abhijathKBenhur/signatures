@@ -74,7 +74,7 @@ function Create(props) {
     publish: "",
   });
 
-  const [slideCount, setSlideCount] = useState(3);
+  const [slideCount, setSlideCount] = useState(0);
   const [billet, setBillet] = useState({
     creator: form.owner,
     fullName: userDetails.fullName,
@@ -85,7 +85,7 @@ function Create(props) {
     // PDFHash: billet.PDFHash,
   });
 
-  const [publishState, setPublishState] = useState(PROGRESS);
+  const [publishState, setPublishState] = useState(INIT);
   const [publishError, setPublishError] = useState(undefined);
   const priceRef = useRef(null);
   let history = useHistory();
