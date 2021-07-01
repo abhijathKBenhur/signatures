@@ -12,7 +12,9 @@ const api = axios.create({
   baseURL: process.env.NODE_ENV == "production" ? ENDPOINTS.REMOTE_ENDPOINTS: ENDPOINTS.LOCAL_ENDPOINTS
 })
 
-export const BINANCE_MAINNET_PARAMS = {
+const chain_id = "0x2a";
+
+const CHAIN_CONFIGS = { "0x38" : {
   chainId: '0x38',
   chainName: 'Binance Smart Chain Mainnet',
   nativeCurrency: {
@@ -22,21 +24,19 @@ export const BINANCE_MAINNET_PARAMS = {
   },
   rpcUrls: ['https://bsc-dataseed1.ninicoin.io'],
   blockExplorerUrls: ['https://bscscan.com/']
-}
-
-export const BINANCE_TESTNET_PARAMS = {
-  chainId: '0x61',
-  chainName: 'Binance Smart Chain Testnet',
-  nativeCurrency: {
-    name: 'Binance Coin',
-    symbol: 'BNB',
-    decimals: 18
   },
-  rpcUrls: ['https://data-seed-prebsc-1-s1.binance.org:8545/'],
-  blockExplorerUrls: ['https://testnet.bscscan.com']
+  "0x61" : {
+    chainId: '0x61',
+    chainName: 'Binance Smart Chain Testnet',
+    nativeCurrency: {
+      name: 'Binance Coin',
+      symbol: 'BNB',
+      decimals: 18
+    },
+    rpcUrls: ['https://data-seed-prebsc-1-s1.binance.org:8545/'],
+    blockExplorerUrls: ['https://testnet.bscscan.com']
+  }
 }
-
-
 
 class BlockchainInterface {
   constructor() {
@@ -52,18 +52,30 @@ class BlockchainInterface {
     })
   }
 
-  addBNBMainNetwork() {
-    window.web3.givenProvider.request({
+  addNetwork(chain_id) {
+    window.ethereum.givenProvider.request({
       method: 'wallet_addEthereumChain',
-      params: [BINANCE_MAINNET_PARAMS]
+      params: [CHAIN_CONFIGS[chain_id]]
     })
   }
 
-  addBNBTestNetwork() {
-    window.web3.givenProvider.request({
-      method: 'wallet_addEthereumChain',
-      params: [BINANCE_TESTNET_PARAMS]
-    })
+  switchNetwork() {
+    try {
+      window.ethereum.request({
+        method: 'wallet_switchEthereumChain',
+        params: [{ chainId: chain_id }],
+      });
+    } catch (switchError) {
+      // This error code indicates that the chain has not been added to MetaMask.
+      if (switchError.code === 4902) {
+        try {
+          this.addNetwork(chain_id)
+        } catch (addError) {
+          // handle "add" error
+        }
+      }
+      // handle other "switch" errors
+    }
   }
 
   register_user = payload => { 
@@ -107,6 +119,7 @@ class BlockchainInterface {
       if (window.ethereum) {
         this.web3 = new Web3(window.ethereum);
         window.web3 = this.web3;
+        this.switchNetwork();
         window.ethereum
           .enable()
           .then((accountId) => {
