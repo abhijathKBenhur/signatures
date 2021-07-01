@@ -8,6 +8,7 @@ import { Row, Col, Container } from "react-bootstrap";
 import "./Rack.scss";
 import moment from "moment";
 import Web3Utils from "web3-utils";
+import CONSTANTS from "../../commons/Constants";
 const Rack = (props) => {
   let history = useHistory();
   function openCardView(signature) {
@@ -24,6 +25,19 @@ const Rack = (props) => {
       },
     });
   };
+
+  function getActionForPurpose(purpose) {
+    switch (purpose) {
+      case CONSTANTS.PURPOSES.SELL:
+        return "BUY";
+      case CONSTANTS.PURPOSES.AUCTION:
+        return "BID";
+      case CONSTANTS.PURPOSES.COLLAB:
+        return "COLLABORATE";
+      case CONSTANTS.PURPOSES.KEEP:
+        return "NOT FOR SALE";
+    }
+  }
 
   return (
     <Container>
@@ -52,21 +66,50 @@ const Rack = (props) => {
                       <Col md="12 collection-image">
                         <Image
                           src={signature.thumbnail}
-                          height={300}
+                          height={250}
                           className=""
                           style={{
                             background: "#f1f1f1",
-                            borderRadius: "7px",
-                            justifyItems: "center"
+                            borderRadius: "5px 5px 0 0",
+                            justifyItems: "center",
                           }}
                         />
                         <div className="description">
-                          <div className="actions w-100"></div>
-                          <div className="description-text">{signature.description}</div>
+                          <div className="actions w-100">
+                            <span className="placeholder">
+                            {signature.price &&
+                                Web3Utils.fromWei(signature.price)}{" "}
+                              BNB
+                            </span>
+                            <span className="price">
+                                <span onClick={() => function openInEtherscan() {
+                                  window.open("https://kovan.etherscan.io/tx/" + signature.transactionID);
+                                }}>View on chain </span>
+                            </span>
+                          </div>
+                          <div className="description-text">
+                            {signature.description}
+                          </div>
                         </div>
                       </Col>
                     </div>
                     <div className="collection-footer">
+                      <Row>
+                        <Col md="12">
+                          <Col md="12" className="tags">
+                              {JSON.parse(signature.category) &&
+                                JSON.parse(signature.category)
+                                  .slice(0, 2)
+                                  .map((category) => {
+                                    return (
+                                      <Button disabled variant="pill">
+                                        {category.value}
+                                      </Button>
+                                    );
+                                  })}
+                            </Col>
+                          </Col>
+                      </Row>
                       <Row>
                         <Col md="12" className="idea-title">
                           <p className="text-left title">{signature.title}</p>
@@ -81,29 +124,26 @@ const Rack = (props) => {
                           <span
                             onClick={(event) => {
                               event.stopPropagation();
-                              goToUserProfile(signature.owner);
+                              goToUserProfile(signature.userID);
                             }}
                           >
                             {signature.userID}
                           </span>
                         </Col>
                       </Row>
-
-                      {/* <Row md="12">
+                    </div>
+                    <div className="collection-actions">
+                      <Row>
                         <Col md="6" className="idea-details">
-                        {signature.purpose}
+                          <Button
+                            variant="secondary"
+                            className="cursor-pointer"
+                          >
+                            {getActionForPurpose(signature.purpose)}
+                          </Button>
                         </Col>
-                        <Col md="6" className="idea-user text-right">
-                          {signature.category}
-                        </Col>
-                      </Row> */}
-
-                      {/* <span className="placeholder">{signature.userID}</span>
-                        <span className="price">
-                          {signature.price &&
-                            Web3Utils.fromWei(signature.price)}{" "}
-                          ETH
-                        </span> */}
+                       
+                      </Row>
                     </div>
                   </div>
                 </Col>

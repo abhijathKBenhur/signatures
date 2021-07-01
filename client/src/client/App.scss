@@ -40,7 +40,7 @@ input[type='radio']:checked:after {
   border: 2px solid white;
 }
 body {
-  font-family: "Roboto", sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   .signature-icons {
     color: $primary !important;
   }
@@ -119,6 +119,7 @@ body {
         box-shadow: none;
     }
   }
+  
   &.btn-secondary {
     border-color: $secondary  !important;
     color: $secondary;
@@ -135,6 +136,25 @@ body {
     &:focus, &:hover, &:active {
         background: $primary-dark !important;
         color: $white !important;
+    }
+  }
+  &.btn-fourth {
+    background-color: $primary;
+    border-color: $primary  !important;
+    color: $secondary;
+    &:focus, &:hover, &:active {
+        background-color: $primary !important;
+        box-shadow: none;
+    }
+  }
+  &.btn-pill {
+    border-color: $secondary  !important;
+    color: $secondary;
+    background: transparent;
+    height: 20px;
+    border-radius: 15px ;
+    &:focus, &:hover, &:active {
+        pointer-events: none;
     }
   }
   &.btn-disabled {

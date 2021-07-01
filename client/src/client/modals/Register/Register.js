@@ -84,7 +84,7 @@ const Register = (props) => {
     if (steps[steps.length - 1].key == activeStep.key) {
       if (registration == PASSED) {
         publishUserToApp();
-        history.push("/profile");
+        window.location.reload()
       } else {
         setRegistration(PENDING);
         registerUser();
@@ -391,7 +391,6 @@ const Register = (props) => {
               Back
             </Button>
           )}
-
           <Button
             disabled={!validated && activeStep.index == 2 || registration == PENDING || _.isEmpty(userDetails.metamaskId) || (_.isEmpty(userDetails.email) && activeStep.index == 1) || userNameError}
             variant="primary"

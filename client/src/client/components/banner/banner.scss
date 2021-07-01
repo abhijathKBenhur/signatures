@@ -1,10 +1,24 @@
 @import "../../commons/Common.scss";
 .banner{
-    width: 100%;
-    z-index: 10000;
-    position: fixed;
-    height: 60px;
-    border-bottom: 1.5px solid $primary;
-    top:60px;
-    background-color: $primary;
+    color: white;
+    .banner_header{
+        font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+        letter-spacing: 2px;
+    font-size: 20px;
+    color: $dark-brown;
+    }
+    .carousal-first{
+        .content{
+           
+        }
+        .carousal-row1{
+            
+        }
+    }
+    .carousal-second{
+        
+    }
+    .carousal-third{
+        
+    }
 }

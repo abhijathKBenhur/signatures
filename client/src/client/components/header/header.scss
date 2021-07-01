@@ -26,6 +26,9 @@
     .right-section{
         display: flex;
         gap: 20px;
+        .loggedinaccount{
+            color: $dark-brown;
+        }
         
     }
     .dropdown-menu{

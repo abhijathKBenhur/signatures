@@ -1,13 +1,13 @@
 import axios from 'axios'
 import _ from "lodash";
-
+import ENDPOINTS from '../commons/Endpoints';
 const api = axios.create({
-    baseURL: 'http://localhost:4000/api',
+    baseURL: process.env.NODE_ENV == "production" ? ENDPOINTS.REMOTE_ENDPOINTS: ENDPOINTS.LOCAL_ENDPOINTS
     // baseURL: '/api',
 })
 
 const fileAPI = axios.create({
-    baseURL: 'http://localhost:4000/api',
+    baseURL: process.env.NODE_ENV == "production" ? ENDPOINTS.REMOTE_ENDPOINTS: ENDPOINTS.LOCAL_ENDPOINTS,
     // baseURL: '/api',
     headers: {
         'Content-Type': 'multipart/form-data'

@@ -45,7 +45,7 @@ function Profile(props) {
     }
     if (viewUser && viewUser.toLowerCase() !== userDetails.userID) {
       let payLoad = {};
-      payLoad.userID = viewUser;
+      payLoad.metamaskId = viewUser;
       getUserDetails(payLoad);
     }
   }, [reduxState.userDetails]);
@@ -59,15 +59,16 @@ function Profile(props) {
 
   const getUserDetails = (payLoad) => {
     MongoDBInterface.getUserInfo(payLoad).then((response) => {
-      setCurrentUserDetails(_.get(response, "data.data"));
-      fetchSignatures();
+      let userDetails = _.get(response, "data.data");
+      setCurrentUserDetails(userDetails);
+      fetchSignatures(userDetails.metamaskId);
     });
   };
 
-  function fetchSignatures() {
+  function fetchSignatures(address) {
     fetchNotifications();
     MongoDBInterface.getSignatures({
-      ownerAddress: currentUserDetails.metamaskId,
+      ownerAddress: address || currentUserDetails.metamaskId,
     }).then((signatures) => {
       let response = _.get(signatures, "data.data");
       let isEmptyPresent = _.find(response, (responseItem) => {
@@ -113,23 +114,12 @@ function Profile(props) {
               <Row className="loggedIn">
                 <Col md="2" className="left-block">
                   {/* <Row className="profile-section"> */}
-                  <img
-                    src={currentUserDetails.imageUrl}
-                    height={200}
-                    width="100%"
-                    className=""
-                    style={{
-                      background: "#f1f1f1",
-                      borderRadius: "7px",
-                    }}
-                  />
+
                   {/* </Row>  */}
                   {/* <Row className="profile-section"> */}
                   <div className="left-block-content">
                     <div className="options">
-                      <h6 className="mt-1">
-                        @{_.get(currentUserDetails, "userID")}
-                      </h6>
+                      <h6 className="mt-1"></h6>
                     </div>
                   </div>
                   {/* </Row> */}
@@ -141,30 +131,16 @@ function Profile(props) {
                         <div className="d-flex flex-row">
                           <Col>
                             <Row>
-                              <h4>{_.get(currentUserDetails, "fullName")}</h4>
-                            </Row>
-                            <Row>
-                              <span>{_.get(currentUserDetails, "email")}</span>
+                              {/* <span>{_.get(currentUserDetails, "email")}</span> */}
                             </Row>
                           </Col>
                           <Col>
                             <Row className=" justify-content-end align-items-center">
-                              <span>
-                                {_.get(currentUserDetails, "metamaskId")}
-                              </span>
-                              <Share
-                                size={15}
-                                onClick={() => {
-                                  window.open(
-                                    "https://kovan.etherscan.io/tx/" +
-                                      _.get(currentUserDetails, "metamaskId")
-                                  );
-                                }}
-                              ></Share>
+                              <span></span>
                             </Row>
                             <Row className=" justify-content-end">
                               <span>
-                                Total ideas owned : {profileCollection.length}
+                                {/* Total ideas owned : {profileCollection.length} */}
                               </span>
                             </Row>
                           </Col>
@@ -175,7 +151,56 @@ function Profile(props) {
                         </div>
                         */}
                       </div>
-                      <div className="second-section"></div>
+                    </div>
+                  </div>
+                  <div className="profile-secction d-flex justify-content-center flex-column">
+                    {/* <div className="separatorline"></div> */}
+                    <img
+                      src={currentUserDetails.imageUrl}
+                      height={100}
+                      width={100}
+                      className=""
+                      style={{
+                        background: "#f1f1f1",
+                        borderRadius: "50px",
+                        zIndex: "1",
+                      }}
+                    />
+                    <div className="profile-info">
+                      <Row className="d-flex justify-content-center">
+                        <h4>{_.get(currentUserDetails, "fullName")}</h4>
+                      </Row>
+                      <Row>
+                        <Col>@{_.get(currentUserDetails, "userID")}</Col>
+                        <Col className="address-copy">
+                          <span>
+                            {_.get(currentUserDetails, "metamaskId") &&
+                              _.get(currentUserDetails, "metamaskId").substring(
+                                0,
+                                3
+                              ) +
+                                " ..... " +
+                                _.get(
+                                  currentUserDetails,
+                                  "metamaskId"
+                                ).substring(
+                                  _.get(currentUserDetails, "metamaskId")
+                                    .length - 3,
+                                  _.get(currentUserDetails, "metamaskId").length
+                                )}
+                          </span>
+                          <Share
+                            size={15}
+                            onClick={() => {
+                              window.open(
+                                "https://kovan.etherscan.io/address/" +
+                                  _.get(currentUserDetails, "metamaskId")
+                              );
+                            }}
+                          ></Share>
+                        </Col>
+                       
+                      </Row>
                     </div>
                   </div>
                   <div className="tabs-wrapper">
@@ -193,30 +218,31 @@ function Profile(props) {
                       </Tab>
                       <Tab eventKey="profile" title="Notifications">
                         <div className="transactions-wrapper">
-                          <table>
-                              <tr>
-                                <td>From</td>
-                                <td>Action</td>
-                                <td>ideaID</td>
-                                <td>message</td>
-                              </tr>
-                          {myNotifications.map((notification) => {
-                            return (
-                              <tr>
-                                <td>{notification.from}</td>
-                                <td>{notification.action}</td>
-                                <td>{notification.ideaID}</td>
-                                <td>{notification.message}</td>
-                              </tr>
-                            )
-                          })}
+                          {myNotifications  && myNotifications.length > 0 && <table>
+                            <tr>
+                              <td>From</td>
+                              <td>Action</td>
+                              <td>ideaID</td>
+                              <td>message</td>
+                            </tr>
+                            {myNotifications.map((notification) => {
+                              return (
+                                <tr>
+                                  <td>{notification.from}</td>
+                                  <td>{notification.action}</td>
+                                  <td>{notification.ideaID}</td>
+                                  <td>{notification.message}</td>
+                                </tr>
+                              );
+                            })}
                           </table>
+}
                         </div>
                       </Tab>
                     </Tabs>
                   </div>
                 </Col>
-                <Col md="2" className="right-block">
+                {/* <Col md="2" className="right-block">
                   <div className="right-block-content">
                     <h5>Awards</h5>
                     <div className="options">
@@ -225,7 +251,7 @@ function Profile(props) {
                       <p>Portfolio</p>
                     </div>
                   </div>
-                </Col>
+                </Col> */}
               </Row>
             </Col>
           </div>

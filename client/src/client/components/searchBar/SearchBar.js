@@ -69,7 +69,7 @@ function Search() {
           id="search-box"
           autoComplete="off"
           className="search-box"
-          placeholder="Search Collections"
+          placeholder="Search IdeaTribe"
         />
         <Tag
           className="search-tag"

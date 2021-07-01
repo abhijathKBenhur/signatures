@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useLocation, useHistory } from "react-router-dom";
-import {confirm} from '../../modals/confirmation/confirmation'
+import { confirm } from "../../modals/confirmation/confirmation";
 import moment from "moment";
-
 import SignatureBean from "../../beans/Signature";
 import {
-  Badge,
+  Button,
   Row,
   Col,
   Form,
@@ -19,18 +18,24 @@ import {
 import BlockChainInterface from "../../interface/BlockchainInterface";
 import MongoDBInterface from "../../interface/MongoDBInterface";
 import ActionsInterface from "../../interface/ActionsInterface";
-
+import Web3Utils from "web3-utils";
+import Dropzone from "react-dropzone";
 import "./Signature.scss";
 import user from "../../../assets/images/user.png";
 import {
+  ExternalLink,
+  ThumbsDown,
   ThumbsUp,
   ShoppingCart,
   Share,
   Crosshair,
+  MoreHorizontal
 } from "react-feather";
 import { Document, Page, pdfjs } from "react-pdf";
 import _ from "lodash";
-
+import md5 from "md5";
+import { toast } from "react-toastify";
+import Select from "react-select";
 import StorageInterface from "../../interface/StorageInterface";
 import { shallowEqual, useSelector } from "react-redux";
 import audio from "../../../assets/images/audio.png";
@@ -49,7 +54,7 @@ const Signature = (props) => {
     undefined
   );
 
-  const [key, setKey] = useState("Bids");
+  const [key, setKey] = useState("Details");
   let history = useHistory();
   useEffect(() => {
     pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
@@ -156,8 +161,7 @@ const Signature = (props) => {
     );
   }
 
-
-  function showInterest(){
+  function showInterest() {
     confirm(
       "Set your price.",
       "Would you like to express your interest?",
@@ -177,14 +181,10 @@ const Signature = (props) => {
           ideaID: signature.ideaID,
           message: success.text,
         };
-        ActionsInterface.postAction(updatePayload).then(success =>{
-          
-        })
+        ActionsInterface.postAction(updatePayload).then((success) => {});
       } else {
-
       }
     });
-    
   }
 
   function openInEtherscan() {
@@ -219,30 +219,32 @@ const Signature = (props) => {
           <div></div>
         ) : (
           <div>
-          { signature.purpose == CONSTANTS.PURPOSES.SELL && <Dropdown.Item
-            onClick={() => {
-              buySignature();
-            }}
-          >
-            <ShoppingCart
-              className="cursor-pointer signature-icons ShoppingCart"
-              color="#79589F"
-            ></ShoppingCart>
-            <span className="txt">Buy</span>
-          </Dropdown.Item>
-          }
-          { signature.purpose == CONSTANTS.PURPOSES.COLLAB && <Dropdown.Item
-            onClick={() => {
-              showInterest();
-            }}
-          >
-            <ShoppingCart
-              className="cursor-pointer signature-icons ShoppingCart"
-              color="#79589F"
-            ></ShoppingCart>
-            <span className="txt">Collaborate</span>
-          </Dropdown.Item>
-          }
+            {signature.purpose == CONSTANTS.PURPOSES.SELL && (
+              <Dropdown.Item
+                onClick={() => {
+                  buySignature();
+                }}
+              >
+                <ShoppingCart
+                  className="cursor-pointer signature-icons ShoppingCart"
+                  color="#79589F"
+                ></ShoppingCart>
+                <span className="txt">Buy</span>
+              </Dropdown.Item>
+            )}
+            {signature.purpose == CONSTANTS.PURPOSES.COLLAB && (
+              <Dropdown.Item
+                onClick={() => {
+                  showInterest();
+                }}
+              >
+                <ShoppingCart
+                  className="cursor-pointer signature-icons ShoppingCart"
+                  color="#79589F"
+                ></ShoppingCart>
+                <span className="txt">Collaborate</span>
+              </Dropdown.Item>
+            )}
             <Dropdown.Item>
               <ThumbsUp
                 className="cursor-pointer signature-icons ThumbsUp"
@@ -356,13 +358,9 @@ const Signature = (props) => {
                       {signature.category &&
                         JSON.parse(signature.category).map((tag, key) => {
                           return (
-                            <Badge
-                              key={key}
-                              className="tagpill"
-                              variant="secondary"
-                            >
+                            <Button disabled variant="pill">
                               {tag.label}
-                            </Badge>
+                            </Button>
                           );
                         })}
                       {/* <Badge
@@ -399,15 +397,24 @@ const Signature = (props) => {
                   activeKey={key}
                   onSelect={(k) => setKey(k)}
                 >
-                  <Tab eventKey="Bids" title="Bids">
+                  <Tab eventKey="Details" title="Details">
                     <div className="collection-wrapper">
-                      <div className="middle-block"></div>
+                      <div className="middle-block">
+                        <Row>
+                          <Col md={6}>Status of idea : </Col>
+                          <Col md={6}>{signature.purpose}</Col>
+                          <Col md={6}>Price : </Col>
+                          <Col md={6}>
+                            {signature.price &&
+                              Web3Utils.fromWei(signature.price)}{" "}
+                            BNB
+                          </Col>
+                        </Row>
+                      </div>
                     </div>
                   </Tab>
                   <Tab eventKey="History" title="History">
-                    <div className="transactions-wrapper">
-                      <h6>No transactions yet</h6>
-                    </div>
+                    <div className="transactions-wrapper"></div>
                   </Tab>
                 </Tabs>
               </div>

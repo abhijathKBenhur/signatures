@@ -1,4 +1,4 @@
-import React, {  useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Button,
   Row,
@@ -17,20 +17,24 @@ import { useHistory } from "react-router-dom";
 import "./Create.scss";
 import { X, Image as ImageFile, Info, UploadCloud, Check } from "react-feather";
 import Hash from "ipfs-only-hash";
-import { Container} from "react-bootstrap";
+import { Container } from "react-bootstrap";
 import { Document, Page, pdfjs } from "react-pdf";
 import _ from "lodash";
 import Select from "react-select";
 
 import "react-step-progress-bar/styles.css";
 import { shallowEqual, useSelector } from "react-redux";
-import user from "../../../assets/images/user1.png";
+import user from "../../../assets/images/user.png";
 import audio from "../../../assets/images/audio.png";
 import loadingGif from "../../../assets/images/loader_blocks.gif";
 import jspdf from "jspdf";
 import domtoimage from "dom-to-image";
 import moment from "moment";
 import { showToaster } from "../../commons/common.utils";
+import QRCode from "qrcode";
+
+import responseImage from "../../../assets/images/response.jpeg";
+import signatureImage from "../../../assets/logo/signatures.png";
 
 function Create(props) {
   const reduxState = useSelector((state) => state, shallowEqual);
@@ -71,7 +75,16 @@ function Create(props) {
   });
 
   const [slideCount, setSlideCount] = useState(0);
-  const [billet, setBillet] = useState({});
+  const [billet, setBillet] = useState({
+    creator: form.owner,
+    fullName: userDetails.fullName,
+    title: form.title,
+    time: moment(new Date()).format("MMMM Do YYYY, h:mm:ss a"),
+    // tokenID: billet.tokenID,
+    // transactionID: billet.tokenID,
+    // PDFHash: billet.PDFHash,
+  });
+
   const [publishState, setPublishState] = useState(INIT);
   const [publishError, setPublishError] = useState(undefined);
   const priceRef = useRef(null);
@@ -80,6 +93,24 @@ function Create(props) {
     fileType: "",
     fileData: undefined,
   });
+  const getQrcode = () => {
+    QRCode.toCanvas(
+      document.getElementById("canvas"),
+      "https://kovan.etherscan.io/address/" +
+                                  _.get(billet, "transactionID"),
+      {
+        color: {
+          dark: "#1b1919", // black dots
+          light: "#0000", // Transparent background
+        },
+        toSJISFunc: QRCode.toSJIS,
+      },
+      function(error) {
+        if (error) console.error(error);
+        console.log("success!");
+      }
+    );
+  };
 
   useEffect(() => {
     pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
@@ -216,7 +247,7 @@ function Create(props) {
   function saveToMongo(form) {
     MongoDBInterface.addSignature(form)
       .then((success) => {
-        showToaster("Your thoughts have been submitted!", {type: 'dark'})
+        showToaster("Your thoughts have been submitted!", { type: "dark" });
       })
       .catch((err) => {
         console.log(err);
@@ -234,8 +265,8 @@ function Create(props) {
         setBillet({
           creator: userDetails.userID,
           fullName: userDetails.fullName,
-          title: response,
-          time: moment(new Date()).format("DD-MMM-YYYY"),
+          title: response.title,
+          time: moment(new Date()).format("MMMM Do YYYY, h:mm:ss a"),
           tokenID: response.ideaID,
           transactionID: response.transactionID,
           PDFHash: response.PDFHash,
@@ -562,9 +593,7 @@ function Create(props) {
                   <div className="file-drop-contatiner" {...getRootProps()}>
                     <input {...getInputProps()} />
                     <UploadCloud />
-                    <p>
-                      Drag 'n' drop some files here, or click to select files
-                    </p>
+                    <p>Drag 'n Drop or Upload the file containing your idea</p>
                     <p>(Upload pdf / mp3 / image)</p>
                     <div>{/* <Plus /> */}</div>
                     {formErrors.pdf && (
@@ -765,7 +794,7 @@ function Create(props) {
       case PREVIEW_SLIDE:
         return (
           <>
-            <Col md="6" sm="12" lg="6" xs="12" className="preview-doc ">
+            <Col md="12" sm="12" lg="6" xs="12" className="preview-doc ">
               <Row className="form-row">
                 <Col md="12" sm="12" lg="12" xs="12" className="pdf-container">
                   {form.PDFFile && (
@@ -786,7 +815,7 @@ function Create(props) {
                 </Col>
               </Row>
             </Col>
-            <Col md="6" sm="12" lg="6" xs="12" className="preview-details ">
+            <Col md="12" sm="12" lg="6" xs="12" className="preview-details ">
               <div className="content-profile">
                 <img
                   src={userDetails.imageUrl ? userDetails.imageUrl : user}
@@ -795,19 +824,37 @@ function Create(props) {
                 <p>{userDetails.userID}</p>
               </div>
               <div className="description">
-                <p>
-                  Lorem Ipsum is simply dummy text of the printing and
-                  typesetting industry. Lorem Ipsum has been the industry's
-                  standard dummy text ever since the 1500s, when an unknown
-                  printer took a galley of type and scrambled it to make a type
-                  specimen book.
-                </p>
-              </div>
-              <div className="price">
-                <p>
-                  Price: <span className="line-through">{form.price} BNB</span>{" "}
-                  <span> FREE</span>
-                </p>
+                <Row>
+                  <Col md="12" className="message">
+                    The Tribe is looking up for the idea that you are about to
+                    post. We appreciate the effort that you have put in to
+                    contribute. Being one of the eary bird, we are taking your
+                    expenses to get your idea sailing. This one is on us.
+                  </Col>
+                </Row>
+                <div className="gas-fee-block">
+                  <div className="gas_fee">
+                    <p>Binance chain gas Fee : </p>
+                  </div>
+                  <div className="gas_fee_value">
+                    <p>2$ </p>
+                  </div>
+                  <div className="gas_free">
+                    <p> This is on us. </p>
+                  </div>
+                </div>
+                <div className="service_fee_block">
+                  <div className="serice_fee">
+                    <p> Service fee : </p>
+                  </div>
+                  <div className="serice_fee_value">
+                    <p> 2$ </p>
+                  </div>
+                  <div className="serice_free">
+                    <p> Free for early members</p>
+                  </div>
+                </div>
+                <p></p>
               </div>
             </Col>
           </>
@@ -815,13 +862,17 @@ function Create(props) {
         break;
       case LOADING_SLIDE:
         return (
-          <Col md="12" sm="12" lg="12" xs="12" className="publishing-wrapper ">
-            <div className="publishing-block">
-              <p>We are posting your idea on the blockchain. Please wait!</p>
-            </div>
+          <Col md="12" sm="12" lg="12" xs="12" className="publishing-wrapper d-flex flex-column justify-content-center">
+            
 
-            <div className="gif-wrapper">
+            <div className="gif-wrapper d-flex justify-content-center">
               <img src={loadingGif} alt="" />
+            </div>
+            <div className="publishing-block-text">
+              <p>
+                We are posting your idea on the binance blockchain. Hold on
+                tight!
+              </p>
             </div>
           </Col>
         );
@@ -833,8 +884,8 @@ function Create(props) {
             sm="12"
             lg="12"
             xs="12"
-            className="published-wrapper "
-            id="published-wrapper-block"
+            className="failed-wrapper"
+            id="failed-wrapper-block"
           >
             <div className="success-block">
               <p>Failed to publish your Idea</p>
@@ -847,52 +898,80 @@ function Create(props) {
           publishState == PASSED && (
             <Col
               md="12"
-              sm="12"
-              lg="12"
-              xs="12"
-              className="published-wrapper "
               id="published-wrapper-block"
+              className="published-wrapper p-0 d-flex flex-row justify-content-space-around"
             >
-              <div className="success-block">
-                <p>Your Idea is posted in blockchain</p>
-                <Check />
-              </div>
-
-              <div className="transaction-data">
-                <div className="transaction-ids">
-                  <p>
-                    Transaction ID- <span>{billet.transactionID}</span>
-                  </p>
-                  <p>
-                    File Hash ID- <span>{billet.PDFHash}</span>
-                  </p>
-                  <p>* Please save both of these for future reference.</p>
+              <div className="left-strip"> </div>
+              <Col
+                md="9"
+                className="center-strip d-flex flex-column justify-content-around"
+              >
+                <Row className="row1">
+                  <Col md="12">
+                    <div className="billet-item">
+                      <div className="user">@{billet.creator}</div>
+                      <div className="name">{billet.fullName}</div>
+                      <div>ideaTribe.com</div>
+                    </div>
+                  </Col>
+                </Row>
+                <Row className="row2">
+                  <Col md="12">
+                    <div className="billet-item">
+                      <div className="item">{billet.title}</div>
+                      <div className="time">at {billet.time}</div>
+                    </div>
+                  </Col>
+                  <Col md="12"></Col>
+                </Row>
+                <Row className="row3">
+                  <Col md="12">
+                    <div className="billet-item">
+                      <div className="trasnection-details">
+                        <div>TRANSACTION ID:</div>
+                        <span className="hashValue">
+                          {billet.transactionID}
+                        </span>
+                      </div>
+                      <div className="trasnection-details">
+                        <div>FILE HASH:</div>
+                        <span className="hashValue">
+                        {billet.PDFHash}
+                        </span>
+                      </div>
+                      <div className="trasnection-details">
+                        <div>TOKEN ID:</div>
+                        <span className="hashValue">{billet.tokenID}</span>
+                      </div>
+                    </div>
+                  </Col>
+                </Row>
+              </Col>
+              <Col md="3" className="right-strip   d-flex flex-column justify-content-around">
+                <div className="brand">
+                  <Col md="12"className="p-0">BILLET</Col>
+                  <Col md="12" className="p-0">
+                    <img
+                      src={signatureImage}
+                      alt="logo"
+                      width="100%"
+                    />
+                  </Col>
                 </div>
-                <div className="btn-block">
-                  <Button
-                    variant="primary"
-                    className="button"
-                    bsstyle="primary"
-                    onClick={() => gotoProfile()}
-                  >
-                    {" "}
-                    Done
-                  </Button>
-                  <Button
-                    variant="primary"
-                    className="button ml-3"
-                    bsstyle="primary"
-                    onClick={() => exportToPdf()}
-                  >
-                    {" "}
-                    Export
-                  </Button>
+                <div class="code-n-share">
+                  <Col md="12">
+                    <canvas id="canvas"></canvas>
+                    {setTimeout(() => {
+                      getQrcode();
+                    })}
+                  </Col>
                 </div>
-              </div>
+              </Col>
             </Col>
           )
         );
-       default: return null;
+      default:
+        return null;
     }
   };
 
@@ -941,18 +1020,26 @@ function Create(props) {
             className="create-form"
           >
             <Col md="12" className="overflow-auto h-100 p-0">
-              <Row className="content-container">{getViewBasedOnSteps()}</Row>
+              <Row
+                className={
+                  publishState == PASSED
+                    ? "content-container h-100"
+                    : "content-container"
+                }
+              >
+                {getViewBasedOnSteps()}
+              </Row>
               {publishState == INIT && (
                 <Row className="footer-class ">
                   <Col
                     md="6"
-                    className="d-flex justify-content-between align-items-center "
+                    className="d-flex justify-content-between align-items-center left-btn-container"
                   >
                     {slideCount >= LOADING_SLIDE ? (
                       <div></div>
                     ) : (
                       <Button
-                        variant="secondary"
+                        variant="ternary"
                         className="button"
                         bsstyle="primary"
                         onClick={() => {
@@ -968,7 +1055,7 @@ function Create(props) {
                     className="d-flex justify-content-end align-items-center right-btn-container"
                   >
                     <Button
-                      variant="primary"
+                      variant="fourth"
                       className="button"
                       bsstyle="primary"
                       style={{ gap: "2px" }}
