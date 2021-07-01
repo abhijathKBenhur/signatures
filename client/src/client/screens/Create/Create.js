@@ -1,4 +1,4 @@
-import React, {  useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Button,
   Row,
@@ -17,7 +17,7 @@ import { useHistory } from "react-router-dom";
 import "./Create.scss";
 import { X, Image as ImageFile, Info, UploadCloud, Check } from "react-feather";
 import Hash from "ipfs-only-hash";
-import { Container} from "react-bootstrap";
+import { Container } from "react-bootstrap";
 import { Document, Page, pdfjs } from "react-pdf";
 import _ from "lodash";
 import Select from "react-select";
@@ -31,11 +31,10 @@ import jspdf from "jspdf";
 import domtoimage from "dom-to-image";
 import moment from "moment";
 import { showToaster } from "../../commons/common.utils";
-import QRCode from "qrcode"
+import QRCode from "qrcode";
 
 import responseImage from "../../../assets/images/response.jpeg";
 import signatureImage from "../../../assets/logo/signatures.png";
-
 
 function Create(props) {
   const reduxState = useSelector((state) => state, shallowEqual);
@@ -75,7 +74,7 @@ function Create(props) {
     publish: "",
   });
 
-  const [slideCount, setSlideCount] = useState(0);
+  const [slideCount, setSlideCount] = useState(4);
   const [billet, setBillet] = useState({});
   const [publishState, setPublishState] = useState(INIT);
   const [publishError, setPublishError] = useState(undefined);
@@ -86,16 +85,23 @@ function Create(props) {
     fileData: undefined,
   });
   const getQrcode = () => {
-    QRCode.toCanvas(document.getElementById('canvas'),
-    'sample text', { color: {
-      dark: '#1b1919',  // black dots
-      light: '#0000' // Transparent background
-    }, toSJISFunc: QRCode.toSJIS }, function (error) {
-    if (error) console.error(error)
-    console.log('success!')
-    })
-  }
-  
+    QRCode.toCanvas(
+      document.getElementById("canvas"),
+      "sample text",
+      {
+        color: {
+          dark: "#1b1919", // black dots
+          light: "#0000", // Transparent background
+        },
+        toSJISFunc: QRCode.toSJIS,
+      },
+      function(error) {
+        if (error) console.error(error);
+        console.log("success!");
+      }
+    );
+  };
+
   useEffect(() => {
     pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
   }, []);
@@ -231,7 +237,7 @@ function Create(props) {
   function saveToMongo(form) {
     MongoDBInterface.addSignature(form)
       .then((success) => {
-        showToaster("Your thoughts have been submitted!", {type: 'dark'})
+        showToaster("Your thoughts have been submitted!", { type: "dark" });
       })
       .catch((err) => {
         console.log(err);
@@ -249,8 +255,8 @@ function Create(props) {
         setBillet({
           creator: userDetails.userID,
           fullName: userDetails.fullName,
-          title: response,
-          time: moment(new Date()).format("DD-MMM-YYYY"),
+          title: response.title,
+          time: moment(new Date()).format("MMMM Do YYYY, h:mm:ss a"),
           tokenID: response.ideaID,
           transactionID: response.transactionID,
           PDFHash: response.PDFHash,
@@ -878,77 +884,64 @@ function Create(props) {
             </div>
           </Col>
         ) : (
-          publishState == PASSED  && (
-            <Col md="12" id="published-wrapper-block" style={{ 
-                  backgroundImage: `url(${responseImage})` 
+          publishState == PASSED && (
+            <Col
+              md="12"
+              id="published-wrapper-block"
+              style={{
+                backgroundImage: `url(${responseImage})`,
               }}
-              className="published-wrapper billet">
-                <Row className="row1">
+              className="published-wrapper billet"
+            >
+              <Row className="row1">
                 <Col md="8">
-                    <div className="billet-item">
-                      <div className="user">
-                        @abhiajht
-                      </div>
-                      <div className="name">
-                        Abhijath Benhur
-                      </div>
-                      <div>
-                        idea tripe .com
-                      </div>
-                    </div>
+                  <div className="billet-item">
+                    <div className="user"></div>
+                    <div className="name">{billet.fullName}</div>
+                    <div>ideaTripe</div>
+                  </div>
                 </Col>
                 <Col md="4">
-                <img src={signatureImage} alt="logo" height="250px" width="200px"/>
+                  <img
+                    src={signatureImage}
+                    alt="logo"
+                    height="250px"
+                    width="200px"
+                  />
                 </Col>
-                </Row>
-                <Row className="row2">
+              </Row>
+              <Row className="row2">
                 <Col md="8">
-                    <div className="billet-item">
-                      
-                      <div className="item">
-                       Smart revolving chair
-                      </div>
-                      <div className="time">
-                        At: 11th May 2021 8:29 PM
-                      </div>
-                    </div>
+                  <div className="billet-item">
+                    <div className="item">{billet.title}</div>
+                    <div className="time">{billet.time}</div>
+                  </div>
                 </Col>
-                <Col md="4">
-                  
-                </Col>
-                </Row>
-                <Row  className="row3">
+                <Col md="4"></Col>
+              </Row>
+              <Row className="row3">
                 <Col md="8">
-                    <div className="billet-item">
-                      
-                      <div className="trasnection-details">
-                        <div >
-                          TRANSACTION ID
-                        </div>
-                        {billet.transactionID}
-                      </div>
-                      <div className="trasnection-details">
-                        <div>
-                          FILE HASH 
-                        </div>
-                        {billet.PDFHash}
-                      </div>
-                      <div className="trasnection-details">
-                        <div>
-                          TOKEN ID
-                        </div>
-                        42342v342342v234234v2vvfgdttrw
-                      </div>
+                  <div className="billet-item">
+                    <div className="trasnection-details">
+                      <div>{billet.transactionID}</div>
                     </div>
+                    <div className="trasnection-details">
+                      <div>FILE HASH</div>
+                      {billet.PDFHash}
+                    </div>
+                    <div className="trasnection-details">
+                      <div>TOKEN ID</div>
+                      {billet.tokenID}
+                    </div>
+                  </div>
                 </Col>
                 <Col md="4 text-center">
-                <canvas id="canvas"></canvas>
-                {
-                setTimeout(()=>{
-                  getQrcode()
-                })}
+                  <canvas id="canvas"></canvas>
+                  {setTimeout(() => {
+                    getQrcode();
+                  })}
                 </Col>
-                </Row>
+              </Row>
             </Col>
             // <Col
             //   md="12"
@@ -956,8 +949,8 @@ function Create(props) {
             //   lg="12"
             //   xs="12"
             //   className="published-wrapper "
-            //   style={{ 
-            //     backgroundImage: `url(${responseImage})` 
+            //   style={{
+            //     backgroundImage: `url(${responseImage})`
             //   }}
             //   id="published-wrapper-block"
             // >
@@ -1000,14 +993,13 @@ function Create(props) {
             //     </div>
             //     </div>
             //   </Col>
-              
-             
+
             // </Col>
           )
         );
-       default: return null;
+      default:
+        return null;
     }
-    
   };
 
   const exportToPdf = () => {
