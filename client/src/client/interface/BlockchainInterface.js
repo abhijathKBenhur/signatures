@@ -12,28 +12,28 @@ const api = axios.create({
   baseURL: process.env.NODE_ENV == "production" ? ENDPOINTS.REMOTE_ENDPOINTS: ENDPOINTS.LOCAL_ENDPOINTS
 })
 
-export const AVALANCHE_MAINNET_PARAMS = {
-  chainId: '43114',
-  chainName: 'Avalanche Mainnet C-Chain',
+export const BINANCE_MAINNET_PARAMS = {
+  chainId: '0x38',
+  chainName: 'Binance Smart Chain Mainnet',
   nativeCurrency: {
-      name: 'Avalanche',
-      symbol: 'AVAX',
-      decimals: 18
+    name: 'Binance Coin',
+    symbol: 'BNB',
+    decimals: 18
   },
-  rpcUrls: ['https://api.avax.network/ext/bc/C/rpc'],
-  blockExplorerUrls: ['https://cchain.explorer.avax.network/']
+  rpcUrls: ['https://bsc-dataseed1.ninicoin.io'],
+  blockExplorerUrls: ['https://bscscan.com/']
 }
 
-export const AVALANCHE_TESTNET_PARAMS = {
-  chainId: '43113',
-  chainName: 'Avalanche Testnet C-Chain',
+export const BINANCE_TESTNET_PARAMS = {
+  chainId: '0x61',
+  chainName: 'Binance Smart Chain Testnet',
   nativeCurrency: {
-      name: 'Avalanche',
-      symbol: 'AVAX',
-      decimals: 18
+    name: 'Binance Coin',
+    symbol: 'BNB',
+    decimals: 18
   },
-  rpcUrls: ['https://api.avax-test.network/ext/bc/C/rpc'],
-  blockExplorerUrls: ['https://cchain.explorer.avax-test.network/']
+  rpcUrls: ['https://data-seed-prebsc-1-s1.binance.org:8545/'],
+  blockExplorerUrls: ['https://testnet.bscscan.com']
 }
 
 
@@ -52,16 +52,17 @@ class BlockchainInterface {
     })
   }
 
-  addAvalancheNetwork() {
-    this.web3.getProvider().then(provider => {
-      provider
-        .request({
-          method: 'wallet_addEthereumChain',
-          params: [AVALANCHE_MAINNET_PARAMS]
-        })
-        .catch((error) => {
-          console.log(error)
-        })
+  addBNBMainNetwork() {
+    window.web3.givenProvider.request({
+      method: 'wallet_addEthereumChain',
+      params: [BINANCE_MAINNET_PARAMS]
+    })
+  }
+
+  addBNBTestNetwork() {
+    window.web3.givenProvider.request({
+      method: 'wallet_addEthereumChain',
+      params: [BINANCE_TESTNET_PARAMS]
     })
   }
 
