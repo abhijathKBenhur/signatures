@@ -108,7 +108,7 @@ const Header = (props) => {
             createnew();
           }}
         >
-          Register your Idea
+          Create
         </Button>
       )
     }

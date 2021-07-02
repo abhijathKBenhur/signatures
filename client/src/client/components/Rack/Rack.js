@@ -2,7 +2,7 @@ import React from "react";
 import _ from "lodash";
 import { Button, Card, CardDeck } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
-import { Feather, User } from "react-feather";
+import { Feather, ExternalLink } from "react-feather";
 import Image from "react-image-resizer";
 import { Row, Col, Container } from "react-bootstrap";
 import "./Rack.scss";
@@ -42,8 +42,8 @@ const Rack = (props) => {
   return (
     <Container>
       <Row className="rack">
-        <Col md="12" className="mycollection">
-          <Row className="collections">
+        <Col md="12" className="deck">
+          <Row className="deck-row">
             {props.deck.map((signature, index) => {
               return (
                 <Col
@@ -52,18 +52,18 @@ const Rack = (props) => {
                   lg="3"
                   sm="6"
                   xs="12"
-                  className="collection-card col-md-offset-2"
+                  className="deck-card col-md-offset-2"
                   onClick={() => {
                     openCardView(signature);
                   }}
                 >
-                  <div className="content cursor-pointer">
+                  <div className="content cursor-pointer p-1">
                     {/* <div className="collection-header d-flex justify-content-between align-items-center p-2">
                       <div className="header-left"></div>
                       <div className="header-right"></div>
                     </div> */}
-                    <div className="collection-preview">
-                      <Col md="12 collection-image">
+                    <div className="deck-preview">
+                      <Col md="12 deck-image">
                         <Image
                           src={signature.thumbnail}
                           height={250}
@@ -84,7 +84,7 @@ const Rack = (props) => {
                             <span className="price">
                                 <span onClick={() => function openInEtherscan() {
                                   window.open("https://kovan.etherscan.io/tx/" + signature.transactionID);
-                                }}>View on chain </span>
+                                }}><ExternalLink></ExternalLink> </span>
                             </span>
                           </div>
                           <div className="description-text">
@@ -93,7 +93,7 @@ const Rack = (props) => {
                         </div>
                       </Col>
                     </div>
-                    <div className="collection-footer">
+                    <div className="deck-footer p-1">
                       <Row>
                         <Col md="12">
                           <Col md="12" className="tags">
@@ -112,7 +112,7 @@ const Rack = (props) => {
                       </Row>
                       <Row>
                         <Col md="12" className="idea-title">
-                          <p className="text-left title">{signature.title}</p>
+                          <p className="text-left title text-tile-title">{signature.title}</p>
                         </Col>
                       </Row>
 
@@ -132,12 +132,12 @@ const Rack = (props) => {
                         </Col>
                       </Row>
                     </div>
-                    <div className="collection-actions">
+                    <div className="deck-actions">
                       <Row>
                         <Col md="6" className="idea-details">
                           <Button
                           disabled={signature.purpose == CONSTANTS.PURPOSES.KEEP}
-                            variant="secondary"
+                            variant="primary"
                             className="cursor-pointer"
                           >
                             {getActionForPurpose(signature.purpose)}

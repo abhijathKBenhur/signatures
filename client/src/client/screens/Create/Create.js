@@ -412,7 +412,7 @@ function Create(props) {
             onLoadError={PDFLoadError}
             onLoadSuccess={onDocumentLoadSuccess}
           >
-            <Page fillWidth pageNumber={1} width={window.innerWidth / 4} />
+            <Page fillWidth pageNumber={1} width={window.innerWidth / 4}  />
           </Document>
         );
       case "mp3":
@@ -631,7 +631,7 @@ function Create(props) {
                     }
                     options={CONSTANTS.CATEGORIES}
                     onChange={handleTagsChange}
-                    placeholder="Tags*"
+                    placeholder="Adding tags to describe your idea."
                   />
                 </Form.Group>
               </Row>

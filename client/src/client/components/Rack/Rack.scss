@@ -1,14 +1,14 @@
 @import "../../commons/Common.scss";
 .rack {
   min-height: calc(100vh - 230px);
-  .mycollection {
-    .collections {
-      .collection-card {
+  .deck {
+      .deck-card {
         .content {
-          .collection-preview {
+          .deck-preview {
             position: relative;
             overflow: hidden;
-            .collection-image {
+            .deck-image {
+              padding: 0;              
               &:hover {
                 img {
                   opacity: 0.5;
@@ -40,7 +40,7 @@
                 justify-content: center;
               }
               img {
-                border-radius: 5px;
+                border-radius: 5px 5px 0 0;
               }
               .description {
                 width: 100%;
@@ -61,9 +61,8 @@
           }
         }
       }
-    }
   }
-  .collection-footer {
+  .deck-footer {
     background-color: $primary;
     color: $grey-border;
     .tags{
@@ -83,7 +82,7 @@
       border-radius: 40px;
     }
   }
-  .collection-actions{
+  .deck-actions{
     margin-top: 10px;
   }
 }

@@ -35,20 +35,27 @@ function Profile(props) {
   const [profileCollection, setProfileCollection] = useState([]);
   let history = useHistory();
   const [key, setKey] = useState("collections");
-  const viewUser = _.get(history.location.state, "userID");
+  
 
   useEffect(() => {
     const { userDetails = {} } = reduxState;
-    if (userDetails) {
-      setCurrentUserDetails(userDetails);
-      fetchSignatures();
-    }
+    const viewUser = _.get(history.location.state, "userID");
     if (viewUser && viewUser.toLowerCase() !== userDetails.userID) {
       let payLoad = {};
-      payLoad.metamaskId = viewUser;
+      payLoad.userID = viewUser;
       getUserDetails(payLoad);
     }
-  }, [reduxState.userDetails]);
+    if (userDetails && !viewUser) {
+      setCurrentUserDetails(userDetails);
+    }
+    
+  }, [reduxState.userDetails ]);
+
+
+  useEffect(() => {
+    fetchSignatures(currentUserDetails.metamaskId);
+    fetchNotifications();
+  }, [currentUserDetails]);
 
   useEffect(() => {
     const { metamaskID = undefined } = reduxState;
@@ -61,25 +68,21 @@ function Profile(props) {
     MongoDBInterface.getUserInfo(payLoad).then((response) => {
       let userDetails = _.get(response, "data.data");
       setCurrentUserDetails(userDetails);
-      fetchSignatures(userDetails.metamaskId);
     });
   };
 
   function fetchSignatures(address) {
-    fetchNotifications();
-    MongoDBInterface.getSignatures({
-      ownerAddress: address || currentUserDetails.metamaskId,
-    }).then((signatures) => {
-      let response = _.get(signatures, "data.data");
-      let isEmptyPresent = _.find(response, (responseItem) => {
-        return _.isEmpty(responseItem.ideaID);
+    if(address || currentUserDetails.metamaskId){
+      MongoDBInterface.getSignatures({
+        ownerAddress: address || currentUserDetails.metamaskId,
+      }).then((signatures) => {
+        let response = _.get(signatures, "data.data").reverse()
+        let isEmptyPresent = _.find(response, (responseItem) => {
+          return _.isEmpty(responseItem.ideaID);
+        });
+        setProfileCollection(response);
       });
-      setProfileCollection(response);
-
-      // if(isEmptyPresent){
-      //   clearInterval(fetchInterval)
-      // }
-    });
+    }
   }
 
   function fetchNotifications() {

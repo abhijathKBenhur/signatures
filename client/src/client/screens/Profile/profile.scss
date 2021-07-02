@@ -45,8 +45,8 @@
     }
   }
   .profile-secction {
-    background-color: $primary;
     color: $secondary;
+    margin-top: -60px;
     align-items: center;
     .profile-info{
       display: flex;
@@ -67,7 +67,7 @@
   }
   .userPane {
     padding: 0px;
-    height: 100px;
+    height: 150px;
     display: flex;
     background-color: $primary;
     .first-section {
