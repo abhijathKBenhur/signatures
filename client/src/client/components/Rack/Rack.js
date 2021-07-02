@@ -136,6 +136,7 @@ const Rack = (props) => {
                       <Row>
                         <Col md="6" className="idea-details">
                           <Button
+                          disabled={signature.purpose == CONSTANTS.PURPOSES.KEEP}
                             variant="secondary"
                             className="cursor-pointer"
                           >

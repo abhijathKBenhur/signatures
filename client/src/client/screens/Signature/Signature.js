@@ -414,7 +414,9 @@ const Signature = (props) => {
                     </div>
                   </Tab>
                   <Tab eventKey="History" title="History">
-                    <div className="transactions-wrapper"></div>
+                    <div className="transactions-wrapper">
+                       No transactions yet
+                    </div>
                   </Tab>
                 </Tabs>
               </div>

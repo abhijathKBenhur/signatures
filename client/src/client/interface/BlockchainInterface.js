@@ -56,9 +56,14 @@ class BlockchainInterface {
   }
 
   addNetwork(chain_id) {
-    window.ethereum.givenProvider.request({
+    window.ethereum.request({
       method: 'wallet_addEthereumChain',
       params: [CHAIN_CONFIGS[chain_id]]
+    }).then(succes => {
+      console.log("succes",succes)
+    }).catch(switchError =>{
+      console.log("switchError",switchError)
+     
     })
   }
 
@@ -67,7 +72,17 @@ class BlockchainInterface {
       window.ethereum.request({
         method: 'wallet_switchEthereumChain',
         params: [{ chainId: chain_id }],
-      });
+      }).then(succes => {
+        console.log("succes",succes)
+      }).catch(switchError =>{
+        if (switchError.code === 4902) {
+          try {
+            this.addNetwork(chain_id)
+          } catch (addError) {
+            // handle "add" error
+          }
+        }
+      })
     } catch (switchError) {
       // This error code indicates that the chain has not been added to MetaMask.
       if (switchError.code === 4902) {

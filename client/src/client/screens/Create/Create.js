@@ -523,7 +523,7 @@ function Create(props) {
                       rows={7}
                       aria-describedby="inputGroupAppend"
                       name="description"
-                      placeholder="Description*"
+                      placeholder="Description (Upto 250 charecters)"
                       style={{ resize: "none" }}
                       onChange={handleChange}
                       maxLength={250}
@@ -826,32 +826,29 @@ function Create(props) {
               <div className="description">
                 <Row>
                   <Col md="12" className="message">
-                    The Tribe is looking up for the idea that you are about to
-                    post. We appreciate the effort that you have put in to
-                    contribute. Being one of the eary bird, we are taking your
-                    expenses to get your idea sailing. This one is on us.
+                  Your idea will now be immortalized in a blockchain. And you will forever be known as it's creator. Welcome to the Tribe!
                   </Col>
                 </Row>
                 <div className="gas-fee-block">
                   <div className="gas_fee">
-                    <p>Binance chain gas Fee : </p>
+                    <p>Binance Chain Gas Fees : </p>
                   </div>
                   <div className="gas_fee_value">
                     <p>2$ </p>
                   </div>
                   <div className="gas_free">
-                    <p> This is on us. </p>
+                    <p> This is on us for your first 5 Ideas. </p>
                   </div>
                 </div>
                 <div className="service_fee_block">
                   <div className="serice_fee">
-                    <p> Service fee : </p>
+                    <p> IdeaTribe Service Fee: </p>
                   </div>
                   <div className="serice_fee_value">
                     <p> 2$ </p>
                   </div>
                   <div className="serice_free">
-                    <p> Free for early members</p>
+                    <p> FREE for early Tribers!</p>
                   </div>
                 </div>
                 <p></p>
@@ -870,7 +867,7 @@ function Create(props) {
             </div>
             <div className="publishing-block-text">
               <p>
-                We are posting your idea on the binance blockchain. Hold on
+                We are posting your idea on the Binance Blockchain. Hold on
                 tight!
               </p>
             </div>

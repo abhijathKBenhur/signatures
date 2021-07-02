@@ -8,7 +8,7 @@ const DiscoverMore = () => {
     return (
         <div className="discover-topics-section">
           <div className="card-topics-nav">
-                <h4>Discover More Topics</h4>
+                <h4>Discover</h4>
           </div>
           <div className="topics-list">
             <ul>

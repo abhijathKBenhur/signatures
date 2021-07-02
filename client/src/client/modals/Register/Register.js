@@ -140,18 +140,7 @@ const Register = (props) => {
   function metamaskGuide() {
     let metamaskAvailable = window.ethereum || window.web3;
     if (metamaskAvailable) {
-      window.ethereum.enable();
-    } else {
-      window.open(
-        "https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn?hl=en"
-      );
-    }
-  }
-
-  function coinBase() {
-    let metamaskAvailable = window.ethereum || window.web3;
-    if (metamaskAvailable) {
-      window.ethereum.enable();
+      BlockchainInterface.getAccountDetails()
     } else {
       window.open(
         "https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn?hl=en"
@@ -343,7 +332,7 @@ const Register = (props) => {
       size="lg"
     >
       <Modal.Header className="d-flex flex-column">
-        <Modal.Title>Hi, you are not yet registered with us.</Modal.Title>
+        <Modal.Title>Hi! You are not yet registered with us.</Modal.Title>
         <div className="steps">
           <ul className="nav">
             {steps.map((step, i) => {
