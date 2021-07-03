@@ -76,12 +76,15 @@ const Rack = (props) => {
                         />
                         <div className="description">
                           <div className="actions w-100">
-                            <span className="placeholder">
-                            {signature.price &&
-                                Web3Utils.fromWei(signature.price)}{" "}
-                              BNB
-                            </span>
-                            <span className="price">
+                            {
+                              <span className="placeholder">
+                                {signature.purpose == CONSTANTS.PURPOSES.AUCTION && <span>Starts at </span>}
+                                {signature.price &&
+                                    Web3Utils.fromWei(signature.price)}{" "}
+                                  BNB
+                              </span>
+                            }
+                            <span className="etherscan_link">
                                 <span onClick={() => function openInEtherscan() {
                                   window.open("https://kovan.etherscan.io/tx/" + signature.transactionID);
                                 }}><ExternalLink></ExternalLink> </span>

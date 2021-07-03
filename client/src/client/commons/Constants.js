@@ -64,15 +64,15 @@ const ACTION_STATUS = {
 };
 
 const STORAGE_TYPE = [
-  { value: "PUBLIC", label: "PUBLIC - The files are stored in IPFS" },
-  {
-    value: "PRIVATE",
-    label: "PRIVATE - We securely store the file in private stores",
-  },
+  { value: "PUBLIC", label: "PUBLIC - The file will be stored in IPFS. Anyone can view it." },
+  // {
+  //   value: "PRIVATE",
+  //   label: "SECU - We will store the file in our secure servers (upto 5MB).",
+  // },
   {
     value: "SELF",
     label:
-      "SELF - We wont be storing the file. Please save the has for reference.",
+      "LOCAL - The file will not be stored with us. Losing or modifying this file will make your idea unverifiable.",
   },
 ];
 

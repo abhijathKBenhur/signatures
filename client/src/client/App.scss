@@ -173,9 +173,13 @@ body {
   }
 }
 .main-content-component{
-  margin-top: 60px;
+  margin-top: 110px;
   height: calc(100vh - 100px);
   width: 100%;
+  text-align: center;
+  color:  $primary;
+  font-size: 18px;
+  text-align: left;
 }
 
 .text-tile-title{
@@ -195,5 +199,18 @@ body {
 }
 
 .text-username{
+  
+}
+.text-banner-title{
 
+}
+.text-banner-header{
+  font-size: 20px;
+}
+.text-banner{
+  font-size: 20px;
+  line-height: 25px;
+  .italics{
+    font-style: italic;
+  }
 }

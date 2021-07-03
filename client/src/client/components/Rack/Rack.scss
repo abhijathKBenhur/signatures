@@ -4,6 +4,7 @@
   .deck {
       .deck-card {
         .content {
+          padding-top: 30px !important;
           .deck-preview {
             position: relative;
             overflow: hidden;
@@ -28,6 +29,12 @@
                     align-items: center;
                     justify-content: space-between;
                     padding: 5px;
+                    .price{
+                      
+                    }
+                    .etherscan_link{
+                      
+                    }
                   }
                   .description-text {
                     padding: 3px;
