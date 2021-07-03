@@ -66,7 +66,7 @@ const Register = (props) => {
       BlockchainInterface.register_user(userDetails)
         .then((success) => {
           let response = success.data;
-          if (response.succes) {
+          if (response.success) {
             MongoDBInterface.registerUser(userDetails).then((mongoSuccess) => {
               setRegistration(PASSED);
             });
