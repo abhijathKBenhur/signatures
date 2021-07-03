@@ -11,7 +11,7 @@ import metamaskLogo from "../../../assets/images/metamask.png";
 import coinBaseLogo from "../../../assets/images/coinbase.png";
 import MongoDBInterface from "../../interface/MongoDBInterface";
 import BlockchainInterface from "../../interface/BlockchainInterface";
-import { Check, X } from "react-feather";
+import { Check, RefreshCcw, X } from "react-feather";
 import { useHistory } from "react-router-dom";
 import store from "../../redux/store";
 // MetamaskID and userDetails are stored in separate redux stores
@@ -187,22 +187,30 @@ const Register = (props) => {
               <div className="network-container">
                 <div
                   className="metamaskLogin loginMode d-flex flex-column align-items-center cursor-pointer"
-                  onClick={() => {
-                    metamaskGuide();
-                  }}
                 >
                   <p>We could not recognize any connected wallet on this app. Please install, login with an account and connect to this app to continue.You might have to refresh the page after installation</p>
                   <img src={metamaskLogo} width="70"></img>
-                  <Button
-                    variant="secondary"
-                    className="button mt-2"
-                    bsstyle="primary"
-                    onClick={() => {
-                      metamaskGuide();
-                    }}
-                  >
-                    Connect Metamask
-                  </Button>
+                  <div className="metamask_integration">
+                    <Button
+                      variant="primary"
+                      className="button mt-2"
+                      bsstyle="primary"
+                      onClick={() => {
+                        metamaskGuide();
+                      }}
+                    >Connect wallet</Button>
+                    <Button
+                      variant="secondary"
+                      className="button ml-2 mt-2"
+                      size
+                      bsstyle="primary"
+                      onClick={() => {
+                        window.location.reload()
+                      }}
+                    >
+                      <RefreshCcw size={15}></RefreshCcw>
+                    </Button>
+                  </div>
                   <p className="mt-1"></p>
                 </div>
                 {/* <div
