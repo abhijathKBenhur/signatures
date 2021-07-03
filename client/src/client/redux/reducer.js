@@ -1,9 +1,11 @@
 
-import {SET_METAMASK_ID, SET_COLLECTION_LIST, SET_USER_DETAILS} from './actions'
+import {SET_METAMASK_ID, SET_COLLECTION_LIST, SET_USER_DETAILS, SET_CTEGORIES} from './actions'
+import CONSTANTS from '../commons/Constants';
 const intialState = {
     metamaskID: undefined,
     collectionList: [],
-    userDetails: {}
+    userDetails: {},
+    categoriesList: CONSTANTS.CATEGORIES
 }
 
 export const reducer = (state = intialState, action) => {
@@ -23,6 +25,12 @@ export const reducer = (state = intialState, action) => {
         return {
             ...state,
             collectionList: action.payload || []
+        }
+        case SET_CTEGORIES:
+            console.log(action)
+        return {
+            ...state,
+            categoriesList: action.payload || []
         }
         default:  return {...state};
     }

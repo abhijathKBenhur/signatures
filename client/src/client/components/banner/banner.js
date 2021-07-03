@@ -30,8 +30,8 @@ const Banner = (props) => {
     >
       {/* <Carousel.Item style={{background:`url(${cover})`}}> */}
       <Carousel.Item>
-        <Container fluid className="carousal-first">
-          <Row className="carousal-row1">
+        <Container fluid className="carousal-itmes">
+          <Row className="carousal-rows">
             <Col sm={9}>
               <Row className="banner_header">What is IdeaTribe?</Row>
               <Row>
@@ -50,13 +50,13 @@ const Banner = (props) => {
         </Container>
       </Carousel.Item>
       <Carousel.Item>
-        <Container fluid className="carousal-first">
-          <Row className="carousal-row1">
+        <Container fluid className="carousal-itmes">
+          <Row className="carousal-rows">
             <Col sm={6}>
               <Row className="banner_header">How should I use it?</Row>
               <Row className="text-banner"> It’s simple, really.</Row>
               <Row className="text-banner">
-                <ul>
+                <ol>
                   <li>
                     Sign up and connect your crypto wallet [Metamask] with
                     IdeaTribe{" "}
@@ -65,7 +65,9 @@ const Banner = (props) => {
                   <li>
                     Click 'Publish'.
                   </li>
-                </ul>
+                  <li>Get your Billet of Registration</li>
+                  <li>Share your idea with the world!</li>
+                </ol>
               </Row>
             </Col>
             <Col md={3}>
@@ -77,9 +79,9 @@ const Banner = (props) => {
 
       {/* <Carousel.Item style={{background:`url(${bg2})`}}> */}
       <Carousel.Item>
-        <Container fluid className="carousal-third">
-          <Row>
-            <Col sm={10}>
+        <Container fluid className="carousal-itmes">
+          <Row className="carousal-rows">
+            <Col sm={18}>
               <Row className="banner_header">
                 What is blockchain and crypto wallet?
               </Row>
@@ -94,7 +96,27 @@ const Banner = (props) => {
                 </div>
               </Row>
             </Col>
-            <Col sm={2}>
+            <Col sm={4}>
+              <div className="content-profile">{/* <img src={user} /> */}</div>
+            </Col>
+          </Row>
+        </Container>
+      </Carousel.Item>
+      <Carousel.Item>
+        <Container fluid className="carousal-itmes">
+          <Row className="carousal-rows">
+            <Col sm={8}>
+              <Row className="banner_header">What is TribeCoin?</Row>
+              <Row>
+                <div className="content">
+                  TribeCoin is the currency of IdeaTribe. You earn TribeCoins
+                  when you use our app in a way that benefits the community. So,
+                  you earn TribeCoins for registering an idea, sharing it with
+                  people and collaborating with others.
+                </div>
+              </Row>
+            </Col>
+            <Col sm={4}>
               <div className="content-profile">{/* <img src={user} /> */}</div>
             </Col>
           </Row>

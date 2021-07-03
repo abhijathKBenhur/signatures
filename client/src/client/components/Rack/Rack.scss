@@ -15,11 +15,15 @@
                 img {
                   opacity: 0.5;
                   transform: translateY(80%);
+                  padding: 0px;
                 }
                 .description {
                   background-color: $primary;
                   height: 100%;
-                  top: 0;
+                  width: 100%;
+                  transition: .5s;
+                  transition-delay: .2s;
+                  top: 0px;
                   justify-content: flex-start;
                   align-items: flex-start;
                   .actions {
@@ -58,11 +62,25 @@
                 top: -100px;
                 flex-direction: column;
                 justify-content: center;
+                .actions {
+                  height: 40px;
+                  background-color: $primary-dark;
+                  color: $secondary;
+                  display: flex;
+                  align-items: center;
+                  justify-content: space-between;
+                  padding: 5px;
+                }
+                .description-text {
+                  padding: 3px;
+                  color: white;
+                }
               }
             }
             img {
               transition: 0.5s;
               transition-delay: 0.2s;
+              max-width: 100%;
             }
 
             
