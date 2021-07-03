@@ -25,7 +25,7 @@ import {
   Share2,
   Download,
   Crosshair,
-  ExternalLink,
+  ExternalLink
 } from "react-feather";
 import Hash from "ipfs-only-hash";
 import { Container } from "react-bootstrap";
@@ -85,7 +85,7 @@ function Create(props) {
     publish: "",
   });
 
-  const [slideCount, setSlideCount] = useState(0);
+  const [slideCount, setSlideCount] = useState(4);
   const [showShare, setShowShare] = useState(false);
   const [billet, setBillet] = useState({
     creator: form.owner,
@@ -97,7 +97,7 @@ function Create(props) {
     // PDFHash: billet.PDFHash,
   });
 
-  const [publishState, setPublishState] = useState(INIT);
+  const [publishState, setPublishState] = useState(PASSED);
   const [publishError, setPublishError] = useState(undefined);
   const priceRef = useRef(null);
   let history = useHistory();
@@ -913,6 +913,10 @@ function Create(props) {
               id="published-wrapper-block"
               className="published-wrapper p-0 d-flex flex-row justify-content-space-around"
             >
+                <X className="closeIcon" onClick={() => {
+                  
+                  gotoProfile()
+                }}></X>
               <div className="left-strip"> </div>
               <Col
                 md="8"

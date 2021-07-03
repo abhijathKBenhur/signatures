@@ -413,6 +413,11 @@
     }
   }
   .published-wrapper {
+    .closeIcon{
+      position: absolute;
+      right: 0;
+      top: 0
+    }
     overflow: hidden;
     .left-strip {
       min-width: 30px;

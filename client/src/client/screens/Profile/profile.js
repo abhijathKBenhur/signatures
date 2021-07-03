@@ -31,6 +31,7 @@ function Profile(props) {
   const [currentMetamaskAccount, setCurrentMetamaskAccount] = useState(
     metamaskID
   );
+  const [profileCollection, setProfileCOllection] = useState([])
   const [currentUserDetails, setCurrentUserDetails] = useState(userDetails);
   const [myNotifications, setMyNotifications] = useState([]);
   let history = useHistory();
@@ -78,10 +79,11 @@ function Profile(props) {
       MongoDBInterface.getSignatures({
         ownerAddress: address || currentUserDetails.metamaskId,
       }).then((signatures) => {
-        let response = _.get(signatures, "data.data").reverse()
+        let response = _.get(signatures, "data.data")
         let isEmptyPresent = _.find(response, (responseItem) => {
           return _.isEmpty(responseItem.ideaID);
         });
+        setProfileCOllection(response)
         dispatch(setCollectionList(response));
     });
     }
@@ -216,7 +218,7 @@ function Profile(props) {
                       <Tab eventKey="collections" title="Collection">
                         <div className="collection-wrapper">
                           <div className="middle-block">
-                            <Collections collectionList={collectionList} />
+                            <Collections collectionList={profileCollection} />
                           </div>
                         </div>
                       </Tab>

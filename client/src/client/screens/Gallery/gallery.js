@@ -22,8 +22,8 @@ function gallery(props) {
   useEffect(() => {
     console.log("getting signatures ");
     MongoDBInterface.getSignatures({ limit: 14 }).then((signatures) => {
-      let response = _.get(signatures, "data.data").reverse();
-      dispatch(setCollectionList(response.reverse()));
+      let response = _.get(signatures, "data.data")
+      dispatch(setCollectionList(response));
     });
     
   }, []);
