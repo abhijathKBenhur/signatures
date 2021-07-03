@@ -130,11 +130,7 @@ getSignatures = async (req, res) => {
     payLoad.owner = ownerAddress;
   }
   if (!limit) {
-    // .sort({'createdAt': 'desc'})
-    //  .exec((err, signatures) => {
-         //do stuff with images
-     
-    await SignatureSchema.find(payLoad, (err, signatures) => {
+    await SignatureSchema.find(payLoad).sort({'createdAt': 'desc'}).exec((err, signatures) => {
       if (err) {
         return res.status(404).json({ success: false, error: "here" });
       }
@@ -174,7 +170,7 @@ buySignature = async (req, res) => {
     owner: buyer,
     price: price,
     transactionID: transactionID,
-    transactionID: transactionID,
+    purpose: "Decide later",
   };
 
   SignatureSchema.findOneAndUpdate(findCriteria, saleCriteria)

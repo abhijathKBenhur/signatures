@@ -451,7 +451,7 @@ const Signature = (props) => {
                     <Row className="d-flex flex-column ">
                       <Col md="12">
                         <div className="owned_by justify-content-end">
-                          Currently owned by {signature.userID}
+                          Created by {signature.userID}
                         </div>
                       </Col>
                     </Row>
@@ -466,7 +466,7 @@ const Signature = (props) => {
               <div className="">
                 <Col md="12" className="created-by justify-content-end">
                   <div className="text-right">
-                    Created by {signature.userID}
+                    Currently owned by {signature.owner&& signature.owner.substring(0,3) + " ... " + signature.owner.substring(signature.owner.length - 3,signature.owner.length)}
                   </div>
                 </Col>
               </div>
