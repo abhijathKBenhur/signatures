@@ -46,7 +46,11 @@ register_user = (req, res) => {
         (errorReason) => {
           error.errorReason = errorReason;
           console.log("error errorReason", errorReason);
+          try{
           return res.status(400).json({ success: false, data: errorReason });
+          }catch(e){
+            console.log(e)
+          }
         }
       );
     });

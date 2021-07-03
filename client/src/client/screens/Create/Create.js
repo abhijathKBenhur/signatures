@@ -85,7 +85,7 @@ function Create(props) {
     publish: "",
   });
 
-  const [slideCount, setSlideCount] = useState(4);
+  const [slideCount, setSlideCount] = useState(0);
   const [showShare, setShowShare] = useState(false);
   const [billet, setBillet] = useState({
     creator: form.owner,
@@ -97,7 +97,7 @@ function Create(props) {
     // PDFHash: billet.PDFHash,
   });
 
-  const [publishState, setPublishState] = useState(PASSED);
+  const [publishState, setPublishState] = useState(INIT);
   const [publishError, setPublishError] = useState(undefined);
   const priceRef = useRef(null);
   let history = useHistory();
@@ -624,6 +624,7 @@ function Create(props) {
       case THUMBNAIL_SLIDE:
         return (
           <>
+           
             <Col md="6" sm="12" lg="6" xs="12" className="price-n-category">
               <Row className="">
                 <Form.Group as={Col} className="formEntry" md="12">
@@ -913,10 +914,7 @@ function Create(props) {
               id="published-wrapper-block"
               className="published-wrapper p-0 d-flex flex-row justify-content-space-around"
             >
-                <X className="closeIcon" onClick={() => {
-                  
-                  gotoProfile()
-                }}></X>
+                
               <div className="left-strip"> </div>
               <Col
                 md="8"
@@ -1060,8 +1058,13 @@ function Create(props) {
 
   return (
     <Container>
+       
       <Row className="createform  d-flex">
-        <Col md="12" sm="12" lg="12" xs="12" className="responsive-content">
+      
+        <Col md="11" sm="11" lg="11" xs="11" className="responsive-content">
+        <X className="closeIcon" size={16} onClick={() => {
+                  gotoProfile()
+                }}></X>
           <Form
             noValidate
             encType="multipart/form-data"
