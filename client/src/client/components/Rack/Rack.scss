@@ -10,6 +10,7 @@
             position: relative;
             overflow: hidden;
             .deck-image {
+              background-color: $primary;
               padding: 0;              
               &:hover {
                 img {
@@ -44,6 +45,7 @@
                   .description-text {
                     padding: 3px;
                     color: white;
+                    visibility: visible;
                   }
                 }
               }
@@ -74,6 +76,7 @@
                 .description-text {
                   padding: 3px;
                   color: white;
+                  visibility: hidden;
                 }
               }
             }

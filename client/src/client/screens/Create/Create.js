@@ -270,19 +270,30 @@ function Create(props) {
     setPublishState(PROGRESS);
     BlockChainInterface.publishOnBehalf(form)
       .then((success) => {
-        let response = _.get(success, "data.data");
-        saveToMongo(response);
-        setBillet({
-          creator: userDetails.userID,
-          fullName: userDetails.fullName,
-          title: response.title,
-          time: moment(new Date()).format("MMMM Do YYYY, h:mm:ss a"),
-          tokenID: response.ideaID,
-          transactionID: response.transactionID,
-          PDFHash: response.PDFHash,
-        });
-        setPublishState(PASSED);
-        setSlideCount(RESPONSE_SLIDE);
+        if(_.get(success,'data.succes')){
+          let successResponse = _.get(success, "data.data");
+          saveToMongo(successResponse);
+          setBillet({
+            creator: userDetails.userID,
+            fullName: userDetails.fullName,
+            title: successResponse.title,
+            time: moment(new Date()).format("MMMM Do YYYY, h:mm:ss a"),
+            tokenID: successResponse.ideaID,
+            transactionID: successResponse.transactionID,
+            PDFHash: successResponse.PDFHash,
+          });
+          setPublishState(PASSED);
+          setSlideCount(RESPONSE_SLIDE);
+        }else{
+          let errorReason = _.get(success,'data.data.errorReason')
+          setPublishState(FAILED);
+          setSlideCount(RESPONSE_SLIDE);
+          
+          setPublishError(
+            "The idea couldnt be published to blockchain. " + errorReason
+          );
+        }
+        
       })
       .catch((error) => {
         setPublishState(FAILED);

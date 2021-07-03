@@ -21,7 +21,7 @@ function gallery(props) {
   const dispatch = useDispatch()
   useEffect(() => {
     console.log("getting signatures ");
-    MongoDBInterface.getSignatures({ limit: 14 }).then((signatures) => {
+    MongoDBInterface.getSignatures().then((signatures) => {
       let response = _.get(signatures, "data.data")
       dispatch(setCollectionList(response));
     });

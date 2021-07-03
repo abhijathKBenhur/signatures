@@ -9,6 +9,8 @@
     top: -5px;
     right: -5px;
     border: 1px solid black;
+    z-index: 1;
+    cursor: pointer;
   }
   border-color: $primary;
   height: calc(100vh - 60px);
@@ -393,8 +395,9 @@
         margin-bottom: 30px;
       }
       .gas-fee-block {
-        font-size: 20px;
+        font-size: 14px;
         display: flex;
+
         .gas_fee {
           color: $dark-brown;
         }
@@ -408,7 +411,7 @@
         }
       }
       .service_fee_block {
-        font-size: 20px;
+        font-size: 14px;
         display: flex;
         .serice_fee {
           color: $dark-brown;

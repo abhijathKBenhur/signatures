@@ -165,13 +165,14 @@ const CollectionCard = (props) => {
               src={signature.thumbnail}
               height={200}
               style={{
-                background: "#f1f1f1",
+                background: "#272B34",
               }}
             />
             <div className="description">
                           <div className="heading">Description</div>
                           <div className="description-text">
-                            {signature.description}
+                          {signature.description.split(' ').slice(0,40).join(' ')}
+
                           </div>
                           
                         </div>

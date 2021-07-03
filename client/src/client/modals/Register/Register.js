@@ -62,23 +62,29 @@ const Register = (props) => {
   });
 
   function registerUser() {
-    try{
-    BlockchainInterface.register_user(userDetails)
-      .then((success) => {
-        MongoDBInterface.registerUser(userDetails).then((mongoSuccess) => {
-          setRegistration(PASSED);
+    try {
+      BlockchainInterface.register_user(userDetails)
+        .then((success) => {
+          let response = success.data;
+          if (response.succes) {
+            MongoDBInterface.registerUser(userDetails).then((mongoSuccess) => {
+              setRegistration(PASSED);
+            });
+            console.log(success);
+          } else {
+            setRegistration(FAILED);
+            setregistrationErrorMessage(response.data);
+            console.log(response.data);
+          }
+        })
+        .catch((error) => {
+          setRegistration(FAILED);
+          setregistrationErrorMessage(error.data);
+          console.log(error.data);
         });
-        console.log(success);
-      })
-      .catch((error) => {
-        setRegistration(FAILED);
-        setregistrationErrorMessage(error.data);
-        console.log(error.data);
-      })
-    }
-    catch(e){
+    } catch (e) {
       debugger;
-      console.log("e",e)
+      console.log("shiotter", e);
     }
   }
 
@@ -90,7 +96,7 @@ const Register = (props) => {
     if (steps[steps.length - 1].key == activeStep.key) {
       if (registration == PASSED) {
         publishUserToApp();
-        window.location.reload()
+        window.location.reload();
       } else {
         setRegistration(PENDING);
         registerUser();
@@ -146,7 +152,7 @@ const Register = (props) => {
   function metamaskGuide() {
     let metamaskAvailable = window.ethereum || window.web3;
     if (metamaskAvailable) {
-      BlockchainInterface.getAccountDetails()
+      BlockchainInterface.getAccountDetails();
     } else {
       window.open(
         "https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn?hl=en"
@@ -191,10 +197,13 @@ const Register = (props) => {
           <Col md="12" className="d-flex justify-content-md-around">
             {_.isEmpty(userDetails.metamaskId) ? (
               <div className="network-container">
-                <div
-                  className="metamaskLogin loginMode d-flex flex-column align-items-center cursor-pointer"
-                >
-                  <p>We could not recognize any connected wallet on this app. Please install, login with an account and connect to this app to continue.You might have to refresh the page after installation</p>
+                <div className="metamaskLogin loginMode d-flex flex-column align-items-center cursor-pointer">
+                  <p>
+                    We could not recognize any connected wallet on this app.
+                    Please install, login with an account and connect to this
+                    app to continue.You might have to refresh the page after
+                    installation
+                  </p>
                   <img src={metamaskLogo} width="70"></img>
                   <div className="metamask_integration">
                     <Button
@@ -204,14 +213,16 @@ const Register = (props) => {
                       onClick={() => {
                         metamaskGuide();
                       }}
-                    >Connect wallet</Button>
+                    >
+                      Connect wallet
+                    </Button>
                     <Button
                       variant="secondary"
                       className="button ml-2 mt-2"
                       size
                       bsstyle="primary"
                       onClick={() => {
-                        window.location.reload()
+                        window.location.reload();
                       }}
                     >
                       <RefreshCcw size={15}></RefreshCcw>
@@ -240,7 +251,6 @@ const Register = (props) => {
               </div>
             ) : (
               <div className="d-flex align-items-center flex-column">
-
                 <img src={metamaskLogo} width="70"></img>
                 <div className="connected">Connected</div>
                 <div> {userDetails.metamaskId}</div>
@@ -254,85 +264,97 @@ const Register = (props) => {
           <div>
             <Row className="user-name-row">
               {registration == PASSED ? (
-                <div> Hi {userDetails.fullName}, Welcome to the tribe. You have signed up to the unlimited possibilities in the world of idea sharing.</div>
-              ) :
-              registration == FAILED ? (
-                <div> Hi {userDetails.fullName}, We were unable to onboard you to the tribe this time. Please try again.</div>
-              )
-              : (
+                <div>
+                  {" "}
+                  Hi {userDetails.fullName}, Welcome to the tribe. You have
+                  signed up to the unlimited possibilities in the world of idea
+                  sharing.
+                </div>
+              ) : registration == FAILED ? (
+                <div>
+                  {" "}
+                  Hi {userDetails.fullName}, We were unable to onboard you to
+                  the tribe this time. 
+                  <br></br>{registrationErrorMessage}
+                </div>
+              ) : (
                 <>
-                <Form.Group
-                  as={Col}
-                  className="formEntry userIDSection"
-                  md="12"
-                  controlId="userID"
-                >
-                  <Image
-                    roundedCircle
-                    src={userDetails.imageUrl}
-                    height={100}
-                    className=""
-                    style={{
-                      background: "#f1f1f1",
-                      borderRadius: "7px",
-                    }}
-                  />
-                  <Form.Control
-                    type="text"
-                    name="userID"
-                    value={userDetails.userID}
-                    className={userNameError ? "username-error userID" : "userID"}
-                    placeholder="User name"
-                    onChange={handleChange}
-                  />
-                  {!userNameError && userDetails.userID &&
-                  userDetails.userID.length > 0 &&
-                  validated ? (
-                    <Check></Check>
-                  ) : !userNameError&& userDetails.userID &&
+                  <Form.Group
+                    as={Col}
+                    className="formEntry userIDSection"
+                    md="12"
+                    controlId="userID"
+                  >
+                    <Image
+                      roundedCircle
+                      src={userDetails.imageUrl}
+                      height={100}
+                      className=""
+                      style={{
+                        background: "#f1f1f1",
+                        borderRadius: "7px",
+                      }}
+                    />
+                    <Form.Control
+                      type="text"
+                      name="userID"
+                      value={userDetails.userID}
+                      className={
+                        userNameError ? "username-error userID" : "userID"
+                      }
+                      placeholder="User name"
+                      onChange={handleChange}
+                    />
+                    {!userNameError &&
+                    userDetails.userID &&
                     userDetails.userID.length > 0 &&
-                    !validated ? (
-                    <X></X>
-                  ) :null}
-                </Form.Group>
-                {userNameError && <span className="username-error-txt">
-                  Invalid username please use lowercase with no special charaters
-    
-                </span> }
+                    validated ? (
+                      <Check></Check>
+                    ) : !userNameError &&
+                      userDetails.userID &&
+                      userDetails.userID.length > 0 &&
+                      !validated ? (
+                      <X></X>
+                    ) : null}
+                  </Form.Group>
+                  {userNameError && (
+                    <span className="username-error-txt">
+                      Invalid username please use lowercase with no special
+                      charaters
+                    </span>
+                  )}
                 </>
               )}
             </Row>
           </div>
         );
-        
-        default: return null;
+
+      default:
+        return null;
     }
   }
 
   function handleChange(event) {
     var key = event.keyCode;
     let returnObj = {};
-    const value = String(event.target.value).toLowerCase()
+    const value = String(event.target.value).toLowerCase();
     returnObj[event.target.name] = value;
     setUserDetails({
       ...userDetails,
       ...returnObj,
     });
-      if(/^[A-Z0-9]+$/i.test(value) ) {
-       
-        setuserNameError(false);
-        MongoDBInterface.getUserInfo({ userID: value })
-          .then((userDetails) => {
-            setValidated(false);
-          })
-          .catch((error) => {
-            setValidated(true);
-          });
-        } else {
-          setuserNameError(true);
-        }
-    
-   
+    if (/^[A-Z0-9]+$/i.test(value)) {
+      setuserNameError(false);
+      MongoDBInterface.getUserInfo({ userID: value })
+        .then((userDetails) => {
+          setValidated(false);
+        })
+        .catch((error) => {
+          setValidated(true);
+        });
+    } else {
+      setuserNameError(true);
+    }
   }
 
   return (
@@ -395,7 +417,13 @@ const Register = (props) => {
             </Button>
           )}
           <Button
-            disabled={!validated && activeStep.index == 2 || registration == PENDING || _.isEmpty(userDetails.metamaskId) || (_.isEmpty(userDetails.email) && activeStep.index == 1) || userNameError}
+            disabled={
+              (!validated && activeStep.index == 2) ||
+              registration == PENDING ||
+              _.isEmpty(userDetails.metamaskId) ||
+              (_.isEmpty(userDetails.email) && activeStep.index == 1) ||
+              userNameError
+            }
             variant="primary"
             className="button"
             bsstyle="primary"

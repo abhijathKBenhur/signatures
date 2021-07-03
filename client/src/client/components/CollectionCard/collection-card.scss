@@ -27,6 +27,8 @@
       position: relative;
       overflow: hidden;
       .collection-image {
+        border-bottom: 1px solid $primary-dark;
+        background-color: $primary;
         padding: 0px;
         &:hover {
           img {
@@ -46,6 +48,7 @@
             .description-text {
               padding: 3px;
               color: white;
+              visibility: visible;
             }
           }
         }
@@ -64,6 +67,11 @@
           flex-direction: column;
           justify-content: flex-start;
           align-items: flex-start;
+          .description-text {
+            padding: 3px;
+            color: white;
+            visibility: hidden;
+          }
           .heading {
             color: $secondary;
             padding: 3px;

@@ -119,19 +119,8 @@ function Profile(props) {
           <div className="separator w-100">
             <Col md="12" className="mycollection">
               <Row className="loggedIn">
-                <Col md="2" className="left-block">
-                  {/* <Row className="profile-section"> */}
-
-                  {/* </Row>  */}
-                  {/* <Row className="profile-section"> */}
-                  <div className="left-block-content">
-                    <div className="options">
-                      <h6 className="mt-1"></h6>
-                    </div>
-                  </div>
-                  {/* </Row> */}
-                </Col>
-                <Col md="8" className="p-0">
+                
+                <Col md="12" className="p-0">
                   <div className="userPane">
                     <div className="w-100">
                       <div className="first-section">

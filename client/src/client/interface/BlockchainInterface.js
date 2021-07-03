@@ -121,12 +121,7 @@ class BlockchainInterface {
 
   register_user = payload => { 
     console.log("register_user")
-    try{
-    return api.post(`/register_user`,payload) 
-    }catch(e){
-      debugger;
-      console.log(e)
-    }
+      return api.post(`/register_user`,payload)
   }
 
   async getAccountDetails() {

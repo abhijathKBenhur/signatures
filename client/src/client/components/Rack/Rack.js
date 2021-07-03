@@ -40,7 +40,7 @@ const Rack = (props) => {
   }
 
   return (
-    <Container>
+    <Container fluid>
       <Row className="rack">
         <Col md="12" className="deck">
           <Row className="deck-row">
@@ -69,7 +69,7 @@ const Rack = (props) => {
                           height={250}
                           className=""
                           style={{
-                            background: "#f1f1f1",
+                            background: "#1B1F26",
                             borderRadius: "5px 5px 0 0",
                             justifyItems: "center",
                           }}
@@ -109,7 +109,8 @@ const Rack = (props) => {
                             </span>
                           </div>
                           <div className="description-text">
-                            {signature.description}
+                            
+                            {signature.description.split(' ').slice(0,40).join(' ')}
                           </div>
                         </div>
                       </Col>

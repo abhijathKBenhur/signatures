@@ -46,11 +46,7 @@ register_user = (req, res) => {
         (errorReason) => {
           error.errorReason = errorReason;
           console.log("error errorReason", errorReason);
-          try{
-          return res.status(400).json({ success: false, data: errorReason });
-          }catch(e){
-            console.log(e)
-          }
+          return res.status(200).json({ success: false, data: errorReason });
         }
       );
     });
@@ -93,7 +89,7 @@ publishOnBehalf = async (req, res) => {
           (errorReason) => {
             console.log("error errorReason", errorReason);
             error.errorReason = errorReason;
-            return res.status(400).json({ success: false, data: error });
+            return res.status(200).json({ success: false, data: error });
           }
         );
       } catch (e) {
