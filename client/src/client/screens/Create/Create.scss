@@ -413,10 +413,16 @@
     }
   }
   .published-wrapper {
-    background-size: cover;
+    overflow: hidden;
     .left-strip {
       min-width: 30px;
       background-color: $secondary;
+    }
+    .actionables{
+      margin-left: 10px;
+      .in-app-actions{
+        gap: 20px;
+      }
     }
     .right-strip {
       background-color: $secondary-light;

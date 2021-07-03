@@ -15,13 +15,23 @@ import Dropzone, { useDropzone } from "react-dropzone";
 import CONSTANTS from "../../commons/Constants";
 import { useHistory } from "react-router-dom";
 import "./Create.scss";
-import { X, Image as ImageFile, Info, UploadCloud, Check } from "react-feather";
+import {
+  X,
+  Image as ImageFile,
+  Info,
+  UploadCloud,
+  Check,
+  Share2,
+  Download,
+  Crosshair,
+  ExternalLink,
+} from "react-feather";
 import Hash from "ipfs-only-hash";
 import { Container } from "react-bootstrap";
 import { Document, Page, pdfjs } from "react-pdf";
 import _ from "lodash";
 import Select from "react-select";
-
+import SocialShare from "../../modals/social-share/socialShare";
 import "react-step-progress-bar/styles.css";
 import { shallowEqual, useSelector } from "react-redux";
 import user from "../../../assets/images/user.png";
@@ -74,7 +84,8 @@ function Create(props) {
     publish: "",
   });
 
-  const [slideCount, setSlideCount] = useState(0);
+  const [slideCount, setSlideCount] = useState(4);
+  const [showShare, setShowShare] = useState(false);
   const [billet, setBillet] = useState({
     creator: form.owner,
     fullName: userDetails.fullName,
@@ -85,7 +96,7 @@ function Create(props) {
     // PDFHash: billet.PDFHash,
   });
 
-  const [publishState, setPublishState] = useState(INIT);
+  const [publishState, setPublishState] = useState(PASSED);
   const [publishError, setPublishError] = useState(undefined);
   const priceRef = useRef(null);
   let history = useHistory();
@@ -96,8 +107,7 @@ function Create(props) {
   const getQrcode = () => {
     QRCode.toCanvas(
       document.getElementById("canvas"),
-      "https://kovan.etherscan.io/address/" +
-                                  _.get(billet, "transactionID"),
+      "https://kovan.etherscan.io/address/" + _.get(billet, "transactionID"),
       {
         color: {
           dark: "#1b1919", // black dots
@@ -412,7 +422,7 @@ function Create(props) {
             onLoadError={PDFLoadError}
             onLoadSuccess={onDocumentLoadSuccess}
           >
-            <Page fillWidth pageNumber={1} width={window.innerWidth / 4}  />
+            <Page fillWidth pageNumber={1} width={window.innerWidth / 4} />
           </Document>
         );
       case "mp3":
@@ -826,7 +836,8 @@ function Create(props) {
               <div className="description">
                 <Row>
                   <Col md="12" className="message">
-                  Your idea will now be immortalized in a blockchain. And you will forever be known as it's creator. Welcome to the Tribe!
+                    Your idea will now be immortalized in a blockchain. And you
+                    will forever be known as it's creator. Welcome to the Tribe!
                   </Col>
                 </Row>
                 <div className="gas-fee-block">
@@ -859,9 +870,13 @@ function Create(props) {
         break;
       case LOADING_SLIDE:
         return (
-          <Col md="12" sm="12" lg="12" xs="12" className="publishing-wrapper d-flex flex-column justify-content-center">
-            
-
+          <Col
+            md="12"
+            sm="12"
+            lg="12"
+            xs="12"
+            className="publishing-wrapper d-flex flex-column justify-content-center"
+          >
             <div className="gif-wrapper d-flex justify-content-center">
               <img src={loadingGif} alt="" />
             </div>
@@ -893,14 +908,14 @@ function Create(props) {
           </Col>
         ) : (
           publishState == PASSED && (
-            <Col
+              <Col
               md="12"
               id="published-wrapper-block"
               className="published-wrapper p-0 d-flex flex-row justify-content-space-around"
             >
               <div className="left-strip"> </div>
               <Col
-                md="9"
+                md="8"
                 className="center-strip d-flex flex-column justify-content-around"
               >
                 <Row className="row1">
@@ -932,9 +947,7 @@ function Create(props) {
                       </div>
                       <div className="trasnection-details">
                         <div>FILE HASH:</div>
-                        <span className="hashValue">
-                        {billet.PDFHash}
-                        </span>
+                        <span className="hashValue">{billet.PDFHash}</span>
                       </div>
                       <div className="trasnection-details">
                         <div>TOKEN ID:</div>
@@ -944,15 +957,16 @@ function Create(props) {
                   </Col>
                 </Row>
               </Col>
-              <Col md="3" className="right-strip   d-flex flex-column justify-content-around">
+              <Col
+                md="3"
+                className="right-strip   d-flex flex-column justify-content-around"
+              >
                 <div className="brand">
-                  <Col md="12"className="p-0">BILLET</Col>
                   <Col md="12" className="p-0">
-                    <img
-                      src={signatureImage}
-                      alt="logo"
-                      width="100%"
-                    />
+                    BILLET
+                  </Col>
+                  <Col md="12" className="p-0">
+                    <img src={signatureImage} alt="logo" width="150px" />
                   </Col>
                 </div>
                 <div class="code-n-share">
@@ -964,7 +978,36 @@ function Create(props) {
                   </Col>
                 </div>
               </Col>
+              <Col md="1" className="actionables p-0">
+                <div className="in-app-actions d-flex flex-column pt-3">
+                  <Crosshair
+                    className="cursor-pointer signature-icons"
+                    color="#F39422"
+                    onClick={() => {
+                      openInEtherscan();
+                    }}
+                  ></Crosshair>
+                  <Download
+                    className="cursor-pointer signature-icons"
+                    color="#F39422"
+                    onClick={() => {
+                      exportToPdf();
+                    }}
+                  ></Download>
+                  {/* <Share2
+                    className="cursor-pointer signature-icons"
+                    color="#F39422"
+                    onClick={() => {
+                      setShowShare(true);
+                    }}
+                  ></Share2> */}
+                  <SocialShare show={showShare}></SocialShare>
+                </div>
+              </Col>
             </Col>
+           
+           
+            
           )
         );
       default:
@@ -976,16 +1019,13 @@ function Create(props) {
     var name = "Billet.pdf";
     domtoimage
       .toJpeg(document.getElementById("published-wrapper-block"), {
-        quality: 0.95,
-        style: {
-          "background-color": "#000",
-          padding: "20px",
-        },
-        filter: function filter(node) {
-          return (
-            ["filterAddition", "bottom-contents"].indexOf(node.className) < 0
-          );
-        },
+        quality: 1,
+        style: {},
+        // filter: function filter(node) {
+        //   return (
+        //     ["filterAddition", "bottom-contents"].indexOf(node.className) < 0
+        //   );
+        // },
       })
       .then(
         function(dataUrl) {
@@ -994,7 +1034,7 @@ function Create(props) {
             var pdf = new jspdf("p", "pt", "a3");
             pdf.internal.pageSize.setWidth(image.width * 0.75);
             pdf.internal.pageSize.setHeight(image.height * 0.75);
-            pdf.addImage(dataUrl, "JPG", 0, -80);
+            pdf.addImage(dataUrl, "JPG", 0, 0);
             pdf.save(name);
           });
           image.src = dataUrl;
@@ -1070,6 +1110,10 @@ function Create(props) {
       </Row>
     </Container>
   );
+
+  function openInEtherscan() {
+    window.open("https://kovan.etherscan.io/tx/" + billet.transactionID);
+  }
 
   function getNextButtonText() {
     if (slideCount == PREVIEW_SLIDE) {

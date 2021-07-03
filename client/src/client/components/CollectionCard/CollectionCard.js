@@ -112,7 +112,7 @@ const CollectionCard = (props) => {
                     View
                   </Dropdown.Item>
 
-                  <Dropdown.Item
+                  {/* <Dropdown.Item
                     className="dropdown-item"
                     eventKey="2"
                     onClick={() => {
@@ -121,7 +121,7 @@ const CollectionCard = (props) => {
                   >
                     <Edit3 className="signature-icons" size={15}></Edit3>
                     Edit Price
-                  </Dropdown.Item>
+                  </Dropdown.Item> */}
 
                   <Dropdown.Item
                     className="dropdown-item"

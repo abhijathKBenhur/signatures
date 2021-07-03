@@ -156,6 +156,14 @@ const Signature = (props) => {
     });
   }
 
+  function procureSignature() {
+    if (signature.purpose == CONSTANTS.PURPOSES.SELL) {
+      buySignature();
+    } else if (signature.purpose == CONSTANTS.PURPOSES.COLLAB) {
+      showInterest();
+    }
+  }
+
   function buySignature() {
     let updatePayload = {
       buyer: currentMetamaskAccount,
@@ -357,17 +365,21 @@ const Signature = (props) => {
             <Col sm="12" lg="5" xs="12" md="6" className="right-side p-0">
               <div className="buttons text-right d-flex justify-content-between">
                 <div className="actions d-flex">
-                  <ShoppingCart
-                    onClick={() => {
-                      buySignature();
-                    }}
-                    className="cursor-pointer signature-icons ShoppingCart"
-                    color="#F39422"
-                  ></ShoppingCart>
-                  <ThumbsUp
-                    className="cursor-pointer signature-icons ThumbsUp"
-                    color="#F39422"
-                  ></ThumbsUp>
+                  {!isCurrentUserOwner && (
+                    <ShoppingCart
+                      onClick={() => {
+                        procureSignature();
+                      }}
+                      className="cursor-pointer signature-icons ShoppingCart"
+                      color="#F39422"
+                    ></ShoppingCart>
+                  )}
+                  {!isCurrentUserOwner && (
+                    <ThumbsUp
+                      className="cursor-pointer signature-icons ThumbsUp"
+                      color="#F39422"
+                    ></ThumbsUp>
+                  )}
                   <ExternalLink
                     className="cursor-pointer signature-icons"
                     color="#F39422"
@@ -453,7 +465,9 @@ const Signature = (props) => {
               </div>
               <div className="">
                 <Col md="12" className="created-by justify-content-end">
-                    <div className="text-right">Created by {signature.userID}</div>
+                  <div className="text-right">
+                    Created by {signature.userID}
+                  </div>
                 </Col>
               </div>
               <div className="tabs-wrapper">
