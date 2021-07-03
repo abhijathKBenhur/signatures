@@ -130,6 +130,10 @@ getSignatures = async (req, res) => {
     payLoad.owner = ownerAddress;
   }
   if (!limit) {
+    // .sort({'createdAt': 'desc'})
+    //  .exec((err, signatures) => {
+         //do stuff with images
+     
     await SignatureSchema.find(payLoad, (err, signatures) => {
       if (err) {
         return res.status(404).json({ success: false, error: "here" });

@@ -258,7 +258,7 @@ function Create(props) {
   function saveToMongo(form) {
     MongoDBInterface.addSignature(form)
       .then((success) => {
-        showToaster("Your thoughts have been submitted!", { type: "dark" });
+        showToaster("Your Idea is now registered on the blockchain!", { type: "dark" });
       })
       .catch((err) => {
         console.log(err);
@@ -270,7 +270,7 @@ function Create(props) {
     setPublishState(PROGRESS);
     BlockChainInterface.publishOnBehalf(form)
       .then((success) => {
-        if(_.get(success,'data.succes')){
+        if(_.get(success,'data.success')){
           let successResponse = _.get(success, "data.data");
           saveToMongo(successResponse);
           setBillet({
