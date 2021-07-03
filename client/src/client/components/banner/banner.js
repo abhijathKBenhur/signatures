@@ -71,7 +71,7 @@ const Banner = (props) => {
               </Row>
             </Col>
             <Col md={3}>
-              <img src={free} width={"300px"}></img>
+              {/* <img src={free} width={"300px"}></img> */}
             </Col>
           </Row>
         </Container>
