@@ -76,7 +76,7 @@ const CollectionCard = (props) => {
       }}
     >
       <MoreHorizontal
-        color="#79589F"
+        color="#F39422"
         className="cursor-pointer "
       ></MoreHorizontal>
     </a>
@@ -137,7 +137,9 @@ const CollectionCard = (props) => {
                   <Dropdown.Item
                     className="dropdown-item"
                     eventKey="2"
-                    onClick={() => {
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
                       openInEtherscan();
                     }}
                   >

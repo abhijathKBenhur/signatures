@@ -45,7 +45,7 @@
     }
   }
   .profile-secction {
-    color: $secondary;
+    color: $primary;
     margin-top: -60px;
     align-items: center;
     .profile-info{
@@ -54,6 +54,10 @@
       justify-items: center;
       align-items: center;
       .address-copy{
+        align-content: center;
+        .address-value{
+          margin-right: 5px;
+        }
         white-space: pre;
       }
     }

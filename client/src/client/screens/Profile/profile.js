@@ -19,7 +19,7 @@ import MongoDBInterface from "../../interface/MongoDBInterface";
 import ActionsInterface from "../../interface/ActionsInterface";
 import BlockChainInterface from "../../interface/BlockchainInterface";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
-import { Share, Award, User } from "react-feather";
+import { ExternalLink, Award, User } from "react-feather";
 import StorageInterface from "../../interface/StorageInterface";
 
 import Collections from "./collections";
@@ -173,16 +173,15 @@ function Profile(props) {
                     />
                     <div className="profile-info">
                       <Row className="d-flex justify-content-center">
-                        <h4>{_.get(currentUserDetails, "fullName")}</h4>
+                        <h4>{_.get(currentUserDetails, "userID")}</h4>
                       </Row>
                       <Row>
-                        <Col>@{_.get(currentUserDetails, "userID")}</Col>
-                        <Col className="address-copy">
-                          <span>
+                        <Col className="address-copy d-flex align-items-center">
+                          <span className="address-value">
                             {_.get(currentUserDetails, "metamaskId") &&
                               _.get(currentUserDetails, "metamaskId").substring(
                                 0,
-                                3
+                                5
                               ) +
                                 " ..... " +
                                 _.get(
@@ -190,11 +189,11 @@ function Profile(props) {
                                   "metamaskId"
                                 ).substring(
                                   _.get(currentUserDetails, "metamaskId")
-                                    .length - 3,
+                                    .length - 4,
                                   _.get(currentUserDetails, "metamaskId").length
                                 )}
                           </span>
-                          <Share
+                          <ExternalLink
                             size={15}
                             onClick={() => {
                               window.open(
@@ -202,7 +201,7 @@ function Profile(props) {
                                   _.get(currentUserDetails, "metamaskId")
                               );
                             }}
-                          ></Share>
+                          ></ExternalLink>
                         </Col>
                        
                       </Row>

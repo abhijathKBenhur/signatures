@@ -102,26 +102,7 @@ const Banner = (props) => {
           </Row>
         </Container>
       </Carousel.Item>
-      <Carousel.Item>
-        <Container fluid className="carousal-itmes">
-          <Row className="carousal-rows">
-            <Col sm={8}>
-              <Row className="banner_header">What is TribeCoin?</Row>
-              <Row>
-                <div className="content">
-                  TribeCoin is the currency of IdeaTribe. You earn TribeCoins
-                  when you use our app in a way that benefits the community. So,
-                  you earn TribeCoins for registering an idea, sharing it with
-                  people and collaborating with others.
-                </div>
-              </Row>
-            </Col>
-            <Col sm={4}>
-              <div className="content-profile">{/* <img src={user} /> */}</div>
-            </Col>
-          </Row>
-        </Container>
-      </Carousel.Item>
+     
       
     </Carousel>
   );

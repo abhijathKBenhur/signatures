@@ -78,16 +78,34 @@ const Rack = (props) => {
                           <div className="actions w-100">
                             {
                               <span className="placeholder">
-                                {signature.purpose == CONSTANTS.PURPOSES.AUCTION && <span>Starts at </span>}
-                                {signature.price &&
-                                    Web3Utils.fromWei(signature.price)}{" "}
-                                  BNB
+                                {signature.purpose ==
+                                  CONSTANTS.PURPOSES.AUCTION && (
+                                  <span>Starts at </span>
+                                )}
+                                {(signature.purpose ==
+                                  CONSTANTS.PURPOSES.AUCTION ||
+                                  signature.purpose ==
+                                    CONSTANTS.PURPOSES.SELL) &&
+                                  signature.price && (
+                                    <span>
+                                      {Web3Utils.fromWei(signature.price)} BNB
+                                    </span>
+                                  )}
                               </span>
                             }
                             <span className="etherscan_link">
-                                <span onClick={() => function openInEtherscan() {
-                                  window.open("https://kovan.etherscan.io/tx/" + signature.transactionID);
-                                }}><ExternalLink></ExternalLink> </span>
+                              <span
+                                onClick={() =>
+                                  function openInEtherscan() {
+                                    window.open(
+                                      "https://kovan.etherscan.io/tx/" +
+                                        signature.transactionID
+                                    );
+                                  }
+                                }
+                              >
+                                <ExternalLink></ExternalLink>{" "}
+                              </span>
                             </span>
                           </div>
                           <div className="description-text">
@@ -100,22 +118,24 @@ const Rack = (props) => {
                       <Row>
                         <Col md="12">
                           <Col md="12" className="tags">
-                              {JSON.parse(signature.category) &&
-                                JSON.parse(signature.category)
-                                  .slice(0, 2)
-                                  .map((category) => {
-                                    return (
-                                      <Button disabled variant="pill">
-                                        {category.value}
-                                      </Button>
-                                    );
-                                  })}
-                            </Col>
+                            {JSON.parse(signature.category) &&
+                              JSON.parse(signature.category)
+                                .slice(0, 2)
+                                .map((category) => {
+                                  return (
+                                    <Button disabled variant="pill">
+                                      {category.value}
+                                    </Button>
+                                  );
+                                })}
                           </Col>
+                        </Col>
                       </Row>
                       <Row>
                         <Col md="12" className="idea-title">
-                          <p className="text-left title text-tile-title">{signature.title}</p>
+                          <p className="text-left title text-tile-title">
+                            {signature.title}
+                          </p>
                         </Col>
                       </Row>
 
@@ -139,14 +159,15 @@ const Rack = (props) => {
                       <Row>
                         <Col md="6" className="idea-details">
                           <Button
-                          disabled={signature.purpose == CONSTANTS.PURPOSES.KEEP}
+                            disabled={
+                              signature.purpose == CONSTANTS.PURPOSES.KEEP
+                            }
                             variant="primary"
                             className="cursor-pointer"
                           >
                             {getActionForPurpose(signature.purpose)}
                           </Button>
                         </Col>
-                       
                       </Row>
                     </div>
                   </div>
