@@ -24,19 +24,19 @@ import StorageInterface from "../../interface/StorageInterface";
 
 import Collections from "./collections";
 import store from "../../redux/store";
+import { setCollectionList } from "../../redux/actions";
 function Profile(props) {
   const reduxState = useSelector((state) => state, shallowEqual);
-  const { metamaskID = undefined, userDetails = {} } = reduxState;
+  const { metamaskID = undefined, userDetails = {}, collectionList = []} = reduxState;
   const [currentMetamaskAccount, setCurrentMetamaskAccount] = useState(
     metamaskID
   );
   const [currentUserDetails, setCurrentUserDetails] = useState(userDetails);
   const [myNotifications, setMyNotifications] = useState([]);
-  const [profileCollection, setProfileCollection] = useState([]);
   let history = useHistory();
   const [key, setKey] = useState("collections");
   const viewUser = _.get(history.location.state, "userID");
-
+  const dispatch = useDispatch()
   useEffect(() => {
     const { userDetails = {} } = reduxState;
     if (userDetails) {
@@ -74,7 +74,7 @@ function Profile(props) {
       let isEmptyPresent = _.find(response, (responseItem) => {
         return _.isEmpty(responseItem.ideaID);
       });
-      setProfileCollection(response);
+      dispatch(setCollectionList(response));
 
       // if(isEmptyPresent){
       //   clearInterval(fetchInterval)
@@ -212,7 +212,7 @@ function Profile(props) {
                       <Tab eventKey="collections" title="Collection">
                         <div className="collection-wrapper">
                           <div className="middle-block">
-                            <Collections collectionList={profileCollection} />
+                            <Collections collectionList={collectionList} />
                           </div>
                         </div>
                       </Tab>

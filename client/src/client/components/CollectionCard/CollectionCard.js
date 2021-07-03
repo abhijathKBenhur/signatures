@@ -5,7 +5,7 @@ import loader from "../../../assets/images/loader.gif";
 import { MoreHorizontal, Eye, Share, Crosshair, Edit3 } from "react-feather";
 import "./collection-card.scss";
 import { confirm } from "../../modals/confirmation/confirmation";
-import { Row, Col, Dropdown } from "react-bootstrap";
+import { Button,Row, Col, Dropdown } from "react-bootstrap";
 import Image from "react-image-resizer";
 import React, { useState, useEffect } from "react";
 import BlockChainInterface from "../../interface/BlockchainInterface";
@@ -168,14 +168,31 @@ const CollectionCard = (props) => {
             />
             <div className="description">
                           <div className="heading">Description</div>
-                          <div className="text">
+                          <div className="description-text">
                             {signature.description}
                           </div>
                           
                         </div>
           </Col>
         </div>
-        <Row className="collection-footer">
+        <div className="collection-footer">
+        <Row >
+                        <Col md="12">
+                          <Col md="12" className="tags">
+                              {JSON.parse(signature.category) &&
+                                JSON.parse(signature.category)
+                                  .slice(0, 2)
+                                  .map((category) => {
+                                    return (
+                                      <Button disabled variant="pill">
+                                        {category.value}
+                                      </Button>
+                                    );
+                                  })}
+                            </Col>
+                          </Col>
+                      </Row>
+                      <Row >
                       <Col md="12" className="idea-title">
                         <p className="text-left title">{signature.title}</p>
                       </Col>
@@ -187,6 +204,8 @@ const CollectionCard = (props) => {
                         {signature.userID} 
                       </Col>
           </Row>
+        </div>
+        
           {/* <div className="idea-details">
             <span className="placeholder">{signature.userID}</span>
             <span className="price">

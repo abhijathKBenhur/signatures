@@ -7,18 +7,14 @@
     font-size: 20px;
     color: $dark-brown;
     }
-    .carousal-first{
-        .content{
-           
-        }
-        .carousal-row1{
-            
-        }
+    .carousel-inner {
+        height: 100%;
     }
-    .carousal-second{
-        
-    }
-    .carousal-third{
-        
+    .carousal-itmes{
+         position: relative;
+         .carousal-rows{
+             position: absolute;
+             width: 100%;
+         }
     }
 }
