@@ -62,6 +62,7 @@ const Register = (props) => {
   });
 
   function registerUser() {
+    try{
     BlockchainInterface.register_user(userDetails)
       .then((success) => {
         MongoDBInterface.registerUser(userDetails).then((mongoSuccess) => {
@@ -73,7 +74,12 @@ const Register = (props) => {
         setRegistration(FAILED);
         setregistrationErrorMessage(error.data);
         console.log(error.data);
-      });
+      })
+    }
+    catch(e){
+      debugger;
+      console.log("e",e)
+    }
   }
 
   function publishUserToApp() {

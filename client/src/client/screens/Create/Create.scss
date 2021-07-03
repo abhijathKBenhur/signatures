@@ -420,7 +420,15 @@
     }
     .actionables{
       margin-left: 10px;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      .sharables{
+        gap: 20px;
+        padding-bottom: 10px;
+      }
       .in-app-actions{
+        display: flex;
         gap: 20px;
       }
     }

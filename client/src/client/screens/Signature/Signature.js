@@ -157,7 +157,7 @@ const Signature = (props) => {
   }
 
   function procureSignature() {
-    if (signature.purpose == CONSTANTS.PURPOSES.SELL) {
+    if (signature.purpose == CONSTANTS.PURPOSES.SELL || signature.purpose == CONSTANTS.PURPOSES.AUCTION) {
       buySignature();
     } else if (signature.purpose == CONSTANTS.PURPOSES.COLLAB) {
       showInterest();

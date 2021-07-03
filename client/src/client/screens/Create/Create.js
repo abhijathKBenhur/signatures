@@ -13,6 +13,7 @@ import BlockChainInterface from "../../interface/BlockchainInterface";
 import StorageInterface from "../../interface/StorageInterface";
 import Dropzone, { useDropzone } from "react-dropzone";
 import CONSTANTS from "../../commons/Constants";
+import * as reactShare from "react-share";
 import { useHistory } from "react-router-dom";
 import "./Create.scss";
 import {
@@ -84,7 +85,7 @@ function Create(props) {
     publish: "",
   });
 
-  const [slideCount, setSlideCount] = useState(4);
+  const [slideCount, setSlideCount] = useState(0);
   const [showShare, setShowShare] = useState(false);
   const [billet, setBillet] = useState({
     creator: form.owner,
@@ -96,7 +97,7 @@ function Create(props) {
     // PDFHash: billet.PDFHash,
   });
 
-  const [publishState, setPublishState] = useState(PASSED);
+  const [publishState, setPublishState] = useState(INIT);
   const [publishError, setPublishError] = useState(undefined);
   const priceRef = useRef(null);
   let history = useHistory();
@@ -269,7 +270,6 @@ function Create(props) {
     setPublishState(PROGRESS);
     BlockChainInterface.publishOnBehalf(form)
       .then((success) => {
-        debugger;
         let response = _.get(success, "data.data");
         saveToMongo(response);
         setBillet({
@@ -908,7 +908,7 @@ function Create(props) {
           </Col>
         ) : (
           publishState == PASSED && (
-              <Col
+            <Col
               md="12"
               id="published-wrapper-block"
               className="published-wrapper p-0 d-flex flex-row justify-content-space-around"
@@ -978,7 +978,7 @@ function Create(props) {
                   </Col>
                 </div>
               </Col>
-              <Col md="1" className="actionables p-0">
+              <Col md="1" className="actionables p-0 flex-column">
                 <div className="in-app-actions d-flex flex-column pt-3">
                   <Crosshair
                     className="cursor-pointer signature-icons"
@@ -994,20 +994,29 @@ function Create(props) {
                       exportToPdf();
                     }}
                   ></Download>
-                  {/* <Share2
-                    className="cursor-pointer signature-icons"
-                    color="#F39422"
-                    onClick={() => {
-                      setShowShare(true);
-                    }}
-                  ></Share2> */}
-                  <SocialShare show={showShare}></SocialShare>
+                 
+                </div>
+                <div className="sharables d-flex flex-column align-flex-start">
+                  
+                  <reactShare.FacebookShareButton
+                    url={window.location.origin + "/signature/" + billet.PDFHash}
+                    quote={"Hey, checkout this idea on ideaTribe."}
+                  >
+                    <reactShare.FacebookIcon size={32} round />
+                  </reactShare.FacebookShareButton>
+                  <reactShare.WhatsappShareButton
+                    url={window.location.origin + "/signature/" + billet.PDFHash}
+                    title={"Hey, checkout this idea on ideaTribe."}
+                    separator=": "
+                  >
+                    <reactShare.WhatsappIcon size={32} round />
+                  </reactShare.WhatsappShareButton>
+                  <reactShare.LinkedinShareButton url={window.location.origin + "/signature/" + billet.PDFHash}>
+                    <reactShare.LinkedinIcon size={32} round />
+                  </reactShare.LinkedinShareButton>
                 </div>
               </Col>
             </Col>
-           
-           
-            
           )
         );
       default:
