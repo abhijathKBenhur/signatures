@@ -42,6 +42,7 @@ import { shallowEqual, useSelector } from "react-redux";
 import audio from "../../../assets/images/audio.png";
 import CONSTANTS from "../../commons/Constants";
 import { showToaster } from "../../commons/common.utils";
+import * as reactShare from "react-share";
 
 const Signature = (props) => {
   let { hashId } = useParams();
@@ -353,51 +354,94 @@ const Signature = (props) => {
                 <Spinner animation="border" />
               )}
             </Col>
-            <Col sm="12" lg="5" xs="12" md="6" className="right-side">
-              <div className="top-section">
+            <Col sm="12" lg="5" xs="12" md="6" className="right-side p-0">
+              <div className="buttons text-right d-flex justify-content-between">
+                <div className="actions d-flex">
+                  <ShoppingCart
+                    onClick={() => {
+                      buySignature();
+                    }}
+                    className="cursor-pointer signature-icons ShoppingCart"
+                    color="#F39422"
+                  ></ShoppingCart>
+                  <ThumbsUp
+                    className="cursor-pointer signature-icons ThumbsUp"
+                    color="#F39422"
+                  ></ThumbsUp>
+                  <ExternalLink
+                    className="cursor-pointer signature-icons"
+                    color="#F39422"
+                    onClick={() => {
+                      copyClipBoard();
+                    }}
+                  ></ExternalLink>
+                  <Crosshair
+                    className="cursor-pointer signature-icons"
+                    color="#F39422"
+                    onClick={() => {
+                      openInEtherscan();
+                    }}
+                  ></Crosshair>
+                </div>
+                <div className="sharables d-flex">
+                  <reactShare.FacebookShareButton
+                    url={window.location.href}
+                    quote={"Hey, checkout this idea on ideaTribe."}
+                  >
+                    <reactShare.FacebookIcon size={32} round />
+                  </reactShare.FacebookShareButton>
+                  <reactShare.TwitterShareButton
+                    url={window.location.href}
+                    title={"Hey, checkout this idea on ideaTribe."}
+                  >
+                    <reactShare.TwitterIcon size={32} round />
+                  </reactShare.TwitterShareButton>
+                  <reactShare.WhatsappShareButton
+                    url={window.location.href}
+                    title={"Hey, checkout this idea on ideaTribe."}
+                    separator=":: "
+                  >
+                    <reactShare.WhatsappIcon size={32} round />
+                  </reactShare.WhatsappShareButton>
+                  <reactShare.LinkedinShareButton url={window.location.href}>
+                    <reactShare.LinkedinIcon size={32} round />
+                  </reactShare.LinkedinShareButton>
+                </div>
+              </div>
+              <div className="top-section d-flex flex-column">
                 <Row className="form-row title-row">
                   <Col md="6" className="pl-0">
                     <span>{signature.title}</span>
                   </Col>
-                  <Col md="6 created-at">
+                  <Col md="6 created-at p-0">
                     {moment(signature.createdAt).format(
                       "MMMM Do YYYY, h:mm:ss A"
                     )}
                   </Col>
                 </Row>
                 <Row>
-                  <Col md="12" className="city_name">
-                    City name here
+                  <Col md="6" className="form-row  tags-row">
+                    {signature.category &&
+                      JSON.parse(signature.category).map((tag, key) => {
+                        return (
+                          <Button disabled variant="pill">
+                            {tag.label}
+                          </Button>
+                        );
+                      })}
+                  </Col>
+                  <Col md="6" className="city_name p-0">
+                    Bangalore
                   </Col>
                 </Row>
                 <Row className="form-row owner-row">
-                  <Col md="6" className="">
-                    <Row className="form-row  tags-row">
-                      {signature.category &&
-                        JSON.parse(signature.category).map((tag, key) => {
-                          return (
-                            <Button disabled variant="pill">
-                              {tag.label}
-                            </Button>
-                          );
-                        })}
-                      {/* <Badge
-                        key={key}
-                        className="tagpill purpose"
-                        variant="secondary"
-                      >
-                        {signature.purpose}
-                      </Badge> */}
-                    </Row>
-                  </Col>
-                  <Col md="6" className="owner text-right">
-                    <Row className="d-flex flex-column mr-0">
-                      <Row className="created_by justify-content-end">
-                        Created by {signature.userID}
-                      </Row>
-                      <Row className="owned_by justify-content-end  mr-0">
-                        Currently owned by {signature.userID}
-                      </Row>
+                  <Col md="12" className="owner text-right">
+                    <Row className="d-flex flex-column ">
+                      <Col md="12">
+                        <div className="owned_by justify-content-end">
+                          Currently owned by {signature.userID}
+                        </div>
+                      </Col>
                     </Row>
 
                     <br></br>
@@ -407,32 +451,10 @@ const Signature = (props) => {
                   <span> {signature.description}</span>
                 </Row>
               </div>
-              <div className="text-right">
-                <ShoppingCart
-                  onClick={() => {
-                    buySignature();
-                  }}
-                  className="cursor-pointer signature-icons ShoppingCart"
-                  color="#F39422"
-                ></ShoppingCart>
-                <ThumbsUp
-                  className="cursor-pointer signature-icons ThumbsUp"
-                  color="#F39422"
-                ></ThumbsUp>
-                <Share
-                  className="cursor-pointer signature-icons"
-                  color="#F39422"
-                  onClick={() => {
-                    copyClipBoard();
-                  }}
-                ></Share>
-                <Crosshair
-                  className="cursor-pointer signature-icons"
-                  color="#F39422"
-                  onClick={() => {
-                    openInEtherscan();
-                  }}
-                ></Crosshair>
+              <div className="">
+                <Col md="12" className="created-by justify-content-end">
+                    <div className="text-right">Created by {signature.userID}</div>
+                </Col>
               </div>
               <div className="tabs-wrapper">
                 <Tabs
@@ -444,7 +466,6 @@ const Signature = (props) => {
                     <div className="collection-wrapper">
                       <div className="middle-block">
                         <Row>
-                          
                           <Col md={12}>
                             <span>{getIdeaStatus()}</span>
                           </Col>

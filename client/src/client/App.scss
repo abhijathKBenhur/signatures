@@ -4,13 +4,9 @@
 /* Styles go here */
 
 .appContainer {
-  // .content{
-  //   // max-height: calc(100% - 100px);
-  //   max-height: 90vh;
-  //   .container-fluid{
-  //     // height: 100%;
-  //   }
-  // }
+  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+  scrollbar-width: none;  /* Firefox */
+
 }
 input[type='radio']:after {
   width: 15px;
@@ -181,6 +177,8 @@ body {
   font-size: 18px;
   text-align: left;
 }
+
+
 
 .text-tile-title{
   // color: red;

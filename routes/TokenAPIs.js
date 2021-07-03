@@ -117,7 +117,7 @@ getSignatures = async (req, res) => {
     console.log(searchOrArray)
   }
   if(searchString){
-    searchOrArray.push({'title':{ $regex: searchString }})
+    searchOrArray.push({'title':{ $regex: new RegExp(searchString, "i") }})
     searchOrArray.push({'description':{ $regex: searchString }})
   }
   if(searchOrArray.length > 0){

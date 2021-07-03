@@ -974,7 +974,6 @@ function Create(props) {
 
   const exportToPdf = () => {
     var name = "Billet.pdf";
-
     domtoimage
       .toJpeg(document.getElementById("published-wrapper-block"), {
         quality: 0.95,

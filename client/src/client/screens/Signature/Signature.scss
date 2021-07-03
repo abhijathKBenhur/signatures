@@ -35,12 +35,23 @@
     }
     .right-side {
       padding: 0;
-      padding-bottom: 20px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       height: 100%;
       overflow: scroll;
+      background-color: $primary;
+      color: white;
+      .buttons{
+        padding:  10px;
+        .actions{
+          gap: 10px;
+        }
+        .sharables{
+          gap:10px
+        }
+        border-bottom: 1px solid $secondary;
+      }
       .tabs-wrapper {
         flex: 1;
         .collection-wrapper{
@@ -54,13 +65,19 @@
         }
         .nav-tabs {
           a {
-            color: #000;
-            border: 0;
+            border-bottom: 0;
+            background-color: transparent;
+            color: $secondary;
             &.active {
-              border-bottom: 2px solid $primary-dark;
+              border: 2px solid $secondary;
+              background-color: $secondary;
               color: $primary-dark;
+
             }
           }
+        }
+        .tab-content{
+          background-color: $secondary;
         }
       }
       .top-section {
@@ -102,7 +119,6 @@
           &.tags-row {
             display: flex;
             margin-top: 2px;
-            margin-bottom: 10px;
             gap: 10px;
             .tagpill {
               padding: 5px;
