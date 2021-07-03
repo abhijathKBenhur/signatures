@@ -39,7 +39,7 @@ function Search() {
     try {
       MongoDBInterface.getSignatures(postObj).then(
         (signatures) => {
-          let response = _.get(signatures, "data.data");
+          let response = _.get(signatures, "data.data").reverse()
           let isEmptyPresent = _.find(response, (responseItem) => {
             return _.isEmpty(responseItem.ideaID);
           });

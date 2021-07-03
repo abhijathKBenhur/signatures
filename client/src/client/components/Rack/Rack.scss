@@ -1,15 +1,15 @@
 @import "../../commons/Common.scss";
 .rack {
   min-height: calc(100vh - 230px);
-  .mycollection {
-    .collections {
-      .collection-card {
+  .deck {
+      .deck-card {
         .content {
-          .collection-preview {
+          padding-top: 30px !important;
+          .deck-preview {
             position: relative;
             overflow: hidden;
-            .collection-image {
-              padding: 0px;
+            .deck-image {
+              padding: 0;              
               &:hover {
                 img {
                   opacity: 0.5;
@@ -25,7 +25,25 @@
                   top: 0px;
                   justify-content: flex-start;
                   align-items: flex-start;
-                
+                  .actions {
+                    height: 40px;
+                    background-color: $primary-dark;
+                    color: $secondary;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    padding: 5px;
+                    .price{
+                      
+                    }
+                    .etherscan_link{
+                      
+                    }
+                  }
+                  .description-text {
+                    padding: 3px;
+                    color: white;
+                  }
                 }
               }
               div {
@@ -33,7 +51,7 @@
                 justify-content: center;
               }
               img {
-                border-radius: 5px;
+                border-radius: 5px 5px 0 0;
               }
               .description {
                 width: 100%;
@@ -68,12 +86,8 @@
           }
         }
       }
-    }
   }
-  .collection-footer {
-    padding: 5px;
-    font-size: 11px;
-    font-weight: 600;
+  .deck-footer {
     background-color: $primary;
     color: $grey-border;
     .tags{
@@ -93,7 +107,7 @@
       border-radius: 40px;
     }
   }
-  .collection-actions{
+  .deck-actions{
     margin-top: 10px;
   }
 }

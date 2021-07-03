@@ -11,9 +11,8 @@
             transition: opacity 2s ease, border-color 1s ease;
         }
         .collection-header{
-            border-radius: 4px;
             height: 30px;
-            margin-bottom: 1px;
+            background-color: $primary-dark;
             .dropdown-menu{
                 padding: 0;
                 .dropdown-item{

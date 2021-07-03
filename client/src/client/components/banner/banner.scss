@@ -2,10 +2,11 @@
 .banner{
     color: white;
     .banner_header{
-        font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+        // font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
         letter-spacing: 2px;
     font-size: 20px;
-    color: $dark-brown;
+    color: $secondary;
+    font-weight: 900;
     }
     .carousel-inner {
         height: 100%;

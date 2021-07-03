@@ -412,7 +412,7 @@ function Create(props) {
             onLoadError={PDFLoadError}
             onLoadSuccess={onDocumentLoadSuccess}
           >
-            <Page fillWidth pageNumber={1} width={window.innerWidth / 4} />
+            <Page fillWidth pageNumber={1} width={window.innerWidth / 4}  />
           </Document>
         );
       case "mp3":
@@ -523,7 +523,7 @@ function Create(props) {
                       rows={7}
                       aria-describedby="inputGroupAppend"
                       name="description"
-                      placeholder="Description (Upto 250 charecters)"
+                      placeholder="upto 250 words"
                       style={{ resize: "none" }}
                       onChange={handleChange}
                       maxLength={250}
@@ -618,7 +618,7 @@ function Create(props) {
               <Row className="">
                 <Form.Group as={Col} className="formEntry" md="12">
                   <div className="tags-label">
-                    <Form.Label>Tags </Form.Label>
+                    <Form.Label>Tags (upto 3) </Form.Label>
                   </div>
                   <Select
                     value={form.category}
@@ -631,7 +631,7 @@ function Create(props) {
                     }
                     options={CONSTANTS.CATEGORIES}
                     onChange={handleTagsChange}
-                    placeholder="Tags*"
+                    placeholder="Adding tags to describe your idea."
                   />
                 </Form.Group>
               </Row>
@@ -696,7 +696,7 @@ function Create(props) {
                         {isSelectedPurpose(CONSTANTS.PURPOSES.KEEP) && (
                           <Check />
                         )}
-                        Keep
+                        Personal Record
                       </Button>
                     </Col>
                   </Row>
@@ -831,10 +831,10 @@ function Create(props) {
                 </Row>
                 <div className="gas-fee-block">
                   <div className="gas_fee">
-                    <p>Binance Chain Gas Fees : </p>
+                    <p>Binance Chain Gas Fees: </p>
                   </div>
                   <div className="gas_fee_value">
-                    <p>2$ </p>
+                    <p> 0.001 BNB </p>
                   </div>
                   <div className="gas_free">
                     <p> This is on us for your first 5 Ideas. </p>
@@ -845,7 +845,7 @@ function Create(props) {
                     <p> IdeaTribe Service Fee: </p>
                   </div>
                   <div className="serice_fee_value">
-                    <p> 2$ </p>
+                    <p> 0.01 BNB </p>
                   </div>
                   <div className="serice_free">
                     <p> FREE for early Tribers!</p>
@@ -916,7 +916,7 @@ function Create(props) {
                   <Col md="12">
                     <div className="billet-item">
                       <div className="item">{billet.title}</div>
-                      <div className="time">at {billet.time}</div>
+                      <div className="time"> {billet.time}, Bangalore</div>
                     </div>
                   </Col>
                   <Col md="12"></Col>
@@ -973,7 +973,7 @@ function Create(props) {
   };
 
   const exportToPdf = () => {
-    var name = "trasnaction.pdf";
+    var name = "Billet.pdf";
 
     domtoimage
       .toJpeg(document.getElementById("published-wrapper-block"), {

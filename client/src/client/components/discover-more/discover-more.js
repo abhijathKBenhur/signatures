@@ -40,7 +40,7 @@ const DiscoverMore = () => {
           let isEmptyPresent = _.find(response, (responseItem) => {
             return _.isEmpty(responseItem.ideaID);
           });
-          document.querySelector('.mycollection').scrollIntoView({
+          document.querySelector('.deck').scrollIntoView({
             behavior: 'smooth' 
           });
           dispatch(setCollectionList(response));

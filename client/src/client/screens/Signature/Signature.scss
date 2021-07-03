@@ -11,7 +11,7 @@
       padding: 0;
       display: flex;
       justify-content: center;
-      border-right: 1px solid $primary;
+      border-right: 1px solid $grey-border;
       align-items: center;
       .pdfUploaded {
         margin: 10px;
@@ -45,6 +45,12 @@
         flex: 1;
         .collection-wrapper{
           padding: 10px;
+          .middle-block{
+            font-size: 40px;
+            color: $primary;
+            text-align: center;
+            font-weight: 900;
+          }
         }
         .nav-tabs {
           a {
@@ -58,8 +64,11 @@
         }
       }
       .top-section {
-          flex: 2;
+          flex: 3;
         padding: 20px;
+        .city_name{
+          text-align: end;
+        }
         .form-row {
           &.title-row {
             align-items: center;
@@ -67,7 +76,6 @@
             text-transform: capitalize;
             span {
               font-size: 28px;
-              color: $primary;
               letter-spacing: -1px;
             }
             .created-at {
@@ -75,9 +83,9 @@
               text-align: end;
             }
           }
+          
           &.owner-row {
             font-size: 12px;
-            color: $primary;
             .owner {
               text-align: end;
               font-size: 12px;
