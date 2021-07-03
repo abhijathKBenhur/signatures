@@ -1,3 +1,4 @@
+@import "../../commons/Common.scss";
 .discover-topics-section{
     display: flex;
     align-items: center;
@@ -23,6 +24,10 @@
                 margin: 0 8px 12px 0;
                 font-size: 12px;
                 font-weight: 500;
+                .btn-secondary.selected {
+                    background-color: $primary-dark !important;
+                    color: $secondary !important
+                }
             }
         }
     }

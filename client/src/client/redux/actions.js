@@ -1,7 +1,8 @@
 
 export const SET_METAMASK_ID = 'SET_METAMASK_ID';
 export const SET_COLLECTION_LIST = 'SET_COLLECTION_LIST'
-export const SET_USER_DETAILS = 'SET_USER_DETAILS'
+export const SET_USER_DETAILS = 'SET_USER_DETAILS';
+export const SET_CTEGORIES = 'SET_CTEGORIES';
 
 export const setReduxMetaMaskID = (id) => {
     return {
@@ -20,6 +21,13 @@ export const setReduxUserDetails = (payload) => {
 export const setCollectionList = (cl) => {
     return {
         type: SET_COLLECTION_LIST,
+        payload: cl
+    }
+}
+
+export const updateCategories = (cl) => {
+    return {
+        type: SET_CTEGORIES,
         payload: cl
     }
 }
