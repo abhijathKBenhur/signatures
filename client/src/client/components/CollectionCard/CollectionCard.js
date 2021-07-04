@@ -5,7 +5,7 @@ import loader from "../../../assets/images/loader.gif";
 import { MoreHorizontal, Eye, Share, Crosshair, Edit3 } from "react-feather";
 import "./collection-card.scss";
 import { confirm } from "../../modals/confirmation/confirmation";
-import { Row, Col, Dropdown } from "react-bootstrap";
+import { Button,Row, Col, Dropdown } from "react-bootstrap";
 import Image from "react-image-resizer";
 import React, { useState, useEffect } from "react";
 import BlockChainInterface from "../../interface/BlockchainInterface";
@@ -76,7 +76,7 @@ const CollectionCard = (props) => {
       }}
     >
       <MoreHorizontal
-        color="#79589F"
+        color="#F39422"
         className="cursor-pointer "
       ></MoreHorizontal>
     </a>
@@ -112,7 +112,7 @@ const CollectionCard = (props) => {
                     View
                   </Dropdown.Item>
 
-                  <Dropdown.Item
+                  {/* <Dropdown.Item
                     className="dropdown-item"
                     eventKey="2"
                     onClick={() => {
@@ -121,7 +121,7 @@ const CollectionCard = (props) => {
                   >
                     <Edit3 className="signature-icons" size={15}></Edit3>
                     Edit Price
-                  </Dropdown.Item>
+                  </Dropdown.Item> */}
 
                   <Dropdown.Item
                     className="dropdown-item"
@@ -137,7 +137,9 @@ const CollectionCard = (props) => {
                   <Dropdown.Item
                     className="dropdown-item"
                     eventKey="2"
-                    onClick={() => {
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
                       openInEtherscan();
                     }}
                   >
@@ -163,19 +165,37 @@ const CollectionCard = (props) => {
               src={signature.thumbnail}
               height={200}
               style={{
-                background: "#f1f1f1",
+                background: "#272B34",
               }}
             />
             <div className="description">
                           <div className="heading">Description</div>
-                          <div className="text">
-                            {signature.description}
+                          <div className="description-text">
+                          {signature.description.split(' ').slice(0,40).join(' ')}
+
                           </div>
                           
                         </div>
           </Col>
         </div>
-        <Row className="collection-footer">
+        <div className="collection-footer">
+        <Row >
+                        <Col md="12">
+                          <Col md="12" className="tags">
+                              {JSON.parse(signature.category) &&
+                                JSON.parse(signature.category)
+                                  .slice(0, 2)
+                                  .map((category) => {
+                                    return (
+                                      <Button disabled variant="pill">
+                                        {category.value}
+                                      </Button>
+                                    );
+                                  })}
+                            </Col>
+                          </Col>
+                      </Row>
+                      <Row >
                       <Col md="12" className="idea-title">
                         <p className="text-left title">{signature.title}</p>
                       </Col>
@@ -187,6 +207,8 @@ const CollectionCard = (props) => {
                         {signature.userID} 
                       </Col>
           </Row>
+        </div>
+        
           {/* <div className="idea-details">
             <span className="placeholder">{signature.userID}</span>
             <span className="price">

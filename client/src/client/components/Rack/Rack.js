@@ -2,7 +2,7 @@ import React from "react";
 import _ from "lodash";
 import { Button, Card, CardDeck } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
-import { Feather, User } from "react-feather";
+import { Feather, ExternalLink } from "react-feather";
 import Image from "react-image-resizer";
 import { Row, Col, Container } from "react-bootstrap";
 import "./Rack.scss";
@@ -40,10 +40,10 @@ const Rack = (props) => {
   }
 
   return (
-    <Container>
+    <Container fluid>
       <Row className="rack">
-        <Col md="12" className="mycollection">
-          <Row className="collections">
+        <Col md="12" className="deck">
+          <Row className="deck-row">
             {props.deck.map((signature, index) => {
               return (
                 <Col
@@ -52,67 +52,91 @@ const Rack = (props) => {
                   lg="3"
                   sm="6"
                   xs="12"
-                  className="collection-card col-md-offset-2"
+                  className="deck-card col-md-offset-2"
                   onClick={() => {
                     openCardView(signature);
                   }}
                 >
-                  <div className="content cursor-pointer">
+                  <div className="content cursor-pointer p-1">
                     {/* <div className="collection-header d-flex justify-content-between align-items-center p-2">
                       <div className="header-left"></div>
                       <div className="header-right"></div>
                     </div> */}
-                    <div className="collection-preview">
-                      <Col md="12 collection-image">
+                    <div className="deck-preview">
+                      <Col md="12 deck-image">
                         <Image
                           src={signature.thumbnail}
                           height={250}
                           className=""
                           style={{
-                            background: "#f1f1f1",
+                            background: "#1B1F26",
                             borderRadius: "5px 5px 0 0",
                             justifyItems: "center",
                           }}
                         />
                         <div className="description">
                           <div className="actions w-100">
-                            <span className="placeholder">
-                            {signature.price &&
-                                Web3Utils.fromWei(signature.price)}{" "}
-                              BNB
-                            </span>
-                            <span className="price">
-                                <span onClick={() => function openInEtherscan() {
-                                  window.open("https://kovan.etherscan.io/tx/" + signature.transactionID);
-                                }}>View on chain </span>
+                            {
+                              <span className="placeholder">
+                                {signature.purpose ==
+                                  CONSTANTS.PURPOSES.AUCTION && (
+                                  <span>Starts at </span>
+                                )}
+                                {(signature.purpose ==
+                                  CONSTANTS.PURPOSES.AUCTION ||
+                                  signature.purpose ==
+                                    CONSTANTS.PURPOSES.SELL) &&
+                                  signature.price && (
+                                    <span>
+                                      {Web3Utils.fromWei(signature.price)} BNB
+                                    </span>
+                                  )}
+                              </span>
+                            }
+                            <span className="etherscan_link">
+                              <span
+                                onClick={() =>
+                                  function openInEtherscan() {
+                                    window.open(
+                                      "https://kovan.etherscan.io/tx/" +
+                                        signature.transactionID
+                                    );
+                                  }
+                                }
+                              >
+                                <ExternalLink></ExternalLink>{" "}
+                              </span>
                             </span>
                           </div>
                           <div className="description-text">
-                            {signature.description}
+                            
+                            {signature.description.split(' ').slice(0,40).join(' ')}
                           </div>
                         </div>
                       </Col>
                     </div>
-                    <div className="collection-footer">
+                    <div className="deck-footer p-1">
                       <Row>
                         <Col md="12">
                           <Col md="12" className="tags">
-                              {JSON.parse(signature.category) &&
-                                JSON.parse(signature.category)
-                                  .slice(0, 2)
-                                  .map((category) => {
-                                    return (
-                                      <Button disabled variant="pill">
-                                        {category.value}
-                                      </Button>
-                                    );
-                                  })}
-                            </Col>
+                            {JSON.parse(signature.category) &&
+                              JSON.parse(signature.category)
+                                .slice(0, 2)
+                                .map((category) => {
+                                  return (
+                                    <Button disabled variant="pill">
+                                      {category.value}
+                                    </Button>
+                                  );
+                                })}
                           </Col>
+                        </Col>
                       </Row>
                       <Row>
                         <Col md="12" className="idea-title">
-                          <p className="text-left title">{signature.title}</p>
+                          <p className="text-left title text-tile-title">
+                            {signature.title}
+                          </p>
                         </Col>
                       </Row>
 
@@ -132,17 +156,19 @@ const Rack = (props) => {
                         </Col>
                       </Row>
                     </div>
-                    <div className="collection-actions">
+                    <div className="deck-actions">
                       <Row>
                         <Col md="6" className="idea-details">
                           <Button
-                            variant="secondary"
+                            disabled={
+                              signature.purpose == CONSTANTS.PURPOSES.KEEP
+                            }
+                            variant="primary"
                             className="cursor-pointer"
                           >
                             {getActionForPurpose(signature.purpose)}
                           </Button>
                         </Col>
-                       
                       </Row>
                     </div>
                   </div>

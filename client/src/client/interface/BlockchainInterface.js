@@ -56,9 +56,14 @@ class BlockchainInterface {
   }
 
   addNetwork(chain_id) {
-    window.ethereum.givenProvider.request({
+    window.ethereum.request({
       method: 'wallet_addEthereumChain',
       params: [CHAIN_CONFIGS[chain_id]]
+    }).then(succes => {
+      console.log("succes",succes)
+    }).catch(switchError =>{
+      console.log("switchError",switchError)
+     
     })
   }
 
@@ -67,7 +72,17 @@ class BlockchainInterface {
       window.ethereum.request({
         method: 'wallet_switchEthereumChain',
         params: [{ chainId: chain_id }],
-      });
+      }).then(succes => {
+        console.log("succes",succes)
+      }).catch(switchError =>{
+        if (switchError.code === 4902) {
+          try {
+            this.addNetwork(chain_id)
+          } catch (addError) {
+            // handle "add" error
+          }
+        }
+      })
     } catch (switchError) {
       // This error code indicates that the chain has not been added to MetaMask.
       if (switchError.code === 4902) {
@@ -81,9 +96,32 @@ class BlockchainInterface {
     }
   }
 
+  addToken(type, address, symbol, decimals) {
+    window.ethereum
+        .request({
+          method: 'wallet_watchAsset',
+          params: {
+            type: type,
+            options: {
+              address: address,
+              symbol: symbol,
+              decimals: decimals
+            },
+          },
+        })
+        .then((success) => {
+          if (success) {
+            console.log(symbol + ' successfully added to wallet!')
+          } else {
+            throw new Error('Something went wrong.')
+          }
+        })
+        .catch(console.error)
+  }
+
   register_user = payload => { 
     console.log("register_user")
-    return api.post(`/register_user`,payload) 
+      return api.post(`/register_user`,payload)
   }
 
   async getAccountDetails() {
@@ -203,7 +241,6 @@ class BlockchainInterface {
       value: updatePayLoad.price,
       from: updatePayLoad.buyer,
     };
-    debugger
     this.contract.methods
       .buy(updatePayLoad.ideaID)
       .send(transactionObject)

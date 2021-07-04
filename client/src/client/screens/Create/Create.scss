@@ -1,10 +1,23 @@
 @import "../../commons/Common.scss";
+
 .createform {
+  .closeIcon{
+    background-color: white;
+    border-radius:15px ;
+    color: black;
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    border: 1px solid black;
+    z-index: 1;
+    cursor: pointer;
+  }
   border-color: $primary;
   height: calc(100vh - 60px);
   margin-top: 60px;
-
+  overflow: scroll;
   .responsive-content {
+    
     margin: 60px 0;
     padding: 0;
     border-radius: 10px;
@@ -69,6 +82,7 @@
             }
           }
         }
+        
         .price-n-category {
           margin-top: 40px;
           padding: 10px 30px;
@@ -234,6 +248,7 @@
             }
           }
           .empty-pdf-row {
+            margin: 10px;
             align-self: center;
             justify-content: center;
             align-items: center;
@@ -380,8 +395,9 @@
         margin-bottom: 30px;
       }
       .gas-fee-block {
-        font-size: 20px;
+        font-size: 14px;
         display: flex;
+
         .gas_fee {
           color: $dark-brown;
         }
@@ -395,7 +411,7 @@
         }
       }
       .service_fee_block {
-        font-size: 20px;
+        font-size: 14px;
         display: flex;
         .serice_fee {
           color: $dark-brown;
@@ -412,10 +428,25 @@
     }
   }
   .published-wrapper {
-    background-size: cover;
+    overflow: hidden;
+    border-radius: 10px;
     .left-strip {
       min-width: 30px;
       background-color: $secondary;
+    }
+    .actionables{
+      margin-left: 10px;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      .sharables{
+        gap: 20px;
+        padding-bottom: 10px;
+      }
+      .in-app-actions{
+        display: flex;
+        gap: 20px;
+      }
     }
     .right-strip {
       background-color: $secondary-light;

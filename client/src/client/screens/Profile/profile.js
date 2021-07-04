@@ -19,36 +19,46 @@ import MongoDBInterface from "../../interface/MongoDBInterface";
 import ActionsInterface from "../../interface/ActionsInterface";
 import BlockChainInterface from "../../interface/BlockchainInterface";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
-import { Share, Award, User } from "react-feather";
+import { ExternalLink, Award, User } from "react-feather";
 import StorageInterface from "../../interface/StorageInterface";
 
 import Collections from "./collections";
 import store from "../../redux/store";
+import { setCollectionList } from "../../redux/actions";
 function Profile(props) {
   const reduxState = useSelector((state) => state, shallowEqual);
-  const { metamaskID = undefined, userDetails = {} } = reduxState;
+  const { metamaskID = undefined, userDetails = {}, collectionList = []} = reduxState;
   const [currentMetamaskAccount, setCurrentMetamaskAccount] = useState(
     metamaskID
   );
+  const [profileCollection, setProfileCOllection] = useState([])
   const [currentUserDetails, setCurrentUserDetails] = useState(userDetails);
   const [myNotifications, setMyNotifications] = useState([]);
-  const [profileCollection, setProfileCollection] = useState([]);
   let history = useHistory();
   const [key, setKey] = useState("collections");
   const viewUser = _.get(history.location.state, "userID");
+  const dispatch = useDispatch()
+  
 
   useEffect(() => {
     const { userDetails = {} } = reduxState;
-    if (userDetails) {
-      setCurrentUserDetails(userDetails);
-      fetchSignatures();
-    }
+    const viewUser = _.get(history.location.state, "userID");
     if (viewUser && viewUser.toLowerCase() !== userDetails.userID) {
       let payLoad = {};
-      payLoad.metamaskId = viewUser;
+      payLoad.userID = viewUser;
       getUserDetails(payLoad);
     }
-  }, [reduxState.userDetails]);
+    if (userDetails && !viewUser) {
+      setCurrentUserDetails(userDetails);
+    }
+    
+  }, [reduxState.userDetails ]);
+
+
+  useEffect(() => {
+    fetchSignatures(currentUserDetails.metamaskId);
+    fetchNotifications();
+  }, [currentUserDetails]);
 
   useEffect(() => {
     const { metamaskID = undefined } = reduxState;
@@ -61,25 +71,22 @@ function Profile(props) {
     MongoDBInterface.getUserInfo(payLoad).then((response) => {
       let userDetails = _.get(response, "data.data");
       setCurrentUserDetails(userDetails);
-      fetchSignatures(userDetails.metamaskId);
     });
   };
 
   function fetchSignatures(address) {
-    fetchNotifications();
-    MongoDBInterface.getSignatures({
-      ownerAddress: address || currentUserDetails.metamaskId,
-    }).then((signatures) => {
-      let response = _.get(signatures, "data.data");
-      let isEmptyPresent = _.find(response, (responseItem) => {
-        return _.isEmpty(responseItem.ideaID);
-      });
-      setProfileCollection(response);
-
-      // if(isEmptyPresent){
-      //   clearInterval(fetchInterval)
-      // }
+    if(address || currentUserDetails.metamaskId){
+      MongoDBInterface.getSignatures({
+        ownerAddress: address || currentUserDetails.metamaskId,
+      }).then((signatures) => {
+        let response = _.get(signatures, "data.data")
+        let isEmptyPresent = _.find(response, (responseItem) => {
+          return _.isEmpty(responseItem.ideaID);
+        });
+        setProfileCOllection(response)
+        dispatch(setCollectionList(response));
     });
+    }
   }
 
   function fetchNotifications() {
@@ -112,19 +119,8 @@ function Profile(props) {
           <div className="separator w-100">
             <Col md="12" className="mycollection">
               <Row className="loggedIn">
-                <Col md="2" className="left-block">
-                  {/* <Row className="profile-section"> */}
-
-                  {/* </Row>  */}
-                  {/* <Row className="profile-section"> */}
-                  <div className="left-block-content">
-                    <div className="options">
-                      <h6 className="mt-1"></h6>
-                    </div>
-                  </div>
-                  {/* </Row> */}
-                </Col>
-                <Col md="8" className="p-0">
+                
+                <Col md="12" className="p-0">
                   <div className="userPane">
                     <div className="w-100">
                       <div className="first-section">
@@ -168,16 +164,15 @@ function Profile(props) {
                     />
                     <div className="profile-info">
                       <Row className="d-flex justify-content-center">
-                        <h4>{_.get(currentUserDetails, "fullName")}</h4>
+                        <h4>{_.get(currentUserDetails, "userID")}</h4>
                       </Row>
                       <Row>
-                        <Col>@{_.get(currentUserDetails, "userID")}</Col>
-                        <Col className="address-copy">
-                          <span>
+                        <Col className="address-copy d-flex align-items-center">
+                          <span className="address-value">
                             {_.get(currentUserDetails, "metamaskId") &&
                               _.get(currentUserDetails, "metamaskId").substring(
                                 0,
-                                3
+                                5
                               ) +
                                 " ..... " +
                                 _.get(
@@ -185,11 +180,11 @@ function Profile(props) {
                                   "metamaskId"
                                 ).substring(
                                   _.get(currentUserDetails, "metamaskId")
-                                    .length - 3,
+                                    .length - 4,
                                   _.get(currentUserDetails, "metamaskId").length
                                 )}
                           </span>
-                          <Share
+                          <ExternalLink
                             size={15}
                             onClick={() => {
                               window.open(
@@ -197,7 +192,7 @@ function Profile(props) {
                                   _.get(currentUserDetails, "metamaskId")
                               );
                             }}
-                          ></Share>
+                          ></ExternalLink>
                         </Col>
                        
                       </Row>

@@ -13,15 +13,26 @@ import BlockChainInterface from "../../interface/BlockchainInterface";
 import StorageInterface from "../../interface/StorageInterface";
 import Dropzone, { useDropzone } from "react-dropzone";
 import CONSTANTS from "../../commons/Constants";
+import * as reactShare from "react-share";
 import { useHistory } from "react-router-dom";
 import "./Create.scss";
-import { X, Image as ImageFile, Info, UploadCloud, Check } from "react-feather";
+import {
+  X,
+  Image as ImageFile,
+  Info,
+  UploadCloud,
+  Check,
+  Share2,
+  Download,
+  Crosshair,
+  ExternalLink
+} from "react-feather";
 import Hash from "ipfs-only-hash";
 import { Container } from "react-bootstrap";
 import { Document, Page, pdfjs } from "react-pdf";
 import _ from "lodash";
 import Select from "react-select";
-
+import SocialShare from "../../modals/social-share/socialShare";
 import "react-step-progress-bar/styles.css";
 import { shallowEqual, useSelector } from "react-redux";
 import user from "../../../assets/images/user.png";
@@ -75,6 +86,7 @@ function Create(props) {
   });
 
   const [slideCount, setSlideCount] = useState(0);
+  const [showShare, setShowShare] = useState(false);
   const [billet, setBillet] = useState({
     creator: form.owner,
     fullName: userDetails.fullName,
@@ -96,8 +108,7 @@ function Create(props) {
   const getQrcode = () => {
     QRCode.toCanvas(
       document.getElementById("canvas"),
-      "https://kovan.etherscan.io/address/" +
-                                  _.get(billet, "transactionID"),
+      "https://kovan.etherscan.io/address/" + _.get(billet, "transactionID"),
       {
         color: {
           dark: "#1b1919", // black dots
@@ -247,7 +258,7 @@ function Create(props) {
   function saveToMongo(form) {
     MongoDBInterface.addSignature(form)
       .then((success) => {
-        showToaster("Your thoughts have been submitted!", { type: "dark" });
+        showToaster("Your Idea is now registered on the blockchain!", { type: "dark" });
       })
       .catch((err) => {
         console.log(err);
@@ -259,20 +270,30 @@ function Create(props) {
     setPublishState(PROGRESS);
     BlockChainInterface.publishOnBehalf(form)
       .then((success) => {
-        debugger;
-        let response = _.get(success, "data.data");
-        saveToMongo(response);
-        setBillet({
-          creator: userDetails.userID,
-          fullName: userDetails.fullName,
-          title: response.title,
-          time: moment(new Date()).format("MMMM Do YYYY, h:mm:ss a"),
-          tokenID: response.ideaID,
-          transactionID: response.transactionID,
-          PDFHash: response.PDFHash,
-        });
-        setPublishState(PASSED);
-        setSlideCount(RESPONSE_SLIDE);
+        if(_.get(success,'data.success')){
+          let successResponse = _.get(success, "data.data");
+          saveToMongo(successResponse);
+          setBillet({
+            creator: userDetails.userID,
+            fullName: userDetails.fullName,
+            title: successResponse.title,
+            time: moment(new Date()).format("MMMM Do YYYY, h:mm:ss a"),
+            tokenID: successResponse.ideaID,
+            transactionID: successResponse.transactionID,
+            PDFHash: successResponse.PDFHash,
+          });
+          setPublishState(PASSED);
+          setSlideCount(RESPONSE_SLIDE);
+        }else{
+          let errorReason = _.get(success,'data.data.errorReason')
+          setPublishState(FAILED);
+          setSlideCount(RESPONSE_SLIDE);
+          
+          setPublishError(
+            "The idea couldnt be published to blockchain. " + errorReason
+          );
+        }
+        
       })
       .catch((error) => {
         setPublishState(FAILED);
@@ -523,7 +544,7 @@ function Create(props) {
                       rows={7}
                       aria-describedby="inputGroupAppend"
                       name="description"
-                      placeholder="Description*"
+                      placeholder="upto 250 words"
                       style={{ resize: "none" }}
                       onChange={handleChange}
                       maxLength={250}
@@ -614,11 +635,12 @@ function Create(props) {
       case THUMBNAIL_SLIDE:
         return (
           <>
+           
             <Col md="6" sm="12" lg="6" xs="12" className="price-n-category">
               <Row className="">
                 <Form.Group as={Col} className="formEntry" md="12">
                   <div className="tags-label">
-                    <Form.Label>Tags </Form.Label>
+                    <Form.Label>Tags (upto 3) </Form.Label>
                   </div>
                   <Select
                     value={form.category}
@@ -631,7 +653,7 @@ function Create(props) {
                     }
                     options={CONSTANTS.CATEGORIES}
                     onChange={handleTagsChange}
-                    placeholder="Tags*"
+                    placeholder="Adding tags to describe your idea."
                   />
                 </Form.Group>
               </Row>
@@ -696,7 +718,7 @@ function Create(props) {
                         {isSelectedPurpose(CONSTANTS.PURPOSES.KEEP) && (
                           <Check />
                         )}
-                        Keep
+                        Personal Record
                       </Button>
                     </Col>
                   </Row>
@@ -826,32 +848,30 @@ function Create(props) {
               <div className="description">
                 <Row>
                   <Col md="12" className="message">
-                    The Tribe is looking up for the idea that you are about to
-                    post. We appreciate the effort that you have put in to
-                    contribute. Being one of the eary bird, we are taking your
-                    expenses to get your idea sailing. This one is on us.
+                    Your idea will now be immortalized in a blockchain. And you
+                    will forever be known as it's creator. Welcome to the Tribe!
                   </Col>
                 </Row>
                 <div className="gas-fee-block">
                   <div className="gas_fee">
-                    <p>Binance chain gas Fee : </p>
+                    <p>Binance Chain Gas Fees: </p>
                   </div>
                   <div className="gas_fee_value">
-                    <p>2$ </p>
+                    <p> 0.001 BNB </p>
                   </div>
                   <div className="gas_free">
-                    <p> This is on us. </p>
+                    <p> This is on us for your first 5 Ideas. </p>
                   </div>
                 </div>
                 <div className="service_fee_block">
                   <div className="serice_fee">
-                    <p> Service fee : </p>
+                    <p> IdeaTribe Service Fee: </p>
                   </div>
                   <div className="serice_fee_value">
-                    <p> 2$ </p>
+                    <p> 0.01 BNB </p>
                   </div>
                   <div className="serice_free">
-                    <p> Free for early members</p>
+                    <p> FREE for early Tribers!</p>
                   </div>
                 </div>
                 <p></p>
@@ -862,15 +882,19 @@ function Create(props) {
         break;
       case LOADING_SLIDE:
         return (
-          <Col md="12" sm="12" lg="12" xs="12" className="publishing-wrapper d-flex flex-column justify-content-center">
-            
-
+          <Col
+            md="12"
+            sm="12"
+            lg="12"
+            xs="12"
+            className="publishing-wrapper d-flex flex-column justify-content-center"
+          >
             <div className="gif-wrapper d-flex justify-content-center">
               <img src={loadingGif} alt="" />
             </div>
             <div className="publishing-block-text">
               <p>
-                We are posting your idea on the binance blockchain. Hold on
+                We are posting your idea on the Binance Blockchain. Hold on
                 tight!
               </p>
             </div>
@@ -901,9 +925,10 @@ function Create(props) {
               id="published-wrapper-block"
               className="published-wrapper p-0 d-flex flex-row justify-content-space-around"
             >
+                
               <div className="left-strip"> </div>
               <Col
-                md="9"
+                md="8"
                 className="center-strip d-flex flex-column justify-content-around"
               >
                 <Row className="row1">
@@ -919,7 +944,7 @@ function Create(props) {
                   <Col md="12">
                     <div className="billet-item">
                       <div className="item">{billet.title}</div>
-                      <div className="time">at {billet.time}</div>
+                      <div className="time"> {billet.time}, Bangalore</div>
                     </div>
                   </Col>
                   <Col md="12"></Col>
@@ -935,9 +960,7 @@ function Create(props) {
                       </div>
                       <div className="trasnection-details">
                         <div>FILE HASH:</div>
-                        <span className="hashValue">
-                        {billet.PDFHash}
-                        </span>
+                        <span className="hashValue">{billet.PDFHash}</span>
                       </div>
                       <div className="trasnection-details">
                         <div>TOKEN ID:</div>
@@ -947,15 +970,16 @@ function Create(props) {
                   </Col>
                 </Row>
               </Col>
-              <Col md="3" className="right-strip   d-flex flex-column justify-content-around">
+              <Col
+                md="3"
+                className="right-strip   d-flex flex-column justify-content-around"
+              >
                 <div className="brand">
-                  <Col md="12"className="p-0">BILLET</Col>
                   <Col md="12" className="p-0">
-                    <img
-                      src={signatureImage}
-                      alt="logo"
-                      width="100%"
-                    />
+                    BILLET
+                  </Col>
+                  <Col md="12" className="p-0">
+                    <img src={signatureImage} alt="logo" width="150px" />
                   </Col>
                 </div>
                 <div class="code-n-share">
@@ -967,6 +991,44 @@ function Create(props) {
                   </Col>
                 </div>
               </Col>
+              <Col md="1" className="actionables p-0 flex-column">
+                <div className="in-app-actions d-flex flex-column pt-3">
+                  <Crosshair
+                    className="cursor-pointer signature-icons"
+                    color="#F39422"
+                    onClick={() => {
+                      openInEtherscan();
+                    }}
+                  ></Crosshair>
+                  <Download
+                    className="cursor-pointer signature-icons"
+                    color="#F39422"
+                    onClick={() => {
+                      exportToPdf();
+                    }}
+                  ></Download>
+                 
+                </div>
+                <div className="sharables d-flex flex-column align-flex-start">
+                  
+                  <reactShare.FacebookShareButton
+                    url={window.location.origin + "/signature/" + billet.PDFHash}
+                    quote={"Hey, checkout this idea on ideaTribe."}
+                  >
+                    <reactShare.FacebookIcon size={32} round />
+                  </reactShare.FacebookShareButton>
+                  <reactShare.WhatsappShareButton
+                    url={window.location.origin + "/signature/" + billet.PDFHash}
+                    title={"Hey, checkout this idea on ideaTribe."}
+                    separator=": "
+                  >
+                    <reactShare.WhatsappIcon size={32} round />
+                  </reactShare.WhatsappShareButton>
+                  <reactShare.LinkedinShareButton url={window.location.origin + "/signature/" + billet.PDFHash}>
+                    <reactShare.LinkedinIcon size={32} round />
+                  </reactShare.LinkedinShareButton>
+                </div>
+              </Col>
             </Col>
           )
         );
@@ -976,20 +1038,16 @@ function Create(props) {
   };
 
   const exportToPdf = () => {
-    var name = "trasnaction.pdf";
-
+    var name = "Billet.pdf";
     domtoimage
       .toJpeg(document.getElementById("published-wrapper-block"), {
-        quality: 0.95,
-        style: {
-          "background-color": "#000",
-          padding: "20px",
-        },
-        filter: function filter(node) {
-          return (
-            ["filterAddition", "bottom-contents"].indexOf(node.className) < 0
-          );
-        },
+        quality: 1,
+        style: {},
+        // filter: function filter(node) {
+        //   return (
+        //     ["filterAddition", "bottom-contents"].indexOf(node.className) < 0
+        //   );
+        // },
       })
       .then(
         function(dataUrl) {
@@ -998,7 +1056,7 @@ function Create(props) {
             var pdf = new jspdf("p", "pt", "a3");
             pdf.internal.pageSize.setWidth(image.width * 0.75);
             pdf.internal.pageSize.setHeight(image.height * 0.75);
-            pdf.addImage(dataUrl, "JPG", 0, -80);
+            pdf.addImage(dataUrl, "JPG", 0, 0);
             pdf.save(name);
           });
           image.src = dataUrl;
@@ -1011,8 +1069,13 @@ function Create(props) {
 
   return (
     <Container>
+       
       <Row className="createform  d-flex">
-        <Col md="12" sm="12" lg="12" xs="12" className="responsive-content">
+      
+        <Col md="11" sm="11" lg="11" xs="11" className="responsive-content">
+        <X className="closeIcon" size={16} onClick={() => {
+                  gotoProfile()
+                }}></X>
           <Form
             noValidate
             encType="multipart/form-data"
@@ -1074,6 +1137,10 @@ function Create(props) {
       </Row>
     </Container>
   );
+
+  function openInEtherscan() {
+    window.open("https://kovan.etherscan.io/tx/" + billet.transactionID);
+  }
 
   function getNextButtonText() {
     if (slideCount == PREVIEW_SLIDE) {

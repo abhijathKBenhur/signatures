@@ -1,9 +1,9 @@
+@import "../../commons/Common.scss";
 .discover-topics-section{
     display: flex;
     align-items: center;
     flex-flow: column;
     margin: 0 auto;
-    max-width: 800px;
     padding: 40px 24px;
     border-top: 1px solid #d9d9d9;
     margin-top: 40px;
@@ -24,6 +24,10 @@
                 margin: 0 8px 12px 0;
                 font-size: 12px;
                 font-weight: 500;
+                .btn-secondary.selected {
+                    background-color: $primary-dark !important;
+                    color: $secondary !important
+                }
             }
         }
     }

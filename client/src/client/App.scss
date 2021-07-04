@@ -4,13 +4,9 @@
 /* Styles go here */
 
 .appContainer {
-  // .content{
-  //   // max-height: calc(100% - 100px);
-  //   max-height: 90vh;
-  //   .container-fluid{
-  //     // height: 100%;
-  //   }
-  // }
+  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+  scrollbar-width: none;  /* Firefox */
+
 }
 input[type='radio']:after {
   width: 15px;
@@ -173,7 +169,46 @@ body {
   }
 }
 .main-content-component{
-  margin-top: 60px;
+  margin-top: 110px;
   height: calc(100vh - 100px);
   width: 100%;
+  text-align: center;
+  color:  $primary;
+  font-size: 18px;
+  text-align: left;
+}
+
+
+
+.text-tile-title{
+  // color: red;
+}
+
+.text-description{
+
+}
+
+.text-paragraph{
+
+}
+
+.text-price{
+
+}
+
+.text-username{
+  
+}
+.text-banner-title{
+
+}
+.text-banner-header{
+  font-size: 20px;
+}
+.text-banner{
+  font-size: 20px;
+  line-height: 25px;
+  .italics{
+    font-style: italic;
+  }
 }

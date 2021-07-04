@@ -29,7 +29,8 @@ import {
   ShoppingCart,
   Share,
   Crosshair,
-  MoreHorizontal
+  Edit3,
+  Check,
 } from "react-feather";
 import { Document, Page, pdfjs } from "react-pdf";
 import _ from "lodash";
@@ -41,6 +42,7 @@ import { shallowEqual, useSelector } from "react-redux";
 import audio from "../../../assets/images/audio.png";
 import CONSTANTS from "../../commons/Constants";
 import { showToaster } from "../../commons/common.utils";
+import * as reactShare from "react-share";
 
 const Signature = (props) => {
   let { hashId } = useParams();
@@ -54,6 +56,10 @@ const Signature = (props) => {
     undefined
   );
 
+  const [signatureEdits, setSignatureEdits] = useState({
+    purpose: false,
+    price: false,
+  });
   const [key, setKey] = useState("Details");
   let history = useHistory();
   useEffect(() => {
@@ -106,18 +112,24 @@ const Signature = (props) => {
   };
 
   function feedbackMessage(signature) {
-    showToaster("Please wait a while we complete the transaction. Please note the transaction ID : " +
-    signature && signature.transactionID, {type:'dark'})
+    showToaster(
+      "Please wait a while we complete the transaction. Please note the transaction ID : " +
+        signature && signature.transactionID,
+      { type: "dark" }
+    );
   }
 
   function errorMessage() {
-    showToaster("There was an error in processing your request in blockchain ", {type: 'error'})
+    showToaster(
+      "There was an error in processing your request in blockchain ",
+      { type: "error" }
+    );
   }
 
   function updateMongoBuySignature(updatePayload) {
     MongoDBInterface.buySignature(updatePayload)
       .then((updatedSignature) => {
-        showToaster("Purchase updated on blockchain", {type: 'info'})
+        showToaster("Purchase updated on blockchain", { type: "info" });
         setSignature(new SignatureBean(_.get(updatedSignature, "data.data")));
         gotoGallery();
       })
@@ -135,13 +147,21 @@ const Signature = (props) => {
   function copyClipBoard() {
     let shareURL = window.location.href + "/signature/" + signature.PDFHash;
     navigator.clipboard.writeText(shareURL);
-    showToaster("Copied to clipboard!", {type: 'dark'})
+    showToaster("Copied to clipboard!", { type: "dark" });
   }
 
   function updatePriceInMongo() {
     MongoDBInterface.updatePrice(signature).then((updatedSignature) => {
       setSignature(_.get(updatedSignature, "data.data"));
     });
+  }
+
+  function procureSignature() {
+    if (signature.purpose == CONSTANTS.PURPOSES.SELL || signature.purpose == CONSTANTS.PURPOSES.AUCTION) {
+      buySignature();
+    } else if (signature.purpose == CONSTANTS.PURPOSES.COLLAB) {
+      showInterest();
+    }
   }
 
   function buySignature() {
@@ -209,86 +229,69 @@ const Signature = (props) => {
     });
   };
 
-  const getMenuActions = () => {
-    return (
-      <DropdownButton id="dropdown-actions" title="Actions">
-        {/* <Dropdown.Toggle variant="success" id="dropdown-basic">
-          <MoreHorizontal />
-        </Dropdown.Toggle> */}
-        {isCurrentUserOwner ? (
-          <div></div>
-        ) : (
-          <div>
-            {signature.purpose == CONSTANTS.PURPOSES.SELL && (
-              <Dropdown.Item
-                onClick={() => {
-                  buySignature();
-                }}
-              >
-                <ShoppingCart
-                  className="cursor-pointer signature-icons ShoppingCart"
-                  color="#79589F"
-                ></ShoppingCart>
-                <span className="txt">Buy</span>
-              </Dropdown.Item>
-            )}
-            {signature.purpose == CONSTANTS.PURPOSES.COLLAB && (
-              <Dropdown.Item
-                onClick={() => {
-                  showInterest();
-                }}
-              >
-                <ShoppingCart
-                  className="cursor-pointer signature-icons ShoppingCart"
-                  color="#79589F"
-                ></ShoppingCart>
-                <span className="txt">Collaborate</span>
-              </Dropdown.Item>
-            )}
-            <Dropdown.Item>
-              <ThumbsUp
-                className="cursor-pointer signature-icons ThumbsUp"
-                color="#79589F"
-              ></ThumbsUp>
-              <span className="txt">Like </span>
-            </Dropdown.Item>
-          </div>
-        )}
+  // const getMenuActions = () => {
+  //   return (
+  //     <DropdownButton id="dropdown-actions" title="Actions">
+  //       {/* <Dropdown.Toggle variant="success" id="dropdown-basic">
+  //         <MoreHorizontal />
+  //       </Dropdown.Toggle> */}
+  //       {isCurrentUserOwner ? (
+  //         <div></div>
+  //       ) : (
+  //         <div>
+  //           {signature.purpose == CONSTANTS.PURPOSES.SELL && (
+  //             <Dropdown.Item
 
-        <Dropdown.Item>
-          <Share
-            className="cursor-pointer signature-icons"
-            color="#79589F"
-            onClick={() => {
-              copyClipBoard();
-            }}
-          ></Share>
-          <span className="txt">Copy link</span>
-        </Dropdown.Item>
-        <Dropdown.Item>
-          <Crosshair
-            className="cursor-pointer signature-icons"
-            color="#79589F"
-            onClick={() => {
-              openInEtherscan();
-            }}
-          ></Crosshair>
-          <span className="txt">View</span>
-        </Dropdown.Item>
+  //             >
 
-        {/* <Dropdown.Item>
-          <ExternalLink
-            className="cursor-pointer signature-icons ExternalLink"
-            onClick={() => {
-              openInNewTab();
-            }}
-            color="#79589F"
-          ></ExternalLink>
-          <span className="txt">Open</span>
-        </Dropdown.Item> */}
-      </DropdownButton>
-    );
-  };
+  //               <span className="txt">Buy</span>
+  //             </Dropdown.Item>
+  //           )}
+  //           {signature.purpose == CONSTANTS.PURPOSES.COLLAB && (
+  //             <Dropdown.Item
+  //               onClick={() => {
+  //                 showInterest();
+  //               }}
+  //             >
+  //               <ShoppingCart
+  //                 className="cursor-pointer signature-icons ShoppingCart"
+  //                 color="#F39422"
+  //               ></ShoppingCart>
+  //               <span className="txt">Collaborate</span>
+  //             </Dropdown.Item>
+  //           )}
+  //           <Dropdown.Item>
+  //             <ThumbsUp
+  //               className="cursor-pointer signature-icons ThumbsUp"
+  //               color="#F39422"
+  //             ></ThumbsUp>
+  //             <span className="txt">Like </span>
+  //           </Dropdown.Item>
+  //         </div>
+  //       )}
+
+  //       <Dropdown.Item>
+
+  //         <span className="txt">Copy link</span>
+  //       </Dropdown.Item>
+  //       <Dropdown.Item>
+
+  //         <span className="txt">View</span>
+  //       </Dropdown.Item>
+
+  //       {/* <Dropdown.Item>
+  //         <ExternalLink
+  //           className="cursor-pointer signature-icons ExternalLink"
+  //           onClick={() => {
+  //             openInNewTab();
+  //           }}
+  //           color="#F39422"
+  //         ></ExternalLink>
+  //         <span className="txt">Open</span>
+  //       </Dropdown.Item> */}
+  //     </DropdownButton>
+  //   );
+  // };
 
   const getDocumnetViewer = () => {
     const { fileType } = signature;
@@ -321,6 +324,23 @@ const Signature = (props) => {
     }
   };
 
+  function getIdeaStatus() {
+    switch (signature.purpose) {
+      case CONSTANTS.PURPOSES.SELL:
+        return "On Sale";
+        break;
+      case CONSTANTS.PURPOSES.AUCTION:
+        return "On Auction";
+        break;
+      case CONSTANTS.PURPOSES.COLLAB:
+        return "Inviting Collaborators";
+        break;
+      case CONSTANTS.PURPOSES.KEEP:
+        return "Personal Record";
+        break;
+    }
+  }
+
   return (
     <Container fluid>
       <Form
@@ -342,55 +362,114 @@ const Signature = (props) => {
                 <Spinner animation="border" />
               )}
             </Col>
-            <Col sm="12" lg="5" xs="12" md="6" className="right-side">
-              <div className="top-section">
+            <Col sm="12" lg="5" xs="12" md="6" className="right-side p-0">
+              <div className="buttons text-right d-flex justify-content-between">
+                <div className="actions d-flex">
+                  {!isCurrentUserOwner && (
+                    <ShoppingCart
+                      onClick={() => {
+                        procureSignature();
+                      }}
+                      className="cursor-pointer signature-icons ShoppingCart"
+                      color="#F39422"
+                    ></ShoppingCart>
+                  )}
+                  {!isCurrentUserOwner && (
+                    <ThumbsUp
+                      className="cursor-pointer signature-icons ThumbsUp"
+                      color="#F39422"
+                    ></ThumbsUp>
+                  )}
+                  <ExternalLink
+                    className="cursor-pointer signature-icons"
+                    color="#F39422"
+                    onClick={() => {
+                      copyClipBoard();
+                    }}
+                  ></ExternalLink>
+                  <Crosshair
+                    className="cursor-pointer signature-icons"
+                    color="#F39422"
+                    onClick={() => {
+                      openInEtherscan();
+                    }}
+                  ></Crosshair>
+                </div>
+                <div className="sharables d-flex">
+                  <reactShare.FacebookShareButton
+                    url={window.location.href}
+                    quote={"Hey, checkout this idea on ideaTribe."}
+                  >
+                    <reactShare.FacebookIcon size={32} round />
+                  </reactShare.FacebookShareButton>
+                  <reactShare.TwitterShareButton
+                    url={window.location.href}
+                    title={"Hey, checkout this idea on ideaTribe."}
+                  >
+                    <reactShare.TwitterIcon size={32} round />
+                  </reactShare.TwitterShareButton>
+                  <reactShare.WhatsappShareButton
+                    url={window.location.href}
+                    title={"Hey, checkout this idea on ideaTribe."}
+                    separator=":: "
+                  >
+                    <reactShare.WhatsappIcon size={32} round />
+                  </reactShare.WhatsappShareButton>
+                  <reactShare.LinkedinShareButton url={window.location.href}>
+                    <reactShare.LinkedinIcon size={32} round />
+                  </reactShare.LinkedinShareButton>
+                </div>
+              </div>
+              <div className="top-section d-flex flex-column">
                 <Row className="form-row title-row">
-                  <Col md="9" className="pl-0">
+                  <Col md="6" className="pl-0">
                     <span>{signature.title}</span>
                   </Col>
-                  <Col md="3 created-at">
-                    {moment(signature.createdAt).format("DD-MMM-YYYY")}
+                  <Col md="6 created-at p-0">
+                    {moment(signature.createdAt).format(
+                      "MMMM Do YYYY, h:mm:ss A"
+                    )}
+                  </Col>
+                </Row>
+                <Row>
+                  <Col md="6" className="form-row  tags-row">
+                    {signature.category &&
+                      JSON.parse(signature.category).map((tag, key) => {
+                        return (
+                          <Button disabled variant="pill">
+                            {tag.label}
+                          </Button>
+                        );
+                      })}
+                  </Col>
+                  <Col md="6" className="city_name p-0">
+                    Bangalore
                   </Col>
                 </Row>
                 <Row className="form-row owner-row">
-                  <Col md="9" className="">
-                    <Row className="form-row  tags-row">
-                      {signature.category &&
-                        JSON.parse(signature.category).map((tag, key) => {
-                          return (
-                            <Button disabled variant="pill">
-                              {tag.label}
-                            </Button>
-                          );
-                        })}
-                      {/* <Badge
-                        key={key}
-                        className="tagpill purpose"
-                        variant="secondary"
-                      >
-                        {signature.purpose}
-                      </Badge> */}
+                  <Col md="12" className="owner text-right">
+                    <Row className="d-flex flex-column ">
+                      <Col md="12">
+                        <div className="owned_by justify-content-end">
+                          Currently owned by {signature.userID}
+                        </div>
+                      </Col>
                     </Row>
-                  </Col>
-                  <Col
-                    md="3"
-                    className="owner"
-                    onClick={() => {
-                      goToUserProfile(signature.userID);
-                    }}
-                  >
-                    <img src={user} alt="user" className="user-profile mr-1" />
-                    {signature.userID}
+
                     <br></br>
-                    {currentUser.metamaskId}
-                    {/* {currentUser.metamaskId.substring(0,3) + " ... " + currentUser.metamaskId.substring(currentUser.metamaskId.length - 4,currentUser.metamaskId)} */}
                   </Col>
                 </Row>
                 <Row className="form-row">
                   <span> {signature.description}</span>
                 </Row>
               </div>
-              <div className="text-right">{getMenuActions()}</div>
+              <div className="">
+                <Col md="12" className="created-by justify-content-end">
+                  <div className="text-right">
+                    Created by {signature.userID}
+                  </div>
+                </Col>
+              </div>
               <div className="tabs-wrapper">
                 <Tabs
                   id="idea-tab-categories"
@@ -401,24 +480,28 @@ const Signature = (props) => {
                     <div className="collection-wrapper">
                       <div className="middle-block">
                         <Row>
-                          <Col md={6}>Status of idea : </Col>
-                          <Col md={6}>{signature.purpose}</Col>
-                          <Col md={6}>Price : </Col>
-                          <Col md={6}>
-                            {signature.price &&
-                              Web3Utils.fromWei(signature.price)}{" "}
-                            BNB
+                          <Col md={12}>
+                            <span>{getIdeaStatus()}</span>
+                          </Col>
+                          <Col md={12}>
+                            <span>
+                              {" "}
+                              {signature.price &&
+                                Web3Utils.fromWei(signature.price)}{" "}
+                              BNB
+                            </span>
                           </Col>
                         </Row>
                       </div>
                     </div>
                   </Tab>
                   <Tab eventKey="History" title="History">
-                    <div className="transactions-wrapper"></div>
+                    <div className="transactions-wrapper">
+                      No transactions yet
+                    </div>
                   </Tab>
                 </Tabs>
               </div>
-              {/* {getMenuActions()} */}
             </Col>
           </Row>
         </Col>

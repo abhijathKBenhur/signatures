@@ -117,7 +117,7 @@ getSignatures = async (req, res) => {
     console.log(searchOrArray)
   }
   if(searchString){
-    searchOrArray.push({'title':{ $regex: searchString }})
+    searchOrArray.push({'title':{ $regex: new RegExp(searchString, "i") }})
     searchOrArray.push({'description':{ $regex: searchString }})
   }
   if(searchOrArray.length > 0){
@@ -130,6 +130,10 @@ getSignatures = async (req, res) => {
     payLoad.owner = ownerAddress;
   }
   if (!limit) {
+    // .sort({'createdAt': 'desc'})
+    //  .exec((err, signatures) => {
+         //do stuff with images
+     
     await SignatureSchema.find(payLoad, (err, signatures) => {
       if (err) {
         return res.status(404).json({ success: false, error: "here" });

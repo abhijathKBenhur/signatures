@@ -108,7 +108,7 @@ const Header = (props) => {
             createnew();
           }}
         >
-          Register your Idea
+          Create NFT
         </Button>
       )
     }
@@ -161,7 +161,9 @@ const Header = (props) => {
           </div>
 
           <div className="right-section">
-            <span className="loggedinaccount">{currentMetamaskAccount}</span>
+            <span className="loggedinaccount" title={currentMetamaskAccount} onClick={() => {
+              window.open("https://kovan.etherscan.io/address/" + currentMetamaskAccount);
+            }}>{currentMetamaskAccount&& currentMetamaskAccount.substring(0,3) + " ... " + currentMetamaskAccount.substring(currentMetamaskAccount.length - 3,currentMetamaskAccount.length)}</span>
             {/* <Button
               variant="primary"
               className="button"
