@@ -1013,14 +1013,14 @@ function Create(props) {
                   
                   <reactShare.FacebookShareButton
                     url={window.location.origin + "/signature/" + billet.PDFHash}
-                    quote={"Hey, checkout this idea on ideaTribe."}
-                  >
+                    quote={"Hey! I registered an original idea on blockchain!"}
+                 >
                     <reactShare.FacebookIcon size={32} round />
                   </reactShare.FacebookShareButton>
                   <reactShare.WhatsappShareButton
                     url={window.location.origin + "/signature/" + billet.PDFHash}
-                    title={"Hey, checkout this idea on ideaTribe."}
-                    separator=": "
+                    title={"Hey! I registered an original idea on blockchain!"}
+                    separator=" "
                   >
                     <reactShare.WhatsappIcon size={32} round />
                   </reactShare.WhatsappShareButton>

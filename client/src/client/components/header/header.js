@@ -108,7 +108,7 @@ const Header = (props) => {
             createnew();
           }}
         >
-          Create NFT
+          Upload
         </Button>
       )
     }
@@ -183,7 +183,7 @@ const Header = (props) => {
                   gotoPortfolio();
                 }}
               >
-                Connect Wallet
+                Register
               </Button>
             ) : 
                 isUserAuthForPublish()

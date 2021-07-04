@@ -5,7 +5,7 @@ import {
   Row,
   Col,
   Form,
-  InputGroup,
+  Button,
   Container,
   Tabs,
   Tab,
@@ -27,18 +27,21 @@ import store from "../../redux/store";
 import { setCollectionList } from "../../redux/actions";
 function Profile(props) {
   const reduxState = useSelector((state) => state, shallowEqual);
-  const { metamaskID = undefined, userDetails = {}, collectionList = []} = reduxState;
+  const {
+    metamaskID = undefined,
+    userDetails = {},
+    collectionList = [],
+  } = reduxState;
   const [currentMetamaskAccount, setCurrentMetamaskAccount] = useState(
     metamaskID
   );
-  const [profileCollection, setProfileCOllection] = useState([])
+  const [profileCollection, setProfileCOllection] = useState([]);
   const [currentUserDetails, setCurrentUserDetails] = useState(userDetails);
   const [myNotifications, setMyNotifications] = useState([]);
   let history = useHistory();
   const [key, setKey] = useState("collections");
   const viewUser = _.get(history.location.state, "userID");
-  const dispatch = useDispatch()
-  
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const { userDetails = {} } = reduxState;
@@ -51,9 +54,7 @@ function Profile(props) {
     if (userDetails && !viewUser) {
       setCurrentUserDetails(userDetails);
     }
-    
-  }, [reduxState.userDetails ]);
-
+  }, [reduxState.userDetails]);
 
   useEffect(() => {
     fetchSignatures(currentUserDetails.metamaskId);
@@ -75,17 +76,17 @@ function Profile(props) {
   };
 
   function fetchSignatures(address) {
-    if(address || currentUserDetails.metamaskId){
+    if (address || currentUserDetails.metamaskId) {
       MongoDBInterface.getSignatures({
         ownerAddress: address || currentUserDetails.metamaskId,
       }).then((signatures) => {
-        let response = _.get(signatures, "data.data")
+        let response = _.get(signatures, "data.data");
         let isEmptyPresent = _.find(response, (responseItem) => {
           return _.isEmpty(responseItem.ideaID);
         });
-        setProfileCOllection(response)
+        setProfileCOllection(response);
         dispatch(setCollectionList(response));
-    });
+      });
     }
   }
 
@@ -108,6 +109,11 @@ function Profile(props) {
     }
   }
 
+
+  function createnew() {
+    history.push("/create");
+  }
+
   return (
     <Container fluid>
       <Row className="profile">
@@ -119,7 +125,6 @@ function Profile(props) {
           <div className="separator w-100">
             <Col md="12" className="mycollection">
               <Row className="loggedIn">
-                
                 <Col md="12" className="p-0">
                   <div className="userPane">
                     <div className="w-100">
@@ -194,7 +199,6 @@ function Profile(props) {
                             }}
                           ></ExternalLink>
                         </Col>
-                       
                       </Row>
                     </div>
                   </div>
@@ -207,31 +211,48 @@ function Profile(props) {
                       <Tab eventKey="collections" title="Collection">
                         <div className="collection-wrapper">
                           <div className="middle-block">
-                            <Collections collectionList={profileCollection} />
+                            {_.isEmpty(profileCollection) ? (
+                              <Col md="12" className="empty-collection d-flex flex-column align-items-center ">
+                                <Row>
+                                  You currently dont own any ideas. Start by
+                                  uploading one.
+                                </Row>
+                                <Row>
+                                  <Button onClick={() => {
+                                    createnew();
+                                  }} variant="primary"> Upload </Button>
+                                </Row>
+                              </Col>
+                            ) : (
+                              <Collections collectionList={profileCollection} />
+                            )}
                           </div>
                         </div>
                       </Tab>
                       <Tab eventKey="profile" title="Notifications">
                         <div className="transactions-wrapper">
-                          {myNotifications  && myNotifications.length > 0 && <table>
-                            <tr>
-                              <td>From</td>
-                              <td>Action</td>
-                              <td>ideaID</td>
-                              <td>message</td>
-                            </tr>
-                            {myNotifications.map((notification) => {
-                              return (
+                          <div className="middle-block">
+                            {myNotifications && myNotifications.length > 0 && (
+                              <table>
                                 <tr>
-                                  <td>{notification.from}</td>
-                                  <td>{notification.action}</td>
-                                  <td>{notification.ideaID}</td>
-                                  <td>{notification.message}</td>
+                                  <td>From</td>
+                                  <td>Action</td>
+                                  <td>ideaID</td>
+                                  <td>message</td>
                                 </tr>
-                              );
-                            })}
-                          </table>
-}
+                                {myNotifications.map((notification) => {
+                                  return (
+                                    <tr>
+                                      <td>{notification.from}</td>
+                                      <td>{notification.action}</td>
+                                      <td>{notification.ideaID}</td>
+                                      <td>{notification.message}</td>
+                                    </tr>
+                                  );
+                                })}
+                              </table>
+                            )}
+                          </div>
                         </div>
                       </Tab>
                     </Tabs>

@@ -91,7 +91,7 @@ const Banner = (props) => {
                   un-hackable registers. Records registered
                   on blockchain are stored forever.<br/><br/>
                   To register in a blockchain, you need crypto currencies - like
-                  Bitcoin, Ethereum or Binance. A crypto wallet is simply where
+                  Bitcoin, Ethereum or Binance.<br/><br/> A crypto wallet is simply where
                   you buy and store your crypto currencies.
                 </div>
               </Row>

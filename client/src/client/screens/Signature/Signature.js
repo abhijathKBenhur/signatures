@@ -398,19 +398,19 @@ const Signature = (props) => {
                 <div className="sharables d-flex">
                   <reactShare.FacebookShareButton
                     url={window.location.href}
-                    quote={"Hey, checkout this idea on ideaTribe."}
+                    quote={"Hey! Check out this idea."}
                   >
                     <reactShare.FacebookIcon size={32} round />
                   </reactShare.FacebookShareButton>
                   <reactShare.TwitterShareButton
                     url={window.location.href}
-                    title={"Hey, checkout this idea on ideaTribe."}
+                    title={"Hey! Check out this idea."}
                   >
                     <reactShare.TwitterIcon size={32} round />
                   </reactShare.TwitterShareButton>
                   <reactShare.WhatsappShareButton
                     url={window.location.href}
-                    title={"Hey, checkout this idea on ideaTribe."}
+                    title={"Hey! Check out this idea."}
                     separator=":: "
                   >
                     <reactShare.WhatsappIcon size={32} round />
