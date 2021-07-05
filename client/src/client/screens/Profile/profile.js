@@ -109,7 +109,6 @@ function Profile(props) {
     }
   }
 
-
   function createnew() {
     history.push("/create");
   }

@@ -48,8 +48,8 @@ const Rack = (props) => {
               return (
                 <Col
                   key={signature._id}
-                  md="4"
-                  lg="3"
+                  md="3"
+                  lg="4"
                   sm="6"
                   xs="12"
                   className="deck-card col-md-offset-2"

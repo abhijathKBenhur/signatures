@@ -868,7 +868,7 @@ function Create(props) {
                     <p> IdeaTribe Service Fee: </p>
                   </div>
                   <div className="serice_fee_value">
-                    <p> 0.01 BNB </p>
+                    <p> 0.1 BNB </p>
                   </div>
                   <div className="serice_free">
                     <p> FREE for early Tribers!</p>

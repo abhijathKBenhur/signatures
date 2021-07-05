@@ -25,7 +25,7 @@ const Banner = (props) => {
     <Carousel
       interval={10000}
       className="d-flex align-items-center banner"
-      style={{ backgroundImage: `url(${bg2})` }}
+      style={{ backgroundImage: `url(${bg2})`}}
       cover
     >
       {/* <Carousel.Item style={{background:`url(${cover})`}}> */}
