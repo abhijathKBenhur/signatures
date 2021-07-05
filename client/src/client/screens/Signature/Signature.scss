@@ -15,6 +15,7 @@
       align-items: center;
       .pdfUploaded {
         margin: 10px;
+        flex-flow: column;
         .pdf-document {
           max-height: 100%;
           max-width: 100%;
@@ -23,14 +24,27 @@
           max-width: 100%;
           max-height: 100%;
         }
-        .audio-wrapper{
+        .audio-wrapper {
           display: flex;
           flex-flow: column;
           align-items: center;
           img {
-              width: 200px;
+            width: 200px;
           }
-      }
+        }
+        .page-container {
+          margin: 0;
+          font-size: 10px;
+          display: flex;
+          align-items: center;
+          svg {
+            width: 16px;
+            cursor: pointer;
+            &.disable {
+              pointer-events: none;
+            }
+          }
+        }
       }
     }
     .right-side {
@@ -42,21 +56,21 @@
       overflow: scroll;
       background-color: $primary;
       color: white;
-      .buttons{
-        padding:  10px;
-        .actions{
+      .buttons {
+        padding: 10px;
+        .actions {
           gap: 10px;
         }
-        .sharables{
-          gap:10px
+        .sharables {
+          gap: 10px;
         }
         border-bottom: 1px solid $secondary;
       }
       .tabs-wrapper {
         flex: 1;
-        .collection-wrapper{
+        .collection-wrapper {
           padding: 10px;
-          .middle-block{
+          .middle-block {
             font-size: 40px;
             color: $primary;
             text-align: center;
@@ -72,18 +86,17 @@
               border: 2px solid $secondary;
               background-color: $secondary;
               color: $primary-dark;
-
             }
           }
         }
-        .tab-content{
+        .tab-content {
           background-color: $secondary;
         }
       }
       .top-section {
-          flex: 3;
+        flex: 3;
         padding: 20px;
-        .city_name{
+        .city_name {
           text-align: end;
         }
         .form-row {
@@ -100,7 +113,7 @@
               text-align: end;
             }
           }
-          
+
           &.owner-row {
             font-size: 12px;
             .owner {
@@ -115,7 +128,7 @@
               }
             }
           }
-    
+
           &.tags-row {
             display: flex;
             margin-top: 2px;
