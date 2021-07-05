@@ -412,19 +412,19 @@ const Signature = (props) => {
                 <div className="sharables d-flex">
                   <reactShare.FacebookShareButton
                     url={window.location.href}
-                    quote={"Hey, checkout this idea on ideaTribe."}
+                    quote={"Hey! Check out this idea."}
                   >
                     <reactShare.FacebookIcon size={32} round />
                   </reactShare.FacebookShareButton>
                   <reactShare.TwitterShareButton
                     url={window.location.href}
-                    title={"Hey, checkout this idea on ideaTribe."}
+                    title={"Hey! Check out this idea."}
                   >
                     <reactShare.TwitterIcon size={32} round />
                   </reactShare.TwitterShareButton>
                   <reactShare.WhatsappShareButton
                     url={window.location.href}
-                    title={"Hey, checkout this idea on ideaTribe."}
+                    title={"Hey! Check out this idea."}
                     separator=":: "
                   >
                     <reactShare.WhatsappIcon size={32} round />
@@ -465,7 +465,7 @@ const Signature = (props) => {
                     <Row className="d-flex flex-column ">
                       <Col md="12">
                         <div className="owned_by justify-content-end">
-                          Currently owned by {signature.userID}
+                          Created by {signature.userID}
                         </div>
                       </Col>
                     </Row>
@@ -480,7 +480,7 @@ const Signature = (props) => {
               <div className="">
                 <Col md="12" className="created-by justify-content-end">
                   <div className="text-right">
-                    Created by {signature.userID}
+                    Currently owned by {signature.owner&& signature.owner.substring(0,3) + " ... " + signature.owner.substring(signature.owner.length - 3,signature.owner.length)}
                   </div>
                 </Col>
               </div>

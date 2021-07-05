@@ -48,21 +48,21 @@ const Rack = (props) => {
               return (
                 <Col
                   key={signature._id}
-                  md="4"
-                  lg="3"
+                  md="3"
+                  lg="4"
                   sm="6"
                   xs="12"
                   className="deck-card col-md-offset-2"
-                  onClick={() => {
-                    openCardView(signature);
-                  }}
+                  
                 >
                   <div className="content cursor-pointer p-1">
                     {/* <div className="collection-header d-flex justify-content-between align-items-center p-2">
                       <div className="header-left"></div>
                       <div className="header-right"></div>
                     </div> */}
-                    <div className="deck-preview">
+                    <div className="deck-preview"onClick={() => {
+                    openCardView(signature);
+                  }}>
                       <Col md="12 deck-image">
                         <Image
                           src={signature.thumbnail}
@@ -116,7 +116,7 @@ const Rack = (props) => {
                       </Col>
                     </div>
                     <div className="deck-footer p-1">
-                      <Row>
+                      <div>
                         <Col md="12">
                           <Col md="12" className="tags">
                             {JSON.parse(signature.category) &&
@@ -131,16 +131,16 @@ const Rack = (props) => {
                                 })}
                           </Col>
                         </Col>
-                      </Row>
-                      <Row>
+                      </div>
+                      <div>
                         <Col md="12" className="idea-title">
                           <p className="text-left title text-tile-title">
                             {signature.title}
                           </p>
                         </Col>
-                      </Row>
+                      </div>
 
-                      <Row md="12">
+                      <div className="d-flex">
                         <Col md="6" className="idea-details">
                           {moment(signature.createdAt).format("DD-MMM-YYYY")}
                         </Col>
@@ -154,7 +154,7 @@ const Rack = (props) => {
                             {signature.userID}
                           </span>
                         </Col>
-                      </Row>
+                      </div>
                     </div>
                     <div className="deck-actions">
                       <Row>

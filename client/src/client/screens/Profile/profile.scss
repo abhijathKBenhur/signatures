@@ -42,6 +42,7 @@
     }
 
     .tab-content {
+      margin-bottom: 20px;
     }
   }
   .profile-secction {
@@ -132,7 +133,11 @@
     display: flex;
 
     .middle-block {
+      margin-top: 30px;
       flex: 4;
+      .empty-collection{
+        
+      }
     }
   }
   .transactions-wrapper {

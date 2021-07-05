@@ -59,8 +59,8 @@ class BlockchainInterface {
     window.ethereum.request({
       method: 'wallet_addEthereumChain',
       params: [CHAIN_CONFIGS[chain_id]]
-    }).then(succes => {
-      console.log("succes",succes)
+    }).then(success => {
+      console.log("success",success)
     }).catch(switchError =>{
       console.log("switchError",switchError)
      
@@ -72,8 +72,8 @@ class BlockchainInterface {
       window.ethereum.request({
         method: 'wallet_switchEthereumChain',
         params: [{ chainId: chain_id }],
-      }).then(succes => {
-        console.log("succes",succes)
+      }).then(success => {
+        console.log("success",success)
       }).catch(switchError =>{
         if (switchError.code === 4902) {
           try {

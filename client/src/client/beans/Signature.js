@@ -17,5 +17,6 @@ export default class Signature{
         this.userID = options.userID
         this.storage = options.storage
         this.purpose = options.purpose
+        this.ideaID = options.ideaID
     }
 }
