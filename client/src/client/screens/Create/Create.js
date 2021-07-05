@@ -25,7 +25,8 @@ import {
   Share2,
   Download,
   Crosshair,
-  ExternalLink
+  ChevronLeft,
+  ChevronRight,
 } from "react-feather";
 import Hash from "ipfs-only-hash";
 import { Container } from "react-bootstrap";
@@ -87,6 +88,10 @@ function Create(props) {
 
   const [slideCount, setSlideCount] = useState(0);
   const [showShare, setShowShare] = useState(false);
+  const [pdfPages, setPdfPages] = useState({
+    currentPage: 1,
+    totalPages: 1
+  });
   const [billet, setBillet] = useState({
     creator: form.owner,
     fullName: userDetails.fullName,
@@ -204,7 +209,9 @@ function Create(props) {
   }
 
   function PDFLoadError(error) {}
-  function onDocumentLoadSuccess(success) {}
+  function onDocumentLoadSuccess({ numPages }) {
+    setPdfPages({...pdfPages, totalPages: numPages});
+  }
 
   function handleTagsChange(tags) {
     setFormData({
@@ -213,7 +220,15 @@ function Create(props) {
     });
   }
 
+  const check250Words = (value) => value.split(/[\s]+/).length > 250 ;
+    
+
   function handleChange(event) {
+    if(event.target.name === 'description') {
+        if(check250Words(event.target.value)) {
+          return false
+        }
+    } 
     let returnObj = {};
     returnObj[event.target.name] =
       _.get(event, "target.name") === "price"
@@ -427,14 +442,21 @@ function Create(props) {
     switch (fileData.fileType) {
       case "pdf":
         return (
+          <>
           <Document
             fillWidth
             file={form.PDFFile}
             onLoadError={PDFLoadError}
             onLoadSuccess={onDocumentLoadSuccess}
           >
-            <Page fillWidth pageNumber={1} width={window.innerWidth / 4} />
+            <Page fillWidth pageNumber={pdfPages.currentPage} width={window.innerWidth / 4} />
           </Document>
+        <p className="page-container">
+          <ChevronLeft className={pdfPages.currentPage === 1? 'disable': ''} onClick={() => setPdfPages({...pdfPages, currentPage: pdfPages.currentPage - 1})} />
+          Page {pdfPages.currentPage} of {pdfPages.totalPages}
+          <ChevronRight className={pdfPages.currentPage === pdfPages.totalPages ? 'disable': ''} onClick={() => setPdfPages({...pdfPages, currentPage: pdfPages.currentPage +1})}  />
+          </p>
+      </>
         );
       case "mp3":
         return (
@@ -518,6 +540,7 @@ function Create(props) {
                       formErrors.title ? "input-err titleArea" : "titleArea"
                     }
                     placeholder="Title*"
+                    maxLength={50}
                     onChange={handleChange}
                   />
                 </Form.Group>
@@ -547,7 +570,6 @@ function Create(props) {
                       placeholder="upto 250 words"
                       style={{ resize: "none" }}
                       onChange={handleChange}
-                      maxLength={250}
                     />
                   </InputGroup>
                 </Form.Group>

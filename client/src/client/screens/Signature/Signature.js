@@ -29,8 +29,8 @@ import {
   ShoppingCart,
   Share,
   Crosshair,
-  Edit3,
-  Check,
+  ChevronRight,
+  ChevronLeft,
 } from "react-feather";
 import { Document, Page, pdfjs } from "react-pdf";
 import _ from "lodash";
@@ -61,6 +61,10 @@ const Signature = (props) => {
     price: false,
   });
   const [key, setKey] = useState("Details");
+  const [pdfPages, setPdfPages] = useState({
+    currentPage: 1,
+    totalPages: 1
+  });
   let history = useHistory();
   useEffect(() => {
     pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
@@ -292,15 +296,25 @@ const Signature = (props) => {
   //     </DropdownButton>
   //   );
   // };
-
+  function onDocumentLoadSuccess({ numPages }) {
+    setPdfPages({...pdfPages, totalPages: numPages});
+  }
   const getDocumnetViewer = () => {
     const { fileType } = signature;
     switch (fileType) {
       case "pdf":
         return (
-          <Document file={PDFFile} className="pdf-document">
+          <>
+          <Document file={PDFFile} className="pdf-document" 
+          onLoadSuccess={onDocumentLoadSuccess}>
             <Page pageNumber={1} />
           </Document>
+           <p className="page-container">
+           <ChevronLeft className={pdfPages.currentPage === 1? 'disable': ''} onClick={() => setPdfPages({...pdfPages, currentPage: pdfPages.currentPage - 1})} />
+           Page {pdfPages.currentPage} of {pdfPages.totalPages}
+           <ChevronRight className={pdfPages.currentPage === pdfPages.totalPages ? 'disable': ''} onClick={() => setPdfPages({...pdfPages, currentPage: pdfPages.currentPage +1})}  />
+           </p>
+           </>
         );
       case "mp3":
         const file = PDFFile.split(",")[1];
