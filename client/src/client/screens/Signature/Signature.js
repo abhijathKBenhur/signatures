@@ -307,7 +307,7 @@ const Signature = (props) => {
           <>
           <Document file={PDFFile} className="pdf-document" 
           onLoadSuccess={onDocumentLoadSuccess}>
-            <Page pageNumber={1} />
+            <Page pageNumber={pdfPages.currentPage} />
           </Document>
            <p className="page-container">
            <ChevronLeft className={pdfPages.currentPage === 1? 'disable': ''} onClick={() => setPdfPages({...pdfPages, currentPage: pdfPages.currentPage - 1})} />
