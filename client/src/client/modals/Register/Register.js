@@ -198,12 +198,12 @@ const Register = (props) => {
             {_.isEmpty(userDetails.metamaskId) ? (
               <div className="network-container">
                 <div className="metamaskLogin loginMode d-flex flex-column align-items-center cursor-pointer">
-                  <p>
+                  <span className="readable-text">
                     We could not recognize any connected wallet on this app.
                     Please install, login with an account and connect to this
                     app to continue.You might have to refresh the page after
                     installation
-                  </p>
+                  </span>
                   <img src={metamaskLogo} width="70"></img>
                   <div className="metamask_integration">
                     <Button
