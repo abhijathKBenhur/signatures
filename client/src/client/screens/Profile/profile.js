@@ -36,7 +36,7 @@ function Profile(props) {
     metamaskID
   );
   const [profileCollection, setProfileCOllection] = useState([]);
-  const [currentUserDetails, setCurrentUserDetails] = useState(userDetails);
+  const [currentUserDetails, setCurrentUserDetails] = useState({});
   const [myNotifications, setMyNotifications] = useState([]);
   let history = useHistory();
   const [key, setKey] = useState("collections");
