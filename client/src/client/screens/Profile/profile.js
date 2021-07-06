@@ -36,7 +36,7 @@ function Profile(props) {
     metamaskID
   );
   const [profileCollection, setProfileCOllection] = useState([]);
-  const [currentUserDetails, setCurrentUserDetails] = useState(userDetails);
+  const [currentUserDetails, setCurrentUserDetails] = useState({});
   const [myNotifications, setMyNotifications] = useState([]);
   let history = useHistory();
   const [key, setKey] = useState("collections");
@@ -125,54 +125,15 @@ function Profile(props) {
             <Col md="12" className="mycollection">
               <Row className="loggedIn">
                 <Col md="12" className="p-0">
-                  <div className="userPane">
+                  <div className="userPane align-items-center">
                     <div className="w-100">
-                      <div className="first-section">
-                        <div className="d-flex flex-row">
-                          <Col>
-                            <Row>
-                              {/* <span>{_.get(currentUserDetails, "email")}</span> */}
-                            </Row>
-                          </Col>
-                          <Col>
-                            <Row className=" justify-content-end align-items-center">
-                              <span></span>
-                            </Row>
-                            <Row className=" justify-content-end">
-                              <span>
-                                {/* Total ideas owned : {profileCollection.length} */}
-                              </span>
-                            </Row>
-                          </Col>
-                        </div>
-
-                        {/* <div className="image-part">
-                          {JSON.stringify(currentUserDetails)}
-                        </div>
-                        */}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="profile-secction d-flex justify-content-center flex-column">
-                    {/* <div className="separatorline"></div> */}
-                    <img
-                      src={currentUserDetails.imageUrl}
-                      height={100}
-                      width={100}
-                      className=""
-                      style={{
-                        background: "#f1f1f1",
-                        borderRadius: "50px",
-                        zIndex: "1",
-                      }}
-                    />
                     <div className="profile-info">
-                      <Row className="d-flex justify-content-center">
-                        <h4>{_.get(currentUserDetails, "userID")}</h4>
+                      <Row className="d-flex justify-content-center align-items-center">
+                        <span className="master-header white">{_.get(currentUserDetails, "userID")}</span>
                       </Row>
-                      <Row>
-                        <Col className="address-copy d-flex align-items-center">
-                          <span className="address-value">
+                      <Row className="">
+                        <Col className="address-copy d-flex align-items-center justify-content-center">
+                          <span className="address-value second-header white">
                             {_.get(currentUserDetails, "metamaskId") &&
                               _.get(currentUserDetails, "metamaskId").substring(
                                 0,
@@ -184,7 +145,7 @@ function Profile(props) {
                                   "metamaskId"
                                 ).substring(
                                   _.get(currentUserDetails, "metamaskId")
-                                    .length - 4,
+                                    .length - 5,
                                   _.get(currentUserDetails, "metamaskId").length
                                 )}
                           </span>
@@ -200,7 +161,24 @@ function Profile(props) {
                         </Col>
                       </Row>
                     </div>
+                
+                    </div>
                   </div>
+                  <div className="profile-secction d-flex justify-content-center flex-column">
+                    {/* <div className="separatorline"></div> */}
+                    
+                    <img
+                      src={currentUserDetails.imageUrl}
+                      height={100}
+                      width={100}
+                      className=""
+                      style={{
+                        background: "#f1f1f1",
+                        borderRadius: "50px",
+                        zIndex: "1",
+                      }}
+                    />
+                      </div>
                   <div className="tabs-wrapper">
                     <Tabs
                       id="controlled-tab-example"

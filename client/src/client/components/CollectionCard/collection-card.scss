@@ -96,7 +96,8 @@
         padding: 10px 0;
         display: flex;
         gap: 5px;
-        overflow: scroll;
+        overflow-y: hidden;
+        overflow-x: auto;
         width: 100%;
       }
       .owner {

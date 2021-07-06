@@ -4,11 +4,11 @@
 /* Styles go here */
 
 .appContainer {
-  -ms-overflow-style: none;  /* Internet Explorer 10+ */
-  scrollbar-width: none;  /* Firefox */
-
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  scrollbar-width: none; /* Firefox */
+  -webkit-font-smoothing: antialiased;
 }
-input[type='radio']:after {
+input[type="radio"]:after {
   width: 15px;
   height: 15px;
   border-radius: 15px;
@@ -16,13 +16,13 @@ input[type='radio']:after {
   left: -1px;
   position: relative;
   background-color: #d1d3d1;
-  content: '';
+  content: "";
   display: inline-block;
   visibility: visible;
   border: 2px solid white;
 }
 
-input[type='radio']:checked:after {
+input[type="radio"]:checked:after {
   width: 15px;
   height: 15px;
   border-radius: 15px;
@@ -30,13 +30,13 @@ input[type='radio']:checked:after {
   left: -1px;
   position: relative;
   background-color: #ffa500;
-  content: '';
+  content: "";
   display: inline-block;
   visibility: visible;
   border: 2px solid white;
 }
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   .signature-icons {
     color: $primary !important;
   }
@@ -74,6 +74,10 @@ body {
 .cursor-pointer {
   cursor: pointer;
 }
+.white {
+  color: white;
+}
+
 .btn {
   font-size: 12px;
   line-height: 16px;
@@ -109,48 +113,58 @@ body {
   }
   &.btn-primary {
     background-color: $secondary;
-    border-color: $secondary  !important;
-    &:focus, &:hover, &:active {
-        background-color: $secondary !important;
-        box-shadow: none;
+    border-color: $secondary !important;
+    &:focus,
+    &:hover,
+    &:active {
+      background-color: $secondary !important;
+      box-shadow: none;
     }
   }
-  
+
   &.btn-secondary {
-    border-color: $secondary  !important;
+    border-color: $secondary !important;
     color: $secondary;
     background: transparent;
-    &:focus, &:hover, &:active {
-        background: $secondary !important;
-        color: $white !important;
+    &:focus,
+    &:hover,
+    &:active {
+      background: $secondary !important;
+      color: $white !important;
     }
   }
   &.btn-ternary {
-    border-color: $primary-dark  !important;
+    border-color: $primary-dark !important;
     color: $primary-dark;
     background: transparent;
-    &:focus, &:hover, &:active {
-        background: $primary-dark !important;
-        color: $white !important;
+    &:focus,
+    &:hover,
+    &:active {
+      background: $primary-dark !important;
+      color: $white !important;
     }
   }
   &.btn-fourth {
     background-color: $primary;
-    border-color: $primary  !important;
+    border-color: $primary !important;
     color: $secondary;
-    &:focus, &:hover, &:active {
-        background-color: $primary !important;
-        box-shadow: none;
+    &:focus,
+    &:hover,
+    &:active {
+      background-color: $primary !important;
+      box-shadow: none;
     }
   }
   &.btn-pill {
-    border-color: $secondary  !important;
+    border-color: $secondary !important;
     color: $secondary;
     background: transparent;
     height: 20px;
-    border-radius: 15px ;
-    &:focus, &:hover, &:active {
-        pointer-events: none;
+    border-radius: 15px;
+    &:focus,
+    &:hover,
+    &:active {
+      pointer-events: none;
     }
   }
   &.btn-disabled {
@@ -159,56 +173,74 @@ body {
     pointer-events: none;
   }
 }
-.generic-cls{
+.generic-cls {
   color: $secondary !important;
   background-color: $primary !important;
-  .Toastify__close-button{
+  .Toastify__close-button {
     svg {
       color: $secondary;
     }
   }
 }
-.main-content-component{
+.main-content-component {
   margin-top: 110px;
   height: calc(100vh - 100px);
   width: 100%;
   text-align: center;
-  color:  $primary;
+  color: $primary;
   font-size: 18px;
   text-align: left;
 }
 
-
-
-.text-tile-title{
-  // color: red;
+.master-header {
+  font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial,
+    sans-serif;
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 38px;
 }
 
-.text-description{
-
+.second-header {
+  font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial,
+    sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 24px;
 }
 
-.text-paragraph{
-
+.third-header {
+  font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial,
+    sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
 }
 
-.text-price{
-
+.master-grey {
+  font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial,
+    sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
 }
 
-.text-username{
-  
+.second-grey {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 18px;
 }
-.text-banner-title{
 
-}
-.text-banner-header{
+.readable-text {
+  font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial,
+    sans-serif;
   font-size: 20px;
+  font-weight: 400;
 }
-.text-banner{
+
+.text-banner {
   font-size: 20px;
   line-height: 25px;
-  .italics{
+  .italics {
     font-style: italic;
   }
 }
