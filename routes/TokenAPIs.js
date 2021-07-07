@@ -130,14 +130,16 @@ getSignatures = async (req, res) => {
     payLoad.owner = ownerAddress;
   }
   if (!limit) {
-    await SignatureSchema.find(payLoad).sort({'createdAt': 'desc'}).exec((err, signatures) => {
-      if (err) {
-        return res.status(404).json({ success: false, error: "here" });
-      }
-      return res.status(200).json({ success: true, data: signatures });
-    }).catch((err) => {
+    try{
+      await SignatureSchema.find(payLoad).sort({'createdAt': 'desc'}).exec((err, signatures) => {
+        if (err) {
+          return res.status(404).json({ success: false, error: "here" });
+        }
+        return res.status(200).json({ success: true, data: signatures });
+      })
+    }catch(err){
       return res.status(404).json({ success: false, error: err });
-    });
+    }
   } else {
     console.log("Getting signatures for all");
     SignatureSchema.find(payLoad)

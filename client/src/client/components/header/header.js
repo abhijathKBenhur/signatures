@@ -108,7 +108,7 @@ const Header = (props) => {
             createnew();
           }}
         >
-          Upload
+          Publish NFT
         </Button>
       )
     }

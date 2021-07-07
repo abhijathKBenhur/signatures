@@ -74,7 +74,7 @@ const Signature = (props) => {
     } else {
       MongoDBInterface.getSignatureByHash(hashId).then((response) => {
         let signatureObject = new SignatureBean(_.get(response, "data.data"));
-        setSignature(...signature, ...signatureObject);
+        setSignature(signatureObject);
       });
     }
 
@@ -96,6 +96,7 @@ const Signature = (props) => {
   }, [reduxState]);
 
   function getIPSPDFFile(hash) {
+    try{
     StorageInterface.getFileFromIPFS(hash).then((pdfFileResponse) => {
       let pdfData = new Blob([pdfFileResponse.content.buffer]);
       // if(signature.fileType === 'pdf') {
@@ -104,6 +105,9 @@ const Signature = (props) => {
       loadFile(pdfData);
       // }
     });
+  }catch(e){
+    console.error("couldnt fetch the file from IPFS")
+  }
   }
 
   const loadFile = (pdfData) => {
