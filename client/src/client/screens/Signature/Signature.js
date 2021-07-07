@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useParams, useLocation, useHistory } from "react-router-dom";
 import { confirm } from "../../modals/confirmation/confirmation";
 import moment from "moment";
-import SignatureBean from "../../beans/Signature";
 import {
   Button,
   Row,
@@ -70,10 +69,10 @@ const Signature = (props) => {
     pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
     let signatureFromParent = location.state;
     if (signatureFromParent) {
-      setSignature({ ...signature, ...new SignatureBean(signatureFromParent) });
+      setSignature({ ...signature, signatureFromParent });
     } else {
       MongoDBInterface.getSignatureByHash(hashId).then((response) => {
-        let signatureObject = new SignatureBean(_.get(response, "data.data"));
+        let signatureObject = _.get(response, "data.data");
         setSignature(...signature, ...signatureObject);
       });
     }
@@ -82,7 +81,7 @@ const Signature = (props) => {
   }, []);
 
   useEffect(() => {
-    setIsCurrentUserOwner(signature.owner == currentUser.metamaskId);
+    setIsCurrentUserOwner(signature.owner.metamaskId == currentUser.metamaskId);
   }, [signature, currentUser]);
 
   useEffect(() => {
@@ -134,7 +133,7 @@ const Signature = (props) => {
     MongoDBInterface.buySignature(updatePayload)
       .then((updatedSignature) => {
         showToaster("Purchase updated on blockchain", { type: "info" });
-        setSignature(new SignatureBean(_.get(updatedSignature, "data.data")));
+        setSignature(_.get(updatedSignature, "data.data"));
         gotoGallery();
       })
       .catch((err) => {
@@ -171,8 +170,8 @@ const Signature = (props) => {
   function buySignature() {
     let updatePayload = {
       buyer: currentMetamaskAccount,
-      seller: signature.owner,
-      buyerUserID: currentUser.userID,
+      seller: signature.owner.userName,
+      buyerUserID: currentUser.userName,
       PDFHash: signature.PDFHash,
       price: signature.price,
       ideaID: signature.ideaID,
@@ -196,10 +195,8 @@ const Signature = (props) => {
     ).then((success) => {
       if (success.proceed) {
         let updatePayload = {
-          from: currentMetamaskAccount,
-          fromUserName: currentUser.userID,
-          toUserName: signature.userID,
-          to: signature.owner,
+          from: currentUser.userName,
+          to: signature.owner.userName,
           action: CONSTANTS.ACTIONS.COLLAB_INTEREST,
           status: CONSTANTS.ACTION_STATUS.PENDING,
           ideaID: signature.ideaID,
@@ -228,7 +225,7 @@ const Signature = (props) => {
     history.push({
       pathname: "/profile/" + id,
       state: {
-        userID: id,
+        userName: id,
       },
     });
   };
@@ -465,7 +462,7 @@ const Signature = (props) => {
                     <Row className="d-flex flex-column ">
                       <Col md="12">
                         <div className="owned_by justify-content-end">
-                          Created by {signature.userID}
+                          Created by {signature.creator.userName}
                         </div>
                       </Col>
                     </Row>
@@ -480,7 +477,7 @@ const Signature = (props) => {
               <div className="">
                 <Col md="12" className="created-by justify-content-end">
                   <div className="text-right">
-                    Currently owned by {signature.owner&& signature.owner.substring(0,3) + " ... " + signature.owner.substring(signature.owner.length - 3,signature.owner.length)}
+                    Currently owned by {signature.owner.metamaskId&& signature.owner.metamaskId.substring(0,3) + " ... " + signature.owner.metamaskId.substring(signature.owner.metamaskId.length - 3,signature.owner.metamaskId.length)}
                   </div>
                 </Col>
               </div>

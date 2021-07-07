@@ -41,7 +41,7 @@ class App extends Component {
             <Route path="/home" render={(props) => <Gallery />} />
             <Route path="/signature/:hashId" children={<Signature />} />
             <Route path="/create" children={<Create />} />
-            <Route path="/profile/:userID" children={<Profile />} />
+            <Route path="/profile/:userName" children={<Profile />} />
             <Route path="/profile" children={<Profile />} />
             <Route path="/daily-reads" component={DailyReads} />
             <Route path="/tutorial" component={Tutorial} />

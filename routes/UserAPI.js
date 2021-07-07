@@ -39,8 +39,8 @@ getUserInfo = async (req, res) => {
   if (req.body.metamaskId) {
     findCriteria.metamaskId = req.body.metamaskId;
   }
-  if (req.body.userID) {
-    findCriteria.userID = req.body.userID;
+  if (req.body.userName) {
+    findCriteria.userName = req.body.userName;
   }
   await User.findOne(findCriteria, (err, user) => {
     if (err) {

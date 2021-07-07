@@ -1,4 +1,6 @@
 const SignatureSchema = require("../db-config/Signature.schema");
+const UserSchema = require("../db-config/user.schema");
+const UserAPI = require("../routes/UserAPI")
 const express = require("express");
 const router = express.Router();
 const upload = require("../db-config/multer");
@@ -6,17 +8,26 @@ const path = require("path");
 var fs = require("fs");
 const { cloudinary } = require("../db-config/cloudinary");
 
-addSignature = (req, res) => {
-  console.log("Adding an idea  to mongoDB", req.body);
-  const body = req.body;
+ addSignature = async(req, res) => {
 
-  if (!body) {
+  const creatorId = await UserSchema.findOne({metamaskId:req.body.creator})
+  const ownerId = await UserSchema.findOne({metamaskId:req.body.owner})
+
+  const newTile = {
+    ...req.body,
+    creator: creatorId,
+    owner: ownerId
+  }
+  console.log("newTile" + JSON.stringify(newTile))
+
+
+  if (!newTile) {
     return res.status(400).json({
       success: false,
       error: "Hollow idea",
     });
   }
-  const newIdea = new SignatureSchema(body);
+  const newIdea = new SignatureSchema(newTile);
 
   if (!newIdea) {
     return res.status(400).json({ success: false, error: err });
@@ -39,48 +50,9 @@ addSignature = (req, res) => {
     });
 };
 
-updateIdeaID = (req, res) => {
-  console.log("updating ID to an idea", req.body);
-  const body = req.body;
-
-  if (!body) {
-    return res.status(400).json({
-      success: false,
-      error: "Hollow idea",
-    });
-  }
-
-  if (!body.PDFHash) {
-    return res.status(400).json({ success: false, error: err });
-  }
-  let findCriteria = {
-    PDFHash: body.PDFHash,
-    transactionID: body.transactionID,
-  };
-
-  SignatureSchema.findOneAndUpdate(findCriteria, { ideaID: body.ideaID })
-    .then((idea, err) => {
-      console.log("Updating idea", idea);
-      if (err) {
-        console.log("Error updating idea");
-        return res.status(400).json({ success: false, error: err });
-      }
-      if (!idea) {
-        console.log(" failed Update");
-        return res.status(404).json({ success: true, data: [] });
-      }
-      console.log(" Updated to store");
-      return res.status(200).json({ success: true, data: idea });
-    })
-    .catch((err) => {
-      console.log("Error updating store");
-      return res.status(200).json({ success: false, data: err });
-    });
-};
-
 getSignatureByHash = async (req, res) => {
   console.log("Getting SignatureSchema :: ", req.params.PDFHash);
-  await SignatureSchema.findOne({ PDFHash: req.params.PDFHash }, (err, signature) => {
+  await SignatureSchema.findOne({ PDFHash: req.params.PDFHash }).populate("creator").populate("owner").exec((err, signature) => {
     if (err) {
       return res.status(400).json({ success: false, error: err });
     }
@@ -130,12 +102,13 @@ getSignatures = async (req, res) => {
     payLoad.owner = ownerAddress;
   }
   if (!limit) {
-    await SignatureSchema.find(payLoad).sort({'createdAt': 'desc'}).exec((err, signatures) => {
+    await SignatureSchema.find(payLoad).sort({'createdAt': 'desc'}).populate("owner").populate("creator").exec((err, signatures) => {
       if (err) {
         return res.status(404).json({ success: false, error: "here" });
       }
       return res.status(200).json({ success: true, data: signatures });
-    }).catch((err) => {
+    })
+    .catch((err) => {
       return res.status(404).json({ success: false, error: err });
     });
   } else {
@@ -159,16 +132,17 @@ buySignature = async (req, res) => {
       error: "Hollow idea",
     });
   }
+  const ownerId = await UserSchema.findOne({metamaskId:buyer})._id
   let buyer = req.body.buyer;
   let seller = req.body.account;
   let PDFHash = req.body.PDFHash;
   let price = req.body.price;
   let transactionID = req.body.transactionID;
 
-  const findCriteria = { PDFHash: PDFHash };
+  const findCriteria = { PDFHash: PDFHash,owner: seller };
   const saleCriteria = {
-    owner: buyer,
-    price: price,
+    owner: ownerId,
+    price: 0,
     transactionID: transactionID,
     purpose: "Decide later",
   };
@@ -263,7 +237,6 @@ router.get("/signature/:PDFHash/", getSignatureByHash);
 router.post("/getSignatures", getSignatures);
 router.post("/buySignature", buySignature);
 router.post("/updatePrice", updatePrice);
-router.post("/updateIdeaID", updateIdeaID);
 router.post(
   "/getCloundinaryImagePath",
   upload.single("thumbnail"),
@@ -276,3 +249,9 @@ router.post(
 );
 
 module.exports = router;
+
+
+
+
+
+

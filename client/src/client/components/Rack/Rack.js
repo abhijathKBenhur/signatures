@@ -21,7 +21,7 @@ const Rack = (props) => {
     history.push({
       pathname: "/profile/" + id,
       state: {
-        userID: id,
+        userName: id,
       },
     });
   };
@@ -148,10 +148,10 @@ const Rack = (props) => {
                           <span
                             onClick={(event) => {
                               event.stopPropagation();
-                              goToUserProfile(signature.userID);
+                              goToUserProfile(signature.creator.userName);
                             }}
                           >
-                            {signature.userID}
+                            {signature.creator.userName}
                           </span>
                         </Col>
                       </div>

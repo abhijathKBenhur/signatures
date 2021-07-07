@@ -3,8 +3,8 @@ const Schema = mongoose.Schema
 
 const Signature = new Schema(
     {
-        creator: { type: String, required: true },
-        owner: { type: String, required: true },
+        creator: { type: Schema.Types.ObjectId, ref: "User", required: true },
+        owner: { type: Schema.Types.ObjectId, ref: "User", required: true },
         title: { type: String, required: true },
         category: { type: String , required: true},
         description: { type: String, required: true },
@@ -14,10 +14,9 @@ const Signature = new Schema(
         PDFHash: { type: String ,required: true},
         fileType: { type: String ,required: true},
         transactionID: { type: String,required: true},
-        userID: { type: String ,required: true},
         ideaID: { type: String},
         storage: { type: String },
-        purpose: { type: String }
+        purpose: { type: String },
     },
     { timestamps: true },
 )

@@ -36,7 +36,6 @@ export const addSignature = payload => {
         transactionID: payload.transactionID,
         ideaID: payload.ideaID,
         fileType: payload.fileType,
-        userID: payload.userID,
         creator: payload.creator,
         storage: payload.storage,
         purpose: payload.purpose,
@@ -44,13 +43,7 @@ export const addSignature = payload => {
     })
 }
 
-export const updateIdeaID = payload => {
-    return api.post(`/updateIdeaID`,{
-        PDFHash: payload.PDFHash,
-        transactionID: payload.transactionID,
-        ideaID: payload.ideaID,
-    })
-}
+
 
 export const getSignatures = (payload) =>  { 
     return api.post("/getSignatures",payload) 
@@ -82,7 +75,6 @@ export const register_user = payload => {
 const MongoDBInterface = {
     getSignatures,
     addSignature,
-    updateIdeaID,
     getSignatureByHash,
     buySignature,
     updatePrice,

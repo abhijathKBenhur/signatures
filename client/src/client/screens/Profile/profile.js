@@ -40,15 +40,15 @@ function Profile(props) {
   const [myNotifications, setMyNotifications] = useState([]);
   let history = useHistory();
   const [key, setKey] = useState("collections");
-  const viewUser = _.get(history.location.state, "userID");
+  const viewUser = _.get(history.location.state, "userName");
   const dispatch = useDispatch();
 
   useEffect(() => {
     const { userDetails = {} } = reduxState;
-    const viewUser = _.get(history.location.state, "userID");
-    if (viewUser && viewUser.toLowerCase() !== userDetails.userID) {
+    const viewUser = _.get(history.location.state, "userName");
+    if (viewUser && viewUser.toLowerCase() !== userDetails.userName) {
       let payLoad = {};
-      payLoad.userID = viewUser;
+      payLoad.userName = viewUser;
       getUserDetails(payLoad);
     }
     if (userDetails && !viewUser) {
@@ -116,7 +116,7 @@ function Profile(props) {
   return (
     <Container fluid>
       <Row className="profile">
-        {_.isEmpty(currentUserDetails.userID) ? (
+        {_.isEmpty(currentUserDetails.userName) ? (
           <Row className="register-modal">
             <Register></Register>
           </Row>
@@ -129,7 +129,7 @@ function Profile(props) {
                     <div className="w-100">
                     <div className="profile-info">
                       <Row className="d-flex justify-content-center align-items-center">
-                        <span className="master-header white">{_.get(currentUserDetails, "userID")}</span>
+                        <span className="master-header white">{_.get(currentUserDetails, "userName")}</span>
                       </Row>
                       <Row className="">
                         <Col className="address-copy d-flex align-items-center justify-content-center">

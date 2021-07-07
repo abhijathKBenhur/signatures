@@ -204,18 +204,10 @@ const CollectionCard = (props) => {
                         {moment(signature.createdAt).format("DD-MMM-YYYY")} 
                       </Col>
                       <Col md="6" className="idea-user text-right">
-                        {signature.userID} 
+                        {signature.creator.fullName} 
                       </Col>
           </Row>
         </div>
-        
-          {/* <div className="idea-details">
-            <span className="placeholder">{signature.userID}</span>
-            <span className="price">
-              {signature.price && Web3Utils.fromWei(signature.price)} BNB
-            </span>
-          </div> */}
-          
       </div>
     </Col>
   );
