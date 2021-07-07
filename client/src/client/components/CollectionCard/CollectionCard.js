@@ -5,14 +5,14 @@ import loader from "../../../assets/images/loader.gif";
 import { MoreHorizontal, Eye, Share, Crosshair, Edit3 } from "react-feather";
 import "./collection-card.scss";
 import { confirm } from "../../modals/confirmation/confirmation";
-import { Row, Col, Dropdown } from "react-bootstrap";
+import { Button,Row, Col, Dropdown } from "react-bootstrap";
 import Image from "react-image-resizer";
 import React, { useState, useEffect } from "react";
 import BlockChainInterface from "../../interface/BlockchainInterface";
 import MongoDBInterface from "../../interface/MongoDBInterface";
-import { toast } from "react-toastify";
 import Web3Utils from "web3-utils";
 import moment from "moment";
+import { showToaster } from "../../commons/common.utils";
 const CollectionCard = (props) => {
   let history = useHistory();
   const [signature, setSignature] = useState(new Signature(props.card));
@@ -26,16 +26,7 @@ const CollectionCard = (props) => {
   function copyClipBoard() {
     let shareURL = window.location.href + "/signature/" + signature.PDFHash;
     navigator.clipboard.writeText(shareURL);
-
-    toast.dark("Copied to clipboard!", {
-      position: "bottom-right",
-      autoClose: 3000,
-      hideProgressBar: true,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
+      showToaster('Copied to clipboard!', {type: 'dark'})
   }
 
   function openInEtherscan() {
@@ -49,18 +40,8 @@ const CollectionCard = (props) => {
   }
 
   function feedbackMessage() {
-    toast.dark(
-      "Your order has been placed. Please wait a while for it to be processed.",
-      {
-        position: "bottom-right",
-        autoClose: 3000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      }
-    );
+    showToaster("Your order has been placed. Please wait a while for it to be processed.", {type: 'dark'})
+   
   }
 
   function editPrice(signature) {
@@ -95,7 +76,7 @@ const CollectionCard = (props) => {
       }}
     >
       <MoreHorizontal
-        color="#79589F"
+        color="#F39422"
         className="cursor-pointer "
       ></MoreHorizontal>
     </a>
@@ -131,7 +112,7 @@ const CollectionCard = (props) => {
                     View
                   </Dropdown.Item>
 
-                  <Dropdown.Item
+                  {/* <Dropdown.Item
                     className="dropdown-item"
                     eventKey="2"
                     onClick={() => {
@@ -140,7 +121,7 @@ const CollectionCard = (props) => {
                   >
                     <Edit3 className="signature-icons" size={15}></Edit3>
                     Edit Price
-                  </Dropdown.Item>
+                  </Dropdown.Item> */}
 
                   <Dropdown.Item
                     className="dropdown-item"
@@ -156,7 +137,9 @@ const CollectionCard = (props) => {
                   <Dropdown.Item
                     className="dropdown-item"
                     eventKey="2"
-                    onClick={() => {
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
                       openInEtherscan();
                     }}
                   >
@@ -182,19 +165,37 @@ const CollectionCard = (props) => {
               src={signature.thumbnail}
               height={200}
               style={{
-                background: "#f1f1f1",
+                background: "#272B34",
               }}
             />
             <div className="description">
                           <div className="heading">Description</div>
-                          <div className="text">
-                            {signature.description}
+                          <div className="description-text">
+                          {signature.description.split(' ').slice(0,40).join(' ')}
+
                           </div>
                           
                         </div>
           </Col>
         </div>
-        <Row className="collection-footer">
+        <div className="collection-footer">
+        <Row >
+                        <Col md="12">
+                          <Col md="12" className="tags">
+                              {JSON.parse(signature.category) &&
+                                JSON.parse(signature.category)
+                                  .slice(0, 2)
+                                  .map((category) => {
+                                    return (
+                                      <Button disabled variant="pill">
+                                        {category.value}
+                                      </Button>
+                                    );
+                                  })}
+                            </Col>
+                          </Col>
+                      </Row>
+                      <Row >
                       <Col md="12" className="idea-title">
                         <p className="text-left title">{signature.title}</p>
                       </Col>
@@ -203,16 +204,10 @@ const CollectionCard = (props) => {
                         {moment(signature.createdAt).format("DD-MMM-YYYY")} 
                       </Col>
                       <Col md="6" className="idea-user text-right">
-                        {signature.userID} 
+                        {signature.creator.fullName} 
                       </Col>
           </Row>
-          {/* <div className="idea-details">
-            <span className="placeholder">{signature.userID}</span>
-            <span className="price">
-              {signature.price && Web3Utils.fromWei(signature.price)} BNB
-            </span>
-          </div> */}
-          
+        </div>
       </div>
     </Col>
   );

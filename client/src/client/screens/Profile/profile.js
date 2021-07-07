@@ -5,7 +5,7 @@ import {
   Row,
   Col,
   Form,
-  InputGroup,
+  Button,
   Container,
   Tabs,
   Tab,
@@ -19,37 +19,47 @@ import MongoDBInterface from "../../interface/MongoDBInterface";
 import ActionsInterface from "../../interface/ActionsInterface";
 import BlockChainInterface from "../../interface/BlockchainInterface";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
-import { Share, Award, User } from "react-feather";
+import { ExternalLink, Award, User } from "react-feather";
 import StorageInterface from "../../interface/StorageInterface";
 
 import Collections from "./collections";
 import store from "../../redux/store";
+import { setCollectionList } from "../../redux/actions";
 function Profile(props) {
   const reduxState = useSelector((state) => state, shallowEqual);
-  const { metamaskID = undefined, userDetails = {} } = reduxState;
+  const {
+    metamaskID = undefined,
+    userDetails = {},
+    collectionList = [],
+  } = reduxState;
   const [currentMetamaskAccount, setCurrentMetamaskAccount] = useState(
     metamaskID
   );
-  const [currentUserDetails, setCurrentUserDetails] = useState(userDetails);
+  const [profileCollection, setProfileCOllection] = useState([]);
+  const [currentUserDetails, setCurrentUserDetails] = useState({});
   const [myNotifications, setMyNotifications] = useState([]);
-  const [profileCollection, setProfileCollection] = useState([]);
   let history = useHistory();
   const [key, setKey] = useState("collections");
-  const viewUser = _.get(history.location.state, "userID");
+  const viewUser = _.get(history.location.state, "userName");
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    fetchNotifications()
     const { userDetails = {} } = reduxState;
-    if (userDetails) {
-      setCurrentUserDetails(userDetails)
-      fetchSignatures();
-    }
-    if (viewUser && viewUser.toLowerCase() !== userDetails.userID) {
+    const viewUser = _.get(history.location.state, "userName");
+    if (viewUser && viewUser.toLowerCase() !== userDetails.userName) {
       let payLoad = {};
-      payLoad.userID = viewUser
+      payLoad.userName = viewUser;
       getUserDetails(payLoad);
     }
+    if (userDetails && !viewUser) {
+      setCurrentUserDetails(userDetails);
+    }
   }, [reduxState.userDetails]);
+
+  useEffect(() => {
+    fetchSignatures(currentUserDetails.metamaskId);
+    fetchNotifications();
+  }, [currentUserDetails]);
 
   useEffect(() => {
     const { metamaskID = undefined } = reduxState;
@@ -60,33 +70,32 @@ function Profile(props) {
 
   const getUserDetails = (payLoad) => {
     MongoDBInterface.getUserInfo(payLoad).then((response) => {
-      setCurrentUserDetails(_.get(response, "data.data"));
-      fetchSignatures()
+      let userDetails = _.get(response, "data.data");
+      setCurrentUserDetails(userDetails);
     });
   };
 
-  function fetchSignatures() {
-    MongoDBInterface.getSignatures({ ownerAddress: currentUserDetails.metamaskId }).then(
-      (signatures) => {
+  function fetchSignatures(address) {
+    if (address || currentUserDetails.metamaskId) {
+      MongoDBInterface.getSignatures({
+        ownerAddress: address || currentUserDetails.metamaskId,
+      }).then((signatures) => {
         let response = _.get(signatures, "data.data");
         let isEmptyPresent = _.find(response, (responseItem) => {
           return _.isEmpty(responseItem.ideaID);
         });
-        setProfileCollection(response);
-
-        // if(isEmptyPresent){
-        //   clearInterval(fetchInterval)
-        // }
-      }
-    );
+        setProfileCOllection(response);
+        dispatch(setCollectionList(response));
+      });
+    }
   }
 
-  function fetchNotifications(){
+  function fetchNotifications() {
     ActionsInterface.getActions({ to: currentUserDetails.metamaskId }).then(
       (signatures) => {
         let response = _.get(signatures, "data.data");
         setMyNotifications(response);
-        console.log(response)
+        console.log(response);
       }
     );
   }
@@ -100,10 +109,14 @@ function Profile(props) {
     }
   }
 
+  function createnew() {
+    history.push("/create");
+  }
+
   return (
     <Container fluid>
       <Row className="profile">
-        {_.isEmpty(currentUserDetails.userID) ? (
+        {_.isEmpty(currentUserDetails.userName) ? (
           <Row className="register-modal">
             <Register></Register>
           </Row>
@@ -111,73 +124,61 @@ function Profile(props) {
           <div className="separator w-100">
             <Col md="12" className="mycollection">
               <Row className="loggedIn">
-                <Col md="2" className="left-block">
-                  {/* <Row className="profile-section"> */}
-                  <img
-                    src={currentUserDetails.imageUrl}
-                    height={200}
-                    width="100%"
-                    className=""
-                    style={{
-                      background: "#f1f1f1",
-                      borderRadius: "7px",
-                    }}
-                  />
-                  {/* </Row>  */}
-                  {/* <Row className="profile-section"> */}
-                  <div className="left-block-content">
-                    <div className="options">
-                      <h6 className="mt-1">
-                        @{_.get(currentUserDetails, "userID")}
-                      </h6>
-                    </div>
-                  </div>
-                  {/* </Row> */}
-                </Col>
-                <Col md="8" className="p-0">
-                  <div className="userPane">
+                <Col md="12" className="p-0">
+                  <div className="userPane align-items-center">
                     <div className="w-100">
-                      <div className="first-section">
-                        <div className="d-flex flex-row">
-                          <Col>
-                            <Row>
-                              <h4>{_.get(currentUserDetails, "fullName")}</h4>
-                            </Row>
-                            <Row>
-                              <span>{_.get(currentUserDetails, "email")}</span>
-                            </Row>
-                          </Col>
-                          <Col>
-                            <Row className=" justify-content-end align-items-center">
-                              <span>
-                                {_.get(currentUserDetails, "metamaskId")}
-                              </span>
-                              <Share
-                                size={15}
-                                onClick={() => {
-                                  window.open(
-                                    "https://kovan.etherscan.io/tx/" +
-                                      _.get(currentUserDetails, "metamaskId")
-                                  );
-                                }}
-                              ></Share>
-                            </Row>
-                            <Row className=" justify-content-end">
-                              <span>
-                                Total ideas owned : {profileCollection.length}
-                              </span>
-                            </Row>
-                          </Col>
-                        </div>
-
-                        {/* <div className="image-part">
-                          {JSON.stringify(currentUserDetails)}
-                        </div>
-                        */}
-                      </div>
-                      <div className="second-section"></div>
+                    <div className="profile-info">
+                      <Row className="d-flex justify-content-center align-items-center">
+                        <span className="master-header white">{_.get(currentUserDetails, "userName")}</span>
+                      </Row>
+                      <Row className="">
+                        <Col className="address-copy d-flex align-items-center justify-content-center">
+                          <span className="address-value second-header white">
+                            {_.get(currentUserDetails, "metamaskId") &&
+                              _.get(currentUserDetails, "metamaskId").substring(
+                                0,
+                                5
+                              ) +
+                                " ..... " +
+                                _.get(
+                                  currentUserDetails,
+                                  "metamaskId"
+                                ).substring(
+                                  _.get(currentUserDetails, "metamaskId")
+                                    .length - 5,
+                                  _.get(currentUserDetails, "metamaskId").length
+                                )}
+                          </span>
+                          <ExternalLink
+                            size={15}
+                            onClick={() => {
+                              window.open(
+                                "https://kovan.etherscan.io/address/" +
+                                  _.get(currentUserDetails, "metamaskId")
+                              );
+                            }}
+                          ></ExternalLink>
+                        </Col>
+                      </Row>
+                    </div>
+                
                     </div>
                   </div>
+                  <div className="profile-secction d-flex justify-content-center flex-column">
+                    {/* <div className="separatorline"></div> */}
+                    
+                    <img
+                      src={currentUserDetails.imageUrl}
+                      height={100}
+                      width={100}
+                      className=""
+                      style={{
+                        background: "#f1f1f1",
+                        borderRadius: "50px",
+                        zIndex: "1",
+                      }}
+                    />
+                      </div>
                   <div className="tabs-wrapper">
                     <Tabs
                       id="controlled-tab-example"
@@ -187,19 +188,54 @@ function Profile(props) {
                       <Tab eventKey="collections" title="Collection">
                         <div className="collection-wrapper">
                           <div className="middle-block">
-                            <Collections collectionList={profileCollection} />
+                            {_.isEmpty(profileCollection) ? (
+                              <Col md="12" className="empty-collection d-flex flex-column align-items-center ">
+                                <Row>
+                                  You currently dont own any ideas. Start by
+                                  uploading one.
+                                </Row>
+                                <Row>
+                                  <Button onClick={() => {
+                                    createnew();
+                                  }} variant="primary"> Upload </Button>
+                                </Row>
+                              </Col>
+                            ) : (
+                              <Collections collectionList={profileCollection} />
+                            )}
                           </div>
                         </div>
                       </Tab>
-                       <Tab eventKey="profile" title="Notifications">
+                      <Tab eventKey="profile" title="Notifications">
                         <div className="transactions-wrapper">
-                          <h6>No transactions yet</h6>
+                          <div className="middle-block">
+                            {myNotifications && myNotifications.length > 0 && (
+                              <table>
+                                <tr>
+                                  <td>From</td>
+                                  <td>Action</td>
+                                  <td>ideaID</td>
+                                  <td>message</td>
+                                </tr>
+                                {myNotifications.map((notification) => {
+                                  return (
+                                    <tr>
+                                      <td>{notification.from}</td>
+                                      <td>{notification.action}</td>
+                                      <td>{notification.ideaID}</td>
+                                      <td>{notification.message}</td>
+                                    </tr>
+                                  );
+                                })}
+                              </table>
+                            )}
+                          </div>
                         </div>
                       </Tab>
                     </Tabs>
                   </div>
                 </Col>
-                <Col md="2" className="right-block">
+                {/* <Col md="2" className="right-block">
                   <div className="right-block-content">
                     <h5>Awards</h5>
                     <div className="options">
@@ -208,7 +244,7 @@ function Profile(props) {
                       <p>Portfolio</p>
                     </div>
                   </div>
-                </Col>
+                </Col> */}
               </Row>
             </Col>
           </div>

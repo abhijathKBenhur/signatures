@@ -40,7 +40,7 @@ getActions = async (req, res) => {
     findCriteria.to = req.body.to;
   }
 
-  await ActionSchema.findOne(findCriteria, (err, user) => {
+  await ActionSchema.find(findCriteria, (err, user) => {
     if (err) {
       return res.status(400).json({ success: false, error: err });
     }

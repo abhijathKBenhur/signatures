@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Button,
   Row,
@@ -13,23 +13,40 @@ import BlockChainInterface from "../../interface/BlockchainInterface";
 import StorageInterface from "../../interface/StorageInterface";
 import Dropzone, { useDropzone } from "react-dropzone";
 import CONSTANTS from "../../commons/Constants";
+import * as reactShare from "react-share";
 import { useHistory } from "react-router-dom";
 import "./Create.scss";
-import { X, Image as ImageFile, Info, UploadCloud, Check } from "react-feather";
+import {
+  X,
+  Image as ImageFile,
+  Info,
+  UploadCloud,
+  Check,
+  Share2,
+  Download,
+  Crosshair,
+  ChevronLeft,
+  ChevronRight,
+} from "react-feather";
 import Hash from "ipfs-only-hash";
-import { Container, Spinner } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 import { Document, Page, pdfjs } from "react-pdf";
 import _ from "lodash";
-import { toast } from "react-toastify";
 import Select from "react-select";
+import SocialShare from "../../modals/social-share/socialShare";
 import "react-step-progress-bar/styles.css";
 import { shallowEqual, useSelector } from "react-redux";
-import user from "../../../assets/images/user1.png";
+import user from "../../../assets/images/user.png";
 import audio from "../../../assets/images/audio.png";
 import loadingGif from "../../../assets/images/loader_blocks.gif";
 import jspdf from "jspdf";
 import domtoimage from "dom-to-image";
 import moment from "moment";
+import { showToaster } from "../../commons/common.utils";
+import QRCode from "qrcode";
+
+import responseImage from "../../../assets/images/response.jpeg";
+import signatureImage from "../../../assets/logo/signatures.png";
 
 function Create(props) {
   const reduxState = useSelector((state) => state, shallowEqual);
@@ -70,7 +87,21 @@ function Create(props) {
   });
 
   const [slideCount, setSlideCount] = useState(0);
-  const [billet, setBillet] = useState({});
+  const [showShare, setShowShare] = useState(false);
+  const [pdfPages, setPdfPages] = useState({
+    currentPage: 1,
+    totalPages: 1
+  });
+  const [billet, setBillet] = useState({
+    creator: form.owner,
+    fullName: userDetails.fullName,
+    title: form.title,
+    time: moment(new Date()).format("MMMM Do YYYY, h:mm:ss a"),
+    // tokenID: billet.tokenID,
+    // transactionID: billet.tokenID,
+    // PDFHash: billet.PDFHash,
+  });
+
   const [publishState, setPublishState] = useState(INIT);
   const [publishError, setPublishError] = useState(undefined);
   const priceRef = useRef(null);
@@ -79,6 +110,23 @@ function Create(props) {
     fileType: "",
     fileData: undefined,
   });
+  const getQrcode = () => {
+    QRCode.toCanvas(
+      document.getElementById("canvas"),
+      "https://kovan.etherscan.io/address/" + _.get(billet, "transactionID"),
+      {
+        color: {
+          dark: "#1b1919", // black dots
+          light: "#0000", // Transparent background
+        },
+        toSJISFunc: QRCode.toSJIS,
+      },
+      function(error) {
+        if (error) console.error(error);
+        console.log("success!");
+      }
+    );
+  };
 
   useEffect(() => {
     pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
@@ -161,7 +209,9 @@ function Create(props) {
   }
 
   function PDFLoadError(error) {}
-  function onDocumentLoadSuccess(success) {}
+  function onDocumentLoadSuccess({ numPages }) {
+    setPdfPages({...pdfPages, totalPages: numPages});
+  }
 
   function handleTagsChange(tags) {
     setFormData({
@@ -170,7 +220,15 @@ function Create(props) {
     });
   }
 
+  const check250Words = (value) => value.split(/[\s]+/).length > 250 ;
+    
+
   function handleChange(event) {
+    if(event.target.name === 'description') {
+        if(check250Words(event.target.value)) {
+          return false
+        }
+    } 
     let returnObj = {};
     returnObj[event.target.name] =
       _.get(event, "target.name") === "price"
@@ -186,44 +244,11 @@ function Create(props) {
     setFormData({ ...form, ...returnObj });
   }
 
-  // function updateIdeaIDToMongo(payload) {
-  //   MongoDBInterface.updateIdeaID(payload)
-  //     .then((success) => {
-  //       setPublishState(PASSED)
-  //
-  //       toast.dark("Your thoughts are live on blockchain.", {
-  //         position: "bottom-right",
-  //         autoClose: 3000,
-  //         hideProgressBar: true,
-  //         closeOnClick: true,
-  //         pauseOnHover: true,
-  //         draggable: true,
-  //         progress: undefined,
-  //       });
-  //       setBillet({
-  //         transactionID: success.transactionID,
-  //         account: success.account,
-  //         PDFHash: success.PDFHash,
-  //       });
-  //     })
-  //     .catch((err) => {
-  //       setPublishState(FAILED)
-  //       console.log(err);
-  //     });
-  // }
 
   function saveToMongo(form) {
     MongoDBInterface.addSignature(form)
       .then((success) => {
-        toast.dark("Your thoughts have been submitted!", {
-          position: "bottom-right",
-          autoClose: 3000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
+        showToaster("Your Idea is now registered on the blockchain!", { type: "dark" });
       })
       .catch((err) => {
         console.log(err);
@@ -231,24 +256,33 @@ function Create(props) {
   }
 
   function saveToBlockChain(form) {
-    // BlockChainInterface.publishIdea(form, saveToMongo, updateIdeaIDToMongo);
     setPublishState(PROGRESS);
     BlockChainInterface.publishOnBehalf(form)
       .then((success) => {
-        debugger;
-        let response = _.get(success, "data.data");
-        saveToMongo(response);
-        setBillet({
-          creator: userDetails.userID,
-          fullName: userDetails.fullName,
-          title: response,
-          time: moment(new Date()).format("DD-MMM-YYYY"),
-          tokenID: response.ideaID,
-          transactionID: response.transactionID,
-          PDFHash: response.PDFHash,
-        });
-        setPublishState(PASSED);
-        setSlideCount(RESPONSE_SLIDE);
+        if(_.get(success,'data.success')){
+          let successResponse = _.get(success, "data.data");
+          saveToMongo(successResponse);
+          setBillet({
+            creator: userDetails.userName,
+            fullName: userDetails.fullName,
+            title: successResponse.title,
+            time: moment(new Date()).format("MMMM Do YYYY, h:mm:ss a"),
+            tokenID: successResponse.ideaID,
+            transactionID: successResponse.transactionID,
+            PDFHash: successResponse.PDFHash,
+          });
+          setPublishState(PASSED);
+          setSlideCount(RESPONSE_SLIDE);
+        }else{
+          let errorReason = _.get(success,'data.data.errorReason')
+          setPublishState(FAILED);
+          setSlideCount(RESPONSE_SLIDE);
+          
+          setPublishError(
+            "The idea couldnt be published to blockchain. " + errorReason
+          );
+        }
+        
       })
       .catch((error) => {
         setPublishState(FAILED);
@@ -271,7 +305,7 @@ function Create(props) {
         ? JSON.stringify(params.price)
         : params.price;
     params.fileType = fileData.fileType;
-    params.userID = reduxState.userDetails.userID;
+    params.userName = reduxState.userDetails.userName;
     setPublishState(PROGRESS);
     setSlideCount(LOADING_SLIDE);
     StorageInterface.getFilePaths(params)
@@ -382,14 +416,21 @@ function Create(props) {
     switch (fileData.fileType) {
       case "pdf":
         return (
+          <>
           <Document
             fillWidth
             file={form.PDFFile}
             onLoadError={PDFLoadError}
             onLoadSuccess={onDocumentLoadSuccess}
           >
-            <Page fillWidth pageNumber={1} width={window.innerWidth / 4} />
+            <Page fillWidth pageNumber={pdfPages.currentPage} width={window.innerWidth / 4} />
           </Document>
+        <p className="page-container">
+          <ChevronLeft className={pdfPages.currentPage === 1? 'disable': ''} onClick={() => setPdfPages({...pdfPages, currentPage: pdfPages.currentPage - 1})} />
+          Page {pdfPages.currentPage} of {pdfPages.totalPages}
+          <ChevronRight className={pdfPages.currentPage === pdfPages.totalPages ? 'disable': ''} onClick={() => setPdfPages({...pdfPages, currentPage: pdfPages.currentPage +1})}  />
+          </p>
+      </>
         );
       case "mp3":
         return (
@@ -473,6 +514,7 @@ function Create(props) {
                       formErrors.title ? "input-err titleArea" : "titleArea"
                     }
                     placeholder="Title*"
+                    maxLength={50}
                     onChange={handleChange}
                   />
                 </Form.Group>
@@ -499,10 +541,9 @@ function Create(props) {
                       rows={7}
                       aria-describedby="inputGroupAppend"
                       name="description"
-                      placeholder="Description*"
+                      placeholder="upto 250 words"
                       style={{ resize: "none" }}
                       onChange={handleChange}
-                      maxLength={250}
                     />
                   </InputGroup>
                 </Form.Group>
@@ -569,9 +610,7 @@ function Create(props) {
                   <div className="file-drop-contatiner" {...getRootProps()}>
                     <input {...getInputProps()} />
                     <UploadCloud />
-                    <p>
-                      Drag 'n' drop some files here, or click to select files
-                    </p>
+                    <p>Drag 'n Drop or Upload the file containing your idea</p>
                     <p>(Upload pdf / mp3 / image)</p>
                     <div>{/* <Plus /> */}</div>
                     {formErrors.pdf && (
@@ -592,11 +631,12 @@ function Create(props) {
       case THUMBNAIL_SLIDE:
         return (
           <>
+           
             <Col md="6" sm="12" lg="6" xs="12" className="price-n-category">
               <Row className="">
                 <Form.Group as={Col} className="formEntry" md="12">
                   <div className="tags-label">
-                    <Form.Label>Tags </Form.Label>
+                    <Form.Label>Tags (upto 3) </Form.Label>
                   </div>
                   <Select
                     value={form.category}
@@ -609,7 +649,7 @@ function Create(props) {
                     }
                     options={CONSTANTS.CATEGORIES}
                     onChange={handleTagsChange}
-                    placeholder="Tags*"
+                    placeholder="Adding tags to describe your idea."
                   />
                 </Form.Group>
               </Row>
@@ -674,7 +714,7 @@ function Create(props) {
                         {isSelectedPurpose(CONSTANTS.PURPOSES.KEEP) && (
                           <Check />
                         )}
-                        Keep
+                        Personal Record
                       </Button>
                     </Col>
                   </Row>
@@ -772,7 +812,7 @@ function Create(props) {
       case PREVIEW_SLIDE:
         return (
           <>
-            <Col md="6" sm="12" lg="6" xs="12" className="preview-doc ">
+            <Col md="12" sm="12" lg="6" xs="12" className="preview-doc ">
               <Row className="form-row">
                 <Col md="12" sm="12" lg="12" xs="12" className="pdf-container">
                   {form.PDFFile && (
@@ -793,28 +833,44 @@ function Create(props) {
                 </Col>
               </Row>
             </Col>
-            <Col md="6" sm="12" lg="6" xs="12" className="preview-details ">
+            <Col md="12" sm="12" lg="6" xs="12" className="preview-details ">
               <div className="content-profile">
                 <img
                   src={userDetails.imageUrl ? userDetails.imageUrl : user}
                   alt=""
                 />
-                <p>{userDetails.userID}</p>
+                <p>{userDetails.userName}</p>
               </div>
               <div className="description">
-                <p>
-                  Lorem Ipsum is simply dummy text of the printing and
-                  typesetting industry. Lorem Ipsum has been the industry's
-                  standard dummy text ever since the 1500s, when an unknown
-                  printer took a galley of type and scrambled it to make a type
-                  specimen book.
-                </p>
-              </div>
-              <div className="price">
-                <p>
-                  Price: <span className="line-through">{form.price} BNB</span>{" "}
-                  <span> FREE</span>
-                </p>
+                <Row>
+                  <Col md="12" className="message">
+                    Your idea will now be immortalized in a blockchain. And you
+                    will forever be known as it's creator. Welcome to the Tribe!
+                  </Col>
+                </Row>
+                <div className="gas-fee-block">
+                  <div className="gas_fee">
+                    <p>Binance Chain Gas Fees: </p>
+                  </div>
+                  <div className="gas_fee_value">
+                    <p> 0.001 BNB </p>
+                  </div>
+                  <div className="gas_free">
+                    <p> This is on us for your first 5 Ideas. </p>
+                  </div>
+                </div>
+                <div className="service_fee_block">
+                  <div className="serice_fee">
+                    <p> IdeaTribe Service Fee: </p>
+                  </div>
+                  <div className="serice_fee_value">
+                    <p> 0.1 BNB </p>
+                  </div>
+                  <div className="serice_free">
+                    <p> FREE for early Tribers!</p>
+                  </div>
+                </div>
+                <p></p>
               </div>
             </Col>
           </>
@@ -822,13 +878,21 @@ function Create(props) {
         break;
       case LOADING_SLIDE:
         return (
-          <Col md="12" sm="12" lg="12" xs="12" className="publishing-wrapper ">
-            <div className="publishing-block">
-              <p>We are posting your idea on the blockchain. Please wait!</p>
-            </div>
-
-            <div className="gif-wrapper">
+          <Col
+            md="12"
+            sm="12"
+            lg="12"
+            xs="12"
+            className="publishing-wrapper d-flex flex-column justify-content-center"
+          >
+            <div className="gif-wrapper d-flex justify-content-center">
               <img src={loadingGif} alt="" />
+            </div>
+            <div className="publishing-block-text">
+              <p>
+                We are posting your idea on the Binance Blockchain. Hold on
+                tight!
+              </p>
             </div>
           </Col>
         );
@@ -840,8 +904,8 @@ function Create(props) {
             sm="12"
             lg="12"
             xs="12"
-            className="published-wrapper "
-            id="published-wrapper-block"
+            className="failed-wrapper"
+            id="failed-wrapper-block"
           >
             <div className="success-block">
               <p>Failed to publish your Idea</p>
@@ -854,70 +918,132 @@ function Create(props) {
           publishState == PASSED && (
             <Col
               md="12"
-              sm="12"
-              lg="12"
-              xs="12"
-              className="published-wrapper "
               id="published-wrapper-block"
+              className="published-wrapper p-0 d-flex flex-row justify-content-space-around"
             >
-              <div className="success-block">
-                <p>Your Idea is posted in blockchain</p>
-                <Check />
-              </div>
-
-              <div className="transaction-data">
-                <div className="transaction-ids">
-                  <p>
-                    Transaction ID- <span>{billet.transactionID}</span>
-                  </p>
-                  <p>
-                    File Hash ID- <span>{billet.PDFHash}</span>
-                  </p>
-                  <p>* Please save both of these for future reference.</p>
+                
+              <div className="left-strip"> </div>
+              <Col
+                md="8"
+                className="center-strip d-flex flex-column justify-content-around"
+              >
+                <Row className="row1">
+                  <Col md="12">
+                    <div className="billet-item">
+                      <div className="user">@{billet.creator}</div>
+                      <div className="name">{billet.fullName}</div>
+                      <div>ideaTribe.com</div>
+                    </div>
+                  </Col>
+                </Row>
+                <Row className="row2">
+                  <Col md="12">
+                    <div className="billet-item">
+                      <div className="item">{billet.title}</div>
+                      <div className="time"> {billet.time}, Bangalore</div>
+                    </div>
+                  </Col>
+                  <Col md="12"></Col>
+                </Row>
+                <Row className="row3">
+                  <Col md="12">
+                    <div className="billet-item">
+                      <div className="trasnection-details">
+                        <div>TRANSACTION ID:</div>
+                        <span className="hashValue">
+                          {billet.transactionID}
+                        </span>
+                      </div>
+                      <div className="trasnection-details">
+                        <div>FILE HASH:</div>
+                        <span className="hashValue">{billet.PDFHash}</span>
+                      </div>
+                      <div className="trasnection-details">
+                        <div>TOKEN ID:</div>
+                        <span className="hashValue">{billet.tokenID}</span>
+                      </div>
+                    </div>
+                  </Col>
+                </Row>
+              </Col>
+              <Col
+                md="3"
+                className="right-strip   d-flex flex-column justify-content-around"
+              >
+                <div className="brand">
+                  <Col md="12" className="p-0">
+                    BILLET
+                  </Col>
+                  <Col md="12" className="p-0">
+                    <img src={signatureImage} alt="logo" width="150px" />
+                  </Col>
                 </div>
-                <div className="btn-block">
-                  <Button
-                    variant="primary"
-                    className="button"
-                    bsstyle="primary"
-                    onClick={() => gotoProfile()}
-                  >
-                    {" "}
-                    Done
-                  </Button>
-                  <Button
-                    variant="primary"
-                    className="button ml-3"
-                    bsstyle="primary"
-                    onClick={() => exportToPdf()}
-                  >
-                    {" "}
-                    Export
-                  </Button>
+                <div class="code-n-share">
+                  <Col md="12">
+                    <canvas id="canvas"></canvas>
+                    {setTimeout(() => {
+                      getQrcode();
+                    })}
+                  </Col>
                 </div>
-              </div>
+              </Col>
+              <Col md="1" className="actionables p-0 flex-column">
+                <div className="in-app-actions d-flex flex-column pt-3">
+                  <Crosshair
+                    className="cursor-pointer signature-icons"
+                    color="#F39422"
+                    onClick={() => {
+                      openInEtherscan();
+                    }}
+                  ></Crosshair>
+                  <Download
+                    className="cursor-pointer signature-icons"
+                    color="#F39422"
+                    onClick={() => {
+                      exportToPdf();
+                    }}
+                  ></Download>
+                 
+                </div>
+                <div className="sharables d-flex flex-column align-flex-start">
+                  
+                  <reactShare.FacebookShareButton
+                    url={window.location.origin + "/signature/" + billet.PDFHash}
+                    quote={"Hey! I registered an original idea on blockchain!"}
+                 >
+                    <reactShare.FacebookIcon size={32} round />
+                  </reactShare.FacebookShareButton>
+                  <reactShare.WhatsappShareButton
+                    url={window.location.origin + "/signature/" + billet.PDFHash}
+                    title={"Hey! I registered an original idea on blockchain!"}
+                    separator=" "
+                  >
+                    <reactShare.WhatsappIcon size={32} round />
+                  </reactShare.WhatsappShareButton>
+                  <reactShare.LinkedinShareButton url={window.location.origin + "/signature/" + billet.PDFHash}>
+                    <reactShare.LinkedinIcon size={32} round />
+                  </reactShare.LinkedinShareButton>
+                </div>
+              </Col>
             </Col>
           )
         );
-        break;
+      default:
+        return null;
     }
   };
 
   const exportToPdf = () => {
-    var name = "trasnaction.pdf";
-
+    var name = "Billet.pdf";
     domtoimage
       .toJpeg(document.getElementById("published-wrapper-block"), {
-        quality: 0.95,
-        style: {
-          "background-color": "#000",
-          padding: "20px",
-        },
-        filter: function filter(node) {
-          return (
-            ["filterAddition", "bottom-contents"].indexOf(node.className) < 0
-          );
-        },
+        quality: 1,
+        style: {},
+        // filter: function filter(node) {
+        //   return (
+        //     ["filterAddition", "bottom-contents"].indexOf(node.className) < 0
+        //   );
+        // },
       })
       .then(
         function(dataUrl) {
@@ -926,7 +1052,7 @@ function Create(props) {
             var pdf = new jspdf("p", "pt", "a3");
             pdf.internal.pageSize.setWidth(image.width * 0.75);
             pdf.internal.pageSize.setHeight(image.height * 0.75);
-            pdf.addImage(dataUrl, "JPG", 0, -80);
+            pdf.addImage(dataUrl, "JPG", 0, 0);
             pdf.save(name);
           });
           image.src = dataUrl;
@@ -939,8 +1065,13 @@ function Create(props) {
 
   return (
     <Container>
+       
       <Row className="createform  d-flex">
-        <Col md="12" sm="12" lg="12" xs="12" className="responsive-content">
+      
+        <Col md="11" sm="11" lg="11" xs="11" className="responsive-content">
+        <X className="closeIcon" size={16} onClick={() => {
+                  gotoProfile()
+                }}></X>
           <Form
             noValidate
             encType="multipart/form-data"
@@ -948,18 +1079,26 @@ function Create(props) {
             className="create-form"
           >
             <Col md="12" className="overflow-auto h-100 p-0">
-              <Row className="content-container">{getViewBasedOnSteps()}</Row>
+              <Row
+                className={
+                  publishState == PASSED
+                    ? "content-container h-100"
+                    : "content-container"
+                }
+              >
+                {getViewBasedOnSteps()}
+              </Row>
               {publishState == INIT && (
                 <Row className="footer-class ">
                   <Col
                     md="6"
-                    className="d-flex justify-content-between align-items-center "
+                    className="d-flex justify-content-between align-items-center left-btn-container"
                   >
                     {slideCount >= LOADING_SLIDE ? (
                       <div></div>
                     ) : (
                       <Button
-                        variant="secondary"
+                        variant="ternary"
                         className="button"
                         bsstyle="primary"
                         onClick={() => {
@@ -975,7 +1114,7 @@ function Create(props) {
                     className="d-flex justify-content-end align-items-center right-btn-container"
                   >
                     <Button
-                      variant="primary"
+                      variant="fourth"
                       className="button"
                       bsstyle="primary"
                       style={{ gap: "2px" }}
@@ -994,6 +1133,10 @@ function Create(props) {
       </Row>
     </Container>
   );
+
+  function openInEtherscan() {
+    window.open("https://kovan.etherscan.io/tx/" + billet.transactionID);
+  }
 
   function getNextButtonText() {
     if (slideCount == PREVIEW_SLIDE) {

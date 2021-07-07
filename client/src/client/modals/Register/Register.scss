@@ -80,6 +80,23 @@
             display: flex;
             align-items: center;
             gap: 20px;
+            input {
+              text-transform: lowercase;
+              &.username-error{
+                border-bottom: 1px solid $danger;
+              }
+            }
+          }
+          .username-error-txt{
+            margin: 0;
+            color: $danger;
+            font-size: 10px;
+            display: inline;
+            margin-left: 132px;
+            margin-top: -35px;
+          }
+          .user-name-row{
+            flex-flow: column;
           }
         }
         .btn-component {

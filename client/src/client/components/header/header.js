@@ -5,7 +5,6 @@ import logo from "../../../assets/logo/signatures.png";
 import _ from "lodash";
 import { User, Plus, Search } from "react-feather";
 import "./header.scss";
-import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Container, Row, Col } from "react-bootstrap";
 import BlockchainInterface from "../../interface/BlockchainInterface";
@@ -14,6 +13,7 @@ import { shallowEqual, useSelector } from "react-redux";
 import SearchBar from "../searchBar/SearchBar";
 import MongoDBInterface from "../../interface/MongoDBInterface";
 import { setReduxUserDetails } from "../../redux/actions";
+import { showToaster } from "../../commons/common.utils";
 const Header = (props) => {
   let history = useHistory();
   const reduxState = useSelector((state) => state, shallowEqual);
@@ -56,15 +56,7 @@ const Header = (props) => {
   function logoutUser() {
     console.log("logging out");
     localStorage.removeItem("userInfo");
-    toast.error("Logged out!", {
-      position: "bottom-right",
-      autoClose: 3000,
-      hideProgressBar: true,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
+    showToaster("Logged out!", {type: 'error'})
     window.location.reload();
   }
 
@@ -116,7 +108,7 @@ const Header = (props) => {
             createnew();
           }}
         >
-          Publish
+          Upload
         </Button>
       )
     }
@@ -135,8 +127,8 @@ const Header = (props) => {
             >
               <img
                 src={logo}
-                width="50"
-                height="50"
+                width="35"
+                height="35"
                 alt=""
                 className="cursor-pointer"
                 onClick={() => gotoGallery()}
@@ -169,7 +161,9 @@ const Header = (props) => {
           </div>
 
           <div className="right-section">
-            {currentMetamaskAccount}
+            <span className="loggedinaccount" title={currentMetamaskAccount} onClick={() => {
+              window.open("https://kovan.etherscan.io/address/" + currentMetamaskAccount);
+            }}>{currentMetamaskAccount&& currentMetamaskAccount.substring(0,3) + " ... " + currentMetamaskAccount.substring(currentMetamaskAccount.length - 3,currentMetamaskAccount.length)}</span>
             {/* <Button
               variant="primary"
               className="button"
@@ -180,7 +174,7 @@ const Header = (props) => {
             >
               Connect
             </Button> */}
-            {_.isEmpty(currentMetamaskAccount) ? (
+            {_.isEmpty(currentMetamaskAccount) || _.isEmpty(currentUserDetails) ? (
               <Button
                 variant="primary"
                 className="button"
@@ -189,7 +183,7 @@ const Header = (props) => {
                   gotoPortfolio();
                 }}
               >
-                Connect Wallet
+                Register
               </Button>
             ) : 
                 isUserAuthForPublish()

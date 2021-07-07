@@ -2,17 +2,41 @@ import _, { defer, has } from "lodash";import  React from 'react';
 import Web3 from "web3";
 import NFTTokenBean from "../beans/Signature";
 import contractJSON from "../../contracts/ideaBlocks.json";
-import { toast } from "react-toastify";
 import store from '../redux/store';
 import { setReduxMetaMaskID } from "../redux/actions";
-
+import ENDPOINTS from '../commons/Endpoints';
 
 import axios from 'axios'
 
 const api = axios.create({
-    baseURL: 'http://localhost:4000/api',
-    // baseURL: '/api',
+  baseURL: process.env.NODE_ENV == "production" ? ENDPOINTS.REMOTE_ENDPOINTS: ENDPOINTS.LOCAL_ENDPOINTS
 })
+
+const chain_id = "0x2a";
+
+const CHAIN_CONFIGS = { "0x38" : {
+  chainId: '0x38',
+  chainName: 'Binance Smart Chain Mainnet',
+  nativeCurrency: {
+    name: 'Binance Coin',
+    symbol: 'BNB',
+    decimals: 18
+  },
+  rpcUrls: ['https://bsc-dataseed1.ninicoin.io'],
+  blockExplorerUrls: ['https://bscscan.com/']
+  },
+  "0x61" : {
+    chainId: '0x61',
+    chainName: 'Binance Smart Chain Testnet',
+    nativeCurrency: {
+      name: 'Binance Coin',
+      symbol: 'BNB',
+      decimals: 18
+    },
+    rpcUrls: ['https://data-seed-prebsc-1-s1.binance.org:8545/'],
+    blockExplorerUrls: ['https://testnet.bscscan.com']
+  }
+}
 
 class BlockchainInterface {
   constructor() {
@@ -26,11 +50,78 @@ class BlockchainInterface {
     window.ethereum && window.ethereum.on('accountsChanged', function (accounts) {
       parentThis.getAccountDetails();
     })
+    window.ethereum && window.ethereum.on('chainChanged', function (chainId) {
+      parentThis.getAccountDetails();
+    })
+  }
+
+  addNetwork(chain_id) {
+    window.ethereum.request({
+      method: 'wallet_addEthereumChain',
+      params: [CHAIN_CONFIGS[chain_id]]
+    }).then(success => {
+      console.log("success",success)
+    }).catch(switchError =>{
+      console.log("switchError",switchError)
+     
+    })
+  }
+
+  switchNetwork() {
+    try {
+      window.ethereum.request({
+        method: 'wallet_switchEthereumChain',
+        params: [{ chainId: chain_id }],
+      }).then(success => {
+        console.log("success",success)
+      }).catch(switchError =>{
+        if (switchError.code === 4902) {
+          try {
+            this.addNetwork(chain_id)
+          } catch (addError) {
+            // handle "add" error
+          }
+        }
+      })
+    } catch (switchError) {
+      // This error code indicates that the chain has not been added to MetaMask.
+      if (switchError.code === 4902) {
+        try {
+          this.addNetwork(chain_id)
+        } catch (addError) {
+          // handle "add" error
+        }
+      }
+      // handle other "switch" errors
+    }
+  }
+
+  addToken(type, address, symbol, decimals) {
+    window.ethereum
+        .request({
+          method: 'wallet_watchAsset',
+          params: {
+            type: type,
+            options: {
+              address: address,
+              symbol: symbol,
+              decimals: decimals
+            },
+          },
+        })
+        .then((success) => {
+          if (success) {
+            console.log(symbol + ' successfully added to wallet!')
+          } else {
+            throw new Error('Something went wrong.')
+          }
+        })
+        .catch(console.error)
   }
 
   register_user = payload => { 
     console.log("register_user")
-    return api.post(`/register_user`,payload) 
+      return api.post(`/register_user`,payload)
   }
 
   async getAccountDetails() {
@@ -69,6 +160,7 @@ class BlockchainInterface {
       if (window.ethereum) {
         this.web3 = new Web3(window.ethereum);
         window.web3 = this.web3;
+        this.switchNetwork();
         window.ethereum
           .enable()
           .then((accountId) => {
@@ -149,7 +241,6 @@ class BlockchainInterface {
       value: updatePayLoad.price,
       from: updatePayLoad.buyer,
     };
-    debugger
     this.contract.methods
       .buy(updatePayLoad.ideaID)
       .send(transactionObject)

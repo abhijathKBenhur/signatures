@@ -7,8 +7,8 @@ const privateKey = process.env.PROGRAMMER_KEY;
 const HDWalletProvider = require("@truffle/hdwallet-provider");
 const _ = require("lodash");
 const networkURL = process.env.NETWORK_URL;
-
-const web3Instance = new Web3(new HDWalletProvider(privateKey, networkURL));
+let hdWallet = new HDWalletProvider({privateKeys:[privateKey] , providerOrUrl : "wss://eth-kovan.ws.alchemyapi.io/v2/x1UTqgj7k4xlcyFzkFza6b2m1PZbqeZx", pollingInterval : 20000})
+const web3Instance = new Web3(hdWallet);
 // web3Instance.eth.getAccounts().then((e) => console.log(e));
 const publicKey =
   web3Instance.eth.accounts.privateKeyToAccount(privateKey).address;
@@ -25,7 +25,7 @@ const transactionObject = {
 
 register_user = (req, res) => {
   let metamaskAddress = req.body.metamaskId;
-  let userName = req.body.userID;
+  let userName = req.body.userName;
   console.log("calling register", deployedContract.address);
 
   deployedContract.methods
@@ -46,7 +46,7 @@ register_user = (req, res) => {
         (errorReason) => {
           error.errorReason = errorReason;
           console.log("error errorReason", errorReason);
-          return res.status(400).json({ success: false, data: errorReason });
+          return res.status(200).json({ success: false, data: errorReason });
         }
       );
     });
@@ -89,7 +89,7 @@ publishOnBehalf = async (req, res) => {
           (errorReason) => {
             console.log("error errorReason", errorReason);
             error.errorReason = errorReason;
-            return res.status(400).json({ success: false, data: error });
+            return res.status(200).json({ success: false, data: error });
           }
         );
       } catch (e) {

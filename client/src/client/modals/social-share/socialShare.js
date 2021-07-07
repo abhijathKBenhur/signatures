@@ -1,33 +1,26 @@
-import React, { Component, useState } from "react";
-import { Modal} from "react-bootstrap";
+import React, { Component } from "react";
+import { Modal } from "react-bootstrap";
 import "./socialShare.scss";
 import * as reactShare from "react-share";
-import {  toast } from 'react-toastify';
 
-import {  Copy } from 'react-feather';
+import { Copy } from "react-feather";
+import { showToaster } from "../../commons/common.utils";
 class SocialShare extends Component {
   constructor(props) {
     super(props);
     this.copyClipBoard = this.copyClipBoard.bind(this);
     this.state = {
-      shareUrl : window.location.href + "?referrer="+ localStorage.getItem("userInfo"),
-      title : 'Hey! Checkout this token'
-    }
+      shareUrl:
+        window.location.href,
+        title: "Hey! Checkout this token",
+    };
   }
 
-  copyClipBoard(){
-    let shareURL = window.location.href + "?referrer="+ localStorage.getItem("userInfo")
-    navigator.clipboard.writeText(shareURL)
-    
-    toast.dark('Copied to clipboard!', {
-      position: "bottom-right",
-      autoClose: 3000,
-      hideProgressBar: true,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
+  copyClipBoard() {
+    let shareURL =
+      window.location.href + "?referrer=" + localStorage.getItem("userInfo");
+    navigator.clipboard.writeText(shareURL);
+    showToaster("Copied to clipboard!", { type: "dark" });
   }
 
   render() {
@@ -38,11 +31,10 @@ class SocialShare extends Component {
         size="sm"
         aria-labelledby="contained-modal-title-vcenter"
         centered
+        show={this.state.show}
       >
-        <Modal.Header closeButton>
-          <Modal.Title >
-            Share 
-          </Modal.Title>
+        <Modal.Header>
+          <Modal.Title>Share</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <div className="holder">
@@ -53,8 +45,7 @@ class SocialShare extends Component {
               <reactShare.FacebookIcon size={32} round />
             </reactShare.FacebookShareButton>
 
-            <div>
-            </div>
+            <div></div>
           </div>
 
           <div className="holder">
@@ -73,7 +64,6 @@ class SocialShare extends Component {
             >
               <reactShare.TwitterIcon size={32} round />
             </reactShare.TwitterShareButton>
-
           </div>
 
           <div className="holder">
@@ -83,7 +73,6 @@ class SocialShare extends Component {
             >
               <reactShare.TelegramIcon size={32} round />
             </reactShare.TelegramShareButton>
-
           </div>
 
           <div className="holder">
@@ -94,7 +83,6 @@ class SocialShare extends Component {
             >
               <reactShare.WhatsappIcon size={32} round />
             </reactShare.WhatsappShareButton>
-
           </div>
 
           <div className="holder">
@@ -104,7 +92,7 @@ class SocialShare extends Component {
           </div>
 
           <div className="holder customcopy" onClick={this.copyClipBoard}>
-            <Copy size={20} color="grey" ></Copy>
+            <Copy size={20} color="grey"></Copy>
           </div>
 
           {/* <div className="holder">
@@ -258,7 +246,7 @@ class SocialShare extends Component {
               <reactShare.HatenaIcon size={32} round />
             </reactShare.HatenaShareButton>
           </div> */}
-          </Modal.Body>
+        </Modal.Body>
       </Modal>
     );
   }

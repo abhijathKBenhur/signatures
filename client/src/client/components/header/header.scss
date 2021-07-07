@@ -24,8 +24,12 @@
         flex: 1
     }
     .right-section{
+        cursor: pointer;
         display: flex;
         gap: 20px;
+        .loggedinaccount{
+            color: $dark-brown;
+        }
         
     }
     .dropdown-menu{

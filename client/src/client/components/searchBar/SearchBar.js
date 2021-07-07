@@ -12,6 +12,7 @@ function Search() {
   const reduxState = useSelector((state) => state, shallowEqual);
   const dispatch = useDispatch();
   const wrapperRef = useRef(null);
+  const { categoriesList = [] } = reduxState;
   const [tags, setTags] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [showDropdown, setShowDropdown] = useState(false);
@@ -32,12 +33,13 @@ function Search() {
   useEffect(() => {
     const { metamaskID = undefined } = reduxState;
     let postObj = { searchString: searchText };
-    if (tags.length)
-      postObj.tags = tags.map(tag => tag.value)
+    let tagsFromBottom = _.filter(categoriesList, function(o) { return o.isSelected; }).map(val => val.value) || [];
+    if (tags.length || tagsFromBottom.length)
+      postObj.tags = [...tags.map(tag => tag.value), ...tagsFromBottom]
     try {
       MongoDBInterface.getSignatures(postObj).then(
         (signatures) => {
-          let response = _.get(signatures, "data.data");
+          let response = _.get(signatures, "data.data")
           let isEmptyPresent = _.find(response, (responseItem) => {
             return _.isEmpty(responseItem.ideaID);
           });
@@ -69,7 +71,7 @@ function Search() {
           id="search-box"
           autoComplete="off"
           className="search-box"
-          placeholder="Search Collections"
+          placeholder="Search IdeaTribe"
         />
         <Tag
           className="search-tag"

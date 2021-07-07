@@ -1,11 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useLocation, useHistory } from "react-router-dom";
-import {confirm} from '../../modals/confirmation/confirmation'
+import { confirm } from "../../modals/confirmation/confirmation";
 import moment from "moment";
-
-import SignatureBean from "../../beans/Signature";
 import {
-  Badge,
   Button,
   Row,
   Col,
@@ -31,17 +28,20 @@ import {
   ShoppingCart,
   Share,
   Crosshair,
-  MoreHorizontal,
+  ChevronRight,
+  ChevronLeft,
 } from "react-feather";
-import md5 from "md5";
 import { Document, Page, pdfjs } from "react-pdf";
 import _ from "lodash";
+import md5 from "md5";
 import { toast } from "react-toastify";
 import Select from "react-select";
 import StorageInterface from "../../interface/StorageInterface";
 import { shallowEqual, useSelector } from "react-redux";
 import audio from "../../../assets/images/audio.png";
 import CONSTANTS from "../../commons/Constants";
+import { showToaster } from "../../commons/common.utils";
+import * as reactShare from "react-share";
 
 const Signature = (props) => {
   let { hashId } = useParams();
@@ -55,16 +55,24 @@ const Signature = (props) => {
     undefined
   );
 
-  const [key, setKey] = useState("Bids");
+  const [signatureEdits, setSignatureEdits] = useState({
+    purpose: false,
+    price: false,
+  });
+  const [key, setKey] = useState("Details");
+  const [pdfPages, setPdfPages] = useState({
+    currentPage: 1,
+    totalPages: 1
+  });
   let history = useHistory();
   useEffect(() => {
     pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
     let signatureFromParent = location.state;
     if (signatureFromParent) {
-      setSignature({ ...signature, ...new SignatureBean(signatureFromParent) });
+      setSignature({ ...signature, signatureFromParent });
     } else {
       MongoDBInterface.getSignatureByHash(hashId).then((response) => {
-        let signatureObject = new SignatureBean(_.get(response, "data.data"));
+        let signatureObject = _.get(response, "data.data");
         setSignature(...signature, ...signatureObject);
       });
     }
@@ -73,7 +81,7 @@ const Signature = (props) => {
   }, []);
 
   useEffect(() => {
-    setIsCurrentUserOwner(signature.owner == currentUser.metamaskId);
+    setIsCurrentUserOwner(signature.owner.metamaskId == currentUser.metamaskId);
   }, [signature, currentUser]);
 
   useEffect(() => {
@@ -107,49 +115,25 @@ const Signature = (props) => {
   };
 
   function feedbackMessage(signature) {
-    toast.dark(
+    showToaster(
       "Please wait a while we complete the transaction. Please note the transaction ID : " +
         signature && signature.transactionID,
-      {
-        position: "bottom-right",
-        autoClose: false,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      }
+      { type: "dark" }
     );
   }
 
   function errorMessage() {
-    toast.error(
+    showToaster(
       "There was an error in processing your request in blockchain ",
-      {
-        position: "bottom-right",
-        autoClose: false,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      }
+      { type: "error" }
     );
   }
 
   function updateMongoBuySignature(updatePayload) {
     MongoDBInterface.buySignature(updatePayload)
       .then((updatedSignature) => {
-        toast.info("Purchase updated on blockchain", {
-          position: "bottom-right",
-          autoClose: 3000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-        setSignature(new SignatureBean(_.get(updatedSignature, "data.data")));
+        showToaster("Purchase updated on blockchain", { type: "info" });
+        setSignature(_.get(updatedSignature, "data.data"));
         gotoGallery();
       })
       .catch((err) => {
@@ -166,16 +150,7 @@ const Signature = (props) => {
   function copyClipBoard() {
     let shareURL = window.location.href + "/signature/" + signature.PDFHash;
     navigator.clipboard.writeText(shareURL);
-
-    toast.dark("Copied to clipboard!", {
-      position: "bottom-right",
-      autoClose: 3000,
-      hideProgressBar: true,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
+    showToaster("Copied to clipboard!", { type: "dark" });
   }
 
   function updatePriceInMongo() {
@@ -184,11 +159,19 @@ const Signature = (props) => {
     });
   }
 
+  function procureSignature() {
+    if (signature.purpose == CONSTANTS.PURPOSES.SELL || signature.purpose == CONSTANTS.PURPOSES.AUCTION) {
+      buySignature();
+    } else if (signature.purpose == CONSTANTS.PURPOSES.COLLAB) {
+      showInterest();
+    }
+  }
+
   function buySignature() {
     let updatePayload = {
       buyer: currentMetamaskAccount,
-      seller: signature.owner,
-      buyerUserID: currentUser.userID,
+      seller: signature.owner.userName,
+      buyerUserID: currentUser.userName,
       PDFHash: signature.PDFHash,
       price: signature.price,
       ideaID: signature.ideaID,
@@ -201,8 +184,7 @@ const Signature = (props) => {
     );
   }
 
-
-  function showInterest(){
+  function showInterest() {
     confirm(
       "Set your price.",
       "Would you like to express your interest?",
@@ -213,21 +195,17 @@ const Signature = (props) => {
     ).then((success) => {
       if (success.proceed) {
         let updatePayload = {
-          from: currentMetamaskAccount,
-          to: signature.owner,
+          from: currentUser.userName,
+          to: signature.owner.userName,
           action: CONSTANTS.ACTIONS.COLLAB_INTEREST,
           status: CONSTANTS.ACTION_STATUS.PENDING,
           ideaID: signature.ideaID,
           message: success.text,
         };
-        ActionsInterface.postAction(updatePayload).then(success =>{
-          
-        })
+        ActionsInterface.postAction(updatePayload).then((success) => {});
       } else {
-
       }
     });
-    
   }
 
   function openInEtherscan() {
@@ -247,98 +225,93 @@ const Signature = (props) => {
     history.push({
       pathname: "/profile/" + id,
       state: {
-        userID: id,
+        userName: id,
       },
     });
   };
 
-  const getMenuActions = () => {
-    return (
-      <DropdownButton id="dropdown-actions" title="Actions">
-        {/* <Dropdown.Toggle variant="success" id="dropdown-basic">
-          <MoreHorizontal />
-        </Dropdown.Toggle> */}
-        {isCurrentUserOwner ? (
-          <div></div>
-        ) : (
-          <div>
-          { signature.purpose == CONSTANTS.PURPOSES.SELL && <Dropdown.Item
-            onClick={() => {
-              buySignature();
-            }}
-          >
-            <ShoppingCart
-              className="cursor-pointer signature-icons ShoppingCart"
-              color="#79589F"
-            ></ShoppingCart>
-            <span className="txt">Buy</span>
-          </Dropdown.Item>
-          }
-          { signature.purpose == CONSTANTS.PURPOSES.COLLAB && <Dropdown.Item
-            onClick={() => {
-              showInterest();
-            }}
-          >
-            <ShoppingCart
-              className="cursor-pointer signature-icons ShoppingCart"
-              color="#79589F"
-            ></ShoppingCart>
-            <span className="txt">Collaborate</span>
-          </Dropdown.Item>
-          }
-            <Dropdown.Item>
-              <ThumbsUp
-                className="cursor-pointer signature-icons ThumbsUp"
-                color="#79589F"
-              ></ThumbsUp>
-              <span className="txt">Like </span>
-            </Dropdown.Item>
-          </div>
-        )}
+  // const getMenuActions = () => {
+  //   return (
+  //     <DropdownButton id="dropdown-actions" title="Actions">
+  //       {/* <Dropdown.Toggle variant="success" id="dropdown-basic">
+  //         <MoreHorizontal />
+  //       </Dropdown.Toggle> */}
+  //       {isCurrentUserOwner ? (
+  //         <div></div>
+  //       ) : (
+  //         <div>
+  //           {signature.purpose == CONSTANTS.PURPOSES.SELL && (
+  //             <Dropdown.Item
 
-        <Dropdown.Item>
-          <Share
-            className="cursor-pointer signature-icons"
-            color="#79589F"
-            onClick={() => {
-              copyClipBoard();
-            }}
-          ></Share>
-          <span className="txt">Copy link</span>
-        </Dropdown.Item>
-        <Dropdown.Item>
-          <Crosshair
-            className="cursor-pointer signature-icons"
-            color="#79589F"
-            onClick={() => {
-              openInEtherscan();
-            }}
-          ></Crosshair>
-          <span className="txt">View</span>
-        </Dropdown.Item>
+  //             >
 
-        {/* <Dropdown.Item>
-          <ExternalLink
-            className="cursor-pointer signature-icons ExternalLink"
-            onClick={() => {
-              openInNewTab();
-            }}
-            color="#79589F"
-          ></ExternalLink>
-          <span className="txt">Open</span>
-        </Dropdown.Item> */}
-      </DropdownButton>
-    );
-  };
+  //               <span className="txt">Buy</span>
+  //             </Dropdown.Item>
+  //           )}
+  //           {signature.purpose == CONSTANTS.PURPOSES.COLLAB && (
+  //             <Dropdown.Item
+  //               onClick={() => {
+  //                 showInterest();
+  //               }}
+  //             >
+  //               <ShoppingCart
+  //                 className="cursor-pointer signature-icons ShoppingCart"
+  //                 color="#F39422"
+  //               ></ShoppingCart>
+  //               <span className="txt">Collaborate</span>
+  //             </Dropdown.Item>
+  //           )}
+  //           <Dropdown.Item>
+  //             <ThumbsUp
+  //               className="cursor-pointer signature-icons ThumbsUp"
+  //               color="#F39422"
+  //             ></ThumbsUp>
+  //             <span className="txt">Like </span>
+  //           </Dropdown.Item>
+  //         </div>
+  //       )}
 
+  //       <Dropdown.Item>
+
+  //         <span className="txt">Copy link</span>
+  //       </Dropdown.Item>
+  //       <Dropdown.Item>
+
+  //         <span className="txt">View</span>
+  //       </Dropdown.Item>
+
+  //       {/* <Dropdown.Item>
+  //         <ExternalLink
+  //           className="cursor-pointer signature-icons ExternalLink"
+  //           onClick={() => {
+  //             openInNewTab();
+  //           }}
+  //           color="#F39422"
+  //         ></ExternalLink>
+  //         <span className="txt">Open</span>
+  //       </Dropdown.Item> */}
+  //     </DropdownButton>
+  //   );
+  // };
+  function onDocumentLoadSuccess({ numPages }) {
+    setPdfPages({...pdfPages, totalPages: numPages});
+  }
   const getDocumnetViewer = () => {
     const { fileType } = signature;
     switch (fileType) {
       case "pdf":
         return (
-          <Document file={PDFFile} className="pdf-document">
-            <Page pageNumber={1} />
+          <>
+          <Document file={PDFFile} className="pdf-document" 
+          onLoadSuccess={onDocumentLoadSuccess}>
+            <Page pageNumber={pdfPages.currentPage} />
           </Document>
+           <p className="page-container">
+           <ChevronLeft className={pdfPages.currentPage === 1? 'disable': ''} onClick={() => setPdfPages({...pdfPages, currentPage: pdfPages.currentPage - 1})} />
+           Page {pdfPages.currentPage} of {pdfPages.totalPages}
+           <ChevronRight className={pdfPages.currentPage === pdfPages.totalPages ? 'disable': ''} onClick={() => setPdfPages({...pdfPages, currentPage: pdfPages.currentPage +1})}  />
+           </p>
+           </>
         );
       case "mp3":
         const file = PDFFile.split(",")[1];
@@ -362,6 +335,23 @@ const Signature = (props) => {
     }
   };
 
+  function getIdeaStatus() {
+    switch (signature.purpose) {
+      case CONSTANTS.PURPOSES.SELL:
+        return "On Sale";
+        break;
+      case CONSTANTS.PURPOSES.AUCTION:
+        return "On Auction";
+        break;
+      case CONSTANTS.PURPOSES.COLLAB:
+        return "Inviting Collaborators";
+        break;
+      case CONSTANTS.PURPOSES.KEEP:
+        return "Personal Record";
+        break;
+    }
+  }
+
   return (
     <Container fluid>
       <Form
@@ -383,78 +373,146 @@ const Signature = (props) => {
                 <Spinner animation="border" />
               )}
             </Col>
-            <Col sm="12" lg="5" xs="12" md="6" className="right-side">
-              <div className="top-section">
+            <Col sm="12" lg="5" xs="12" md="6" className="right-side p-0">
+              <div className="buttons text-right d-flex justify-content-between">
+                <div className="actions d-flex">
+                  {!isCurrentUserOwner && (
+                    <ShoppingCart
+                      onClick={() => {
+                        procureSignature();
+                      }}
+                      className="cursor-pointer signature-icons ShoppingCart"
+                      color="#F39422"
+                    ></ShoppingCart>
+                  )}
+                  {!isCurrentUserOwner && (
+                    <ThumbsUp
+                      className="cursor-pointer signature-icons ThumbsUp"
+                      color="#F39422"
+                    ></ThumbsUp>
+                  )}
+                  <ExternalLink
+                    className="cursor-pointer signature-icons"
+                    color="#F39422"
+                    onClick={() => {
+                      copyClipBoard();
+                    }}
+                  ></ExternalLink>
+                  <Crosshair
+                    className="cursor-pointer signature-icons"
+                    color="#F39422"
+                    onClick={() => {
+                      openInEtherscan();
+                    }}
+                  ></Crosshair>
+                </div>
+                <div className="sharables d-flex">
+                  <reactShare.FacebookShareButton
+                    url={window.location.href}
+                    quote={"Hey! Check out this idea."}
+                  >
+                    <reactShare.FacebookIcon size={32} round />
+                  </reactShare.FacebookShareButton>
+                  <reactShare.TwitterShareButton
+                    url={window.location.href}
+                    title={"Hey! Check out this idea."}
+                  >
+                    <reactShare.TwitterIcon size={32} round />
+                  </reactShare.TwitterShareButton>
+                  <reactShare.WhatsappShareButton
+                    url={window.location.href}
+                    title={"Hey! Check out this idea."}
+                    separator=":: "
+                  >
+                    <reactShare.WhatsappIcon size={32} round />
+                  </reactShare.WhatsappShareButton>
+                  <reactShare.LinkedinShareButton url={window.location.href}>
+                    <reactShare.LinkedinIcon size={32} round />
+                  </reactShare.LinkedinShareButton>
+                </div>
+              </div>
+              <div className="top-section d-flex flex-column">
                 <Row className="form-row title-row">
-                  <Col md="9" className="pl-0">
+                  <Col md="6" className="pl-0">
                     <span>{signature.title}</span>
                   </Col>
-                  <Col md="3 created-at">
-                    {moment(signature.createdAt).format("DD-MMM-YYYY")}
+                  <Col md="6 created-at p-0">
+                    {moment(signature.createdAt).format(
+                      "MMMM Do YYYY, h:mm:ss A"
+                    )}
+                  </Col>
+                </Row>
+                <Row>
+                  <Col md="6" className="form-row  tags-row">
+                    {signature.category &&
+                      JSON.parse(signature.category).map((tag, key) => {
+                        return (
+                          <Button disabled variant="pill">
+                            {tag.label}
+                          </Button>
+                        );
+                      })}
+                  </Col>
+                  <Col md="6" className="city_name p-0">
+                    Bangalore
                   </Col>
                 </Row>
                 <Row className="form-row owner-row">
-                  <Col md="9" className="">
-                    <Row className="form-row  tags-row">
-                      {signature.category &&
-                        JSON.parse(signature.category).map((tag, key) => {
-                          return (
-                            <Badge
-                              key={key}
-                              className="tagpill"
-                              variant="secondary"
-                            >
-                              {tag.label}
-                            </Badge>
-                          );
-                        })}
-                      {/* <Badge
-                        key={key}
-                        className="tagpill purpose"
-                        variant="secondary"
-                      >
-                        {signature.purpose}
-                      </Badge> */}
+                  <Col md="12" className="owner text-right">
+                    <Row className="d-flex flex-column ">
+                      <Col md="12">
+                        <div className="owned_by justify-content-end">
+                          Created by {signature.creator.userName}
+                        </div>
+                      </Col>
                     </Row>
-                  </Col>
-                  <Col
-                    md="3"
-                    className="owner"
-                    onClick={() => {
-                      goToUserProfile(signature.userID);
-                    }}
-                  >
-                    <img src={user} alt="user" className="user-profile mr-1" />
-                    {signature.userID}
+
                     <br></br>
-                    {currentUser.metamaskId}
-                    {/* {currentUser.metamaskId.substring(0,3) + " ... " + currentUser.metamaskId.substring(currentUser.metamaskId.length - 4,currentUser.metamaskId)} */}
                   </Col>
                 </Row>
                 <Row className="form-row">
                   <span> {signature.description}</span>
                 </Row>
               </div>
-              <div className="text-right">{getMenuActions()}</div>
+              <div className="">
+                <Col md="12" className="created-by justify-content-end">
+                  <div className="text-right">
+                    Currently owned by {signature.owner.metamaskId&& signature.owner.metamaskId.substring(0,3) + " ... " + signature.owner.metamaskId.substring(signature.owner.metamaskId.length - 3,signature.owner.metamaskId.length)}
+                  </div>
+                </Col>
+              </div>
               <div className="tabs-wrapper">
                 <Tabs
                   id="idea-tab-categories"
                   activeKey={key}
                   onSelect={(k) => setKey(k)}
                 >
-                  <Tab eventKey="Bids" title="Bids">
+                  <Tab eventKey="Details" title="Details">
                     <div className="collection-wrapper">
-                      <div className="middle-block"></div>
+                      <div className="middle-block">
+                        <Row>
+                          <Col md={12}>
+                            <span>{getIdeaStatus()}</span>
+                          </Col>
+                          <Col md={12}>
+                            <span>
+                              {" "}
+                              {signature.price &&
+                                Web3Utils.fromWei(signature.price)}{" "}
+                              BNB
+                            </span>
+                          </Col>
+                        </Row>
+                      </div>
                     </div>
                   </Tab>
                   <Tab eventKey="History" title="History">
                     <div className="transactions-wrapper">
-                      <h6>No transactions yet</h6>
+                      No transactions yet
                     </div>
                   </Tab>
                 </Tabs>
               </div>
-              {/* {getMenuActions()} */}
             </Col>
           </Row>
         </Col>

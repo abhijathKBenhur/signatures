@@ -1,13 +1,13 @@
 import axios from 'axios'
 import _ from "lodash";
-
+import ENDPOINTS from '../commons/Endpoints';
 const api = axios.create({
-    baseURL: 'http://localhost:4000/api',
+    baseURL: process.env.NODE_ENV == "production" ? ENDPOINTS.REMOTE_ENDPOINTS: ENDPOINTS.LOCAL_ENDPOINTS
     // baseURL: '/api',
 })
 
 const fileAPI = axios.create({
-    baseURL: 'http://localhost:4000/api',
+    baseURL: process.env.NODE_ENV == "production" ? ENDPOINTS.REMOTE_ENDPOINTS: ENDPOINTS.LOCAL_ENDPOINTS,
     // baseURL: '/api',
     headers: {
         'Content-Type': 'multipart/form-data'
@@ -36,7 +36,6 @@ export const addSignature = payload => {
         transactionID: payload.transactionID,
         ideaID: payload.ideaID,
         fileType: payload.fileType,
-        userID: payload.userID,
         creator: payload.creator,
         storage: payload.storage,
         purpose: payload.purpose,
@@ -44,13 +43,7 @@ export const addSignature = payload => {
     })
 }
 
-export const updateIdeaID = payload => {
-    return api.post(`/updateIdeaID`,{
-        PDFHash: payload.PDFHash,
-        transactionID: payload.transactionID,
-        ideaID: payload.ideaID,
-    })
-}
+
 
 export const getSignatures = (payload) =>  { 
     return api.post("/getSignatures",payload) 
@@ -82,7 +75,6 @@ export const register_user = payload => {
 const MongoDBInterface = {
     getSignatures,
     addSignature,
-    updateIdeaID,
     getSignatureByHash,
     buySignature,
     updatePrice,

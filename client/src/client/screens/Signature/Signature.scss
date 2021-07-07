@@ -11,10 +11,11 @@
       padding: 0;
       display: flex;
       justify-content: center;
-      border-right: 1px solid $primary;
+      border-right: 1px solid $grey-border;
       align-items: center;
       .pdfUploaded {
         margin: 10px;
+        flex-flow: column;
         .pdf-document {
           max-height: 100%;
           max-width: 100%;
@@ -23,40 +24,81 @@
           max-width: 100%;
           max-height: 100%;
         }
-        .audio-wrapper{
+        .audio-wrapper {
           display: flex;
           flex-flow: column;
           align-items: center;
           img {
-              width: 200px;
+            width: 200px;
           }
-      }
-      }
-    }
-    .right-side {
-      padding: 0;
-      padding-bottom: 20px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      height: 100%;
-      overflow: scroll;
-      .tabs-wrapper {
-        flex: 1;
-        .nav-tabs {
-          a {
-            color: #000;
-            border: 0;
-            &.active {
-              border-bottom: 2px solid $primary-dark;
-              color: $primary-dark;
+        }
+        .page-container {
+          margin: 0;
+          font-size: 10px;
+          display: flex;
+          align-items: center;
+          svg {
+            width: 16px;
+            cursor: pointer;
+            &.disable {
+              pointer-events: none;
             }
           }
         }
       }
+    }
+    .right-side {
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
+      overflow: auto;
+      background-color: $primary;
+      color: white;
+      .buttons {
+        padding: 10px;
+        .actions {
+          gap: 10px;
+        }
+        .sharables {
+          gap: 10px;
+        }
+        border-bottom: 1px solid $secondary;
+      }
+      .tabs-wrapper {
+        flex: 1;
+        .collection-wrapper {
+          padding: 10px;
+          .middle-block {
+            font-size: 40px;
+            color: $primary;
+            text-align: center;
+            font-weight: 900;
+          }
+        }
+        .nav-tabs {
+          a {
+            border-bottom: 0;
+            background-color: transparent;
+            color: $secondary;
+            &.active {
+              border: 2px solid $secondary;
+              background-color: $secondary;
+              color: $primary-dark;
+            }
+          }
+        }
+        .tab-content {
+          background-color: $secondary;
+        }
+      }
       .top-section {
-          flex: 1;
+        flex: 3;
         padding: 20px;
+        .city_name {
+          text-align: end;
+        }
         .form-row {
           &.title-row {
             align-items: center;
@@ -64,7 +106,6 @@
             text-transform: capitalize;
             span {
               font-size: 28px;
-              color: $primary;
               letter-spacing: -1px;
             }
             .created-at {
@@ -72,9 +113,9 @@
               text-align: end;
             }
           }
+
           &.owner-row {
             font-size: 12px;
-            color: $primary;
             .owner {
               text-align: end;
               font-size: 12px;
@@ -87,11 +128,10 @@
               }
             }
           }
-    
+
           &.tags-row {
             display: flex;
             margin-top: 2px;
-            margin-bottom: 10px;
             gap: 10px;
             .tagpill {
               padding: 5px;
