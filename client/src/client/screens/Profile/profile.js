@@ -1,5 +1,4 @@
 import _ from "lodash";
-import Signature from "../../beans/Signature";
 import React, { useState, useEffect } from "react";
 import {
   Row,

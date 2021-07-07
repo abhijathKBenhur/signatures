@@ -1,6 +1,5 @@
 import _, { defer, has } from "lodash";import  React from 'react';
 import Web3 from "web3";
-import NFTTokenBean from "../beans/Signature";
 import contractJSON from "../../contracts/ideaBlocks.json";
 import store from '../redux/store';
 import { setReduxMetaMaskID } from "../redux/actions";
@@ -45,7 +44,6 @@ class BlockchainInterface {
     this.contractJSON = contractJSON;
     this.contract = undefined;
     this.tokens = [];
-    this.NFTTokenBean = NFTTokenBean;
     let parentThis = this
     window.ethereum && window.ethereum.on('accountsChanged', function (accounts) {
       parentThis.getAccountDetails();

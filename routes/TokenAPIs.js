@@ -1,6 +1,6 @@
 const SignatureSchema = require("../db-config/Signature.schema");
 const UserSchema = require("../db-config/user.schema");
-const UserAPI = require("../routes/UserAPI")
+const UserAPI = require("../routes/UserAPI");
 const express = require("express");
 const router = express.Router();
 const upload = require("../db-config/multer");
@@ -8,18 +8,16 @@ const path = require("path");
 var fs = require("fs");
 const { cloudinary } = require("../db-config/cloudinary");
 
- addSignature = async(req, res) => {
-
-  const creatorId = await UserSchema.findOne({metamaskId:req.body.creator})
-  const ownerId = await UserSchema.findOne({metamaskId:req.body.owner})
+addSignature = async (req, res) => {
+  const creatorId = await UserSchema.findOne({ metamaskId: req.body.creator });
+  const ownerId = await UserSchema.findOne({ metamaskId: req.body.owner });
 
   const newTile = {
     ...req.body,
     creator: creatorId,
-    owner: ownerId
-  }
-  console.log("newTile" + JSON.stringify(newTile))
-
+    owner: ownerId,
+  };
+  console.log("newTile" + JSON.stringify(newTile));
 
   if (!newTile) {
     return res.status(400).json({
@@ -52,17 +50,21 @@ const { cloudinary } = require("../db-config/cloudinary");
 
 getSignatureByHash = async (req, res) => {
   console.log("Getting SignatureSchema :: ", req.params.PDFHash);
-  await SignatureSchema.findOne({ PDFHash: req.params.PDFHash }).populate("creator").populate("owner").exec((err, signature) => {
-    if (err) {
-      return res.status(400).json({ success: false, error: err });
-    }
-    if (!signature) {
-      return res.status(404).json({ success: true, data: [] });
-    }
-    return res.status(200).json({ success: true, data: signature });
-  }).catch((err) => {
-    return res.status(400).json({ success: false, data: err });
-  });
+  await SignatureSchema.findOne({ PDFHash: req.params.PDFHash })
+    .populate("creator")
+    .populate("owner")
+    .exec((err, signature) => {
+      if (err) {
+        return res.status(400).json({ success: false, error: err });
+      }
+      if (!signature) {
+        return res.status(404).json({ success: true, data: [] });
+      }
+      return res.status(200).json({ success: true, data: signature });
+    })
+    .catch((err) => {
+      return res.status(400).json({ success: false, data: err });
+    });
 };
 
 getSignatures = async (req, res) => {
@@ -71,46 +73,43 @@ getSignatures = async (req, res) => {
   let getOnlyNulls = req.body.getOnlyNulls;
   let tags = req.body.tags;
   let searchString = req.body.searchString;
-  let searchOrArray = []
+  let searchOrArray = [];
   let payLoad = {};
 
   if (getOnlyNulls) {
     payLoad.ideaID = null;
   }
-  console.log(tags)
+  console.log(tags);
 
   //search string block start
-  
-  if(tags){
-    for(let i=0; i < tags.length; i++) {
+
+  if (tags) {
+    for (let i = 0; i < tags.length; i++) {
       let tag = tags[0];
-      searchOrArray.push({'category':{ $regex: tag }})
+      searchOrArray.push({ category: { $regex: new RegExp(tag, "i") } });
     }
-    console.log(searchOrArray)
+    console.log(searchOrArray);
   }
-  if(searchString){
-    searchOrArray.push({'title':{ $regex: new RegExp(searchString, "i") }})
-    searchOrArray.push({'description':{ $regex: searchString }})
+  if (searchString) {
+    searchOrArray.push({ title: { $regex: new RegExp(searchString, "i") } });
+    searchOrArray.push({ description: { $regex: searchString } });
   }
-  if(searchOrArray.length > 0){
+  if (searchOrArray.length > 0) {
     payLoad.$or = searchOrArray;
   }
 
   //search string block end
-  
+
   if (ownerAddress) {
     payLoad.owner = ownerAddress;
   }
   if (!limit) {
-    await SignatureSchema.find(payLoad).sort({'createdAt': 'desc'}).populate("owner").populate("creator").exec((err, signatures) => {
-      if (err) {
-        return res.status(404).json({ success: false, error: "here" });
-      }
-      return res.status(200).json({ success: true, data: signatures });
-    })
-    .catch((err) => {
-      return res.status(404).json({ success: false, error: err });
-    });
+      let tiles = await SignatureSchema.find(payLoad)
+        .sort({ createdAt: "desc" })
+        .populate("owner")
+        .populate("creator")
+        .exec();
+      return res.status(200).json({ success: true, data: tiles });
   } else {
     console.log("Getting signatures for all");
     SignatureSchema.find(payLoad)
@@ -132,14 +131,14 @@ buySignature = async (req, res) => {
       error: "Hollow idea",
     });
   }
-  const ownerId = await UserSchema.findOne({metamaskId:buyer})._id
+  const ownerId = await UserSchema.findOne({ metamaskId: buyer })._id;
   let buyer = req.body.buyer;
   let seller = req.body.account;
   let PDFHash = req.body.PDFHash;
   let price = req.body.price;
   let transactionID = req.body.transactionID;
 
-  const findCriteria = { PDFHash: PDFHash,owner: seller };
+  const findCriteria = { PDFHash: PDFHash, owner: seller };
   const saleCriteria = {
     owner: ownerId,
     price: 0,
@@ -249,9 +248,3 @@ router.post(
 );
 
 module.exports = router;
-
-
-
-
-
-

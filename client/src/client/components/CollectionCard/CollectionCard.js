@@ -1,6 +1,5 @@
 import { useHistory } from "react-router-dom";
 import _ from "lodash";
-import Signature from "../../beans/Signature";
 import loader from "../../../assets/images/loader.gif";
 import { MoreHorizontal, Eye, Share, Crosshair, Edit3 } from "react-feather";
 import "./collection-card.scss";
@@ -15,7 +14,7 @@ import moment from "moment";
 import { showToaster } from "../../commons/common.utils";
 const CollectionCard = (props) => {
   let history = useHistory();
-  const [signature, setSignature] = useState(new Signature(props.card));
+  const [signature, setSignature] = useState(props.card);
   function openCardView(signature) {
     history.push({
       pathname: "/signature/" + signature.PDFHash,
