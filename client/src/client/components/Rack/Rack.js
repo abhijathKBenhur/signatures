@@ -157,7 +157,9 @@ const Rack = (props) => {
                       </div>
                     </div>
                     <div className="deck-actions">
-                      <Row>
+                      <Row onClick={() => {
+                    openCardView(signature);
+                  }}>
                         <Col md="6" className="idea-details">
                           <Button
                             disabled={
