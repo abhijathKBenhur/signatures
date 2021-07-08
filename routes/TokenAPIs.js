@@ -195,40 +195,50 @@ updatePrice = async (req, res) => {
 };
 
 getImagePathFromCloudinary = (req, res) => {
+  try{
   console.log("file details: ", req.file);
-  // cloudinary.v2.uploader.upload(file, options, callback);
+  let folderPath = "ThoughtBlocks" ;
+  let fileName = req.hash
+  if(req.thumbnail){
+    fileName = req.hash +"_thumbnail"
+    folderPath = folderPath + "/ideas/" +req.hash+"/"
+  }
+  else if(req.userID){
+    fileName = userID +"_userID"
+    folderPath = folderPath + "/users/" +userID+"/"
+  }
+  else if(req.cover){
+    fileName = userID +"_cover"
+    folderPath = folderPath + "/users/" +userID+"/"
+  }
+  else if(req.preview){
+    req.hash = "_preview"
+    folderPath = folderPath + "/ideas/" +req.hash+"/"
+  }
+  else if(req.original){
+    fileName = req.hash +"_orig"
+    folderPath = folderPath + "/ideas/" +req.hash+"/"
+  }
+  console.log("Image uploading to folderPath: ", folderPath);
   cloudinary.uploader
-    .upload(req.file.path, {
-      public_id: "ThoughBlocks/" + req.hash + "/" + req.hash,
+    .upload(req.file.path,(result) => {
+      console.log("Image uplaoded to: ", result);
+      if(result.error){
+        return res.status(400).json({ success: false, error: result.error.message });
+      }else{
+        res.status(200).json({
+          path: result.url,
+          type: "thumbnail",
+        });
+      }
+    },{ 
+       public_id: "fileName" ,
+       folder: folderPath
     })
-    .then((result) => {
-      console.log("Image uplaoded to : ", result);
-      res.status(200).json({
-        path: result.url,
-        type: "thumbnail",
-      });
-    })
-    .catch((err) => {
-      return res.status(400).json({ success: false, error: err });
-    });
-};
-
-getPDFPathFromCloudinary = (req, res) => {
-  console.log("file details: ", req.file);
-  cloudinary.uploader
-    .upload(req.file.path, {
-      public_id: "ThoughBlocks/" + req.hash + "/" + req.hash,
-    })
-    .then((result) => {
-      console.log("PDF uplaoded to : ", result);
-      res.status(200).json({
-        path: result.url,
-        type: "PDFFile",
-      });
-    })
-    .catch((err) => {
-      return res.status(400).json({ success: false, error: err });
-    });
+  }
+  catch(err){
+    return res.status(400).json({ success: false, error: err });
+  };
 };
 
 router.post("/addSignature", addSignature);
@@ -241,10 +251,6 @@ router.post(
   upload.single("thumbnail"),
   getImagePathFromCloudinary
 );
-router.post(
-  "/getCloundinaryPDFPath",
-  upload.single("PDFFile"),
-  getPDFPathFromCloudinary
-);
+
 
 module.exports = router;
