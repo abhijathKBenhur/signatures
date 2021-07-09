@@ -4,6 +4,7 @@ import 'bootstrap/dist/css/bootstrap.css'
 import App from './client/App';
 import * as serviceWorker from './serviceWorker';
 import { BrowserRouter } from "react-router-dom";
+import 'font-awesome/css/font-awesome.min.css';
 
 import {Provider} from "react-redux"
 import store from "./client/redux/store"

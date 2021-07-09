@@ -1,0 +1,88 @@
+.share-modal-dialog{
+    top: 30px;
+    .modal-content{
+        border-radius: 12px;
+    }
+}
+.share-modal {
+    .share-modal-body {
+        padding: 0;
+        .modal-header-wrapper{
+            background: #f8f8f8;
+            padding: 0 40px;
+            border-radius: 13px 12px 0px 0px;
+            .image-placeholder{
+                width: 100%;
+                background: #fff;
+                color: #fff;
+                position: relative;
+                top: -40px;
+                border-radius: 12px;
+                overflow: hidden;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                img{
+                    width: 300px;
+                    height: 300px;
+                    object-fit: contain;
+                }
+                // -webkit-box-shadow: 0px 0px 20px 20px rgb(0 0 0 / 5%);
+                // box-shadow: 0px 0px 20px 20px rgb(0 0 0 / 5%);
+            }
+        }
+        .wrapper{
+            padding: 38px 64px 48px;
+            h3{
+                font-size: 24px;
+                font-weight: 700;
+                line-height: 29px;
+                margin-bottom: 24px;
+                text-align: center;
+            }
+            .sharables {
+                margin-bottom: 32px;
+                justify-content: center;
+                button {
+                    margin-right: 10px;
+                    svg {
+                        height: 60px;
+                        width: 60px;
+
+                    }
+                }
+            }
+            .share-copy-action{
+                p {
+                    font-size: 14px;
+                    font-weight: 400;
+                    line-height: 20px;
+                    color: #6e6d7a;
+                    margin: 0;
+                    margin-bottom: 10px;
+                }
+                .url-wrapper{
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    flex-wrap: nowrap;
+                    background-color: #f3f3f4;
+                    border-color: transparent;
+                    box-shadow: none;
+                    color: #9e9ea7;
+                    padding: 5px 9px;
+                    border-radius: 10px;
+                    .url{
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                    }
+                    .copy-txt {
+                        text-transform: capitalize;
+                        color: #f39322;
+                        cursor: pointer;
+                    }
+                }
+            }
+        }
+    }
+}
