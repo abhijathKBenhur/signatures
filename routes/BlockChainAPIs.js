@@ -25,7 +25,7 @@ const transactionObject = {
 
 register_user = (req, res) => {
   let metamaskAddress = req.body.metamaskId;
-  let userName = req.body.userID;
+  let userName = req.body.userName;
   console.log("calling register", deployedContract.address);
 
   deployedContract.methods

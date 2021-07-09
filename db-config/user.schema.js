@@ -9,10 +9,10 @@ const User = new Schema(
     fullName: { type: String },
     imageUrl: { type: String },
     metamaskId: { type: String },
-    userID: { type: String },
+    userName: { type: String },
     loginMode: { type: String },
   },
   { timestamps: true }
 );
 
-module.exports = mongoose.model("user", User);
+module.exports = mongoose.model("User", User);

@@ -1,6 +1,5 @@
 import { useHistory } from "react-router-dom";
 import _ from "lodash";
-import Signature from "../../beans/Signature";
 import loader from "../../../assets/images/loader.gif";
 import { MoreHorizontal, Eye, Share, Crosshair, Edit3 } from "react-feather";
 import "./collection-card.scss";
@@ -15,7 +14,7 @@ import moment from "moment";
 import { showToaster } from "../../commons/common.utils";
 const CollectionCard = (props) => {
   let history = useHistory();
-  const [signature, setSignature] = useState(new Signature(props.card));
+  const [signature, setSignature] = useState(props.card);
   function openCardView(signature) {
     history.push({
       pathname: "/signature/" + signature.PDFHash,
@@ -204,18 +203,10 @@ const CollectionCard = (props) => {
                         {moment(signature.createdAt).format("DD-MMM-YYYY")} 
                       </Col>
                       <Col md="6" className="idea-user text-right">
-                        {signature.userID} 
+                        {signature.creator.fullName} 
                       </Col>
           </Row>
         </div>
-        
-          {/* <div className="idea-details">
-            <span className="placeholder">{signature.userID}</span>
-            <span className="price">
-              {signature.price && Web3Utils.fromWei(signature.price)} BNB
-            </span>
-          </div> */}
-          
       </div>
     </Col>
   );

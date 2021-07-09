@@ -38,7 +38,7 @@ const Register = (props) => {
       index: 1,
     },
     {
-      key: "userID",
+      key: "userName",
       label: "Pick your username",
       isDone: false,
       index: 2,
@@ -57,7 +57,7 @@ const Register = (props) => {
     fullName: _.get(reduxState, "fullName"),
     imageUrl: _.get(reduxState, "imageUrl"),
     metamaskId: _.get(reduxState, "metamaskID"),
-    userID: _.get(reduxState, "userID"),
+    userName: _.get(reduxState, "userName"),
     loginMode: _.get(reduxState, "loginMode"),
   });
 
@@ -259,7 +259,7 @@ const Register = (props) => {
           </Col>
         );
         break;
-      case "userID":
+      case "userName":
         return (
           <div>
             <Row className="user-name-row">
@@ -283,7 +283,7 @@ const Register = (props) => {
                     as={Col}
                     className="formEntry userIDSection"
                     md="12"
-                    controlId="userID"
+                    controlId="userName"
                   >
                     <Image
                       roundedCircle
@@ -297,22 +297,22 @@ const Register = (props) => {
                     />
                     <Form.Control
                       type="text"
-                      name="userID"
-                      value={userDetails.userID}
+                      name="userName"
+                      value={userDetails.userName}
                       className={
-                        userNameError ? "username-error userID" : "userID"
+                        userNameError ? "username-error userName" : "userName"
                       }
                       placeholder="User name"
                       onChange={handleChange}
                     />
                     {!userNameError &&
-                    userDetails.userID &&
-                    userDetails.userID.length > 0 &&
+                    userDetails.userName &&
+                    userDetails.userName.length > 0 &&
                     validated ? (
                       <Check></Check>
                     ) : !userNameError &&
-                      userDetails.userID &&
-                      userDetails.userID.length > 0 &&
+                      userDetails.userName &&
+                      userDetails.userName.length > 0 &&
                       !validated ? (
                       <X></X>
                     ) : null}
@@ -345,7 +345,7 @@ const Register = (props) => {
     });
     if (/^[A-Z0-9]+$/i.test(value)) {
       setuserNameError(false);
-      MongoDBInterface.getUserInfo({ userID: value })
+      MongoDBInterface.getUserInfo({ userName: value })
         .then((userDetails) => {
           setValidated(false);
         })

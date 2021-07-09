@@ -53,6 +53,7 @@
     "react-select": "^4.3.1",
     "react-share": "^4.4.0",
     "react-shimmer": "^3.1.1",
+    "react-spinners": "^0.11.0",
     "react-step-progress-bar": "^1.0.3",
     "react-toastify": "^7.0.4",
     "redux": "^4.1.0",

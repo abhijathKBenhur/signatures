@@ -244,31 +244,6 @@ function Create(props) {
     setFormData({ ...form, ...returnObj });
   }
 
-  // function updateIdeaIDToMongo(payload) {
-  //   MongoDBInterface.updateIdeaID(payload)
-  //     .then((success) => {
-  //       setPublishState(PASSED)
-  //
-  //       toast.dark("Your thoughts are live on blockchain.", {
-  //         position: "bottom-right",
-  //         autoClose: 3000,
-  //         hideProgressBar: true,
-  //         closeOnClick: true,
-  //         pauseOnHover: true,
-  //         draggable: true,
-  //         progress: undefined,
-  //       });
-  //       setBillet({
-  //         transactionID: success.transactionID,
-  //         account: success.account,
-  //         PDFHash: success.PDFHash,
-  //       });
-  //     })
-  //     .catch((err) => {
-  //       setPublishState(FAILED)
-  //       console.log(err);
-  //     });
-  // }
 
   function saveToMongo(form) {
     MongoDBInterface.addSignature(form)
@@ -281,7 +256,6 @@ function Create(props) {
   }
 
   function saveToBlockChain(form) {
-    // BlockChainInterface.publishIdea(form, saveToMongo, updateIdeaIDToMongo);
     setPublishState(PROGRESS);
     BlockChainInterface.publishOnBehalf(form)
       .then((success) => {
@@ -289,7 +263,7 @@ function Create(props) {
           let successResponse = _.get(success, "data.data");
           saveToMongo(successResponse);
           setBillet({
-            creator: userDetails.userID,
+            creator: userDetails.userName,
             fullName: userDetails.fullName,
             title: successResponse.title,
             time: moment(new Date()).format("MMMM Do YYYY, h:mm:ss a"),
@@ -331,7 +305,7 @@ function Create(props) {
         ? JSON.stringify(params.price)
         : params.price;
     params.fileType = fileData.fileType;
-    params.userID = reduxState.userDetails.userID;
+    params.userName = reduxState.userDetails.userName;
     setPublishState(PROGRESS);
     setSlideCount(LOADING_SLIDE);
     StorageInterface.getFilePaths(params)
@@ -865,7 +839,7 @@ function Create(props) {
                   src={userDetails.imageUrl ? userDetails.imageUrl : user}
                   alt=""
                 />
-                <p>{userDetails.userID}</p>
+                <p>{userDetails.userName}</p>
               </div>
               <div className="description">
                 <Row>
