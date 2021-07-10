@@ -49,8 +49,7 @@ function Profile(props) {
       let payLoad = {};
       payLoad.userName = viewUser;
       getUserDetails(payLoad);
-    }
-    if (userDetails && !viewUser) {
+    }else if (userDetails && (!viewUser || viewUser.toLowerCase() === userDetails.userName)) {
       setCurrentUserDetails(userDetails);
     }
   }, [reduxState.userDetails]);
@@ -76,9 +75,7 @@ function Profile(props) {
 
   function fetchSignatures(address) {
     if (address || currentUserDetails.metamaskId) {
-      MongoDBInterface.getSignatures({
-        ownerAddress: address || currentUserDetails.metamaskId,
-      }).then((signatures) => {
+      MongoDBInterface.getSignatures().then((signatures) => {
         let response = _.get(signatures, "data.data");
         let isEmptyPresent = _.find(response, (responseItem) => {
           return _.isEmpty(responseItem.ideaID);

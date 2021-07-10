@@ -9,6 +9,7 @@ import "./Rack.scss";
 import moment from "moment";
 import Web3Utils from "web3-utils";
 import CONSTANTS from "../../commons/Constants";
+import CollectionCard from "../collection-card/collection-card";
 const Rack = (props) => {
   let history = useHistory();
   function openCardView(signature) {
@@ -43,136 +44,10 @@ const Rack = (props) => {
     <Container fluid>
       <Row className="rack">
         <Col md="12" className="deck">
-          <Row className="deck-row">
-            {props.deck.map((signature, index) => {
+          <Row className="deck-row text-center">
+            {[...props.deck].map((signature, index) => {
               return (
-                <Col
-                  key={signature._id}
-                  md="3"
-                  lg="4"
-                  sm="6"
-                  xs="12"
-                  className="deck-card col-md-offset-2"
-                  
-                >
-                  <div className="content cursor-pointer p-1">
-                    {/* <div className="collection-header d-flex justify-content-between align-items-center p-2">
-                      <div className="header-left"></div>
-                      <div className="header-right"></div>
-                    </div> */}
-                    <div className="deck-preview"onClick={() => {
-                    openCardView(signature);
-                  }}>
-                      <Col md="12 deck-image">
-                        <Image
-                          src={signature.thumbnail}
-                          height={250}
-                          className=""
-                          style={{
-                            background: "#1B1F26",
-                            borderRadius: "5px 5px 0 0",
-                            justifyItems: "center",
-                          }}
-                        />
-                        <div className="description">
-                          <div className="actions w-100">
-                            {
-                              <span className="placeholder">
-                                {signature.purpose ==
-                                  CONSTANTS.PURPOSES.AUCTION && (
-                                  <span>Starts at </span>
-                                )}
-                                {(signature.purpose ==
-                                  CONSTANTS.PURPOSES.AUCTION ||
-                                  signature.purpose ==
-                                    CONSTANTS.PURPOSES.SELL) &&
-                                  signature.price && (
-                                    <span>
-                                      {Web3Utils.fromWei(signature.price)} BNB
-                                    </span>
-                                  )}
-                              </span>
-                            }
-                            <span className="etherscan_link">
-                              <span
-                                onClick={() =>
-                                  function openInEtherscan() {
-                                    window.open(
-                                      "https://kovan.etherscan.io/tx/" +
-                                        signature.transactionID
-                                    );
-                                  }
-                                }
-                              >
-                                <ExternalLink></ExternalLink>{" "}
-                              </span>
-                            </span>
-                          </div>
-                          <div className="description-text">
-                            
-                            {signature.description.split(' ').slice(0,40).join(' ')}
-                          </div>
-                        </div>
-                      </Col>
-                    </div>
-                    <div className="deck-footer p-1">
-                      <div>
-                        <Col md="12">
-                          <Col md="12" className="tags">
-                            {JSON.parse(signature.category) &&
-                              JSON.parse(signature.category)
-                                .slice(0, 2)
-                                .map((category) => {
-                                  return (
-                                    <Button disabled variant="pill">
-                                      {category.value}
-                                    </Button>
-                                  );
-                                })}
-                          </Col>
-                        </Col>
-                      </div>
-                      <div>
-                        <Col md="12" className="idea-title">
-                          <p className="text-left title text-tile-title">
-                            {signature.title}
-                          </p>
-                        </Col>
-                      </div>
-
-                      <div className="d-flex">
-                        <Col md="6" className="idea-details">
-                          {moment(signature.createdAt).format("DD-MMM-YYYY")}
-                        </Col>
-                        <Col md="6" className="idea-user text-right">
-                          <span
-                            onClick={(event) => {
-                              event.stopPropagation();
-                              goToUserProfile(signature.creator.userName);
-                            }}
-                          >
-                            {signature.creator.userName}
-                          </span>
-                        </Col>
-                      </div>
-                    </div>
-                    <div className="deck-actions">
-                      <Row>
-                        <Col md="6" className="idea-details">
-                          <Button
-                            disabled={
-                              signature.purpose == CONSTANTS.PURPOSES.KEEP
-                            }
-                            variant="primary"
-                            className="cursor-pointer"
-                          >
-                            {getActionForPurpose(signature.purpose)}
-                          </Button>
-                        </Col>
-                      </Row>
-                    </div>
-                  </div>
-                </Col>
+                <CollectionCard collection={signature} index={index} profileCallback={goToUserProfile} actionCallback={getActionForPurpose}/>
               );
             })}
           </Row>
