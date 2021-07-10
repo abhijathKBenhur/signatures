@@ -9,7 +9,6 @@ import {
     ChevronLeft
   } from "react-feather";
   import { Document, Page, pdfjs } from "react-pdf";
-  import SignatureBean from "../../beans/Signature";
   import MongoDBInterface from "../../interface/MongoDBInterface";
 
 import userImg from '../../../assets/images/user.png';
@@ -44,10 +43,10 @@ const SignatureNew = (props) => {
         pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
         let signatureFromParent = location.state;
     if (signatureFromParent) {
-      setSignature({ ...signature, ...new SignatureBean(signatureFromParent) });
+      setSignature({ ...signature, ...signatureFromParent });
     } else {
       MongoDBInterface.getSignatureByHash(hashId).then((response) => {
-        let signatureObject = new SignatureBean(_.get(response, "data.data"));
+        let signatureObject =_.get(response, "data.data");
         setSignature(...signature, ...signatureObject);
       });
     }
