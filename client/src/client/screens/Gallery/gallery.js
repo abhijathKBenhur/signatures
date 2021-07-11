@@ -8,7 +8,7 @@ import MongoDBInterface from "../../interface/MongoDBInterface";
 import { useHistory } from "react-router-dom";
 import Cookies from "universal-cookie";
 import Banner from "../../components/banner/banner";
-import DiscoverMore from "../../components/discover-more/discover-more";
+
 
 import { setCollectionList } from "../../redux/actions";
 
@@ -51,7 +51,6 @@ function gallery(props) {
         <div className="separator"> </div>
         <Rack deck={collectionList}></Rack>
       </div>
-      <DiscoverMore />
     </Container>
   );
 }

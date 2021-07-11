@@ -209,27 +209,22 @@ const SignatureNew = (props) => {
     <Container fluid className="signature-new">
       <div className="wrapper">
         <div className="wrapper-margin">
-          <Row className="title-row w-100">
-            <span className="master-header justify-content-left">
-              {signature.title}
-              </span>
-          </Row>
           <Row className="user-row  ">
             <Col md="10">
               <Row  className="justify-content-between align-items-center" style={{marginBottom:"15px"}}>
                 <div className="action-section">
                   <div className="user-details">
-                    <img src={userImg} alt="profile" />
+                    
                     <div className="user-metadata">
-                      <p>{_.get(signature, "title")}</p>
-                      <p>{_.get(signature, "userID")}</p>
+                    <span className="master-header justify-content-left">
+                      {signature.title}
+                    </span>
                     </div>
                   </div>
                 </div>
                 <div className="action-section">
                   <Button className="like-btn">
-                    <i className="fa fa-heart" aria-hidden="true"></i>
-                    Like
+                    Engage
                   </Button>
                 </div>
               </Row>
@@ -255,7 +250,7 @@ const SignatureNew = (props) => {
               <Row className="justify-content-center">
                 <div className="sidebar">
                   <div className="avatar">
-                    <img src={userImg} alt="profile" />
+                    {signature.owner && <img src={signature.owner.imageUrl} alt="profile" />}
                   </div>
                   <div className="action-btns">
                     <OverlayTrigger

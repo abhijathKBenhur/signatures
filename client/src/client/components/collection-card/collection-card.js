@@ -5,7 +5,7 @@ import { Feather, ExternalLink } from "react-feather";
 import moment from "moment";
 import { useHistory } from "react-router-dom";
 
-import "./collection-card.scss"
+import "./collection-card.scss";
 import CONSTANTS from "../../commons/Constants";
 
 const goToUserProfile = (id) => {
@@ -26,85 +26,94 @@ const CollectionCard = (props) => {
       state: signature,
     });
   }
-    const [signature, setSignature] = useState(props.collection)
-    return (
-        <Col key={signature._id}
-            className="main-container"
-          md="3"
-          lg="3"
-          sm="6"
-          xs="12">
-            <div className="card-container">
-                <div className="image-container" onClick={() => {openCardView()}}>
-                    <div className="above-image third-header">
-                        <div className="description">
-                        {signature.description.split(' ').slice(0,40).join(' ') + " ..."}
-                        </div>
-                        <div>
-                            <span className="etherscan_link">
-                            <span
-                                    onClick={() =>
-                                    function openInEtherscan() {
-                                        window.open(
-                                        "https://kovan.etherscan.io/tx/" +
-                                            signature.transactionID
-                                        );
-                                    }
-                                    }
-                                >
-                                    <ExternalLink></ExternalLink>{" "}
-                                </span>
-                            </span>
-                        </div>
-                    </div>
-                    <Image
-                        src={signature.thumbnail}
-                        className="img-fluid"
-                        style={{
-                          background: "#f1f1f1",
-                        }} 
-                    />
-                    <div className="below-image third-header">
-                        {signature.title}
-                    </div>
-                </div>
-                <div className="card-footer">
-                    <div className="user-logo">
-                        <Image src={signature.owner.imageUrl} color="F3F3F3" />
-                         <div className="user-popup-outer">
-                             <div className="user-popup">
-                                 <div className="user-logo">
-                                    <Image src={signature.owner.imageUrl} />
-                                 </div>
-                                 <div>
-                                 {JSON.parse(signature.category) &&
-                                  JSON.parse(signature.category)
-                                    .slice(0, 2)
-                                    .map((category,i) => {
-                                      return (
-                                        <Button key={i} disabled variant="pill">
-                                          {category.value}
-                                        </Button>
-                                      );
-                                })}
-                                </div>
-                            </div>
-                        </div>
-                        
-                      </div>
-                      <div className="user-name third-header" onClick={(event) => {
-                              event.stopPropagation();
-                              goToUserProfile(signature.creator.userName);
-                            }}>
-                        {signature.creator.userName}
-                      </div>
-                      <div className="date">
-                        {moment(signature.createdAt).format("DD-MMM-YYYY")}
-                      </div>
-                </div>
-                
+  const [signature, setSignature] = useState(props.collection);
+  return (
+    <Col
+      key={signature._id}
+      className="main-container"
+      md="3"
+      lg="3"
+      sm="6"
+      xs="12"
+    >
+      <div className="card-container">
+        <div
+          className="image-container"
+          onClick={() => {
+            openCardView();
+          }}
+        >
+          <div className="masking third-header">
+            <div className="description">
+              {signature.description
+                .split("")
+                .slice(0, 40)
+                .join("") + " ..."}
             </div>
-        </Col>
-    )
-}
-export default CollectionCard
+            <div>
+              <span className="etherscan_link">
+                <span
+                  onClick={() =>
+                    function openInEtherscan() {
+                      window.open(
+                        "https://kovan.etherscan.io/tx/" +
+                          signature.transactionID
+                      );
+                    }
+                  }
+                >
+                  <ExternalLink></ExternalLink>{" "}
+                </span>
+              </span>
+            </div>
+          </div>
+          <Image
+            src={signature.thumbnail}
+            className="img-fluid"
+            style={{
+              background: "#f1f1f1",
+            }}
+          />
+          <div className="below-image third-header"></div>
+        </div>
+        <div className="card-footer">
+          <div className="user-logo">
+            <Image src={signature.owner.imageUrl} color="F3F3F3" />
+            <div className="user-popup-outer">
+              <div className="user-popup">
+                <div className="user-logo">
+                  <Image src={signature.owner.imageUrl} />
+                </div>
+                <div>
+                  {JSON.parse(signature.category) &&
+                    JSON.parse(signature.category)
+                      .slice(0, 2)
+                      .map((category, i) => {
+                        return (
+                          <Button key={i} disabled variant="pill">
+                            {category.value}
+                          </Button>
+                        );
+                      })}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            className="user-name third-header"
+            onClick={(event) => {
+              event.stopPropagation();
+              goToUserProfile(signature.creator.userName);
+            }}
+          >
+            {signature.creator.userName}
+          </div>
+          <div className="date master-grey">
+            {moment(signature.createdAt).format("DD-MMM-YYYY")}
+          </div>
+        </div>
+      </div>
+    </Col>
+  );
+};
+export default CollectionCard;
