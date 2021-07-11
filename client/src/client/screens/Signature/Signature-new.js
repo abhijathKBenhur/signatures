@@ -209,9 +209,14 @@ const SignatureNew = (props) => {
     <Container fluid className="signature-new">
       <div className="wrapper">
         <div className="wrapper-margin">
+          <Row className="title-row w-100">
+            <span className="master-header justify-content-left">
+              {signature.title}
+              </span>
+          </Row>
           <Row className="user-row  ">
             <Col md="10">
-              <Row  className="justify-content-between align-items-center">
+              <Row  className="justify-content-between align-items-center" style={{marginBottom:"15px"}}>
                 <div className="action-section">
                   <div className="user-details">
                     <img src={userImg} alt="profile" />
@@ -228,10 +233,6 @@ const SignatureNew = (props) => {
                   </Button>
                 </div>
               </Row>
-            </Col>
-          </Row>
-          <Row className="signature-content w-100">
-            <Col md="10">
               <Row>
                 <section className="doc-section">
                   {PDFFile ? (
@@ -250,7 +251,6 @@ const SignatureNew = (props) => {
                 </div>
               </Row>
             </Col>
-
             <Col md="2">
               <Row className="justify-content-center">
                 <div className="sidebar">

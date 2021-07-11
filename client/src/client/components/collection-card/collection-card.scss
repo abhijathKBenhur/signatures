@@ -5,12 +5,15 @@
     margin: 30px 0px;
     .card-container {
         height: 255px;
+        width: 100%;
+        border-radius: 10px;
+
         .image-container {
             height: 223px;
             min-width: 100%;
             border-radius: 10px;
-            cursor: pointer;
             background-color: $greyLight-1;
+            cursor: pointer;
             position: relative;
             &:hover {
                 .below-image {
@@ -24,6 +27,7 @@
                 height: 223px;
                 max-width: 100%;
                 border-radius: 10px;
+                width: 100%;
             }
             .below-image {
                 position: absolute;
@@ -39,10 +43,6 @@
             , #515151e3, transparent);
                 border-radius: 0px 0px 10px 10px;
                 color: #fff;
-                font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial, sans-serif;
-                font-size: 16px;
-                font-weight: 500;
-                line-height: 22px;
                 overflow: hidden;
                 text-overflow: ellipsis;
                 white-space: nowrap;
@@ -62,10 +62,6 @@
             , #515151e3, transparent);
                 border-radius: 10px 10px 0px 0px;
                 color: #fff;
-                font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial, sans-serif;
-                font-size: 16px;
-                font-weight: 500;
-                line-height: 22px;
                 justify-content: space-between;
                 .description {
                     overflow: hidden;
@@ -75,11 +71,12 @@
                 }
             }
         }
-        .footer-new {
+        .card-footer {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 10px;
+            padding: 10px 0;
+            background-color: transparent;
             .user-logo {
               height: 30px;
               width: 30px;
@@ -107,14 +104,9 @@
             .user-name {
                 flex-grow: 1;
                 cursor: pointer;
-                font-size: 14px;
-                font-weight: 600;
-                line-height: 20px;
                 overflow: hidden;
                 text-overflow: ellipsis;
                 white-space: nowrap;
-                margin-left: 8px;
-                color: #0d0c22;
                 font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial, sans-serif;
             }
             .date {

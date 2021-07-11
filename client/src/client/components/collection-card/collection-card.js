@@ -36,7 +36,7 @@ const CollectionCard = (props) => {
           xs="12">
             <div className="card-container">
                 <div className="image-container" onClick={() => {openCardView()}}>
-                    <div className="above-image">
+                    <div className="above-image third-header">
                         <div className="description">
                         {signature.description.split(' ').slice(0,40).join(' ') + " ..."}
                         </div>
@@ -59,16 +59,16 @@ const CollectionCard = (props) => {
                     </div>
                     <Image
                         src={signature.thumbnail}
-                        className=""
+                        className="img-fluid"
                         style={{
                           background: "#f1f1f1",
                         }} 
                     />
-                    <div className="below-image">
+                    <div className="below-image third-header">
                         {signature.title}
                     </div>
                 </div>
-                <div className="footer-new">
+                <div className="card-footer">
                     <div className="user-logo">
                         <Image src={signature.owner.imageUrl} color="F3F3F3" />
                          <div className="user-popup-outer">
@@ -92,7 +92,7 @@ const CollectionCard = (props) => {
                         </div>
                         
                       </div>
-                      <div className="user-name" onClick={(event) => {
+                      <div className="user-name third-header" onClick={(event) => {
                               event.stopPropagation();
                               goToUserProfile(signature.creator.userName);
                             }}>
