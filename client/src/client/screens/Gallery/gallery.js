@@ -41,13 +41,13 @@ function gallery(props) {
   return (
     <Container fluid>
       <div className="gallery d-flex flex-column">
-        <Row className="userPane profile-row" >
+        {/* <Row className="userPane profile-row" >
           {true ? (
             <div className="profileHolder">
               <Banner></Banner>
             </div>
           ) : null}
-        </Row>
+        </Row> */}
         <div className="separator"> </div>
         <Rack deck={collectionList}></Rack>
       </div>

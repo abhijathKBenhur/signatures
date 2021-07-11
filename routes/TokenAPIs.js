@@ -205,6 +205,7 @@ getImagePathFromCloudinary = (req, res) => {
   }
   else if(req.userID){
     fileName = userID +"_userID"
+    
     folderPath = folderPath + "/users/" +userID+"/"
   }
   else if(req.cover){

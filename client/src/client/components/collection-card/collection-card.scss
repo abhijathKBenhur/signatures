@@ -1,14 +1,16 @@
+@import '../../commons/Common.scss';
 .main-container {
     display: flex;
     justify-content: center;
     margin: 30px 0px;
     .card-container {
         height: 255px;
-        width: 300px;
         .image-container {
             height: 223px;
             min-width: 100%;
             border-radius: 10px;
+            cursor: pointer;
+            background-color: $greyLight-1;
             position: relative;
             &:hover {
                 .below-image {

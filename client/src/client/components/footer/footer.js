@@ -43,8 +43,8 @@ const Footer = (props) => {
                       { option: "About us", route: "/about" },
                       { option: "Whitepaper", route: "/ico" },
                       // { option: "Blog", route: "/blog" },
-                    ].map((company) => (
-                      <li onClick={() => redirectTo(company.route)}>
+                    ].map((company,i) => (
+                      <li key={i} onClick={() => redirectTo(company.route)}>
                         {company.option}
                       </li>
                     ))}
