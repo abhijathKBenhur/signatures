@@ -197,7 +197,7 @@ body {
 .master-grey {
   font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial,
     sans-serif;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 600;
   line-height: 20px;
   color: #3D3D4E;
@@ -207,7 +207,7 @@ body {
   font-size: 14px;
   font-weight: 500;
   line-height: 18px;
-  color: #3D3D4E;
+  color: $grey-text;
 }
 
 .readable-text {

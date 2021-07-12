@@ -106,9 +106,12 @@ const CollectionCard = (props) => {
               goToUserProfile(signature.creator.userName);
             }}
           >
-            {signature.creator.userName}
+            {signature.title}
           </div>
-          <div className="date master-grey">
+
+       
+
+          <div className="date second-grey">
             {moment(signature.createdAt).format("DD-MMM-YYYY")}
           </div>
         </div>

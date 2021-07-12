@@ -58,7 +58,7 @@ const ShareModal = (props) => {
                   </reactShare.LinkedinShareButton>
                 </div>
                 <div className="share-copy-action">
-                  <p>
+                  <p className="text-center">
                   or copy link
                   </p>
                   <div className="url-wrapper">

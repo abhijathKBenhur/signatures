@@ -215,18 +215,20 @@ const SignatureNew = (props) => {
                 className="justify-content-between align-items-center"
                 style={{ marginBottom: "15px" }}
               >
-                <div className="action-section">
-                  <div className="user-details">
-                    <div className="user-metadata">
-                      <span className="master-header justify-content-left">
-                        {signature.title}
-                      </span>
+                <Col md="12" className="d-flex flex-row justify-content-between align-items-center">
+                  <div className="action-section">
+                    <div className="user-details">
+                      <div className="user-metadata">
+                        <span className="master-header justify-content-left">
+                          {signature.title}
+                        </span>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div className="action-section">
-                  <Button className="like-btn">Engage</Button>
-                </div>
+                  <div className="action-section">
+                    <Button className="like-btn">Engage</Button>
+                  </div>
+                </Col>
               </Row>
               <Row>
                 <Col md="12">
@@ -281,7 +283,7 @@ const SignatureNew = (props) => {
                         variant="outline-secondary"
                         onClick={() => showModal("share")}
                       >
-                        <i className="fa fa-share-nodes" aria-hidden="true"></i>
+                        <i className="fa fa-share-alt" aria-hidden="true"></i>
                       </Button>
                     </OverlayTrigger>
                     <OverlayTrigger

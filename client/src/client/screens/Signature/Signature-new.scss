@@ -5,7 +5,7 @@
     position: relative;
     .wrapper{
         @media (min-width: 920px) {
-            padding: 64px 120px;
+            padding: 40px 0;
             transition-delay: 0.15s;
         }
         .wrapper-margin{
@@ -60,7 +60,6 @@
                 min-height: calc(100vh - 300px);
                 align-items: center;
                 box-shadow: $card-box-shadow;
-                background-color: $greyLight-1;
 
                 .pdfUploaded{
                     flex-flow: column;
@@ -130,8 +129,8 @@
                 border-radius: 25px;
                 box-shadow: $shadow;
                 font-size: 18px;
+                background-color: $white;
                 &:hover, &:active {
-                    background-color: transparent;
                     color: #6c757d;
                 }
             }
