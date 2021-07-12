@@ -211,46 +211,57 @@ const SignatureNew = (props) => {
         <div className="wrapper-margin">
           <Row className="user-row  ">
             <Col md="10">
-              <Row  className="justify-content-between align-items-center" style={{marginBottom:"15px"}}>
+              <Row
+                className="justify-content-between align-items-center"
+                style={{ marginBottom: "15px" }}
+              >
                 <div className="action-section">
                   <div className="user-details">
-                    
                     <div className="user-metadata">
-                    <span className="master-header justify-content-left">
-                      {signature.title}
-                    </span>
+                      <span className="master-header justify-content-left">
+                        {signature.title}
+                      </span>
                     </div>
                   </div>
                 </div>
                 <div className="action-section">
-                  <Button className="like-btn">
-                    Engage
-                  </Button>
+                  <Button className="like-btn">Engage</Button>
                 </div>
               </Row>
               <Row>
-                <section className="doc-section">
-                  {PDFFile ? (
-                    <div className="pdfUploaded h-100 overflow-auto align-items-center justify-content-center d-flex">
-                      {/* <Document file={PDFFile} className="pdf-document">
+                <Col md="12">
+                  <section className="doc-section">
+                    {PDFFile ? (
+                      <div className="pdfUploaded h-100 overflow-auto align-items-center justify-content-center d-flex">
+                        {/* <Document file={PDFFile} className="pdf-document">
                       <Page pageNumber={1} width={window.innerWidth / 3} />
                     </Document> */}
-                      {getDocumnetViewer()}
-                    </div>
-                  ) : (
-                    <Spinner animation="border" />
-                  )}
-                </section>
-                <div className="description-section">
-                  <p>{_.get(signature, "description")}</p>
-                </div>
+                        {getDocumnetViewer()}
+                      </div>
+                    ) : (
+                      <Spinner animation="border" />
+                    )}
+                  </section>
+                </Col>
+                <Col md="12">
+                  <div className="description-section">
+                    <p>{_.get(signature, "description")}</p>
+                  </div>
+                </Col>
+                <Col md="12">
+                  <div className="description-section">
+                    <p>{_.get(signature, "description")}</p>
+                  </div>
+                </Col>
               </Row>
             </Col>
             <Col md="2">
               <Row className="justify-content-center">
                 <div className="sidebar">
                   <div className="avatar">
-                    {signature.owner && <img src={signature.owner.imageUrl} alt="profile" />}
+                    {signature.owner && (
+                      <img src={signature.owner.imageUrl} alt="profile" />
+                    )}
                   </div>
                   <div className="action-btns">
                     <OverlayTrigger
@@ -270,12 +281,12 @@ const SignatureNew = (props) => {
                         variant="outline-secondary"
                         onClick={() => showModal("share")}
                       >
-                        <i className="fa fa-share" aria-hidden="true"></i>
+                        <i className="fa fa-share-nodes" aria-hidden="true"></i>
                       </Button>
                     </OverlayTrigger>
                     <OverlayTrigger
                       placement="left"
-                      overlay={<Tooltip>Shot Details</Tooltip>}
+                      overlay={<Tooltip> Details</Tooltip>}
                     >
                       <Button
                         variant="outline-secondary"
