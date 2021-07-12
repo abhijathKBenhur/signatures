@@ -201,7 +201,7 @@ const Header = (props) => {
                 className="cursor-pointer header-icons"
                 src={currentUserDetails.imageUrl}
                 roundedCircle
-                width="20px"
+                width="36px"
                 onClick={() => {
                   gotoPortfolio();
                 }}

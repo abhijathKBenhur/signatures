@@ -26,14 +26,14 @@ const Register = (props) => {
 
   const [steps, setSteps] = useState([
     {
-      key: "chainAddress",
-      label: "Integrate wallet",
+      key: "socialLogin",
+      label: "Social login",
       isDone: true,
       index: 0,
     },
     {
-      key: "socialLogin",
-      label: "Social login",
+      key: "chainAddress",
+      label: "Integrate wallet",
       isDone: false,
       index: 1,
     },
@@ -420,8 +420,8 @@ const Register = (props) => {
             disabled={
               (!validated && activeStep.index == 2) ||
               registration == PENDING ||
-              _.isEmpty(userDetails.metamaskId) ||
-              (_.isEmpty(userDetails.email) && activeStep.index == 1) ||
+              (_.isEmpty(userDetails.metamaskId) && activeStep.index == 1) ||
+              (_.isEmpty(userDetails.email) && activeStep.index == 0) ||
               userNameError
             }
             variant="primary"
