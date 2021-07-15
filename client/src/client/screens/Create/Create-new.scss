@@ -1,0 +1,194 @@
+@import '../../commons/Common.scss';
+.create-container{
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 70px;
+    background-color: $greyLight-1;
+    @media (min-width: 768px) {
+        padding: 24px;
+
+    }
+    .createform{
+        .top-bar{
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 3;
+            margin-bottom: 10px;
+            @media (min-width: 920px) {
+                position: sticky;
+                top: 40px;
+            }
+            .btn {
+                padding: 10px 16px;
+                border: none !important;
+                height: auto;
+                display: flex;
+                align-items: center;
+                box-shadow: $shadow;
+                cursor: pointer;
+                &.cancel-btn{
+                    background: $greyLight-1;
+                    color: $greyLight-3;
+                    &:hover,&:active {
+                        background: transparent !important;
+                    }
+                }
+                &.submit-btn{
+                    background: $secondary;
+                    color: $white;
+                }
+            }
+        }
+        .page-content{
+            max-width: 1024px;
+            width: 100%;
+            .step-container{
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                .main-heading{
+                    text-align: center;
+                    font-size: 24px;
+                    font-weight: 700;
+                    line-height: 29px;
+                    margin-top: 24px;
+                    @media (min-width: 768px) {
+                        font-size: 32px;
+                        font-weight: 700;
+                        line-height: 38px;
+                        margin-bottom: 16px;
+                    }
+   
+                }
+                .subtext {
+                    margin-top: 8px;
+                    color: #6e6d7a;
+                    max-width: 532px;
+                    text-align: center;
+                }
+                .shot-media-upload-placeholder{
+                    max-width: 85vh;
+                    // margin: 30px 0;
+                    // max-height: 500px;
+                    max-width: 85vw;
+                    // box-shadow: $card-box-shadow;
+                    // background: $greyLight-1;
+                    border-radius: 8px;
+                    padding: 70px;
+                    position: relative;
+                    @media (min-width: 768px) {
+                        min-width: 768px;
+                    }
+                    .file-drop-contatiner {
+                        border: 1px dashed $greyLight-2;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        cursor: pointer;
+                        flex-flow: column;
+                        height: 500px;
+                        // width: 300px;
+                        border-radius: 20px;
+                        padding: 10px;
+                        text-align: center;
+                        img {
+                            width: 80px;
+                            margin-bottom: 12px;
+                            background: transparent ;
+                            border-radius: 8px;
+                        }
+                        p {
+                          color: $primary-dark;
+                          margin: 0;
+                          span {
+                            color: $secondary;
+                            font-weight: 600
+                          }
+                          &.invalid-paragraph {
+                            color: $danger;
+                            margin: 1rem 0;
+                            font-size: 12px;
+                          }
+                          &.supported-type-txt{
+                              margin-top: 10px;
+                          }
+                        }
+                      }
+                      .pdfUploaded{
+                          display: flex;
+                          flex-flow: column;
+                          .btn {
+                            margin-bottom: 16px;
+                            padding: 10px 12px;
+                            height: auto;
+                            border: none !important;
+                            box-shadow: 0px 0px 0px 1px #e7e7e9 inset;
+                            border-radius: 8px;
+                            color: #6c757d;
+                            box-shadow: $shadow;
+                            background-color: $greyLight-1;
+                            font-size: 24px;
+                            position: absolute;
+                            right: 10px;
+                            right: 15px;
+                            top: 10px;
+                            &:hover, &:active {
+                                background-color: transparent;
+                                color: #6c757d;
+                            }
+                        }
+                          .react-pdf__Page__canvas,
+                        .react-pdf__Page__textContent {
+                        width: 100% !important;
+                        height: 100% !important;
+                        }
+                        
+                        .page-container{
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            margin: 0;
+                            font-size: 10px;
+                          
+                            svg {
+                                width: 16px;
+                                cursor: pointer;
+                                &.disable {
+                                pointer-events: none;
+                                }
+                            }
+                        }
+                        img {
+                            object-fit: contain;
+                        }
+                        .audio-wrapper{
+                            flex-flow: column;
+                            display: flex;
+                            align-items: center;
+                            @include play-pause-animated-btn ();
+                            .circle{
+                                margin: 40px;
+                            }
+                        }
+                      }
+                }
+                .formEntry{
+                    &.desc-group{
+                        margin-top: 1rem;
+                    }
+                    .titleArea, .descriptionArea{
+                            border: none;
+                            background-color: transparent;
+                            &.input-err {
+                                border-bottom: 1px solid $danger;
+                              }
+                    }
+                }
+            }
+        }
+    }
+}
