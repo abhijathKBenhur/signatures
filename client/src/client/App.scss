@@ -7,34 +7,9 @@
   -ms-overflow-style: none; /* Internet Explorer 10+ */
   scrollbar-width: none; /* Firefox */
   -webkit-font-smoothing: antialiased;
-}
-input[type="radio"]:after {
-  width: 15px;
-  height: 15px;
-  border-radius: 15px;
-  top: -2px;
-  left: -1px;
-  position: relative;
-  background-color: #d1d3d1;
-  content: "";
-  display: inline-block;
-  visibility: visible;
-  border: 2px solid white;
+  background-color: $greyLight-1;
 }
 
-input[type="radio"]:checked:after {
-  width: 15px;
-  height: 15px;
-  border-radius: 15px;
-  top: -2px;
-  left: -1px;
-  position: relative;
-  background-color: #ffa500;
-  content: "";
-  display: inline-block;
-  visibility: visible;
-  border: 2px solid white;
-}
 body {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   .signature-icons {
@@ -81,7 +56,7 @@ body {
 .btn {
   font-size: 12px;
   line-height: 16px;
-  height: 26px;
+  height: 36px;
   -webkit-font-smoothing: antialiased !important;
   -moz-osx-font-smoothing: grayscale;
   display: -ms-inline-flexbox;
@@ -182,6 +157,9 @@ body {
     }
   }
 }
+
+
+
 .main-content-component {
   margin-top: 110px;
   height: calc(100vh - 100px);
@@ -220,14 +198,16 @@ body {
   font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial,
     sans-serif;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 20px;
+  color: #3D3D4E;
 }
 
 .second-grey {
   font-size: 14px;
-  font-weight: 400;
+  font-weight: 500;
   line-height: 18px;
+  color: $grey-text;
 }
 
 .readable-text {

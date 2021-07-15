@@ -1,11 +1,12 @@
 @import "../../commons/Common.scss";
 .appHeader{
-    background-color: $primary-dark !important;
     width: 100%;
     z-index: 10000;
     position: fixed;
     top:0;
-    height: 60px;
+    height: 70px;
+    background-color: $greyLight-1 !important;
+    ;
     .header-icons{
         color: $secondary;
     }
@@ -26,6 +27,7 @@
     .right-section{
         cursor: pointer;
         display: flex;
+        align-items: center;
         gap: 20px;
         .loggedinaccount{
             color: $dark-brown;

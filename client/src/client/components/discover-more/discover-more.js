@@ -56,16 +56,13 @@ const DiscoverMore = () => {
 
     return (
         <div className="discover-topics-section">
-          <div className="card-topics-nav">
-                <h4>Discover</h4>
-          </div>
           <div className="topics-list">
             <ul>
               {
-              categoriesList.map((item,i) => <li>
-                <Button
+              categoriesList.slice(1,10).map((item,i) => <li>
+                <span
                 key={i}
-                  className={item.isSelected ? "btn-secondary selected" : "btn-secondary"}
+                  className={item.isSelected ? "category-name master-grey" : "category-name master-grey"}
                   bsstyle="primary"
 
                   onClick={(event) => {
@@ -73,7 +70,7 @@ const DiscoverMore = () => {
                   }}
                 >
                    {item.value}
-                </Button>
+                </span>
                 </li>)
               }
             </ul>

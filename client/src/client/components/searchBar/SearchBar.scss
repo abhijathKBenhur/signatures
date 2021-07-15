@@ -5,17 +5,22 @@
         width:500px;
         .search-box {
             width: 100%;
-            border: 1px solid $primary;
             border-radius: 5px;
-            height: 35px;
+            height: 40px;
             padding: 5px 10px;
-            font-size: 12px;
+            font-size: 14px;
+            box-shadow: $inner-shadow;
+            background-color: $greyLight-1;
             outline: none;
+            border:0;
+            &:focus{
+                // border: 1px solid $primary;
+            }
         }
         .search-tag{
             position: absolute;
             right: 3px;
-            top: 7px;
+            top: 10px;
             cursor: pointer;
         }
         .tags-pills{

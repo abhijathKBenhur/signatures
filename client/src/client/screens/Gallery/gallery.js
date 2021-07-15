@@ -8,7 +8,7 @@ import MongoDBInterface from "../../interface/MongoDBInterface";
 import { useHistory } from "react-router-dom";
 import Cookies from "universal-cookie";
 import Banner from "../../components/banner/banner";
-import DiscoverMore from "../../components/discover-more/discover-more";
+
 
 import { setCollectionList } from "../../redux/actions";
 
@@ -41,17 +41,16 @@ function gallery(props) {
   return (
     <Container fluid>
       <div className="gallery d-flex flex-column">
-        <Row className="userPane profile-row" >
+        {/* <Row className="userPane profile-row" >
           {true ? (
             <div className="profileHolder">
               <Banner></Banner>
             </div>
           ) : null}
-        </Row>
+        </Row> */}
         <div className="separator"> </div>
         <Rack deck={collectionList}></Rack>
       </div>
-      <DiscoverMore />
     </Container>
   );
 }

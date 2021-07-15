@@ -2,22 +2,23 @@
 $primary : #272a34;
 $primary-dark: #1C1E25;
 $dark-brown: #946214;
-$secondary: #F39422;
+
+$secondary: #032C3D;
 $secondary-light: #E6C195;
+
 $grey-border: #E5E5E5;
 $danger: red;
-$text-grey: #6e6d7a;
 $white: white;
+
 $greyLight-1: #E4EBF5;
 $greyLight-2: #c8d0e7;
-$greyLight-3: #bec8e4;
-$greyDark: #9baacf;
+$grey-text: #3D3D4E;
 
 
 
 // Shadow variables 
 $shadow: .3rem .3rem .6rem $greyLight-2, 
--.2rem -.2rem .5rem $white;
+-.2rem -.2rem .5rem $greyLight-2;
 $inner-shadow: inset .2rem .2rem .5rem $greyLight-2, 
 inset -.2rem -.2rem .5rem $white;
 
