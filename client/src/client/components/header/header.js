@@ -134,7 +134,7 @@ const Header = (props) => {
                 onClick={() => gotoGallery()}
               ></img>
             </a>
-            <SearchBar />
+            {/* <SearchBar /> */}
             {/* <Nav.Item>
               <Nav.Link
                 active={appLocation == "home"}

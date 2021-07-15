@@ -8,7 +8,8 @@ import MongoDBInterface from "../../interface/MongoDBInterface";
 import { useHistory } from "react-router-dom";
 import Cookies from "universal-cookie";
 import Banner from "../../components/banner/banner";
-
+import DiscoverMore from "../../components/discover-more/discover-more";
+import SearchBar from "../../components/searchBar/SearchBar";
 
 import { setCollectionList } from "../../redux/actions";
 
@@ -48,6 +49,10 @@ function gallery(props) {
             </div>
           ) : null}
         </Row> */}
+         <Row className="search-discover d-flex flex-column align-items-center" >
+          <SearchBar />
+          <DiscoverMore></DiscoverMore>
+        </Row>
         <div className="separator"> </div>
         <Rack deck={collectionList}></Rack>
       </div>

@@ -7,7 +7,6 @@
   -ms-overflow-style: none; /* Internet Explorer 10+ */
   scrollbar-width: none; /* Firefox */
   -webkit-font-smoothing: antialiased;
-  background-color: $greyLight-1;
 }
 
 body {
@@ -131,15 +130,19 @@ body {
     }
   }
   &.btn-pill {
+    border-radius: 10px;
     border-color: $secondary !important;
     color: $secondary;
-    background: transparent;
+    background: $grey-border;
+    color: $secondary;
     height: 20px;
-    border-radius: 15px;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 18px;
     &:focus,
     &:hover,
     &:active {
-      pointer-events: none;
+      
     }
   }
   &.btn-disabled {

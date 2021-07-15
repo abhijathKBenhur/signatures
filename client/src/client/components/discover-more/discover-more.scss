@@ -4,8 +4,7 @@
     align-items: center;
     flex-flow: column;
     margin: 0 auto;
-    padding: 40px 24px;
-    margin-top: 40px;
+    margin-top: 5px;
     .card-topics-nav{
         h4{
             font-weight: 500;
@@ -25,11 +24,11 @@
                 font-size: 12px;
                 font-weight: 500;
                 .category-name{
+                    &.selected {
+                        color: $secondary !important
+                    }
                 }
-                .btn-secondary.selected {
-                    background-color: $primary-dark !important;
-                    color: $secondary !important
-                }
+                
             }
         }
     }

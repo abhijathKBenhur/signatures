@@ -1,8 +1,9 @@
 
-$primary : #272a34;
-$primary-dark: #1C1E25;
-$dark-brown: #946214;
+$primary : #032C3D;
+$primary-dark: #032C3D;
 
+
+$dark-brown: #946214;
 $secondary: #032C3D;
 $secondary-light: #E6C195;
 
@@ -17,13 +18,12 @@ $grey-text: #3D3D4E;
 
 
 // Shadow variables 
-$shadow: .3rem .3rem .6rem $greyLight-2, 
--.2rem -.2rem .5rem $greyLight-2;
+$shadow: 0.0rem 0.0rem 1.6rem $greyLight-2, 
+0.0rem 0.0rem .15rem $greyLight-2;
+
 $inner-shadow: inset .2rem .2rem .5rem $greyLight-2, 
 inset -.2rem -.2rem .5rem $white;
 
-$card-box-shadow: .8rem .8rem 1.4rem $greyLight-2, 
-            -.2rem -.2rem 1.8rem $white;
 
 $secondary-button-shadow:inset .2rem .2rem 1rem $secondary, 
             inset -.2rem -.2rem 1rem $secondary,

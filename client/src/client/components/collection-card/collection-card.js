@@ -1,24 +1,16 @@
 import React, { useState } from "react";
 import { Button, Card, CardDeck, Image } from "react-bootstrap";
 import { Row, Col, Container } from "react-bootstrap";
-import { Feather, ExternalLink } from "react-feather";
 import moment from "moment";
 import { useHistory } from "react-router-dom";
 
 import "./collection-card.scss";
 import CONSTANTS from "../../commons/Constants";
 
-const goToUserProfile = (id) => {
-  let history = useHistory();
-  history.push({
-    pathname: "/profile/" + id,
-    state: {
-      userName: id,
-    },
-  });
-};
+
 
 const CollectionCard = (props) => {
+
   let history = useHistory();
   function openCardView() {
     history.push({
@@ -26,6 +18,17 @@ const CollectionCard = (props) => {
       state: signature,
     });
   }
+
+  const goToUserProfile = (id) => {
+    let history = useHistory();
+    history.push({
+      pathname: "/profile/" + id,
+      state: {
+        userName: id,
+      },
+    });
+  };
+
   const [signature, setSignature] = useState(props.collection);
   return (
     <Col
@@ -37,6 +40,9 @@ const CollectionCard = (props) => {
       xs="12"
     >
       <div className="card-container">
+        <div>
+          <i className="fa fa-"></i>
+        </div>
         <div
           className="image-container"
           onClick={() => {
@@ -49,22 +55,6 @@ const CollectionCard = (props) => {
                 .split("")
                 .slice(0, 40)
                 .join("") + " ..."}
-            </div>
-            <div>
-              <span className="etherscan_link">
-                <span
-                  onClick={() =>
-                    function openInEtherscan() {
-                      window.open(
-                        "https://kovan.etherscan.io/tx/" +
-                          signature.transactionID
-                      );
-                    }
-                  }
-                >
-                  <ExternalLink></ExternalLink>{" "}
-                </span>
-              </span>
             </div>
           </div>
           <Image
@@ -108,8 +98,6 @@ const CollectionCard = (props) => {
           >
             {signature.title}
           </div>
-
-       
 
           <div className="date second-grey">
             {moment(signature.createdAt).format("DD-MMM-YYYY")}
