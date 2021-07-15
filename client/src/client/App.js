@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import "./App.scss";
 import "./commons/Common.scss";
 
-import Create from "./screens/Create/Create";
+import CreateNew from "./screens/Create/Create-new";
 import Signature from "./screens/Signature/Signature-new";
 import Gallery from "./screens/Gallery/gallery";
 import Profile from "./screens/Profile/profile";
@@ -40,7 +40,7 @@ class App extends Component {
           <Switch>
             <Route path="/home" render={(props) => <Gallery />} />
             <Route path="/signature/:hashId" children={<Signature />} />
-            <Route path="/create" children={<Create />} />
+            <Route path="/create" children={<CreateNew />} />
             <Route path="/profile/:userName" children={<Profile />} />
             <Route path="/profile" children={<Profile />} />
             <Route path="/daily-reads" component={DailyReads} />
