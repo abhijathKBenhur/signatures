@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useParams, useLocation } from "react-router-dom";
-
+import moment from "moment";
 import {
   Container,
   Row,
@@ -212,8 +212,7 @@ const SignatureNew = (props) => {
           <Row className="user-row  ">
             <Col md="10">
               <Row
-                className="justify-content-between align-items-center"
-                style={{ marginBottom: "15px" }}
+                className="justify-content-between align-items-center mb-3"
               >
                 <Col md="12" className="d-flex flex-row justify-content-between align-items-center">
                   <div className="action-section">
@@ -226,11 +225,27 @@ const SignatureNew = (props) => {
                     </div>
                   </div>
                   <div className="action-section">
-                    <Button className="like-btn">Engage</Button>
+                    <Button className="like-btn">Collaborate</Button>
                   </div>
                 </Col>
               </Row>
               <Row>
+              <Col md="12" className="meta mb-2 justify-content-between d-flex flex-row">
+                <div className="tags second-grey">
+                {signature.category &&
+                    JSON.parse(signature.category).map((tag, key) => {
+                      return (
+                        <Button disabled variant="pill">
+                          {tag.label}
+                        </Button>
+                      );
+                    })}  
+                </div>
+                <div className="time second-grey">
+                  {moment(signature.createdAt).format("YYYY-MM-DD HH:mm:ss")}
+                </div>
+             
+              </Col>
                 <Col md="12">
                   <section className="doc-section">
                     {PDFFile ? (
@@ -268,10 +283,10 @@ const SignatureNew = (props) => {
                   <div className="action-btns">
                     <OverlayTrigger
                       placement="left"
-                      overlay={<Tooltip>Feedback</Tooltip>}
+                      overlay={<Tooltip>View on chain</Tooltip>}
                     >
                       <Button variant="outline-secondary">
-                        <i className="fa fa-comment" aria-hidden="true"></i>
+                        <i className="fa fa-link" aria-hidden="true"></i>
                       </Button>
                     </OverlayTrigger>
 
@@ -283,18 +298,18 @@ const SignatureNew = (props) => {
                         variant="outline-secondary"
                         onClick={() => showModal("share")}
                       >
-                        <i className="fa fa-share-alt" aria-hidden="true"></i>
+                        <i className="fa fa-bullhorn" aria-hidden="true"></i>
                       </Button>
                     </OverlayTrigger>
                     <OverlayTrigger
                       placement="left"
-                      overlay={<Tooltip> Details</Tooltip>}
+                      overlay={<Tooltip> History</Tooltip>}
                     >
                       <Button
                         variant="outline-secondary"
                         onClick={() => showModal("info")}
                       >
-                        <i className="fa fa-info-circle" aria-hidden="true"></i>
+                        <i className="fa fa-clock-o" aria-hidden="true"></i>
                       </Button>
                     </OverlayTrigger>
                   </div>

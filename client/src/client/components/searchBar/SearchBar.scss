@@ -5,14 +5,12 @@
         width:500px;
         .search-box {
             width: 100%;
-            border-radius: 5px;
+            border-radius: 10px;
             height: 40px;
             padding: 5px 10px;
             font-size: 14px;
-            box-shadow: $inner-shadow;
-            background-color: $greyLight-1;
+            border: 1px solid $grey-border;
             outline: none;
-            border:0;
             &:focus{
                 // border: 1px solid $primary;
             }
@@ -28,7 +26,6 @@
             right: 25px;
             top: 4px;
             span {
-
                 border: 1px solid $primary-dark;
                 border-radius: 2px;
                 padding: 2px;

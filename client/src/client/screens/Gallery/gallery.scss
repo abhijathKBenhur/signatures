@@ -1,6 +1,10 @@
 @import "../../commons/Common.scss";
 .gallery {
   margin-top: 60px;
+  .search-discover{
+    margin-top: 100px;
+    margin-bottom: 50px;
+  }
   .userPane {
     height: 250px;
     border-bottom: 1px solid $primary;

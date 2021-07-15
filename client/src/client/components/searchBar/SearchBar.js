@@ -73,7 +73,7 @@ function Search() {
           className="search-box"
           placeholder="Search IdeaTribe"
         />
-        <Tag
+        {/* <Tag
           className="search-tag"
           color="#56288c"
           size={20}
@@ -81,7 +81,7 @@ function Search() {
             event.stopPropagation();
             setShowDropdown(!showDropdown);
           }}
-        ></Tag>
+        ></Tag> */}
         {/* <div className="tags-pills">
           {tags
             .filter((item) => item.isSelected)

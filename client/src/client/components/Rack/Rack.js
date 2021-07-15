@@ -10,14 +10,11 @@ import moment from "moment";
 import Web3Utils from "web3-utils";
 import CONSTANTS from "../../commons/Constants";
 import CollectionCard from "../collection-card/collection-card";
-import DiscoverMore from "../../components/discover-more/discover-more";
 
 const Rack = (props) => {
   return (
     <Container fluid>
-      <Row className="discover-mode" >
-        <DiscoverMore></DiscoverMore>
-      </Row>
+     
       <Row className="rack">
         <Col md="12" className="deck">
           <Row className="deck-row text-center">
