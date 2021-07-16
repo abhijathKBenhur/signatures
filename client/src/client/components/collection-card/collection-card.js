@@ -90,7 +90,7 @@ const CollectionCard = (props) => {
             </div>
           </div>
           <div
-            className="user-name third-header"
+            className="user-name third-header ml-2"
             onClick={(event) => {
               event.stopPropagation();
               goToUserProfile(signature.creator.userName);

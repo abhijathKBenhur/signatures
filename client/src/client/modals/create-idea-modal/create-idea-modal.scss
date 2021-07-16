@@ -11,7 +11,6 @@
     .create-idea-modal-body {
         padding: 0;
         .modal-header-wrapper{
-            background: #f8f8f8;
             padding: 0 40px;
             border-radius: 13px 12px 0px 0px;
             .image-placeholder{
@@ -19,7 +18,6 @@
                 background: #fff;
                 color: #fff;
                 position: relative;
-                top: -40px;
                 border-radius: 12px;
                 overflow: hidden;
                 display: flex;
@@ -48,7 +46,7 @@
                         }
                         p {
                             margin: 10px 0;
-                            color: $primary-dark;
+                            color: $primary-light;
                             text-align: center;
                         }
                     }
@@ -61,14 +59,10 @@
                             padding: 10px;
                             height: auto;
                             border: none !important;
-                            box-shadow: 0px 0px 0px 1px #e7e7e9 inset;
                             border-radius: 8px;
-                            color: #6c757d;
-                            box-shadow: $shadow;
-                            background-color: $greyLight-1;
+                            color: $grey-dark;
                             font-size: 15px;
                             position: absolute;
-                            right: 10px;
                             right: 15px;
                             top: 10px;
                             &:hover, &:active {
@@ -90,7 +84,7 @@
                 align-items: center;
                 box-shadow: $shadow;
                 cursor: pointer;
-                color: $primary-dark;
+                color: $primary-light;
                 &.purpose-button {
                     width: 100%;
                     // padding: 5%;
@@ -98,7 +92,7 @@
                     border-color: $secondary !important;
                     &:active,&:hover {
                         background: transparent !important;
-                        color: $primary-dark;
+                        color: $primary-light;
                     }
                     // color: $white;
                     i {

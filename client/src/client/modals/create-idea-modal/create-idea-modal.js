@@ -300,8 +300,8 @@ const CreateIdeaModal = ({formErrors, form, onImageDrop, clearImage,getInputProp
                 <>
             <div className="tags-section">
                 <Form.Group as={Col} className="formEntry" md="12">
-                  <div className="tags-label">
-                    <Form.Label>Tags (upto 3) </Form.Label>
+                  <div className="tags-label second-grey">
+                    <Form.Label>Tags </Form.Label>
                   </div>
                   <Select
                     value={form.category}
@@ -321,7 +321,7 @@ const CreateIdeaModal = ({formErrors, form, onImageDrop, clearImage,getInputProp
                 <div className="purpose-selection">
                 <Row className="purpose-selector-row">
                 <Col md="12" className="">
-                  <div className="purpose-label">
+                  <div className="purpose-label second-grey">
                     <Form.Label>
                       What would you like to do with the idea ?{" "}
                     </Form.Label>
@@ -395,7 +395,7 @@ const CreateIdeaModal = ({formErrors, form, onImageDrop, clearImage,getInputProp
                 </div>
                 <div className="price-section">
                 <Form.Group as={Col} className="formEntry" md="12">
-                  <div className="price-label">
+                  <div className="price-label second-grey">
                     <Form.Label>
                       {CONSTANTS.PURPOSES.AUCTION === form.purpose
                         ? "Base price"
@@ -431,7 +431,7 @@ const CreateIdeaModal = ({formErrors, form, onImageDrop, clearImage,getInputProp
                   md="12"
                   controlId="fileStorage"
                 >
-                  <div className="file-storage-label">
+                  <div className="file-storage-label second-grey">
                     <Form.Label>File Storage </Form.Label>
                     <OverlayTrigger
                       placement="top"
@@ -486,7 +486,7 @@ const CreateIdeaModal = ({formErrors, form, onImageDrop, clearImage,getInputProp
         <Modal
         show={true}
         onHide={props.onHide}
-        size="md"
+        size="lg"
        className="create-idea-modal"
        dialogClassName="create-idea-modal-dialog"
        centered

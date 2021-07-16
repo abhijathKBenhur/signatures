@@ -125,11 +125,11 @@ function Profile(props) {
                     <div className="w-100">
                     <div className="profile-info">
                       <Row className="d-flex justify-content-center align-items-center">
-                        <span className="master-header white">{_.get(currentUserDetails, "userName")}</span>
+                        <span className="master-header userName">{_.get(currentUserDetails, "userName")}</span>
                       </Row>
                       <Row className="">
                         <Col className="address-copy d-flex align-items-center justify-content-center">
-                          <span className="address-value second-header white">
+                          <span className="address-value third-header">
                             {_.get(currentUserDetails, "metamaskId") &&
                               _.get(currentUserDetails, "metamaskId").substring(
                                 0,
@@ -145,15 +145,13 @@ function Profile(props) {
                                   _.get(currentUserDetails, "metamaskId").length
                                 )}
                           </span>
-                          <ExternalLink
-                            size={15}
-                            onClick={() => {
+                          <i className="fa fa-external-link ml-2"  onClick={() => {
                               window.open(
                                 "https://kovan.etherscan.io/address/" +
                                   _.get(currentUserDetails, "metamaskId")
                               );
-                            }}
-                          ></ExternalLink>
+                            }}>
+                          </i>
                         </Col>
                       </Row>
                     </div>
@@ -202,7 +200,7 @@ function Profile(props) {
                           </div>
                         </div>
                       </Tab>
-                      <Tab eventKey="profile" title="Notifications">
+                      <Tab eventKey="alerts" title="Notifications">
                         <div className="transactions-wrapper">
                           <div className="middle-block">
                             {myNotifications && myNotifications.length > 0 && (
@@ -227,6 +225,9 @@ function Profile(props) {
                             )}
                           </div>
                         </div>
+                      </Tab>
+                      <Tab eventKey="clan" title="Clans">
+                        
                       </Tab>
                     </Tabs>
                   </div>

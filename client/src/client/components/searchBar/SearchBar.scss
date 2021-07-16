@@ -9,7 +9,7 @@
             height: 40px;
             padding: 5px 10px;
             font-size: 14px;
-            border: 1px solid $grey-border;
+            border: 1px solid $greyLight-1;
             outline: none;
             &:focus{
                 // border: 1px solid $primary;
@@ -26,7 +26,7 @@
             right: 25px;
             top: 4px;
             span {
-                border: 1px solid $primary-dark;
+                border: 1px solid $primary-light;
                 border-radius: 2px;
                 padding: 2px;
                 font-size: 12px;
@@ -50,7 +50,7 @@
                 padding: 2px;
                 &.selected {
                     background-color: $primary;
-                    border: 1px solid $primary-dark ;
+                    border: 1px solid $primary-light ;
                 }
             }
             

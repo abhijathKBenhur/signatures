@@ -102,7 +102,7 @@ const Header = (props) => {
      return  (
         <Button
           variant="primary"
-          className="button"
+          className="button uploadButton"
           bsstyle="primary"
           onClick={() => {
             createnew();

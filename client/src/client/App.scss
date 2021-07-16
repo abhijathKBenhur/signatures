@@ -108,13 +108,13 @@ body {
     }
   }
   &.btn-ternary {
-    border-color: $primary-dark !important;
-    color: $primary-dark;
+    border-color: $primary-light !important;
+    color: $primary-light;
     background: transparent;
     &:focus,
     &:hover,
     &:active {
-      background: $primary-dark !important;
+      background: $primary-light !important;
       color: $white !important;
     }
   }
@@ -133,7 +133,7 @@ body {
     border-radius: 10px;
     border-color: $secondary !important;
     color: $secondary;
-    background: $grey-border;
+    background: $greyLight-1;
     color: $secondary;
     height: 20px;
     font-size: 14px;
@@ -147,7 +147,7 @@ body {
   }
   &.btn-disabled {
     color: $primary;
-    background-color: $grey-border;
+    background-color: $greyLight-1;
     pointer-events: none;
   }
 }
@@ -210,7 +210,7 @@ body {
   font-size: 14px;
   font-weight: 500;
   line-height: 18px;
-  color: $grey-text;
+  color: $grey-dark;
 }
 
 .readable-text {

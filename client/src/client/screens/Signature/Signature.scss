@@ -11,7 +11,7 @@
       padding: 0;
       display: flex;
       justify-content: center;
-      border-right: 1px solid $grey-border;
+      border-right: 1px solid $greyLight-1;
       align-items: center;
       .pdfUploaded {
         margin: 10px;
@@ -85,7 +85,7 @@
             &.active {
               border: 2px solid $secondary;
               background-color: $secondary;
-              color: $primary-dark;
+              color: $primary-light;
             }
           }
         }
@@ -163,7 +163,7 @@
           background: transparent;
           border: none !important;
           svg {
-            color: #79589f;
+            color: $secondary;
           }
           &:focus {
             box-shadow: none;
