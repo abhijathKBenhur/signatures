@@ -2,6 +2,10 @@
 .create-idea-modal-dialog{
     top: 30px;
     max-width: 660px;
+    @media screen and (max-width: 768px) {
+        margin-left: 0;
+        margin-right: 0;
+}
     .modal-content{
         border-radius: 12px;
         
@@ -50,6 +54,11 @@
                             margin: 10px 0;
                             color: $primary-dark;
                             text-align: center;
+                            &.invalid-paragraph{
+                                color: $danger;
+                                margin: 1rem 0;
+                                font-size: 12px;
+                            }
                         }
                     }
                 }

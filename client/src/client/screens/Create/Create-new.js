@@ -542,7 +542,7 @@ const checkValidationBeforeSubmit = () => {
         Submit
     </Button>
     </Col>
-      <Col md="11" sm="11" lg="11" xs="11" className="page-content">
+      <Col md="11" sm="11" lg="11" xs="12" className="page-content">
             <div className="step-container">
                 {
                     form.PDFFile  ? 
