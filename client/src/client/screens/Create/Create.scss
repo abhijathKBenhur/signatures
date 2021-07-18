@@ -97,7 +97,6 @@
             .css-g1d714-ValueContainer {
               .css-1rhbuit-multiValue {
                 background: transparent;
-                border: 1px solid $secondary;
                 .css-12jo7m5,
                 .css-xb97g8 {
                   color: $secondary;
@@ -354,6 +353,11 @@
   }
   .css-1pahdxg-control {
     background: transparent;
+    border:none;
+    outline: none !important;
+    &:focus-visible{
+      outline: none !important;
+    }
   }
   .css-26l3qy-menu {
     color: $primary-light;

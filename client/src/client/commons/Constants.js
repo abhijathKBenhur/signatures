@@ -50,7 +50,8 @@ const PURPOSES = {
   AUCTION: "AUCTION",
   SELL: "SELL",
   COLLAB: "COLLABORATE",
-  KEEP: "Decide later",
+  KEEP: "KEEP",
+  LICENSE:  "LICENSE",
 };
 const ACTIONS = {
   AUCTION_REQUEST: "Auction Request",

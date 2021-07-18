@@ -32,21 +32,6 @@
         .loggedinaccount{
             color: $primary-light;
         }
-        .uploadButton{
-            background-color: $white !important;
-            color: $primary;
-            outline: none;
-            border-color: $primary !important;
-            &:focus,
-            &:hover,
-            &:active {
-                background-color: $white !important;
-                box-shadow: none;
-                color: $primary;
-                outline: none;
-            }
-        }
-        
     }
     .dropdown-menu{
         padding: 3px;

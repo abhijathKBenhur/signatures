@@ -2,8 +2,8 @@
 .appFooter{
     width: 100%;
     z-index: 10;
-    // position: fixed;
-    // height: 60px;
+    position: sticky;
+    top: 100vh;
     background-color: $primary-light !important;
     border-top: 1.5px solid $primary-light;
     // bottom:0;

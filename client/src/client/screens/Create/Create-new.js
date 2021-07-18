@@ -411,12 +411,15 @@ const CreateNew = () => {
     return (
       <div className="file-drop-contatiner" {...getRootProps()}>
         <input {...getInputProps()} />
-        <i className="fa fa-cloud-upload mb-3" style={{fontSize:"50px"}}></i>
-        <p className="drag-drop-txt second-grey">
+        <i
+          className="fa fa-cloud-upload mb-3 color-primary"
+          style={{ fontSize: "50px" }}
+        ></i>
+        <p className="drag-drop-txt second-grey  color-secondary">
           Drag 'n Drop or Upload the file containing your idea or{" "}
           <span>Browse</span>
         </p>
-        <p className="supported-type-txt second-grey">
+        <p className="supported-type-txt second-grey color-secondary">
           (Upload pdf / mp3 / image)
         </p>
         <div>{/* <Plus /> */}</div>
@@ -609,6 +612,30 @@ const CreateNew = () => {
                     onChange={handleChange}
                   />
                 </Form.Group>
+                {form.PDFFile && (
+                  <Form.Group
+                    as={Col}
+                    className="formEntry desc-group"
+                    md="12"
+                    controlId="description"
+                  >
+                    <Form.Control
+                      value={form.description}
+                      className={
+                        formErrors.description
+                          ? "input-err descriptionArea"
+                          : "descriptionArea"
+                      }
+                      as="textarea"
+                      rows={7}
+                      aria-describedby="inputGroupAppend"
+                      name="description"
+                      placeholder="Description upto 250 words"
+                      style={{ resize: "none" }}
+                      onChange={handleChange}
+                    />
+                  </Form.Group>
+                )}
               </>
             ) : (
               <>
@@ -620,30 +647,6 @@ const CreateNew = () => {
                 {checkUplloadedFile()}
               </div>
             </Col>
-            {form.PDFFile && (
-              <Form.Group
-                as={Col}
-                className="formEntry desc-group"
-                md="12"
-                controlId="description"
-              >
-                <Form.Control
-                  value={form.description}
-                  className={
-                    formErrors.description
-                      ? "input-err descriptionArea"
-                      : "descriptionArea"
-                  }
-                  as="textarea"
-                  rows={7}
-                  aria-describedby="inputGroupAppend"
-                  name="description"
-                  placeholder="Description upto 250 words"
-                  style={{ resize: "none" }}
-                  onChange={handleChange}
-                />
-              </Form.Group>
-            )}
           </div>
         </Col>
       </Row>

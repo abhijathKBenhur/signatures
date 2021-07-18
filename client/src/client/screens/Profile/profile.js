@@ -1,14 +1,6 @@
 import _ from "lodash";
 import React, { useState, useEffect } from "react";
-import {
-  Row,
-  Col,
-  Form,
-  Button,
-  Container,
-  Tabs,
-  Tab,
-} from "react-bootstrap";
+import { Row, Col, Form, Button, Container, Tabs, Tab } from "react-bootstrap";
 import Image from "react-image-resizer";
 import { useHistory } from "react-router-dom";
 import "./profile.scss";
@@ -49,7 +41,10 @@ function Profile(props) {
       let payLoad = {};
       payLoad.userName = viewUser;
       getUserDetails(payLoad);
-    }else if (userDetails && (!viewUser || viewUser.toLowerCase() === userDetails.userName)) {
+    } else if (
+      userDetails &&
+      (!viewUser || viewUser.toLowerCase() === userDetails.userName)
+    ) {
       setCurrentUserDetails(userDetails);
     }
   }, [reduxState.userDetails]);
@@ -121,11 +116,27 @@ function Profile(props) {
             <Col md="12" className="mycollection">
               <Row className="loggedIn">
                 <Col md="12" className="p-0">
-                  <div className="userPane align-items-center">
-                    <div className="w-100">
-                    <div className="profile-info">
+                  <div className="userPane w-100 d-column">
+                  < div className="profile-section d-flex flex-column ml-5 align-self-center">
+                      {/* <div className="separatorline"></div> */}
+
+                      <img
+                        src={currentUserDetails.imageUrl}
+                        height={150}
+                        width={150}
+                        className=""
+                        style={{
+                          background: "#f1f1f1",
+                          borderRadius: "5px",
+                          zIndex: "1",
+                        }}
+                      />
+                    </div>
+                    <div className="profile-info ml-3">
                       <Row className="d-flex justify-content-center align-items-center">
-                        <span className="master-header userName">{_.get(currentUserDetails, "userName")}</span>
+                        <span className="master-header userName">
+                          {_.get(currentUserDetails, "userName")}
+                        </span>
                       </Row>
                       <Row className="">
                         <Col className="address-copy d-flex align-items-center justify-content-center">
@@ -145,34 +156,20 @@ function Profile(props) {
                                   _.get(currentUserDetails, "metamaskId").length
                                 )}
                           </span>
-                          <i className="fa fa-external-link ml-2"  onClick={() => {
+                          <i
+                            className="fa fa-external-link ml-2"
+                            onClick={() => {
                               window.open(
                                 "https://kovan.etherscan.io/address/" +
                                   _.get(currentUserDetails, "metamaskId")
                               );
-                            }}>
-                          </i>
+                            }}
+                          ></i>
                         </Col>
                       </Row>
                     </div>
-                
-                    </div>
                   </div>
-                  <div className="profile-secction d-flex justify-content-center flex-column">
-                    {/* <div className="separatorline"></div> */}
-                    
-                    <img
-                      src={currentUserDetails.imageUrl}
-                      height={100}
-                      width={100}
-                      className=""
-                      style={{
-                        background: "#f1f1f1",
-                        borderRadius: "50px",
-                        zIndex: "1",
-                      }}
-                    />
-                      </div>
+
                   <div className="tabs-wrapper">
                     <Tabs
                       id="controlled-tab-example"
@@ -183,15 +180,24 @@ function Profile(props) {
                         <div className="collection-wrapper">
                           <div className="middle-block">
                             {_.isEmpty(profileCollection) ? (
-                              <Col md="12" className="empty-collection d-flex flex-column align-items-center ">
+                              <Col
+                                md="12"
+                                className="empty-collection d-flex flex-column align-items-center "
+                              >
                                 <Row>
                                   You currently dont own any ideas. Start by
                                   uploading one.
                                 </Row>
                                 <Row>
-                                  <Button onClick={() => {
-                                    createnew();
-                                  }} variant="primary"> Upload </Button>
+                                  <Button
+                                    onClick={() => {
+                                      createnew();
+                                    }}
+                                    variant="primary"
+                                  >
+                                    {" "}
+                                    Upload{" "}
+                                  </Button>
                                 </Row>
                               </Col>
                             ) : (
@@ -226,9 +232,7 @@ function Profile(props) {
                           </div>
                         </div>
                       </Tab>
-                      <Tab eventKey="clan" title="Clans">
-                        
-                      </Tab>
+                      <Tab eventKey="clan" title="Clans"></Tab>
                     </Tabs>
                   </div>
                 </Col>

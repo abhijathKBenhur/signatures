@@ -30,9 +30,13 @@
     .tabs-wrapper {
       flex: 5;
       .nav-tabs {
-        a {
+        .nav-item {
           color: #000;
           border: 0;
+          font-size: 14px;
+          font-weight: 500;
+          line-height: 18px;
+          color: $grey-dark;
           &.active {
             border-bottom: 2px solid $secondary;
             color: $secondary;
@@ -47,8 +51,7 @@
   }
   .profile-secction {
     color: $primary;
-    margin-top: -60px;
-    align-items: center;
+    align-items: start;
     .profile-info{
       display: flex;
       flex-direction: column;
@@ -75,7 +78,7 @@
   }
   .userPane {
     padding: 0px;
-    height: 200px;
+    height: 250px;
     display: flex;
     background-color: $primary-light;
     .first-section {

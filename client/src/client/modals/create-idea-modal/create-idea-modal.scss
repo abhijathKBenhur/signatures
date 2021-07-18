@@ -1,7 +1,6 @@
 @import '../../commons/Common.scss';
 .create-idea-modal-dialog{
     top: 30px;
-    max-width: 660px;
     .modal-content{
         border-radius: 12px;
         
@@ -76,6 +75,7 @@
         }
         .purpose-selection{
             margin: 15px;
+            flex: 1;
             .btn {
                 padding: 10px 16px;
                 // border: none !important;
@@ -86,8 +86,8 @@
                 cursor: pointer;
                 color: $primary-light;
                 &.purpose-button {
-                    width: 100%;
-                    // padding: 5%;
+                    width: 100px;
+                    height: 100px;
                     margin-top: 10px;
                     border-color: $secondary !important;
                     &:active,&:hover {
@@ -112,16 +112,27 @@
                   }
                 .css-yk16xz-control {
                   background: transparent;
+                  border-top: none;
+                  border-left: none;
+                  border-right: none;
+                  border-radius: 0;
                 }
                 background: transparent;
                 // color: $white;
                 .css-g1d714-ValueContainer {
+                  outline: none;
                   .css-1rhbuit-multiValue {
                     background: transparent;
+                    border-radius: 10px;
+                    height: 20px;
+                    font-size: 14px;
+                    display: flex;
+                    align-items: center;
                     border: 1px solid $secondary;
                     .css-12jo7m5,
                     .css-xb97g8 {
                       color: $secondary;
+                      
                     }
                   }
                   .css-12jo7m5 {
