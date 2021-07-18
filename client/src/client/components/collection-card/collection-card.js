@@ -34,7 +34,7 @@ const CollectionCard = (props) => {
     <Col
       key={signature._id}
       className="main-container"
-      md="3"
+      md="4"
       lg="3"
       sm="6"
       xs="12"
