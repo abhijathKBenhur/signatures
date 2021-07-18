@@ -411,7 +411,7 @@ const CreateNew = () => {
     return (
       <div className="file-drop-contatiner" {...getRootProps()}>
         <input {...getInputProps()} />
-        <i className="fa fa-cloud-upload mb-3" style={{fontSize:"50px"}}></i>
+        <i className="fa fa-cloud-upload mb-3" style={{ fontSize: "50px" }}></i>
         <p className="drag-drop-txt second-grey">
           Drag 'n Drop or Upload the file containing your idea or{" "}
           <span>Browse</span>
@@ -562,22 +562,9 @@ const CreateNew = () => {
 
   return (
     <Container fluid className="create-container">
-      <Row className="createform top-bar d-flex w-100">
-        <Col md="1" sm="1" lg="1" xs="1">
-          <Button
-            className="submit-btn"
-            onClick={() => checkValidationOnButtonClick()}
-          >
-            Cancel
-          </Button>
-        </Col>
-
-        <Col md="10" sm="10" lg="10" xs="10" className="">
-          {/* <Button  className="cancel-btn">
-              Cancel
-          </Button> */}
-        </Col>
-        <Col md="1" sm="1" lg="1" xs="1">
+      <Row className="createform  d-flex">
+        <Col xs="12" className="top-bar">
+          <Button className="cancel-btn">Cancel</Button>
           <Button
             className="submit-btn"
             onClick={() => checkValidationOnButtonClick()}
@@ -585,9 +572,7 @@ const CreateNew = () => {
             Submit
           </Button>
         </Col>
-      </Row>
-      <Row className="createform  d-flex">
-        <Col md="10" sm="10" lg="10" xs="10" className="page-content">
+        <Col md="11" sm="11" lg="11" xs="12" className="page-content">
           <div className="step-container">
             {form.PDFFile ? (
               <>
