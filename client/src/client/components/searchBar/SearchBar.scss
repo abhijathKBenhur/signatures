@@ -2,7 +2,11 @@
 .search-bar-container {
     .search-dropdown-container {
         position: relative;
-        width:500px;
+        width:100%;
+        @media screen and (max-width: 768px) {
+                max-width: 500px;
+                width: 300px;
+        }
         .search-box {
             width: 100%;
             border-radius: 10px;

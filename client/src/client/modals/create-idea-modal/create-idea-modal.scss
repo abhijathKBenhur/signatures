@@ -1,6 +1,11 @@
 @import '../../commons/Common.scss';
 .create-idea-modal-dialog{
     top: 30px;
+    max-width: 660px;
+    @media screen and (max-width: 768px) {
+        margin-left: 0;
+        margin-right: 0;
+}
     .modal-content{
         border-radius: 12px;
         
@@ -47,6 +52,11 @@
                             margin: 10px 0;
                             color: $primary-light;
                             text-align: center;
+                            &.invalid-paragraph{
+                                color: $danger;
+                                margin: 1rem 0;
+                                font-size: 12px;
+                            }
                         }
                     }
                 }
@@ -75,31 +85,11 @@
         }
         .purpose-selection{
             margin: 15px;
-            flex: 1;
-            .btn {
-                padding: 10px 16px;
-                // border: none !important;
-                height: auto;
-                display: flex;
-                align-items: center;
-                box-shadow: $shadow;
-                cursor: pointer;
-                color: $primary-light;
-                &.purpose-button {
-                    width: 100px;
-                    height: 100px;
-                    margin-top: 10px;
-                    border-color: $secondary !important;
-                    &:active,&:hover {
-                        background: transparent !important;
-                        color: $primary-light;
-                    }
-                    // color: $white;
-                    i {
-                        margin-right: 10px;
-                        font-size: 12px;
-                    }
-                  }
+            .purpose-tabs{
+              display: flex;
+              .purpose-entry{
+                flex: 1;
+              }
             }
         }
         .tags-section {

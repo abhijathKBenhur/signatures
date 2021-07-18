@@ -6,7 +6,6 @@ import {
   Button,
   Col,
   Row,
-  Accordion,
   InputGroup,
 } from "react-bootstrap";
 import React from "react";
@@ -145,6 +144,7 @@ const CreateIdeaModal = ({
   const isSelectedPurpose = (purpose) => form.purpose === purpose;
 
   const getElement = () => {
+    let pusposeList = [CONSTANTS.PURPOSES.SELL,CONSTANTS.PURPOSES.AUCTION,CONSTANTS.PURPOSES.LICENSE,CONSTANTS.PURPOSES.COLLAB,CONSTANTS.PURPOSES.AUCTION]
     switch (publishState) {
       case "PASSED":
         return (
@@ -323,171 +323,49 @@ const CreateIdeaModal = ({
         return (
           <>
             <div className="tags-section">
-              <Col md="6" sm="12" lg="6" xs="12" className="">
-                <Form.Group as={Col} className="formEntry" md="12">
-                  <div className="tags-label second-grey">
-                    <Form.Label>Add tags to catogorize your idea. </Form.Label>
-                  </div>
-                  <Select
-                    value={form.category}
-                    closeMenuOnSelect={false}
-                    isMulti
-                    className={
-                      formErrors.category
-                        ? "input-err tag-selector"
-                        : "tag-selector"
-                    }
-                    options={CONSTANTS.CATEGORIES}
-                    onChange={handleTagsChange}
-                    placeholder="Tags."
-                  />
-                </Form.Group>
-              </Col>
-              <Col md="6" sm="12" lg="6" xs="12" className=""></Col>
+              <Form.Group as={Col} className="formEntry" md="12">
+                <div className="tags-label second-grey">
+                  <Form.Label>Tags </Form.Label>
+                </div>
+                <Select
+                  value={form.category}
+                  closeMenuOnSelect={false}
+                  isMulti
+                  className={
+                    formErrors.category
+                      ? "input-err tag-selector"
+                      : "tag-selector"
+                  }
+                  options={CONSTANTS.CATEGORIES}
+                  onChange={handleTagsChange}
+                  placeholder="Adding tags to describe your idea."
+                />
+              </Form.Group>
             </div>
             <div className="purpose-selection">
               <Row className="purpose-selector-row">
-                <Col md="6" sm="12" lg="6" xs="12" className="">
-                  {/* <Accordion defaultActiveKey="0">
-                  <Accordion.Item eventKey="0">
-                    <Accordion.Header>Accordion Item #1</Accordion.Header>
-                    <Accordion.Body>
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                      tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-                      veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-                      commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-                      velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-                      cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id
-                      est laborum.
-                    </Accordion.Body>
-                  </Accordion.Item>
-                  <Accordion.Item eventKey="1">
-                    <Accordion.Header>Accordion Item #2</Accordion.Header>
-                    <Accordion.Body>
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                      tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-                      veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-                      commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-                      velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-                      cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id
-                      est laborum.
-                    </Accordion.Body>
-                  </Accordion.Item>
-                </Accordion> */}
+                <Col md="12" className="">
                   <div className="purpose-label second-grey">
                     <Form.Label>
                       What would you like to do with the idea ?{" "}
                     </Form.Label>
                   </div>
-                  <Row>
-                    <Button
-                      variant="outline-primary"
-                      className="purpose-button"
-                      onClick={() => {
-                        setPurpose(CONSTANTS.PURPOSES.AUCTION);
-                      }}
-                    >
-                      {isSelectedPurpose(CONSTANTS.PURPOSES.AUCTION) && (
-                        <i className="fa fa-check" aria-hidden="true"></i>
-                      )}
-                      Auction
-                    </Button>
-                    <Button
-                      variant="outline-primary"
-                      className="purpose-button"
-                      onClick={() => {
-                        setPurpose(CONSTANTS.PURPOSES.SELL);
-                      }}
-                    >
-                      {isSelectedPurpose(CONSTANTS.PURPOSES.SELL) && (
-                        <i className="fa fa-check" aria-hidden="true"></i>
-                      )}
-                      Sell
-                    </Button>
-                    <Button
-                      variant="outline-primary"
-                      className="purpose-button"
-                      onClick={() => {
-                        setPurpose(CONSTANTS.PURPOSES.COLLAB);
-                      }}
-                    >
-                      {isSelectedPurpose(CONSTANTS.PURPOSES.COLLAB) && (
-                        <i className="fa fa-check" aria-hidden="true"></i>
-                      )}
-                      Collab
-                    </Button>
-                    <Button
-                      variant="outline-primary"
-                      className="purpose-button"
-                      onClick={() => {
-                        setPurpose(CONSTANTS.PURPOSES.KEEP);
-                      }}
-                    >
-                      {isSelectedPurpose(CONSTANTS.PURPOSES.KEEP) && (
-                        <i className="fa fa-check" aria-hidden="true"></i>
-                      )}
-                      Personal Record
-                    </Button>
-                    <Button
-                      variant="outline-primary"
-                      className="purpose-button"
-                      onClick={() => {
-                        setPurpose(CONSTANTS.PURPOSES.LICENSE);
-                      }}
-                    >
-                      {isSelectedPurpose(CONSTANTS.PURPOSES.LICENSE) && (
-                        <i className="fa fa-check" aria-hidden="true"></i>
-                      )}
-                      License
-                    </Button>
-                  </Row>
-                </Col>
-
-                <Col md="6" sm="12" lg="6" xs="12" className="">
-                  <div className="file-storage-wrapper">
-                    <Row className="form-row">
-                      <Form.Group
-                        as={Col}
-                        className="file-storage-group"
-                        md="12"
-                        controlId="fileStorage"
-                      >
-                        <div className="file-storage-label second-grey">
-                          <Form.Label>File Storage </Form.Label>
-                          <OverlayTrigger
-                            placement="top"
-                            overlay={
-                              <Tooltip id={`tooltip-top`}>
-                                Choose file storage type
-                              </Tooltip>
-                            }
-                          >
-                            <i className="fa fa-info" aria-hidden="true"></i>
-                          </OverlayTrigger>
+                  <div className="purpose-tabs">
+                    {_.map((entry) => {
+                      return (
+                        <div
+                          className="purpose-entry"
+                          onClick={() => {
+                            setPurpose(entry);
+                          }}
+                        >
+                          {isSelectedPurpose(entry) && (
+                            <i className="fa fa-check" aria-hidden="true"></i>
+                          )}
+                          Auction
                         </div>
-                        {CONSTANTS.STORAGE_TYPE.map((item) => (
-                          <Form.Check
-                            id={item.value}
-                            name="storageGroup"
-                            type="radio"
-                            value={form.storage}
-                            checked={form.storage === item.value}
-                            onChange={() =>
-                              setFormData({ ...form, storage: item.value })
-                            }
-                            disabled
-                            label={item.label}
-                          />
-                        ))}
-                        {/* <Select
-                    className="basic-single"
-                    classNamePrefix="select"
-                    name="color"
-                    defaultValue={{value: form.storage, label: form.storage}}
-                    options={CONSTANTS.STORAGE_TYPE}
-                  /> */}
-                      </Form.Group>
-                    </Row>
+                      );
+                    })}
                   </div>
                 </Col>
               </Row>
@@ -522,6 +400,51 @@ const CreateIdeaModal = ({
               </Form.Group>
             </div>
 
+            <div className="file-storage-wrapper">
+              <Row className="form-row">
+                <Form.Group
+                  as={Col}
+                  className="file-storage-group"
+                  md="12"
+                  controlId="fileStorage"
+                >
+                  <div className="file-storage-label second-grey">
+                    <Form.Label>File Storage </Form.Label>
+                    <OverlayTrigger
+                      placement="top"
+                      overlay={
+                        <Tooltip id={`tooltip-top`}>
+                          Choose file storage type
+                        </Tooltip>
+                      }
+                    >
+                      <i className="fa fa-info" aria-hidden="true"></i>
+                    </OverlayTrigger>
+                  </div>
+                  {CONSTANTS.STORAGE_TYPE.map((item) => (
+                    <Form.Check
+                      id={item.value}
+                      name="storageGroup"
+                      type="radio"
+                      value={form.storage}
+                      checked={form.storage === item.value}
+                      onChange={() =>
+                        setFormData({ ...form, storage: item.value })
+                      }
+                      disabled
+                      label={item.label}
+                    />
+                  ))}
+                  {/* <Select
+                    className="basic-single"
+                    classNamePrefix="select"
+                    name="color"
+                    defaultValue={{value: form.storage, label: form.storage}}
+                    options={CONSTANTS.STORAGE_TYPE}
+                  /> */}
+                </Form.Group>
+              </Row>
+            </div>
             <Row className="button-section  d-flex">
               <Col xs="12" className="button-bar">
                 <Button className="cancel-btn">Cancel</Button>

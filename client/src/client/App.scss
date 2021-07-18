@@ -161,8 +161,6 @@ body {
   }
 }
 
-
-
 .main-content-component {
   margin-top: 110px;
   height: calc(100vh - 100px);
@@ -243,3 +241,11 @@ body {
     font-style: italic;
   }
 }
+
+@media (min-width:1440) {
+  .col-lg-2-4{
+    flex: 0 0 20% !important;
+    max-width: 20% !important;
+  }
+}
+
