@@ -51,7 +51,7 @@ const PURPOSES = {
   SELL: "SELL",
   COLLAB: "COLLABORATE",
   KEEP: "KEEP",
-  LICENSE:  "LICENSE",
+  LICENCE:  "LICENCE",
 };
 const ACTIONS = {
   AUCTION_REQUEST: "Auction Request",
@@ -66,14 +66,14 @@ const ACTION_STATUS = {
 
 const STORAGE_TYPE = [
   { value: "PUBLIC", label: "PUBLIC - The file will be stored in IPFS. Anyone can view it." },
-  // {
-  //   value: "PRIVATE",
-  //   label: "SECU - We will store the file in our secure servers (upto 5MB).",
-  // },
+  {
+    value: "SECURE",
+    label: "SECURE - We will store the file in our secure servers (upto 5MB).",
+  },
   {
     value: "SELF",
     label:
-      "LOCAL - The file will not be stored with us. Losing or modifying this file will make your idea unverifiable.",
+      "SELF - The file wont be stored with us. Losing or modifying this file will make your idea unverifiable.",
   },
 ];
 

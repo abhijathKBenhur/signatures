@@ -7,6 +7,7 @@ import {
   Col,
   Row,
   InputGroup,
+  Dropdown
 } from "react-bootstrap";
 import React from "react";
 import Dropzone from "react-dropzone";
@@ -143,8 +144,84 @@ const CreateIdeaModal = ({
   };
   const isSelectedPurpose = (purpose) => form.purpose === purpose;
 
+  function getPurposeIcon(item) {
+    if(item == CONSTANTS.PURPOSES.SELL){
+      return "fa fa-usd purpose-icon"
+    }else if(item == CONSTANTS.PURPOSES.AUCTION){
+      return "fa fa-gavel purpose-icon"
+    }else if(item == CONSTANTS.PURPOSES.COLLAB){
+      return "fa fa-handshake-o purpose-icon"
+    }
+    else if(item == CONSTANTS.PURPOSES.KEEP){
+      return "fa fa-floppy-o purpose-icon"
+    }
+    else if(item == CONSTANTS.PURPOSES.LICENCE){
+      return "fa fa-id-card-o purpose-icon"
+    }
+  }
+
+  function getConditionalCompnent(){
+    switch(form.purpose){
+      case CONSTANTS.PURPOSES.AUCTION:
+        return <div/>
+      break;
+      case CONSTANTS.PURPOSES.SELL:
+        return(
+        <div className="price-section">
+        <Form.Group as={Col} className="formEntry" md="12">
+          <div className="price-label second-grey">
+            <Form.Label>
+              {CONSTANTS.PURPOSES.AUCTION === form.purpose
+                ? "Base price"
+                : "Price"}
+            </Form.Label>
+          </div>
+          <InputGroup className="price-input-group">
+            <Form.Control
+              type="number"
+              placeholder="how much do you think your idea is worth ?*"
+              min={1}
+              value={form.price ? form.price : undefined}
+              className={
+                formErrors.price
+                  ? `input-err price-selector `
+                  : `price-selector `
+              }
+              aria-label="Amount (ether)"
+              name="price"
+              onChange={handleChange}
+              ref={priceRef}
+            />
+            <InputGroup.Text>BNB</InputGroup.Text>
+          </InputGroup>
+        </Form.Group>
+      </div>
+      )
+      break;
+      case CONSTANTS.PURPOSES.COLLAB:
+        return <div className="collab-section">
+          <Col md="6" lg="6" sm="6" xs="6">
+
+          </Col>
+        </div>
+      break;
+      case CONSTANTS.PURPOSES.LICENCE:
+      break;
+      case CONSTANTS.PURPOSES.KEEP:
+        return <div/>
+      break;
+    }
+   
+  }
+
   const getElement = () => {
-    let pusposeList = [CONSTANTS.PURPOSES.SELL,CONSTANTS.PURPOSES.AUCTION,CONSTANTS.PURPOSES.LICENSE,CONSTANTS.PURPOSES.COLLAB,CONSTANTS.PURPOSES.AUCTION]
+    let pusposeList = [
+      CONSTANTS.PURPOSES.SELL,
+      CONSTANTS.PURPOSES.AUCTION,
+      CONSTANTS.PURPOSES.LICENCE,
+      CONSTANTS.PURPOSES.COLLAB,
+      CONSTANTS.PURPOSES.KEEP,
+    ];
     switch (publishState) {
       case "PASSED":
         return (
@@ -322,86 +399,28 @@ const CreateIdeaModal = ({
       default:
         return (
           <>
-            <div className="tags-section">
-              <Form.Group as={Col} className="formEntry" md="12">
-                <div className="tags-label second-grey">
-                  <Form.Label>Tags </Form.Label>
-                </div>
-                <Select
-                  value={form.category}
-                  closeMenuOnSelect={false}
-                  isMulti
-                  className={
-                    formErrors.category
-                      ? "input-err tag-selector"
-                      : "tag-selector"
-                  }
-                  options={CONSTANTS.CATEGORIES}
-                  onChange={handleTagsChange}
-                  placeholder="Adding tags to describe your idea."
-                />
-              </Form.Group>
-            </div>
-            <div className="purpose-selection">
-              <Row className="purpose-selector-row">
-                <Col md="12" className="">
-                  <div className="purpose-label second-grey">
-                    <Form.Label>
-                      What would you like to do with the idea ?{" "}
-                    </Form.Label>
+            <Row>
+            <Col md="12" lg="12" sm="12" xs="12">
+                <Form.Group as={Col} className="formEntry" md="12">
+                  <div className="tags-label second-grey">
+                    <Form.Label>Tags </Form.Label>
                   </div>
-                  <div className="purpose-tabs">
-                    {_.map((entry) => {
-                      return (
-                        <div
-                          className="purpose-entry"
-                          onClick={() => {
-                            setPurpose(entry);
-                          }}
-                        >
-                          {isSelectedPurpose(entry) && (
-                            <i className="fa fa-check" aria-hidden="true"></i>
-                          )}
-                          Auction
-                        </div>
-                      );
-                    })}
-                  </div>
-                </Col>
-              </Row>
-            </div>
-            <div className="price-section">
-              <Form.Group as={Col} className="formEntry" md="12">
-                <div className="price-label second-grey">
-                  <Form.Label>
-                    {CONSTANTS.PURPOSES.AUCTION === form.purpose
-                      ? "Base price"
-                      : "Price"}
-                  </Form.Label>
-                </div>
-                <InputGroup className="price-input-group">
-                  <Form.Control
-                    type="number"
-                    placeholder="how much do you think your idea is worth ?*"
-                    min={1}
-                    value={form.price ? form.price : undefined}
+                  <Select
+                    value={form.category}
+                    closeMenuOnSelect={false}
+                    isMulti
                     className={
-                      formErrors.price
-                        ? `input-err price-selector `
-                        : `price-selector `
+                      formErrors.category
+                        ? "input-err tag-selector"
+                        : "tag-selector"
                     }
-                    aria-label="Amount (ether)"
-                    name="price"
-                    onChange={handleChange}
-                    ref={priceRef}
+                    options={CONSTANTS.CATEGORIES}
+                    onChange={handleTagsChange}
+                    placeholder=""
                   />
-                  <InputGroup.Text>BNB</InputGroup.Text>
-                </InputGroup>
-              </Form.Group>
-            </div>
-
-            <div className="file-storage-wrapper">
-              <Row className="form-row">
+                </Form.Group>
+              </Col>
+              <Col md="12" lg="12" sm="12" xs="12">
                 <Form.Group
                   as={Col}
                   className="file-storage-group"
@@ -421,30 +440,60 @@ const CreateIdeaModal = ({
                       <i className="fa fa-info" aria-hidden="true"></i>
                     </OverlayTrigger>
                   </div>
-                  {CONSTANTS.STORAGE_TYPE.map((item) => (
-                    <Form.Check
-                      id={item.value}
-                      name="storageGroup"
-                      type="radio"
-                      value={form.storage}
-                      checked={form.storage === item.value}
-                      onChange={() =>
-                        setFormData({ ...form, storage: item.value })
-                      }
-                      disabled
-                      label={item.label}
-                    />
-                  ))}
-                  {/* <Select
-                    className="basic-single"
-                    classNamePrefix="select"
-                    name="color"
-                    defaultValue={{value: form.storage, label: form.storage}}
-                    options={CONSTANTS.STORAGE_TYPE}
-                  /> */}
+                  <Dropdown className="w-100">
+                    <Dropdown.Toggle variant="light" id="dropdown-basic" className="w-100 justify-content-start selected-storage">
+                      {form.storage}
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu>
+                      {CONSTANTS.STORAGE_TYPE.map((item) => (
+                        <Dropdown.Item
+                          name="storageGroup"
+                          onClick={() =>
+                            setFormData({ ...form, storage: item.value })
+                          }
+                        >
+                          {item.label}
+                        </Dropdown.Item>
+                      ))}
+                    </Dropdown.Menu>
+                  </Dropdown>
                 </Form.Group>
+              </Col>
+              
+            </Row>
+
+            <div className="purpose-selection">
+              <Row className="purpose-selector-row">
+                <Col md="12" className="">
+                  <div className="purpose-label second-grey">
+                    <Form.Label>
+                      What would you like to do with the idea ?{" "}
+                    </Form.Label>
+                  </div>
+                  <div className="purpose-tabs">
+                    {pusposeList.map((entry) => {
+                      return (
+                        <div
+                          className={isSelectedPurpose(entry) ? "purpose-entry selected" : "purpose-entry"}
+                          onClick={() => {
+                            setPurpose(entry);
+                          }}
+                        >
+                         
+                          <i className={getPurposeIcon(entry)}></i>
+                          <span className="second-grey">{entry}</span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </Col>
               </Row>
             </div>
+            <div clasName="selective-component">
+              {getConditionalCompnent()}
+            </div>
+            
+
             <Row className="button-section  d-flex">
               <Col xs="12" className="button-bar">
                 <Button className="cancel-btn">Cancel</Button>

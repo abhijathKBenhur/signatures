@@ -83,7 +83,6 @@ body {
   &:focus,
   &:active {
     box-shadow: none;
-    color: white;
   }
   &.btn-primary {
     background-color: $secondary;
@@ -205,6 +204,8 @@ body {
 }
 
 .second-grey {
+  font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial,
+    sans-serif;
   font-size: 14px;
   font-weight: 500;
   line-height: 18px;
