@@ -97,7 +97,6 @@
             .css-g1d714-ValueContainer {
               .css-1rhbuit-multiValue {
                 background: transparent;
-                border: 1px solid $secondary;
                 .css-12jo7m5,
                 .css-xb97g8 {
                   color: $secondary;
@@ -160,7 +159,7 @@
           align-items: flex-start;
           // border: 1px dashed $primary;
           border-radius: 10px;
-          background: $primary-dark;
+          background: $primary-light;
           .imageUploaded {
             display: flex;
             justify-content: center;
@@ -203,7 +202,7 @@
           display: flex;
           justify-content: center;
           align-items: center;
-          background: $primary-dark;
+          background: $primary-light;
           border-top-right-radius: 10px;
           .pdfUploaded {
             display: flex;
@@ -354,9 +353,14 @@
   }
   .css-1pahdxg-control {
     background: transparent;
+    border:none;
+    outline: none !important;
+    &:focus-visible{
+      outline: none !important;
+    }
   }
   .css-26l3qy-menu {
-    color: $primary-dark;
+    color: $primary-light;
   }
   .preview-doc {
     background: $primary;
@@ -379,7 +383,7 @@
     }
   }
   .preview-details {
-    background: $primary-dark;
+    background: $primary-light;
     display: flex;
     flex-flow: column;
     flex-wrap: wrap;
@@ -404,7 +408,7 @@
     .description {
       margin: 10px;
       .message {
-        color: $grey-border;
+        color: $greyLight-1;
         text-align: center;
         margin-bottom: 30px;
       }
@@ -413,14 +417,12 @@
         display: flex;
 
         .gas_fee {
-          color: $dark-brown;
         }
         .gas_free {
           color: $secondary;
           margin-left: 5px;
         }
         .gas_fee_value {
-          color: $dark-brown;
           text-decoration: line-through;
         }
       }
@@ -428,10 +430,8 @@
         font-size: 14px;
         display: flex;
         .serice_fee {
-          color: $dark-brown;
         }
         .serice_fee_value {
-          color: $dark-brown;
           text-decoration: line-through;
         }
         .serice_free {

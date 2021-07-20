@@ -5,10 +5,10 @@
     position: fixed;
     top:0;
     height: 70px;
-    background-color: $greyLight-1 !important;
+    background-color: $primary !important;
     ;
     .header-icons{
-        color: $secondary;
+        color: $primary;
     }
     .left-section{
         display: flex;
@@ -30,9 +30,8 @@
         align-items: center;
         gap: 20px;
         .loggedinaccount{
-            color: $dark-brown;
+            color: $primary-light;
         }
-        
     }
     .dropdown-menu{
         padding: 3px;

@@ -11,7 +11,7 @@ import { setCollectionList } from "../../redux/actions";
 
 const DiscoverMore = () => {
   const reduxState = useSelector((state) => state, shallowEqual);
-  const { categoriesList = [] } = reduxState;
+  const [categoriesList, setCategoriesList] = useState(reduxState.categoriesList);
   const dispatch = useDispatch()
   let categoryCopy = [];
   useEffect(() => {
@@ -27,6 +27,7 @@ const DiscoverMore = () => {
   const categorySelected = (item,index) => {
     categoryCopy = _.cloneDeep(categoriesList)
     categoryCopy[index].isSelected = !item.isSelected;
+    setCategoriesList(categoryCopy)
     dispatch(updateCategories(categoryCopy));
   }
   const getCollectionListBasedOntags = () => {
@@ -59,10 +60,10 @@ const DiscoverMore = () => {
           <div className="topics-list">
             <ul>
               {
-              categoriesList.slice(1,10).map((item,i) => <li>
+              categoriesList.slice(0,10).map((item,i) => <li>
                 <span
                 key={i}
-                  className={item.isSelected ? "category-name second-grey third-header" : "category-name second-grey"}
+                  className={item.isSelected ? "category-name third-header selected" : "category-name third-header"}
                   bsstyle="primary"
 
                   onClick={(event) => {

@@ -83,7 +83,6 @@ body {
   &:focus,
   &:active {
     box-shadow: none;
-    color: white;
   }
   &.btn-primary {
     background-color: $secondary;
@@ -108,13 +107,13 @@ body {
     }
   }
   &.btn-ternary {
-    border-color: $primary-dark !important;
-    color: $primary-dark;
+    border-color: $primary-light !important;
+    color: $primary-light;
     background: transparent;
     &:focus,
     &:hover,
     &:active {
-      background: $primary-dark !important;
+      background: $primary-light !important;
       color: $white !important;
     }
   }
@@ -133,7 +132,7 @@ body {
     border-radius: 10px;
     border-color: $secondary !important;
     color: $secondary;
-    background: $grey-border;
+    background: $greyLight-1;
     color: $secondary;
     height: 20px;
     font-size: 14px;
@@ -147,7 +146,7 @@ body {
   }
   &.btn-disabled {
     color: $primary;
-    background-color: $grey-border;
+    background-color: $greyLight-1;
     pointer-events: none;
   }
 }
@@ -160,8 +159,6 @@ body {
     }
   }
 }
-
-
 
 .main-content-component {
   margin-top: 110px;
@@ -207,10 +204,12 @@ body {
 }
 
 .second-grey {
+  font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial,
+    sans-serif;
   font-size: 14px;
   font-weight: 500;
   line-height: 18px;
-  color: $grey-text;
+  color: $grey-dark;
 }
 
 .readable-text {
@@ -220,6 +219,22 @@ body {
   font-weight: 400;
 }
 
+.color-primary{
+  color: $primary;
+}
+
+.color-primary-light{
+  color: $primary-light;
+}
+
+.color-secondary{
+  color: $secondary;
+}
+
+.color-secondary-light{
+  color: $secondary-light;
+}
+
 .text-banner {
   font-size: 20px;
   line-height: 25px;
@@ -227,3 +242,11 @@ body {
     font-style: italic;
   }
 }
+
+@media (min-width:1440) {
+  .col-lg-2-4{
+    flex: 0 0 20% !important;
+    max-width: 20% !important;
+  }
+}
+

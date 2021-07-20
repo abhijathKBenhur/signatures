@@ -47,7 +47,7 @@ import QRCode from "qrcode";
 import responseImage from "../../../assets/images/response.jpeg";
 import signatureImage from "../../../assets/logo/signatures.png";
 import imagePlaceholder from "../../../assets/images/image-placeholder.png";
-import CreateIdeaModal from '../../modals/create-idea-modal/create-idea-modal';
+import CreateIdeaModal from "../../modals/create-idea-modal/create-idea-modal";
 const CreateNew = () => {
   const history = useHistory();
   const reduxState = useSelector((state) => state, shallowEqual);
@@ -91,15 +91,15 @@ const CreateNew = () => {
   const priceRef = useRef(null);
   const [pdfPages, setPdfPages] = useState({
     currentPage: 1,
-    totalPages: 1
+    totalPages: 1,
   });
   const [publishState, setPublishState] = useState(INIT);
   const [publishError, setPublishError] = useState(undefined);
   const [audioState, setAudioState] = useState({
-    isAudioPlaying: false
-})
-const [modalShow, setModalShow] = useState(false);
-const [billet, setBillet] = useState({
+    isAudioPlaying: false,
+  });
+  const [modalShow, setModalShow] = useState(false);
+  const [billet, setBillet] = useState({
     creator: form.owner,
     fullName: userDetails.fullName,
     title: form.title,
@@ -149,13 +149,18 @@ const [billet, setBillet] = useState({
   }, []);
 
   useEffect(() => {
-    if(audioRef.current) {
-      audioRef.current.addEventListener('ended', () =>  setAudioState({...audioState, isAudioPlaying: false}));
-      audioRef.current.addEventListener('pause', () =>  setAudioState({...audioState, isAudioPlaying: false}));
-      audioRef.current.addEventListener('play', () =>  setAudioState({...audioState, isAudioPlaying: true}));
+    if (audioRef.current) {
+      audioRef.current.addEventListener("ended", () =>
+        setAudioState({ ...audioState, isAudioPlaying: false })
+      );
+      audioRef.current.addEventListener("pause", () =>
+        setAudioState({ ...audioState, isAudioPlaying: false })
+      );
+      audioRef.current.addEventListener("play", () =>
+        setAudioState({ ...audioState, isAudioPlaying: true })
+      );
     }
-  
-}, [audioRef.current])
+  }, [audioRef.current]);
 
   useEffect(() => {
     const { metamaskID = undefined } = reduxState;
@@ -202,7 +207,7 @@ const [billet, setBillet] = useState({
         preview: URL.createObjectURL(acceptedFiles[0]),
       }),
     });
-  }
+  };
   const checkDisablePrice = () => {
     if (
       CONSTANTS.PURPOSES.COLLAB === form.purpose ||
@@ -219,24 +224,24 @@ const [billet, setBillet] = useState({
       ...form,
       PDFFile: undefined,
     });
-  }
+  };
 
   const clearImage = () => {
     setFormData({
       ...form,
       thumbnail: undefined,
     });
-  }
+  };
 
   const playAudio = () => {
     audioRef.current.play();
-    setAudioState({...audioState, isAudioPlaying: true})
-  }
+    setAudioState({ ...audioState, isAudioPlaying: true });
+  };
 
   const pauseAudio = () => {
     audioRef.current.pause();
-    setAudioState({...audioState, isAudioPlaying: false})
-}
+    setAudioState({ ...audioState, isAudioPlaying: false });
+  };
 
   const onPDFDrop = (acceptedFiles) => {
     const reader = new window.FileReader();
@@ -251,29 +256,28 @@ const [billet, setBillet] = useState({
         });
       });
     };
-  }
+  };
 
-  const PDFLoadError = (error) =>{}
+  const PDFLoadError = (error) => {};
   const onDocumentLoadSuccess = ({ numPages }) => {
-    setPdfPages({...pdfPages, totalPages: numPages});
-  }
+    setPdfPages({ ...pdfPages, totalPages: numPages });
+  };
 
-  const handleTagsChange = (tags) =>{
+  const handleTagsChange = (tags) => {
     setFormData({
       ...form,
       category: tags,
     });
-  }
+  };
 
-  const check250Words = (value) => value.split(/[\s]+/).length > 250 ;
-    
+  const check250Words = (value) => value.split(/[\s]+/).length > 250;
 
   const handleChange = (event) => {
-    if(event.target.name === 'description') {
-        if(check250Words(event.target.value)) {
-          return false
-        }
-    } 
+    if (event.target.name === "description") {
+      if (check250Words(event.target.value)) {
+        return false;
+      }
+    }
     let returnObj = {};
     returnObj[event.target.name] =
       _.get(event, "target.name") === "price"
@@ -287,44 +291,72 @@ const [billet, setBillet] = useState({
           : _.isEmpty(event.target.value),
     });
     setFormData({ ...form, ...returnObj });
-  }
+  };
 
   const getFileViewer = () => {
     switch (fileData.fileType) {
       case "pdf":
         return (
           <>
-          <Document
-            fillWidth
-            file={form.PDFFile}
-            onLoadError={PDFLoadError}
-            onLoadSuccess={onDocumentLoadSuccess}
-          >
-            <Page fillWidth pageNumber={pdfPages.currentPage} width={window.innerWidth / 4} />
-          </Document>
-        <p className="page-container">
-          <ChevronLeft className={pdfPages.currentPage === 1? 'disable': ''} onClick={() => setPdfPages({...pdfPages, currentPage: pdfPages.currentPage - 1})} />
-          Page {pdfPages.currentPage} of {pdfPages.totalPages}
-          <ChevronRight className={pdfPages.currentPage === pdfPages.totalPages ? 'disable': ''} onClick={() => setPdfPages({...pdfPages, currentPage: pdfPages.currentPage +1})}  />
-          </p>
-      </>
+            <Document
+              fillWidth
+              file={form.PDFFile}
+              onLoadError={PDFLoadError}
+              onLoadSuccess={onDocumentLoadSuccess}
+            >
+              <Page
+                fillWidth
+                pageNumber={pdfPages.currentPage}
+                width={window.innerWidth / 4}
+              />
+            </Document>
+            <p className="page-container">
+              <ChevronLeft
+                className={pdfPages.currentPage === 1 ? "disable" : ""}
+                onClick={() =>
+                  setPdfPages({
+                    ...pdfPages,
+                    currentPage: pdfPages.currentPage - 1,
+                  })
+                }
+              />
+              Page {pdfPages.currentPage} of {pdfPages.totalPages}
+              <ChevronRight
+                className={
+                  pdfPages.currentPage === pdfPages.totalPages ? "disable" : ""
+                }
+                onClick={() =>
+                  setPdfPages({
+                    ...pdfPages,
+                    currentPage: pdfPages.currentPage + 1,
+                  })
+                }
+              />
+            </p>
+          </>
         );
       case "mp3":
         return (
           <div className="audio-wrapper">
-               <div className="circle">
-                        <span className="circle__btn">
-                            {
-                                audioState.isAudioPlaying ?
-                                    <i className="fa fa-pause" aria-hidden="true" onClick={() => pauseAudio()}></i>
-                                :
-                                    <i className="fa fa-play" aria-hidden="true" onClick={() => playAudio()}></i>
-
-                            }
-                        </span>
-                        <span className="circle__back-1"></span>
-                        <span className="circle__back-2"></span>
-                    </div>
+            <div className="circle">
+              <span className="circle__btn">
+                {audioState.isAudioPlaying ? (
+                  <i
+                    className="fa fa-pause"
+                    aria-hidden="true"
+                    onClick={() => pauseAudio()}
+                  ></i>
+                ) : (
+                  <i
+                    className="fa fa-play"
+                    aria-hidden="true"
+                    onClick={() => playAudio()}
+                  ></i>
+                )}
+              </span>
+              <span className="circle__back-1"></span>
+              <span className="circle__back-2"></span>
+            </div>
             {/* <img src={audio} alt="" className="mb-1" /> */}
             <audio controls ref={audioRef}>
               <source src={fileData.fileData}></source>
@@ -357,68 +389,66 @@ const [billet, setBillet] = useState({
   });
 
   const checkUplloadedFile = () => {
-      if(form.PDFFile && !formErrors.maxFileError) {
-          return (
-            <div className="pdfUploaded w-100 h-100">
-                <OverlayTrigger
-                placement="left"
-                overlay={
-                    <Tooltip >
-                    Remove 
-                    </Tooltip>
-                }
-                >
-                <Button  variant="outline-secondary" onClick={() => {
+    if (form.PDFFile && !formErrors.maxFileError) {
+      return (
+        <div className="pdfUploaded w-100 h-100">
+          <OverlayTrigger placement="left" overlay={<Tooltip>Remove</Tooltip>}>
+            <Button
+              variant="outline-secondary"
+              onClick={() => {
                 clearPDF();
-              }}>
-                <i className="fa fa-trash" aria-hidden="true" ></i>
-                            </Button>
-                </OverlayTrigger>
-               
-            {fileData.fileData && getFileViewer()}
-          </div>
-          )
-      }
+              }}
+            >
+              <i className="fa fa-trash" aria-hidden="true"></i>
+            </Button>
+          </OverlayTrigger>
 
-    return (<div className="file-drop-contatiner" {...getRootProps()}>
+          {fileData.fileData && getFileViewer()}
+        </div>
+      );
+    }
+
+    return (
+      <div className="file-drop-contatiner" {...getRootProps()}>
         <input {...getInputProps()} />
-       <img src={imagePlaceholder} alt=" placehoder" />
-        <p className="drag-drop-txt">Drag 'n Drop or Upload the file containing your idea or  <span>Browse</span></p>
-        <p className="supported-type-txt">
-            (Upload pdf / mp3 / image)</p>
+        <i className="fa fa-cloud-upload mb-3" style={{ fontSize: "50px" }}></i>
+        <p className="drag-drop-txt second-grey">
+          Drag 'n Drop or Upload the file containing your idea or{" "}
+          <span>Browse</span>
+        </p>
+        <p className="supported-type-txt second-grey color-secondary">
+          (Upload pdf / mp3 / image)
+        </p>
         <div>{/* <Plus /> */}</div>
         {formErrors.pdf && (
           <p className="invalid-paragraph"> File is required </p>
         )}
         {formErrors.maxFileError && (
-          <p className="invalid-paragraph">
-            {" "}
-            Max file size is 5MB{" "}
-          </p>
+          <p className="invalid-paragraph"> Max file size is 5MB </p>
         )}
-      </div>)
-  }
+      </div>
+    );
+  };
 
   const checkValidationOnButtonClick = () => {
     const { title, description, PDFFile, category, price, thumbnail } = form;
     if (_.isEmpty(title) || _.isEmpty(description) || _.isEmpty(PDFFile)) {
-        setFormErrors({
-          ...formErrors,
-          title: _.isEmpty(title),
-          description: _.isEmpty(description),
-          pdf: _.isEmpty(PDFFile),
-        });
-      } else {
-        setModalShow(true);
-        setFormErrors({
-          ...formErrors,
-          title: false,
-          description: false,
-          pdf: false,
-        });
-      }
-      
-  }
+      setFormErrors({
+        ...formErrors,
+        title: _.isEmpty(title),
+        description: _.isEmpty(description),
+        pdf: _.isEmpty(PDFFile),
+      });
+    } else {
+      setModalShow(true);
+      setFormErrors({
+        ...formErrors,
+        title: false,
+        description: false,
+        pdf: false,
+      });
+    }
+  };
   function handleSubmit() {
     const params = _.clone({ ...form });
     params.category = JSON.stringify(params.category);
@@ -453,7 +483,7 @@ const [billet, setBillet] = useState({
     // setPublishState(PROGRESS);
     BlockChainInterface.publishOnBehalf(form)
       .then((success) => {
-        if(_.get(success,'data.success')){
+        if (_.get(success, "data.success")) {
           let successResponse = _.get(success, "data.data");
           saveToMongo(successResponse);
           setBillet({
@@ -466,17 +496,16 @@ const [billet, setBillet] = useState({
             PDFHash: successResponse.PDFHash,
           });
           setPublishState(PASSED);
-        //   setSlideCount(RESPONSE_SLIDE);
-        }else{
-          let errorReason = _.get(success,'data.data.errorReason')
+          //   setSlideCount(RESPONSE_SLIDE);
+        } else {
+          let errorReason = _.get(success, "data.data.errorReason");
           setPublishState(FAILED);
-        //   setSlideCount(RESPONSE_SLIDE);
-          
+          //   setSlideCount(RESPONSE_SLIDE);
+
           setPublishError(
             "The idea couldnt be published to blockchain. " + errorReason
           );
         }
-        
       })
       .catch((error) => {
         setPublishState(FAILED);
@@ -490,64 +519,64 @@ const [billet, setBillet] = useState({
   function saveToMongo(form) {
     MongoDBInterface.addSignature(form)
       .then((success) => {
-        showToaster("Your Idea is now registered on the blockchain!", { type: "dark" });
+        showToaster("Your Idea is now registered on the blockchain!", {
+          type: "dark",
+        });
       })
       .catch((err) => {
         console.log(err);
       });
   }
 
-const checkValidationBeforeSubmit = () => {
+  const checkValidationBeforeSubmit = () => {
     const { category, price, thumbnail } = form;
     if (_.isEmpty(category) || _.isEmpty(thumbnail)) {
-        if (!checkDisablePrice()) {
-          setFormErrors({
-            ...formErrors,
-            price: price <= 0,
-            category: _.isEmpty(category),
-            thumbnail: _.isEmpty(thumbnail),
-          });
-        } else {
-          setFormErrors({
-            ...formErrors,
-            price: false,
-            category: _.isEmpty(category),
-            thumbnail: _.isEmpty(thumbnail),
-          });
-        }
+      if (!checkDisablePrice()) {
+        setFormErrors({
+          ...formErrors,
+          price: price <= 0,
+          category: _.isEmpty(category),
+          thumbnail: _.isEmpty(thumbnail),
+        });
       } else {
-        handleSubmit()
+        setFormErrors({
+          ...formErrors,
+          price: false,
+          category: _.isEmpty(category),
+          thumbnail: _.isEmpty(thumbnail),
+        });
       }
-      
-}
+    } else {
+      handleSubmit();
+    }
+  };
 
-  const  setPurpose = (purpose) =>  {
+  const setPurpose = (purpose) => {
     setFormData({ ...form, purpose });
-  }
+  };
 
   const changeFileStorage = (item) => {
-      console.log('item ==> ', item)
-    setFormData({ ...form, storage: item.value })
-  }
+    console.log("item ==> ", item);
+    setFormData({ ...form, storage: item.value });
+  };
 
-  return(
+  return (
     <Container fluid className="create-container">
-       
-    <Row className="createform  d-flex">
-    <Col xs="12" className="top-bar">
-    <Button  className="cancel-btn">
-        Cancel
-    </Button>
-     <Button  className="submit-btn" onClick={() => checkValidationOnButtonClick()}>
-        Submit
-    </Button>
-    </Col>
-      <Col md="11" sm="11" lg="11" xs="12" className="page-content">
-            <div className="step-container">
-                {
-                    form.PDFFile  ? 
-                        <>
-                            <Form.Group
+      <Row className="createform  d-flex">
+        <Col xs="12" className="top-bar">
+          <Button className="cancel-btn">Cancel</Button>
+          <Button
+            className="submit-btn"
+            onClick={() => checkValidationOnButtonClick()}
+          >
+            Submit
+          </Button>
+        </Col>
+        <Col md="11" sm="11" lg="11" xs="12" className="page-content">
+          <div className="step-container">
+            {form.PDFFile ? (
+              <>
+                <Form.Group
                   as={Col}
                   className="formEntry"
                   md="12"
@@ -565,33 +594,13 @@ const checkValidationBeforeSubmit = () => {
                     onChange={handleChange}
                   />
                 </Form.Group>
-                        </>
-                    : 
-                    (
-                        <>
-                         <h2 className="main-heading">
-                            What are you working on?
-                            </h2>
-                            <div className="subtext">
-                                Upload your Idea.
-                                {/* Upload your design. This will also be used as the thumbnail in feeds. */}
-                            </div>
-                        </>
-                    )
-                }
-               
-
-                <div className="shot-media-upload-placeholder ">
-                    {checkUplloadedFile()}
-               </div>
-               {
-                    form.PDFFile  && 
-                    <Form.Group
-                  as={Col}
-                  className="formEntry desc-group"
-                  md="12"
-                  controlId="description"
-                >
+                {form.PDFFile && (
+                  <Form.Group
+                    as={Col}
+                    className="formEntry desc-group"
+                    md="12"
+                    controlId="description"
+                  >
                     <Form.Control
                       value={form.description}
                       className={
@@ -607,23 +616,45 @@ const checkValidationBeforeSubmit = () => {
                       style={{ resize: "none" }}
                       onChange={handleChange}
                     />
-                </Form.Group>
-               }
-               
-            </div>
+                  </Form.Group>
+                )}
+              </>
+            ) : (
+              <>
+                <h2 className="master-header ">Share you idea</h2>
+              </>
+            )}
+            <Col md="12" sm="12" lg="12" xs="12">
+              <div className="shot-media-upload-placeholder ">
+                {checkUplloadedFile()}
+              </div>
+            </Col>
+          </div>
         </Col>
-    </Row>
-    {
-       modalShow && <CreateIdeaModal show={modalShow} form={form} formErrors={formErrors} onImageDrop={onImageDrop}
-        clearImage={clearImage} getRootProps={getRootProps} getInputProps={getInputProps} handleTagsChange={handleTagsChange} setPurpose={setPurpose}
-        onHide={() => setModalShow(false)} handleChange={handleChange} priceRef={priceRef}
-         setFormData= {setFormData} checkValidationBeforeSubmit= {checkValidationBeforeSubmit}
-         publishState={publishState} publishError={publishError} billet={billet}/>
-    }
+      </Row>
+      {modalShow && (
+        <CreateIdeaModal
+          show={modalShow}
+          form={form}
+          formErrors={formErrors}
+          onImageDrop={onImageDrop}
+          clearImage={clearImage}
+          getRootProps={getRootProps}
+          getInputProps={getInputProps}
+          handleTagsChange={handleTagsChange}
+          setPurpose={setPurpose}
+          onHide={() => setModalShow(false)}
+          handleChange={handleChange}
+          priceRef={priceRef}
+          setFormData={setFormData}
+          checkValidationBeforeSubmit={checkValidationBeforeSubmit}
+          publishState={publishState}
+          publishError={publishError}
+          billet={billet}
+        />
+      )}
     </Container>
-  )
-
-
+  );
 };
 
 export default CreateNew;

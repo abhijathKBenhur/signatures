@@ -33,7 +33,7 @@ const CollectionCard = (props) => {
   return (
     <Col
       key={signature._id}
-      className="main-container"
+      className="main-container col-lg-2-4"
       md="4"
       lg="3"
       sm="6"
@@ -90,7 +90,7 @@ const CollectionCard = (props) => {
             </div>
           </div>
           <div
-            className="user-name third-header"
+            className="user-name third-header ml-2"
             onClick={(event) => {
               event.stopPropagation();
               goToUserProfile(signature.creator.userName);

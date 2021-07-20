@@ -2,10 +2,10 @@
 .appFooter{
     width: 100%;
     z-index: 10;
-    // position: fixed;
-    // height: 60px;
-    background-color: $primary !important;
-    border-top: 1.5px solid $primary;
+    position: sticky;
+    top: 100vh;
+    background-color: $primary-light !important;
+    border-top: 1.5px solid $primary-light;
     // bottom:0;
     .container-fluid{
         flex-flow: column;
