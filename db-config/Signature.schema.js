@@ -8,7 +8,7 @@ const Signature = new Schema(
         title: { type: String, required: true },
         category: { type: String , required: true},
         description: { type: String, required: true },
-        price: { type: String , required: true},
+        
         thumbnail: { type: String , required: true},
         PDFFile: { type: String ,required: true},
         PDFHash: { type: String ,required: true},
@@ -17,6 +17,12 @@ const Signature = new Schema(
         ideaID: { type: String},
         storage: { type: String },
         purpose: { type: String },
+        location: { type: String },
+        
+        price: { type: String , required: true},
+        collab: { type: String },
+        units: { type: String },
+        
     },
     { timestamps: true },
 )

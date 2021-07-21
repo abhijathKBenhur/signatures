@@ -77,6 +77,8 @@ const CreateNew = () => {
     transactionID: undefined,
     purpose: CONSTANTS.PURPOSES.SELL,
     storage: CONSTANTS.STORAGE_TYPE[0].value,
+    collab: CONSTANTS.COLLAB_TYPE[0].value,
+    umits: 1
   });
   const [formErrors, setFormErrors] = useState({
     title: false,
@@ -86,7 +88,7 @@ const CreateNew = () => {
     price: false,
     thumbnail: false,
     maxFileError: false,
-    publish: "",
+    publish: ""
   });
   const priceRef = useRef(null);
   const [pdfPages, setPdfPages] = useState({

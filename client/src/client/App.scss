@@ -23,6 +23,10 @@ body {
   background-size: 7px 7px;
 }
 
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+  margin-bottom: 0 ;
+}
+
 .btn:focus,
 .btn:active {
   outline: none !important;
@@ -197,10 +201,10 @@ body {
 .master-grey {
   font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial,
     sans-serif;
-  font-size: 14px;
-  font-weight: 600;
+  font-size: 15px;
+  font-weight: 500;
   line-height: 20px;
-  color: #3D3D4E;
+  color: $grey-darker;
 }
 
 .second-grey {

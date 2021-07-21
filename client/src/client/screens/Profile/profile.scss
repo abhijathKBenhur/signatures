@@ -81,6 +81,8 @@
     height: 250px;
     display: flex;
     background-color: $primary-light;
+    justify-content: center;
+    align-items: center;
     .first-section {
       flex: 1;
       // display: flex;
