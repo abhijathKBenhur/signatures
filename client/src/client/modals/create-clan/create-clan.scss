@@ -1,0 +1,30 @@
+@import "../../commons/Common.scss";
+.create-clan-modal{
+    top: 30px;
+   
+    @media screen and (max-width: 768px) {
+      margin-left: 0;
+      margin-right: 0;
+    }
+    .modal-content {
+      border-radius: 12px;
+    }
+
+    .create-clan-modal {
+        .create-clan-modal-body {
+          padding: 0;
+          .modal-header-wrapper {
+            padding: 0 40px;
+            border-radius: 13px 12px 0px 0px;
+            
+        }
+        .button-section{
+            .button-bar {
+             justify-content: flex-end;
+             display: flex;
+            }
+         }
+    }
+    
+}
+}

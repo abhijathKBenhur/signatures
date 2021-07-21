@@ -16,6 +16,8 @@ import StorageInterface from "../../interface/StorageInterface";
 import Collections from "./collections";
 import store from "../../redux/store";
 import { setCollectionList } from "../../redux/actions";
+import EditProfile from "../../modals/edit-profile/edit-profile";
+import CreateClan from "../../modals/create-clan/create-clan";
 function Profile(props) {
   const reduxState = useSelector((state) => state, shallowEqual);
   const {
@@ -33,7 +35,10 @@ function Profile(props) {
   const [key, setKey] = useState("collections");
   const viewUser = _.get(history.location.state, "userName");
   const dispatch = useDispatch();
-
+  const [modalShow, setShowModal] = useState({
+    editProfile: false,
+    createClan: false
+  })
   useEffect(() => {
     const { userDetails = {} } = reduxState;
     const viewUser = _.get(history.location.state, "userName");
@@ -130,6 +135,7 @@ function Profile(props) {
                           borderRadius: "5px",
                           zIndex: "1",
                         }}
+                        alt="user"
                       />
                     </div>
                     <div className="profile-info ml-3">
@@ -167,6 +173,29 @@ function Profile(props) {
                           ></i>
                         </Col>
                       </Row>
+                    </div>
+                    <div className="actions">
+                    <Button
+                          variant="primary"
+                          className="button uploadButton"
+                          bsstyle="primary"
+                          onClick={() => {
+                            setShowModal({...modalShow, editProfile: true})
+                          }}
+                        >
+                          Edit Profile
+                        </Button>
+
+                        <Button
+                          variant="primary"
+                          className="button uploadButton"
+                          bsstyle="primary"
+                          onClick={() => {
+                            setShowModal({...modalShow, createClan: true})
+                          }}
+                        >
+                          Create Clan
+                        </Button>
                     </div>
                   </div>
 
@@ -251,6 +280,12 @@ function Profile(props) {
           </div>
         )}
       </Row>
+      {
+        modalShow.editProfile && <EditProfile  show={modalShow.editProfile}  onHide={() => setShowModal({...modalShow, editProfile: false})} />
+      }
+      {
+         modalShow.createClan && <CreateClan  show={modalShow.createClan}  onHide={() => setShowModal({...modalShow, createClan: false})} />
+      }
     </Container>
   );
 }
