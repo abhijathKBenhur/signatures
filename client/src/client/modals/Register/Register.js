@@ -52,7 +52,7 @@ const Register = (props) => {
 
   const [userDetails, setUserDetails] = useState({
     firstName: _.get(reduxState, "firstName"),
-    LastName: _.get(reduxState, "LastName"),
+    lastName: _.get(reduxState, "lastName"),
     email: _.get(reduxState, "email"),
     fullName: _.get(reduxState, "fullName"),
     imageUrl: _.get(reduxState, "imageUrl"),
@@ -141,7 +141,7 @@ const Register = (props) => {
     setUserDetails({
       ...userDetails,
       firstName: _.get(googleFormResponseObject.profileObj, "givenName"),
-      LastName: _.get(googleFormResponseObject.profileObj, "familyName"),
+      lastName: _.get(googleFormResponseObject.profileObj, "familyName"),
       email: _.get(googleFormResponseObject.profileObj, "email"),
       fullName: _.get(googleFormResponseObject.profileObj, "name"),
       imageUrl: _.get(googleFormResponseObject.profileObj, "imageUrl"),

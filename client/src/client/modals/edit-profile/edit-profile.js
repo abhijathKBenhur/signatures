@@ -15,26 +15,30 @@ import {
 const EditProfile = ({ ...props }) => {
 
     const [editProfile, setEditProfile] = useState({
-        profilePic: null,
-        userName: '',
-        firstName: '',
-        lastName: '',
-        email: '',
-        facebookUrl: '',
-        linkedInUrl: "",
-        bio: ''
+        profilePic: props.userDetails.profilePic || '',
+        userName: props.userDetails.userName || '',
+        firstName: props.userDetails.firstName ||  '',
+        lastName: props.userDetails.LastName || '',
+        email: props.userDetails.email || '',
+        facebookUrl: props.userDetails.facebookUrl ||'',
+        linkedInUrl: props.userDetails.linkedInUrl ||"",
+        instaUrl: props.userDetails.linkedInUrl ||"",
+        bio: props.userDetails.bio ||'',
+        imageUrl: props.userDetails.imageUrl ||'',
     });
 
     useEffect(() => {
         const profileData = {
-            profilePic: props.profilePic || '',
-            userName: props.userName || '',
-            firstName: props.firstName ||  '',
-            lastName: props.lastName || '',
-            email: props.email || '',
-            facebookUrl: props.facebookUrl ||'',
-            linkedInUrl: props.linkedInUrl ||"",
-            bio: props.bio ||''
+            profilePic: props.userDetails.profilePic || '',
+            userName: props.userDetails.userName || '',
+            firstName: props.userDetails.firstName ||  '',
+            lastName: props.userDetails.LastName || '',
+            email: props.userDetails.email || '',
+            facebookUrl: props.userDetails.facebookUrl ||'',
+            linkedInUrl: props.userDetails.linkedInUrl ||"",
+            instaUrl: props.userDetails.linkedInUrl ||"",
+            bio: props.userDetails.bio ||'',
+            imageUrl: props.userDetails.imageUrl ||'',
         }
 
         setEditProfile({...editProfile, profileData})
@@ -62,27 +66,14 @@ const EditProfile = ({ ...props }) => {
           <Modal.Body className="edit-profile-modal-body">
             <div className="modal-header-wrapper">
             <h4>Edit Profile </h4>
-              <div className="image-placeholder">
-
+            <hr></hr>
+              <div className="image-placeholder d-flex align-items-center flex-column mb-3">
+                <img src={editProfile.imageUrl} height={100} width={100} style={{borderRadius:"100px"}}></img>
+                <span>{editProfile.userName}</span>
               </div>
             </div>
             <div className="wrapper">
-            <Row className="username-row mb-4">
-                <Col md="12" className="">
-                  <div className="username-label second-grey">
-                    <Form.Label>
-                     UserName
-                    </Form.Label>
-                  </div>
-                  <Form.Control
-                    type="text"
-                    name="userName"
-                    value={editProfile.userName}
-                    
-                    disabled
-                  />
-                  </Col>
-                </Row>
+           
 
                  <Row className="name-row mb-4">
                 <Col md="6" xs= "12" className="">
@@ -123,6 +114,7 @@ const EditProfile = ({ ...props }) => {
                     </Form.Label>
                   </div>
                   <Form.Control
+                    disabled
                     type="text"
                     name="email"
                     value={editProfile.email}
@@ -135,13 +127,29 @@ const EditProfile = ({ ...props }) => {
                 <Col md="12" className="">
                   <div className="facebook-label second-grey">
                     <Form.Label>
-                     Facebook URL
+                    Facebook URL
                     </Form.Label>
                   </div>
                   <Form.Control
                     type="text"
                     name="facebookUrl"
                     value={editProfile.facebookUrl}
+                    onChange={(e) => handleChange(e)}
+                  />
+                  </Col>
+                </Row>
+
+                <Row className="facebook-url-row mb-4">
+                <Col md="12" className="">
+                  <div className="facebook-label second-grey">
+                    <Form.Label>
+                    Instagram URL
+                    </Form.Label>
+                  </div>
+                  <Form.Control
+                    type="text"
+                    name="instaUrl"
+                    value={editProfile.instaUrl}
                     onChange={(e) => handleChange(e)}
                   />
                   </Col>
