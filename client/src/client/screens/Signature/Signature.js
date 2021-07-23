@@ -17,7 +17,7 @@ import {
   DropdownButton,
 } from "react-bootstrap";
 import BlockChainInterface from "../../interface/BlockchainInterface";
-import MongoDBInterface from "../../interface/MongoDBInterface";
+import SignatureInterface from "../../interface/SignatureInterface";
 import ActionsInterface from "../../interface/ActionsInterface";
 import Web3Utils from "web3-utils";
 import Dropzone from "react-dropzone";
@@ -73,7 +73,7 @@ const Signature = (props) => {
     if (signatureFromParent) {
       setSignature(signatureFromParent);
     } else {
-      MongoDBInterface.getSignatureByHash(hashId).then((response) => {
+      SignatureInterface.getSignatureByHash(hashId).then((response) => {
         let signatureObject = _.get(response, "data.data");
         setSignature(...signature, ...signatureObject);
       });
@@ -132,7 +132,7 @@ const Signature = (props) => {
   }
 
   function updateMongoBuySignature(updatePayload) {
-    MongoDBInterface.buySignature(updatePayload)
+    SignatureInterface.buySignature(updatePayload)
       .then((updatedSignature) => {
         showToaster("Purchase updated on blockchain", { type: "info" });
         setSignature(_.get(updatedSignature, "data.data"));
@@ -156,7 +156,7 @@ const Signature = (props) => {
   }
 
   function updatePriceInMongo() {
-    MongoDBInterface.updatePrice(signature).then((updatedSignature) => {
+    SignatureInterface.updatePrice(signature).then((updatedSignature) => {
       setSignature(_.get(updatedSignature, "data.data"));
     });
   }

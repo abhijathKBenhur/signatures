@@ -6,6 +6,7 @@ const tokenAPI = require("./routes/TokenAPIs");
 const userAPI = require("./routes/UserAPI");
 const actionAPI = require("./routes/actionsAPI")
 const blockChainAPI = require("./routes/BlockChainAPIs");
+const ClanAPI = require("./routes/ClanAPI");
 const dotenv = require("dotenv");
 const path = require("path");
 const app = express();
@@ -21,6 +22,7 @@ app.use("/api", tokenAPI);
 app.use("/api", userAPI);
 app.use("/api", blockChainAPI);
 app.use("/api", actionAPI);
+app.use("/api", ClanAPI);
 
 
 

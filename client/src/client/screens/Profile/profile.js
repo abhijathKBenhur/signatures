@@ -6,7 +6,7 @@ import { useHistory } from "react-router-dom";
 import "./profile.scss";
 import { Shimmer } from "react-shimmer";
 import Register from "../../modals/Register/Register";
-import MongoDBInterface from "../../interface/MongoDBInterface";
+import SignatureInterface from "../../interface/SignatureInterface";
 import ActionsInterface from "../../interface/ActionsInterface";
 import BlockChainInterface from "../../interface/BlockchainInterface";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
@@ -18,6 +18,7 @@ import store from "../../redux/store";
 import { setCollectionList } from "../../redux/actions";
 import EditProfile from "../../modals/edit-profile/edit-profile";
 import CreateClan from "../../modals/create-clan/create-clan";
+import UserInterface from "../../interface/UserInterface";
 function Profile(props) {
   const reduxState = useSelector((state) => state, shallowEqual);
   const {
@@ -67,7 +68,7 @@ function Profile(props) {
   }, [reduxState.metamaskID]);
 
   const getUserDetails = (payLoad) => {
-    MongoDBInterface.getUserInfo(payLoad).then((response) => {
+    UserInterface.getUserInfo(payLoad).then((response) => {
       let userDetails = _.get(response, "data.data");
       setCurrentUserDetails(userDetails);
     });
@@ -75,7 +76,7 @@ function Profile(props) {
 
   function fetchSignatures(address) {
     if (address || currentUserDetails.metamaskId) {
-      MongoDBInterface.getSignatures().then((signatures) => {
+      SignatureInterface.getSignatures().then((signatures) => {
         let response = _.get(signatures, "data.data");
         let isEmptyPresent = _.find(response, (responseItem) => {
           return _.isEmpty(responseItem.ideaID);

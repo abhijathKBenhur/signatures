@@ -20,10 +20,10 @@ export const markAllAsRead = (payload) =>  {
 }
   
 
-const MongoDBInterface = {
+const SignatureInterface = {
     postAction,
     getActions,
     markAllAsRead,
 }
 
-export default MongoDBInterface
+export default SignatureInterface

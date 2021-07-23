@@ -11,7 +11,8 @@ import BlockchainInterface from "../../interface/BlockchainInterface";
 import store from "../../redux/store";
 import { shallowEqual, useSelector } from "react-redux";
 import SearchBar from "../searchBar/SearchBar";
-import MongoDBInterface from "../../interface/MongoDBInterface";
+import SignatureInterface from "../../interface/SignatureInterface";
+import UserInterface from "../../interface/UserInterface";
 import { setReduxUserDetails } from "../../redux/actions";
 import { showToaster } from "../../commons/common.utils";
 const Header = (props) => {
@@ -41,7 +42,7 @@ const Header = (props) => {
 
   function refreshUserDetails() {
     if (!_.isEmpty(currentMetamaskAccount)) {
-      MongoDBInterface.getUserInfo({ metamaskId: currentMetamaskAccount })
+      UserInterface.getUserInfo({ metamaskId: currentMetamaskAccount })
         .then((userDetails) => {
           store.dispatch(setReduxUserDetails(_.get(userDetails, "data.data")));
           setCurrentUserDetails(_.get(userDetails, "data.data"));

@@ -6,7 +6,7 @@ import _ from "lodash";
 import $ from "jquery";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { updateCategories } from "../../redux/actions";
-import MongoDBInterface from "../../interface/MongoDBInterface";
+import SignatureInterface from "../../interface/SignatureInterface";
 import { setCollectionList } from "../../redux/actions";
 
 const DiscoverMore = () => {
@@ -35,7 +35,7 @@ const DiscoverMore = () => {
       let postObj = {
         tags: _.filter(categoriesList, function(o) { return o.isSelected; }).map(val => val.value)
       }
-      MongoDBInterface.getSignatures(postObj).then(
+      SignatureInterface.getSignatures(postObj).then(
         (signatures) => {
           let response = _.get(signatures, "data.data");
           let isEmptyPresent = _.find(response, (responseItem) => {
