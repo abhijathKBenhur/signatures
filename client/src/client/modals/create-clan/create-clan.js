@@ -1,3 +1,5 @@
+
+import _ from "lodash";
 import React, { useEffect, useState } from "react";
 import {
   Modal,
@@ -21,7 +23,7 @@ const CreateClan = ({ ...props }) => {
     name: "",
     leader: props.userDetails.userName,
     description: "",
-    imageUrl: "",
+    imageUrl: "test",
     members: [],
   });
   const [userList, setUserList] = useState([]);
@@ -39,8 +41,19 @@ const CreateClan = ({ ...props }) => {
   };
 
   const createClanHandler = () => {
-    ClanInterface.createClan(createClanState).then(success => {
+    let membersWithoutLabel = _.map(createClanState.members, member => {
+      return {
+        imageUrl: member.imageUrl,
+        userName: member.value
+      }
+    })
+    let payload = {
+      ...createClanState,
+      members: membersWithoutLabel
+    }
+    ClanInterface.createClan(payload).then(success => {
       console.log("clan created")
+      props.onHide()
     }).catch(error =>{
       console.log("clan could not be created")
     })
@@ -124,6 +137,7 @@ const CreateClan = ({ ...props }) => {
                 options={userList.map((item) => {
                   return {
                     value: item.userName,
+                    imageUrl:item.imageUrl,
                     label: (
                       <div>
                         <img

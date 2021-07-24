@@ -1,9 +1,10 @@
 import React from "react";
 import {
   Row,
-  Col, Container
+  Col, Container, Button
 } from "react-bootstrap";
 import "./about.scss";
+import { useHistory } from "react-router-dom";
 import dummyImg from "../../../assets/images/dummy.png"
 import user from "../../../assets/images/user.png"
 import cover from "../../../assets/images/cover.jpeg"
@@ -11,6 +12,7 @@ import dummy1 from "../../../assets/images/dummy1.png"
 import dummy2 from "../../../assets/images/dummy2.jpg"
 import dummy3 from "../../../assets/images/dummy3.jpeg"
 const About = () => {
+  let history = useHistory();
   return (
     <Container className="about-container">
       <Row className="about-item about-first">
@@ -26,6 +28,11 @@ const About = () => {
             you least expect them. We’re here to store them for posterity and help
             you change the world. Ideatribe was born out of a desire by the founding
             team to harness the creativity of the everyman ...You, us, everyone!
+          </div>
+          <div>
+            <Button variabt="secondary" className="mt-5" onClick={() => {
+              history.push("/home");
+            }}>Take me to the tribe</Button>
           </div>
         </Col>
         <Col className="right" xs={12} sm={4}>

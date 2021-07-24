@@ -1,0 +1,114 @@
+@import "../../commons/Common.scss";
+
+.profile {
+  .register-modal {
+    min-height: 100vh;
+  }
+  .separator {
+    margin-top: 60px;
+    display: flex;
+    min-height: calc(100vh - 60px);
+    .intial-block {
+      flex: 1;
+      max-height: 300px;
+      padding: 20px;
+      background-color: #fff;
+      margin-right: 20px;
+      h5 {
+        text-transform: uppercase;
+        font-size: 17px;
+        font-weight: 500;
+      }
+      .options {
+        margin-top: 20px;
+        p {
+          //    margin: 0;
+        }
+      }
+    }
+
+    .tabs-wrapper {
+      flex: 5;
+      .nav-tabs {
+        .nav-item {
+          color: #000;
+          border: 0;
+          font-size: 14px;
+          font-weight: 500;
+          line-height: 18px;
+          color: $grey-dark;
+          &.active {
+            border-bottom: 2px solid $secondary;
+            color: $secondary;
+          }
+        }
+      }
+    }
+
+    .tab-content {
+      margin-bottom: 20px;
+    }
+  }
+
+
+
+  .userPane {
+    padding: 0px;
+    padding-top: 50px;
+    display: flex;
+    align-items: center;
+    background-color: #F1F1F1;
+    .profile-section{
+     
+
+    }
+    .profile-info{
+      color: $primary-light;
+      .address-copy{
+        color: $secondary;
+      }
+    }
+
+    .actions{
+      display: flex;
+      justify-content: center;
+      align-items: inherit;
+      flex-flow: column;
+      gap: 10px;
+      flex-direction: row;
+    }
+    .profileHolder {
+      height: 75px;
+      width: 75px;
+      border-radius: 150px;
+      border: 2px solid #f1f1f1;
+      align-self: flex-end;
+      position: relative;
+      background-color: white;
+      top: 35px;
+      justify-content: center;
+      -webkit-align-items: center;
+      display: flex;
+    }
+  }
+  .collection-wrapper {
+    display: flex;
+
+    .middle-block {
+      margin-top: 30px;
+      flex: 4;
+      .empty-collection{
+        
+      }
+    }
+  }
+  .transactions-wrapper {
+    min-height: 300px;
+    text-align: center;
+    margin-top: -2px;
+  }
+
+  .collection-container {
+    max-width: 100%;
+  }
+}
