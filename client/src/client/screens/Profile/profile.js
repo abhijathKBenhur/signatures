@@ -11,7 +11,7 @@ import ActionsInterface from "../../interface/ActionsInterface";
 import BlockChainInterface from "../../interface/BlockchainInterface";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { ExternalLink, Award, User } from "react-feather";
-import StorageInterface from "../../interface/StorageInterface";
+import Clans from '../Clans/Clans'
 
 import Collections from "./collections";
 import store from "../../redux/store";
@@ -122,7 +122,7 @@ function Profile(props) {
             <Col md="12" className="mycollection">
               <Row className="loggedIn h-100">
                 <Col md="12" className="p-0 d-flex">
-                  <Col md="2" className="userPane w-100 h-100 flex-column">
+                  <Col md="2" className="userPane w-100  flex-column h-100">
                   < div className="profile-section d-flex flex-column">
                       {/* <div className="separatorline"></div> */}
 
@@ -268,7 +268,9 @@ function Profile(props) {
                           </div>
                         </div>
                       </Tab>
-                      <Tab eventKey="clan" title="Clans"></Tab>
+                      <Tab eventKey="clan" title="Clans">
+                        <Clans></Clans>
+                      </Tab>
                     </Tabs>
                   </Col>
                 </Col>

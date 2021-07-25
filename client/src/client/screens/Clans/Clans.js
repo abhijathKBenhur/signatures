@@ -1,25 +1,37 @@
-import React from 'react';
 import { Container, Row } from "react-bootstrap";
-import CollectionCard from "../../components/collection-card/collection-card";
-import './Clans.scss'
+import React, { useState, useEffect } from "react";
+import ClanInterface from "../../interface/ClanInterface";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
+import _ from 'lodash'
+import "./Clans.scss";
 
-const Collections = ({collectionList = []}) => {
-    return(
-<Container className="collection-container">
+const Clans = (props) => {
+  const reduxState = useSelector((state) => state, shallowEqual);
+  const [currentUserDetails, setCurrentUserDetails] = useState(props.currentUserDetails);
+  const [ownClans, setOwnClans] = useState([]);
 
-<Row className="collections">
-  {collectionList.map((collection, index) => {
-    return (
-      <CollectionCard collection={collection} index={index}/>
-      // <CollectionCard key={index} card={collection}>
-      //   {" "}
-      // </CollectionCard>
-    );
-  })}
-</Row>
-</Container>
-    )
+  useEffect(() => {
+    const { userDetails = {} } = reduxState;
+    ClanInterface.getClans({
+      leader:userDetails.userName
+    }).then(success => {
+      let clansData = _.get(success,'data.data')
+      setOwnClans(clansData)
+    }).catch(err => {
 
-}
+    })
+  
+  }, [reduxState.userDetails]);
 
-export default Collections;
+  return (
+    <Container className="clans">
+     {ownClans.map(clan =>{
+       return (
+         <div>{clan.name}</div>
+       )
+     })}
+    </Container>
+  );
+};
+
+export default Clans;

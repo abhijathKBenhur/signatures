@@ -10,7 +10,6 @@ export const createClan = payload => {
     return api.post("/createClan",payload)
 }
 
-
 export const updateClan = (payload) =>  { 
     return api.post("/updateClan",payload) 
 }
@@ -18,7 +17,6 @@ export const updateClan = (payload) =>  {
 export const getClans = (payload) =>  { 
     return api.post("/getClans",payload) 
 }
-  
 
 const ClanInterface = {
     createClan,

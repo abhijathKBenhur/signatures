@@ -40,8 +40,8 @@ createClan = (req, res) => {
 
 getClans = async (req, res) => {
   let findCriteria = {};
-  if (req.body.to) {
-    findCriteria.to = req.body.to;
+  if (req.body.leader) {
+    findCriteria.leader = req.body.leader;
   }
 
   await ClanSchema.find(findCriteria, (err, user) => {

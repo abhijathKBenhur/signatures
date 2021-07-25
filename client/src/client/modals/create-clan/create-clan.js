@@ -1,4 +1,3 @@
-
 import _ from "lodash";
 import React, { useEffect, useState } from "react";
 import {
@@ -16,14 +15,15 @@ import Select from "react-select";
 import CONSTANTS from "../../commons/Constants";
 import ClanInterface from "../../interface/ClanInterface";
 import UserInterface from "../../interface/UserInterface";
-
+import Dropzone, { useDropzone } from "react-dropzone";
+import imagePlaceholder from "../../../assets/images/image-placeholder.png";
 import "./create-clan.scss";
 const CreateClan = ({ ...props }) => {
   const [createClanState, setCreateClanState] = useState({
     name: "",
     leader: props.userDetails.userName,
     description: "",
-    imageUrl: "test",
+    thumbnail: undefined,
     members: [],
   });
   const [userList, setUserList] = useState([]);
@@ -41,22 +41,24 @@ const CreateClan = ({ ...props }) => {
   };
 
   const createClanHandler = () => {
-    let membersWithoutLabel = _.map(createClanState.members, member => {
+    let membersWithoutLabel = _.map(createClanState.members, (member) => {
       return {
         imageUrl: member.imageUrl,
-        userName: member.value
-      }
-    })
+        userName: member.value,
+      };
+    });
     let payload = {
       ...createClanState,
-      members: membersWithoutLabel
-    }
-    ClanInterface.createClan(payload).then(success => {
-      console.log("clan created")
-      props.onHide()
-    }).catch(error =>{
-      console.log("clan could not be created")
-    })
+      members: membersWithoutLabel,
+    };
+    ClanInterface.createClan(payload)
+      .then((success) => {
+        console.log("clan created");
+        props.onHide();
+      })
+      .catch((error) => {
+        console.log("clan could not be created");
+      });
   };
 
   const handleMembersChange = (members) => {
@@ -65,6 +67,16 @@ const CreateClan = ({ ...props }) => {
       members: members,
     });
   };
+
+  const onImageDrop = (acceptedFiles) => {
+    setCreateClanState({
+      ...createClanState,
+      thumbnail: Object.assign(acceptedFiles[0], {
+        preview: URL.createObjectURL(acceptedFiles[0]),
+      }),
+    });
+  };
+
   return (
     <Modal
       show={true}
@@ -80,32 +92,73 @@ const CreateClan = ({ ...props }) => {
           <hr></hr>
         </div>
         <div className="wrapper">
-          <Row className="clan-name-row mb-4">
-            <Col md="12" className="">
-              <div className="clan-name-label second-grey">
-                <Form.Label>Clan Name</Form.Label>
-              </div>
-              <Form.Control
-                type="text"
-                name="name"
-                value={createClanState.name}
-                onChange={(e) => handleChange(e)}
-              />
-            </Col>
-          </Row>
+          <Row>
+            <Col md="6">
+              <Row className="clan-name-row mb-4">
+                <Col md="12" className="">
+                  <div className="clan-name-label second-grey">
+                    <Form.Label>Clan Name</Form.Label>
+                  </div>
+                  <Form.Control
+                    type="text"
+                    name="name"
+                    value={createClanState.name}
+                    onChange={(e) => handleChange(e)}
+                  />
+                </Col>
+              </Row>
 
-          <Row className="clan-leader-row mb-4">
-            <Col md="12" className="">
+              <Row className="clan-leader-row mb-4">
+                <Col md="12" className="">
+                  <div className="clan-leader-label second-grey">
+                    <Form.Label>Clan Leader</Form.Label>
+                  </div>
+                  <Form.Control
+                    type="text"
+                    name="leader"
+                    disabled
+                    value={createClanState.leader}
+                    onChange={(e) => handleChange(e)}
+                  />
+                </Col>
+              </Row>
+            </Col>
+            <Col md="6">
               <div className="clan-leader-label second-grey">
-                <Form.Label>Clan Leader</Form.Label>
+                {
+                  !_.isEmpty(createClanState.thumbnail) ? 
+                    <div>
+                      <img src={createClanState.thumbnail} ></img>
+                      <span class="fa fa-undo"></span>
+
+                    </div>
+                  :
+                  <Dropzone
+                  onDrop={onImageDrop}
+                  acceptedFiles={".jpeg"}
+                  className="dropzoneContainer"
+                >
+                  {({ getRootProps, getInputProps }) => (
+                    <section className="container h-100 f-flex align-items-center justofy-items-center">
+                      <div
+                        {...getRootProps()}
+                        className="emptyImage dropZone h-100 d-flex flex-column align-items-center"
+                      >
+                        <input {...getInputProps()} />
+                        <img
+                          src={imagePlaceholder} width={100} height={100}
+                          className="placeholder-image"
+                          alt=" placehoder"
+                        />
+                        <span className="drospanfile-text">
+                          Drop your thumbnail here
+                        </span>
+                      </div>
+                    </section>
+                  )}
+                </Dropzone>
+                }
               </div>
-              <Form.Control
-                type="text"
-                name="leader"
-                disabled
-                value={createClanState.leader}
-                onChange={(e) => handleChange(e)}
-              />
             </Col>
           </Row>
 
@@ -137,7 +190,7 @@ const CreateClan = ({ ...props }) => {
                 options={userList.map((item) => {
                   return {
                     value: item.userName,
-                    imageUrl:item.imageUrl,
+                    imageUrl: item.imageUrl,
                     label: (
                       <div>
                         <img

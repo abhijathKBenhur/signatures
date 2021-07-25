@@ -15,7 +15,7 @@ const About = () => {
   let history = useHistory();
   return (
     <Container className="about-container">
-      <Row className="about-item about-first">
+      <Row className="about-item about-first second-grey">
         <Col className="left" xs={12} sm={8}>
           <h2>
             Doing the right thing,
@@ -23,7 +23,7 @@ const About = () => {
           <h2>
             at the right time.
           </h2>
-          <div>
+          <div className="mt-3 second-grey color-white">
             We’ve noticed the best ideas come when
             you least expect them. We’re here to store them for posterity and help
             you change the world. Ideatribe was born out of a desire by the founding
