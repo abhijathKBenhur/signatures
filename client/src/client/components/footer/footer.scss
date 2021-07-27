@@ -4,46 +4,23 @@
     z-index: 10;
     position: sticky;
     top: 100vh;
-    background-color: $primary-light !important;
+    background-color: $secondary-light !important;
     border-top: 1.5px solid $primary-light;
-    // bottom:0;
+    height: 60px;
     .container-fluid{
         flex-flow: column;
-       
         .footer-info{
             display: flex;
             align-items: center;
             flex-flow: column;
             margin: 0 auto;
-            max-width: 800px;
             width: 100%;
-            margin-top: 20px;
             .footer-info-wrapper{
                 text-align: center;
                 display: flex;
                 width: 100%;
-                .products, .company, .resources{
-                    flex: 1;
-                    h6{
-                        font-weight: 600;
-                        width: 100%;
-                        margin-bottom: 16px;
-                        cursor: pointer;
-                        color: white;
-                        &:hover{
-                        }
-                    }
-                    ul {
-                        list-style-type: none;
-                        padding: 0;
-                        li{
-                            line-height: 1.5em;
-                            cursor: pointer;
-                            margin-bottom: 1rem;
-                            color:#666;
-                        }
-                    }
-                }
+                gap:20px;
+                color:  $greyLight-1 !important;
             }
         }
         .metamask-id{

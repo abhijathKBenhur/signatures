@@ -7,7 +7,7 @@ import {
   Col,
   Row,
   InputGroup,
-  Dropdown
+  Dropdown,
 } from "react-bootstrap";
 import React from "react";
 import Dropzone from "react-dropzone";
@@ -145,73 +145,168 @@ const CreateIdeaModal = ({
   const isSelectedPurpose = (purpose) => form.purpose === purpose;
 
   function getPurposeIcon(item) {
-    if(item == CONSTANTS.PURPOSES.SELL){
-      return "fa fa-usd purpose-icon"
-    }else if(item == CONSTANTS.PURPOSES.AUCTION){
-      return "fa fa-gavel purpose-icon"
-    }else if(item == CONSTANTS.PURPOSES.COLLAB){
-      return "fa fa-handshake-o purpose-icon"
-    }
-    else if(item == CONSTANTS.PURPOSES.KEEP){
-      return "fa fa-floppy-o purpose-icon"
-    }
-    else if(item == CONSTANTS.PURPOSES.LICENCE){
-      return "fa fa-id-card-o purpose-icon"
+    if (item == CONSTANTS.PURPOSES.SELL) {
+      return "fa fa-usd purpose-icon second-grey";
+    } else if (item == CONSTANTS.PURPOSES.AUCTION) {
+      return "fa fa-gavel purpose-icon second-grey";
+    } else if (item == CONSTANTS.PURPOSES.COLLAB) {
+      return "fa fa-handshake-o purpose-icon second-grey";
+    } else if (item == CONSTANTS.PURPOSES.KEEP) {
+      return "fa fa-floppy-o purpose-icon second-grey";
+    } else if (item == CONSTANTS.PURPOSES.LICENCE) {
+      return "fa fa-id-card-o purpose-icon second-grey";
     }
   }
 
-  function getConditionalCompnent(){
-    switch(form.purpose){
+  function getConditionalCompnent() {
+    switch (form.purpose) {
       case CONSTANTS.PURPOSES.AUCTION:
-        return <div/>
-      break;
-      case CONSTANTS.PURPOSES.SELL:
-        return(
-        <div className="price-section">
-        <Form.Group as={Col} className="formEntry" md="12">
-          <div className="price-label second-grey">
-            <Form.Label>
-              {CONSTANTS.PURPOSES.AUCTION === form.purpose
-                ? "Base price"
-                : "Price"}
-            </Form.Label>
-          </div>
-          <InputGroup className="price-input-group">
-            <Form.Control
-              type="number"
-              placeholder="how much do you think your idea is worth ?*"
-              min={1}
-              value={form.price ? form.price : undefined}
-              className={
-                formErrors.price
-                  ? `input-err price-selector `
-                  : `price-selector `
-              }
-              aria-label="Amount (ether)"
-              name="price"
-              onChange={handleChange}
-              ref={priceRef}
-            />
-            <InputGroup.Text>BNB</InputGroup.Text>
-          </InputGroup>
-        </Form.Group>
-      </div>
-      )
-      break;
-      case CONSTANTS.PURPOSES.COLLAB:
-        return <div className="collab-section">
-          <Col md="6" lg="6" sm="6" xs="6">
-
+        return (
+          <Col md="12">
+            <span className="purpose-message second-grey">
+              We know your idea is worth the traction. We will get you there
+              sooon.
+            </span>
           </Col>
-        </div>
-      break;
+        );
+
+      case CONSTANTS.PURPOSES.SELL:
+        return (
+          <Col md="12">
+            <span className="purpose-message second-grey">
+              Set a price to the idea and it will be sold immediately when there
+              is a buyer.
+            </span>
+            <div className="price-section">
+              <div className="price-label second-grey">
+                <Form.Label>
+                  {CONSTANTS.PURPOSES.AUCTION === form.purpose
+                    ? "Base price"
+                    : "Price"}
+                </Form.Label>
+              </div>
+              <InputGroup className="price-input-group">
+                <Form.Control
+                  type="number"
+                  placeholder="how much do you think your idea is worth ?"
+                  min={1}
+                  value={form.price ? form.price : undefined}
+                  className={
+                    formErrors.price
+                      ? `input-err price-selector `
+                      : `price-selector `
+                  }
+                  aria-label="Amount (ether)"
+                  name="price"
+                  onChange={handleChange}
+                  ref={priceRef}
+                />
+                <InputGroup.Text>BNB</InputGroup.Text>
+              </InputGroup>
+            </div>
+          </Col>
+        );
+        break;
+      case CONSTANTS.PURPOSES.COLLAB:
+        return (
+          <Col md="12">
+            <span className="purpose-message second-grey">
+              You may chose to licence it to multiple people. Only your idea
+              will be available in the market.
+            </span>
+            <div className="collab-section">
+              <Dropdown className="w-100">
+                <Dropdown.Toggle
+                  variant="light"
+                  id="dropdown-basic"
+                  className="w-100 justify-content-start "
+                >
+                  {form.collab}
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
+                  {CONSTANTS.COLLAB_TYPE.map((item) => (
+                    <Dropdown.Item
+                      name="storageGroup"
+                      onClick={() =>
+                        setFormData({ ...form, collab: item.value })
+                      }
+                    >
+                      {item.label}
+                    </Dropdown.Item>
+                  ))}
+                </Dropdown.Menu>
+              </Dropdown>
+            </div>
+          </Col>
+        );
+        break;
       case CONSTANTS.PURPOSES.LICENCE:
-      break;
+        return (
+          <Col md="12" sm="12" lg="12" cs="12">
+            <Row>
+              <Col md="12">
+                <span className="purpose-message second-grey">
+                  You may chose to licence it to multiple people. Only your idea
+                  will be available in the market.
+                </span>
+              </Col>
+            </Row>
+            <Row>
+              <Col md="6" sm="12" xs="12" lg="6">
+                {/* <span className="purpose-message second-grey">Amount per unit</span> */}
+                <InputGroup className="price-input-group">
+                  <Form.Control
+                    type="number"
+                    placeholder="Price per unit"
+                    min={1}
+                    value={form.price ? form.price : undefined}
+                    className={
+                      formErrors.price
+                        ? `input-err price-selector `
+                        : `price-selector `
+                    }
+                    aria-label="Amount (BNB)"
+                    name="price"
+                    onChange={handleChange}
+                    ref={priceRef}
+                  />
+                  <InputGroup.Text>BNB</InputGroup.Text>
+                </InputGroup>
+              </Col>
+              <Col md="6" sm="12" xs="12" lg="6">
+              {/* <span className="purpose-message second-grey">Number of units</span> */}
+              <InputGroup className="price-input-group">
+                <Form.Control
+                  type="number"
+                  placeholder="Number of units"
+                  min={1}
+                  value={form.umits ? form.umits : undefined}
+                  className={
+                    formErrors.umits
+                      ? `input-err umits-selector `
+                      : `umits-selector `
+                  }
+                  aria-label="umits"
+                  name="umits"
+                  onChange={handleChange}
+                  ref={priceRef}
+                />
+                <InputGroup.Text>UNITS</InputGroup.Text>
+                </InputGroup>
+              </Col>
+            </Row>
+          </Col>
+        );
       case CONSTANTS.PURPOSES.KEEP:
-        return <div/>
-      break;
+        return (
+          <Col md="12">
+            <span className="purpose-message second-grey">
+              The record will not be open for any interaction. It will be still
+              be visible for everyone.
+            </span>
+          </Col>
+        );
     }
-   
   }
 
   const getElement = () => {
@@ -400,9 +495,9 @@ const CreateIdeaModal = ({
         return (
           <>
             <Row>
-            <Col md="12" lg="12" sm="12" xs="12">
+              <Col md="12" lg="12" sm="12" xs="12">
                 <Form.Group as={Col} className="formEntry" md="12">
-                  <div className="tags-label second-grey">
+                  <div className="tags-label master-grey">
                     <Form.Label>Tags </Form.Label>
                   </div>
                   <Select
@@ -427,7 +522,7 @@ const CreateIdeaModal = ({
                   md="12"
                   controlId="fileStorage"
                 >
-                  <div className="file-storage-label second-grey">
+                  <div className="file-storage-label master-grey">
                     <Form.Label>File Storage </Form.Label>
                     <OverlayTrigger
                       placement="top"
@@ -441,7 +536,11 @@ const CreateIdeaModal = ({
                     </OverlayTrigger>
                   </div>
                   <Dropdown className="w-100">
-                    <Dropdown.Toggle variant="light" id="dropdown-basic" className="w-100 justify-content-start selected-storage">
+                    <Dropdown.Toggle
+                      variant="light"
+                      id="dropdown-basic"
+                      className="w-100 justify-content-start selected-storage"
+                    >
                       {form.storage}
                     </Dropdown.Toggle>
                     <Dropdown.Menu>
@@ -459,13 +558,12 @@ const CreateIdeaModal = ({
                   </Dropdown>
                 </Form.Group>
               </Col>
-              
             </Row>
 
             <div className="purpose-selection">
               <Row className="purpose-selector-row">
                 <Col md="12" className="">
-                  <div className="purpose-label second-grey">
+                  <div className="purpose-label master-grey">
                     <Form.Label>
                       What would you like to do with the idea ?{" "}
                     </Form.Label>
@@ -474,14 +572,19 @@ const CreateIdeaModal = ({
                     {pusposeList.map((entry) => {
                       return (
                         <div
-                          className={isSelectedPurpose(entry) ? "purpose-entry selected" : "purpose-entry"}
+                          className={
+                            isSelectedPurpose(entry)
+                              ? "purpose-entry selected"
+                              : "purpose-entry"
+                          }
                           onClick={() => {
                             setPurpose(entry);
                           }}
                         >
-                         
                           <i className={getPurposeIcon(entry)}></i>
-                          <span className="second-grey">{entry}</span>
+                          <span className="second-grey purpose-text">
+                            {entry}
+                          </span>
                         </div>
                       );
                     })}
@@ -489,11 +592,11 @@ const CreateIdeaModal = ({
                 </Col>
               </Row>
             </div>
-            <div clasName="selective-component">
-              {getConditionalCompnent()}
+            <div className="selective-component">
+              <div>
+                {getConditionalCompnent()}
+              </div>
             </div>
-            
-
             <Row className="button-section  d-flex">
               <Col xs="12" className="button-bar">
                 <Button className="cancel-btn">Cancel</Button>

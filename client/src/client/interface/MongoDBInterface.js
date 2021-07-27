@@ -70,6 +70,11 @@ export const register_user = payload => {
     console.log("register_user")
     return api.post(`/register_user`,payload) 
   }
+
+export const update_user = payload => { 
+    console.log("update_user")
+    return api.post(`/update_user`,payload) 
+}
   
 
 const MongoDBInterface = {
@@ -79,7 +84,8 @@ const MongoDBInterface = {
     buySignature,
     updatePrice,
     registerUser,
-    getUserInfo
+    getUserInfo,
+    update_user
 }
 
 export default MongoDBInterface

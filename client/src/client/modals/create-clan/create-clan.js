@@ -18,7 +18,7 @@ const CreateClan = ({ ...props }) => {
 
     const [createClanState, setCreateClanState] = useState({
         clanName: '',
-        clanLeader: '',
+        clanLeader: props.userDetails.userName,
         clanDescription: '',
         clanMembers: []
     });
@@ -56,7 +56,7 @@ const CreateClan = ({ ...props }) => {
           <Modal.Body className="create-clan-modal-body">
             <div className="modal-header-wrapper">
             <h4>Create Clan </h4>
-             
+            <hr></hr>
             </div>
             <div className="wrapper">
             <Row className="clan-name-row mb-4">
@@ -85,6 +85,7 @@ const CreateClan = ({ ...props }) => {
                   <Form.Control
                     type="text"
                     name="clanLeader"
+                    disabled
                     value={createClanState.clanLeader}
                     onChange={(e) => handleChange(e)}
                   />

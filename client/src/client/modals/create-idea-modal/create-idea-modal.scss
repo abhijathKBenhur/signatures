@@ -81,6 +81,9 @@
         }
       }
     }
+    .selective-component{
+      min-height: 150px;
+    }
     .purpose-selection {
       margin: 15px;
       .purpose-tabs {
@@ -100,9 +103,20 @@
           .purpose-icon{
             font-size: 20px;
             margin-bottom: 10px;
+            color: $primary;
           }
+          .purpose-text{
+            color: $primary;
+          }
+      
           &.selected{
             box-shadow: $shadow;
+            .purpose-icon{
+              color: $white;
+            }
+            .purpose-text{
+              color: $white;
+            }
             border: 2px solid $secondary;
             background-color: $secondary;
           }
@@ -123,7 +137,7 @@
           border-left: none;
           border-right: none;
           border-radius: 0;
-          border: 1px solid $greyLight-1 !important;
+          border: 1px solid $greyLight-2 !important;
         }
         background: transparent;
         // color: $white;
@@ -176,6 +190,7 @@
           line-height: 18px;
           color: $grey-dark;
           border: 1px solid $greyLight-1 !important;
+          background-color: $white;
           &:active {
             background-color: transparent;
             color: $grey-dark;

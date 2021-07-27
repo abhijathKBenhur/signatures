@@ -119,26 +119,32 @@ function Profile(props) {
         ) : (
           <div className="separator w-100">
             <Col md="12" className="mycollection">
-              <Row className="loggedIn">
-                <Col md="12" className="p-0">
-                  <div className="userPane w-100 d-column">
-                  < div className="profile-section d-flex flex-column ml-5 align-self-center">
+              <Row className="loggedIn h-100">
+                <Col md="12" className="p-0 d-flex">
+                  <Col md="2" className="userPane w-100 h-100 flex-column">
+                  < div className="profile-section d-flex flex-column">
                       {/* <div className="separatorline"></div> */}
 
                       <img
                         src={currentUserDetails.imageUrl}
-                        height={150}
-                        width={150}
+                        height={140}
+                        width={140}
                         className=""
                         style={{
                           background: "#f1f1f1",
-                          borderRadius: "5px",
+                          borderRadius: "140px",
                           zIndex: "1",
                         }}
                         alt="user"
                       />
+                      <div className="d-flex justify-content-center master-grey mt-1">
+                        <span>
+                        {currentUserDetails.fullName}
+                        </span>
+                      </div>
+                      
                     </div>
-                    <div className="profile-info ml-3">
+                    <div className="profile-info">
                       <Row className="d-flex justify-content-center align-items-center">
                         <span className="master-header userName">
                           {_.get(currentUserDetails, "userName")}
@@ -174,32 +180,32 @@ function Profile(props) {
                         </Col>
                       </Row>
                     </div>
-                    <div className="actions">
+                    <div className="actions mt-4">
                     <Button
-                          variant="primary"
-                          className="button uploadButton"
+                          variant="action"
+                          className="button"
                           bsstyle="primary"
                           onClick={() => {
                             setShowModal({...modalShow, editProfile: true})
                           }}
                         >
-                          Edit Profile
+                          <i className="fa fa-user mr-1"></i>
                         </Button>
 
                         <Button
-                          variant="primary"
-                          className="button uploadButton"
+                          variant="action"
+                          className="button"
                           bsstyle="primary"
                           onClick={() => {
                             setShowModal({...modalShow, createClan: true})
                           }}
                         >
-                          Create Clan
+                          <i className="fa fa-users mr-1"></i>
                         </Button>
                     </div>
-                  </div>
+                  </Col>
 
-                  <div className="tabs-wrapper">
+                  <Col md="10" className="tabs-wrapper mt-3">
                     <Tabs
                       id="controlled-tab-example"
                       activeKey={key}
@@ -263,28 +269,18 @@ function Profile(props) {
                       </Tab>
                       <Tab eventKey="clan" title="Clans"></Tab>
                     </Tabs>
-                  </div>
+                  </Col>
                 </Col>
-                {/* <Col md="2" className="right-block">
-                  <div className="right-block-content">
-                    <h5>Awards</h5>
-                    <div className="options">
-                      <p>Website</p>
-                      <p>Blog</p>
-                      <p>Portfolio</p>
-                    </div>
-                  </div>
-                </Col> */}
               </Row>
             </Col>
           </div>
         )}
       </Row>
       {
-        modalShow.editProfile && <EditProfile  show={modalShow.editProfile}  onHide={() => setShowModal({...modalShow, editProfile: false})} />
+        modalShow.editProfile && <EditProfile userDetails={currentUserDetails} show={modalShow.editProfile}  onHide={() => setShowModal({...modalShow, editProfile: false})} />
       }
       {
-         modalShow.createClan && <CreateClan  show={modalShow.createClan}  onHide={() => setShowModal({...modalShow, createClan: false})} />
+         modalShow.createClan && <CreateClan  userDetails={currentUserDetails} show={modalShow.createClan}  onHide={() => setShowModal({...modalShow, createClan: false})} />
       }
     </Container>
   );
