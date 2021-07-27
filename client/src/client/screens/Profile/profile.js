@@ -32,6 +32,8 @@ function Profile(props) {
   const [profileCollection, setProfileCOllection] = useState([]);
   const [currentUserDetails, setCurrentUserDetails] = useState({});
   const [myNotifications, setMyNotifications] = useState([]);
+  const [ billetList, setBilletList] = useState([]);
+
   let history = useHistory();
   const [key, setKey] = useState("collections");
   const viewUser = _.get(history.location.state, "userName");
@@ -81,6 +83,9 @@ function Profile(props) {
         let isEmptyPresent = _.find(response, (responseItem) => {
           return _.isEmpty(responseItem.ideaID);
         });
+        const billetList = _.filter(response, (responseItem) => _.get(responseItem, 'owner.metamaskId') === _.get(currentUserDetails, 'metamaskId'));
+        console.log('billetList ==> ',billetList);
+        setBilletList([...billetList])
         setProfileCOllection(response);
         dispatch(setCollectionList(response));
       });
@@ -283,7 +288,7 @@ function Profile(props) {
         modalShow.editProfile && <EditProfile userDetails={currentUserDetails} show={modalShow.editProfile}  onHide={() => setShowModal({...modalShow, editProfile: false})} />
       }
       {
-         modalShow.createClan && <CreateClan  userDetails={currentUserDetails} show={modalShow.createClan}  onHide={() => setShowModal({...modalShow, createClan: false})} />
+         modalShow.createClan && <CreateClan  userDetails={currentUserDetails} billetList= {billetList} show={modalShow.createClan}  onHide={() => setShowModal({...modalShow, createClan: false})} />
       }
     </Container>
   );
