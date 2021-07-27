@@ -18,6 +18,7 @@ import UserInterface from "../../interface/UserInterface";
 import Dropzone, { useDropzone } from "react-dropzone";
 import imagePlaceholder from "../../../assets/images/image-placeholder.png";
 import "./create-clan.scss";
+import SignatureInterface from "../../interface/SignatureInterface";
 const CreateClan = ({ ...props }) => {
   const [createClanState, setCreateClanState] = useState({
     name: "",
@@ -25,15 +26,26 @@ const CreateClan = ({ ...props }) => {
     description: "",
     thumbnail: undefined,
     members: [],
+   selectedBillet: undefined
   });
   const [userList, setUserList] = useState([]);
+  const [clanMemberList, setClanMemberList] = useState([]);
+
 
   useEffect(() => {
     let users = UserInterface.getUsers().then((succes) => {
       setUserList(succes.data.data);
     });
-    console.log(users);
+    let payLoad = {};
+    fetchSignatures();
   }, []);
+
+  const fetchSignatures = () => {
+      SignatureInterface.getSignatures().then((signatures) => {
+        const response = _.get(signatures, "data.data");
+      });
+    
+  }
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -61,10 +73,19 @@ const CreateClan = ({ ...props }) => {
       });
   };
 
-  const handleMembersChange = (members) => {
+  const handleMembersChange = (members, index) => {
+    const createClanStateCopy = _.clone(createClanState);
+    createClanStateCopy.members[index]= (members);
     setCreateClanState({
       ...createClanState,
-      members: members,
+     ...createClanStateCopy,
+    });
+  };
+
+  const handleBilletChange = (billet) => {
+    setCreateClanState({
+      ...createClanState,
+      selectedBillet: billet,
     });
   };
 
@@ -76,6 +97,42 @@ const CreateClan = ({ ...props }) => {
       }),
     });
   };
+
+  const addMemberHandler = () => {
+    const clanMemberListCopy = _.clone(clanMemberList);
+    clanMemberListCopy.push([]);
+    
+    setClanMemberList([...clanMemberListCopy])
+    const createClanStateCopy = _.clone(createClanState);
+    createClanStateCopy.members.push(undefined);
+    setCreateClanState({
+      ...createClanState,
+     ...createClanStateCopy,
+    });
+  }
+
+  
+  const visitClanMemberProfile = (index) => {
+    const createClanStateCopy = _.clone(createClanState);
+    try {
+      if(createClanStateCopy.members[index].userName) {
+        window.open(window.location + `/${createClanStateCopy.members[index].userName}`)
+      }
+    } catch(err) {
+
+    }
+   
+  }
+
+  const removeClanMember = (index) => {
+    const clanMemberListCopy = _.clone(clanMemberList);
+    clanMemberListCopy.splice(index, 1);
+    const createClanStateCopy = _.clone(createClanState);
+    createClanStateCopy.members.splice(index, 1);
+    setCreateClanState({...createClanState, createClanStateCopy})
+    setClanMemberList([...clanMemberListCopy])
+
+  }
 
   return (
     <Modal
@@ -178,36 +235,79 @@ const CreateClan = ({ ...props }) => {
             </Col>
           </Row>
 
+          <Row className="billet-row mb-4">
+            <Col md="12">
+              <div className="billet-label second-grey">
+                <Form.Label>My Billet  </Form.Label>
+              </div>
+             { _.get(props, 'billetList') &&  <Select
+                value={createClanState.selectedBillet}
+                options={_.get(props, 'billetList').map((item) => {
+                  return {
+                    value: item.title,
+                    id: item.ideaID,
+                    label: (
+                      <div>
+                        {item.title}{" "}
+                      </div>
+                    ),
+                  };
+                })}
+                onChange={handleBilletChange}
+                placeholder="My Billet"
+              />}
+            </Col>
+          </Row>
+
           <Row className="clan-members-row mb-4">
             <Col md="12">
               <div className="clan-members-label second-grey">
                 <Form.Label>Clan Members </Form.Label>
               </div>
-              <Select
-                value={createClanState.members}
-                closeMenuOnSelect={false}
-                isMulti
-                options={userList.map((item) => {
-                  return {
-                    value: item.userName,
-                    imageUrl: item.imageUrl,
-                    label: (
-                      <div>
-                        <img
-                          src={item.imageUrl}
-                          style={{ borderRadius: "30px" }}
-                          className="mr-1"
-                          height="30px"
-                          width="30px"
-                        />
-                        {item.userName}{" "}
-                      </div>
-                    ),
-                  };
-                })}
-                onChange={handleMembersChange}
-                placeholder="Members"
-              />
+              {
+                clanMemberList.map((member, index) => {
+                  return(
+                    <div className="selected-clan-member-item">
+                         <Select
+                    value={createClanState.members[index]}
+                    options={userList.map((item) => {
+                      return {
+                        value: item.userName,
+                        imageUrl: item.imageUrl,
+                        userName: item.userName,
+                        label: (
+                          <div>
+                            <img
+                              src={item.imageUrl}
+                              style={{ borderRadius: "30px" }}
+                              className="mr-1"
+                              height="30px"
+                              width="30px"
+                              alt="user"
+                            />
+                            {item.userName}{" "}
+                          </div>
+                        ),
+                      };
+                    })}
+                    onChange={(e) => handleMembersChange(e, index)}
+                    placeholder="Select Member"
+                  />
+                  <div className="action">
+                  <p onClick={(e) =>  visitClanMemberProfile(index)}>Visit Profile 
+                  </p>
+                  <i className="fa fa-times" onClick={(e) =>  removeClanMember(index)} ></i>
+
+                  </div>
+                 
+                    </div>
+                   
+                  )
+                })
+              }
+              <Button className="cancel-btn mr-2" onClick={() => addMemberHandler()}>
+                Add Member
+              </Button>
             </Col>
           </Row>
 
