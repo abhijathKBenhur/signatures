@@ -58,34 +58,13 @@ export const buySignature = payload => {
 }
 
 
-export const getUserInfo = payload => { 
-    return api.post(`/getUserInfo`,payload) 
-}
-
-export const registerUser = payload => { 
-    return api.post(`/registerUser`,payload) 
-}
-
-export const register_user = payload => { 
-    console.log("register_user")
-    return api.post(`/register_user`,payload) 
-  }
-
-export const update_user = payload => { 
-    console.log("update_user")
-    return api.post(`/update_user`,payload) 
-}
-  
-
-const MongoDBInterface = {
+const SignatureInterface = {
     getSignatures,
     addSignature,
     getSignatureByHash,
     buySignature,
-    updatePrice,
-    registerUser,
-    getUserInfo,
-    update_user
+    updatePrice
+
 }
 
-export default MongoDBInterface
+export default SignatureInterface

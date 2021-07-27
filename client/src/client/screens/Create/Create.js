@@ -8,7 +8,7 @@ import {
   OverlayTrigger,
   Tooltip,
 } from "react-bootstrap";
-import MongoDBInterface from "../../interface/MongoDBInterface";
+import SignatureInterface from "../../interface/SignatureInterface";
 import BlockChainInterface from "../../interface/BlockchainInterface";
 import StorageInterface from "../../interface/StorageInterface";
 import Dropzone, { useDropzone } from "react-dropzone";
@@ -246,7 +246,7 @@ function Create(props) {
 
 
   function saveToMongo(form) {
-    MongoDBInterface.addSignature(form)
+    SignatureInterface.addSignature(form)
       .then((success) => {
         showToaster("Your Idea is now registered on the blockchain!", { type: "dark" });
       })

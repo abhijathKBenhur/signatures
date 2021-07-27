@@ -9,11 +9,12 @@ import CONSTANTS from "../../commons/Constants";
 import { setReduxUserDetails } from "../../redux/actions";
 import metamaskLogo from "../../../assets/images/metamask.png";
 import coinBaseLogo from "../../../assets/images/coinbase.png";
-import MongoDBInterface from "../../interface/MongoDBInterface";
+import SignatureInterface from "../../interface/SignatureInterface";
 import BlockchainInterface from "../../interface/BlockchainInterface";
 import { Check, RefreshCcw, X } from "react-feather";
 import { useHistory } from "react-router-dom";
 import store from "../../redux/store";
+import UserInterface from "../../interface/UserInterface";
 // MetamaskID and userDetails are stored in separate redux stores
 // userDetails are stored as state
 
@@ -67,7 +68,7 @@ const Register = (props) => {
         .then((success) => {
           let response = success.data;
           if (response.success) {
-            MongoDBInterface.registerUser(userDetails).then((mongoSuccess) => {
+            UserInterface.registerUser(userDetails).then((mongoSuccess) => {
               setRegistration(PASSED);
             });
             console.log(success);
@@ -345,7 +346,7 @@ const Register = (props) => {
     });
     if (/^[A-Z0-9]+$/i.test(value)) {
       setuserNameError(false);
-      MongoDBInterface.getUserInfo({ userName: value })
+      UserInterface.getUserInfo({ userName: value })
         .then((userDetails) => {
           setValidated(false);
         })

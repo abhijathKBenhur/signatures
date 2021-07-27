@@ -6,18 +6,19 @@ import { useHistory } from "react-router-dom";
 import "./profile.scss";
 import { Shimmer } from "react-shimmer";
 import Register from "../../modals/Register/Register";
-import MongoDBInterface from "../../interface/MongoDBInterface";
+import SignatureInterface from "../../interface/SignatureInterface";
 import ActionsInterface from "../../interface/ActionsInterface";
 import BlockChainInterface from "../../interface/BlockchainInterface";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { ExternalLink, Award, User } from "react-feather";
-import StorageInterface from "../../interface/StorageInterface";
+import Clans from '../Clans/Clans'
 
 import Collections from "./collections";
 import store from "../../redux/store";
 import { setCollectionList } from "../../redux/actions";
 import EditProfile from "../../modals/edit-profile/edit-profile";
 import CreateClan from "../../modals/create-clan/create-clan";
+import UserInterface from "../../interface/UserInterface";
 function Profile(props) {
   const reduxState = useSelector((state) => state, shallowEqual);
   const {
@@ -67,7 +68,7 @@ function Profile(props) {
   }, [reduxState.metamaskID]);
 
   const getUserDetails = (payLoad) => {
-    MongoDBInterface.getUserInfo(payLoad).then((response) => {
+    UserInterface.getUserInfo(payLoad).then((response) => {
       let userDetails = _.get(response, "data.data");
       setCurrentUserDetails(userDetails);
     });
@@ -75,7 +76,7 @@ function Profile(props) {
 
   function fetchSignatures(address) {
     if (address || currentUserDetails.metamaskId) {
-      MongoDBInterface.getSignatures().then((signatures) => {
+      SignatureInterface.getSignatures().then((signatures) => {
         let response = _.get(signatures, "data.data");
         let isEmptyPresent = _.find(response, (responseItem) => {
           return _.isEmpty(responseItem.ideaID);
@@ -121,7 +122,7 @@ function Profile(props) {
             <Col md="12" className="mycollection">
               <Row className="loggedIn h-100">
                 <Col md="12" className="p-0 d-flex">
-                  <Col md="2" className="userPane w-100 h-100 flex-column">
+                  <Col md="2" className="userPane w-100  flex-column h-100">
                   < div className="profile-section d-flex flex-column">
                       {/* <div className="separatorline"></div> */}
 
@@ -267,7 +268,9 @@ function Profile(props) {
                           </div>
                         </div>
                       </Tab>
-                      <Tab eventKey="clan" title="Clans"></Tab>
+                      <Tab eventKey="clan" title="Clans">
+                        <Clans></Clans>
+                      </Tab>
                     </Tabs>
                   </Col>
                 </Col>

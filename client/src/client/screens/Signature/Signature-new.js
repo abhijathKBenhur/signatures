@@ -13,7 +13,7 @@ import {
 import StorageInterface from "../../interface/StorageInterface";
 import { ChevronRight, ChevronLeft } from "react-feather";
 import { Document, Page, pdfjs } from "react-pdf";
-import MongoDBInterface from "../../interface/MongoDBInterface";
+import SignatureInterface from "../../interface/SignatureInterface";
 
 import userImg from "../../../assets/images/user.png";
 import _ from "lodash";
@@ -49,7 +49,7 @@ const SignatureNew = (props) => {
     if (signatureFromParent) {
       setSignature({ ...signature, ...signatureFromParent });
     } else {
-      MongoDBInterface.getSignatureByHash(hashId).then((response) => {
+      SignatureInterface.getSignatureByHash(hashId).then((response) => {
         let signatureObject = _.get(response, "data.data");
         setSignature(...signature, ...signatureObject);
       });

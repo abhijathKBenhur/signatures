@@ -47,14 +47,14 @@ class App extends Component {
             <Route path="/tutorial" component={Tutorial} />
             <Route path="/ico" component={ICO} />
             <Route path="/roadmap" component={Roadmap} />
-            <Route path="/about" component={About} />
+            <Route path="/" component={About} />
             <Route path="/newsletter" component={Newsletter} />
             <Route path="/blog" component={Blog} />
             <Route path="/help" component={Help} />
             <Route path="/support" component={Support} />
             <Route path="/partner" component={Partner} />
             <Route path="/contact" component={Contact} />
-            <Route exact path="/" render={() => <Redirect from="/" to="/home" />} />
+            <Route exact path="/" render={() => <Redirect from="/" to="/" />} />
           </Switch>
           <Footer></Footer>
         </div>

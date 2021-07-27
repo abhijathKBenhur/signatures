@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import Rack from "../../components/Rack/Rack";
 import "./gallery.scss";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
-import MongoDBInterface from "../../interface/MongoDBInterface";
+import SignatureInterface from "../../interface/SignatureInterface";
 import { useHistory } from "react-router-dom";
 import Cookies from "universal-cookie";
 import Banner from "../../components/banner/banner";
@@ -22,7 +22,7 @@ function gallery(props) {
   const dispatch = useDispatch()
   useEffect(() => {
     console.log("getting signatures ");
-    MongoDBInterface.getSignatures().then((signatures) => {
+    SignatureInterface.getSignatures().then((signatures) => {
       let response = _.get(signatures, "data.data")
       dispatch(setCollectionList(response));
     });

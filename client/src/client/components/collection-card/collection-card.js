@@ -49,12 +49,15 @@ const CollectionCard = (props) => {
             openCardView();
           }}
         >
-          <div className="masking third-header">
+          <div className="masking third-header h-100">
             <div className="description">
               {signature.description
                 .split("")
                 .slice(0, 40)
                 .join("") + " ..."}
+            </div>
+            <div className="title master-grey color-white h-100">
+            {signature.title}
             </div>
           </div>
           <Image

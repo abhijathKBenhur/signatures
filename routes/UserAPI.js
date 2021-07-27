@@ -73,8 +73,29 @@ login = async (req, res) => {
   });
 };
 
+getUsers = async (req, res) => {
+  console.log("getting users", req.body);
+
+  let findCriteria = {};
+  await User.find(findCriteria, (err, user) => {
+    if (err) {
+      return res.status(400).json({ success: false, error: err });
+    }
+    if (!user) {
+      return res.status(404).json({ success: true, data: [] });
+    }
+    console.log("got users", user);
+    return res.status(200).json({ success: true, data: user });
+  }).catch((err) => {
+    console.log("caught users", err);
+    return res.status(200).json({ success: false, data: err });
+  });
+};
+
 router.post("/registerUser", registerUser);
 router.post("/login", login);
 router.post("/getUserInfo", getUserInfo);
+router.post("/getUsers", getUsers);
+
 
 module.exports = router;
