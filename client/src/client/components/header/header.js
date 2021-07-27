@@ -109,7 +109,7 @@ const Header = (props) => {
             createnew();
           }}
         >
-          Upload
+          Publish Idea
         </Button>
       )
     }
