@@ -60,14 +60,14 @@ const DiscoverMore = () => {
               categoriesList.slice(0,10).map((item,i) => <li>
                 <span
                 key={i}
-                  className={item.isSelected ? "category-name third-header selected" : "category-name third-header"}
+                  className={item.isSelected ? "category-name third-header selected mr-2" : "category-name third-header  mr-2"}
                   bsstyle="primary"
 
                   onClick={(event) => {
                       categorySelected(item,i)
                   }}
                 >
-                   {item.value}
+                   {item.label}
                 </span>
                 </li>)
               }

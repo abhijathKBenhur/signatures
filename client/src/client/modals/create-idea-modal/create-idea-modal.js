@@ -23,6 +23,7 @@ import signatureImage from "../../../assets/logo/signatures.png";
 import jspdf from "jspdf";
 import _ from "lodash";
 import domtoimage from "dom-to-image";
+import { getPurposeIcon } from "../../commons/common.utils";
 const CreateIdeaModal = ({
   formErrors,
   form,
@@ -144,19 +145,7 @@ const CreateIdeaModal = ({
   };
   const isSelectedPurpose = (purpose) => form.purpose === purpose;
 
-  function getPurposeIcon(item) {
-    if (item == CONSTANTS.PURPOSES.SELL) {
-      return "fa fa-usd purpose-icon second-grey";
-    } else if (item == CONSTANTS.PURPOSES.AUCTION) {
-      return "fa fa-gavel purpose-icon second-grey";
-    } else if (item == CONSTANTS.PURPOSES.COLLAB) {
-      return "fa fa-handshake-o purpose-icon second-grey";
-    } else if (item == CONSTANTS.PURPOSES.KEEP) {
-      return "fa fa-floppy-o purpose-icon second-grey";
-    } else if (item == CONSTANTS.PURPOSES.LICENCE) {
-      return "fa fa-id-card-o purpose-icon second-grey";
-    }
-  }
+  
 
   function getConditionalCompnent() {
     switch (form.purpose) {
