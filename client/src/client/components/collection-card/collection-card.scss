@@ -2,16 +2,37 @@
 .main-container {
   display: flex;
   justify-content: center;
-  margin: 0 0 40px 0px;
+  margin-top :50px;
   .card-container {
-    height: 255px;
     width: 100%;
     border-radius: 10px;
-
+    .footer-area{
+      background-color: $primary;
+      border-radius: 0 0 10px 10px;
+      height: 50px;
+    }
+    .bottom-content{
+      border-radius: 0 0 10px 10px;
+      background-color: $secondary;
+      padding: 0.5rem;
+      .purpose-badge{
+        border: 2px solid $greyLight-1;
+        border-radius: 100%;
+        padding: 0.5rem;
+        i{
+          color: $greyLight-1;
+        }
+      }
+      .tag-n-location{
+        .tags{
+          text-align: left;
+          color: $greyLight-1;
+        }
+      }
+    }
     .image-container {
       height: 223px;
       min-width: 100%;
-      border-radius: 10px;
       background-color: $greyLight-1;
       cursor: pointer;
       position: relative;
@@ -42,7 +63,7 @@
       img {
         height: 223px;
         max-width: 100%;
-        border-radius: 10px;
+        border-radius: 10px 10px 0 0;
         width: 100%;
       }
       .masking {
@@ -54,7 +75,7 @@
         top: 0px;
         height: 100%;
         width: 100%;
-        border-radius: 10px;
+        border-radius: 10px 10px 0 0;
         text-align: left;
         padding: 5px 10px;
         background-color: $primary;
@@ -79,11 +100,11 @@
         }
       }
     }
-    .card-footer {
+    .card-float-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 10px 0;
+      padding: 3px 0;
       background-color: transparent;
       border: none !important;
       .user-logo {

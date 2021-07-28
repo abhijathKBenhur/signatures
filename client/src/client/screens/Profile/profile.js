@@ -127,7 +127,7 @@ function Profile(props) {
             <Col md="12" className="mycollection">
               <Row className="loggedIn h-100">
                 <Col md="12" className="p-0 d-flex">
-                  <Col md="2" className="userPane w-100  flex-column h-100">
+                  <Col md="2" className="userPane w-100 flex-column h-100">
                   < div className="profile-section d-flex flex-column">
                       {/* <div className="separatorline"></div> */}
 
@@ -211,7 +211,7 @@ function Profile(props) {
                     </div>
                   </Col>
 
-                  <Col md="10" className="tabs-wrapper mt-3">
+                  <Col md="8" className="tabs-wrapper mt-3">
                     <Tabs
                       id="controlled-tab-example"
                       activeKey={key}
@@ -247,37 +247,14 @@ function Profile(props) {
                           </div>
                         </div>
                       </Tab>
-                      <Tab eventKey="alerts" title="Notifications">
-                        <div className="transactions-wrapper">
-                          <div className="middle-block">
-                            {myNotifications && myNotifications.length > 0 && (
-                              <table>
-                                <tr>
-                                  <td>From</td>
-                                  <td>Action</td>
-                                  <td>ideaID</td>
-                                  <td>message</td>
-                                </tr>
-                                {myNotifications.map((notification) => {
-                                  return (
-                                    <tr>
-                                      <td>{notification.from}</td>
-                                      <td>{notification.action}</td>
-                                      <td>{notification.ideaID}</td>
-                                      <td>{notification.message}</td>
-                                    </tr>
-                                  );
-                                })}
-                              </table>
-                            )}
-                          </div>
-                        </div>
-                      </Tab>
-                      <Tab eventKey="clan" title="Clans">
+                     <Tab eventKey="clan" title="Clans">
                         <Clans></Clans>
                       </Tab>
                     </Tabs>
                   </Col>
+                  <Col md="2" className="notification-wrapper mt-1 flex-column h-100">
+                      <span className="second-grey">Notifications</span>
+                  </Col> 
                 </Col>
               </Row>
             </Col>
