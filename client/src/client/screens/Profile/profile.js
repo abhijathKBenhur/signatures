@@ -145,7 +145,7 @@ function Profile(props) {
                       />
                       <div className="d-flex justify-content-center master-grey mt-1">
                         <span>
-                        {currentUserDetails.fullName}
+                        {/* {currentUserDetails.fullName} */}
                         </span>
                       </div>
                       
@@ -212,6 +212,22 @@ function Profile(props) {
                   </Col>
 
                   <Col md="8" className="tabs-wrapper mt-3">
+                    <Row className="profile-details">
+                      <Col md="5">
+                        <span className="second-header"> {currentUserDetails.fullName} </span> <br></br>
+                        <span className="second-grey"> asdasdaklsdj askdhb akjsdb akjsdb lakjsd lkajndijanpsdijnapijdn adpiajndp janspd janspdojansdapsjdnpajsndpajnsdpoajnsd apsdjnasd
+                        
+                         ;djnalkjdnakjnsdlkjans;dkjanda spdnap ;djna </span>
+                      
+                      </Col>
+                      <Col md="7">
+                        <Row className="justify-content-end pr-3 cursor-pointer color-secondary">
+                          <Button variant="action">
+                            <i className="fa fa-envelope-o"></i>
+                          </Button>
+                        </Row>
+                      </Col>
+                    </Row>
                     <Tabs
                       id="controlled-tab-example"
                       activeKey={key}

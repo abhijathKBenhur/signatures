@@ -10,7 +10,7 @@ import Cookies from "universal-cookie";
 import Banner from "../../components/banner/banner";
 import DiscoverMore from "../../components/discover-more/discover-more";
 import SearchBar from "../../components/searchBar/SearchBar";
-
+import cover from "../../../assets/images/cover.jpg"
 import { setCollectionList } from "../../redux/actions";
 
 function gallery(props) {
@@ -49,7 +49,7 @@ function gallery(props) {
             </div>
           ) : null}
         </Row> */}
-         <Row className="search-discover d-flex flex-column align-items-center" >
+         <Row className="search-discover d-flex flex-column align-items-center" style={{ background: `linear-gradient(rgba(255,255,255,.95), rgba(255,255,255,.95)), url(${cover})`, height: '300px' }} >
           <SearchBar />
           <DiscoverMore></DiscoverMore>
         </Row>

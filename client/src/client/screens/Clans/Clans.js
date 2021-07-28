@@ -4,6 +4,7 @@ import ClanInterface from "../../interface/ClanInterface";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import _ from 'lodash'
 import "./Clans.scss";
+import ClanCard from "../../components/clan-card/clan-card";
 
 const Clans = (props) => {
   const reduxState = useSelector((state) => state, shallowEqual);
@@ -25,11 +26,11 @@ const Clans = (props) => {
 
   return (
     <Container className="clans">
-     {ownClans.map(clan =>{
-       return (
-         <div>{clan.name}</div>
-       )
-     })}
+       {ownClans.map((clan, index) => {
+        return (
+          <ClanCard clan={clan} key={index} index={index}  />
+        );
+      })}
     </Container>
   );
 };

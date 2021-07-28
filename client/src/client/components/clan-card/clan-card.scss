@@ -1,5 +1,5 @@
 @import "../../commons/Common.scss";
-.main-container {
+.clan-container {
   display: flex;
   justify-content: center;
   margin-bottom :25px;
@@ -7,24 +7,20 @@
   .card-container {
     width: 100%;
     border-radius: 10px;
-    .footer-area{
-      background-color: $primary;
-      border-radius: 0 0 10px 10px;
-      height: 50px;
-    }
     .bottom-content{
       border-radius: 0 0 10px 10px;
       background-color: $secondary;
       padding: 0.5rem;
       .purpose-badge{
-        border: 2px solid $greyLight-1;
         border-radius: 100%;
-        padding: 0.5rem;
         width: 40px;
         height: 40px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        &.excess{
+          background-color: $greyLight-1;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
         i{
           color: $greyLight-1;
         }
@@ -39,6 +35,7 @@
     .image-container {
       height: 223px;
       min-width: 100%;
+      border-radius: 10px ;
       background-color: $greyLight-1;
       cursor: pointer;
       position: relative;
@@ -60,6 +57,7 @@
             width: 80%;
             opacity: 1;
             display: block;
+            color: $primary;
             transition: opacity .25s ease-in-out;
             -moz-transition: opacity .25s ease-in-out;
             -webkit-transition: opacity .25s ease-in-out;
@@ -69,7 +67,7 @@
       img {
         height: 223px;
         max-width: 100%;
-        border-radius: 10px 10px 0 0;
+        border-radius: 10px ;
         width: 100%;
       }
       .masking {
@@ -81,10 +79,10 @@
         top: 0px;
         height: 100%;
         width: 100%;
-        border-radius: 10px 10px 0 0;
+        border-radius: 10px ;
         text-align: left;
         padding: 5px 10px;
-        background-color: $primary;
+        background-color: $greyLight-1;
         color: $white;
         justify-content: space-between;
         .title {
