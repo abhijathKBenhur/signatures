@@ -19,6 +19,8 @@ import Dropzone, { useDropzone } from "react-dropzone";
 import imagePlaceholder from "../../../assets/images/image-placeholder.png";
 import "./create-clan.scss";
 import SignatureInterface from "../../interface/SignatureInterface";
+import StorageInterface from '../../interface/StorageInterface';
+
 const CreateClan = ({ ...props }) => {
   const [createClanState, setCreateClanState] = useState({
     name: "",
@@ -29,7 +31,7 @@ const CreateClan = ({ ...props }) => {
    selectedBillet: undefined
   });
   const [userList, setUserList] = useState([]);
-  const [clanMemberList, setClanMemberList] = useState([]);
+  const [clanMemberList, setClanMemberList] = useState([null]);
 
 
   useEffect(() => {
@@ -53,24 +55,39 @@ const CreateClan = ({ ...props }) => {
   };
 
   const createClanHandler = () => {
+    console.log('create clan state = ', createClanState);
     let membersWithoutLabel = _.map(createClanState.members, (member) => {
       return {
         imageUrl: member.imageUrl,
         userName: member.value,
       };
     });
-    let payload = {
+    const payload = {
       ...createClanState,
       members: membersWithoutLabel,
     };
-    ClanInterface.createClan(payload)
+    StorageInterface.getImagePath(payload)
       .then((success) => {
-        console.log("clan created");
-        props.onHide();
+        payload.thumbnail = _.get(
+          success,
+          "data.path"
+        );
+        ClanInterface.createClan(payload)
+        .then((success) => {
+          console.log("clan created");
+          props.onHide();
+        })
+        .catch((error) => {
+          console.log("clan could not be created", error);
+        });
       })
       .catch((error) => {
-        console.log("clan could not be created");
+        return {
+          PDFFile: "error",
+          thumbnail: "error",
+        };
       });
+  
   };
 
   const handleMembersChange = (members, index) => {
@@ -134,6 +151,13 @@ const CreateClan = ({ ...props }) => {
 
   }
 
+  const clearImage = () => {
+    setCreateClanState({
+      ...createClanState,
+      thumbnail: undefined
+    });
+  };
+
   return (
     <Modal
       show={true}
@@ -184,9 +208,11 @@ const CreateClan = ({ ...props }) => {
               <div className="clan-leader-label second-grey">
                 {
                   !_.isEmpty(createClanState.thumbnail) ? 
-                    <div>
-                      <img src={createClanState.thumbnail} ></img>
-                      <span class="fa fa-undo"></span>
+                    <div className="clan-image-wrapper">
+                      <img src={createClanState.thumbnail.preview} alt="clan"></img>
+                      <span class="fa fa-undo"  onClick={() => {
+              clearImage();
+            }}></span>
 
                     </div>
                   :
@@ -248,6 +274,14 @@ const CreateClan = ({ ...props }) => {
                     id: item.ideaID,
                     label: (
                       <div>
+                         <img
+                              src={item.thumbnail}
+                              style={{ borderRadius: "30px" }}
+                              className="mr-1"
+                              height="30px"
+                              width="30px"
+                              alt="user"
+                            />
                         {item.title}{" "}
                       </div>
                     ),
@@ -305,9 +339,15 @@ const CreateClan = ({ ...props }) => {
                   )
                 })
               }
-              <Button className="cancel-btn mr-2" onClick={() => addMemberHandler()}>
-                Add Member
-              </Button>
+              <div className="add-member-btn">
+                <div className="add-btn-wrapper second-grey" onClick={() => addMemberHandler()}>
+                    <i className="fa fa-plus-circle" ></i>
+                      <span>
+                          Add Member
+                      </span> 
+                </div>
+              </div>
+              
             </Col>
           </Row>
 

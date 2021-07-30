@@ -48,3 +48,24 @@
   }
   
 }
+.add-member-btn{
+  display: flex;
+  justify-content: center;
+  .add-btn-wrapper{
+    font-size: 16px;
+    cursor: pointer;
+    i {
+      margin-right: 10px;
+      font-size: 20px;
+    }
+  }
+}
+.clan-leader-label {
+  .clan-image-wrapper{
+    display: flex;
+    justify-content: center;
+    img{
+      max-width: 150px;
+    }
+  }
+}

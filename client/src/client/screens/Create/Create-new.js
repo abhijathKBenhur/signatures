@@ -194,6 +194,7 @@ const CreateNew = () => {
   }, [reduxState]);
 
   useEffect(() => {
+    // showPosition();
     if (priceRef.current) {
       if (checkDisablePrice()) {
         priceRef.current.disabled = true;
@@ -296,6 +297,19 @@ const CreateNew = () => {
     });
     setFormData({ ...form, ...returnObj });
   };
+
+  const showPosition = ()  => {
+    if(navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition((position) => {
+          console.log('position = ',position)
+            
+        });
+    } else {
+      showToaster("Sorry, your browser does not support HTML5 geolocation.", {
+        type: "dark",
+      });
+    }
+}
 
   const getFileViewer = () => {
     switch (fileData.fileType) {
