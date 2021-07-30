@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const Actions = new Schema(
+const Relation = new Schema(
   {
     from : { type: String },
     to: { type: String },
@@ -13,4 +13,4 @@ const Actions = new Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model("Actions", Actions);
+module.exports = mongoose.model("Relation", Relation);

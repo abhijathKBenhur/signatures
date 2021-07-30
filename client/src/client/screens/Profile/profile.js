@@ -7,15 +7,17 @@ import "./profile.scss";
 import { Shimmer } from "react-shimmer";
 import Register from "../../modals/Register/Register";
 import SignatureInterface from "../../interface/SignatureInterface";
-import ActionsInterface from "../../interface/ActionsInterface";
+import NotificationInterface from "../../interface/NotificationInterface";
 import BlockChainInterface from "../../interface/BlockchainInterface";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { ExternalLink, Award, User } from "react-feather";
 import Clans from '../Clans/Clans'
+import ShareModal from "../../modals/share/share.modal";
 
 import Collections from "./collections";
 import store from "../../redux/store";
 import { setCollectionList } from "../../redux/actions";
+import SendMessage from "../../modals/send-message/send-message";
 import EditProfile from "../../modals/edit-profile/edit-profile";
 import CreateClan from "../../modals/create-clan/create-clan";
 import UserInterface from "../../interface/UserInterface";
@@ -40,7 +42,9 @@ function Profile(props) {
   const dispatch = useDispatch();
   const [modalShow, setShowModal] = useState({
     editProfile: false,
-    createClan: false
+    createClan: false,
+    sendMessage: false,
+    shareProfile: false
   })
   useEffect(() => {
     const { userDetails = {} } = reduxState;
@@ -93,7 +97,7 @@ function Profile(props) {
   }
 
   function fetchNotifications() {
-    ActionsInterface.getActions({ to: currentUserDetails.metamaskId }).then(
+    NotificationInterface.getActions({ to: currentUserDetails.metamaskId }).then(
       (signatures) => {
         let response = _.get(signatures, "data.data");
         setMyNotifications(response);
@@ -215,15 +219,29 @@ function Profile(props) {
                     <Row className="profile-details">
                       <Col md="5">
                         <span className="second-header"> {currentUserDetails.fullName} </span> <br></br>
-                        <span className="second-grey"> asdasdaklsdj askdhb akjsdb akjsdb lakjsd lkajndijanpsdijnapijdn adpiajndp janspd janspdojansdapsjdnpajsndpajnsdpoajnsd apsdjnasd
-                        
-                         ;djnalkjdnakjnsdlkjans;dkjanda spdnap ;djna </span>
+                        <span className="second-grey"> {currentUserDetails.bio} </span>
                       
                       </Col>
                       <Col md="7">
                         <Row className="justify-content-end pr-3 cursor-pointer color-secondary">
-                          <Button variant="action">
-                            <i className="fa fa-envelope-o"></i>
+                          <Button variant="action"   onClick={() => {
+                            setShowModal({...modalShow, sendMessage: true})
+                          }}>
+                            <i className="fa fa-envelope"></i>
+                          </Button>
+                        </Row>
+                        <Row className="justify-content-end pr-3 cursor-pointer color-secondary">
+                          <Button variant="action"   onClick={() => {
+                            setShowModal({...modalShow, shareProfile: true})
+                          }}>
+                            <i className="fa fa-share"></i>
+                          </Button>
+                        </Row>
+                        <Row className="justify-content-end pr-3 cursor-pointer color-secondary">
+                          <Button variant="action"   onClick={() => {
+                            setShowModal({...modalShow, shareProfile: true})
+                          }}>
+                            <i className="fa fa-user-plus"></i>
                           </Button>
                         </Row>
                       </Col>
@@ -270,6 +288,7 @@ function Profile(props) {
                   </Col>
                   <Col md="2" className="notification-wrapper mt-1 flex-column h-100">
                       <span className="second-grey">Notifications</span>
+                      <hr></hr>
                   </Col> 
                 </Col>
               </Row>
@@ -278,10 +297,16 @@ function Profile(props) {
         )}
       </Row>
       {
+        modalShow.sendMessage && <SendMessage userDetails={currentUserDetails} show={modalShow.sendMessage}  onHide={() => setShowModal({...modalShow, sendMessage: false})} />
+      }
+      {
         modalShow.editProfile && <EditProfile userDetails={currentUserDetails} show={modalShow.editProfile}  onHide={() => setShowModal({...modalShow, editProfile: false})} />
       }
       {
          modalShow.createClan && <CreateClan  userDetails={currentUserDetails} billetList= {billetList} show={modalShow.createClan}  onHide={() => setShowModal({...modalShow, createClan: false})} />
+      }
+      {
+         modalShow.shareProfile && <ShareModal  thumbnail={currentUserDetails.imageUrl} show={modalShow.shareProfile}  onHide={() => setShowModal({...modalShow, shareProfile: false})} />
       }
     </Container>
   );
