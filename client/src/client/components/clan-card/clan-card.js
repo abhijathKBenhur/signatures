@@ -46,7 +46,7 @@ const ClanCard = (props) => {
             openCardView();
           }}
         >
-          <span>{clan.title}</span>
+          <span className="p-2 color-primary">{clan.name}</span>
           <div className="masking third-header h-100">
             <div className="description">
               {clan.description
@@ -55,13 +55,7 @@ const ClanCard = (props) => {
                 .join("") + " ..."}
             </div>
           </div>
-          <Image
-            src={clan.thumbnail}
-            className="img-fluid"
-            style={{
-              background: "#f1f1f1",
-            }}
-          />
+         
            
         </div>
         <div className="bottom-content d-flex align-items-center ">

@@ -7,8 +7,6 @@ const Relation = new Schema(
     to: { type: String },
     action: { type: String },
     status: { type: String },
-    message: { type: String },
-    
   },
   { timestamps: true }
 );

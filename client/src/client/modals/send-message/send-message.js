@@ -26,8 +26,7 @@ const SendMessage = ({ ...props }) => {
     to: props.userDetails.userName,
     from: userDetails.userName,
     message: "",
-    status: CONSTANTS.ACTION_STATUS.PENDING,
-    action: CONSTANTS.NOTIFICATION_ACTIONS.PERSONAL_MESSAGE
+    status: CONSTANTS.ACTION_STATUS.PENDING
   });
 
   const handleChange = (event) => {
@@ -40,7 +39,7 @@ const SendMessage = ({ ...props }) => {
     let payload = {
       ...sendMessage,
     };
-    NotificationInterface.postAction(sendMessage.from, sendMessage.to, sendMessage.action, sendMessage.status, sendMessage.message)
+    NotificationInterface.postNotification(sendMessage.from, sendMessage.to, CONSTANTS.NOTIFICATION_ACTIONS.PERSONAL_MESSAGE, sendMessage.status, sendMessage.message)
       .then((success) => {
         console.log("message created");
         props.onHide();

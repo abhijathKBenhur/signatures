@@ -6,25 +6,25 @@ const api = axios.create({
     baseURL: process.env.NODE_ENV == "production" ? ENDPOINTS.REMOTE_ENDPOINTS: ENDPOINTS.LOCAL_ENDPOINTS
 })
 
-export const postAction = (from,to,action,status,message) => {
+export const postNotification = (from,to,action,status,message) => {
     let payload = {
         from, to, action, status, message
     }
-    return api.post(`/postAction`,payload)
+    return api.post(`/postNotification`,payload)
 }
 
-export const getActions = (payload) =>  { 
-    return api.post("/getActions",payload) 
+export const getNotifications = (payload) =>  { 
+    return api.post("/getNotifications",payload) 
 }
 
 export const markAllAsRead = (payload) =>  { 
-    return api.post("/updateActions",payload) 
+    return api.post("/updateNotifications",payload) 
 }
   
 
 const NotificationInterface = {
-    postAction,
-    getActions,
+    postNotification,
+    getNotifications,
     markAllAsRead,
 }
 

@@ -28,9 +28,7 @@ function Profile(props) {
     userDetails = {},
     collectionList = [],
   } = reduxState;
-  const [currentMetamaskAccount, setCurrentMetamaskAccount] = useState(
-    metamaskID
-  );
+ 
   const [profileCollection, setProfileCOllection] = useState([]);
   const [currentUserDetails, setCurrentUserDetails] = useState({});
   const [myNotifications, setMyNotifications] = useState([]);
@@ -66,12 +64,6 @@ function Profile(props) {
     fetchNotifications();
   }, [currentUserDetails]);
 
-  useEffect(() => {
-    const { metamaskID = undefined } = reduxState;
-    if (metamaskID) {
-      setCurrentMetamaskAccount(metamaskID);
-    }
-  }, [reduxState.metamaskID]);
 
   const getUserDetails = (payLoad) => {
     UserInterface.getUserInfo(payLoad).then((response) => {
@@ -97,7 +89,7 @@ function Profile(props) {
   }
 
   function fetchNotifications() {
-    NotificationInterface.getActions({ to: currentUserDetails.metamaskId }).then(
+    NotificationInterface.getNotifications({ to: currentUserDetails.userName }).then(
       (signatures) => {
         let response = _.get(signatures, "data.data");
         setMyNotifications(response);
@@ -117,6 +109,10 @@ function Profile(props) {
 
   function createnew() {
     history.push("/create");
+  }
+
+  function followUser(){
+    NotificationInterface.postNotification()
   }
 
   return (
@@ -239,7 +235,7 @@ function Profile(props) {
                         </Row>
                         <Row className="justify-content-end pr-3 cursor-pointer color-secondary">
                           <Button variant="action"   onClick={() => {
-                            setShowModal({...modalShow, shareProfile: true})
+                            followUser()
                           }}>
                             <i className="fa fa-user-plus"></i>
                           </Button>

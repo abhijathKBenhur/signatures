@@ -13,9 +13,9 @@ const PURPOSES = {
   LICENCE:  "LICENCE",
 };
 const NOTIFICATION_ACTIONS = {
-  AUCTION_REQUEST: "Auction Request",
-  BUY_INIT: "Initiate Buy",
-  COLLAB_INTEREST: "Interest to collaborate",
+  UPVOTED: "UPVOTED",
+  FOLLOWED: "FOLLOWED",
+  CREATE_CLAN: "CREATE_CLAN",
   PERSONAL_MESSAGE: "PERSONAL_MESSAGE",
 };
 const ACTION_STATUS = {
