@@ -84,7 +84,6 @@ const Register = (props) => {
           console.log(error.data);
         });
     } catch (e) {
-      debugger;
       console.log("shiotter", e);
     }
   }

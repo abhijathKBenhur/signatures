@@ -4,7 +4,7 @@ const cors = require("cors");
 const mongotConnection = require("./db-config/mongodb");
 const tokenAPI = require("./routes/TokenAPIs");
 const userAPI = require("./routes/UserAPI");
-const actionAPI = require("./routes/actionsAPI")
+const notificationAPI = require("./routes/NotificationAPIs")
 const blockChainAPI = require("./routes/BlockChainAPIs");
 const ClanAPI = require("./routes/ClanAPI");
 const dotenv = require("dotenv");
@@ -16,7 +16,7 @@ dotenv.config();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-var whitelist = ['http://localhost:3000', 'https://ideatribe.herokuapp.com']
+var whitelist = ['http://localhost:3000','http://localhost:3001', 'https://ideatribe.herokuapp.com']
 app.use(cors(
   {
     origin: function (origin, callback) {
@@ -33,7 +33,7 @@ app.use(cors(
 app.use("/api", tokenAPI);
 app.use("/api", userAPI);
 app.use("/api", blockChainAPI);
-app.use("/api", actionAPI);
+app.use("/api", notificationAPI);
 app.use("/api", ClanAPI);
 
 

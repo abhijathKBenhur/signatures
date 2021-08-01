@@ -213,6 +213,15 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
   line-height: 20px;
 }
 
+.father-grey {
+  font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial,
+    sans-serif;
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 38px;
+  color: $grey-darker;
+}
+
 .master-grey {
   font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial,
     sans-serif;

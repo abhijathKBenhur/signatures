@@ -1,4 +1,5 @@
 @import "../../commons/Common.scss";
+$card-height: 200px;
 .main-container {
   display: flex;
   justify-content: center;
@@ -37,7 +38,7 @@
       }
     }
     .image-container {
-      height: 223px;
+      height: $card-height;
       min-width: 100%;
       background-color: $greyLight-1;
       cursor: pointer;
@@ -67,7 +68,7 @@
         }
       }
       img {
-        height: 223px;
+        height: $card-height;
         max-width: 100%;
         border-radius: 10px 10px 0 0;
         width: 100%;

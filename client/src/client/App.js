@@ -10,20 +10,19 @@ import Profile from "./screens/Profile/profile";
 import Header from "./components/header/header";
 import Footer from "./components/footer/footer";
 import Banner from "./components/banner/banner";
-
 import { Switch, Route, Redirect } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import DailyReads from "./components/daily-reads/daily-reads";
-import Tutorial from "./components/tutorial/tutorial";
-import ICO from "./components/ico/ico";
-import Roadmap from "./components/roadmap/roadmap";
-import About from "./components/about/about";
-import Newsletter from "./components/newsletter/newsletter";
-import Blog from "./components/blog/blog";
-import Help from "./components/help/help";
-import Support from "./components/support/support";
-import Partner from "./components/partner/partner";
-import Contact from "./components/contact/contact";
+import Tutorial from "./screens/tutorial/tutorial";
+import ICO from "./screens/ico/ico";
+import Roadmap from "./screens/roadmap/roadmap";
+import About from "./screens/about/about";
+import Newsletter from "./screens/newsletter/newsletter";
+import Blog from "./screens/blog/blog";
+import Help from "./screens/help/help";
+import Support from "./screens/support/support";
+import Partner from "./screens/partner/partner";
+import Contact from "./screens/contact/contact";
 
 class App extends Component {
   constructor(props) {

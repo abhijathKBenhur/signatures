@@ -1,7 +1,7 @@
 import _ from "lodash";
 import React, { useState, useEffect } from "react";
 import { Row, Col, Form, Button, Container, Tabs, Tab } from "react-bootstrap";
-import Image from "react-image-resizer";
+import NotificationPanel from "../../components/notifications/NotificationPanel";
 import { useHistory } from "react-router-dom";
 import "./profile.scss";
 import { Shimmer } from "react-shimmer";
@@ -112,7 +112,6 @@ function Profile(props) {
   }
 
   function followUser(){
-    NotificationInterface.postNotification()
   }
 
   return (
@@ -283,8 +282,9 @@ function Profile(props) {
                     </Tabs>
                   </Col>
                   <Col md="2" className="notification-wrapper mt-1 flex-column h-100">
-                      <span className="second-grey">Notifications</span>
-                      <hr></hr>
+                      <span className="second-header notification-title">Notifications</span>
+                      <NotificationPanel myNotifications={myNotifications}></NotificationPanel>
+                      
                   </Col> 
                 </Col>
               </Row>

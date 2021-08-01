@@ -10,7 +10,7 @@ export const postNotification = (from,to,action,status,message) => {
     let payload = {
         from, to, action, status, message
     }
-    return api.post(`/postNotification`,payload)
+    return api.post("/postNotification",payload)
 }
 
 export const getNotifications = (payload) =>  { 
