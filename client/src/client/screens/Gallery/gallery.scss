@@ -1,11 +1,12 @@
 @import "../../commons/Common.scss";
+
 .gallery {
   margin-top: 60px;
-  .search-discover{
-    margin-top: 100px;
-    margin-bottom: 50px;
+  .search-discover {
+    padding-top: 100px;
+    padding-bottom: 50px;
     align-self: center;
-    width: 40%;
+    width: 100%;
   }
   .userPane {
     height: 250px;

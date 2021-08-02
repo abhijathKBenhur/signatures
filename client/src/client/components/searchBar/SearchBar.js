@@ -63,7 +63,7 @@ function Search() {
 
   
   return (
-    <div className="search-bar-container w-100">
+    <div className="search-bar-container">
       <div className="search-dropdown-container" ref={wrapperRef}>
         <input
           type="text"

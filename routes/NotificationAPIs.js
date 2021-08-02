@@ -1,46 +1,46 @@
-const ActionSchema = require("../db-config/actions.schema");
+const NotificationSchema = require("../db-config/notification.schema");
 const express = require("express");
 const router = express.Router();
 
-postAction = (req, res) => {
+postNotification = (req, res) => {
   const body = req.body;
   body.balance = 1000;
   if (!body) {
     return res.status(400).json({
       success: false,
-      error: "You must provide an action",
+      error: "Blank",
     });
   }
-  const newAction = new ActionSchema(body);
+  const newNotification = new NotificationSchema(body);
 
-  if (!newAction) {
+  if (!newNotification) {
     return res.status(400).json({ success: false, error: err });
   }
 
-  newAction
+  newNotification
     .save()
     .then((user, b) => {
       return res.status(201).json({
         success: true,
         data: user,
-        message: "action poster!",
+        message: "notification poster!",
       });
     })
     .catch((error) => {
       return res.status(400).json({
         error,
-        message: "action poster!",
+        message: "notification poster!",
       });
     });
 };
 
-getActions = async (req, res) => {
+getNotifications = async (req, res) => {
   let findCriteria = {};
   if (req.body.to) {
     findCriteria.to = req.body.to;
   }
 
-  await ActionSchema.find(findCriteria, (err, user) => {
+  await NotificationSchema.find(findCriteria, (err, user) => {
     if (err) {
       return res.status(400).json({ success: false, error: err });
     }
@@ -55,7 +55,7 @@ getActions = async (req, res) => {
 
 
 
-router.post("/postAction", postAction);
-router.post("/getActions", getActions);
+router.post("/postNotification", postNotification);
+router.post("/getNotifications", getNotifications);
 
 module.exports = router;

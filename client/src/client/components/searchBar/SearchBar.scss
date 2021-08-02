@@ -1,5 +1,6 @@
 @import "../../commons/Common.scss";
 .search-bar-container {
+    width:40%;
     .search-dropdown-container {
         position: relative;
         width:100%;
@@ -13,7 +14,7 @@
             height: 40px;
             padding: 5px 10px;
             font-size: 14px;
-            border: 1px solid $greyLight-1;
+            border: 1px solid $secondary-light;
             outline: none;
             &:focus{
                 // border: 1px solid $primary;

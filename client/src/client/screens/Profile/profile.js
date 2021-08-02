@@ -1,21 +1,23 @@
 import _ from "lodash";
 import React, { useState, useEffect } from "react";
 import { Row, Col, Form, Button, Container, Tabs, Tab } from "react-bootstrap";
-import Image from "react-image-resizer";
+import NotificationPanel from "../../components/notifications/NotificationPanel";
 import { useHistory } from "react-router-dom";
 import "./profile.scss";
 import { Shimmer } from "react-shimmer";
 import Register from "../../modals/Register/Register";
 import SignatureInterface from "../../interface/SignatureInterface";
-import ActionsInterface from "../../interface/ActionsInterface";
+import NotificationInterface from "../../interface/NotificationInterface";
 import BlockChainInterface from "../../interface/BlockchainInterface";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { ExternalLink, Award, User } from "react-feather";
 import Clans from '../Clans/Clans'
+import ShareModal from "../../modals/share/share.modal";
 
 import Collections from "./collections";
 import store from "../../redux/store";
 import { setCollectionList } from "../../redux/actions";
+import SendMessage from "../../modals/send-message/send-message";
 import EditProfile from "../../modals/edit-profile/edit-profile";
 import CreateClan from "../../modals/create-clan/create-clan";
 import UserInterface from "../../interface/UserInterface";
@@ -26,9 +28,7 @@ function Profile(props) {
     userDetails = {},
     collectionList = [],
   } = reduxState;
-  const [currentMetamaskAccount, setCurrentMetamaskAccount] = useState(
-    metamaskID
-  );
+ 
   const [profileCollection, setProfileCOllection] = useState([]);
   const [currentUserDetails, setCurrentUserDetails] = useState({});
   const [myNotifications, setMyNotifications] = useState([]);
@@ -40,7 +40,9 @@ function Profile(props) {
   const dispatch = useDispatch();
   const [modalShow, setShowModal] = useState({
     editProfile: false,
-    createClan: false
+    createClan: false,
+    sendMessage: false,
+    shareProfile: false
   })
   useEffect(() => {
     const { userDetails = {} } = reduxState;
@@ -62,12 +64,6 @@ function Profile(props) {
     fetchNotifications();
   }, [currentUserDetails]);
 
-  useEffect(() => {
-    const { metamaskID = undefined } = reduxState;
-    if (metamaskID) {
-      setCurrentMetamaskAccount(metamaskID);
-    }
-  }, [reduxState.metamaskID]);
 
   const getUserDetails = (payLoad) => {
     UserInterface.getUserInfo(payLoad).then((response) => {
@@ -93,7 +89,7 @@ function Profile(props) {
   }
 
   function fetchNotifications() {
-    ActionsInterface.getActions({ to: currentUserDetails.metamaskId }).then(
+    NotificationInterface.getNotifications({ to: currentUserDetails.userName }).then(
       (signatures) => {
         let response = _.get(signatures, "data.data");
         setMyNotifications(response);
@@ -113,6 +109,9 @@ function Profile(props) {
 
   function createnew() {
     history.push("/create");
+  }
+
+  function followUser(){
   }
 
   return (
@@ -145,7 +144,7 @@ function Profile(props) {
                       />
                       <div className="d-flex justify-content-center master-grey mt-1">
                         <span>
-                        {currentUserDetails.fullName}
+                        {/* {currentUserDetails.fullName} */}
                         </span>
                       </div>
                       
@@ -212,6 +211,36 @@ function Profile(props) {
                   </Col>
 
                   <Col md="8" className="tabs-wrapper mt-3">
+                    <Row className="profile-details">
+                      <Col md="5">
+                        <span className="second-header"> {currentUserDetails.fullName} </span> <br></br>
+                        <span className="second-grey"> {currentUserDetails.bio} </span>
+                      
+                      </Col>
+                      <Col md="7">
+                        <Row className="justify-content-end pr-3 cursor-pointer color-secondary">
+                          <Button variant="action"   onClick={() => {
+                            setShowModal({...modalShow, sendMessage: true})
+                          }}>
+                            <i className="fa fa-envelope"></i>
+                          </Button>
+                        </Row>
+                        <Row className="justify-content-end pr-3 cursor-pointer color-secondary">
+                          <Button variant="action"   onClick={() => {
+                            setShowModal({...modalShow, shareProfile: true})
+                          }}>
+                            <i className="fa fa-share"></i>
+                          </Button>
+                        </Row>
+                        <Row className="justify-content-end pr-3 cursor-pointer color-secondary">
+                          <Button variant="action"   onClick={() => {
+                            followUser()
+                          }}>
+                            <i className="fa fa-user-plus"></i>
+                          </Button>
+                        </Row>
+                      </Col>
+                    </Row>
                     <Tabs
                       id="controlled-tab-example"
                       activeKey={key}
@@ -253,7 +282,9 @@ function Profile(props) {
                     </Tabs>
                   </Col>
                   <Col md="2" className="notification-wrapper mt-1 flex-column h-100">
-                      <span className="second-grey">Notifications</span>
+                      <span className="second-header notification-title">Notifications</span>
+                      <NotificationPanel myNotifications={myNotifications}></NotificationPanel>
+                      
                   </Col> 
                 </Col>
               </Row>
@@ -262,10 +293,16 @@ function Profile(props) {
         )}
       </Row>
       {
+        modalShow.sendMessage && <SendMessage userDetails={currentUserDetails} show={modalShow.sendMessage}  onHide={() => setShowModal({...modalShow, sendMessage: false})} />
+      }
+      {
         modalShow.editProfile && <EditProfile userDetails={currentUserDetails} show={modalShow.editProfile}  onHide={() => setShowModal({...modalShow, editProfile: false})} />
       }
       {
          modalShow.createClan && <CreateClan  userDetails={currentUserDetails} billetList= {billetList} show={modalShow.createClan}  onHide={() => setShowModal({...modalShow, createClan: false})} />
+      }
+      {
+         modalShow.shareProfile && <ShareModal  thumbnail={currentUserDetails.imageUrl} show={modalShow.shareProfile}  onHide={() => setShowModal({...modalShow, shareProfile: false})} />
       }
     </Container>
   );

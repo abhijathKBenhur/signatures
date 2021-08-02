@@ -7,7 +7,7 @@ import "./about.scss";
 import { useHistory } from "react-router-dom";
 import dummyImg from "../../../assets/images/dummy.png"
 import user from "../../../assets/images/user.png"
-import cover from "../../../assets/images/cover.jpeg"
+import cover from "../../../assets/images/cover.jpg"
 import dummy1 from "../../../assets/images/dummy1.png"
 import dummy2 from "../../../assets/images/dummy2.jpg"
 import dummy3 from "../../../assets/images/dummy3.jpeg"

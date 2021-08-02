@@ -1,6 +1,5 @@
 @import "../../commons/Common.scss";
-$card-height: 200px;
-.main-container {
+.clan-container {
   display: flex;
   justify-content: center;
   margin-bottom :25px;
@@ -8,24 +7,20 @@ $card-height: 200px;
   .card-container {
     width: 100%;
     border-radius: 10px;
-    .footer-area{
-      background-color: $primary;
-      border-radius: 0 0 10px 10px;
-      height: 50px;
-    }
     .bottom-content{
       border-radius: 0 0 10px 10px;
       background-color: $secondary;
       padding: 0.5rem;
       .purpose-badge{
-        border: 2px solid $greyLight-1;
         border-radius: 100%;
-        padding: 0.5rem;
         width: 40px;
         height: 40px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        &.excess{
+          background-color: $greyLight-1;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
         i{
           color: $greyLight-1;
         }
@@ -38,8 +33,9 @@ $card-height: 200px;
       }
     }
     .image-container {
-      height: $card-height;
+      height: 223px;
       min-width: 100%;
+      border-radius: 10px ;
       background-color: $greyLight-1;
       cursor: pointer;
       position: relative;
@@ -61,6 +57,7 @@ $card-height: 200px;
             width: 80%;
             opacity: 1;
             display: block;
+            color: $primary;
             transition: opacity .25s ease-in-out;
             -moz-transition: opacity .25s ease-in-out;
             -webkit-transition: opacity .25s ease-in-out;
@@ -68,24 +65,24 @@ $card-height: 200px;
         }
       }
       img {
-        height: $card-height;
+        height: 223px;
         max-width: 100%;
-        border-radius: 10px 10px 0 0;
+        border-radius: 10px ;
         width: 100%;
       }
       .masking {
         position: absolute;
         display: flex;
-        opacity: 0.8;
+        opacity: 0;
         display: block;
         transition: opacity 300ms ease-in-out;
         top: 0px;
         height: 100%;
         width: 100%;
-        border-radius: 10px 10px 0 0;
+        border-radius: 10px ;
         text-align: left;
         padding: 5px 10px;
-        background-color: $primary;
+        background-color: $greyLight-1;
         color: $white;
         justify-content: space-between;
         .title {
@@ -93,7 +90,7 @@ $card-height: 200px;
           text-overflow: ellipsis;
           white-space: nowrap;
           width: 80%;
-          font-size: 28px;
+          font-size: 18px;
           padding: 10px;
         }
         .description {

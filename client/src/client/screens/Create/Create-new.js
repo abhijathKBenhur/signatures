@@ -43,6 +43,7 @@ import domtoimage from "dom-to-image";
 import moment from "moment";
 import { showToaster } from "../../commons/common.utils";
 import QRCode from "qrcode";
+import $ from 'jquery';
 
 import responseImage from "../../../assets/images/response.jpeg";
 import signatureImage from "../../../assets/logo/signatures.png";
@@ -78,7 +79,7 @@ const CreateNew = () => {
     purpose: CONSTANTS.PURPOSES.SELL,
     storage: CONSTANTS.STORAGE_TYPE[0].value,
     collab: CONSTANTS.COLLAB_TYPE[0].value,
-    umits: 1
+    units: 1
   });
   const [formErrors, setFormErrors] = useState({
     title: false,
@@ -148,6 +149,7 @@ const CreateNew = () => {
 
   useEffect(() => {
     pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
+    
   }, []);
 
   useEffect(() => {
@@ -477,6 +479,7 @@ const CreateNew = () => {
         : params.price;
     params.fileType = fileData.fileType;
     params.userName = reduxState.userDetails.userName;
+ 
     setPublishState(PROGRESS);
     // setSlideCount(LOADING_SLIDE);
     StorageInterface.getFilePaths(params)
@@ -533,7 +536,9 @@ const CreateNew = () => {
       });
   }
   function saveToMongo(form) {
-    SignatureInterface.addSignature(form)
+    $.get("http://ipinfo.io?token=162c69a92ff37a", function (response) {
+      form.location =  response.city + ", " + response.region
+      SignatureInterface.addSignature(form)
       .then((success) => {
         showToaster("Your Idea is now registered on the blockchain!", {
           type: "dark",
@@ -542,6 +547,8 @@ const CreateNew = () => {
       .catch((err) => {
         console.log(err);
       });
+  }, "jsonp");
+   
   }
 
   const checkValidationBeforeSubmit = () => {

@@ -6,7 +6,6 @@ const Clan = new Schema(
     name : { type: String, required: true },
     leader : { type: String, required: true },
     description : { type: String, required: true },
-    thumbnail : { type: String, required: true },
     thumbnail: { type: String, required: true },
     members : [
       {
