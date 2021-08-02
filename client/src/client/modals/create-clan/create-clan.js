@@ -20,6 +20,7 @@ import imagePlaceholder from "../../../assets/images/image-placeholder.png";
 import "./create-clan.scss";
 import SignatureInterface from "../../interface/SignatureInterface";
 import StorageInterface from "../../interface/StorageInterface";
+import NotificationInterface from "../../interface/NotificationInterface";
 
 const CreateClan = ({ ...props }) => {
   const [createClanState, setCreateClanState] = useState({
@@ -67,9 +68,11 @@ const CreateClan = ({ ...props }) => {
     StorageInterface.getImagePath(payload)
       .then((success) => {
         payload.thumbnail = _.get(success, "data.path");
+        
         ClanInterface.createClan(payload)
           .then((success) => {
             console.log("clan created");
+            NotificationInterface.postNotification()
             props.onHide();
           })
           .catch((error) => {

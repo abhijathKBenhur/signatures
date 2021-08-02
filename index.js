@@ -5,6 +5,8 @@ const mongotConnection = require("./db-config/mongodb");
 const tokenAPI = require("./routes/TokenAPIs");
 const userAPI = require("./routes/UserAPI");
 const notificationAPI = require("./routes/NotificationAPIs")
+const commentAPI = require("./routes/commentAPI")
+const relationAPI = require("./routes/RelationAPI");
 const blockChainAPI = require("./routes/BlockChainAPIs");
 const ClanAPI = require("./routes/ClanAPI");
 const dotenv = require("dotenv");
@@ -34,7 +36,10 @@ app.use("/api", tokenAPI);
 app.use("/api", userAPI);
 app.use("/api", blockChainAPI);
 app.use("/api", notificationAPI);
+app.use("/api", relationAPI);
+app.use("/api", commentAPI);
 app.use("/api", ClanAPI);
+
 
 
 
