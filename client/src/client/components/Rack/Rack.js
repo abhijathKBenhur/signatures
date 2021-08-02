@@ -13,13 +13,12 @@ import CollectionCard from "../collection-card/collection-card";
 
 const Rack = (props) => {
   return (
-    <Container className="racks-container">
+    <Container fluid className="racks-container">
       <Row className="rack mt-2">
-        <Col md="12">
-            <span className="father-grey">Explore the tribe</span>
-        </Col>
-
-        <Col md="12" className="deck">
+        <Col md="10">
+          <span className="father-grey">Explore the tribe</span>
+          <hr></hr>
+        
           <Row className="deck-row text-center">
             {[...props.deck].map((signature, index) => {
               return (
@@ -32,6 +31,14 @@ const Rack = (props) => {
             })}
           </Row>
         </Col>
+        <Col md="2" className="latest-news">
+            <span className="master-grey">Newsletter</span>
+            <div className="news-list">
+
+
+            </div>
+        </Col>
+        
       </Row>
     </Container>
   );

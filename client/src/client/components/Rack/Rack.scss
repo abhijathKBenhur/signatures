@@ -1,23 +1,7 @@
 @import "../../commons/Common.scss";
-@media (min-width: 576px) {
-  .racks-container {
-    max-width: 540px;
-  }
-}
-@media (min-width: 768px) {
-  .racks-container {
-    max-width: 720px;
-  }
-}
-@media (min-width: 992px) {
-  .racks-container {
-    max-width: 960px;
-  }
-}
-@media (min-width: 1200px) {
-  .racks-container {
-    max-width: 840px;
-  }
+
+.deck{
+  border-right: 1px solid $greyLight-2;
 }
 .rack {
   min-height: calc(100vh - 230px);

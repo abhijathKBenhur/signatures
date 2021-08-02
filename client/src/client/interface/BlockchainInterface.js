@@ -138,7 +138,7 @@ class BlockchainInterface {
               const contract = this.web3.eth.Contract(abi, contractAddress);
               this.contract = contract;
             } else {
-              window.alert("Smart contract not deployed to detected network.");
+              window.alert("Smart contract not deployed to detected network. Please change the network in mnetamask.");
             }
             resolve(this.metamaskAccount);
           })

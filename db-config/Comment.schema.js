@@ -1,19 +1,15 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-
-// activity notifications and personal messaging
-const Notification = new Schema(
+const Comment = new Schema(
   {
     from : { type: String },
     to: { type: String },
     action: { type: String },
-    status: { type: String },
-    message: { type: String },
+    comment: { type: String },
     payload: { type: String }
-    
   },
   { timestamps: true }
 );
 
-module.exports = mongoose.model("Notification", Notification);
+module.exports = mongoose.model("Comment", Comment);

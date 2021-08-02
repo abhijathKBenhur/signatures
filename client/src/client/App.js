@@ -12,7 +12,7 @@ import Footer from "./components/footer/footer";
 import Banner from "./components/banner/banner";
 import { Switch, Route, Redirect } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
-import DailyReads from "./components/daily-reads/daily-reads";
+import DailyReads from "./screens/daily-reads/daily-reads";
 import Tutorial from "./screens/tutorial/tutorial";
 import ICO from "./screens/ico/ico";
 import Roadmap from "./screens/roadmap/roadmap";
