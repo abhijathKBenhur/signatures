@@ -12,7 +12,7 @@ import Footer from "./components/footer/footer";
 import Banner from "./components/banner/banner";
 import { Switch, Route, Redirect } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
-import DailyReads from "./components/daily-reads/daily-reads";
+// import DailyReads from "./components/daily-reads/daily-reads";
 import Tutorial from "./screens/tutorial/tutorial";
 import ICO from "./screens/ico/ico";
 import Roadmap from "./screens/roadmap/roadmap";
@@ -42,7 +42,7 @@ class App extends Component {
             <Route path="/create" children={<CreateNew />} />
             <Route path="/profile/:userName" children={<Profile />} />
             <Route path="/profile" children={<Profile />} />
-            <Route path="/daily-reads" component={DailyReads} />
+            {/* <Route path="/daily-reads" component={DailyReads} /> */}
             <Route path="/tutorial" component={Tutorial} />
             <Route path="/ico" component={ICO} />
             <Route path="/roadmap" component={Roadmap} />
