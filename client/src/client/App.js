@@ -35,7 +35,7 @@ class App extends Component {
         <ToastContainer></ToastContainer>
         <Header></Header>
         {/* <Banner></Banner> */}
-        <div className="content">
+        <div className="app-content">
           <Switch>
             <Route path="/home" render={(props) => <Gallery />} />
             <Route path="/signature/:hashId" children={<Signature />} />
@@ -55,8 +55,8 @@ class App extends Component {
             <Route path="/contact" component={Contact} />
             <Route exact path="/" render={() => <Redirect from="/" to="/" />} />
           </Switch>
-          <Footer></Footer>
         </div>
+        <Footer></Footer>
       </div>
     );
   }

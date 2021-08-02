@@ -1,6 +1,9 @@
 @import "../../commons/Common.scss";
 .notification-item{
     border-bottom: 1px solid $greyLight-1 ;
+    overflow: hidden;
+    cursor: pointer;
+    padding: 10px 0;
     .icon{
         border-radius: 100%;
         border: 1px solid $greyLight-1

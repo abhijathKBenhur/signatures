@@ -283,6 +283,7 @@ function Profile(props) {
                   </Col>
                   <Col md="2" className="notification-wrapper mt-1 flex-column h-100">
                       <span className="second-header notification-title">Notifications</span>
+                      <hr></hr>
                       <NotificationPanel myNotifications={myNotifications}></NotificationPanel>
                       
                   </Col> 
