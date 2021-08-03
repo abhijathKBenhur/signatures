@@ -22,7 +22,7 @@ const Header = (props) => {
   const [currentMetamaskAccount, setCurrentMetamaskAccount] = useState(
     metamaskID
   );
-  const [currentUserDetails, setCurrentUserDetails] = useState(userDetails);
+  const [loggedInUserDetails, setLoggedInUserDetails] = useState(userDetails);
 
   useEffect(() => {
     const { metamaskID = undefined } = reduxState;
@@ -45,10 +45,10 @@ const Header = (props) => {
       UserInterface.getUserInfo({ metamaskId: currentMetamaskAccount })
         .then((userDetails) => {
           store.dispatch(setReduxUserDetails(_.get(userDetails, "data.data")));
-          setCurrentUserDetails(_.get(userDetails, "data.data"));
+          setLoggedInUserDetails(_.get(userDetails, "data.data"));
         })
         .catch((success) => {
-          setCurrentUserDetails({});
+          setLoggedInUserDetails({});
           store.dispatch(setReduxUserDetails({}));
         });
     }
@@ -73,7 +73,7 @@ const Header = (props) => {
 
   function gotoPortfolio() {
     setAppLocatoin("profile");
-    history.push("/profile/" + currentUserDetails.userName);
+    history.replace("/profile/" + loggedInUserDetails.userName);
   }
 
   function connectWallet() {
@@ -175,7 +175,7 @@ const Header = (props) => {
             >
               Connect
             </Button> */}
-            {_.isEmpty(currentMetamaskAccount) || _.isEmpty(currentUserDetails) ? (
+            {_.isEmpty(currentMetamaskAccount) || _.isEmpty(loggedInUserDetails) ? (
               <Button
                 variant="primary"
                 className="button"
@@ -190,7 +190,7 @@ const Header = (props) => {
                 isUserAuthForPublish()
             }
 
-            {_.isEmpty(currentUserDetails.imageUrl) ? (
+            {_.isEmpty(loggedInUserDetails.imageUrl) ? (
               <User
                 className="cursor-pointer header-icons"
                 onClick={() => {
@@ -200,7 +200,7 @@ const Header = (props) => {
             ) : (
               <Image
                 className="cursor-pointer header-icons"
-                src={currentUserDetails.imageUrl}
+                src={loggedInUserDetails.imageUrl}
                 roundedCircle
                 width="36px"
                 onClick={() => {

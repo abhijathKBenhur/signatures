@@ -30,7 +30,7 @@ function Profile(props) {
   } = reduxState;
 
   const [profileCollection, setProfileCOllection] = useState([]);
-  const [currentUserDetails, setCurrentUserDetails] = useState({});
+  const [loggedInUserDetails, setLoggedInUserDetails] = useState({});
   const [myNotifications, setMyNotifications] = useState([]);
   const [billetList, setBilletList] = useState([]);
 
@@ -55,24 +55,24 @@ function Profile(props) {
       userDetails &&
       (!viewUser || viewUser.toLowerCase() === userDetails.userName)
     ) {
-      setCurrentUserDetails(userDetails);
+      setLoggedInUserDetails(userDetails);
     }
   }, [reduxState.userDetails]);
 
   useEffect(() => {
-    fetchSignatures(currentUserDetails.userName);
+    fetchSignatures(loggedInUserDetails.userName);
     fetchNotifications();
-  }, [currentUserDetails]);
+  }, [loggedInUserDetails]);
 
   const getUserDetails = (payLoad) => {
     UserInterface.getUserInfo(payLoad).then((response) => {
       let userDetails = _.get(response, "data.data");
-      setCurrentUserDetails(userDetails);
+      setLoggedInUserDetails(userDetails);
     });
   };
 
   function fetchSignatures(userName) {
-    if (userName || currentUserDetails.userName) {
+    if (userName || loggedInUserDetails.userName) {
       SignatureInterface.getSignatures({ userName: userName }).then(
         (signatures) => {
           let response = _.get(signatures, "data.data");
@@ -83,7 +83,7 @@ function Profile(props) {
             response,
             (responseItem) =>
               _.get(responseItem, "owner.userName") ===
-              _.get(currentUserDetails, "userName")
+              _.get(loggedInUserDetails, "userName")
           );
           console.log("billetList ==> ", billetList);
           setBilletList([...billetList]);
@@ -96,7 +96,7 @@ function Profile(props) {
 
   function fetchNotifications() {
     NotificationInterface.getNotifications({
-      to: currentUserDetails.userName,
+      to: loggedInUserDetails.userName,
     }).then((signatures) => {
       let response = _.get(signatures, "data.data");
       setMyNotifications(response);
@@ -122,7 +122,7 @@ function Profile(props) {
   return (
     <Container fluid>
       <Row className="profile">
-        {_.isEmpty(currentUserDetails.userName) ? (
+        {_.isEmpty(loggedInUserDetails.userName) ? (
           <Row className="register-modal">
             <Register></Register>
           </Row>
@@ -136,7 +136,7 @@ function Profile(props) {
                       {/* <div className="separatorline"></div> */}
 
                       <img
-                        src={currentUserDetails.imageUrl}
+                        src={loggedInUserDetails.imageUrl}
                         height={140}
                         width={140}
                         className=""
@@ -148,31 +148,33 @@ function Profile(props) {
                         alt="user"
                       />
                       <div className="d-flex justify-content-center master-grey mt-1">
-                        <span>{/* {currentUserDetails.fullName} */}</span>
+                        <span>
+                        {loggedInUserDetails.fullName}
+                        </span>
                       </div>
                     </div>
                     <div className="profile-info">
                       <Row className="d-flex justify-content-center align-items-center">
                         <span className="master-header userName">
-                          {_.get(currentUserDetails, "userName")}
+                          {_.get(loggedInUserDetails, "userName")}
                         </span>
                       </Row>
                       <Row className="">
                         <Col className="address-copy d-flex align-items-center justify-content-center">
                           <span className="address-value third-header">
-                            {_.get(currentUserDetails, "metamaskId") &&
-                              _.get(currentUserDetails, "metamaskId").substring(
+                            {_.get(loggedInUserDetails, "metamaskId") &&
+                              _.get(loggedInUserDetails, "metamaskId").substring(
                                 0,
                                 5
                               ) +
                                 " ..... " +
                                 _.get(
-                                  currentUserDetails,
+                                  loggedInUserDetails,
                                   "metamaskId"
                                 ).substring(
-                                  _.get(currentUserDetails, "metamaskId")
+                                  _.get(loggedInUserDetails, "metamaskId")
                                     .length - 5,
-                                  _.get(currentUserDetails, "metamaskId").length
+                                  _.get(loggedInUserDetails, "metamaskId").length
                                 )}
                           </span>
                           <i
@@ -180,7 +182,7 @@ function Profile(props) {
                             onClick={() => {
                               window.open(
                                 "https://kovan.etherscan.io/address/" +
-                                  _.get(currentUserDetails, "userName")
+                                  _.get(loggedInUserDetails, "userName")
                               );
                             }}
                           ></i>
@@ -219,12 +221,12 @@ function Profile(props) {
                           <Col md="12">
                           <span className="second-header">
                             {" "}
-                            {currentUserDetails.fullName}{" "}
+                            {loggedInUserDetails.fullName}{" "}
                           </span>{" "}
                           </Col>
                         </Row>
                         <Row className="d-flex align-content-center justify-content-center h-100">
-                          {_.isEmpty(currentUserDetails.bio) ? (
+                          {_.isEmpty(loggedInUserDetails.bio) ? (
                             <div>
                               <Row className="d-flex justify-content-center">
                                 <span className="second-grey">
@@ -244,10 +246,11 @@ function Profile(props) {
                           ) : (
                             <span className="second-grey">
                               {" "}
-                              {currentUserDetails.bio}{" "}
+                              {loggedInUserDetails.bio}{" "}
                             </span>
                           )}
                         </Row>
+
                       </Col>
                       <Col md="1">
                         <Row className="justify-content-end pr-3 cursor-pointer color-secondary">
@@ -336,35 +339,18 @@ function Profile(props) {
           </div>
         )}
       </Row>
-      {modalShow.sendMessage && (
-        <SendMessage
-          userDetails={currentUserDetails}
-          show={modalShow.sendMessage}
-          onHide={() => setShowModal({ ...modalShow, sendMessage: false })}
-        />
-      )}
-      {modalShow.editProfile && (
-        <EditProfile
-          userDetails={currentUserDetails}
-          show={modalShow.editProfile}
-          onHide={() => setShowModal({ ...modalShow, editProfile: false })}
-        />
-      )}
-      {modalShow.createClan && (
-        <CreateClan
-          userDetails={currentUserDetails}
-          billetList={billetList}
-          show={modalShow.createClan}
-          onHide={() => setShowModal({ ...modalShow, createClan: false })}
-        />
-      )}
-      {modalShow.shareProfile && (
-        <ShareModal
-          thumbnail={currentUserDetails.imageUrl}
-          show={modalShow.shareProfile}
-          onHide={() => setShowModal({ ...modalShow, shareProfile: false })}
-        />
-      )}
+      {
+        modalShow.sendMessage && <SendMessage userDetails={loggedInUserDetails} show={modalShow.sendMessage}  onHide={() => setShowModal({...modalShow, sendMessage: false})} />
+      }
+      {
+        modalShow.editProfile && <EditProfile userDetails={loggedInUserDetails} show={modalShow.editProfile}  onHide={() => setShowModal({...modalShow, editProfile: false})} />
+      }
+      {
+         modalShow.createClan && <CreateClan  userDetails={loggedInUserDetails} billetList= {billetList} show={modalShow.createClan}  onHide={() => setShowModal({...modalShow, createClan: false})} />
+      }
+      {
+         modalShow.shareProfile && <ShareModal  thumbnail={loggedInUserDetails.imageUrl} show={modalShow.shareProfile}  onHide={() => setShowModal({...modalShow, shareProfile: false})} />
+      }
     </Container>
   );
 }
