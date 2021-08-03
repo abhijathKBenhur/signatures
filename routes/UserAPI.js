@@ -55,10 +55,15 @@ getUserInfo = async (req, res) => {
   });
 };
 
-login = async (req, res) => {
-  console.log("checking login", req.body);
-  await User.findOne(
-    { userName: req.body.userName, password: req.body.password },
+updateUser = async (req, res) => {
+  console.log("updateUser", req.body);
+  let findCriteria = {userName: req.body.userName};
+  const newUser = new User(req.body);
+  delete newUser.userName
+  await User.findOneAndUpdate(
+    findCriteria, 
+    newUser,
+    { new: true },
     (err, user) => {
       if (err) {
         return res.status(400).json({ success: false, error: err });
@@ -93,7 +98,7 @@ getUsers = async (req, res) => {
 };
 
 router.post("/registerUser", registerUser);
-router.post("/login", login);
+router.post("/updateUser", updateUser);
 router.post("/getUserInfo", getUserInfo);
 router.post("/getUsers", getUsers);
 

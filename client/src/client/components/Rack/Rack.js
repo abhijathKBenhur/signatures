@@ -15,7 +15,14 @@ const Rack = (props) => {
   return (
     <Container fluid className="racks-container">
       <Row className="rack mt-2">
-        <Col md="10">
+      <Col md="2" className="next-feature">
+            <span className="master-grey">Tell us what to do</span>
+            <div className="news-list">
+
+
+            </div>
+        </Col>
+        <Col md="8">
           <span className="father-grey">Explore the tribe</span>
           <hr></hr>
         

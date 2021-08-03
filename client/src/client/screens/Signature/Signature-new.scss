@@ -9,7 +9,6 @@
             transition-delay: 0.15s;
         }
         .wrapper-margin{
-            max-width: 1172px;
             width: 100%;    
             display: flex;
             flex-direction: column;
@@ -18,6 +17,9 @@
             gap:30px;
             .user-row {
                 width: 100%;
+                .conversation-container{
+                    border-left: 2px solid $greyLight-1;
+                }
                 .user-details{
                     display: flex;
                     align-items: center;

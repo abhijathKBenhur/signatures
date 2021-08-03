@@ -223,7 +223,7 @@ const SignatureNew = (props) => {
       <div className="wrapper">
         <div className="wrapper-margin">
           <Row className="user-row  ">
-            <Col md="8">
+            <Col md="8" className="document-container pt-2">
               <Row className="justify-content-between align-items-center mb-3">
                 <Col
                   md="12"
@@ -283,12 +283,12 @@ const SignatureNew = (props) => {
                 </Col>
               </Row>
             </Col>
-            <Col md="3" className="conversation-container">
-              <span className="conversation-title"  >Conversation</span>                        
+            <Col md="3" className="conversation-container  pt-2">
+              <span className="conversation-title second-header"  >Conversation</span>                        
               <hr></hr>
               <NotificationPanel canAdd={true} myNotifications={comments}></NotificationPanel>
             </Col>
-            <Col md="1">
+            <Col md="1" className="options-container  pt-2">
               <Row className="justify-content-center">
                 <div className="sidebar">
                   <div className="avatar">
