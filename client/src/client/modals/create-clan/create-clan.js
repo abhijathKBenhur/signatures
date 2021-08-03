@@ -130,7 +130,7 @@ const CreateClan = ({ ...props }) => {
     try {
       if (createClanStateCopy.members[index].userName) {
         window.open(
-          window.location + `/${createClanStateCopy.members[index].userName}`
+          window.location.origin + `/profile/${createClanStateCopy.members[index].userName}`
         );
       }
     } catch (err) {}
