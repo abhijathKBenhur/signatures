@@ -9,7 +9,7 @@ const User = new Schema(
     fullName: { type: String },
     imageUrl: { type: String },
     metamaskId: { type: String },
-    userName: { type: String },
+    userName: { type: String , immutable: true},
     loginMode: { type: String },
     facebookUrl: { type: String },
     linkedInUrl: { type: String },

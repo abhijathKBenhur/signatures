@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
+import NotificationPanel from "../../components/notifications/NotificationPanel";
 import { useParams, useLocation } from "react-router-dom";
 import moment from "moment";
 import {
@@ -14,6 +15,7 @@ import StorageInterface from "../../interface/StorageInterface";
 import { ChevronRight, ChevronLeft } from "react-feather";
 import { Document, Page, pdfjs } from "react-pdf";
 import SignatureInterface from "../../interface/SignatureInterface";
+import CommentsInterface from "../../interface/CommentsInterface"
 
 import userImg from "../../../assets/images/user.png";
 import _ from "lodash";
@@ -26,6 +28,7 @@ import InfoModal from "../../modals/info-modal/info.modal";
 const SignatureNew = (props) => {
   const { hashId } = useParams();
   const reduxState = useSelector((state) => state, shallowEqual);
+  const [comments, setComments] = useState([]);
   const location = useLocation();
   const audioRef = useRef(null);
   const [signature, setSignature] = useState({});
@@ -205,16 +208,27 @@ const SignatureNew = (props) => {
     }
   };
 
+  function getComments() {
+    CommentsInterface.getComments({ to: "currentUserDetails.userName" }).then(
+      (signatures) => {
+        let response = _.get(signatures, "data.data");
+        setComments(response);
+        console.log(response);
+      }
+    );
+  }
+
   return (
-    <Container fluid className="signature-new">
+    <div className="signature-new">
       <div className="wrapper">
         <div className="wrapper-margin">
           <Row className="user-row  ">
-            <Col md="10">
-              <Row
-                className="justify-content-between align-items-center mb-3"
-              >
-                <Col md="12" className="d-flex flex-row justify-content-between align-items-center">
+            <Col md="8" className="document-container pt-2">
+              <Row className="justify-content-between align-items-center mb-3">
+                <Col
+                  md="12"
+                  className="d-flex flex-row justify-content-between align-items-center"
+                >
                   <div className="action-section">
                     <div className="user-details">
                       <div className="user-metadata">
@@ -230,49 +244,51 @@ const SignatureNew = (props) => {
                 </Col>
               </Row>
               <Row>
-              <Col md="12" className="meta mb-2 justify-content-between d-flex flex-row">
-                <div className="tags second-grey">
-                {signature.category &&
-                    JSON.parse(signature.category).map((tag, key) => {
-                      return (
-                        <Button disabled variant="pill">
-                          {tag.label}
-                        </Button>
-                      );
-                    })}  
-                </div>
-                <div className="time second-grey">
-                  {moment(signature.createdAt).format("YYYY-MM-DD HH:mm:ss")}
-                </div>
-             
-              </Col>
-                <Col md="12">
-                  <section className="doc-section">
-                    {PDFFile ? (
-                      <div className="pdfUploaded h-100 overflow-auto align-items-center justify-content-center d-flex">
-                        {/* <Document file={PDFFile} className="pdf-document">
-                      <Page pageNumber={1} width={window.innerWidth / 3} />
-                    </Document> */}
-                        {getDocumnetViewer()}
-                      </div>
-                    ) : (
-                      <Spinner animation="border" />
-                    )}
-                  </section>
-                </Col>
-                <Col md="12">
-                  <div className="description-section">
-                    <p>{_.get(signature, "description")}</p>
+                <Col
+                  md="12"
+                  className="meta mb-2 justify-content-between d-flex flex-row"
+                >
+                  <div className="tags second-grey">
+                    {signature.category &&
+                      JSON.parse(signature.category).map((tag, key) => {
+                        return (
+                          <Button disabled variant="pill">
+                            {tag.label}
+                          </Button>
+                        );
+                      })}
+                  </div>
+                  <div className="time second-grey">
+                    {moment(signature.createdAt).format("YYYY-MM-DD HH:mm:ss")}
                   </div>
                 </Col>
                 <Col md="12">
                   <div className="description-section">
                     <p>{_.get(signature, "description")}</p>
+                  </div>
+                  <div>
+                    <section className="doc-section">
+                      {PDFFile ? (
+                        <div className="pdfUploaded h-100 overflow-auto align-items-center justify-content-center d-flex">
+                          {/* <Document file={PDFFile} className="pdf-document">
+                      <Page pageNumber={1} width={window.innerWidth / 3} />
+                    </Document> */}
+                          {getDocumnetViewer()}
+                        </div>
+                      ) : (
+                        <Spinner animation="border" />
+                      )}
+                    </section>
                   </div>
                 </Col>
               </Row>
             </Col>
-            <Col md="2">
+            <Col md="3" className="conversation-container  pt-2">
+              <span className="conversation-title second-header"  >Conversation</span>                        
+              <hr></hr>
+              <NotificationPanel canAdd={true} myNotifications={comments}></NotificationPanel>
+            </Col>
+            <Col md="1" className="options-container  pt-2">
               <Row className="justify-content-center">
                 <div className="sidebar">
                   <div className="avatar">
@@ -303,13 +319,13 @@ const SignatureNew = (props) => {
                     </OverlayTrigger>
                     <OverlayTrigger
                       placement="left"
-                      overlay={<Tooltip> History</Tooltip>}
+                      overlay={<Tooltip> Upvote</Tooltip>}
                     >
                       <Button
                         variant="outline-secondary"
                         onClick={() => showModal("info")}
                       >
-                        <i className="fa fa-clock-o" aria-hidden="true"></i>
+                        <i className="fa fa-thumbs-o-up" aria-hidden="true"></i>
                       </Button>
                     </OverlayTrigger>
                   </div>
@@ -334,7 +350,7 @@ const SignatureNew = (props) => {
           onHide={() => hideModal("info")}
         />
       )}
-    </Container>
+    </div>
   );
 };
 

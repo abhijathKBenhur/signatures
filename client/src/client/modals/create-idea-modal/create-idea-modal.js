@@ -487,12 +487,11 @@ const CreateIdeaModal = ({
               <Col md="12" lg="12" sm="12" xs="12">
                 <Form.Group as={Col} className="formEntry" md="12">
                   <div className="tags-label master-grey">
-                    <Form.Label>Tags </Form.Label>
+                    <Form.Label>Category </Form.Label>
                   </div>
                   <Select
                     value={form.category}
                     closeMenuOnSelect={false}
-                    isMulti
                     className={
                       formErrors.category
                         ? "input-err tag-selector"

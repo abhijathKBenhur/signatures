@@ -11,7 +11,7 @@ import NotificationInterface from "../../interface/NotificationInterface";
 import BlockChainInterface from "../../interface/BlockchainInterface";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { ExternalLink, Award, User } from "react-feather";
-import Clans from '../Clans/Clans'
+import Clans from "../Clans/Clans";
 import ShareModal from "../../modals/share/share.modal";
 
 import Collections from "./collections";
@@ -28,11 +28,11 @@ function Profile(props) {
     userDetails = {},
     collectionList = [],
   } = reduxState;
- 
+
   const [profileCollection, setProfileCOllection] = useState([]);
   const [loggedInUserDetails, setLoggedInUserDetails] = useState({});
   const [myNotifications, setMyNotifications] = useState([]);
-  const [ billetList, setBilletList] = useState([]);
+  const [billetList, setBilletList] = useState([]);
 
   let history = useHistory();
   const [key, setKey] = useState("collections");
@@ -42,8 +42,8 @@ function Profile(props) {
     editProfile: false,
     createClan: false,
     sendMessage: false,
-    shareProfile: false
-  })
+    shareProfile: false,
+  });
   useEffect(() => {
     const { userDetails = {} } = reduxState;
     const viewUser = _.get(history.location.state, "userName");
@@ -60,10 +60,9 @@ function Profile(props) {
   }, [reduxState.userDetails]);
 
   useEffect(() => {
-    fetchSignatures(loggedInUserDetails.metamaskId);
+    fetchSignatures(loggedInUserDetails.userName);
     fetchNotifications();
   }, [loggedInUserDetails]);
-
 
   const getUserDetails = (payLoad) => {
     UserInterface.getUserInfo(payLoad).then((response) => {
@@ -72,30 +71,37 @@ function Profile(props) {
     });
   };
 
-  function fetchSignatures(address) {
-    if (address || loggedInUserDetails.metamaskId) {
-      SignatureInterface.getSignatures().then((signatures) => {
-        let response = _.get(signatures, "data.data");
-        let isEmptyPresent = _.find(response, (responseItem) => {
-          return _.isEmpty(responseItem.ideaID);
-        });
-        const billetList = _.filter(response, (responseItem) => _.get(responseItem, 'owner.metamaskId') === _.get(loggedInUserDetails, 'metamaskId'));
-        console.log('billetList ==> ',billetList);
-        setBilletList([...billetList])
-        setProfileCOllection(response);
-        dispatch(setCollectionList(response));
-      });
+  function fetchSignatures(userName) {
+    if (userName || loggedInUserDetails.userName) {
+      SignatureInterface.getSignatures({ userName: userName }).then(
+        (signatures) => {
+          let response = _.get(signatures, "data.data");
+          let isEmptyPresent = _.find(response, (responseItem) => {
+            return _.isEmpty(responseItem.ideaID);
+          });
+          const billetList = _.filter(
+            response,
+            (responseItem) =>
+              _.get(responseItem, "owner.userName") ===
+              _.get(loggedInUserDetails, "userName")
+          );
+          console.log("billetList ==> ", billetList);
+          setBilletList([...billetList]);
+          setProfileCOllection(response);
+          dispatch(setCollectionList(response));
+        }
+      );
     }
   }
 
   function fetchNotifications() {
-    NotificationInterface.getNotifications({ to: loggedInUserDetails.userName }).then(
-      (signatures) => {
-        let response = _.get(signatures, "data.data");
-        setMyNotifications(response);
-        console.log(response);
-      }
-    );
+    NotificationInterface.getNotifications({
+      to: loggedInUserDetails.userName,
+    }).then((signatures) => {
+      let response = _.get(signatures, "data.data");
+      setMyNotifications(response);
+      console.log(response);
+    });
   }
 
   function registerCallBacks(params) {
@@ -111,8 +117,7 @@ function Profile(props) {
     history.push("/create");
   }
 
-  function followUser(){
-  }
+  function followUser() {}
 
   return (
     <Container fluid>
@@ -127,7 +132,7 @@ function Profile(props) {
               <Row className="loggedIn h-100">
                 <Col md="12" className="p-0 d-flex">
                   <Col md="2" className="userPane w-100 flex-column h-100">
-                  < div className="profile-section d-flex flex-column">
+                    <div className="profile-section d-flex flex-column">
                       {/* <div className="separatorline"></div> */}
 
                       <img
@@ -144,10 +149,9 @@ function Profile(props) {
                       />
                       <div className="d-flex justify-content-center master-grey mt-1">
                         <span>
-                        {/* {loggedInUserDetails.fullName} */}
+                        {loggedInUserDetails.fullName}
                         </span>
                       </div>
-                      
                     </div>
                     <div className="profile-info">
                       <Row className="d-flex justify-content-center align-items-center">
@@ -178,7 +182,7 @@ function Profile(props) {
                             onClick={() => {
                               window.open(
                                 "https://kovan.etherscan.io/address/" +
-                                  _.get(loggedInUserDetails, "metamaskId")
+                                  _.get(loggedInUserDetails, "userName")
                               );
                             }}
                           ></i>
@@ -186,56 +190,99 @@ function Profile(props) {
                       </Row>
                     </div>
                     <div className="actions mt-4">
-                    <Button
-                          variant="action"
-                          className="button"
-                          bsstyle="primary"
-                          onClick={() => {
-                            setShowModal({...modalShow, editProfile: true})
-                          }}
-                        >
-                          <i className="fa fa-user mr-1"></i>
-                        </Button>
+                      <Button
+                        variant="action"
+                        className="button"
+                        bsstyle="primary"
+                        onClick={() => {
+                          setShowModal({ ...modalShow, editProfile: true });
+                        }}
+                      >
+                        <i className="fa fa-user mr-1"></i>
+                      </Button>
 
-                        <Button
-                          variant="action"
-                          className="button"
-                          bsstyle="primary"
-                          onClick={() => {
-                            setShowModal({...modalShow, createClan: true})
-                          }}
-                        >
-                          <i className="fa fa-users mr-1"></i>
-                        </Button>
+                      <Button
+                        variant="action"
+                        className="button"
+                        bsstyle="primary"
+                        onClick={() => {
+                          setShowModal({ ...modalShow, createClan: true });
+                        }}
+                      >
+                        <i className="fa fa-users mr-1"></i>
+                      </Button>
                     </div>
                   </Col>
 
                   <Col md="8" className="tabs-wrapper mt-3">
                     <Row className="profile-details">
-                      <Col md="5">
-                        <span className="second-header"> {loggedInUserDetails.fullName} </span> <br></br>
-                        <span className="second-grey"> {loggedInUserDetails.bio} </span>
-                      
+                      <Col md="11" className="">
+                        <Row>
+                          <Col md="12">
+                          <span className="second-header">
+                            {" "}
+                            {loggedInUserDetails.fullName}{" "}
+                          </span>{" "}
+                          </Col>
+                        </Row>
+                        <Row className="d-flex align-content-center justify-content-center h-100">
+                          {_.isEmpty(loggedInUserDetails.bio) ? (
+                            <div>
+                              <Row className="d-flex justify-content-center">
+                                <span className="second-grey">
+                                  You profile might need more information.
+                                  Please try 
+                                  <span className="cursor-pointer color-secondary" onClick={() => {
+                                    setShowModal({
+                                      ...modalShow,
+                                      editProfile: true,
+                                    });
+                                  }}> adding </span>
+                                   more info.
+                                </span>
+                              </Row>
+                             
+                            </div>
+                          ) : (
+                            <span className="second-grey">
+                              {" "}
+                              {loggedInUserDetails.bio}{" "}
+                            </span>
+                          )}
+                        </Row>
+
                       </Col>
-                      <Col md="7">
+                      <Col md="1">
                         <Row className="justify-content-end pr-3 cursor-pointer color-secondary">
-                          <Button variant="action"   onClick={() => {
-                            setShowModal({...modalShow, sendMessage: true})
-                          }}>
+                          <Button
+                            variant="action"
+                            onClick={() => {
+                              setShowModal({ ...modalShow, sendMessage: true });
+                            }}
+                          >
                             <i className="fa fa-envelope"></i>
                           </Button>
                         </Row>
                         <Row className="justify-content-end pr-3 cursor-pointer color-secondary">
-                          <Button variant="action"   onClick={() => {
-                            setShowModal({...modalShow, shareProfile: true})
-                          }}>
+                          <Button
+                            variant="action"
+                            onClick={() => {
+                              setShowModal({
+                                ...modalShow,
+                                shareProfile: true,
+                              });
+                            }}
+                          >
                             <i className="fa fa-share"></i>
                           </Button>
                         </Row>
                         <Row className="justify-content-end pr-3 cursor-pointer color-secondary">
-                          <Button variant="action"   onClick={() => {
-                            followUser()
-                          }}>
+                          <Button
+                            variant="action"
+                            onClick={() => {
+                              followUser();
+                            }}
+                          >
                             <i className="fa fa-user-plus"></i>
                           </Button>
                         </Row>
@@ -255,19 +302,12 @@ function Profile(props) {
                                 className="empty-collection d-flex flex-column align-items-center "
                               >
                                 <Row>
-                                  You currently dont own any ideas. Start by
-                                  uploading one.
-                                </Row>
-                                <Row>
-                                  <Button
-                                    onClick={() => {
-                                      createnew();
-                                    }}
-                                    variant="primary"
-                                  >
-                                    {" "}
-                                    Upload{" "}
-                                  </Button>
+                                  <span className="second-grey">
+                                    You currently dont own any ideas. Start by
+                                    <span className="cursor-pointer color-secondary" onClick={() => {
+                                    createnew()
+                                  }}> uploading </span> one.
+                                  </span>
                                 </Row>
                               </Col>
                             ) : (
@@ -276,16 +316,23 @@ function Profile(props) {
                           </div>
                         </div>
                       </Tab>
-                     <Tab eventKey="clan" title="Clans">
+                      <Tab eventKey="clan" title="Clans">
                         <Clans></Clans>
                       </Tab>
                     </Tabs>
                   </Col>
-                  <Col md="2" className="notification-wrapper mt-1 flex-column h-100">
-                      <span className="second-header notification-title">Notifications</span>
-                      <NotificationPanel myNotifications={myNotifications}></NotificationPanel>
-                      
-                  </Col> 
+                  <Col
+                    md="2"
+                    className="notification-wrapper mt-1 flex-column h-100"
+                  >
+                    <span className="second-grey notification-title">
+                      Notifications
+                    </span>
+                    <hr></hr>
+                    <NotificationPanel
+                      myNotifications={myNotifications}
+                    ></NotificationPanel>
+                  </Col>
                 </Col>
               </Row>
             </Col>

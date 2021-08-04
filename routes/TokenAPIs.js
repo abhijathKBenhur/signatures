@@ -68,18 +68,13 @@ getSignatureByHash = async (req, res) => {
 };
 
 getSignatures = async (req, res) => {
-  let ownerAddress = req.body.ownerAddress;
+  let userName = req.body.userName;
   let limit = req.body.limit;
-  let getOnlyNulls = req.body.getOnlyNulls;
+  let offset = req.body.offset;
   let tags = req.body.tags;
   let searchString = req.body.searchString;
   let searchOrArray = [];
   let payLoad = {};
-
-  if (getOnlyNulls) {
-    payLoad.ideaID = null;
-  }
-  console.log(tags);
 
   //search string block start
 
@@ -92,16 +87,19 @@ getSignatures = async (req, res) => {
   }
   if (searchString) {
     searchOrArray.push({ title: { $regex: new RegExp(searchString, "i") } });
-    searchOrArray.push({ description: { $regex: searchString } });
+    searchOrArray.push({ description: { $regex: new RegExp(searchString, "i") } });
   }
   if (searchOrArray.length > 0) {
+
     payLoad.$or = searchOrArray;
   }
 
   //search string block end
 
-  if (ownerAddress) {
-    payLoad.owner = ownerAddress;
+  if (userName) {
+    payLoad.owner = {}
+    const ownerUser = await UserSchema.findOne({ userName: userName });
+    payLoad.owner = ownerUser._id;
   }
   if (!limit) {
       let tiles = await SignatureSchema.find(payLoad)
@@ -197,7 +195,7 @@ updatePrice = async (req, res) => {
 getImagePathFromCloudinary = (req, res) => {
   try{
   console.log("file details: ", req.file);
-  let folderPath = "ThoughtBlocks" ;
+  let folderPath = "ideaTribe" ;
   let fileName = req.hash
   if(req.thumbnail){
     fileName = req.hash +"_thumbnail"
@@ -233,7 +231,7 @@ getImagePathFromCloudinary = (req, res) => {
         });
       }
     },{ 
-       public_id: "fileName" ,
+       public_id: fileName ,
        folder: folderPath
     })
   }

@@ -18,7 +18,7 @@ function getNotificationImage(type){
 
 const NotificationPanel = (props) => {
     return (
-        <ListGroup className="mt-5">
+        <ListGroup className="">
         {props.myNotifications.map(notification => {
           return   (
             <div className="notification-item d-flex flex-row align-items-center pb-1">

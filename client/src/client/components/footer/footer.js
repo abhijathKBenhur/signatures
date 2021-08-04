@@ -14,7 +14,7 @@ const Footer = (props) => {
   const redirectTo = (route) => history.push(route);
   return (
     <div>
-      <nav className="navbar navbar-light bg-light flex-md-nowrap shadow appFooter ">
+      <nav className="navbar navbar-light bg-light flex-md-nowrap shadow appFooter fixed-bottom">
         <Container fluid>
           <div className="footer-info ">
             <div className="footer-info-wrapper d-flex justify-content-around">

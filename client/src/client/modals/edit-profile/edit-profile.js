@@ -15,10 +15,9 @@ import {
 const EditProfile = ({ ...props }) => {
 
     const [editProfile, setEditProfile] = useState({
-        profilePic: props.userDetails.profilePic || '',
         userName: props.userDetails.userName || '',
         firstName: props.userDetails.firstName ||  '',
-        lastName: props.userDetails.LastName || '',
+        lastName: props.userDetails.lastName || '',
         email: props.userDetails.email || '',
         facebookUrl: props.userDetails.facebookUrl ||'',
         linkedInUrl: props.userDetails.linkedInUrl ||"",
@@ -29,7 +28,6 @@ const EditProfile = ({ ...props }) => {
 
     useEffect(() => {
         const profileData = {
-            profilePic: props.userDetails.profilePic || '',
             userName: props.userDetails.userName || '',
             firstName: props.userDetails.firstName ||  '',
             lastName: props.userDetails.LastName || '',
@@ -46,7 +44,6 @@ const EditProfile = ({ ...props }) => {
 
     const handleChange = (event) => {
         const { name, value } = event.target;
-
         setEditProfile({...editProfile, [name]: value});
     }
 
