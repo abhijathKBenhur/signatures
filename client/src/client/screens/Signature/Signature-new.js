@@ -16,6 +16,7 @@ import { ChevronRight, ChevronLeft } from "react-feather";
 import { Document, Page, pdfjs } from "react-pdf";
 import SignatureInterface from "../../interface/SignatureInterface";
 import CommentsInterface from "../../interface/CommentsInterface"
+import { useHistory } from "react-router-dom";
 
 import userImg from "../../../assets/images/user.png";
 import _ from "lodash";
@@ -37,6 +38,7 @@ const SignatureNew = (props) => {
     currentPage: 1,
     totalPages: 1,
   });
+  const history = useHistory();
   const [modalShow, setModalShow] = useState({
     shareModal: false,
     infoModal: false,
@@ -293,7 +295,7 @@ const SignatureNew = (props) => {
                 <div className="sidebar">
                   <div className="avatar">
                     {signature.owner && (
-                      <img src={signature.owner.imageUrl} alt="profile" />
+                      <img src={signature.owner.imageUrl} alt="profile" onClick={() => history.push(`/profile/${signature.owner.userName}`)} />
                     )}
                   </div>
                   <div className="action-btns">

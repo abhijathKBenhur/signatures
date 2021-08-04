@@ -1,6 +1,6 @@
 import _ from "lodash";
 import React, { useState, useEffect } from "react";
-import { Row, Col, Form, Button, Container, Tabs, Tab } from "react-bootstrap";
+import { Row, Col, Form, Button, Container, Tabs, Tab, Tooltip, OverlayTrigger } from "react-bootstrap";
 import NotificationPanel from "../../components/notifications/NotificationPanel";
 import { useHistory } from "react-router-dom";
 import "./profile.scss";
@@ -21,6 +21,8 @@ import SendMessage from "../../modals/send-message/send-message";
 import EditProfile from "../../modals/edit-profile/edit-profile";
 import CreateClan from "../../modals/create-clan/create-clan";
 import UserInterface from "../../interface/UserInterface";
+import * as reactShare from "react-share";
+
 function Profile(props) {
   const reduxState = useSelector((state) => state, shallowEqual);
   const {
@@ -36,7 +38,7 @@ function Profile(props) {
 
   let history = useHistory();
   const [key, setKey] = useState("collections");
-  const viewUser = _.get(history.location.state, "userName");
+  const viewUser = _.get(history.location, "pathname").split('profile/')[1];
   const dispatch = useDispatch();
   const [modalShow, setShowModal] = useState({
     editProfile: false,
@@ -46,7 +48,6 @@ function Profile(props) {
   });
   useEffect(() => {
     const { userDetails = {} } = reduxState;
-    const viewUser = _.get(history.location.state, "userName");
     if (viewUser && viewUser.toLowerCase() !== userDetails.userName) {
       let payLoad = {};
       payLoad.userName = viewUser;
@@ -189,19 +190,40 @@ function Profile(props) {
                         </Col>
                       </Row>
                     </div>
+                    {
+                          viewUser === userDetails.userName ?
                     <div className="actions mt-4">
-                      <Button
-                        variant="action"
-                        className="button"
-                        bsstyle="primary"
-                        onClick={() => {
-                          setShowModal({ ...modalShow, editProfile: true });
-                        }}
-                      >
-                        <i className="fa fa-user mr-1"></i>
-                      </Button>
-
-                      <Button
+                       <OverlayTrigger
+                          key={"top"}
+                          placement="top"
+                          overlay={
+                            <Tooltip id={`tooltip-top`}>
+                              Edit Profile
+                            </Tooltip>
+                          }
+                        >
+                          <Button
+                                variant="action"
+                                className="button"
+                                bsstyle="primary"
+                                onClick={() => {
+                                  setShowModal({ ...modalShow, editProfile: true });
+                                }}
+                              >
+                                <i className="fa fa-user mr-1"></i>
+                              </Button>
+                  </OverlayTrigger>
+                      
+                  <OverlayTrigger
+                          key={"top"}
+                          placement="top"
+                          overlay={
+                            <Tooltip id={`tooltip-top`}>
+                              Create Clan
+                            </Tooltip>
+                          }
+                        >
+                         <Button
                         variant="action"
                         className="button"
                         bsstyle="primary"
@@ -211,7 +233,33 @@ function Profile(props) {
                       >
                         <i className="fa fa-users mr-1"></i>
                       </Button>
+                  </OverlayTrigger>
+                    </div> :
+                      <div className="sharables d-flex">
+                      <reactShare.FacebookShareButton
+                        url={window.location.href}
+                        quote={"Hey! Check out this idea."}
+                      >
+                        <reactShare.FacebookIcon size={32} round />
+                      </reactShare.FacebookShareButton>
+                      <reactShare.TwitterShareButton
+                        url={window.location.href}
+                        title={"Hey! Check out this idea."}
+                      >
+                        <reactShare.TwitterIcon size={32} round />
+                      </reactShare.TwitterShareButton>
+                      <reactShare.WhatsappShareButton
+                        url={window.location.href}
+                        title={"Hey! Check out this idea."}
+                        separator=":: "
+                      >
+                        <reactShare.WhatsappIcon size={32} round />
+                      </reactShare.WhatsappShareButton>
+                      <reactShare.LinkedinShareButton url={window.location.href}>
+                        <reactShare.LinkedinIcon size={32} round />
+                      </reactShare.LinkedinShareButton>
                     </div>
+                    }
                   </Col>
 
                   <Col md="8" className="tabs-wrapper mt-3">
@@ -253,7 +301,18 @@ function Profile(props) {
 
                       </Col>
                       <Col md="1">
-                        <Row className="justify-content-end pr-3 cursor-pointer color-secondary">
+                        {
+                          viewUser !== userDetails.userName &&  <Row className="justify-content-end pr-3 cursor-pointer color-secondary">
+                              
+                              <OverlayTrigger
+                          key={"top"}
+                          placement="top"
+                          overlay={
+                            <Tooltip id={`tooltip-top`}>
+                            Send Message
+                            </Tooltip>
+                          }
+                        >
                           <Button
                             variant="action"
                             onClick={() => {
@@ -262,8 +321,23 @@ function Profile(props) {
                           >
                             <i className="fa fa-envelope"></i>
                           </Button>
+
+                  </OverlayTrigger>
+
                         </Row>
+
+                        }
+                       
                         <Row className="justify-content-end pr-3 cursor-pointer color-secondary">
+                        <OverlayTrigger
+                          key={"top"}
+                          placement="top"
+                          overlay={
+                            <Tooltip id={`tooltip-top`}>
+                            Share
+                            </Tooltip>
+                          }
+                        >
                           <Button
                             variant="action"
                             onClick={() => {
@@ -275,8 +349,22 @@ function Profile(props) {
                           >
                             <i className="fa fa-share"></i>
                           </Button>
+
+                  </OverlayTrigger>
+                          
                         </Row>
+                        {
+                          viewUser !== userDetails.userName && 
                         <Row className="justify-content-end pr-3 cursor-pointer color-secondary">
+                          <OverlayTrigger
+                          key={"top"}
+                          placement="top"
+                          overlay={
+                            <Tooltip id={`tooltip-top`}>
+                            Follow User
+                            </Tooltip>
+                          }
+                        >
                           <Button
                             variant="action"
                             onClick={() => {
@@ -285,7 +373,11 @@ function Profile(props) {
                           >
                             <i className="fa fa-user-plus"></i>
                           </Button>
+
+                  </OverlayTrigger>
+                          
                         </Row>
+                        }
                       </Col>
                     </Row>
                     <Tabs

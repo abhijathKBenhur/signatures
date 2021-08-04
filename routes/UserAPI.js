@@ -36,11 +36,11 @@ registerUser = (req, res) => {
 
 getUserInfo = async (req, res) => {
   let findCriteria = {};
-  if (req.body.metamaskId) {
-    findCriteria.metamaskId = req.body.metamaskId;
-  }
   if (req.body.userName) {
     findCriteria.userName = req.body.userName;
+  }
+  if (req.body.metamaskId) {
+    findCriteria.metamaskId = req.body.metamaskId;
   }
   await User.findOne(findCriteria, (err, user) => {
     if (err) {
