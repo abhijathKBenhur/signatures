@@ -140,6 +140,7 @@ $card-height: 200px;
       }
       .user-name {
         flex-grow: 1;
+        text-align: left;
         cursor: pointer;
         overflow: hidden;
         text-overflow: ellipsis;

@@ -9,7 +9,7 @@ import {
   InputGroup,
   Dropdown,
 } from "react-bootstrap";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Dropzone from "react-dropzone";
 import imagePlaceholder from "../../../assets/images/image-placeholder.png";
 import CONSTANTS from "../../commons/Constants";
@@ -24,6 +24,8 @@ import jspdf from "jspdf";
 import _ from "lodash";
 import domtoimage from "dom-to-image";
 import { getPurposeIcon } from "../../commons/common.utils";
+import { shallowEqual, useSelector } from "react-redux";
+import ClanInterface from "../../interface/ClanInterface";
 const CreateIdeaModal = ({
   formErrors,
   form,
@@ -42,8 +44,17 @@ const CreateIdeaModal = ({
   billet,
   ...props
 }) => {
+  const reduxState = useSelector((state) => state, shallowEqual);
+  const [userClans, setUserClans] = useState( [] );
+  useEffect(() => {
+    const { userDetails = {} } = reduxState;
+    ClanInterface.getClans({leader:userDetails.userName}).then(result => {
+      setUserClans(result.datat)
+    })
+  }, [reduxState.userDetails]);
+  
   const getThumbnailImage = () => {
-    return form.thumbnail ? (
+    return form.thumbnail && publishState == "INIT" ? (
       <div className="imageUploaded w-100 h-100">
         <OverlayTrigger placement="left" overlay={<Tooltip>Remove</Tooltip>}>
           <Button
@@ -190,7 +201,7 @@ const CreateIdeaModal = ({
                   onChange={handleChange}
                   ref={priceRef}
                 />
-                <InputGroup.Text>BNB</InputGroup.Text>
+                <InputGroup.Text>Tribe Coin</InputGroup.Text>
               </InputGroup>
             </div>
           </Col>
@@ -472,7 +483,7 @@ const CreateIdeaModal = ({
                 </div>
                 <div className="publishing-block-text">
                   <p>
-                    We are posting your idea on the Binance Blockchain. Hold on
+                    We are posting your idea on the Blockchain. Hold on
                     tight!
                   </p>
                 </div>
@@ -503,6 +514,35 @@ const CreateIdeaModal = ({
                   />
                 </Form.Group>
               </Col>
+              {/* <Col md="6" lg="6" sm="6" xs="6">
+                <Form.Group as={Col} className="formEntry" md="12">
+                  <div className="tags-label master-grey">
+                    <Form.Label>Clan </Form.Label>
+                    <OverlayTrigger
+                      placement="top"
+                      overlay={
+                        <Tooltip id={`tooltip-top`}>
+                          The clan will be the owner of the idea
+                        </Tooltip>
+                      }
+                    >
+                      <i className="fa fa-info" aria-hidden="true"></i>
+                    </OverlayTrigger>
+                  </div>
+                  <Select
+                    value={form.category}
+                    closeMenuOnSelect={false}
+                    className={
+                      formErrors.category
+                        ? "input-err tag-selector"
+                        : "tag-selector"
+                    }
+                    options={userClans}
+                    onChange={handleTagsChange}
+                    placeholder=""
+                  />
+                </Form.Group>
+              </Col> */}
               <Col md="12" lg="12" sm="12" xs="12">
                 <Form.Group
                   as={Col}
