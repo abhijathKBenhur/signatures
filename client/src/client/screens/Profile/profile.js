@@ -37,7 +37,7 @@ function Profile(props) {
   const [billetList, setBilletList] = useState([]);
 
   let history = useHistory();
-  const [key, setKey] = useState("collections");
+  const [key, setKey] = useState("Wallet");
   const viewUser = _.get(history.location, "pathname").split('profile/')[1];
   const dispatch = useDispatch();
   const [modalShow, setShowModal] = useState({
@@ -385,6 +385,9 @@ function Profile(props) {
                       activeKey={key}
                       onSelect={(k) => setKey(k)}
                     >
+                      <Tab eventKey="Wallet" title="Wallets">
+                        Wallet
+                      </Tab>
                       <Tab eventKey="collections" title="Collection">
                         <div className="collection-wrapper">
                           <div className="middle-block">
