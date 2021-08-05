@@ -42,4 +42,19 @@
     }
     
 }
+.selected-socialLogin-item{
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  .css-2b097c-container{
+    flex: 1;
+
+  }
+  .action{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+  }
+}
 }
