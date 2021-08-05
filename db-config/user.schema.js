@@ -11,8 +11,11 @@ const User = new Schema(
     metamaskId: { type: String },
     userName: { type: String , immutable: true},
     loginMode: { type: String },
+
     facebookUrl: { type: String },
     linkedInUrl: { type: String },
+    twitterUrl: { type: String },
+    instaUrl: { type: String },
     bio: { type: String },
   },
   { timestamps: true }

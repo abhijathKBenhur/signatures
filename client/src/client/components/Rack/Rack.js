@@ -16,7 +16,7 @@ const Rack = (props) => {
     <Container fluid className="racks-container">
       <Row className="rack mt-2">
       <Col md="2" className="next-feature">
-            <span className="master-grey">Tell us what to do</span>
+            <span className="master-grey">Suggest us what to do</span>
             <div className="news-list">
 
 

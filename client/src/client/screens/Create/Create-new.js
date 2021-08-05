@@ -96,7 +96,7 @@ const CreateNew = () => {
     currentPage: 1,
     totalPages: 1,
   });
-  const [publishState, setPublishState] = useState(INIT);
+  const [publishState, setPublishState] = useState(PROGRESS);
   const [publishError, setPublishError] = useState(undefined);
   const [audioState, setAudioState] = useState({
     isAudioPlaying: false,
@@ -587,7 +587,7 @@ const CreateNew = () => {
     <Container fluid className="create-container">
       <Row className="createform  d-flex">
         <Col xs="12" className="top-bar">
-          <Button className="cancel-btn">Cancel</Button>
+          <Button className="" variant="secondary" onClick={() => history.push("/home")}>Cancel</Button>
           <Button
             className="submit-btn"
             onClick={() => checkValidationOnButtonClick()}
@@ -610,7 +610,7 @@ const CreateNew = () => {
                     name="title"
                     value={form.title}
                     className={
-                      formErrors.title ? "input-err titleArea" : "titleArea"
+                      formErrors.title ? "input-err titleArea master-header" : "titleArea master-header"
                     }
                     placeholder="Title*"
                     maxLength={50}

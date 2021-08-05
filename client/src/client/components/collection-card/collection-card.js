@@ -49,16 +49,9 @@ const CollectionCard = (props) => {
                   <Image src={signature.owner.imageUrl} />
                 </div>
                 <div>
-                  {JSON.parse(signature.category) &&
-                    JSON.parse(signature.category)
-                      .slice(0, 2)
-                      .map((category, i) => {
-                        return (
-                          <Button key={i} disabled variant="pill">
-                            {category.value}
-                          </Button>
-                        );
-                      })}
+                  <Button disabled variant="pill">
+                    {JSON.parse(signature.category).label}
+                  </Button>
                 </div>
               </div>
             </div>
@@ -67,15 +60,13 @@ const CollectionCard = (props) => {
             className="user-name third-header ml-2"
             onClick={(event) => {
               event.stopPropagation();
-              goToUserProfile(signature.creator.userName);
+              goToUserProfile(signature.owner.userName);
             }}
           >
-            {signature.title}
+            {signature.owner.userName}
           </div>
 
-          <div className="date second-grey">
-            {moment(signature.createdAt).format("DD-MMM-YYYY")}
-          </div>
+          
         </div>
         <div className="image-container"
           onClick={() => {
@@ -104,8 +95,10 @@ const CollectionCard = (props) => {
         </div>
         <div className="bottom-content d-flex justify-content-between align-items-center ">
           <div class="tag-n-location">
-            <div className="location second-header">{signature.location}Location</div>
-            <div className="tags second-grey">{JSON.parse(signature.category)[0].label}</div>
+            <div className="location second-header">{signature.location}
+            {moment(signature.createdAt).format("YYYY-MM-DD HH:mm:ss")}
+            </div>
+            <div className="tags second-grey">{JSON.parse(signature.category).label}</div>
           </div>
           <div class="purpose-badge">
               <i className={getPurposeIcon(signature.purpose)}></i>

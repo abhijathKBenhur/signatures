@@ -15,7 +15,7 @@ import StorageInterface from "../../interface/StorageInterface";
 import { ChevronRight, ChevronLeft } from "react-feather";
 import { Document, Page, pdfjs } from "react-pdf";
 import SignatureInterface from "../../interface/SignatureInterface";
-import CommentsInterface from "../../interface/CommentsInterface"
+import CommentsInterface from "../../interface/CommentsInterface";
 import { useHistory } from "react-router-dom";
 
 import userImg from "../../../assets/images/user.png";
@@ -251,14 +251,9 @@ const SignatureNew = (props) => {
                   className="meta mb-2 justify-content-between d-flex flex-row"
                 >
                   <div className="tags second-grey">
-                    {signature.category &&
-                      JSON.parse(signature.category).map((tag, key) => {
-                        return (
-                          <Button disabled variant="pill">
-                            {tag.label}
-                          </Button>
-                        );
-                      })}
+                    <Button disabled variant="pill">
+                      {signature.category && JSON.parse(signature.category) && JSON.parse(signature.category).label}
+                    </Button>
                   </div>
                   <div className="time second-grey">
                     {moment(signature.createdAt).format("YYYY-MM-DD HH:mm:ss")}
@@ -286,16 +281,27 @@ const SignatureNew = (props) => {
               </Row>
             </Col>
             <Col md="3" className="conversation-container  pt-2">
-              <span className="conversation-title second-header"  >Conversation</span>                        
+              <span className="conversation-title second-header">
+                Conversation
+              </span>
               <hr></hr>
-              <NotificationPanel canAdd={true} myNotifications={comments}></NotificationPanel>
+              <NotificationPanel
+                canAdd={true}
+                myNotifications={comments}
+              ></NotificationPanel>
             </Col>
             <Col md="1" className="options-container  pt-2">
               <Row className="justify-content-center">
                 <div className="sidebar">
                   <div className="avatar">
                     {signature.owner && (
-                      <img src={signature.owner.imageUrl} alt="profile" onClick={() => history.push(`/profile/${signature.owner.userName}`)} />
+                      <img
+                        src={signature.owner.imageUrl}
+                        alt="profile"
+                        onClick={() =>
+                          history.push(`/profile/${signature.owner.userName}`)
+                        }
+                      />
                     )}
                   </div>
                   <div className="action-btns">
