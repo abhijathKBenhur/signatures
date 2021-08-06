@@ -1,6 +1,16 @@
 import _ from "lodash";
 import React, { useState, useEffect } from "react";
-import { Row, Col, Form, Button, Container, Tabs, Tab, Tooltip, OverlayTrigger } from "react-bootstrap";
+import {
+  Row,
+  Col,
+  Form,
+  Button,
+  Container,
+  Tabs,
+  Tab,
+  Tooltip,
+  OverlayTrigger,
+} from "react-bootstrap";
 import NotificationPanel from "../../components/notifications/NotificationPanel";
 import { useHistory } from "react-router-dom";
 import "./profile.scss";
@@ -37,8 +47,8 @@ function Profile(props) {
   const [billetList, setBilletList] = useState([]);
 
   let history = useHistory();
-  const [key, setKey] = useState("Wallet");
-  const viewUser = _.get(history.location, "pathname").split('profile/')[1];
+  const [key, setKey] = useState(isMyPage() ? "Wallet" : "collections");
+  const viewUser = _.get(history.location, "pathname").split("profile/")[1];
   const dispatch = useDispatch();
   const [modalShow, setShowModal] = useState({
     editProfile: false,
@@ -48,14 +58,11 @@ function Profile(props) {
   });
   useEffect(() => {
     const { userDetails = {} } = reduxState;
-    if (viewUser && viewUser.toLowerCase() !== userDetails.userName) {
+    if (viewUser && !isMyPage()) {
       let payLoad = {};
       payLoad.userName = viewUser;
       getUserDetails(payLoad);
-    } else if (
-      userDetails &&
-      (!viewUser || viewUser.toLowerCase() === userDetails.userName)
-    ) {
+    } else if (userDetails && (!viewUser || isMyPage())) {
       setLoggedInUserDetails(userDetails);
     }
   }, [reduxState.userDetails]);
@@ -71,6 +78,10 @@ function Profile(props) {
       setLoggedInUserDetails(userDetails);
     });
   };
+
+  function isMyPage() {
+    return viewUser === userDetails.userName;
+  }
 
   function fetchSignatures(userName) {
     if (userName || loggedInUserDetails.userName) {
@@ -149,9 +160,7 @@ function Profile(props) {
                         alt="user"
                       />
                       <div className="d-flex justify-content-center master-grey mt-1">
-                        <span>
-                        {loggedInUserDetails.fullName}
-                        </span>
+                        <span>{loggedInUserDetails.fullName}</span>
                       </div>
                     </div>
                     <div className="profile-info">
@@ -164,10 +173,10 @@ function Profile(props) {
                         <Col className="address-copy d-flex align-items-center justify-content-center">
                           <span className="address-value third-header">
                             {_.get(loggedInUserDetails, "metamaskId") &&
-                              _.get(loggedInUserDetails, "metamaskId").substring(
-                                0,
-                                5
-                              ) +
+                              _.get(
+                                loggedInUserDetails,
+                                "metamaskId"
+                              ).substring(0, 5) +
                                 " ..... " +
                                 _.get(
                                   loggedInUserDetails,
@@ -175,7 +184,8 @@ function Profile(props) {
                                 ).substring(
                                   _.get(loggedInUserDetails, "metamaskId")
                                     .length - 5,
-                                  _.get(loggedInUserDetails, "metamaskId").length
+                                  _.get(loggedInUserDetails, "metamaskId")
+                                    .length
                                 )}
                           </span>
                           <i
@@ -190,106 +200,109 @@ function Profile(props) {
                         </Col>
                       </Row>
                     </div>
-                    {
-                          viewUser === userDetails.userName ?
-                    <div className="actions mt-4">
-                       <OverlayTrigger
+                    {isMyPage() ? (
+                      <div className="actions mt-4">
+                        <OverlayTrigger
                           key={"top"}
                           placement="top"
                           overlay={
-                            <Tooltip id={`tooltip-top`}>
-                              Edit Profile
-                            </Tooltip>
+                            <Tooltip id={`tooltip-top`}>Edit Profile</Tooltip>
                           }
                         >
                           <Button
-                                variant="action"
-                                className="button"
-                                bsstyle="primary"
-                                onClick={() => {
-                                  setShowModal({ ...modalShow, editProfile: true });
-                                }}
-                              >
-                                <i className="fa fa-user mr-1"></i>
-                              </Button>
-                  </OverlayTrigger>
-                      
-                  <OverlayTrigger
+                            variant="action"
+                            className="button"
+                            bsstyle="primary"
+                            onClick={() => {
+                              setShowModal({ ...modalShow, editProfile: true });
+                            }}
+                          >
+                            <i className="fa fa-user mr-1"></i>
+                          </Button>
+                        </OverlayTrigger>
+
+                        <OverlayTrigger
                           key={"top"}
                           placement="top"
                           overlay={
-                            <Tooltip id={`tooltip-top`}>
-                              Create Clan
-                            </Tooltip>
+                            <Tooltip id={`tooltip-top`}>Create Clan</Tooltip>
                           }
                         >
-                         <Button
-                        variant="action"
-                        className="button"
-                        bsstyle="primary"
-                        onClick={() => {
-                          setShowModal({ ...modalShow, createClan: true });
-                        }}
-                      >
-                        <i className="fa fa-users mr-1"></i>
-                      </Button>
-                  </OverlayTrigger>
-                    </div> :
+                          <Button
+                            variant="action"
+                            className="button"
+                            bsstyle="primary"
+                            onClick={() => {
+                              setShowModal({ ...modalShow, createClan: true });
+                            }}
+                          >
+                            <i className="fa fa-users mr-1"></i>
+                          </Button>
+                        </OverlayTrigger>
+                      </div>
+                    ) : (
                       <div className="sharables d-flex">
-                      <reactShare.FacebookShareButton
-                        url={window.location.href}
-                        quote={"Hey! Check out this idea."}
-                      >
-                        <reactShare.FacebookIcon size={32} round />
-                      </reactShare.FacebookShareButton>
-                      <reactShare.TwitterShareButton
-                        url={window.location.href}
-                        title={"Hey! Check out this idea."}
-                      >
-                        <reactShare.TwitterIcon size={32} round />
-                      </reactShare.TwitterShareButton>
-                      <reactShare.WhatsappShareButton
-                        url={window.location.href}
-                        title={"Hey! Check out this idea."}
-                        separator=":: "
-                      >
-                        <reactShare.WhatsappIcon size={32} round />
-                      </reactShare.WhatsappShareButton>
-                      <reactShare.LinkedinShareButton url={window.location.href}>
-                        <reactShare.LinkedinIcon size={32} round />
-                      </reactShare.LinkedinShareButton>
-                    </div>
-                    }
+                        <reactShare.FacebookShareButton
+                          url={window.location.href}
+                          quote={"Hey! Check out this idea."}
+                        >
+                          <reactShare.FacebookIcon size={32} round />
+                        </reactShare.FacebookShareButton>
+                        <reactShare.TwitterShareButton
+                          url={window.location.href}
+                          title={"Hey! Check out this idea."}
+                        >
+                          <reactShare.TwitterIcon size={32} round />
+                        </reactShare.TwitterShareButton>
+                        <reactShare.WhatsappShareButton
+                          url={window.location.href}
+                          title={"Hey! Check out this idea."}
+                          separator=":: "
+                        >
+                          <reactShare.WhatsappIcon size={32} round />
+                        </reactShare.WhatsappShareButton>
+                        <reactShare.LinkedinShareButton
+                          url={window.location.href}
+                        >
+                          <reactShare.LinkedinIcon size={32} round />
+                        </reactShare.LinkedinShareButton>
+                      </div>
+                    )}
                   </Col>
 
-                  <Col md="8" className="tabs-wrapper mt-3">
+                  <Col className={isMyPage() ? "tabs-wrapper mt-3 col-md-8" : "tabs-wrapper mt-3 col-md-10"}>
                     <Row className="profile-details">
                       <Col md="11" className="">
                         <Row>
                           <Col md="12">
-                          <span className="second-header">
-                            {" "}
-                            {loggedInUserDetails.fullName}{" "}
-                          </span>{" "}
+                            <span className="second-header">
+                              {" "}
+                              {loggedInUserDetails.fullName}{" "}
+                            </span>{" "}
                           </Col>
                         </Row>
                         <Row className="d-flex align-content-center justify-content-center h-100">
-                          {_.isEmpty(loggedInUserDetails.bio) ? (
+                          {_.isEmpty(loggedInUserDetails.bio) && isMyPage() ? (
                             <div>
                               <Row className="d-flex justify-content-center">
                                 <span className="second-grey">
-                                  You profile might need more information.
-                                  Please try 
-                                  <span className="cursor-pointer color-secondary" onClick={() => {
-                                    setShowModal({
-                                      ...modalShow,
-                                      editProfile: true,
-                                    });
-                                  }}> adding </span>
-                                   more info.
+                                  Your profile might need more information.
+                                  Please try
+                                  <span
+                                    className="cursor-pointer color-secondary"
+                                    onClick={() => {
+                                      setShowModal({
+                                        ...modalShow,
+                                        editProfile: true,
+                                      });
+                                    }}
+                                  >
+                                    {" "}
+                                    adding{" "}
+                                  </span>
+                                  more info.
                                 </span>
                               </Row>
-                             
                             </div>
                           ) : (
                             <span className="second-grey">
@@ -298,86 +311,77 @@ function Profile(props) {
                             </span>
                           )}
                         </Row>
-
                       </Col>
                       <Col md="1">
-                        {
-                          viewUser !== userDetails.userName &&  <Row className="justify-content-end pr-3 cursor-pointer color-secondary">
-                              
-                              <OverlayTrigger
-                          key={"top"}
-                          placement="top"
-                          overlay={
-                            <Tooltip id={`tooltip-top`}>
-                            Send Message
-                            </Tooltip>
-                          }
-                        >
-                          <Button
-                            variant="action"
-                            onClick={() => {
-                              setShowModal({ ...modalShow, sendMessage: true });
-                            }}
-                          >
-                            <i className="fa fa-envelope"></i>
-                          </Button>
+                        {!isMyPage() && (
+                          <Row className="justify-content-end pr-3 cursor-pointer color-secondary">
+                            <OverlayTrigger
+                              key={"top"}
+                              placement="top"
+                              overlay={
+                                <Tooltip id={`tooltip-top`}>
+                                  Send Message
+                                </Tooltip>
+                              }
+                            >
+                              <Button
+                                variant="action"
+                                onClick={() => {
+                                  setShowModal({
+                                    ...modalShow,
+                                    sendMessage: true,
+                                  });
+                                }}
+                              >
+                                <i className="fa fa-envelope"></i>
+                              </Button>
+                            </OverlayTrigger>
+                          </Row>
+                        )}
 
-                  </OverlayTrigger>
-
-                        </Row>
-
-                        }
-                       
-                        <Row className="justify-content-end pr-3 cursor-pointer color-secondary">
-                        <OverlayTrigger
-                          key={"top"}
-                          placement="top"
-                          overlay={
-                            <Tooltip id={`tooltip-top`}>
-                            Share
-                            </Tooltip>
-                          }
-                        >
-                          <Button
-                            variant="action"
-                            onClick={() => {
-                              setShowModal({
-                                ...modalShow,
-                                shareProfile: true,
-                              });
-                            }}
-                          >
-                            <i className="fa fa-share"></i>
-                          </Button>
-
-                  </OverlayTrigger>
-                          
-                        </Row>
-                        {
-                          viewUser !== userDetails.userName && 
                         <Row className="justify-content-end pr-3 cursor-pointer color-secondary">
                           <OverlayTrigger
-                          key={"top"}
-                          placement="top"
-                          overlay={
-                            <Tooltip id={`tooltip-top`}>
-                            Follow User
-                            </Tooltip>
-                          }
-                        >
-                          <Button
-                            variant="action"
-                            onClick={() => {
-                              followUser();
-                            }}
+                            key={"top"}
+                            placement="top"
+                            overlay={
+                              <Tooltip id={`tooltip-top`}>Share</Tooltip>
+                            }
                           >
-                            <i className="fa fa-user-plus"></i>
-                          </Button>
-
-                  </OverlayTrigger>
-                          
+                            <Button
+                              variant="action"
+                              onClick={() => {
+                                setShowModal({
+                                  ...modalShow,
+                                  shareProfile: true,
+                                });
+                              }}
+                            >
+                              <i className="fa fa-share"></i>
+                            </Button>
+                          </OverlayTrigger>
                         </Row>
-                        }
+                        {!isMyPage() && (
+                          <Row className="justify-content-end pr-3 cursor-pointer color-secondary">
+                            <OverlayTrigger
+                              key={"top"}
+                              placement="top"
+                              overlay={
+                                <Tooltip id={`tooltip-top`}>
+                                  Follow User
+                                </Tooltip>
+                              }
+                            >
+                              <Button
+                                variant="action"
+                                onClick={() => {
+                                  followUser();
+                                }}
+                              >
+                                <i className="fa fa-user-plus"></i>
+                              </Button>
+                            </OverlayTrigger>
+                          </Row>
+                        )}
                       </Col>
                     </Row>
                     <Tabs
@@ -385,9 +389,10 @@ function Profile(props) {
                       activeKey={key}
                       onSelect={(k) => setKey(k)}
                     >
-                      <Tab eventKey="Wallet" title="Wallets">
+                      {isMyPage() ? <Tab eventKey="Wallet" title="Wallets">
                         Wallet
                       </Tab>
+                      : <div></div> }
                       <Tab eventKey="collections" title="Collection">
                         <div className="collection-wrapper">
                           <div className="middle-block">
@@ -399,9 +404,16 @@ function Profile(props) {
                                 <Row>
                                   <span className="second-grey">
                                     You currently dont own any ideas. Start by
-                                    <span className="cursor-pointer color-secondary" onClick={() => {
-                                    createnew()
-                                  }}> uploading </span> one.
+                                    <span
+                                      className="cursor-pointer color-secondary"
+                                      onClick={() => {
+                                        createnew();
+                                      }}
+                                    >
+                                      {" "}
+                                      uploading{" "}
+                                    </span>{" "}
+                                    one.
                                   </span>
                                 </Row>
                               </Col>
@@ -416,36 +428,57 @@ function Profile(props) {
                       </Tab>
                     </Tabs>
                   </Col>
-                  <Col
-                    md="2"
-                    className="notification-wrapper mt-1 flex-column h-100"
-                  >
-                    <span className="second-grey notification-title">
-                      Notifications
-                    </span>
-                    <hr></hr>
-                    <NotificationPanel
-                      myNotifications={myNotifications}
-                    ></NotificationPanel>
-                  </Col>
+                  {isMyPage() ? (
+                    <Col
+                      md="2"
+                      className="notification-wrapper mt-1 flex-column h-100"
+                    >
+                      <span className="second-grey notification-title">
+                        Notifications
+                      </span>
+                      <hr></hr>
+                      <NotificationPanel
+                        myNotifications={myNotifications}
+                      ></NotificationPanel>
+                    </Col>
+                  ) : (
+                    <div></div>
+                  )}
                 </Col>
               </Row>
             </Col>
           </div>
         )}
       </Row>
-      {
-        modalShow.sendMessage && <SendMessage userDetails={loggedInUserDetails} show={modalShow.sendMessage}  onHide={() => setShowModal({...modalShow, sendMessage: false})} />
-      }
-      {
-        modalShow.editProfile && <EditProfile userDetails={loggedInUserDetails} show={modalShow.editProfile}  onHide={() => setShowModal({...modalShow, editProfile: false})} />
-      }
-      {
-         modalShow.createClan && <CreateClan  userDetails={loggedInUserDetails} billetList= {billetList} show={modalShow.createClan}  onHide={() => setShowModal({...modalShow, createClan: false})} />
-      }
-      {
-         modalShow.shareProfile && <ShareModal  thumbnail={loggedInUserDetails.imageUrl} show={modalShow.shareProfile}  onHide={() => setShowModal({...modalShow, shareProfile: false})} />
-      }
+      {modalShow.sendMessage && (
+        <SendMessage
+          userDetails={loggedInUserDetails}
+          show={modalShow.sendMessage}
+          onHide={() => setShowModal({ ...modalShow, sendMessage: false })}
+        />
+      )}
+      {modalShow.editProfile && (
+        <EditProfile
+          userDetails={loggedInUserDetails}
+          show={modalShow.editProfile}
+          onHide={() => setShowModal({ ...modalShow, editProfile: false })}
+        />
+      )}
+      {modalShow.createClan && (
+        <CreateClan
+          userDetails={loggedInUserDetails}
+          billetList={billetList}
+          show={modalShow.createClan}
+          onHide={() => setShowModal({ ...modalShow, createClan: false })}
+        />
+      )}
+      {modalShow.shareProfile && (
+        <ShareModal
+          thumbnail={loggedInUserDetails.imageUrl}
+          show={modalShow.shareProfile}
+          onHide={() => setShowModal({ ...modalShow, shareProfile: false })}
+        />
+      )}
     </Container>
   );
 }

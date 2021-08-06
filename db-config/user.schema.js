@@ -17,6 +17,10 @@ const User = new Schema(
     twitterUrl: { type: String },
     instaUrl: { type: String },
     bio: { type: String },
+
+    tribeCoinBalance: {type: Number},
+    GasBalance: {type: Number},
+    tribeGoldBalance: {type: Number}
   },
   { timestamps: true }
 );
