@@ -22,6 +22,8 @@ import EditProfile from "../../modals/edit-profile/edit-profile";
 import CreateClan from "../../modals/create-clan/create-clan";
 import UserInterface from "../../interface/UserInterface";
 import * as reactShare from "react-share";
+import Wallet from "../../components/wallet/wallet";
+import Transactions from "../../components/transactions/transaction";
 
 function Profile(props) {
   const reduxState = useSelector((state) => state, shallowEqual);
@@ -46,6 +48,53 @@ function Profile(props) {
     sendMessage: false,
     shareProfile: false,
   });
+
+  const [walletState, setWalletState] = useState({
+    selectedWallet: '',
+    trasactionList: []
+  })
+
+  // wallet Dummy Data
+     const WalletData = [
+       {
+        coinType: 'Tribe Coin',
+        coinBalance: '23 TBC',
+        description: 'You can create 23 ideas' 
+       },
+       {
+        coinType: 'Tribe Gold',
+        coinBalance: '5 TBG',
+        description: 'Equalent to 23$' 
+       },
+       {
+        coinType: 'GAS',
+        coinBalance: '0.0003 POLYGON',
+        description: 'You can post 20 ideas with the remaining gas' 
+       },
+     ]
+
+     const DummyTransactionList = [
+       {
+         from: 'account 1',
+         to: 'account 2',
+         amount: 1
+       },
+       {
+        from: 'account 3',
+        to: 'account 5',
+        amount: 2
+      },{
+        from: 'account 6',
+        to: 'account 7',
+        amount: 10
+      },{
+        from: 'account 8',
+        to: 'account 10',
+        amount: 6
+      },
+     ]
+
+
   useEffect(() => {
     const { userDetails = {} } = reduxState;
     if (viewUser && viewUser.toLowerCase() !== userDetails.userName) {
@@ -119,6 +168,11 @@ function Profile(props) {
   }
 
   function followUser() {}
+
+  const selectWalletHandler = (seletedWallet) => {
+    console.log('seletedWallet ==> ',seletedWallet)
+    setWalletState({...walletState, selectedWallet:seletedWallet, trasactionList:DummyTransactionList})
+  }
 
   return (
     <Container fluid>
@@ -386,7 +440,16 @@ function Profile(props) {
                       onSelect={(k) => setKey(k)}
                     >
                       <Tab eventKey="Wallet" title="Wallets">
-                        Wallet
+                        <div className="wallet-wrapper">
+                        {
+                          WalletData.map((wallet, index) => <Wallet key={index} {...wallet} selectWalletHandler={selectWalletHandler} />)
+                        }
+                        </div>
+                        <div className="transaction-wrapper">
+                          {
+                            <Transactions transactionList={walletState.trasactionList} transactionType={walletState.selectedWallet} />
+                          }
+                        </div>
                       </Tab>
                       <Tab eventKey="collections" title="Collection">
                         <div className="collection-wrapper">
