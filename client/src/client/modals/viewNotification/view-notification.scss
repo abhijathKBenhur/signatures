@@ -1,0 +1,14 @@
+.view-notification-modal{
+    .reply-block{
+        display: flex;
+        align-items: center;
+        input{
+            width: 90%;
+        }
+        i{
+            position: absolute;
+            right: 20px;
+            cursor: pointer;
+        }
+    }
+}
