@@ -20,7 +20,6 @@ const CollectionCard = (props) => {
   }
 
   const goToUserProfile = (id) => {
-    let history = useHistory();
     history.push({
       pathname: "/profile/" + id,
       state: {
@@ -58,8 +57,7 @@ const CollectionCard = (props) => {
           </div>
           <div
             className="user-name third-header ml-2"
-            onClick={(event) => {
-              event.stopPropagation();
+            onClick={() => {
               goToUserProfile(signature.owner.userName);
             }}
           >

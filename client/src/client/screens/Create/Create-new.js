@@ -410,16 +410,7 @@ const CreateNew = () => {
     if (form.PDFFile && !formErrors.maxFileError) {
       return (
         <div className="pdfUploaded w-100 h-100">
-          <OverlayTrigger placement="left" overlay={<Tooltip>Remove</Tooltip>}>
-            <Button
-              variant="outline-secondary"
-              onClick={() => {
-                clearPDF();
-              }}
-            >
-              <i className="fa fa-trash" aria-hidden="true"></i>
-            </Button>
-          </OverlayTrigger>
+         
 
           {fileData.fileData && getFileViewer()}
         </div>
