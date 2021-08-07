@@ -1,0 +1,55 @@
+@import'../../commons/Common.scss';
+.wallet-container{
+    display: flex;
+    flex-flow: column;
+    flex: 1;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: $shadow;
+    cursor: pointer;
+    min-height: 200px;
+  &:hover {
+    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+  }
+  &:nth-child(1){
+    background-color: $secondary;
+  }
+  &:nth-child(2){
+      margin: 10px 10px 0 10px;
+      background-color: $secondary-light;
+
+  }
+  &:nth-child(3){
+    background-color: $primary-light;
+}
+  .wallet-type{
+    font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 25px;
+    font-weight: 700;
+    line-height: 38px;
+    color: $white;
+  }
+  .coin-amount{
+    font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 18px;
+    color: $white;
+    margin: 10px 0;
+  }
+  .coin-description{
+    flex: 1;
+    display: flex;
+    align-items: flex-end;
+      span{
+        font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 18px;
+        color: $white;
+      }
+  }
+}
