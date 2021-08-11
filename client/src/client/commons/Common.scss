@@ -135,3 +135,33 @@ $secondary-button-shadow:inset .2rem .2rem 1rem $secondary,
       opacity: 0;
     }
   }
+
+  @mixin social-icon-wrapper($backgroungColor: $primary) {
+      width: 35px;
+      height: 35px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 50%;
+      background-color: $backgroungColor;
+      color: $white;
+      i{
+        font-size: 18px;
+      }
+  }
+
+  .social-icon-wrapper{
+    &.fb{
+      @include social-icon-wrapper(#3b5997)
+    }
+    &.twitter{
+      @include social-icon-wrapper(#01acec)
+
+    }
+    &.whatsapp{
+      @include social-icon-wrapper(#23d366)
+    }
+    &.linkedin{
+      @include social-icon-wrapper(#037fb1)
+    }
+  }

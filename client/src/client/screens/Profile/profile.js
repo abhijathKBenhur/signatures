@@ -35,7 +35,7 @@ import * as reactShare from "react-share";
 import Wallet from "../../components/wallet/wallet";
 import Transactions from "../../components/transactions/transaction";
 
-function Profile(props) {
+const Profile = (props) =>  {
   const reduxState = useSelector((state) => state, shallowEqual);
   const {
     metamaskID = undefined,
@@ -50,7 +50,7 @@ function Profile(props) {
 
   let history = useHistory();
   const [key, setKey] = useState(isMyPage() ? "Wallet" : "collections");
-  const viewUser = _.get(history.location, "pathname").split("profile/")[1];
+  const viewUser = _.get(window.location, "pathname").split("profile/")[1];
   const dispatch = useDispatch();
   const [modalShow, setShowModal] = useState({
     editProfile: false,
@@ -114,6 +114,7 @@ function Profile(props) {
     } else if (userDetails && (!viewUser || isMyPage())) {
       setLoggedInUserDetails(userDetails);
     }
+    console.log('userDetails = ',userDetails)
   }, [reduxState.userDetails]);
 
   useEffect(() => {
@@ -300,25 +301,37 @@ function Profile(props) {
                           url={window.location.href}
                           quote={"Hey! Check out this idea."}
                         >
-                          <reactShare.FacebookIcon size={32} round />
+                           <div className="social-icon-wrapper fb">
+                      <i class="fa fa-facebook" aria-hidden="true"></i>
+                    </div>
+                          {/* <reactShare.FacebookIcon size={32} round /> */}
                         </reactShare.FacebookShareButton>
                         <reactShare.TwitterShareButton
                           url={window.location.href}
                           title={"Hey! Check out this idea."}
                         >
-                          <reactShare.TwitterIcon size={32} round />
+                          <div className="social-icon-wrapper twitter ml-2">
+                     <i class="fa fa-twitter" aria-hidden="true"></i>
+                    </div>
+                          {/* <reactShare.TwitterIcon size={32} round /> */}
                         </reactShare.TwitterShareButton>
                         <reactShare.WhatsappShareButton
                           url={window.location.href}
                           title={"Hey! Check out this idea."}
                           separator=":: "
                         >
-                          <reactShare.WhatsappIcon size={32} round />
+                           <div className="social-icon-wrapper whatsapp ml-2">
+                    <i class="fa fa-whatsapp" aria-hidden="true"></i>
+                    </div>
+                          {/* <reactShare.WhatsappIcon size={32} round /> */}
                         </reactShare.WhatsappShareButton>
                         <reactShare.LinkedinShareButton
                           url={window.location.href}
                         >
-                          <reactShare.LinkedinIcon size={32} round />
+                           <div className="social-icon-wrapper linkedin ml-2">
+                  <i class="fa fa-linkedin" aria-hidden="true"></i>
+                    </div>
+                          {/* <reactShare.LinkedinIcon size={32} round /> */}
                         </reactShare.LinkedinShareButton>
                       </div>
                     )}
