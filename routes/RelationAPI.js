@@ -39,6 +39,9 @@ getRelations = async (req, res) => {
   if (req.body.to) {
     findCriteria.to = req.body.to;
   }
+  if (req.body.status) {
+    findCriteria.status = req.body.status;
+  }
 
   await RelationSchema.find(findCriteria, (err, user) => {
     if (err) {
