@@ -481,7 +481,7 @@ const CreateIdeaModal = ({
                 <div className="gif-wrapper d-flex justify-content-center">
                   <img src={loadingGif} alt="" />
                 </div>
-                <div className="publishing-block-text">
+                <div className="publishing-block-text second-grey">
                   <p>
                     We are posting your idea on the Blockchain. Hold on
                     tight!
@@ -648,11 +648,13 @@ const CreateIdeaModal = ({
       className="create-idea-modal"
       dialogClassName="create-idea-modal-dialog"
       centered
+      backdrop="static"
+
     >
       <Modal.Body className="create-idea-modal-body">
-        <div className="modal-header-wrapper">
+        {publishState != "PASSED" && <div className="modal-header-wrapper">
           <div className="image-placeholder">{getThumbnailImage()}</div>
-        </div>
+        </div> }
         <div className="wrapper">{getElement()}</div>
       </Modal.Body>
     </Modal>

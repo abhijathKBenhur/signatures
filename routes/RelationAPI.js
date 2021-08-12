@@ -5,7 +5,6 @@ const router = express.Router();
 // upvotes, downvotes, followEtc
 postRelation = (req, res) => {
   const body = req.body;
-  body.balance = 1000;
   if (!body) {
     return res.status(400).json({
       success: false,

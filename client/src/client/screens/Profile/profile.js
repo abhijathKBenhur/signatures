@@ -34,7 +34,9 @@ import UserInterface from "../../interface/UserInterface";
 import * as reactShare from "react-share";
 import Wallet from "../../components/wallet/wallet";
 import Transactions from "../../components/transactions/transaction";
-
+import RelationsInterface from "../../interface/RelationsInterface";
+import CONSTANTS from "../../commons/Constants";
+import { showToaster } from "../../commons/common.utils";
 function Profile(props) {
   const reduxState = useSelector((state) => state, shallowEqual);
   const {
@@ -44,6 +46,7 @@ function Profile(props) {
   } = reduxState;
 
   const [profileCollection, setProfileCOllection] = useState([]);
+  const [followers, setFollowers] = useState([]);
   const [loggedInUserDetails, setLoggedInUserDetails] = useState({});
   const [myNotifications, setMyNotifications] = useState([]);
   const [billetList, setBilletList] = useState([]);
@@ -178,7 +181,14 @@ function Profile(props) {
     history.push("/create");
   }
 
-  function followUser() {}
+  function followUser() {
+    debugger
+    RelationsInterface.postRelation(loggedInUserDetails.userName,viewUser,CONSTANTS.NOTIFICATION_ACTIONS.FOLLOWED,CONSTANTS.ACTION_STATUS.PENDING,"I would like to follow you.").then(success =>{
+      showToaster("Followed!", {type: 'success'});
+      NotificationInterface.postNotification(loggedInUserDetails.userName,viewUser, CONSTANTS.NOTIFICATION_ACTIONS.FOLLOWED, CONSTANTS.ACTION_STATUS.COMPLETED, loggedInUserDetails.userName + " just followed you!")
+    })
+
+  }
 
   const selectWalletHandler = (seletedWallet) => {
     console.log('seletedWallet ==> ',seletedWallet)

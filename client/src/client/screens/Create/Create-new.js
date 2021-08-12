@@ -96,7 +96,7 @@ const CreateNew = () => {
     currentPage: 1,
     totalPages: 1,
   });
-  const [publishState, setPublishState] = useState(PROGRESS);
+  const [publishState, setPublishState] = useState(INIT);
   const [publishError, setPublishError] = useState(undefined);
   const [audioState, setAudioState] = useState({
     isAudioPlaying: false,
