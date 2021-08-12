@@ -418,7 +418,10 @@ const CreateIdeaModal = ({
                         "Hey! I registered an original idea on blockchain!"
                       }
                     >
-                      <reactShare.FacebookIcon size={32} round />
+                       <div className="social-icon-wrapper fb">
+                      <i class="fa fa-facebook" aria-hidden="true"></i>
+                    </div>
+                      {/* <reactShare.FacebookIcon size={32} round /> */}
                     </reactShare.FacebookShareButton>
                     <reactShare.WhatsappShareButton
                       url={
@@ -429,14 +432,20 @@ const CreateIdeaModal = ({
                       }
                       separator=" "
                     >
-                      <reactShare.WhatsappIcon size={32} round />
+                       <div className="social-icon-wrapper whatsapp">
+                    <i class="fa fa-whatsapp" aria-hidden="true"></i>
+                    </div>
+                      {/* <reactShare.WhatsappIcon size={32} round /> */}
                     </reactShare.WhatsappShareButton>
                     <reactShare.LinkedinShareButton
                       url={
                         window.location.origin + "/signature/" + billet.PDFHash
                       }
                     >
-                      <reactShare.LinkedinIcon size={32} round />
+                       <div className="social-icon-wrapper linkedin">
+                  <i class="fa fa-linkedin" aria-hidden="true"></i>
+                    </div>
+                      {/* <reactShare.LinkedinIcon size={32} round /> */}
                     </reactShare.LinkedinShareButton>
                   </div>
                 </Col>
