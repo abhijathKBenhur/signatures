@@ -136,6 +136,12 @@
                     color: #6c757d;
                 }
             }
+            .upvoted{
+                background-color: $secondary;
+                .upvoted{
+                    color: white;
+                }
+            }
         }
     }
 }

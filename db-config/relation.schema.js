@@ -7,7 +7,7 @@ const Relation = new Schema(
   {
     from : { type: String },
     to: { type: String },
-    action: { type: String },
+    relation: { type: String },
     status: { type: String },
     message: { type: String },
     payload: { type: String }

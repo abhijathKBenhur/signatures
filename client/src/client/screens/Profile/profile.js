@@ -63,50 +63,51 @@ function Profile(props) {
   });
 
   const [walletState, setWalletState] = useState({
-    selectedWallet: '',
-    trasactionList: []
-  })
+    selectedWallet: "",
+    trasactionList: [],
+  });
 
   // wallet Dummy Data
-     const WalletData = [
-       {
-        coinType: 'Tribe Coin',
-        coinBalance: '23 TBC',
-        description: 'You can create 23 ideas' 
-       },
-       {
-        coinType: 'Tribe Gold',
-        coinBalance: '5 TBG',
-        description: 'Equalent to 23$' 
-       },
-       {
-        coinType: 'GAS',
-        coinBalance: '0.0003 POLYGON',
-        description: 'You can post 20 ideas with the remaining gas' 
-       },
-     ]
+  const WalletData = [
+    {
+      coinType: "Tribe Coin",
+      coinBalance: "23 TBC",
+      description: "You can create 23 ideas",
+    },
+    {
+      coinType: "Tribe Gold",
+      coinBalance: "5 TBG",
+      description: "Equalent to 23$",
+    },
+    {
+      coinType: "GAS",
+      coinBalance: "0.0003 POLYGON",
+      description: "You can post 20 ideas with the remaining gas",
+    },
+  ];
 
-     const DummyTransactionList = [
-       {
-         from: 'account 1',
-         to: 'account 2',
-         amount: 1
-       },
-       {
-        from: 'account 3',
-        to: 'account 5',
-        amount: 2
-      },{
-        from: 'account 6',
-        to: 'account 7',
-        amount: 10
-      },{
-        from: 'account 8',
-        to: 'account 10',
-        amount: 6
-      },
-     ]
-
+  const DummyTransactionList = [
+    {
+      from: "account 1",
+      to: "account 2",
+      amount: 1,
+    },
+    {
+      from: "account 3",
+      to: "account 5",
+      amount: 2,
+    },
+    {
+      from: "account 6",
+      to: "account 7",
+      amount: 10,
+    },
+    {
+      from: "account 8",
+      to: "account 10",
+      amount: 6,
+    },
+  ];
 
   useEffect(() => {
     const { userDetails = {} } = reduxState;
@@ -115,17 +116,17 @@ function Profile(props) {
       payLoad.userName = viewUser;
       getUserDetails(payLoad);
     } else if (userDetails && (!viewUser || isMyPage())) {
+      //own profile page
       setLoggedInUserDetails(userDetails);
     }
-    console.log('userDetails = ',userDetails)
+    console.log("userDetails = ", userDetails);
   }, [reduxState.userDetails]);
 
   useEffect(() => {
     fetchSignatures(loggedInUserDetails.userName);
     fetchNotifications();
-    if(!isMyPage()){
-      loadFollowers()
-
+    if (!isMyPage()) {
+      loadFollowers();
     }
   }, [loggedInUserDetails]);
 
@@ -163,14 +164,14 @@ function Profile(props) {
     }
   }
 
-  function loadFollowers(){
+  function loadFollowers() {
     RelationsInterface.getRelations({
-      to:viewUser,
-    }).then(success =>{
-      setFollowers(_.map(success.data,'to'))
-    }).catch(err =>{
-
+      to: viewUser,
     })
+      .then((success) => {
+        setFollowers(_.map(success.data.data, "from"));
+      })
+      .catch((err) => {});
   }
 
   function fetchNotifications() {
@@ -197,17 +198,47 @@ function Profile(props) {
   }
 
   function followUser() {
-    RelationsInterface.postRelation(loggedInUserDetails.userName,viewUser,CONSTANTS.NOTIFICATION_ACTIONS.FOLLOWED,CONSTANTS.ACTION_STATUS.PENDING,"I would like to follow you.").then(success =>{
-      showToaster("Followed!", {type: 'success'});
-      NotificationInterface.postNotification(loggedInUserDetails.userName,viewUser, CONSTANTS.NOTIFICATION_ACTIONS.FOLLOWED, CONSTANTS.ACTION_STATUS.COMPLETED, loggedInUserDetails.userName + " just followed you!")
-    })
-
+    if (followers.indexOf(loggedInUserDetails.userName)) {
+      RelationsInterface.postRelation(
+        loggedInUserDetails.userName,
+        viewUser,
+        CONSTANTS.RELATION.FOLLOW,
+        CONSTANTS.ACTION_STATUS.PENDING,
+        "I would like to follow you."
+      ).then((success) => {
+        showToaster("Followed!", { type: "success" });
+        followers.push(loggedInUserDetails.userName);
+        setFollowers(followers);
+        NotificationInterface.postNotification(
+          loggedInUserDetails.userName,
+          viewUser,
+          CONSTANTS.NOTIFICATION_ACTIONS.FOLLOWED,
+          CONSTANTS.ACTION_STATUS.COMPLETED,
+          loggedInUserDetails.userName + " just followed you!"
+        );
+      });
+    } else {
+      RelationsInterface.removeRelation(
+        loggedInUserDetails.userName,
+        viewUser,
+        CONSTANTS.RELATION.FOLLOW
+      ).then((success) => {
+        showToaster("Unfollowed!", { type: "success" });
+        let followeIndex = followers.indexOf(loggedInUserDetails.userName);
+        followers.splice(followeIndex, 1);
+        setFollowers(followers);
+      });
+    }
   }
 
   const selectWalletHandler = (seletedWallet) => {
-    console.log('seletedWallet ==> ',seletedWallet)
-    setWalletState({...walletState, selectedWallet:seletedWallet, trasactionList:DummyTransactionList})
-  }
+    console.log("seletedWallet ==> ", seletedWallet);
+    setWalletState({
+      ...walletState,
+      selectedWallet: seletedWallet,
+      trasactionList: DummyTransactionList,
+    });
+  };
 
   return (
     <Container fluid>
@@ -238,7 +269,6 @@ function Profile(props) {
                         alt="user"
                       />
                       <div className="d-flex justify-content-center master-grey mt-1">
-                        <span>{loggedInUserDetails.fullName}</span>
                       </div>
                     </div>
                     <div className="profile-info">
@@ -275,6 +305,13 @@ function Profile(props) {
                               );
                             }}
                           ></i>
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col>
+                          <span className="address-value third-header justify-content-center d-flex mt-2">
+                            {followers.length} followers.
+                          </span>
                         </Col>
                       </Row>
                     </div>
@@ -324,9 +361,9 @@ function Profile(props) {
                           url={window.location.href}
                           quote={"Hey! Check out this idea."}
                         >
-                           <div className="social-icon-wrapper fb">
-                      <i class="fa fa-facebook" aria-hidden="true"></i>
-                    </div>
+                          <div className="social-icon-wrapper fb">
+                            <i class="fa fa-facebook" aria-hidden="true"></i>
+                          </div>
                           {/* <reactShare.FacebookIcon size={32} round /> */}
                         </reactShare.FacebookShareButton>
                         <reactShare.TwitterShareButton
@@ -334,8 +371,8 @@ function Profile(props) {
                           title={"Hey! Check out this idea."}
                         >
                           <div className="social-icon-wrapper twitter ml-2">
-                     <i class="fa fa-twitter" aria-hidden="true"></i>
-                    </div>
+                            <i class="fa fa-twitter" aria-hidden="true"></i>
+                          </div>
                           {/* <reactShare.TwitterIcon size={32} round /> */}
                         </reactShare.TwitterShareButton>
                         <reactShare.WhatsappShareButton
@@ -343,24 +380,30 @@ function Profile(props) {
                           title={"Hey! Check out this idea."}
                           separator=":: "
                         >
-                           <div className="social-icon-wrapper whatsapp ml-2">
-                    <i class="fa fa-whatsapp" aria-hidden="true"></i>
-                    </div>
+                          <div className="social-icon-wrapper whatsapp ml-2">
+                            <i class="fa fa-whatsapp" aria-hidden="true"></i>
+                          </div>
                           {/* <reactShare.WhatsappIcon size={32} round /> */}
                         </reactShare.WhatsappShareButton>
                         <reactShare.LinkedinShareButton
                           url={window.location.href}
                         >
-                           <div className="social-icon-wrapper linkedin ml-2">
-                  <i class="fa fa-linkedin" aria-hidden="true"></i>
-                    </div>
+                          <div className="social-icon-wrapper linkedin ml-2">
+                            <i class="fa fa-linkedin" aria-hidden="true"></i>
+                          </div>
                           {/* <reactShare.LinkedinIcon size={32} round /> */}
                         </reactShare.LinkedinShareButton>
                       </div>
                     )}
                   </Col>
 
-                  <Col className={isMyPage() ? "tabs-wrapper mt-3 col-md-8" : "tabs-wrapper mt-3 col-md-10"}>
+                  <Col
+                    className={
+                      isMyPage()
+                        ? "tabs-wrapper mt-3 col-md-8"
+                        : "tabs-wrapper mt-3 col-md-10"
+                    }
+                  >
                     <Row className="profile-details">
                       <Col md="11" className="">
                         <Row>
@@ -457,17 +500,28 @@ function Profile(props) {
                               placement="top"
                               overlay={
                                 <Tooltip id={`tooltip-top`}>
-                                  Follow User
+                                  {followers.indexOf(
+                                    loggedInUserDetails.userName
+                                  ) > -1
+                                    ? "Following"
+                                    : "Follow User"}
                                 </Tooltip>
                               }
                             >
                               <Button
                                 variant="action"
+                                className={
+                                  followers.indexOf(
+                                    loggedInUserDetails.userName
+                                  ) > -1
+                                    ? "following"
+                                    : ""
+                                }
                                 onClick={() => {
                                   followUser();
                                 }}
                               >
-                                <i className={followers.indexOf(loggedInUserDetails.userName) > -1 ? "fa fa-user-plus following" : "fa fa-user-plus"}></i>
+                                <i className="fa fa-user-plus"></i>
                               </Button>
                             </OverlayTrigger>
                           </Row>
@@ -479,19 +533,29 @@ function Profile(props) {
                       activeKey={key}
                       onSelect={(k) => setKey(k)}
                     >
-                    {isMyPage() ?  <Tab eventKey="Wallet" title="Wallets">
-                        <div className="wallet-wrapper">
-                        {
-                          WalletData.map((wallet, index) => <Wallet key={index} {...wallet} selectWalletHandler={selectWalletHandler} />)
-                        }
-                        </div>
-                        <div className="transaction-wrapper">
-                          {
-                            <Transactions transactionList={walletState.trasactionList} transactionType={walletState.selectedWallet} />
-                          }
-                        </div>
-                      </Tab>
-                      : <div></div> }
+                      {isMyPage() ? (
+                        <Tab eventKey="Wallet" title="Wallets">
+                          <div className="wallet-wrapper">
+                            {WalletData.map((wallet, index) => (
+                              <Wallet
+                                key={index}
+                                {...wallet}
+                                selectWalletHandler={selectWalletHandler}
+                              />
+                            ))}
+                          </div>
+                          <div className="transaction-wrapper">
+                            {
+                              <Transactions
+                                transactionList={walletState.trasactionList}
+                                transactionType={walletState.selectedWallet}
+                              />
+                            }
+                          </div>
+                        </Tab>
+                      ) : (
+                        <div></div>
+                      )}
                       <Tab eventKey="collections" title="Collection">
                         <div className="collection-wrapper">
                           <div className="middle-block">

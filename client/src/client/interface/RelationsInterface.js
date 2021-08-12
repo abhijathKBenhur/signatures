@@ -13,6 +13,15 @@ export const postRelation = (from,to,relation,status,message) => {
     return api.post(`/postRelation`,payload)
 }
 
+export const removeRelation = (from,to,relation) => {
+    let payload = {
+        from, to, relation
+    }
+    return api.post(`/removeRelation`,payload)
+}
+
+
+
 export const getRelations = (payload) =>  { 
     return api.post("/getRelations",payload) 
 }
@@ -26,6 +35,7 @@ const RelationsInterface = {
     postRelation,
     getRelations,
     markAllAsRead,
+    removeRelation
 }
 
 export default RelationsInterface
