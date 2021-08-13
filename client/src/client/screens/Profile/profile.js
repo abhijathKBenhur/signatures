@@ -207,8 +207,7 @@ function Profile(props) {
         "I would like to follow you."
       ).then((success) => {
         showToaster("Followed!", { type: "success" });
-        followers.push(loggedInUserDetails.userName);
-        setFollowers(followers);
+        setFollowers(...followers,loggedInUserDetails.userName);
         NotificationInterface.postNotification(
           loggedInUserDetails.userName,
           viewUser,
@@ -225,8 +224,9 @@ function Profile(props) {
       ).then((success) => {
         showToaster("Unfollowed!", { type: "success" });
         let followeIndex = followers.indexOf(loggedInUserDetails.userName);
-        followers.splice(followeIndex, 1);
-        setFollowers(followers);
+        let followersCopy = _.clone(followers)
+        followersCopy.splice(followeIndex, 1);
+        setFollowers(followersCopy);
       });
     }
   }

@@ -246,8 +246,7 @@ const SignatureNew = (props) => {
         "Upvoting."
       ).then((success) => {
         showToaster("Upvoted!", { type: "success" });
-        upvotes.push(loggedInUserDetails.userName);
-        setUpvotes(upvotes);
+        setUpvotes(...upvotes,loggedInUserDetails.userName);
         NotificationInterface.postNotification(
           loggedInUserDetails.userName,
           signature.ideaID,
@@ -263,9 +262,10 @@ const SignatureNew = (props) => {
         CONSTANTS.RELATION.UPVOTE
       ).then((success) => {
         showToaster("Upvoted!", { type: "success" });
-        let followeIndex = upvotes.indexOf(loggedInUserDetails.userName);
-        upvotes.splice(followeIndex, 1);
-        setUpvotes(upvotes);
+        let voteIndex = upvotes.indexOf(loggedInUserDetails.userName);
+        let upvotesCopy = _.clone(upvotes)
+        upvotesCopy.splice(voteIndex, 1);
+        setUpvotes(upvotesCopy);
       });
     }
   }
