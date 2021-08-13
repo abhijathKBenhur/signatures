@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import NotificationPanel from "../../components/notifications/NotificationPanel";
+import CommentsPanel from "../../components/comments/CommentsPanel";
 import { useParams, useLocation } from "react-router-dom";
 import moment from "moment";
 import CONSTANTS from "../../commons/Constants";
@@ -342,13 +342,11 @@ const SignatureNew = (props) => {
             </Col>
             <Col md="3" className="conversation-container  pt-2">
               <span className="conversation-title second-header">
-                Conversation
+                Conversation (280)
               </span>
               <hr></hr>
-              <NotificationPanel
-                canAdd={true}
-                myNotifications={comments}
-              ></NotificationPanel>
+              <CommentsPanel user={loggedInUserDetails} idea={signature} type="ideaComments"
+              ></CommentsPanel>
             </Col>
             <Col md="1" className="options-container  pt-2">
               <Row className="justify-content-center">

@@ -1,0 +1,77 @@
+import React, { useEffect, useState, useRef } from "react";
+import { ListGroup,Form } from "react-bootstrap";
+import CONSTANTS from "../../commons/Constants";
+import ViewNotification from "../../modals/viewNotification/view-notification";
+import _ from "lodash";
+import "./comments.scss";
+import CommentsInterface from "../../interface/CommentsInterface";
+
+
+const CommentsPanel = (props) => {
+  useEffect(() => {
+    // loadComments();
+  }, []);
+
+  return (
+        <ListGroup className="">
+            <Form.Control
+                as="textarea"
+                rows={2}
+                name="description"
+                placeholder="Add a comment"
+                style={{ resize: "none", borderRadius:10 }}
+                className="mb-2"
+              />
+        <div className={true ? "notification-item d-flex flex-row align-items-center pb-1": "notification-item d-flex flex-row align-items-center pb-1 unread"}>
+            <div className="icon mr-2 p-1">
+                <i className="fa fa-comment-o"></i>
+            </div>
+            <div className="content">
+                <div className="top master-grey">John doe</div>
+                <div className="bottom second-grey">Innovative idea</div>
+            </div>
+        </div>
+            <div className={true ? "notification-item d-flex flex-row align-items-center pb-1": "notification-item d-flex flex-row align-items-center pb-1 unread"}>
+                <div className="icon mr-2 p-1">
+                    <i className="fa fa-comment-o"></i>
+                </div>
+                <div className="content">
+                    <div className="top master-grey">Michael </div>
+                    <div className="bottom second-grey">Awesome</div>
+                </div>
+            </div>
+            <div className={true ? "notification-item d-flex flex-row align-items-center pb-1": "notification-item d-flex flex-row align-items-center pb-1 unread"}>
+                <div className="icon mr-2 p-1">
+                    <i className="fa fa-comment-o"></i>
+                </div>
+                <div className="content">
+                    <div className="top master-grey">Tessy</div>
+                    <div className="bottom second-grey">Great!</div>
+                </div>
+            </div>
+            <div className={true ? "notification-item d-flex flex-row align-items-center pb-1": "notification-item d-flex flex-row align-items-center pb-1 unread"}>
+                <div className="icon mr-2 p-1">
+                    <i className="fa fa-comment-o"></i>
+                </div>
+                <div className="content">
+                    <div className="top master-grey">John doe</div>
+                    <div className="bottom second-grey">Innovative idea</div>
+                </div>
+            </div>
+            <div className={true ? "notification-item d-flex flex-row align-items-center pb-1": "notification-item d-flex flex-row align-items-center pb-1 unread"}>
+                <div className="icon mr-2 p-1">
+                    <i className="fa fa-comment-o"></i>
+                </div>
+                <div className="content">
+                    <div className="top master-grey">John doe</div>
+                    <div className="bottom second-grey">Innovative idea</div>
+                </div>
+            </div>
+        {/* {_.get(notificationState, 'viewNotification')  &&  <ViewNotification notification={_.get(notificationState, 'selectedNotification')}
+         onHide={() => setNotificationState({ ...notificationState, viewNotification: false, selectedNotification: {} })} />} */}
+
+      </ListGroup>
+  );
+};
+
+export default CommentsPanel;
