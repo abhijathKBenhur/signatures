@@ -4,6 +4,7 @@ import CONSTANTS from '../../commons/Constants';
 import ViewNotification from '../../modals/viewNotification/view-notification';
 import _ from 'lodash';
 import './notification.scss'
+import NotificationInterface from '../../interface/NotificationInterface';
 
 
 
@@ -26,18 +27,21 @@ const NotificationPanel = (props) => {
         selectedNotification: {}
     })
     const viewMessageHandler = (notification) => {
+
+        notification.status = CONSTANTS.NOTIFICATION_ACTIONS.COMPLETED
         setNotificationState({
             ...notificationState,
             viewNotification: true,
             selectedNotification: notification
         })
+        NotificationInterface.markNotificationAsRead(notification)
     }
     
     return (
         <ListGroup className="">
         {props.myNotifications.map(notification => {
           return   (
-            <div className="notification-item d-flex flex-row align-items-center pb-1" onClick={() => viewMessageHandler(notification)}>
+            <div className={notification.status == "COMPLETED" ? "notification-item d-flex flex-row align-items-center pb-1": "notification-item d-flex flex-row align-items-center pb-1 unread"} onClick={() => viewMessageHandler(notification)}>
                 <div className="icon mr-2 p-1">
                     <i className={getNotificationImage(notification.action)}></i>
                 </div>

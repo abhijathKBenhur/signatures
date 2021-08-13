@@ -46,6 +46,10 @@
       .profile-details{
         height: 230px;
         padding-top: 20px;
+        .following{
+          background-color: $secondary;
+          color: $white !important;
+        }
       }
     }
 

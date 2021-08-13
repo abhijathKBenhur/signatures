@@ -13,12 +13,16 @@ export const postNotification = (from,to,action,status,message,payload) => {
     return api.post("/postNotification",request)
 }
 
+export const markNotificationAsRead = (request) =>  { 
+    return api.post("/markNotificationAsRead",request) 
+}
+
 export const getNotifications = (request) =>  { 
     return api.post("/getNotifications",request) 
 }
 
 export const markAllAsRead = (request) =>  { 
-    return api.post("/updateNotifications",request) 
+    return api.post("/markAllAsRead",request) 
 }
   
 
@@ -26,6 +30,7 @@ const NotificationInterface = {
     postNotification,
     getNotifications,
     markAllAsRead,
+    markNotificationAsRead
 }
 
 export default NotificationInterface

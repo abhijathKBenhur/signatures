@@ -18,11 +18,10 @@ dotenv.config();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-var whitelist = ['http://localhost:3000','http://localhost:3001', 'https://ideatribe.herokuapp.com']
+var whitelist = ['http://localhost:3000','http://localhost:3001','http://localhost:3002', 'https://ideatribe.herokuapp.com']
 app.use(cors(
   {
     origin: function (origin, callback) {
-      console.log("API accessed from "+ origin )
       if (whitelist.indexOf(origin) !== -1) {
         callback(null, true)
       } else {

@@ -8,4 +8,7 @@
         border-radius: 100%;
         border: 1px solid $greyLight-1
     }
+    &.unread{
+        background-color: $greyLight-1;
+    }
 }

@@ -1,7 +1,10 @@
 import React, { useEffect, useState, useRef } from "react";
-import NotificationPanel from "../../components/notifications/NotificationPanel";
+import CommentsPanel from "../../components/comments/CommentsPanel";
 import { useParams, useLocation } from "react-router-dom";
 import moment from "moment";
+import CONSTANTS from "../../commons/Constants";
+import { showToaster } from "../../commons/common.utils";
+import NotificationInterface from "../../interface/NotificationInterface";
 import {
   Container,
   Row,
@@ -22,13 +25,16 @@ import userImg from "../../../assets/images/user.png";
 import _ from "lodash";
 import audio from "../../../assets/images/audio.png";
 import ShareModal from "../../modals/share/share.modal";
-import { shallowEqual, useSelector } from "react-redux";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
 
 import "./Signature-new.scss";
 import InfoModal from "../../modals/info-modal/info.modal";
+import RelationsInterface from "../../interface/RelationsInterface";
 const SignatureNew = (props) => {
   const { hashId } = useParams();
+  const [upvotes, setUpvotes] = useState([]);
   const reduxState = useSelector((state) => state, shallowEqual);
+  const [loggedInUserDetails, setLoggedInUserDetails] = useState({});
   const [comments, setComments] = useState([]);
   const location = useLocation();
   const audioRef = useRef(null);
@@ -48,6 +54,7 @@ const SignatureNew = (props) => {
     isAudioPlaying: false,
   });
 
+
   useEffect(() => {
     pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
     let signatureFromParent = location.state;
@@ -59,6 +66,7 @@ const SignatureNew = (props) => {
         setSignature(...signature, ...signatureObject);
       });
     }
+    loadUpvotes()
     // setSignature({...signature, ...dummmySignature});
     getIPSPDFFile(hashId);
   }, []);
@@ -73,6 +81,14 @@ const SignatureNew = (props) => {
       // }
     });
   };
+
+  useEffect(() => {
+    const { userDetails = {} } = reduxState;
+    setLoggedInUserDetails(userDetails);
+    console.log("userDetails = ", userDetails);
+  }, [reduxState.userDetails]);
+
+
   useEffect(() => {
     if (audioRef.current) {
       audioRef.current.addEventListener("ended", () =>
@@ -95,6 +111,16 @@ const SignatureNew = (props) => {
       setPDFFile(base64data);
     };
   };
+
+  const loadUpvotes = () =>{
+    RelationsInterface.getRelations({
+      to: signature.ideaID,
+    })
+      .then((success) => {
+        setUpvotes(_.map(success.data.data, "from"));
+      })
+      .catch((err) => {});
+  }
 
   const onDocumentLoadSuccess = ({ numPages }) => {
     setPdfPages({ ...pdfPages, totalPages: numPages });
@@ -210,6 +236,40 @@ const SignatureNew = (props) => {
     }
   };
 
+  const setVoting =() =>{
+    if (upvotes.indexOf(loggedInUserDetails.userName) < 0) {
+      RelationsInterface.postRelation(
+        loggedInUserDetails.userName,
+        signature.ideaID,
+        CONSTANTS.RELATION.UPVOTE,
+        CONSTANTS.ACTION_STATUS.PENDING,
+        "Upvoting."
+      ).then((success) => {
+        showToaster("Upvoted!", { type: "success" });
+        upvotes.push(loggedInUserDetails.userName);
+        setUpvotes(upvotes);
+        NotificationInterface.postNotification(
+          loggedInUserDetails.userName,
+          signature.ideaID,
+          CONSTANTS.NOTIFICATION_ACTIONS.UPVOTED,
+          CONSTANTS.ACTION_STATUS.COMPLETED,
+          loggedInUserDetails.userName + " Upvoted you!"
+        );
+      });
+    } else {
+      RelationsInterface.removeRelation(
+        loggedInUserDetails.userName,
+        signature.ideaID,
+        CONSTANTS.RELATION.UPVOTE
+      ).then((success) => {
+        showToaster("Upvoted!", { type: "success" });
+        let followeIndex = upvotes.indexOf(loggedInUserDetails.userName);
+        upvotes.splice(followeIndex, 1);
+        setUpvotes(upvotes);
+      });
+    }
+  }
+
   function getComments() {
     CommentsInterface.getComments({ to: "currentUserDetails.userName" }).then(
       (signatures) => {
@@ -282,13 +342,11 @@ const SignatureNew = (props) => {
             </Col>
             <Col md="3" className="conversation-container  pt-2">
               <span className="conversation-title second-header">
-                Conversation
+                Conversation (280)
               </span>
               <hr></hr>
-              <NotificationPanel
-                canAdd={true}
-                myNotifications={comments}
-              ></NotificationPanel>
+              <CommentsPanel user={loggedInUserDetails} idea={signature} type="ideaComments"
+              ></CommentsPanel>
             </Col>
             <Col md="1" className="options-container  pt-2">
               <Row className="justify-content-center">
@@ -327,13 +385,14 @@ const SignatureNew = (props) => {
                     </OverlayTrigger>
                     <OverlayTrigger
                       placement="left"
-                      overlay={<Tooltip> Upvote</Tooltip>}
+                      overlay={<Tooltip> {upvotes.indexOf(loggedInUserDetails.userName) > -1 ? "unvote" :"upvote"}</Tooltip>}
                     >
                       <Button
                         variant="outline-secondary"
-                        onClick={() => showModal("info")}
+                        onClick={() => setVoting()}
+                        className={upvotes.indexOf(loggedInUserDetails.userName) > -1 ? "upvoted" :""}
                       >
-                        <i className="fa fa-thumbs-o-up" aria-hidden="true"></i>
+                        <i aria-hidden="true" className={upvotes.indexOf(loggedInUserDetails.userName) > -1 ? "fa fa-thumbs-o-up upvoted" :"fa fa-thumbs-o-up"}></i>
                       </Button>
                     </OverlayTrigger>
                   </div>

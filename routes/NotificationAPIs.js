@@ -2,15 +2,48 @@ const NotificationSchema = require("../db-config/notification.schema");
 const express = require("express");
 const router = express.Router();
 
-postNotification = (req, res) => {
+markNotificationAsRead = (req, res) => {
   const body = req.body;
-  body.balance = 1000;
   if (!body) {
     return res.status(400).json({
       success: false,
       error: "Blank",
     });
   }
+  body.status = "COMPLETED"
+
+  const updatedNotification = new NotificationSchema(body);
+
+  if (!updatedNotification) {
+    return res.status(400).json({ success: false, error: err });
+  }
+
+  NotificationSchema.findByIdAndUpdate(body._id,updatedNotification)
+    .then((notification, b) => {
+      return res.status(201).json({
+        success: true,
+        data: notification,
+        message: "notification posted!",
+      });
+    })
+    .catch((error) => {
+      return res.status(400).json({
+        error,
+        message: "notification posted!",
+      });
+    });
+};
+
+
+postNotification = (req, res) => {
+  const body = req.body;
+  if (!body) {
+    return res.status(400).json({
+      success: false,
+      error: "Blank",
+    });
+  }
+  
   const newNotification = new NotificationSchema(body);
 
   if (!newNotification) {
@@ -19,17 +52,17 @@ postNotification = (req, res) => {
 
   newNotification
     .save()
-    .then((user, b) => {
+    .then((notification, b) => {
       return res.status(201).json({
         success: true,
-        data: user,
-        message: "notification poster!",
+        data: notification,
+        message: "notification posted!",
       });
     })
     .catch((error) => {
       return res.status(400).json({
         error,
-        message: "notification poster!",
+        message: "notification posted!",
       });
     });
 };
@@ -40,14 +73,14 @@ getNotifications = async (req, res) => {
     findCriteria.to = req.body.to;
   }
 
-  await NotificationSchema.find(findCriteria, (err, user) => {
+  await NotificationSchema.find(findCriteria, (err, notification) => {
     if (err) {
       return res.status(400).json({ success: false, error: err });
     }
-    if (!user) {
+    if (!notification) {
       return res.status(404).json({ success: true, data: [] });
     }
-    return res.status(200).json({ success: true, data: user });
+    return res.status(200).json({ success: true, data: notification });
   }).catch((err) => {
     return res.status(200).json({ success: false, data: err });
   });
@@ -57,5 +90,7 @@ getNotifications = async (req, res) => {
 
 router.post("/postNotification", postNotification);
 router.post("/getNotifications", getNotifications);
+router.post("/markNotificationAsRead", markNotificationAsRead);
+
 
 module.exports = router;

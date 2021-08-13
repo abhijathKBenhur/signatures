@@ -10,6 +10,8 @@ import moment from "moment";
 import Web3Utils from "web3-utils";
 import CONSTANTS from "../../commons/Constants";
 import CollectionCard from "../collection-card/collection-card";
+import CommentsPanel from  "../comments/CommentsPanel"
+
 
 const Rack = (props) => {
   return (
@@ -33,10 +35,7 @@ const Rack = (props) => {
         </Col>
         <Col md="2" className="latest-news">
             <span className="master-grey">Newsletter</span>
-            <div className="news-list">
-
-
-            </div>
+            <CommentsPanel></CommentsPanel>
         </Col>
         
       </Row>
