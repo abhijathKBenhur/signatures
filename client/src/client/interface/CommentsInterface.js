@@ -6,9 +6,9 @@ const api = axios.create({
     baseURL: process.env.NODE_ENV == "production" ? ENDPOINTS.REMOTE_ENDPOINTS: ENDPOINTS.LOCAL_ENDPOINTS
 })
 
-export const postComment = (from,to,action,status,message,payload) => {
+export const postComment = (from,to,action,message,payload) => {
     let request = {
-        from, to, action, status, message,payload
+        from, to, action, message,payload
     }
     return api.post("/postComment",request)
 }

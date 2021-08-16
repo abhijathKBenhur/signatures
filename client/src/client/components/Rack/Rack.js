@@ -35,7 +35,6 @@ const Rack = (props) => {
         </Col>
         <Col md="2" className="latest-news">
             <span className="master-grey">Newsletter</span>
-            <CommentsPanel></CommentsPanel>
         </Col>
         
       </Row>

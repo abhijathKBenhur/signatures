@@ -35,7 +35,6 @@ const SignatureNew = (props) => {
   const [upvotes, setUpvotes] = useState([]);
   const reduxState = useSelector((state) => state, shallowEqual);
   const [loggedInUserDetails, setLoggedInUserDetails] = useState({});
-  const [comments, setComments] = useState([]);
   const location = useLocation();
   const audioRef = useRef(null);
   const [signature, setSignature] = useState({});
@@ -54,7 +53,6 @@ const SignatureNew = (props) => {
     isAudioPlaying: false,
   });
 
-
   useEffect(() => {
     pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
     let signatureFromParent = location.state;
@@ -66,7 +64,7 @@ const SignatureNew = (props) => {
         setSignature(...signature, ...signatureObject);
       });
     }
-    loadUpvotes()
+    loadUpvotes();
     // setSignature({...signature, ...dummmySignature});
     getIPSPDFFile(hashId);
   }, []);
@@ -87,7 +85,6 @@ const SignatureNew = (props) => {
     setLoggedInUserDetails(userDetails);
     console.log("userDetails = ", userDetails);
   }, [reduxState.userDetails]);
-
 
   useEffect(() => {
     if (audioRef.current) {
@@ -112,7 +109,7 @@ const SignatureNew = (props) => {
     };
   };
 
-  const loadUpvotes = () =>{
+  const loadUpvotes = () => {
     RelationsInterface.getRelations({
       to: signature.ideaID,
     })
@@ -120,7 +117,7 @@ const SignatureNew = (props) => {
         setUpvotes(_.map(success.data.data, "from"));
       })
       .catch((err) => {});
-  }
+  };
 
   const onDocumentLoadSuccess = ({ numPages }) => {
     setPdfPages({ ...pdfPages, totalPages: numPages });
@@ -236,49 +233,37 @@ const SignatureNew = (props) => {
     }
   };
 
-  const setVoting =() =>{
+  const setVoting = () => {
     if (upvotes.indexOf(loggedInUserDetails.userName) < 0) {
       RelationsInterface.postRelation(
         loggedInUserDetails.userName,
         signature.ideaID,
-        CONSTANTS.RELATION.UPVOTE,
+        CONSTANTS.ACTIONS.UPVOTE,
         CONSTANTS.ACTION_STATUS.PENDING,
         "Upvoting."
       ).then((success) => {
-        showToaster("Upvoted!", { type: "success" });
-        upvotes.push(loggedInUserDetails.userName);
-        setUpvotes(upvotes);
+        setUpvotes(...upvotes, loggedInUserDetails.userName);
         NotificationInterface.postNotification(
           loggedInUserDetails.userName,
           signature.ideaID,
-          CONSTANTS.NOTIFICATION_ACTIONS.UPVOTED,
+          CONSTANTS.ACTIONS.UPVOTE,
           CONSTANTS.ACTION_STATUS.COMPLETED,
-          loggedInUserDetails.userName + " Upvoted you!"
+          loggedInUserDetails.userName + "just upvoted you."
         );
       });
     } else {
       RelationsInterface.removeRelation(
         loggedInUserDetails.userName,
         signature.ideaID,
-        CONSTANTS.RELATION.UPVOTE
+        CONSTANTS.ACTIONS.UPVOTE
       ).then((success) => {
-        showToaster("Upvoted!", { type: "success" });
-        let followeIndex = upvotes.indexOf(loggedInUserDetails.userName);
-        upvotes.splice(followeIndex, 1);
-        setUpvotes(upvotes);
+        let voteIndex = upvotes.indexOf(loggedInUserDetails.userName);
+        let upvotesCopy = _.clone(upvotes) || [];
+        upvotesCopy.splice(voteIndex, 1);
+        setUpvotes(upvotesCopy);
       });
     }
-  }
-
-  function getComments() {
-    CommentsInterface.getComments({ to: "currentUserDetails.userName" }).then(
-      (signatures) => {
-        let response = _.get(signatures, "data.data");
-        setComments(response);
-        console.log(response);
-      }
-    );
-  }
+  };
 
   return (
     <div className="signature-new">
@@ -291,17 +276,57 @@ const SignatureNew = (props) => {
                   md="12"
                   className="d-flex flex-row justify-content-between align-items-center"
                 >
-                  <div className="action-section">
-                    <div className="user-details">
-                      <div className="user-metadata">
-                        <span className="master-header justify-content-left">
-                          {signature.title}
-                        </span>
-                      </div>
+                  <div className="user-details">
+                    <div className="user-metadata">
+                      <span className="master-header justify-content-left">
+                        {signature.title}
+                      </span>
                     </div>
                   </div>
                   <div className="action-section">
-                    <Button className="like-btn">Collaborate</Button>
+                    <div className="justify-content-center">
+                      <div className="sidebar">
+                        
+                        <div className="action-btns align-items-center">
+                          <OverlayTrigger
+                            placement="left"
+                            overlay={
+                              <Tooltip>
+                                {" "}
+                                {upvotes.indexOf(loggedInUserDetails.userName) >
+                                -1
+                                  ? "unvote"
+                                  : "upvote"}
+                              </Tooltip>
+                            }
+                          >
+                            <Button
+                              variant="action"
+                              onClick={() => setVoting()}
+                              className={
+                                upvotes.indexOf(loggedInUserDetails.userName) >
+                                -1
+                                  ? "upvoted"
+                                  : ""
+                              }
+                            >
+                              <i
+                                aria-hidden="true"
+                                className={
+                                  upvotes.indexOf(
+                                    loggedInUserDetails.userName
+                                  ) > -1
+                                    ? "fa fa-thumbs-o-up upvoted"
+                                    : "fa fa-thumbs-o-up"
+                                }
+                              ></i>
+                            </Button>
+                          </OverlayTrigger>
+                          <Button variant="primary">Collaborate</Button>
+                        </div>
+                        
+                      </div>
+                    </div>
                   </div>
                 </Col>
               </Row>
@@ -312,11 +337,13 @@ const SignatureNew = (props) => {
                 >
                   <div className="tags second-grey">
                     <Button disabled variant="pill">
-                      {signature.category && JSON.parse(signature.category) && JSON.parse(signature.category).label}
+                      {signature.category &&
+                        JSON.parse(signature.category) &&
+                        JSON.parse(signature.category).label}
                     </Button>
                   </div>
                   <div className="time second-grey">
-                    {moment(signature.createdAt).format("YYYY-MM-DD HH:mm:ss")}
+                    {moment(signature.createdAt).format("YYYY-MM-DD HH:mm:ss")}, {signature.location || "Global"}
                   </div>
                 </Col>
                 <Col md="12">
@@ -342,15 +369,19 @@ const SignatureNew = (props) => {
             </Col>
             <Col md="3" className="conversation-container  pt-2">
               <span className="conversation-title second-header">
-                Conversation (280)
+                Conversation
               </span>
               <hr></hr>
-              <CommentsPanel user={loggedInUserDetails} idea={signature} type="ideaComments"
-              ></CommentsPanel>
+              {!_.isEmpty(signature) && (
+                <CommentsPanel
+                  idea={signature}
+                  type="ideaComments"
+                ></CommentsPanel>
+              )}
             </Col>
             <Col md="1" className="options-container  pt-2">
               <Row className="justify-content-center">
-                <div className="sidebar">
+                <div className="sidebar d-flex flex-column">
                   <div className="avatar">
                     {signature.owner && (
                       <img
@@ -362,12 +393,12 @@ const SignatureNew = (props) => {
                       />
                     )}
                   </div>
-                  <div className="action-btns">
+                  <div className="action-btns d-flex flex-column align-items-center">
                     <OverlayTrigger
                       placement="left"
                       overlay={<Tooltip>View on chain</Tooltip>}
                     >
-                      <Button variant="outline-secondary">
+                      <Button variant="action">
                         <i className="fa fa-link" aria-hidden="true"></i>
                       </Button>
                     </OverlayTrigger>
@@ -377,24 +408,13 @@ const SignatureNew = (props) => {
                       overlay={<Tooltip>Share</Tooltip>}
                     >
                       <Button
-                        variant="outline-secondary"
+                        variant="action"
                         onClick={() => showModal("share")}
                       >
                         <i className="fa fa-bullhorn" aria-hidden="true"></i>
                       </Button>
                     </OverlayTrigger>
-                    <OverlayTrigger
-                      placement="left"
-                      overlay={<Tooltip> {upvotes.indexOf(loggedInUserDetails.userName) > -1 ? "unvote" :"upvote"}</Tooltip>}
-                    >
-                      <Button
-                        variant="outline-secondary"
-                        onClick={() => setVoting()}
-                        className={upvotes.indexOf(loggedInUserDetails.userName) > -1 ? "upvoted" :""}
-                      >
-                        <i aria-hidden="true" className={upvotes.indexOf(loggedInUserDetails.userName) > -1 ? "fa fa-thumbs-o-up upvoted" :"fa fa-thumbs-o-up"}></i>
-                      </Button>
-                    </OverlayTrigger>
+                    
                   </div>
                 </div>
               </Row>
