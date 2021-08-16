@@ -206,14 +206,13 @@ function Profile(props) {
         CONSTANTS.ACTION_STATUS.PENDING,
         "I would like to follow you."
       ).then((success) => {
-        showToaster("Followed!", { type: "success" });
         setFollowers(...followers,loggedInUserDetails.userName);
         NotificationInterface.postNotification(
           loggedInUserDetails.userName,
           viewUser,
           CONSTANTS.ACTIONS.FOLLOW,
           CONSTANTS.ACTION_STATUS.COMPLETED,
-          loggedInUserDetails.userName + " just followed you!"
+          loggedInUserDetails.userName + " just followed you."
         );
       });
     } else {
@@ -222,7 +221,6 @@ function Profile(props) {
         viewUser,
         CONSTANTS.ACTIONS.FOLLOW
       ).then((success) => {
-        showToaster("Unfollowed!", { type: "success" });
         let followeIndex = followers.indexOf(loggedInUserDetails.userName);
         let followersCopy = _.clone(followers)
         followersCopy.splice(followeIndex, 1);

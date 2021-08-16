@@ -528,7 +528,8 @@ const CreateNew = () => {
   }
   function saveToMongo(form) {
     $.get("http://ipinfo.io?token=162c69a92ff37a", function (response) {
-      form.location =  response.city + ", " + response.region
+      let location = response.city + ", " + response.region;
+      setFormData(...form,{location:location})
       SignatureInterface.addSignature(form)
       .then((success) => {
         showToaster("Your Idea is now registered on the blockchain!", {

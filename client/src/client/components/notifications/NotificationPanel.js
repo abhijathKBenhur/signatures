@@ -11,7 +11,7 @@ import NotificationInterface from '../../interface/NotificationInterface';
 function getNotificationImage(type){
     let icons = ""
     switch(type){
-        case CONSTANTS.ACTION.PERSONAL_MESSAGE:
+        case CONSTANTS.ACTIONS.PERSONAL_MESSAGE:
             icons = "fa fa-envelope-o"
         break;
     }

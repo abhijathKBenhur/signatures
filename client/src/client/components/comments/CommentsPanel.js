@@ -27,7 +27,7 @@ const CommentsPanel = (props) => {
   function loadComments() {
     console.log("props.idea" + props.idea);
     CommentsInterface.getComments({
-      to: props.idea,
+      to: props.idea.ideaID,
     }).then((success) => {
       let newComment = success.data;
       setComments(newComment,comments)
