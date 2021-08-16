@@ -17,6 +17,7 @@ import UserInterface from '../../interface/UserInterface';
 const EditProfile = ({ ...props }) => {
 
     const [editProfile, setEditProfile] = useState({
+        id: props.userDetails._id || '',
         userName: props.userDetails.userName || '',
         firstName: props.userDetails.firstName ||  '',
         lastName: props.userDetails.lastName || '',

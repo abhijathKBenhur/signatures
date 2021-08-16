@@ -273,7 +273,7 @@ const SignatureNew = (props) => {
         <div className="wrapper-margin">
           <Row className="user-row  ">
             <Col md="8" className="document-container pt-2">
-              <Row className="justify-content-between align-items-center mb-3">
+              <Row className="justify-content-between align-items-center mb-1">
                 <Col
                   md="12"
                   className="d-flex flex-row justify-content-between align-items-center"
@@ -290,6 +290,7 @@ const SignatureNew = (props) => {
                       <div className="sidebar">
                         
                         <div className="action-btns align-items-center">
+                          <span className="second-grey">{upvotes.length} upvotes</span>
                           <OverlayTrigger
                             placement="left"
                             overlay={
@@ -308,8 +309,8 @@ const SignatureNew = (props) => {
                               className={
                                 upvotes.indexOf(loggedInUserDetails.userName) >
                                 -1
-                                  ? "upvoted"
-                                  : ""
+                                  ? "upvoted small"
+                                  : "small"
                               }
                             >
                               <i
