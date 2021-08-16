@@ -57,11 +57,10 @@ getUserInfo = async (req, res) => {
 
 updateUser = async (req, res) => {
   console.log("updateUser", req.body);
-  let findCriteria = {userName: req.body.userName};
   const newUser = new User(req.body);
   delete newUser.userName
-  await User.findOneAndUpdate(
-    findCriteria, 
+  await User.findByIdAndUpdate(
+    req.body.id, 
     newUser,
     { new: true },
     (err, user) => {

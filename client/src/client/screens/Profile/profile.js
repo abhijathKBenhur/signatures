@@ -69,21 +69,21 @@ function Profile(props) {
 
   // wallet Dummy Data
   const WalletData = [
-    {
-      coinType: "Tribe Coin",
-      coinBalance: "23 TBC",
-      description: "You can create 23 ideas",
-    },
+    // {
+    //   coinType: "Tribe Coin",
+    //   coinBalance: "23 TBC",
+    //   description: "You can create 23 ideas",
+    // },
     {
       coinType: "Tribe Gold",
       coinBalance: "5 TBG",
       description: "Equalent to 23$",
     },
-    {
-      coinType: "GAS",
-      coinBalance: "0.0003 POLYGON",
-      description: "You can post 20 ideas with the remaining gas",
-    },
+    // {
+    //   coinType: "GAS",
+    //   coinBalance: "0.0003 POLYGON",
+    //   description: "You can post 20 ideas with the remaining gas",
+    // },
   ];
 
   const DummyTransactionList = [
@@ -198,7 +198,7 @@ function Profile(props) {
   }
 
   function followUser() {
-    if (followers.indexOf(loggedInUserDetails.userName)) {
+    if (followers.indexOf(loggedInUserDetails.userName) < 0) {
       RelationsInterface.postRelation(
         loggedInUserDetails.userName,
         viewUser,
@@ -206,7 +206,8 @@ function Profile(props) {
         CONSTANTS.ACTION_STATUS.PENDING,
         "I would like to follow you."
       ).then((success) => {
-        setFollowers(...followers,loggedInUserDetails.userName);
+        let newFollowlist = _.concat(followers,[loggedInUserDetails.userName])
+        setFollowers(newFollowlist);
         NotificationInterface.postNotification(
           loggedInUserDetails.userName,
           viewUser,
@@ -445,7 +446,7 @@ function Profile(props) {
                       </Col>
                       <Col md="1">
                         {!isMyPage() && (
-                          <Row className="justify-content-end pr-3 cursor-pointer color-secondary">
+                          <Row className="justify-content-end pr-3 cursor-pointer color-secondary mb-1">
                             <OverlayTrigger
                               key={"top"}
                               placement="top"
@@ -470,7 +471,7 @@ function Profile(props) {
                           </Row>
                         )}
 
-                        <Row className="justify-content-end pr-3 cursor-pointer color-secondary">
+                        <Row className="justify-content-end pr-3 cursor-pointer color-secondary mb-1">
                           <OverlayTrigger
                             key={"top"}
                             placement="top"
@@ -492,7 +493,7 @@ function Profile(props) {
                           </OverlayTrigger>
                         </Row>
                         {!isMyPage() && (
-                          <Row className="justify-content-end pr-3 cursor-pointer color-secondary">
+                          <Row className="justify-content-end pr-3 cursor-pointer color-secondary mb-1">
                             <OverlayTrigger
                               key={"top"}
                               placement="top"
@@ -594,7 +595,7 @@ function Profile(props) {
                       md="2"
                       className="notification-wrapper mt-1 flex-column h-100"
                     >
-                      <span className="second-grey notification-title">
+                      <span className="second-grey notification-title pl-2">
                         Notifications
                       </span>
                       <hr></hr>

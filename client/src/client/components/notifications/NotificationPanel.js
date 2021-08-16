@@ -14,6 +14,21 @@ function getNotificationImage(type){
         case CONSTANTS.ACTIONS.PERSONAL_MESSAGE:
             icons = "fa fa-envelope-o"
         break;
+        case CONSTANTS.ACTIONS.FOLLOW:
+            icons = "fa fa-user-plus"
+        break;
+        case CONSTANTS.ACTIONS.UPVOTE:
+            icons = "fa fa-thumbs-up"
+        break;
+        case CONSTANTS.ACTIONS.COMMENT:
+            icons = "fa fa-commenting-o"
+        break;
+        case CONSTANTS.ACTIONS.CREATE_CLAN:
+            icons = "fa fa-users"
+        break;
+        default:
+        icons = "fa fa-bell"
+        break;
     }
     return icons
 }
@@ -41,7 +56,7 @@ const NotificationPanel = (props) => {
         <ListGroup className="">
         {props.myNotifications.map(notification => {
           return   (
-            <div className={notification.status == "COMPLETED" ? "notification-item d-flex flex-row align-items-center pb-1": "notification-item d-flex flex-row align-items-center pb-1 unread"} onClick={() => viewMessageHandler(notification)}>
+            <div className={notification.status == "COMPLETED" ? "notification-item d-flex flex-row align-items-center pb-1 pl-1": "notification-item d-flex flex-row align-items-center pb-1 pl-1 unread"} onClick={() => viewMessageHandler(notification)}>
                 <div className="icon mr-2 p-1">
                     <i className={getNotificationImage(notification.action)}></i>
                 </div>
