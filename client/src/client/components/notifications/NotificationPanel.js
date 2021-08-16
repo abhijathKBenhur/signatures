@@ -11,7 +11,7 @@ import NotificationInterface from '../../interface/NotificationInterface';
 function getNotificationImage(type){
     let icons = ""
     switch(type){
-        case CONSTANTS.NOTIFICATION_ACTIONS.PERSONAL_MESSAGE:
+        case CONSTANTS.ACTION.PERSONAL_MESSAGE:
             icons = "fa fa-envelope-o"
         break;
     }
@@ -28,7 +28,7 @@ const NotificationPanel = (props) => {
     })
     const viewMessageHandler = (notification) => {
 
-        notification.status = CONSTANTS.NOTIFICATION_ACTIONS.COMPLETED
+        notification.status = CONSTANTS.ACTIONS.COMPLETED
         setNotificationState({
             ...notificationState,
             viewNotification: true,

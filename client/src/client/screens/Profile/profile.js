@@ -202,7 +202,7 @@ function Profile(props) {
       RelationsInterface.postRelation(
         loggedInUserDetails.userName,
         viewUser,
-        CONSTANTS.RELATION.FOLLOW,
+        CONSTANTS.ACTIONS.FOLLOW,
         CONSTANTS.ACTION_STATUS.PENDING,
         "I would like to follow you."
       ).then((success) => {
@@ -211,7 +211,7 @@ function Profile(props) {
         NotificationInterface.postNotification(
           loggedInUserDetails.userName,
           viewUser,
-          CONSTANTS.NOTIFICATION_ACTIONS.FOLLOWED,
+          CONSTANTS.ACTIONS.FOLLOW,
           CONSTANTS.ACTION_STATUS.COMPLETED,
           loggedInUserDetails.userName + " just followed you!"
         );
@@ -220,7 +220,7 @@ function Profile(props) {
       RelationsInterface.removeRelation(
         loggedInUserDetails.userName,
         viewUser,
-        CONSTANTS.RELATION.FOLLOW
+        CONSTANTS.ACTIONS.FOLLOW
       ).then((success) => {
         showToaster("Unfollowed!", { type: "success" });
         let followeIndex = followers.indexOf(loggedInUserDetails.userName);

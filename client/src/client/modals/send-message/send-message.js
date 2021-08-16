@@ -39,7 +39,7 @@ const SendMessage = ({ ...props }) => {
     let payload = {
       ...sendMessage,
     };
-    NotificationInterface.postNotification(sendMessage.from, sendMessage.to, CONSTANTS.NOTIFICATION_ACTIONS.PERSONAL_MESSAGE, sendMessage.status, sendMessage.message)
+    NotificationInterface.postNotification(sendMessage.from, sendMessage.to, CONSTANTS.ACTIONPERSONAL_MESSAGE, sendMessage.status, sendMessage.message)
       .then((success) => {
         console.log("message created");
         props.onHide();

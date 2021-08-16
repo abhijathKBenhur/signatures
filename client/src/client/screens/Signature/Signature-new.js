@@ -35,7 +35,6 @@ const SignatureNew = (props) => {
   const [upvotes, setUpvotes] = useState([]);
   const reduxState = useSelector((state) => state, shallowEqual);
   const [loggedInUserDetails, setLoggedInUserDetails] = useState({});
-  const [comments, setComments] = useState([]);
   const location = useLocation();
   const audioRef = useRef(null);
   const [signature, setSignature] = useState({});
@@ -59,11 +58,11 @@ const SignatureNew = (props) => {
     pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
     let signatureFromParent = location.state;
     if (signatureFromParent) {
-      setSignature({ ...signature, ...signatureFromParent });
+      setSignature({ signatureFromParent });
     } else {
       SignatureInterface.getSignatureByHash(hashId).then((response) => {
         let signatureObject = _.get(response, "data.data");
-        setSignature(...signature, ...signatureObject);
+        setSignature(signatureObject);
       });
     }
     loadUpvotes()
@@ -241,7 +240,7 @@ const SignatureNew = (props) => {
       RelationsInterface.postRelation(
         loggedInUserDetails.userName,
         signature.ideaID,
-        CONSTANTS.RELATION.UPVOTE,
+        CONSTANTS.ACTIONS.UPVOTE,
         CONSTANTS.ACTION_STATUS.PENDING,
         "Upvoting."
       ).then((success) => {
@@ -250,7 +249,7 @@ const SignatureNew = (props) => {
         NotificationInterface.postNotification(
           loggedInUserDetails.userName,
           signature.ideaID,
-          CONSTANTS.NOTIFICATION_ACTIONS.UPVOTED,
+          CONSTANTS.ACTIONS.UPVOTE,
           CONSTANTS.ACTION_STATUS.COMPLETED,
           loggedInUserDetails.userName + " Upvoted you!"
         );
@@ -259,7 +258,7 @@ const SignatureNew = (props) => {
       RelationsInterface.removeRelation(
         loggedInUserDetails.userName,
         signature.ideaID,
-        CONSTANTS.RELATION.UPVOTE
+        CONSTANTS.ACTIONS.UPVOTE
       ).then((success) => {
         showToaster("Upvoted!", { type: "success" });
         let voteIndex = upvotes.indexOf(loggedInUserDetails.userName);
@@ -270,15 +269,6 @@ const SignatureNew = (props) => {
     }
   }
 
-  function getComments() {
-    CommentsInterface.getComments({ to: "currentUserDetails.userName" }).then(
-      (signatures) => {
-        let response = _.get(signatures, "data.data");
-        setComments(response);
-        console.log(response);
-      }
-    );
-  }
 
   return (
     <div className="signature-new">
@@ -345,8 +335,8 @@ const SignatureNew = (props) => {
                 Conversation (280)
               </span>
               <hr></hr>
-              <CommentsPanel user={loggedInUserDetails} idea={signature} type="ideaComments"
-              ></CommentsPanel>
+              {!_.isEmpty(signature) && <CommentsPanel idea={signature} type="ideaComments"
+              ></CommentsPanel>}
             </Col>
             <Col md="1" className="options-container  pt-2">
               <Row className="justify-content-center">
