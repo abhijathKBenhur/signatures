@@ -234,7 +234,7 @@ const SignatureNew = (props) => {
   };
 
   const setVoting = () => {
-    if (upvotes.indexOf(loggedInUserDetails.userName) < 0) {
+    if (upvotes.indexOf(loggedInUserDetails.userName) === -1) {
       RelationsInterface.postRelation(
         loggedInUserDetails.userName,
         signature.ideaID,
@@ -242,7 +242,9 @@ const SignatureNew = (props) => {
         CONSTANTS.ACTION_STATUS.PENDING,
         "Upvoting."
       ).then((success) => {
-        setUpvotes(...upvotes, loggedInUserDetails.userName);
+        const upVotesClone = _.cloneDeep(upvotes);
+        upVotesClone.push(loggedInUserDetails.userName)
+        setUpvotes(upVotesClone);
         NotificationInterface.postNotification(
           loggedInUserDetails.userName,
           signature.ideaID,
