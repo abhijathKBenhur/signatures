@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Card, CardDeck, Image } from "react-bootstrap";
 import { Row, Col, Container } from "react-bootstrap";
 import moment from "moment";
@@ -27,6 +27,9 @@ const CollectionCard = (props) => {
       },
     });
   };
+  useEffect(() => {
+    setSignature(props.collection)
+  },[props])
 
   const [signature, setSignature] = useState(props.collection);
   return (
