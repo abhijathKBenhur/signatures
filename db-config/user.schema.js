@@ -9,7 +9,7 @@ const User = new Schema(
     fullName: { type: String },
     imageUrl: { type: String },
     metamaskId: { type: String },
-    userName: { type: String , immutable: true},
+    userName: { type: String },
     loginMode: { type: String },
 
     facebookUrl: { type: String },
@@ -20,7 +20,10 @@ const User = new Schema(
 
     tribeCoinBalance: {type: Number},
     GasBalance: {type: Number},
-    tribeGoldBalance: {type: Number}
+    tribeGoldBalance: {type: Number},
+
+    referral:{ type: String },
+
   },
   { timestamps: true }
 );

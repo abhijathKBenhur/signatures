@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { ListGroup } from "react-bootstrap";
 import CONSTANTS from '../../commons/Constants';
 import ViewNotification from '../../modals/viewNotification/view-notification';
+import {getInitialSubString} from "../../commons/common.utils"
 import _ from 'lodash';
 import './notification.scss'
 import NotificationInterface from '../../interface/NotificationInterface';
@@ -62,7 +63,7 @@ const NotificationPanel = (props) => {
                 </div>
                 <div className="content">
                     <div className="top master-grey">{notification.from}</div>
-                    <div className="bottom second-grey">{notification.message}</div>
+                    <div className="bottom second-grey">{getInitialSubString(notification.message, 25)}</div>
                 </div>
             </div>
           )

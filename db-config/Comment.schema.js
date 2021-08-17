@@ -6,7 +6,8 @@ const Comment = new Schema(
     from : { type: String },
     to: { type: String },
     action: { type: String },
-    comment: { type: String }
+    comment: { type: String },
+    entity:  { type: String }
   },
   { timestamps: true }
 );

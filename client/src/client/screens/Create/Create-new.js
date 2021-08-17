@@ -36,7 +36,6 @@ import SocialShare from "../../modals/social-share/socialShare";
 import "react-step-progress-bar/styles.css";
 import { shallowEqual, useSelector } from "react-redux";
 import user from "../../../assets/images/user.png";
-import audio from "../../../assets/images/audio.png";
 import loadingGif from "../../../assets/images/loader_blocks.gif";
 import jspdf from "jspdf";
 import domtoimage from "dom-to-image";

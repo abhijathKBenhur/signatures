@@ -23,7 +23,6 @@ import { useHistory } from "react-router-dom";
 
 import userImg from "../../../assets/images/user.png";
 import _ from "lodash";
-import audio from "../../../assets/images/audio.png";
 import ShareModal from "../../modals/share/share.modal";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 
@@ -248,7 +247,7 @@ const SignatureNew = (props) => {
           signature.ideaID,
           CONSTANTS.ACTIONS.UPVOTE,
           CONSTANTS.ACTION_STATUS.COMPLETED,
-          loggedInUserDetails.userName + "just upvoted you."
+          loggedInUserDetails.userName + "just upvoted your idea."
         );
       });
     } else {
@@ -288,7 +287,7 @@ const SignatureNew = (props) => {
                       <div className="sidebar">
                         
                         <div className="action-btns align-items-center">
-                          <span className="second-grey">{upvotes.length} upvotes</span>
+                          {/* <span className="second-grey">{upvotes.length} upvotes</span> */}
                           <OverlayTrigger
                             placement="left"
                             overlay={
@@ -377,6 +376,7 @@ const SignatureNew = (props) => {
                 <CommentsPanel
                   idea={signature}
                   type="ideaComments"
+                  entity={CONSTANTS.ENTITIES.IDEA}
                 ></CommentsPanel>
               )}
             </Col>

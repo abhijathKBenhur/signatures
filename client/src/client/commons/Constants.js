@@ -13,9 +13,10 @@ const PURPOSES = {
   LICENCE:  "LICENCE",
 };
 
-const RELATION = {
-  UPVOTE: "UPVOTE",
-  FOLLOW: "FOLLOW",
+const ENTITIES = {
+  IDEA: "IDEA",
+  PROFILE: "PROFILE",
+  CLAN: "CLAN",
 };
 
 const ACTIONS = {
@@ -69,8 +70,8 @@ const CONSTANTS = {
   ACTIONS,
   ACTION_STATUS,
   COLLAB_TYPE,
-  RELATION,
-  ACTIONS
+  ACTIONS,
+  ENTITIES
 };
 
 export default CONSTANTS;

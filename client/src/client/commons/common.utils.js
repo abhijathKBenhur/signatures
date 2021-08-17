@@ -19,6 +19,8 @@ export const showToaster = (text, data) => {
 }
 
 
+
+
 export const getPurposeIcon = (item) => {
     if (item == CONSTANTS.PURPOSES.SELL) {
       return "fa fa-usd purpose-icon second-grey";
@@ -30,6 +32,15 @@ export const getPurposeIcon = (item) => {
       return "fa fa-floppy-o purpose-icon second-grey";
     } else if (item == CONSTANTS.PURPOSES.LICENCE) {
       return "fa fa-id-card-o purpose-icon second-grey";
+    }
+  }
+
+  export const getInitialSubString = (string,limit) => {
+    if(string && string.length > limit){
+      return string.substring(0,limit) + "... "
+    }
+    else{
+      return string
     }
   }
 

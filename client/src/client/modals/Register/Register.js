@@ -8,7 +8,7 @@ import { shallowEqual, useSelector } from "react-redux";
 import CONSTANTS from "../../commons/Constants";
 import { setReduxUserDetails } from "../../redux/actions";
 import metamaskLogo from "../../../assets/images/metamask.png";
-import coinBaseLogo from "../../../assets/images/coinbase.png";
+import successLogo from "../../../assets/images/sucess.png";
 import SignatureInterface from "../../interface/SignatureInterface";
 import BlockchainInterface from "../../interface/BlockchainInterface";
 import { Check, RefreshCcw, X } from "react-feather";
@@ -46,8 +46,9 @@ const Register = (props) => {
     },
   ]);
   const [activeStep, setActiveStep] = useState(steps[0]);
+  const [registration, setRegistration] = useState("");
+
   const [validated, setValidated] = useState(false);
-  const [registration, setRegistration] = useState("false");
   const [userNameError, setuserNameError] = useState(false);
   const [registrationErrorMessage, setregistrationErrorMessage] = useState("");
 
@@ -60,6 +61,7 @@ const Register = (props) => {
     metamaskId: _.get(reduxState, "metamaskID"),
     userName: _.get(reduxState, "userName"),
     loginMode: _.get(reduxState, "loginMode"),
+    referral: undefined
   });
 
   function registerUser() {
@@ -116,7 +118,9 @@ const Register = (props) => {
 
   const handleBack = () => {
     const index = steps.findIndex((x) => x.key === activeStep.key);
-    if (index === 0) return;
+    if (index === 0) {
+      history.push("/home");
+    };
 
     setSteps((prevStep) =>
       prevStep.map((x) => {
@@ -146,6 +150,7 @@ const Register = (props) => {
       fullName: _.get(googleFormResponseObject.profileObj, "name"),
       imageUrl: _.get(googleFormResponseObject.profileObj, "imageUrl"),
       loginMode: "google",
+      userName: _.get(googleFormResponseObject.profileObj, "email").split("@")[0]
     });
   }
 
@@ -164,7 +169,7 @@ const Register = (props) => {
     switch (stepKey) {
       case "socialLogin":
         return (
-          <div>
+          <div className="w-100 align-self-center d-flex justify-content-center">
             {_.isEmpty(userDetails.email) ? (
               <GoogleLogin
                 //secretKey:I0YMKAriMhc6dB7bN44fHuKj
@@ -261,14 +266,18 @@ const Register = (props) => {
         break;
       case "userName":
         return (
-          <div>
-            <Row className="user-name-row">
+          <div className="w-100 d-flex flex-row align-items-center justify-content-center">
               {registration == PASSED ? (
-                <div>
-                  {" "}
-                  Hi {userDetails.fullName}, Welcome to the tribe. You have
+                <div className="d-flex flex-column align-items-center">
+                  <div>
+                    <img src={successLogo} width="70"></img>
+                    <span className="second-grey">Welcome to IdeaTribe</span>
+                  </div>
+                  <span>
+                  Hi {userDetails.fullName} You have
                   signed up to the unlimited possibilities in the world of idea
                   sharing.
+                  </span>
                 </div>
               ) : registration == FAILED ? (
                 <div>
@@ -282,7 +291,7 @@ const Register = (props) => {
                   <Form.Group
                     as={Col}
                     className="formEntry userIDSection"
-                    md="12"
+                    md="6"
                     controlId="userName"
                   >
                     <Image
@@ -317,15 +326,31 @@ const Register = (props) => {
                       <X></X>
                     ) : null}
                   </Form.Group>
-                  {userNameError && (
+                  <Form.Group className="d-flex align-items-center justify-content-end" as={Col}
+                    md="6">
+                
+                    <div>
+                    <Form.Control
+                      type="text"
+                      name="referral"
+                      value={userDetails.referral}
+                      className={
+                        "userName referral"
+                      }
+                      placeholder="referral code"
+                      onChange={(handleChange)}
+                    />
+                    </div>
+                  {/* {userNameError && (
                     <span className="username-error-txt">
                       Invalid username please use lowercase with no special
                       charaters
                     </span>
-                  )}
+                  )} */}
+                  </Form.Group>
+                  
                 </>
               )}
-            </Row>
           </div>
         );
 
@@ -343,18 +368,21 @@ const Register = (props) => {
       ...userDetails,
       ...returnObj,
     });
-    if (/^[A-Z0-9]+$/i.test(value)) {
-      setuserNameError(false);
-      UserInterface.getUserInfo({ userName: value })
-        .then((userDetails) => {
-          setValidated(false);
-        })
-        .catch((error) => {
-          setValidated(true);
-        });
-    } else {
-      setuserNameError(true);
+    if(event.target.name == "userName"){
+      if (/^[A-Z0-9]+$/i.test(value)) {
+        setuserNameError(false);
+        UserInterface.getUserInfo({ userName: value })
+          .then((userDetails) => {
+            setValidated(false);
+          })
+          .catch((error) => {
+            setValidated(true);
+          });
+      } else {
+        setuserNameError(true);
+      }
     }
+    
   }
 
   return (
@@ -402,7 +430,7 @@ const Register = (props) => {
           md="12"
           className="d-flex justify-content-between align-items-center "
         >
-          {activeStep.index == 0 || registration == PASSED ? (
+          {registration == PASSED ? (
             <div></div>
           ) : (
             <Button
@@ -413,7 +441,9 @@ const Register = (props) => {
                 handleBack();
               }}
             >
-              Back
+               {activeStep.index == 0
+              ? "Cancel"
+              : "Back"}
             </Button>
           )}
           <Button
