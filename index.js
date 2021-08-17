@@ -23,7 +23,7 @@ app.use(cors(
   {
     origin: function (origin, callback) {
       console.log("API requested from " + origin)
-      if (whitelist.indexOf(origin) !== -1) {
+      if (whitelist.indexOf(origin) !== -1 || !origin) {
         callback(null, true)
       } else {
         callback(new Error('Not allowed by CORS'))

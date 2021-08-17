@@ -324,7 +324,12 @@ const SignatureNew = (props) => {
                               ></i>
                             </Button>
                           </OverlayTrigger>
-                          <Button variant="primary">Collaborate</Button>
+                          {signature.owner && loggedInUserDetails.userName == signature.owner.userName ? 
+                            <div>
+                              <Button variant="action" className="small ml-1" onClick={() => showModal("info")}> <i className="fa fa-cog"></i></Button>
+                            </div>
+                           :
+                          <Button variant="primary">{signature.purpose}</Button>}
                         </div>
                         
                       </div>
@@ -435,6 +440,7 @@ const SignatureNew = (props) => {
       )}
       {modalShow.infoModal && (
         <InfoModal
+          size="lg"
           {...signature}
           show={modalShow.infoModal}
           onHide={() => hideModal("info")}
