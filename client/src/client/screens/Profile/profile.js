@@ -206,7 +206,7 @@ function Profile(props) {
         CONSTANTS.ACTION_STATUS.PENDING,
         "I would like to follow you."
       ).then((success) => {
-        let newFollowlist = _.concat(followers,[loggedInUserDetails.userName])
+        let newFollowlist = _.concat(followers, [loggedInUserDetails.userName]);
         setFollowers(newFollowlist);
         NotificationInterface.postNotification(
           loggedInUserDetails.userName,
@@ -223,7 +223,7 @@ function Profile(props) {
         CONSTANTS.ACTIONS.FOLLOW
       ).then((success) => {
         let followeIndex = followers.indexOf(loggedInUserDetails.userName);
-        let followersCopy = _.clone(followers)
+        let followersCopy = _.clone(followers);
         followersCopy.splice(followeIndex, 1);
         setFollowers(followersCopy);
       });
@@ -267,8 +267,7 @@ function Profile(props) {
                         }}
                         alt="user"
                       />
-                      <div className="d-flex justify-content-center master-grey mt-1">
-                      </div>
+                      <div className="d-flex justify-content-center master-grey mt-1"></div>
                     </div>
                     <div className="profile-info">
                       <Row className="d-flex justify-content-center align-items-center">
@@ -394,6 +393,45 @@ function Profile(props) {
                         </reactShare.LinkedinShareButton>
                       </div>
                     )}
+
+                    <Row className="mt-5">
+                      <Col
+                        md="6"
+                        className="d-flex flex-column align-items-center stats-entry"
+                      >
+                        <span className="stats-title master-header">113</span>
+                        <span className="stats-value second-grey  text-center">
+                          Ideas posted
+                        </span>
+                      </Col>
+                      <Col
+                        md="6"
+                        className="d-flex flex-column align-items-center stats-entry"
+                      >
+                        <span className="stats-title master-header">113</span>
+                        <span className="stats-value second-grey  text-center">
+                          total upvotes
+                        </span>
+                      </Col>
+                      <Col
+                        md="6"
+                        className="d-flex flex-column align-items-center stats-entry"
+                      >
+                        <span className="stats-title master-header">113</span>
+                        <span className="stats-value second-grey  text-center">
+                          Users registered
+                        </span>
+                      </Col>
+                      <Col
+                        md="6"
+                        className="d-flex flex-column align-items-center stats-entry"
+                      >
+                        <span className="stats-title master-header">113</span>
+                        <span className="stats-value second-grey  text-center">
+                          Users registered
+                        </span>
+                      </Col>
+                    </Row>
                   </Col>
 
                   <Col

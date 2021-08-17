@@ -1,4 +1,4 @@
-const SignatureSchema = require("../db-config/Signature.schema");
+const IdeaSchema = require("../db-config/Signature.schema");
 const UserSchema = require("../db-config/user.schema");
 const UserAPI = require("../routes/UserAPI");
 const express = require("express");
@@ -25,7 +25,7 @@ addSignature = async (req, res) => {
       error: "Hollow idea",
     });
   }
-  const newIdea = new SignatureSchema(newTile);
+  const newIdea = new IdeaSchema(newTile);
 
   if (!newIdea) {
     return res.status(400).json({ success: false, error: err });
@@ -49,8 +49,8 @@ addSignature = async (req, res) => {
 };
 
 getSignatureByHash = async (req, res) => {
-  console.log("Getting SignatureSchema :: ", req.params.PDFHash);
-  await SignatureSchema.findOne({ PDFHash: req.params.PDFHash })
+  console.log("Getting IdeaSchema :: ", req.params.PDFHash);
+  await IdeaSchema.findOne({ PDFHash: req.params.PDFHash })
     .populate("creator")
     .populate("owner")
     .exec((err, signature) => {
@@ -102,7 +102,7 @@ getSignatures = async (req, res) => {
     payLoad.owner = ownerUser._id;
   }
   if (!limit) {
-      let tiles = await SignatureSchema.find(payLoad)
+      let tiles = await IdeaSchema.find(payLoad)
         .sort({ createdAt: "desc" })
         .populate("owner")
         .populate("creator")
@@ -110,7 +110,7 @@ getSignatures = async (req, res) => {
       return res.status(200).json({ success: true, data: tiles });
   } else {
     console.log("Getting signatures for all");
-    SignatureSchema.find(payLoad)
+    IdeaSchema.find(payLoad)
       .limit(limit)
       .then((signatures) => {
         return res.status(200).json({ success: true, data: signatures });
@@ -144,7 +144,7 @@ buySignature = async (req, res) => {
     purpose: "Decide later",
   };
 
-  SignatureSchema.findOneAndUpdate(findCriteria, saleCriteria)
+  IdeaSchema.findOneAndUpdate(findCriteria, saleCriteria)
     .then((idea, err) => {
       console.log("Updating idea to mongoDB", idea);
       if (err) {
@@ -174,7 +174,7 @@ updatePrice = async (req, res) => {
     req.body.price
   );
 
-  await SignatureSchema.findOneAndUpdate(
+  await IdeaSchema.findOneAndUpdate(
     { ideaID: req.body.ideaID, owner: req.body.setter },
     { price: req.body.price },
     (err, token) => {
