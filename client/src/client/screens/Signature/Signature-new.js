@@ -29,6 +29,7 @@ import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import "./Signature-new.scss";
 import InfoModal from "../../modals/info-modal/info.modal";
 import RelationsInterface from "../../interface/RelationsInterface";
+import EditIdeaModal from "../../modals/edit-idea-modal/edit-idea-modal";
 const SignatureNew = (props) => {
   const { hashId } = useParams();
   const [upvotes, setUpvotes] = useState([]);
@@ -439,7 +440,7 @@ const SignatureNew = (props) => {
         />
       )}
       {modalShow.infoModal && (
-        <InfoModal
+        <EditIdeaModal
           size="lg"
           {...signature}
           show={modalShow.infoModal}

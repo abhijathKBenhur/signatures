@@ -5,4 +5,7 @@
 }
 .rack {
   min-height: calc(100vh - 230px);
+  .latest-news{
+    border-left: 1px solid $greyLight-1;
+  }
 }

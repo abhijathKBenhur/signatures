@@ -10,17 +10,17 @@ import moment from "moment";
 import Web3Utils from "web3-utils";
 import CONSTANTS from "../../commons/Constants";
 import CollectionCard from "../collection-card/collection-card";
-import CommentsPanel from  "../comments/CommentsPanel"
-
+import CommentsPanel from "../comments/CommentsPanel";
 
 const Rack = (props) => {
   return (
     <Container fluid className="racks-container">
+      
       <Row className="rack mt-2">
-        <Col md="10">
+        <Col md="9">
           <span className="father-grey">Explore the tribe</span>
           <hr></hr>
-        
+
           <Row className="deck-row text-center">
             {[...props.deck].map((signature, index) => {
               return (
@@ -33,10 +33,19 @@ const Rack = (props) => {
             })}
           </Row>
         </Col>
-        <Col md="2" className="latest-news">
-            <span className="master-grey">Newsletter</span>
+        <Col md="3" className="latest-news mt-3">
+          <span className="master-grey">Activities</span>
+          <hr></hr>
+          <div className="activity-entry d-flex flex-row">
+            <div className="activity-content  d-flex flex-column">
+              <div className="activity-title second-header">Title</div>
+              <div className="activity-description second-grey">
+                description description description description
+              </div>
+            </div>
+            <div className="activity-thumbnail">thumbnail</div>
+          </div>
         </Col>
-        
       </Row>
     </Container>
   );
