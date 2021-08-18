@@ -17,7 +17,7 @@ const Rack = (props) => {
     <Container fluid className="racks-container">
       
       <Row className="rack mt-2">
-        <Col md="9">
+        <Col md="12">
           <span className="father-grey">Explore the tribe</span>
           <hr></hr>
 
@@ -33,19 +33,7 @@ const Rack = (props) => {
             })}
           </Row>
         </Col>
-        <Col md="3" className="latest-news mt-3">
-          <span className="master-grey">Activities</span>
-          <hr></hr>
-          <div className="activity-entry d-flex flex-row">
-            <div className="activity-content  d-flex flex-column">
-              <div className="activity-title second-header">Title</div>
-              <div className="activity-description second-grey">
-                description description description description
-              </div>
-            </div>
-            <div className="activity-thumbnail">thumbnail</div>
-          </div>
-        </Col>
+       
       </Row>
     </Container>
   );

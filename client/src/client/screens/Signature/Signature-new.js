@@ -383,7 +383,6 @@ const SignatureNew = (props) => {
               {!_.isEmpty(signature) && (
                 <CommentsPanel
                   idea={signature}
-                  type="ideaComments"
                   entity={CONSTANTS.ENTITIES.IDEA}
                 ></CommentsPanel>
               )}

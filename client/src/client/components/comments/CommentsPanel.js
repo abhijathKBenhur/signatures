@@ -24,10 +24,21 @@ const CommentsPanel = (props) => {
     loadComments();
   }, []);
 
+  function getCommentDestination() {
+    switch(props.entity){
+      case CONSTANTS.ENTITIES.IDEA:
+        return props.idea.ideaID
+        break;
+        case CONSTANTS.ENTITIES.PUBLIC:
+          return CONSTANTS.ENTITIES.PUBLIC
+          break;
+    }
+  }
+
   function loadComments() {
     console.log("props.idea" + props.idea);
     CommentsInterface.getComments({
-      to: props.idea.ideaID,
+      to: getCommentDestination(),
       entity: props.entity,
     }).then((success) => {
       let comments = success.data;
@@ -42,27 +53,30 @@ const CommentsPanel = (props) => {
       event.target.value = "";
       CommentsInterface.postComment(
         loggedInUserDetails.userName,
-        props.idea.ideaID,
+        getCommentDestination(),
         CONSTANTS.ACTIONS.COMMENT,
         value,
-        CONSTANTS.ENTITIES.IDEA
+        props.entity,
       ).then((success) => {
         let commentsCOpy = _.clone(comments)
         commentsCOpy.push({
           from : loggedInUserDetails.userName,
-          to: props.idea.ideaID,
+          to: getCommentDestination(),
           action: CONSTANTS.ACTIONS.COMMENT,
           comment: value,
-          entity:  CONSTANTS.ENTITIES.IDEA
+          entity: props.entity,
         })
         setComments(commentsCOpy)
-        NotificationInterface.postNotification(
-          loggedInUserDetails.userName,
-          props.idea.owner.userName,
-          CONSTANTS.ACTIONS.COMMENT,
-          CONSTANTS.ACTION_STATUS.COMPLETED,
-          loggedInUserDetails.userName + " addded a comment on your idea."
-        );
+        if(_.get(props,'idea.owner.userName')){
+          NotificationInterface.postNotification(
+            loggedInUserDetails.userName,
+            props.idea.owner.userName,
+            CONSTANTS.ACTIONS.COMMENT,
+            CONSTANTS.ACTION_STATUS.COMPLETED,
+            loggedInUserDetails.userName + " addded a comment on your idea."
+          );
+        }
+        
       });
     } else {
       setNewComment(value);
@@ -77,7 +91,7 @@ const CommentsPanel = (props) => {
         placeholder="Add a comment"
         onKeyUp={(e) => handleChange(e)}
         style={{ borderRadius: 5 }}
-        className="mb-2"
+        className="mb-2 comment-entry"
       />
 
       {_.map(comments, (comment) => {

@@ -26,6 +26,7 @@ import domtoimage from "dom-to-image";
 import { getPurposeIcon } from "../../commons/common.utils";
 import { shallowEqual, useSelector } from "react-redux";
 import ClanInterface from "../../interface/ClanInterface";
+import { useHistory } from "react-router-dom";
 const CreateIdeaModal = ({
   formErrors,
   form,
@@ -46,6 +47,7 @@ const CreateIdeaModal = ({
 }) => {
   const reduxState = useSelector((state) => state, shallowEqual);
   const [userClans, setUserClans] = useState( [] );
+  const history = useHistory();
   useEffect(() => {
     const { userDetails = {} } = reduxState;
     ClanInterface.getClans({leader:userDetails.userName}).then(result => {
@@ -636,7 +638,9 @@ const CreateIdeaModal = ({
             </div>
             <Row className="button-section  d-flex">
               <Col xs="12" className="button-bar">
-                <Button className="cancel-btn">Cancel</Button>
+                <Button className="cancel-btn" onClick={() => {
+                  history.push(`/create`)
+                }}>Cancel</Button>
                 <Button
                   className="submit-btn"
                   onClick={checkValidationBeforeSubmit}

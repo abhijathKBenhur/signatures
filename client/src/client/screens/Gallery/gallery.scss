@@ -2,6 +2,35 @@
 
 .gallery {
   margin-top: 60px;
+  .latest-news{
+    border-left: 1px solid $greyLight-1;
+    
+    .second-header{
+      padding-left: 1px;
+    }
+    .comment-entry{
+
+    }
+    .activity-entry{
+      padding: 1px;
+      
+      .activity-title{
+        color: $primary;
+      }
+      .activity-thumbnail{
+        img{
+          height: 50px;
+          width: 50px;
+          border-radius: 50px;
+          &.primary{
+            background-color: $primary;
+            color: white;
+          }
+        }
+       
+      }
+    }
+  }
   .search-discover {
     align-self: center;
     width: 100%;

@@ -2,7 +2,6 @@ const CATEGORIES = [
     { value: "Creative_art", label: "Creative art" },
     { value: "Business_idea", label: "Business idea" },
     { value: "Technical_inventions", label: "Technical inventions" },
-    { value: "Scientific_research", label: "Scientific research" },
 ];
 
 const PURPOSES = {
@@ -17,6 +16,7 @@ const ENTITIES = {
   IDEA: "IDEA",
   PROFILE: "PROFILE",
   CLAN: "CLAN",
+  PUBLIC: "PUBLIC",
 };
 
 const ACTIONS = {
