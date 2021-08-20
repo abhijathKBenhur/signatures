@@ -1,54 +1,61 @@
+@import "../../commons/Common.scss";
 .info-modal-dialog{
     top: 30px;
     .modal-content{
         border-radius: 12px;
         .info-modal-body{
+           
             padding: 48px;
-            .modal-header-wrapper{
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                h4 {
-                    margin: 0;
+            .selective-component{
+              
+              .collab-section{
+                .dropdown{
+                  .dropdown-toggle{
+                    border: 1px solid $greyLight-3 !important;
+                    color: black !important;
+                  }
                 }
-                i {
-                    position: absolute;
-                    top: 20px;
-                    right: 20px;
-                    font-size: 20px;
-                    color: #9e9ea7;
-                }
+              }
             }
-            .created-at{
-                p {
-                    margin: 1rem 0;
-                }
-                span{
-                    &:first-child{
-                        margin-right: 10px;
+            .purpose-selection {
+                margin: 15px;
+                .purpose-tabs {
+                  display: flex;
+                  gap: 15px;
+                  .purpose-entry {
+                    height: 150px;
+                    border: 1px solid $greyLight-3;
+                    border-radius: 10px;
+                    padding: 5px;
+                    flex: 1;
+                    cursor: pointer;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    .purpose-icon{
+                      font-size: 20px;
+                      margin-bottom: 10px;
+                      color: $primary;
                     }
-                }
-            }
-            .wrapper {
-                .purpose-section{
-                    margin: 1rem 0;
-                }
-                .tags-wrapper{
-                    .tag-item{
-                        padding: 8px 12px;
-                        border: 1px solid #dbdbde;
-                        border-radius: 4px;
-                        margin-right: 8px;
-                        margin-bottom: 8px;
-                        color: #0d0c22;
-                        font-size: 12px;
-                        &:hover{
-                            border-color: transparent;
-                            background: #f3f3f4;
-                        }
+                    .purpose-text{
+                      color: $primary;
                     }
+                
+                    &.selected{
+                      box-shadow: $shadow;
+                      .purpose-icon{
+                        color: $white;
+                      }
+                      .purpose-text{
+                        color: $white;
+                      }
+                      border: 2px solid $secondary;
+                      background-color: $secondary;
+                    }
+                  }
                 }
-            }
+              }
         }
     }
 }

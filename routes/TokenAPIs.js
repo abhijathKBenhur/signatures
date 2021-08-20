@@ -141,7 +141,7 @@ buySignature = async (req, res) => {
     owner: ownerId,
     price: 0,
     transactionID: transactionID,
-    purpose: "Decide later",
+    purpose: {type:"KEEP"},
   };
 
   IdeaSchema.findOneAndUpdate(findCriteria, saleCriteria)

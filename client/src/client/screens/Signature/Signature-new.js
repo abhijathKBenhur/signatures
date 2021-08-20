@@ -29,7 +29,6 @@ import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import "./Signature-new.scss";
 import InfoModal from "../../modals/info-modal/info.modal";
 import RelationsInterface from "../../interface/RelationsInterface";
-import EditIdeaModal from "../../modals/edit-idea-modal/edit-idea-modal";
 const SignatureNew = (props) => {
   const { hashId } = useParams();
   const [upvotes, setUpvotes] = useState([]);
@@ -330,7 +329,7 @@ const SignatureNew = (props) => {
                               <Button variant="action" className="small ml-1" onClick={() => showModal("info")}> <i className="fa fa-cog"></i></Button>
                             </div>
                            :
-                          <Button variant="primary">{signature.purpose}</Button>}
+                          <Button variant="primary">{  _.get(signature,'purpose.type') || _.get(signature,'purpose')}</Button>}
                         </div>
                         
                       </div>
@@ -439,10 +438,10 @@ const SignatureNew = (props) => {
         />
       )}
       {modalShow.infoModal && (
-        <EditIdeaModal
-          size="lg"
+        <InfoModal
           {...signature}
           show={modalShow.infoModal}
+          idea={signature}
           onHide={() => hideModal("info")}
         />
       )}

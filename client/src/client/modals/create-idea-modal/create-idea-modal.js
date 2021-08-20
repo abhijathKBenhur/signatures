@@ -71,7 +71,7 @@ const CreateIdeaModal = ({
         </OverlayTrigger>
 
         <img
-          src={form.thumbnail.preview}
+          src={form.thumbnail.preview || form.thumbnail}
           className="uploadedImage"
           alt="thumbnail"
         ></img>
@@ -156,12 +156,12 @@ const CreateIdeaModal = ({
         }
       );
   };
-  const isSelectedPurpose = (purpose) => form.purpose === purpose;
+  const isSelectedPurpose = (purpose) => _.get(form,'purpose.type') === purpose;
 
   
 
   function getConditionalCompnent() {
-    switch (form.purpose) {
+    switch (_.get(form,'purpose.type')) {
       case CONSTANTS.PURPOSES.AUCTION:
         return (
           <Col md="12">
@@ -230,7 +230,13 @@ const CreateIdeaModal = ({
                     <Dropdown.Item
                       name="storageGroup"
                       onClick={() =>
-                        setFormData({ ...form, collab: item.value })
+                        setFormData({
+                          ...form,
+                          purpose: {
+                            type: form.purpose.type,
+                            subType: item.value,
+                          },
+                        })
                       }
                     >
                       {item.label}
@@ -309,6 +315,19 @@ const CreateIdeaModal = ({
           </Col>
         );
     }
+  }
+
+  const gotoIdea = () =>{
+    history.push({
+      pathname: "/signature/" + form.PDFHash,
+      state: form,
+    })
+  }
+
+  const gotoCreate = () =>{
+    history.push({
+      pathname: "/create"
+    })
   }
 
   const getElement = () => {
@@ -453,6 +472,16 @@ const CreateIdeaModal = ({
                 </Col>
               </Col>
             </Row>
+            <Row className="button-section  d-flex">
+              <Col xs="12" className="button-bar">
+                <Button
+                  className="submit-btn"
+                  onClick={gotoIdea}
+                >
+                  Done
+                </Button>
+              </Col>
+            </Row>
           </div>
         );
       case "FAILED":
@@ -474,6 +503,16 @@ const CreateIdeaModal = ({
                     {publishError}
                   </p>
                 </div>
+              </Col>
+            </Row>
+            <Row className="button-section  d-flex">
+              <Col xs="12" className="button-bar">
+                <Button
+                  className="submit-btn"
+                  onClick={gotoCreate}
+                >
+                  Retry
+                </Button>
               </Col>
             </Row>
           </div>

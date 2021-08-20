@@ -269,7 +269,7 @@ const Register = (props) => {
           <div className="w-100 d-flex flex-row align-items-center justify-content-center">
               {registration == PASSED ? (
                 <div className="d-flex flex-column align-items-center">
-                  <div>
+                  <div className="d-flex align-items-center flex-column mb-2">
                     <img src={successLogo} width="70"></img>
                     <span className="second-grey">Welcome to IdeaTribe</span>
                   </div>

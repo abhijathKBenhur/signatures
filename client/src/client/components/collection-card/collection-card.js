@@ -3,7 +3,7 @@ import { Button, Card, CardDeck, Image } from "react-bootstrap";
 import { Row, Col, Container } from "react-bootstrap";
 import moment from "moment";
 import { useHistory } from "react-router-dom";
-
+import _ from 'lodash'
 import "./collection-card.scss";
 import CONSTANTS from "../../commons/Constants";
 import { showToaster } from "../../commons/common.utils";
@@ -102,7 +102,7 @@ const CollectionCard = (props) => {
             <div className="tags second-grey">{JSON.parse(signature.category).label}</div>
           </div>
           <div class="purpose-badge">
-              <i className={getPurposeIcon(signature.purpose)}></i>
+              <i className={getPurposeIcon(_.get(signature,'purpose.type') || _.get(signature,'purpose') )}></i>
           </div>
         </div>
         {/* <div className="footer-area">testing bottom footer area</div> */}

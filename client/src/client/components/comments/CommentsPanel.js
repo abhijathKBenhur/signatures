@@ -41,8 +41,8 @@ const CommentsPanel = (props) => {
       to: getCommentDestination(),
       entity: props.entity,
     }).then((success) => {
-      let comments = success.data;
-      setComments(comments.data);
+      let comments = _.get(success,"data.data");
+      setComments(comments.reverse());
     });
   }
 

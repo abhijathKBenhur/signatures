@@ -42,7 +42,7 @@ import domtoimage from "dom-to-image";
 import moment from "moment";
 import { showToaster } from "../../commons/common.utils";
 import QRCode from "qrcode";
-import $ from 'jquery';
+import $ from "jquery";
 
 import responseImage from "../../../assets/images/response.jpeg";
 import signatureImage from "../../../assets/logo/signatures.png";
@@ -75,10 +75,10 @@ const CreateNew = () => {
     PDFHash: undefined,
     ideaID: undefined,
     transactionID: undefined,
-    purpose: CONSTANTS.PURPOSES.SELL,
+    purpose: { type: CONSTANTS.PURPOSES.SELL },
     storage: CONSTANTS.STORAGE_TYPE[0].value,
     collab: CONSTANTS.COLLAB_TYPE[0].value,
-    units: 1
+    units: 1,
   });
   const [formErrors, setFormErrors] = useState({
     title: false,
@@ -88,7 +88,7 @@ const CreateNew = () => {
     price: false,
     thumbnail: false,
     maxFileError: false,
-    publish: ""
+    publish: "",
   });
   const priceRef = useRef(null);
   const [pdfPages, setPdfPages] = useState({
@@ -148,7 +148,6 @@ const CreateNew = () => {
 
   useEffect(() => {
     pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
-    
   }, []);
 
   useEffect(() => {
@@ -203,7 +202,7 @@ const CreateNew = () => {
         priceRef.current.style.backgroundColor = "";
       }
     }
-  }, [form.purpose]);
+  }, [form.purpose.type]);
   const onImageDrop = (acceptedFiles) => {
     setFormData({
       ...form,
@@ -214,8 +213,8 @@ const CreateNew = () => {
   };
   const checkDisablePrice = () => {
     if (
-      CONSTANTS.PURPOSES.COLLAB === form.purpose ||
-      CONSTANTS.PURPOSES.KEEP === form.purpose
+      CONSTANTS.PURPOSES.COLLAB === form.purpose.type ||
+      CONSTANTS.PURPOSES.KEEP === form.purpose.type
     ) {
       setFormData({ ...form, price: 0 });
       return true;
@@ -296,19 +295,6 @@ const CreateNew = () => {
     });
     setFormData({ ...form, ...returnObj });
   };
-
-  const showPosition = ()  => {
-    if(navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition((position) => {
-          console.log('position = ',position)
-            
-        });
-    } else {
-      showToaster("Sorry, your browser does not support HTML5 geolocation.", {
-        type: "dark",
-      });
-    }
-}
 
   const getFileViewer = () => {
     switch (fileData.fileType) {
@@ -409,8 +395,6 @@ const CreateNew = () => {
     if (form.PDFFile && !formErrors.maxFileError) {
       return (
         <div className="pdfUploaded w-100 h-100">
-         
-
           {fileData.fileData && getFileViewer()}
         </div>
       );
@@ -469,7 +453,7 @@ const CreateNew = () => {
         : params.price;
     params.fileType = fileData.fileType;
     params.userName = reduxState.userDetails.userName;
- 
+
     setPublishState(PROGRESS);
     // setSlideCount(LOADING_SLIDE);
     StorageInterface.getFilePaths(params)
@@ -526,20 +510,23 @@ const CreateNew = () => {
       });
   }
   function saveToMongo(form) {
-    $.get("http://ipinfo.io?token=162c69a92ff37a", function (response) {
-      let location = response.city + ", " + response.region;
-      setFormData(...form,{location:location})
-      SignatureInterface.addSignature(form)
-      .then((success) => {
-        showToaster("Your Idea is now registered on the blockchain!", {
-          type: "dark",
-        });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, "jsonp");
-   
+    $.get(
+      "http://ipinfo.io?token=162c69a92ff37a",
+      function(response) {
+        let location = response.city + ", " + response.region;
+        setFormData({ ...form, location: location });
+        SignatureInterface.addSignature(form)
+          .then((success) => {
+            showToaster("Your Idea is now registered on the blockchain!", {
+              type: "dark",
+            });
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      },
+      "jsonp"
+    );
   }
 
   const checkValidationBeforeSubmit = () => {
@@ -566,7 +553,12 @@ const CreateNew = () => {
   };
 
   const setPurpose = (purpose) => {
-    setFormData({ ...form, purpose });
+    setFormData({
+      ...form,
+      purpose: {
+        type: purpose,
+      },
+    });
   };
 
   const changeFileStorage = (item) => {
@@ -578,7 +570,13 @@ const CreateNew = () => {
     <Container fluid className="create-container">
       <Row className="createform  d-flex">
         <Col xs="12" className="top-bar">
-          <Button className="" variant="secondary" onClick={() => history.push("/home")}>Cancel</Button>
+          <Button
+            className=""
+            variant="secondary"
+            onClick={() => history.push("/home")}
+          >
+            Cancel
+          </Button>
           <Button
             className="submit-btn"
             onClick={() => checkValidationOnButtonClick()}
@@ -601,7 +599,9 @@ const CreateNew = () => {
                     name="title"
                     value={form.title}
                     className={
-                      formErrors.title ? "input-err titleArea master-header" : "titleArea master-header"
+                      formErrors.title
+                        ? "input-err titleArea master-header"
+                        : "titleArea master-header"
                     }
                     placeholder="Title*"
                     maxLength={50}

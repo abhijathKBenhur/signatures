@@ -98,7 +98,7 @@ function gallery(props) {
         </Col>
         <Col md="3" className="latest-news mt-3">
           <div className="gutter-block">
-            <span className="second-header">Recent story</span>
+            <span className="second-header color-secondary">Recent story</span>
             <hr></hr>
             <div className="activity-entry d-flex flex-row">
               <div className="activity-content  d-flex flex-column">
@@ -135,11 +135,12 @@ function gallery(props) {
                 <img src="https://pbs.twimg.com/profile_images/1335939208595329025/6pVApHxk_400x400.jpg"></img>
               </div>
             </div>
-            
 
           </div>
+          <hr></hr>
+
           <div className="gutter-block mt-5">
-            <span className="second-header">Discussions</span>
+            <span className="second-header color-secondary">We hear you</span>
             <hr></hr>
             <CommentsPanel entity={CONSTANTS.ENTITIES.PUBLIC}></CommentsPanel>
           </div>
