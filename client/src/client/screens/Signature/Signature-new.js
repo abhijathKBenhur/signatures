@@ -60,7 +60,7 @@ const SignatureNew = (props) => {
     } else {
       SignatureInterface.getSignatureByHash(hashId).then((response) => {
         let signatureObject = _.get(response, "data.data");
-        setSignature(...signature, ...signatureObject);
+        setSignature({...signature, ...signatureObject});
       });
     }
     loadUpvotes();
@@ -245,10 +245,10 @@ const SignatureNew = (props) => {
         upVotesClone.push(loggedInUserDetails.userName)
         setUpvotes(upVotesClone);
         NotificationInterface.postNotification(
-          loggedInUserDetails.userName,
+          loggedInUserDetails._id,
           signature.ideaID,
           CONSTANTS.ACTIONS.UPVOTE,
-          CONSTANTS.ACTION_STATUS.COMPLETED,
+          CONSTANTS.ACTION_STATUS.PENDING,
           loggedInUserDetails.userName + "just upvoted your idea."
         );
       });
@@ -329,7 +329,7 @@ const SignatureNew = (props) => {
                               <Button variant="action" className="small ml-1" onClick={() => showModal("info")}> <i className="fa fa-cog"></i></Button>
                             </div>
                            :
-                          <Button variant="primary">{  _.get(signature,'purpose.type') || _.get(signature,'purpose')}</Button>}
+                          <Button variant="primary">{  _.get(signature,'purpose.purposeType') || _.get(signature,'purpose')}</Button>}
                         </div>
                         
                       </div>

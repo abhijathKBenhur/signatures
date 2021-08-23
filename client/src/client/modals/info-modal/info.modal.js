@@ -26,7 +26,7 @@ const InfoModal = (props) => {
     }
   };
 
-  const isSelectedPurpose = (purpose) => form.purpose.type === purpose;
+  const isSelectedPurpose = (purpose) => form.purpose.purposeType === purpose;
 
   const handleChange = (event) => {
     let returnObj = {};
@@ -63,7 +63,7 @@ const InfoModal = (props) => {
   };
 
   const getIdeaStatus = (purpose) => {
-    switch (purpose.type) {
+    switch (purpose.purposeType) {
       case CONSTANTS.PURPOSES.SELL:
         return "On Sale";
 
@@ -88,7 +88,7 @@ const InfoModal = (props) => {
   ];
 
   function getConditionalCompnent() {
-    switch (form.purpose.type) {
+    switch (form.purpose.purposeType) {
       case CONSTANTS.PURPOSES.AUCTION:
         return (
           <Col md="12">
@@ -282,7 +282,7 @@ const InfoModal = (props) => {
               placeholder="Description upto 250 words"
               style={{ resize: "none", borderRadius:"5px" }}
               onChange= {(event) => {
-                setFormData({ ...form, purpose: { type:form.purpose.type, subType:form.purpose.subType ,message: event.target.value } })
+                setFormData({ ...form, purpose: { type:form.purpose.purposeType, subType:form.purpose.subType ,message: event.target.value } })
               }}
             />
           </Col>

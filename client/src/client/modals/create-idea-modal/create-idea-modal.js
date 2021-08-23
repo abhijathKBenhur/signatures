@@ -56,8 +56,9 @@ const CreateIdeaModal = ({
   }, [reduxState.userDetails]);
   
   const getThumbnailImage = () => {
-    return form.thumbnail && publishState == "INIT" ? (
+    return form.thumbnail ? (
       <div className="imageUploaded w-100 h-100">
+        { publishState == "INIT" ? 
         <OverlayTrigger placement="left" overlay={<Tooltip>Remove</Tooltip>}>
           <Button
             className="remove-thumbnail-btn"
@@ -68,8 +69,7 @@ const CreateIdeaModal = ({
           >
             <i className="fa fa-trash" aria-hidden="true"></i>
           </Button>
-        </OverlayTrigger>
-
+        </OverlayTrigger> : <div></div> }
         <img
           src={form.thumbnail.preview || form.thumbnail}
           className="uploadedImage"
@@ -156,12 +156,12 @@ const CreateIdeaModal = ({
         }
       );
   };
-  const isSelectedPurpose = (purpose) => _.get(form,'purpose.type') === purpose;
+  const isSelectedPurpose = (purpose) => _.get(form,'purpose.purposeType') === purpose;
 
   
 
   function getConditionalCompnent() {
-    switch (_.get(form,'purpose.type')) {
+    switch (_.get(form,'purpose.purposeType')) {
       case CONSTANTS.PURPOSES.AUCTION:
         return (
           <Col md="12">
@@ -233,7 +233,7 @@ const CreateIdeaModal = ({
                         setFormData({
                           ...form,
                           purpose: {
-                            type: form.purpose.type,
+                            type: form.purpose.purposeType,
                             subType: item.value,
                           },
                         })
@@ -320,7 +320,6 @@ const CreateIdeaModal = ({
   const gotoIdea = () =>{
     history.push({
       pathname: "/signature/" + form.PDFHash,
-      state: form,
     })
   }
 
@@ -509,8 +508,9 @@ const CreateIdeaModal = ({
               <Col xs="12" className="button-bar">
                 <Button
                   className="submit-btn"
-                  onClick={gotoCreate}
-                >
+                  onClick={() => {
+                    history.push(`/create`)
+                  }}>
                   Retry
                 </Button>
               </Col>

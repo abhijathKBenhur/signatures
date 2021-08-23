@@ -209,10 +209,10 @@ function Profile(props) {
         let newFollowlist = _.concat(followers, [loggedInUserDetails.userName]);
         setFollowers(newFollowlist);
         NotificationInterface.postNotification(
-          loggedInUserDetails.userName,
+          loggedInUserDetails._id,
           viewUser,
           CONSTANTS.ACTIONS.FOLLOW,
-          CONSTANTS.ACTION_STATUS.COMPLETED,
+          CONSTANTS.ACTION_STATUS.PENDING,
           loggedInUserDetails.userName + " just followed you."
         );
       });
@@ -399,36 +399,18 @@ function Profile(props) {
                         md="6"
                         className="d-flex flex-column align-items-center stats-entry"
                       >
-                        <span className="stats-title master-header">113</span>
+                        <span className="stats-title master-grey">113</span>
                         <span className="stats-value second-grey  text-center">
-                          Ideas posted
+                          Posts
                         </span>
                       </Col>
                       <Col
                         md="6"
                         className="d-flex flex-column align-items-center stats-entry"
                       >
-                        <span className="stats-title master-header">113</span>
+                        <span className="stats-title master-grey">113</span>
                         <span className="stats-value second-grey  text-center">
-                          total upvotes
-                        </span>
-                      </Col>
-                      <Col
-                        md="6"
-                        className="d-flex flex-column align-items-center stats-entry"
-                      >
-                        <span className="stats-title master-header">113</span>
-                        <span className="stats-value second-grey  text-center">
-                          Users registered
-                        </span>
-                      </Col>
-                      <Col
-                        md="6"
-                        className="d-flex flex-column align-items-center stats-entry"
-                      >
-                        <span className="stats-title master-header">113</span>
-                        <span className="stats-value second-grey  text-center">
-                          Users registered
+                          Upvotes
                         </span>
                       </Col>
                     </Row>

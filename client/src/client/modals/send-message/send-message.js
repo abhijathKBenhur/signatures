@@ -24,7 +24,7 @@ const SendMessage = ({ ...props }) => {
 
   const [sendMessage, setSendMessage] = useState({
     to: props.userDetails.userName,
-    from: userDetails.userName,
+    from: userDetails._id,
     message: "",
     status: CONSTANTS.ACTION_STATUS.PENDING
   });

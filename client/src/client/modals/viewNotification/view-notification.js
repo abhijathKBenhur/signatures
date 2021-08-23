@@ -30,7 +30,7 @@ const ViewNotification = ({ ...props }) => {
 
     NotificationInterface.postNotification(
       _.get(props, "notification.to"),
-      _.get(props, "notification.from"),
+      _.get(props, "notification._id"),
       _.get(props, "notification.action"),
       CONSTANTS.ACTION_STATUS.PENDING,
       viewNotificationState.replyTxt

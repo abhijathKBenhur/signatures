@@ -98,7 +98,7 @@ function gallery(props) {
         </Col>
         <Col md="3" className="latest-news mt-3">
           <div className="gutter-block">
-            <span className="second-header color-secondary">Recent story</span>
+            <span className="second-header color-secondary">Recent stories</span>
             <hr></hr>
             <div className="activity-entry d-flex flex-row">
               <div className="activity-content  d-flex flex-column">

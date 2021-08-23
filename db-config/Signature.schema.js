@@ -17,7 +17,7 @@ const Signature = new Schema(
         ideaID: { type: String},
         storage: { type: String },
         purpose: {
-              type: String,
+              purposeType: String,
               subType: String,
               message: String
             },

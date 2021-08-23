@@ -41,17 +41,20 @@ getComments = async (req, res) => {
     findCriteria.to = req.body.to;
   }
 
-  await CommentSchema.find(findCriteria, (err, user) => {
-    if (err) {
-      return res.status(400).json({ success: false, error: err });
-    }
-    if (!user) {
-      return res.status(404).json({ success: true, data: [] });
-    }
-    return res.status(200).json({ success: true, data: user });
-  }).catch((err) => {
-    return res.status(200).json({ success: false, data: err });
-  });
+  await CommentSchema.find(findCriteria)
+    .populate("from")
+    .exec((err, comment) => {
+      if (err) {
+        return res.status(400).json({ success: false, error: err });
+      }
+      if (!comment) {
+        return res.status(404).json({ success: true, data: [] });
+      }
+      return res.status(200).json({ success: true, data: comment });
+    })
+    .catch((err) => {
+      return res.status(400).json({ success: false, data: err });
+    });
 };
 
 

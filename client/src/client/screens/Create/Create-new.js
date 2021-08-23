@@ -202,7 +202,7 @@ const CreateNew = () => {
         priceRef.current.style.backgroundColor = "";
       }
     }
-  }, [form.purpose.type]);
+  }, [form.purpose.purposeType]);
   const onImageDrop = (acceptedFiles) => {
     setFormData({
       ...form,
@@ -213,8 +213,8 @@ const CreateNew = () => {
   };
   const checkDisablePrice = () => {
     if (
-      CONSTANTS.PURPOSES.COLLAB === form.purpose.type ||
-      CONSTANTS.PURPOSES.KEEP === form.purpose.type
+      CONSTANTS.PURPOSES.COLLAB === form.purpose.purposeType ||
+      CONSTANTS.PURPOSES.KEEP === form.purpose.purposeType
     ) {
       setFormData({ ...form, price: 0 });
       return true;
@@ -556,7 +556,7 @@ const CreateNew = () => {
     setFormData({
       ...form,
       purpose: {
-        type: purpose,
+        purposeType: purpose,
       },
     });
   };

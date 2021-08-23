@@ -1,14 +1,16 @@
 import React, { useEffect, useState, useRef } from "react";
-import { ListGroup, Form } from "react-bootstrap";
+import { ListGroup, Form, Image } from "react-bootstrap";
 import CONSTANTS from "../../commons/Constants";
 import {getInitialSubString} from "../../commons/common.utils"
 import _ from "lodash";
+import { useHistory } from "react-router-dom";
 import "./comments.scss";
 import CommentsInterface from "../../interface/CommentsInterface";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import NotificationInterface from "../../interface/NotificationInterface";
 
 const CommentsPanel = (props) => {
+  let history = useHistory();
   const reduxState = useSelector((state) => state, shallowEqual);
   const [comments, setComments] = useState("");
   const [newComment, setNewComment] = useState("");
@@ -41,8 +43,8 @@ const CommentsPanel = (props) => {
       to: getCommentDestination(),
       entity: props.entity,
     }).then((success) => {
-      let comments = _.get(success,"data.data");
-      setComments(comments.reverse());
+      let comments = success.data;
+      setComments(comments.data);
     });
   }
 
@@ -52,7 +54,7 @@ const CommentsPanel = (props) => {
       event.target.blur();
       event.target.value = "";
       CommentsInterface.postComment(
-        loggedInUserDetails.userName,
+        loggedInUserDetails._id,
         getCommentDestination(),
         CONSTANTS.ACTIONS.COMMENT,
         value,
@@ -60,7 +62,7 @@ const CommentsPanel = (props) => {
       ).then((success) => {
         let commentsCOpy = _.clone(comments)
         commentsCOpy.push({
-          from : loggedInUserDetails.userName,
+          from : loggedInUserDetails,
           to: getCommentDestination(),
           action: CONSTANTS.ACTIONS.COMMENT,
           comment: value,
@@ -69,11 +71,11 @@ const CommentsPanel = (props) => {
         setComments(commentsCOpy)
         if(_.get(props,'idea.owner.userName')){
           NotificationInterface.postNotification(
-            loggedInUserDetails.userName,
+            loggedInUserDetails._id,
             props.idea.owner.userName,
             CONSTANTS.ACTIONS.COMMENT,
-            CONSTANTS.ACTION_STATUS.COMPLETED,
-            loggedInUserDetails.userName + " addded a comment on your idea."
+            CONSTANTS.ACTION_STATUS.PENDING,
+            value
           );
         }
         
@@ -96,12 +98,16 @@ const CommentsPanel = (props) => {
 
       {_.map(comments, (comment) => {
         return (
-          <div className="notification-item d-flex flex-row align-items-center pb-1">
-            <div className="icon mr-2 p-1">
-              <i className="fa fa-comment-o"></i>
+          <div className="comment-item d-flex flex-row align-items-center pb-1">
+            <div className="icon mr-2 p-1 cursor-pointer">
+            <Image src={comment.from.imageUrl} color="F3F3F3" className="user-circle" onClick={() => {
+              history.push({
+                pathname: "/profile/" + comment.from.userName,
+              });
+            }}/>
             </div>
             <div className="content">
-              <div className="top master-grey">{comment.from}</div>
+              <div className="top master-grey  cursor-pointer">{comment.from.userName}</div>
               <div className="bottom second-grey">{getInitialSubString(comment.comment,25)}</div>
             </div>
           </div>
