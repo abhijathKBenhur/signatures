@@ -4,17 +4,15 @@ const Schema = mongoose.Schema;
 const Clan = new Schema(
   {
     name : { type: String, required: true },
-    leader : { type: String, required: true },
+    leader : { type: Schema.Types.ObjectId, ref: "User", required: true },
     description : { type: String, required: true },
     thumbnail: { type: String, required: true },
     members : [
-      {
-        userName: String,
-        imageUrl: String,
-        status: String
-      }
+      { 
+        memberId : String,
+        status: Boolean
+     }
     ],
-    
   },
   { timestamps: true }
 );

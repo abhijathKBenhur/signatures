@@ -1,6 +1,7 @@
 const ClanSchema = require("../db-config/clan.schema");
 const express = require("express");
 const router = express.Router();
+const NotificationAPI = require("./NotificationAPIs")
 
 createClan = (req, res) => {
   console.log("createClan called");

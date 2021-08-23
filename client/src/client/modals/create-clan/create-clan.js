@@ -25,7 +25,7 @@ import NotificationInterface from "../../interface/NotificationInterface";
 const CreateClan = ({ ...props }) => {
   const [createClanState, setCreateClanState] = useState({
     name: "",
-    leader: props.userDetails.userName,
+    leader: props.userDetails._id,
     description: "",
     thumbnail: undefined,
     members: [],
@@ -57,8 +57,8 @@ const CreateClan = ({ ...props }) => {
     console.log("create clan state = ", createClanState);
     let membersWithoutLabel = _.map(createClanState.members, (member) => {
       return {
-        imageUrl: member.imageUrl,
-        userName: member.value,
+        memberId: member.id,
+        status:false
       };
     });
     const payload = {
@@ -72,7 +72,10 @@ const CreateClan = ({ ...props }) => {
         ClanInterface.createClan(payload)
           .then((success) => {
             console.log("clan created");
-            NotificationInterface.postNotification()
+            let invitees = _.map(_.get(success,"data.data.members"))
+            _.forEach(invitees, (invitee) => {
+              NotificationInterface.postNotification(createClanState.leader, invitee.memberId, CONSTANTS.ACTIONS.CREATE_CLAN, CONSTANTS.ACTION_STATUS.PEN, "Would you like to join this clan?")
+            })
             props.onHide();
           })
           .catch((error) => {
@@ -192,7 +195,7 @@ const CreateClan = ({ ...props }) => {
                     type="text"
                     name="leader"
                     disabled
-                    value={createClanState.leader}
+                    value={props.userDetails.userName}
                     onChange={(e) => handleChange(e)}
                   />
                 </Col>
@@ -307,7 +310,7 @@ const CreateClan = ({ ...props }) => {
                       value={createClanState.members[index]}
                       options={userList.map((item) => {
                         return {
-                          value: item.userName,
+                          id: item._id,
                           imageUrl: item.imageUrl,
                           userName: item.userName,
                           label: (
