@@ -68,13 +68,16 @@ const CreateClan = ({ ...props }) => {
     StorageInterface.getImagePath(payload)
       .then((success) => {
         payload.thumbnail = _.get(success, "data.path");
-        
+        _.omit(payload.selectedBillet,'label')
         ClanInterface.createClan(payload)
           .then((success) => {
             console.log("clan created");
-            let invitees = _.map(_.get(success,"data.data.members"))
+            let invitees = _.map(createClanState.members,"userName")
             _.forEach(invitees, (invitee) => {
-              NotificationInterface.postNotification(createClanState.leader, invitee.memberId, CONSTANTS.ACTIONS.CREATE_CLAN, CONSTANTS.ACTION_STATUS.PEN, "Would you like to join this clan?")
+              NotificationInterface.postNotification(createClanState.leader, invitee, CONSTANTS.ACTIONS.CREATE_CLAN, CONSTANTS.ACTION_STATUS.PEN, "Sent you a clan invite?",
+              JSON.stringify({
+                clanID: _.get(success,'data.data,_id')
+              }))
             })
             props.onHide();
           })

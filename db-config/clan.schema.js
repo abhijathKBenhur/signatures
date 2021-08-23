@@ -7,6 +7,7 @@ const Clan = new Schema(
     leader : { type: Schema.Types.ObjectId, ref: "User", required: true },
     description : { type: String, required: true },
     thumbnail: { type: String, required: true },
+    payLoad: { type: String },
     members : [
       { 
         memberId : String,

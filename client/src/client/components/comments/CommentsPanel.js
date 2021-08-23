@@ -75,7 +75,10 @@ const CommentsPanel = (props) => {
             props.idea.owner.userName,
             CONSTANTS.ACTIONS.COMMENT,
             CONSTANTS.ACTION_STATUS.PENDING,
-            value
+            value,
+            JSON.stringify({
+              ideaID: _.get(props.idea,'PDFHash')
+            })
           );
         }
         

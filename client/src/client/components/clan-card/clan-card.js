@@ -1,23 +1,39 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Card, CardDeck, Image } from "react-bootstrap";
 import { Row, Col, Container } from "react-bootstrap";
 import moment from "moment";
 import { useHistory } from "react-router-dom";
-
+import _ from 'lodash'
 import "./clan-card.scss";
 import CONSTANTS from "../../commons/Constants";
 import { showToaster } from "../../commons/common.utils";
 import { getPurposeIcon } from "../../commons/common.utils";
+import ClanInterface from "../../interface/ClanInterface";
+
 
 
 const ClanCard = (props) => {
+  const [clanMembers, setClanMembers] = useState([]);
+  const [clan, setclan] = useState(props.clan);
   let history = useHistory();
   function openCardView() {
     history.push({
-      pathname: "/clan/" + clan.PDFHash,
+      pathname: "/clan/" + clan._id,
       state: clan,
     });
   }
+
+  useEffect(() => {
+    ClanInterface.getClanMembers({
+      clanId:clan._id
+    }).then(success => {
+      let clanMembersProfiles = _.get(success,'data.data')
+      setClanMembers(clanMembersProfiles)
+    }).catch(err => {
+
+    })
+  
+  }, []);
 
   const goToUserProfile = (id) => {
     let history = useHistory();
@@ -29,8 +45,8 @@ const ClanCard = (props) => {
     });
   };
 
-  const [clan, setclan] = useState(props.clan);
-  let excessCount = clan.members.length - 3;
+  
+  let excessCount = clanMembers.length - 3;
   return (
     <Col
       key={clan._id}
@@ -61,7 +77,7 @@ const ClanCard = (props) => {
         <div className="bottom-content d-flex align-items-center ">
           {
             
-            clan.members && clan.members.slice(0,3).map(member => {
+            clanMembers && clanMembers.slice(0,3).map(member => {
               return (
                 <div class="purpose-badge"> 
                   <img src={member.imageUrl} width="40px" height="40px" style={{borderRadius:"40px"}}></img>

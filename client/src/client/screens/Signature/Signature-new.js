@@ -249,8 +249,10 @@ const SignatureNew = (props) => {
           signature.ideaID,
           CONSTANTS.ACTIONS.UPVOTE,
           CONSTANTS.ACTION_STATUS.PENDING,
-          loggedInUserDetails.userName + "just upvoted your idea."
-        );
+          loggedInUserDetails.userName + "just upvoted your idea.",
+          JSON.stringify({
+            ideaID: _.get(signature,'PDFHash')
+          }))
       });
     } else {
       RelationsInterface.removeRelation(
