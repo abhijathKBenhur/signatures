@@ -24,6 +24,8 @@ import { useHistory } from "react-router-dom";
 import userImg from "../../../assets/images/user.png";
 import _ from "lodash";
 import ShareModal from "../../modals/share/share.modal";
+import EngageModal from "../../modals/engage-modal/engage-modal"
+
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 
 import "./Signature-new.scss";
@@ -46,6 +48,7 @@ const SignatureNew = (props) => {
   const [modalShow, setModalShow] = useState({
     shareModal: false,
     infoModal: false,
+    engageModal: false
   });
 
   const [audioState, setAudioState] = useState({
@@ -60,7 +63,7 @@ const SignatureNew = (props) => {
     } else {
       SignatureInterface.getSignatureByHash(hashId).then((response) => {
         let signatureObject = _.get(response, "data.data");
-        setSignature({...signature, ...signatureObject});
+        setSignature({ ...signature, ...signatureObject });
       });
     }
     loadUpvotes();
@@ -219,6 +222,9 @@ const SignatureNew = (props) => {
       case "info":
         setModalShow({ ...showModal, infoModal: true });
         break;
+      case "engage":
+        setModalShow({ ...showModal, engageModal: true });
+        break;
       default:
         break;
     }
@@ -227,8 +233,12 @@ const SignatureNew = (props) => {
   const hideModal = (type) => {
     if (type === "share") {
       setModalShow({ ...showModal, shareModal: false });
-    } else {
+    } 
+    else if(type === "info") { 
       setModalShow({ ...showModal, infoModal: false });
+    } 
+    else {
+      setModalShow({ ...showModal, engageModal: false });
     }
   };
 
@@ -242,7 +252,7 @@ const SignatureNew = (props) => {
         "Upvoting."
       ).then((success) => {
         const upVotesClone = _.cloneDeep(upvotes);
-        upVotesClone.push(loggedInUserDetails.userName)
+        upVotesClone.push(loggedInUserDetails.userName);
         setUpvotes(upVotesClone);
         NotificationInterface.postNotification(
           loggedInUserDetails._id,
@@ -251,8 +261,9 @@ const SignatureNew = (props) => {
           CONSTANTS.ACTION_STATUS.PENDING,
           loggedInUserDetails.userName + "just upvoted your idea.",
           JSON.stringify({
-            ideaID: _.get(signature,'PDFHash')
-          }))
+            ideaID: _.get(signature, "PDFHash"),
+          })
+        );
       });
     } else {
       RelationsInterface.removeRelation(
@@ -265,6 +276,25 @@ const SignatureNew = (props) => {
         upvotesCopy.splice(voteIndex, 1);
         setUpvotes(upvotesCopy);
       });
+    }
+  };
+
+  const getIdeaStatus = (purpose) => {
+    switch (purpose.purposeType) {
+      case CONSTANTS.PURPOSES.SELL:
+      case CONSTANTS.PURPOSES.LICENCE:
+        return "Buy";
+
+      case CONSTANTS.PURPOSES.AUCTION:
+        return "Bid";
+
+      case CONSTANTS.PURPOSES.COLLAB:
+        return "Collaborate";
+
+      case CONSTANTS.PURPOSES.KEEP:
+        return "View info";
+      default:
+        return null;
     }
   };
 
@@ -289,7 +319,6 @@ const SignatureNew = (props) => {
                   <div className="action-section">
                     <div className="justify-content-center">
                       <div className="sidebar">
-                        
                         <div className="action-btns align-items-center">
                           {/* <span className="second-grey">{upvotes.length} upvotes</span> */}
                           <OverlayTrigger
@@ -326,14 +355,30 @@ const SignatureNew = (props) => {
                               ></i>
                             </Button>
                           </OverlayTrigger>
-                          {signature.owner && loggedInUserDetails.userName == signature.owner.userName ? 
+                          {signature.owner &&
+                          loggedInUserDetails.userName ==
+                            signature.owner.userName ? (
                             <div>
-                              <Button variant="action" className="small ml-1" onClick={() => showModal("info")}> <i className="fa fa-cog"></i></Button>
+                              <Button
+                                variant="action"
+                                className="small ml-1"
+                                onClick={() => showModal("info")}
+                              >
+                                {" "}
+                                <i className="fa fa-cog"></i>
+                              </Button>
                             </div>
-                           :
-                          <Button variant="primary">{  _.get(signature,'purpose.purposeType') || _.get(signature,'purpose')}</Button>}
+                          ) : (
+                             <Button
+                              variant="primary"
+                              onClick={() => showModal("engage")}
+                            >
+                              {_.get(signature, "purpose") && getIdeaStatus(
+                                _.get(signature, "purpose")
+                              )}
+                            </Button>
+                          )}
                         </div>
-                        
                       </div>
                     </div>
                   </div>
@@ -352,7 +397,8 @@ const SignatureNew = (props) => {
                     </Button>
                   </div>
                   <div className="time second-grey">
-                    {moment(signature.createdAt).format("YYYY-MM-DD HH:mm:ss")}, {signature.location || "Global"}
+                    {moment(signature.createdAt).format("YYYY-MM-DD HH:mm:ss")},{" "}
+                    {signature.location || "Global"}
                   </div>
                 </Col>
                 <Col md="12">
@@ -423,7 +469,6 @@ const SignatureNew = (props) => {
                         <i className="fa fa-bullhorn" aria-hidden="true"></i>
                       </Button>
                     </OverlayTrigger>
-                    
                   </div>
                 </div>
               </Row>
@@ -445,6 +490,14 @@ const SignatureNew = (props) => {
           show={modalShow.infoModal}
           idea={signature}
           onHide={() => hideModal("info")}
+        />
+      )}
+      {modalShow.engageModal && (
+        <EngageModal
+          {...signature}
+          show={modalShow.engageModal}
+          idea={signature}
+          onHide={() => hideModal("engage")}
         />
       )}
     </div>

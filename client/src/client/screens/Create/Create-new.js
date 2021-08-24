@@ -79,6 +79,7 @@ const CreateNew = () => {
     storage: CONSTANTS.STORAGE_TYPE[0].value,
     collab: CONSTANTS.COLLAB_TYPE[0].value,
     units: 1,
+    location: "",
   });
   const [formErrors, setFormErrors] = useState({
     title: false,
@@ -105,6 +106,7 @@ const CreateNew = () => {
     creator: form.owner,
     fullName: userDetails.fullName,
     title: form.title,
+    location: form.location,
     time: moment(new Date()).format("MMMM Do YYYY, h:mm:ss a"),
     // tokenID: billet.tokenID,
     // transactionID: billet.tokenID,
@@ -487,6 +489,7 @@ const CreateNew = () => {
             tokenID: successResponse.ideaID,
             transactionID: successResponse.transactionID,
             PDFHash: successResponse.PDFHash,
+            location: successResponse.location,
           });
           setPublishState(PASSED);
           //   setSlideCount(RESPONSE_SLIDE);
@@ -513,9 +516,9 @@ const CreateNew = () => {
     $.get(
       "https://ipinfo.io?token=162c69a92ff37a",
       function(response) {
-        let location = response.city + ", " + response.region;
-        setFormData({ ...form, location: location });
-        SignatureInterface.addSignature(form)
+        let region = response.city + ", " + response.region;
+        setFormData({...form, location: region})
+        SignatureInterface.addSignature({ ...form, location: region })
           .then((success) => {
             showToaster("Your Idea is now registered on the blockchain!", {
               type: "dark",

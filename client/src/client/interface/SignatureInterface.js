@@ -15,11 +15,10 @@ const fileAPI = axios.create({
 })
 
 
-export const updatePrice = payload => {
-    return api.post(`/updatePrice`,{
-        setter: payload.owner,
-        price: payload.price,
+export const updatePurpose = payload => {
+    return api.post(`/updatePurpose`,{
         ideaID: payload.ideaID,
+        purpose: payload.purpose,
     })
 }
 
@@ -39,7 +38,7 @@ export const addSignature = payload => {
         creator: payload.creator,
         storage: payload.storage,
         purpose: payload.purpose,
-        creator: payload.creator
+        location: payload.location
     })
 }
 
@@ -63,7 +62,7 @@ const SignatureInterface = {
     addSignature,
     getSignatureByHash,
     buySignature,
-    updatePrice
+    updatePurpose
 
 }
 

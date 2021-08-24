@@ -107,7 +107,10 @@
           .purpose-text{
             color: $primary;
           }
-      
+          &.disabled{
+            cursor: no-drop;
+            background-color: $greyLight-1;
+          }
           &.selected{
             box-shadow: $shadow;
             .purpose-icon{

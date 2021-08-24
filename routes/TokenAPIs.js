@@ -164,7 +164,7 @@ buySignature = async (req, res) => {
     });
 };
 
-updatePrice = async (req, res) => {
+updatePurpose = async (req, res) => {
   console.log(
     "updateing token price",
     req.body.ideaID,
@@ -175,8 +175,8 @@ updatePrice = async (req, res) => {
   );
 
   await IdeaSchema.findOneAndUpdate(
-    { ideaID: req.body.ideaID, owner: req.body.setter },
-    { price: req.body.price },
+    { ideaID: req.body.ideaID },
+    { purpose: req.body.purpose },
     (err, token) => {
       if (err) {
         return res.status(400).json({ success: false, error: err });
@@ -244,7 +244,7 @@ router.post("/addSignature", addSignature);
 router.get("/signature/:PDFHash/", getSignatureByHash);
 router.post("/getSignatures", getSignatures);
 router.post("/buySignature", buySignature);
-router.post("/updatePrice", updatePrice);
+router.post("/updatePurpose", updatePurpose);
 router.post(
   "/getCloundinaryImagePath",
   upload.single("thumbnail"),

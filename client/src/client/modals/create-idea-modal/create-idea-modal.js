@@ -329,6 +329,11 @@ const CreateIdeaModal = ({
     })
   }
 
+  const isDisabled = (action) =>{
+    return [ CONSTANTS.PURPOSES.AUCTION,
+      CONSTANTS.PURPOSES.LICENCE].indexOf(action) > -1
+  }
+
   const getElement = () => {
     let pusposeList = [
       CONSTANTS.PURPOSES.SELL,
@@ -364,8 +369,8 @@ const CreateIdeaModal = ({
                   <Row className="row2">
                     <Col md="12">
                       <div className="billet-item">
-                        <div className="item">{billet.title}</div>
-                        <div className="time"> {billet.time}, Bangalore</div>
+                        <div className="item">{billet.title}</div><br></br>
+                        <div className="time"> {billet.time}, {billet.location}</div>
                       </div>
                     </Col>
                     <Col md="12"></Col>
@@ -653,7 +658,8 @@ const CreateIdeaModal = ({
                           className={
                             isSelectedPurpose(entry)
                               ? "purpose-entry selected"
-                              : "purpose-entry"
+                              : isDisabled(entry)
+                              ? "purpose-entry disabled" : "purpose-entry"
                           }
                           onClick={() => {
                             setPurpose(entry);
@@ -678,7 +684,7 @@ const CreateIdeaModal = ({
             <Row className="button-section  d-flex">
               <Col xs="12" className="button-bar">
                 <Button className="cancel-btn" onClick={() => {
-                  history.push(`/create`)
+                  history.push(`/home`)
                 }}>Cancel</Button>
                 <Button
                   className="submit-btn"
