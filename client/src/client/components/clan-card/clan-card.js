@@ -50,9 +50,9 @@ const ClanCard = (props) => {
   return (
     <Col
       key={clan._id}
-      className="clan-container col-lg-2-4"
-      md="4"
-      lg="3"
+      className="clan-container "
+      md="3"
+      lg="4"
       sm="6"
       xs="12"
     >

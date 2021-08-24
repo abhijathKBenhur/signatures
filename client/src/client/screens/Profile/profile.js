@@ -21,7 +21,7 @@ import NotificationInterface from "../../interface/NotificationInterface";
 import BlockChainInterface from "../../interface/BlockchainInterface";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { ExternalLink, Award, User } from "react-feather";
-import Clans from "../Clans/Clans";
+import Clans from "../Clan/Clans";
 import ShareModal from "../../modals/share/share.modal";
 
 import Collections from "./collections";

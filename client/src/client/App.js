@@ -41,6 +41,7 @@ class App extends Component {
             <Route path="/signature/:hashId" children={<Signature />} />
             <Route path="/create" children={<CreateNew />} />
             <Route path="/profile/:userName" children={<Profile />} />
+            <Route path="/clan/:clanID" children={<Profile />} />
             <Route path="/profile" children={<Profile />} />
             <Route path="/daily-reads" component={DailyReads} />
             <Route path="/tutorial" component={Tutorial} />

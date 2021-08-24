@@ -25,10 +25,8 @@ export const register_user = payload => {
   }
 
 export const updateUser = payload => { 
-    console.log("updateUser")
     return api.post(`/updateUser`,payload) 
 }
-  
 
 const UserInterface = {
     registerUser,
