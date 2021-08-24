@@ -7,6 +7,8 @@ import CreateNew from "./screens/Create/Create-new";
 import Signature from "./screens/Signature/Signature-new";
 import Gallery from "./screens/Gallery/gallery";
 import Profile from "./screens/Profile/profile";
+import Clan from "./screens/Clan/Clan";
+
 import Header from "./components/header/header";
 import Footer from "./components/footer/footer";
 import Banner from "./components/banner/banner";
@@ -41,7 +43,7 @@ class App extends Component {
             <Route path="/signature/:hashId" children={<Signature />} />
             <Route path="/create" children={<CreateNew />} />
             <Route path="/profile/:userName" children={<Profile />} />
-            <Route path="/clan/:clanID" children={<Profile />} />
+            <Route path="/clan/:clanID" children={<Clan />} />
             <Route path="/profile" children={<Profile />} />
             <Route path="/daily-reads" component={DailyReads} />
             <Route path="/tutorial" component={Tutorial} />

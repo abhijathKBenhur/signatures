@@ -18,7 +18,7 @@ const ClanCard = (props) => {
   let history = useHistory();
   function openCardView() {
     history.push({
-      pathname: "/clan/" + clan._id,
+      pathname: "/clan/" + clan.name,
       state: clan,
     });
   }
