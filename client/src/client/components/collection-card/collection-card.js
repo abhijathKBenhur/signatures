@@ -31,6 +31,13 @@ const CollectionCard = (props) => {
   }, [props]);
 
   const [signature, setSignature] = useState(props.collection);
+
+  const getClassNames = () => {
+    return "bottom-content d-flex justify-content-between align-items-center " +
+      _.get(JSON.parse(signature.category), "value")
+    ;
+  };
+
   return (
     <Col
       key={signature._id}
@@ -91,15 +98,17 @@ const CollectionCard = (props) => {
             }}
           />
         </div>
-        <div className="bottom-content d-flex justify-content-between align-items-center ">
+        <div className={getClassNames()}>
           <div class="tag-n-location">
             <div className=" second-header timestamp">
               {moment(signature.createdAt).format("YYYY-MM-DD HH:mm:ss")}
             </div>
-            <div className="tags second-grey">{signature.location || 'Global'}</div>
+            <div className="tags second-grey">
+              {signature.location || "Global"}
+            </div>
           </div>
           <div class="purpose-badge">
-            <i 
+            <i
               className={getPurposeIcon(
                 _.get(signature, "purpose.purposeType") ||
                   _.get(signature, "purpose")

@@ -509,7 +509,7 @@ const CreateIdeaModal = ({
                 <Button
                   className="submit-btn"
                   onClick={() => {
-                    history.push(`/create`)
+                    window.location.reload()
                   }}>
                   Retry
                 </Button>

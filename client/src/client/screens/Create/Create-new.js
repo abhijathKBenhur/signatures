@@ -511,7 +511,7 @@ const CreateNew = () => {
   }
   function saveToMongo(form) {
     $.get(
-      "http://ipinfo.io?token=162c69a92ff37a",
+      "https://ipinfo.io?token=162c69a92ff37a",
       function(response) {
         let location = response.city + ", " + response.region;
         setFormData({ ...form, location: location });
