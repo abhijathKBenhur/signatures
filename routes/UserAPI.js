@@ -1,7 +1,7 @@
 const User = require("../db-config/user.schema");
 const express = require("express");
 const router = express.Router();
-
+const mongoose = require('mongoose')
 registerUser = (req, res) => {
   const body = req.body;
   body.balance = 1000;
@@ -80,6 +80,15 @@ getUsers = async (req, res) => {
   console.log("getting users", req.body);
 
   let findCriteria = {};
+  let ids = req.body.ids
+  function getMongooseIds (stringId){
+    return mongoose.Types.ObjectId(stringId)
+  }
+  if(ids){
+    findCriteria._id = {
+      $in : ids.map(getMongooseIds)
+    }
+  }
   await User.find(findCriteria, (err, user) => {
     if (err) {
       return res.status(400).json({ success: false, error: err });

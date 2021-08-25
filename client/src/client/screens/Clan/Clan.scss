@@ -43,11 +43,11 @@
           }
         }
       }
-      .profile-details{
+      .profile-details {
         height: 230px;
         padding-top: 20px;
         overflow: auto;
-        .following{
+        .following {
           background-color: $secondary;
           color: $white !important;
         }
@@ -59,7 +59,7 @@
     }
   }
 
-  .notification-wrapper{
+  .notification-wrapper {
     padding-top: 25px;
     border-left: 1px solid $greyLight-2;
     padding-left: 0;
@@ -73,19 +73,29 @@
     padding-top: 50px;
     display: flex;
     align-items: center;
-    background-color: #F1F1F1;
-    .profile-section{
-     
-
+    background-color: #f1f1f1;
+    .profile-section {
     }
-    .profile-info{
+    .profile-info {
       color: $primary-light;
-      .address-copy{
+      .address-copy {
         color: $secondary;
       }
     }
+    .clan-members {
+      .member-list {
+        .member-item {
+           border-bottom: 1px solid $greyLight-2;
+          .user-circle {
+            height: 30px;
+            width: 30px;
+            border-radius: 21px;
+          }
+        }
+      }
+    }
 
-    .actions{
+    .actions {
       display: flex;
       justify-content: center;
       align-items: inherit;
@@ -113,8 +123,7 @@
     .middle-block {
       margin-top: 30px;
       flex: 4;
-      .empty-collection{
-        
+      .empty-collection {
       }
     }
   }
@@ -127,10 +136,10 @@
   .collection-container {
     max-width: 100%;
   }
-  .wallet-wrapper{
+  .wallet-wrapper {
     display: flex;
   }
-  .transaction-wrapper{
+  .transaction-wrapper {
     min-height: 200px;
     overflow-y: auto;
     margin-top: 20px;
