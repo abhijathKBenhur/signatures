@@ -54,7 +54,7 @@ const EditProfile = ({ ...props }) => {
             imageUrl: props.userDetails.imageUrl ||'',
         }
 
-        setEditProfile({...editProfile, profileData})
+        setEditProfile({...editProfile, ...profileData})
     },[])
 
     const handleChange = (event) => {

@@ -26,6 +26,7 @@ import domtoimage from "dom-to-image";
 import { getPurposeIcon } from "../../commons/common.utils";
 import { shallowEqual, useSelector } from "react-redux";
 import ClanInterface from "../../interface/ClanInterface";
+import { useHistory } from "react-router-dom";
 const CreateIdeaModal = ({
   formErrors,
   form,
@@ -46,6 +47,7 @@ const CreateIdeaModal = ({
 }) => {
   const reduxState = useSelector((state) => state, shallowEqual);
   const [userClans, setUserClans] = useState( [] );
+  const history = useHistory();
   useEffect(() => {
     const { userDetails = {} } = reduxState;
     ClanInterface.getClans({leader:userDetails.userName}).then(result => {
@@ -54,8 +56,9 @@ const CreateIdeaModal = ({
   }, [reduxState.userDetails]);
   
   const getThumbnailImage = () => {
-    return form.thumbnail && publishState == "INIT" ? (
+    return form.thumbnail ? (
       <div className="imageUploaded w-100 h-100">
+        { publishState == "INIT" ? 
         <OverlayTrigger placement="left" overlay={<Tooltip>Remove</Tooltip>}>
           <Button
             className="remove-thumbnail-btn"
@@ -66,10 +69,9 @@ const CreateIdeaModal = ({
           >
             <i className="fa fa-trash" aria-hidden="true"></i>
           </Button>
-        </OverlayTrigger>
-
+        </OverlayTrigger> : <div></div> }
         <img
-          src={form.thumbnail.preview}
+          src={form.thumbnail.preview || form.thumbnail}
           className="uploadedImage"
           alt="thumbnail"
         ></img>
@@ -154,12 +156,12 @@ const CreateIdeaModal = ({
         }
       );
   };
-  const isSelectedPurpose = (purpose) => form.purpose === purpose;
+  const isSelectedPurpose = (purpose) => _.get(form,'purpose.purposeType') === purpose;
 
   
 
   function getConditionalCompnent() {
-    switch (form.purpose) {
+    switch (_.get(form,'purpose.purposeType')) {
       case CONSTANTS.PURPOSES.AUCTION:
         return (
           <Col md="12">
@@ -228,7 +230,13 @@ const CreateIdeaModal = ({
                     <Dropdown.Item
                       name="storageGroup"
                       onClick={() =>
-                        setFormData({ ...form, collab: item.value })
+                        setFormData({
+                          ...form,
+                          purpose: {
+                            type: form.purpose.purposeType,
+                            subType: item.value,
+                          },
+                        })
                       }
                     >
                       {item.label}
@@ -309,6 +317,23 @@ const CreateIdeaModal = ({
     }
   }
 
+  const gotoIdea = () =>{
+    history.push({
+      pathname: "/signature/" + form.PDFHash,
+    })
+  }
+
+  const gotoCreate = () =>{
+    history.push({
+      pathname: "/create"
+    })
+  }
+
+  const isDisabled = (action) =>{
+    return [ CONSTANTS.PURPOSES.AUCTION,
+      CONSTANTS.PURPOSES.LICENCE].indexOf(action) > -1
+  }
+
   const getElement = () => {
     let pusposeList = [
       CONSTANTS.PURPOSES.SELL,
@@ -344,8 +369,8 @@ const CreateIdeaModal = ({
                   <Row className="row2">
                     <Col md="12">
                       <div className="billet-item">
-                        <div className="item">{billet.title}</div>
-                        <div className="time"> {billet.time}, Bangalore</div>
+                        <div className="item">{billet.title}</div><br></br>
+                        <div className="time"> {billet.time}, {billet.location}</div>
                       </div>
                     </Col>
                     <Col md="12"></Col>
@@ -451,6 +476,16 @@ const CreateIdeaModal = ({
                 </Col>
               </Col>
             </Row>
+            <Row className="button-section  d-flex">
+              <Col xs="12" className="button-bar">
+                <Button
+                  className="submit-btn"
+                  onClick={gotoIdea}
+                >
+                  Done
+                </Button>
+              </Col>
+            </Row>
           </div>
         );
       case "FAILED":
@@ -472,6 +507,17 @@ const CreateIdeaModal = ({
                     {publishError}
                   </p>
                 </div>
+              </Col>
+            </Row>
+            <Row className="button-section  d-flex">
+              <Col xs="12" className="button-bar">
+                <Button
+                  className="submit-btn"
+                  onClick={() => {
+                    window.location.reload()
+                  }}>
+                  Retry
+                </Button>
               </Col>
             </Row>
           </div>
@@ -612,7 +658,8 @@ const CreateIdeaModal = ({
                           className={
                             isSelectedPurpose(entry)
                               ? "purpose-entry selected"
-                              : "purpose-entry"
+                              : isDisabled(entry)
+                              ? "purpose-entry disabled" : "purpose-entry"
                           }
                           onClick={() => {
                             setPurpose(entry);
@@ -636,7 +683,9 @@ const CreateIdeaModal = ({
             </div>
             <Row className="button-section  d-flex">
               <Col xs="12" className="button-bar">
-                <Button className="cancel-btn">Cancel</Button>
+                <Button className="cancel-btn" onClick={() => {
+                  history.push(`/home`)
+                }}>Cancel</Button>
                 <Button
                   className="submit-btn"
                   onClick={checkValidationBeforeSubmit}

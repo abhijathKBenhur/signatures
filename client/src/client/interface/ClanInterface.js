@@ -18,10 +18,16 @@ export const getClans = (payload) =>  {
     return api.post("/getClans",payload) 
 }
 
+export const getClanMembers = (payload) =>  { 
+    return api.post("/getClanMembers",payload) 
+}
+
+
 const ClanInterface = {
     createClan,
     updateClan,
     getClans,
+    getClanMembers
 }
 
 export default ClanInterface

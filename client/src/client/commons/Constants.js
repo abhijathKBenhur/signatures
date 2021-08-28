@@ -2,7 +2,6 @@ const CATEGORIES = [
     { value: "Creative_art", label: "Creative art" },
     { value: "Business_idea", label: "Business idea" },
     { value: "Technical_inventions", label: "Technical inventions" },
-    { value: "Scientific_research", label: "Scientific research" },
 ];
 
 const PURPOSES = {
@@ -13,9 +12,11 @@ const PURPOSES = {
   LICENCE:  "LICENCE",
 };
 
-const RELATION = {
-  UPVOTE: "UPVOTE",
-  FOLLOW: "FOLLOW",
+const ENTITIES = {
+  IDEA: "IDEA",
+  PROFILE: "PROFILE",
+  CLAN: "CLAN",
+  PUBLIC: "PUBLIC",
 };
 
 const ACTIONS = {
@@ -69,8 +70,8 @@ const CONSTANTS = {
   ACTIONS,
   ACTION_STATUS,
   COLLAB_TYPE,
-  RELATION,
-  ACTIONS
+  ACTIONS,
+  ENTITIES
 };
 
 export default CONSTANTS;

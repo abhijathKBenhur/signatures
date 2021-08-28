@@ -16,11 +16,14 @@ const Signature = new Schema(
         transactionID: { type: String,required: true},
         ideaID: { type: String},
         storage: { type: String },
-        purpose: { type: String },
+        purpose: {
+              purposeType: String,
+              subType: String,
+              message: String
+            },
         location: { type: String },
         
         price: { type: String , required: true},
-        collab: { type: String },
         units: { type: String },
         
     },

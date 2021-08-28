@@ -42,6 +42,10 @@
                       color: $primary;
                     }
                 
+                    &.disabled{
+                      background-color: $greyLight-1;
+                      cursor: no-drop;
+                    }
                     &.selected{
                       box-shadow: $shadow;
                       .purpose-icon{

@@ -5,7 +5,8 @@ const Schema = mongoose.Schema;
 // activity notifications and personal messaging
 const Notification = new Schema(
   {
-    from : { type: String },
+    from : { type: Schema.Types.ObjectId, ref: "User", required: true },
+    fromUserID: { type: String },
     to: { type: String },
     action: { type: String },
     status: { type: String },

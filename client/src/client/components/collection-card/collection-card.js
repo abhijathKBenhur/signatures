@@ -3,12 +3,11 @@ import { Button, Card, CardDeck, Image } from "react-bootstrap";
 import { Row, Col, Container } from "react-bootstrap";
 import moment from "moment";
 import { useHistory } from "react-router-dom";
-
+import _ from "lodash";
 import "./collection-card.scss";
 import CONSTANTS from "../../commons/Constants";
 import { showToaster } from "../../commons/common.utils";
 import { getPurposeIcon } from "../../commons/common.utils";
-
 
 const CollectionCard = (props) => {
   let history = useHistory();
@@ -28,10 +27,17 @@ const CollectionCard = (props) => {
     });
   };
   useEffect(() => {
-    setSignature(props.collection)
-  },[props])
+    setSignature(props.collection);
+  }, [props]);
 
   const [signature, setSignature] = useState(props.collection);
+
+  const getClassNames = () => {
+    return "bottom-content d-flex justify-content-between align-items-center " +
+      _.get(JSON.parse(signature.category), "value")
+    ;
+  };
+
   return (
     <Col
       key={signature._id}
@@ -66,10 +72,9 @@ const CollectionCard = (props) => {
           >
             {signature.owner.userName}
           </div>
-
-          
         </div>
-        <div className="image-container"
+        <div
+          className="image-container"
           onClick={() => {
             openCardView();
           }}
@@ -92,17 +97,23 @@ const CollectionCard = (props) => {
               background: "#f1f1f1",
             }}
           />
-           
         </div>
-        <div className="bottom-content d-flex justify-content-between align-items-center ">
+        <div className={getClassNames()}>
           <div class="tag-n-location">
-            <div className="location second-header">{signature.location}
-            {moment(signature.createdAt).format("YYYY-MM-DD HH:mm:ss")}
+            <div className=" second-header timestamp">
+              {moment(signature.createdAt).format("YYYY-MM-DD HH:mm:ss")}
             </div>
-            <div className="tags second-grey">{JSON.parse(signature.category).label}</div>
+            <div className="tags second-grey">
+              {signature.location || "Global"}
+            </div>
           </div>
           <div class="purpose-badge">
-              <i className={getPurposeIcon(signature.purpose)}></i>
+            <i
+              className={getPurposeIcon(
+                _.get(signature, "purpose.purposeType") ||
+                  _.get(signature, "purpose")
+              )}
+            ></i>
           </div>
         </div>
         {/* <div className="footer-area">testing bottom footer area</div> */}

@@ -66,11 +66,8 @@
       }
       .modal-body {
         .step-component {
-          padding: 20px;
           height: 200px;
           display: flex;
-          align-items: center;
-          justify-content: center;
           .loginMode{
             padding: 8px;
             &:hover{
@@ -96,7 +93,6 @@
             margin-top: -35px;
           }
           .user-name-row{
-            flex-flow: column;
           }
         }
         .btn-component {

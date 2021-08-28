@@ -14,7 +14,7 @@ const Clans = (props) => {
   useEffect(() => {
     const { userDetails = {} } = reduxState;
     ClanInterface.getClans({
-      leader:userDetails.userName
+      leader:userDetails._id
     }).then(success => {
       let clansData = _.get(success,'data.data')
       setOwnClans(clansData)

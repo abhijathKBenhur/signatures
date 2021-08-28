@@ -16,6 +16,15 @@ $card-height: 200px;
     .bottom-content{
       border-radius: 0 0 10px 10px;
       background-color: $secondary;
+      &.Creative_art{
+        background-color: $category1;
+      }
+      &.Business_idea{
+        background-color: $category2;
+      }
+      &.Technical_inventions{
+        background-color: $category3;
+      }
       padding: 0.5rem;
       .purpose-badge{
         border: 2px solid $greyLight-1;
@@ -26,6 +35,7 @@ $card-height: 200px;
         display: flex;
         align-items: center;
         justify-content: center;
+        color: white;
         i{
           color: $greyLight-1;
         }
@@ -34,6 +44,10 @@ $card-height: 200px;
         .tags{
           text-align: left;
           color: $greyLight-1;
+        }
+        .timestamp{
+          font-size: 11px !important;
+
         }
       }
     }

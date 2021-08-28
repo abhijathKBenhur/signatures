@@ -6,9 +6,9 @@ import CONSTANTS from "../../commons/Constants";
 import Web3Utils from "web3-utils";
 import { getPurposeIcon } from "../../commons/common.utils";
 import { showToaster } from "../../commons/common.utils";
-import "./info.modal.scss";
+import "./engage-modal.scss";
 import SignatureInterface from "../../interface/SignatureInterface";
-const InfoModal = (props) => {
+const EngageModal = (props) => {
   const priceRef = useRef(null);
   const getTagsElement = () => {
     try {
@@ -237,6 +237,46 @@ const InfoModal = (props) => {
     }
   }
 
+  const getEngageText = (purpose, isVerb) => {
+    switch (purpose.purposeType) {
+      case CONSTANTS.PURPOSES.SELL:
+        return isVerb ? "available for purchase" :"Buy";
+      
+      case CONSTANTS.PURPOSES.LICENCE:
+        return isVerb ? "available for licensing" :"Buy";
+
+      case CONSTANTS.PURPOSES.AUCTION:
+        return isVerb ? "available for auction" :"Bid";
+
+      case CONSTANTS.PURPOSES.COLLAB:
+        return isVerb ? "available for collaboration" :"Collaborate";
+
+      case CONSTANTS.PURPOSES.KEEP:
+        return "Not availble to engage.";
+      default:
+        return null;
+    }
+  };
+
+  const engage = (purpose) =>{
+    switch (purpose.purposeType) {
+      case CONSTANTS.PURPOSES.SELL:
+      case CONSTANTS.PURPOSES.LICENCE:
+        return "Buy";
+
+      case CONSTANTS.PURPOSES.AUCTION:
+        return "Bid";
+
+      case CONSTANTS.PURPOSES.COLLAB:
+        return "Collaborate";
+
+      case CONSTANTS.PURPOSES.KEEP:
+        return "View info";
+      default:
+        return null;
+    }
+  }
+
   return (
     <Modal
       show={true}
@@ -250,7 +290,7 @@ const InfoModal = (props) => {
       <Modal.Body className="info-modal-body">
         <div className="modal-header-wrapper">
             <Col md="12" className="">
-              <h4>Engagement</h4>
+              <h4>Engage</h4>
             </Col>
         </div>
         <div className="purpose-selection">
@@ -258,7 +298,7 @@ const InfoModal = (props) => {
             <Col md="12" className="">
               <div className="purpose-label master-grey">
                 <Form.Label>
-                  What would you like to do with the idea ?{" "}
+                  This idea is  {getEngageText(form.purpose,true)}
                 </Form.Label>
               </div>
               <div className="purpose-tabs">
@@ -268,11 +308,8 @@ const InfoModal = (props) => {
                       className={
                         isSelectedPurpose(entry)
                           ? "purpose-entry selected"
-                          : "purpose-entry"
+                          : "purpose-entry disabled"
                       }
-                      onClick={() => {
-                        setPurpose(entry);
-                      }}
                     >
                       <i className={getPurposeIcon(entry)}></i>
                       <span className="second-grey purpose-text">{entry}</span>
@@ -284,47 +321,27 @@ const InfoModal = (props) => {
           </Row>
         </div>
         <div className="selective-component">
-          <div>{getConditionalCompnent()}</div>
+          {/* <div>{getConditionalCompnent()}</div> */}
 
           {/* {form.purpose.purposeType == CONSTANTS.PURPOSES.COLLAB &&  */}
           <Col>
-            <Form.Control
-              value={form.purpose.message}
-              as="textarea"
-              className="mt-3"
-              rows={7}
-              aria-describedby="inputGroupAppend"
-              name="description"
-              placeholder="Description upto 250 words"
-              style={{ resize: "none", borderRadius: "5px" }}
-              onChange={(event) => {
-                setFormData({
-                  ...form,
-                  purpose: {
-                    purposeType: form.purpose.purposeType,
-                    subType: form.purpose.subType,
-                    message: event.target.value,
-                  },
-                });
-              }}
-            />
+            <span>{form.purpose.message}</span>
           </Col>
           {/* } */}
         </div>
-        <Row className="button-section  d-flex mb-4  ">
-          <Col xs="12" className="button-bar justify-content-end d-flex">
+        
+          <Col xs="12" className="button-bar justify-content-between d-flex">
             <Button className="cancel-btn mr-2 mt-2" onClick={props.onHide}>
               Cancel
             </Button>
-            <Button className="submit-btn  mt-2" onClick={() => updateIdea()}>
-              Update
+            <Button className="submit-btn  mt-2" onClick={() => engage(form.purpose)}>
+              {getEngageText(form.purpose)}
             </Button>
           </Col>
-        </Row>
       </Modal.Body>
     </Modal>
   );
 
  
 };
-export default InfoModal;
+export default EngageModal;

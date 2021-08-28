@@ -1,11 +1,13 @@
 import React, { useState } from "react";
-import { Modal, Form, Button } from "react-bootstrap";
+import { Modal, Form, Button, Image } from "react-bootstrap";
 import _ from "lodash";
 import NotificationInterface from "../../interface/NotificationInterface";
 import CONSTANTS from "../../commons/Constants";
 import "./view-notification.scss";
 import { showToaster } from "../../commons/common.utils";
+import { useHistory } from "react-router-dom";
 const ViewNotification = ({ ...props }) => {
+  let history = useHistory();
   const [viewNotificationState, setViewNotificationState] = useState({
     showReply: false,
     replyTxt: "",
@@ -30,23 +32,57 @@ const ViewNotification = ({ ...props }) => {
 
     NotificationInterface.postNotification(
       _.get(props, "notification.to"),
-      _.get(props, "notification.from"),
+      _.get(props, "notification._id"),
       _.get(props, "notification.action"),
       CONSTANTS.ACTION_STATUS.PENDING,
       viewNotificationState.replyTxt
     )
       .then((success) => {
         props.onHide();
-        showToaster("Message sent!", {type: 'success'})
+        showToaster("Message sent!", { type: "success" });
       })
       .catch((error) => {
         console.log("message could not be created");
       });
   };
+
+  const getNotificationActionText = (notification) => {
+    switch (notification.action) {
+      case CONSTANTS.ACTIONS.CREATE_CLAN:
+        return "View clan"
+        break;
+      case CONSTANTS.ACTIONS.COMMENT:
+      case CONSTANTS.ACTIONS.UPVOTE:
+        return "View idea"
+        break;
+    }
+  };
+
+  const makeCustomAction = (notification) => {
+    switch (notification.action) {
+      case CONSTANTS.ACTIONS.CREATE_CLAN:
+        history.push({
+          pathname:
+            "/clan/" + _.get(props, "notification.payload.clanID"),
+        });
+        break;
+      case CONSTANTS.ACTIONS.COMMENT:
+      case CONSTANTS.ACTIONS.UPVOTE:
+        history.push({
+          pathname:
+            "/signature/" + _.get(props, "notification.payload.ideaID"),
+        });
+        break;
+    }
+  };
+
+  
+
   return (
     <Modal
       show={true}
       onHide={props.onHide}
+      close
       size="md"
       className="view-notification-modal"
       dialogClassName="view-notification-modal-dialog"
@@ -54,14 +90,27 @@ const ViewNotification = ({ ...props }) => {
     >
       <Modal.Body className="view-notification-modal-body">
         <div className="modal-header-wrapper master-grey">
-          <h4>{_.get(props, "notification.from")} </h4>
+          <Image
+            src={_.get(props, "notification.from.imageUrl")}
+            color="F3F3F3"
+            className="user-circle mr-1"
+            onClick={() => {
+              history.push({
+                pathname:
+                  "/profile/" + _.get(props, "notification.from.userName"),
+              });
+            }}
+          />
+          <span className="master-grey">
+            {_.get(props, "notification.from.userName")}{" "}
+          </span>
           <hr></hr>
         </div>
         <div className="wrapper">
-        <div className="notification-container second-grey">
+          <div className="notification-container second-grey">
             {_.get(props, "notification.message")}
           </div>
-          {showReplyBlock() && (
+          {viewNotificationState.showReply && (
             <div className="reply-block mt-3">
               {_.get(viewNotificationState, "showReply") ? (
                 <div class="d-flex flex-column w-100">
@@ -72,21 +121,52 @@ const ViewNotification = ({ ...props }) => {
                     className="w-100"
                     onChange={(e) => handleChange(e)}
                   />
-                  <Button variant="primary"
+                  <Button
+                    variant="primary"
                     className=" mt-3 justify-self-end"
                     aria-hidden="true"
                     onClick={() => sendMessage()}
-                  >Send</Button>
+                  >
+                    Send
+                  </Button>
                 </div>
               ) : (
-                <Button variant="primary"
+                <Button
+                  variant="primary"
                   className="mt-3  justify-self-end"
                   aria-hidden="true"
                   onClick={() => replyMessage()}
-                >Reply</Button>
+                >
+                  Reply
+                </Button>
               )}
             </div>
           )}
+          <hr></hr>
+        </div>
+        <div className="footer">
+          <Button
+            variant="primary"
+            className="button"
+            bsstyle="primary"
+            onClick={() => {
+              makeCustomAction(_.get(props, "notification"))
+            }}
+          >
+            {" "}
+            {getNotificationActionText(_.get(props, "notification"))}
+          </Button>
+          <Button
+            variant="primary"
+            className="button ml-2"
+            bsstyle="primary"
+            onClick={() => {
+              replyMessage();
+            }}
+          >
+            {" "}
+            Send a message
+          </Button>
         </div>
       </Modal.Body>
     </Modal>

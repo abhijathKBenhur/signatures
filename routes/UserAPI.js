@@ -56,25 +56,24 @@ getUserInfo = async (req, res) => {
 };
 
 updateUser = async (req, res) => {
-  console.log("updateUser", req.body);
+  let userName = req.body.userName
+  delete req.body.userName
   const newUser = new User(req.body);
-  delete newUser.userName
-  await User.findByIdAndUpdate(
-    req.body.id, 
-    newUser,
-    { new: true },
-    (err, user) => {
-      if (err) {
-        return res.status(400).json({ success: false, error: err });
-      }
-      if (!user) {
-        return res.status(404).json({ success: true, data: [] });
-      }
-      return res.status(200).json({ success: true, data: user });
-    }
-  ).catch((err) => {
-    return res.status(200).json({ success: false, data: err });
+  User.findOneAndUpdate({userName: userName},newUser,{upsert: true})
+  .then((notification, b) => {
+    return res.status(201).json({
+      success: true,
+      data: notification,
+      message: "user updated!",
+    });
+  })
+  .catch((error) => {
+    return res.status(400).json({
+      error,
+      message: "user update failed!",
+    });
   });
+
 };
 
 getUsers = async (req, res) => {

@@ -73,7 +73,7 @@ const Header = (props) => {
 
   function gotoPortfolio() {
     setAppLocatoin("profile");
-    history.replace("/profile/" + loggedInUserDetails.userName);
+    history.replace( loggedInUserDetails.userName ? "/profile/"+ loggedInUserDetails.userName : "/profile/create" );
   }
 
   function connectWallet() {
@@ -191,7 +191,7 @@ const Header = (props) => {
             }
 
             {_.isEmpty(loggedInUserDetails.imageUrl) ? (
-              <User
+              <User color="white"
                 className="cursor-pointer header-icons"
                 onClick={() => {
                   gotoPortfolio();

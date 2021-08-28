@@ -25,7 +25,7 @@ import NotificationInterface from "../../interface/NotificationInterface";
 const CreateClan = ({ ...props }) => {
   const [createClanState, setCreateClanState] = useState({
     name: "",
-    leader: props.userDetails.userName,
+    leader: props.userDetails._id,
     description: "",
     thumbnail: undefined,
     members: [],
@@ -57,8 +57,8 @@ const CreateClan = ({ ...props }) => {
     console.log("create clan state = ", createClanState);
     let membersWithoutLabel = _.map(createClanState.members, (member) => {
       return {
-        imageUrl: member.imageUrl,
-        userName: member.value,
+        memberId: member.id,
+        status:false
       };
     });
     const payload = {
@@ -68,11 +68,17 @@ const CreateClan = ({ ...props }) => {
     StorageInterface.getImagePath(payload)
       .then((success) => {
         payload.thumbnail = _.get(success, "data.path");
-        
+        _.omit(payload.selectedBillet,'label')
         ClanInterface.createClan(payload)
           .then((success) => {
             console.log("clan created");
-            NotificationInterface.postNotification()
+            let invitees = _.map(createClanState.members,"userName")
+            _.forEach(invitees, (invitee) => {
+              NotificationInterface.postNotification(createClanState.leader, invitee, CONSTANTS.ACTIONS.CREATE_CLAN, CONSTANTS.ACTION_STATUS.PEN, "Sent you a clan invite?",
+              JSON.stringify({
+                clanID: _.get(success,'data.data,_id')
+              }))
+            })
             props.onHide();
           })
           .catch((error) => {
@@ -192,7 +198,7 @@ const CreateClan = ({ ...props }) => {
                     type="text"
                     name="leader"
                     disabled
-                    value={createClanState.leader}
+                    value={props.userDetails.userName}
                     onChange={(e) => handleChange(e)}
                   />
                 </Col>
@@ -307,7 +313,7 @@ const CreateClan = ({ ...props }) => {
                       value={createClanState.members[index]}
                       options={userList.map((item) => {
                         return {
-                          value: item.userName,
+                          id: item._id,
                           imageUrl: item.imageUrl,
                           userName: item.userName,
                           label: (

@@ -22,7 +22,8 @@ var whitelist = ['http://localhost:3000','http://localhost:3001','http://localho
 app.use(cors(
   {
     origin: function (origin, callback) {
-      if (whitelist.indexOf(origin) !== -1) {
+      console.log("API requested from " + origin)
+      if (whitelist.indexOf(origin) !== -1 || !origin) {
         callback(null, true)
       } else {
         callback(new Error('Not allowed by CORS'))

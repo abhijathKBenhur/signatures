@@ -46,7 +46,7 @@ class App extends Component {
             <Route path="/tutorial" component={Tutorial} />
             <Route path="/ico" component={ICO} />
             <Route path="/roadmap" component={Roadmap} />
-            <Route path="/" component={About} />
+            <Route path="/"  render={(props) => <Gallery />} />
             <Route path="/newsletter" component={Newsletter} />
             <Route path="/blog" component={Blog} />
             <Route path="/help" component={Help} />

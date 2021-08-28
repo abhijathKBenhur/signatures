@@ -63,6 +63,8 @@
     border-left: 1px solid $greyLight-2;
     padding-left: 0;
     padding-right: 0;
+    overflow: scroll;
+    max-height: calc(100vh - 100px);
   }
 
   .userPane {
