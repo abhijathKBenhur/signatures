@@ -42,6 +42,10 @@ getUserInfo = async (req, res) => {
   if (req.body.metamaskId) {
     findCriteria.metamaskId = req.body.metamaskId;
   }
+  if(req.body.myReferralCode){
+    console.log("myReferralCode,"+  req.body.myReferralCode)
+    findCriteria.myReferralCode = req.body.myReferralCode
+  }
   await User.findOne(findCriteria, (err, user) => {
     if (err) {
       return res.status(400).json({ success: false, error: err });
@@ -83,6 +87,10 @@ getUsers = async (req, res) => {
   let ids = req.body.ids
   function getMongooseIds (stringId){
     return mongoose.Types.ObjectId(stringId)
+  }
+  if(req.body.myReferralCode){
+    console.log("myReferralCode,"+  req.body.myReferralCode)
+    findCriteria.myReferralCode = req.body.myReferralCode
   }
   if(ids){
     findCriteria._id = {

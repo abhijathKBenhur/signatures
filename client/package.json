@@ -19,6 +19,7 @@
     "chai": "4.2.0",
     "chai-as-promised": "7.1.1",
     "chai-bignumber": "3.0.0",
+    "crypto-js": "^4.1.1",
     "dom-to-image": "^2.6.0",
     "feather-icons-react": "^0.4.3",
     "font-awesome": "^4.7.0",

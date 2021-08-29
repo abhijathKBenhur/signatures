@@ -423,16 +423,19 @@ const SignatureNew = (props) => {
               </Row>
             </Col>
             <Col md="3" className="conversation-container  pt-2">
+            {!_.isEmpty(signature) && !_.isEmpty(loggedInUserDetails) &&  (<div>
               <span className="conversation-title second-header">
                 Conversation
               </span>
               <hr></hr>
-              {!_.isEmpty(signature) && (
+              
                 <CommentsPanel
                   idea={signature}
                   entity={CONSTANTS.ENTITIES.IDEA}
                 ></CommentsPanel>
+                </div>
               )}
+              
             </Col>
             <Col md="1" className="options-container  pt-2">
               <Row className="justify-content-center">

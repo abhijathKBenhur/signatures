@@ -9,7 +9,7 @@ const User = new Schema(
     fullName: { type: String },
     imageUrl: { type: String },
     metamaskId: { type: String },
-    userName: { type: String },
+    userName: { type: String, unique: true },
     loginMode: { type: String },
 
     facebookUrl: { type: String },
@@ -22,7 +22,8 @@ const User = new Schema(
     GasBalance: {type: Number},
     tribeGoldBalance: {type: Number},
 
-    referral:{ type: String },
+    myReferralCode:{ type: String },
+    referredBy:{ type: String },
 
   },
   { timestamps: true }

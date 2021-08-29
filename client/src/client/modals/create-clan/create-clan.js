@@ -58,7 +58,7 @@ const CreateClan = ({ ...props }) => {
     let membersWithoutLabel = _.map(createClanState.members, (member) => {
       return {
         memberId: member.id,
-        status:false
+        status: CONSTANTS.ACTION_STATUS.PENDING
       };
     });
     const payload = {
@@ -74,7 +74,7 @@ const CreateClan = ({ ...props }) => {
             console.log("clan created");
             let invitees = _.map(createClanState.members,"userName")
             _.forEach(invitees, (invitee) => {
-              NotificationInterface.postNotification(createClanState.leader, invitee, CONSTANTS.ACTIONS.CREATE_CLAN, CONSTANTS.ACTION_STATUS.PEN, "Sent you a clan invite?",
+              NotificationInterface.postNotification(createClanState.leader, invitee, CONSTANTS.ACTIONS.CREATE_CLAN, CONSTANTS.ACTION_STATUS.PENDING, "Sent you a clan invite?",
               JSON.stringify({
                 clanID: _.get(success,'data.data,_id')
               }))
@@ -189,7 +189,7 @@ const CreateClan = ({ ...props }) => {
                 </Col>
               </Row>
 
-              <Row className="clan-leader-row mb-4">
+              {/* <Row className="clan-leader-row mb-4">
                 <Col md="12" className="">
                   <div className="clan-leader-label second-grey">
                     <Form.Label>Clan Leader</Form.Label>
@@ -202,7 +202,7 @@ const CreateClan = ({ ...props }) => {
                     onChange={(e) => handleChange(e)}
                   />
                 </Col>
-              </Row>
+              </Row> */}
             </Col>
             <Col md="6">
               <div className="clan-leader-label second-grey">
@@ -267,7 +267,7 @@ const CreateClan = ({ ...props }) => {
             </Col>
           </Row>
 
-          <Row className="billet-row mb-4">
+          {/* <Row className="billet-row mb-4">
             <Col md="12">
               <div className="billet-label second-grey">
                 <Form.Label>My Billet </Form.Label>
@@ -299,7 +299,7 @@ const CreateClan = ({ ...props }) => {
                 />
               )}
             </Col>
-          </Row>
+          </Row> */}
 
           <Row className="clan-members-row mb-4">
             <Col md="12">

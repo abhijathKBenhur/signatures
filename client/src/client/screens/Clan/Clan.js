@@ -49,7 +49,6 @@ function Clan(props) {
   const [clan, setClan] = useState(props.clan || {});
   const [clanCollection, setclanCollection] = useState([]);
   const [followers, setClanFollowers] = useState([]);
-  const [clanMembers, setClanMembers] = useState([]);
   const [loggedInUserDetails, setLoggedInUserDetails] = useState({});
   const [clanNotifications, setClanNotifications] = useState([]);
   const [billetList, setClanBilletList] = useState([]);
@@ -124,16 +123,18 @@ function Clan(props) {
     if (_.isEmpty(clan)) {
       ClanInterface.getClan({ name: clanName }).then((success) => {
         let clanInfo = _.get(success, "data.data[0]");
-        setClan(clanInfo);
         let memberList = _.map(clanInfo.members, "memberId");
         UserInterface.getUsers({ ids: memberList }).then((succes) => {
-          setClanMembers(
+          setClanMembers(clanInfo,
             _.get(succes, "data.data").map((member) => {
-              let status = _.get(_.find(clanInfo.members, {memberId: member._id}),"status")
-              member.status = status
-              return member
-          }))
-          
+              let status = _.get(
+                _.find(clanInfo.members, { memberId: member._id }),
+                "status"
+              );
+              member.status = status;
+              return member;
+            })
+          );
         });
       });
     }
@@ -141,7 +142,7 @@ function Clan(props) {
 
   const getUserDetails = (payLoad) => {
     UserInterface.getUserInfo(payLoad).then((response) => {
-      let userDetails = _.get(response, "data.data")
+      let userDetails = _.get(response, "data.data");
       setLoggedInUserDetails(userDetails);
     });
   };
@@ -205,6 +206,21 @@ function Clan(props) {
     });
   };
 
+  const respondToInvite = (member,acceptance) => {
+    debugger
+    let memberIndex = _.findIndex(clan.members, { memberId: member._id })
+    let members = clan.members;
+    let newStatus = acceptance ? CONSTANTS.ACTION_STATUS.COMPLETED : CONSTANTS.ACTION_STATUS.DECLINED;
+    members[memberIndex].status = newStatus
+    setClanMembers(clan, members)
+  }
+
+  const setClanMembers = (clanInfo,members) => {
+    let clanObject = clanInfo || clan;
+    clanObject.members = members;
+    setClan(clanObject)
+  }
+
   return (
     <Container fluid>
       <Row className="profile">
@@ -217,18 +233,16 @@ function Clan(props) {
             <Col md="12" className="mycollection">
               <Row className="loggedIn h-100">
                 <Col md="12" className="p-0 d-flex">
-                  <Col md="2" className="clanPane w-100 flex-column h-100">
+                  <Col md="3" className="clanPane w-100 flex-column h-100">
                     <div className="profile-section d-flex flex-column">
                       {/* <div className="separatorline"></div> */}
-
                       <img
                         src={clan.thumbnail}
                         height={140}
-                        width={140}
+                        width="100%"
                         className=""
                         style={{
                           background: "#f1f1f1",
-                          borderRadius: "140px",
                           zIndex: "1",
                         }}
                         alt="user"
@@ -236,36 +250,76 @@ function Clan(props) {
                       <div className="d-flex justify-content-center master-grey mt-1"></div>
                     </div>
                     <div className="profile-info">
-                      <div className="d-flex justify-content-center align-items-center">
+                      <div className="d-flex justify-content-center align-items-center flex-column">
                         <span className="master-header userName">
-                          {_.get(clan, "name")}
+                          {_.get(clan, "name")} 
+                        </span>
+                        <span>
+                        ({_.isEmpty(clan.address) ? "Proposed" : clan.address})
                         </span>
                       </div>
                     </div>
                     <div className="clan-members mt-5 w-100 d-flex flex-column">
                       <span className="second-header">Members</span>
                       <div className="member-list mt-2">
-                        {clanMembers.map((member, i) => {
+                        {clan && clan.members && clan.members.map((member, i) => {
                           return (
-                            <div className="member-item d-flex flex-row align-items-center pb-1">
-                              <div className="icon mr-2 p-1 cursor-pointer">
-                                <Image
-                                  src={member.imageUrl}
-                                  color="F3F3F3"
-                                  className="user-circle"
-                                  onClick={() => {
-                                    history.push({
-                                      pathname: "/profile/" + member.userName,
-                                    });
-                                  }}
-                                />
-                              </div>
-                              <div className="content">
-                                <div className="top master-grey  cursor-pointer">
-                                  {member.userName}
+                            <div className="member-item d-flex flex-row align-items-center pb-1 justify-content-between">
+                              <div className="profile-status d-flex">
+                                <div className="icon mr-2 p-1 cursor-pointer">
+                                  <Image
+                                    src={member.imageUrl}
+                                    color="F3F3F3"
+                                    className="user-circle"
+                                    onClick={() => {
+                                      history.push({
+                                        pathname: "/profile/" + member.userName,
+                                      });
+                                    }}
+                                  />
                                 </div>
-                                <div className="bottom second-grey">{member.status ? "Member" : "Invited"}</div>
+                                <div className="content">
+                                  <div className="top master-grey  cursor-pointer">
+                                    {member.userName}
+                                  </div>
+                                  <div className="bottom second-grey">
+                                    {member.status ==
+                                    CONSTANTS.ACTION_STATUS.COMPLETED
+                                      ? "Member"
+                                      : member.status ==
+                                        CONSTANTS.ACTION_STATUS.DECLINED
+                                      ? "Declined"
+                                      : "Invited"}
+                                  </div>
+                                </div>
                               </div>
+
+                              {member.status ==
+                                CONSTANTS.ACTION_STATUS.PENDING && (
+                                <div className="actions-panel">
+                                  <Button
+                                    variant="action"
+                                    disabled
+                                    
+                                    onClick={() => {
+                                      respondToInvite(member, true);
+                                    }}
+                                    className="small"
+                                  >
+                                    <i className="fa fa-check"></i>
+                                  </Button>
+                                  <Button
+                                    variant="action"
+                                    disabled
+                                    onClick={() => {
+                                      respondToInvite(member, false);
+                                    }}
+                                    className="small ml-1"
+                                  >
+                                    <i className="fa fa-times"></i>
+                                  </Button>
+                                </div>
+                              )}
                             </div>
                           );
                         })}
@@ -276,8 +330,8 @@ function Clan(props) {
                   <Col
                     className={
                       isMyClan()
-                        ? "tabs-wrapper mt-3 col-md-8"
-                        : "tabs-wrapper mt-3 col-md-10"
+                        ? "tabs-wrapper mt-3 col-md-7"
+                        : "tabs-wrapper mt-3 col-md-"
                     }
                   >
                     <Row className="profile-details">

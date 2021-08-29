@@ -25,13 +25,13 @@ const Clans = (props) => {
   }, [reduxState.userDetails]);
 
   return (
-    <div className="clans">
+    <Row className="clans">
        {ownClans.map((clan, index) => {
         return (
           <ClanCard clan={clan} key={index} index={index}  />
         );
       })}
-    </div>
+    </Row>
   );
 };
 
