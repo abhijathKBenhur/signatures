@@ -60,14 +60,15 @@ getUserInfo = async (req, res) => {
 };
 
 updateUser = async (req, res) => {
-  let userName = req.body.userName
-  delete req.body.userName
   const newUser = new User(req.body);
-  User.findOneAndUpdate({userName: userName},newUser,{upsert: true})
-  .then((notification, b) => {
+  User.findByIdAndUpdate(req.body._id,newUser, {
+    new: true
+  })
+  .then((user, b) => {
+    console.log("user updated",user)
     return res.status(201).json({
       success: true,
-      data: notification,
+      data: user,
       message: "user updated!",
     });
   })

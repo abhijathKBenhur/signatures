@@ -63,10 +63,10 @@ const EditProfile = ({ ...props }) => {
     }
 
     const editProfileHandler = () => {
-        delete editProfile.id
         delete editProfile._id
         UserInterface.updateUser(editProfile).then(response => {
         console.log('edit profile success  = ', response)
+        props.onHide();
         }).catch(err => {
           console.log('error  = ', err)
         })

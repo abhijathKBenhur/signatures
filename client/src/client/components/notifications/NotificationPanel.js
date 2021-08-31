@@ -71,7 +71,7 @@ const NotificationPanel = (props) => {
             onClick={() => viewMessageHandler(notification)}
           >
             <Image
-              src={notification.from.imageUrl}
+              src={_.get(props, "notification.from.imageUrl")}
               color="F3F3F3"
               className="user-circle mr-2"
               onClick={() => {
@@ -87,7 +87,7 @@ const NotificationPanel = (props) => {
               }}
             >
               <div className="top master-grey">
-                {notification.from.userName}
+                {_.get(props, "notification.from.userName")}
               </div>
               <div className="bottom second-grey">
                 {getInitialSubString(notification.message, 25)}

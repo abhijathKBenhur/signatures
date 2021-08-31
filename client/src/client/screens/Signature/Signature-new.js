@@ -357,7 +357,7 @@ const SignatureNew = (props) => {
                           </OverlayTrigger>
                           {signature.owner &&
                           loggedInUserDetails.userName ==
-                            signature.owner.userName ? (
+                          _.get(signature,'owner.userName') ? (
                             <div>
                               <Button
                                 variant="action"
@@ -443,10 +443,10 @@ const SignatureNew = (props) => {
                   <div className="avatar">
                     {signature.owner && (
                       <img
-                        src={signature.owner.imageUrl}
+                        src={_.get(signature,'owner.imageUrl')}
                         alt="profile"
                         onClick={() =>
-                          history.push(`/profile/${signature.owner.userName}`)
+                          history.push(`/profile/${_.get(signature,'owner.imageUrl')}`)
                         }
                       />
                     )}
