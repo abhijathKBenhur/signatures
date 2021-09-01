@@ -60,12 +60,21 @@ getUserInfo = async (req, res) => {
 };
 
 updateUser = async (req, res) => {
-  const newUser = new User(req.body);
-  User.findByIdAndUpdate(req.body._id,newUser, {
-    new: true
-  })
+  const newUser = req.body;
+  let updates = {
+    firstName: newUser.firstName,
+    lastName: newUser.lastName,
+    email: newUser.email,
+    facebookUrl: newUser.facebookUrl,
+    linkedInUrl: newUser.linkedInUrl,
+    twitterUrl: newUser.twitterUrl,
+    instaUrl: newUser.instaUrl,
+    bio: newUser.bio
+  }
+
+  User.findOneAndUpdate({id:req.body._id},updates,{new:true})
   .then((user, b) => {
-    console.log("user updated",user)
+    console.log("user updated",user, b)
     return res.status(201).json({
       success: true,
       data: user,

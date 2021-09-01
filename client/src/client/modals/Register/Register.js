@@ -102,7 +102,10 @@ const Register = (props) => {
       if (registration == PASSED) {
         publishUserToApp();
         history.push("/profile/" + userDetails.userName);
-      } else {
+      } else if(registration == FAILED){
+        setRegistration("")
+      }
+      else {
         setRegistration(PENDING);
         registerUser();
       }
@@ -132,6 +135,9 @@ const Register = (props) => {
       })
     );
     setActiveStep(steps[index - 1]);
+    if(activeStep.index == 2){
+      setRegistration("")
+    }
   };
 
   useEffect(() => {
@@ -460,8 +466,10 @@ const Register = (props) => {
             disabled={
               ( 
                 ( userNameError || !userDetails.userName || userDetails.userName.length == 0  ||  
-                  referralError || !userDetails.referredBy || userDetails.referredBy.length == 0   
-                ) && activeStep.index == 2) ||
+                  referralError
+                  //  || !userDetails.referredBy || userDetails.referredBy.length == 0   
+                ) 
+                && activeStep.index == 2) ||
               registration == PENDING ||
               (_.isEmpty(userDetails.metamaskId) && activeStep.index == 1) ||
               (_.isEmpty(userDetails.email) && activeStep.index == 0) ||
@@ -474,10 +482,10 @@ const Register = (props) => {
               handleNext();
             }}
           >
-            {activeStep.index == steps.length - 1
-              ? registration == PASSED
-                ? "Done"
-                : "Register"
+            {activeStep.index == steps.length - 1 ? 
+              registration == PASSED ? "Done" :
+              registration == PENDING ? "Registering" :
+              registration == FAILED ?  "Retry" : "Register"
               : "Next"}
           </Button>
         </Col>
