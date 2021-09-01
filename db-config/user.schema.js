@@ -6,7 +6,6 @@ const User = new Schema(
     firstName: { type: String },
     lastName: { type: String },
     email: { type: String },
-    fullName: { type: String },
     imageUrl: { type: String },
     metamaskId: { type: String },
     userName: { type: String, unique: true },

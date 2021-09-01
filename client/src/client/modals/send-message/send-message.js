@@ -7,6 +7,7 @@ import {
   Col,
   Row,
 } from "react-bootstrap";
+import { showToaster } from "../../commons/common.utils";
 import Select from "react-select";
 import CONSTANTS from "../../commons/Constants";
 import NotificationInterface from "../../interface/NotificationInterface";
@@ -39,9 +40,10 @@ const SendMessage = ({ ...props }) => {
     let payload = {
       ...sendMessage,
     };
-    NotificationInterface.postNotification(sendMessage.from, sendMessage.to, CONSTANTS.ACTION.PERSONAL_MESSAGE, sendMessage.status, sendMessage.message)
+    NotificationInterface.postNotification(sendMessage.from, sendMessage.to, CONSTANTS.ACTIONS.PERSONAL_MESSAGE, sendMessage.status, sendMessage.message)
       .then((success) => {
         console.log("message created");
+        showToaster("Message sent!", { type: "dark" });
         props.onHide();
       })
       .catch((error) => {

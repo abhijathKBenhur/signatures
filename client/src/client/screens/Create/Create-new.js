@@ -104,7 +104,7 @@ const CreateNew = () => {
   const [modalShow, setModalShow] = useState(false);
   const [billet, setBillet] = useState({
     creator: form.owner,
-    fullName: userDetails.fullName,
+    fullName: userDetails.firstName + " " + userDetails.lastName,
     title: form.title,
     location: form.location,
     time: moment(new Date()).format("MMMM Do YYYY, h:mm:ss a"),
@@ -483,7 +483,7 @@ const CreateNew = () => {
           saveToMongo(successResponse);
           setBillet({
             creator: userDetails.userName,
-            fullName: userDetails.fullName,
+            fullName: userDetails.firstName + " " + userDetails.lastName,
             title: successResponse.title,
             time: moment(new Date()).format("MMMM Do YYYY, h:mm:ss a"),
             tokenID: successResponse.ideaID,

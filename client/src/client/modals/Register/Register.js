@@ -58,7 +58,6 @@ const Register = (props) => {
     firstName: _.get(reduxState, "firstName"),
     lastName: _.get(reduxState, "lastName"),
     email: _.get(reduxState, "email"),
-    fullName: _.get(reduxState, "fullName"),
     imageUrl: _.get(reduxState, "imageUrl"),
     metamaskId: _.get(reduxState, "metamaskID"),
     userName: _.get(reduxState, "userName"),
@@ -156,7 +155,6 @@ const Register = (props) => {
       firstName: _.get(googleFormResponseObject.profileObj, "givenName"),
       lastName: _.get(googleFormResponseObject.profileObj, "familyName"),
       email: _.get(googleFormResponseObject.profileObj, "email"),
-      fullName: _.get(googleFormResponseObject.profileObj, "name"),
       imageUrl: _.get(googleFormResponseObject.profileObj, "imageUrl"),
       loginMode: "google",
       userName: _.get(googleFormResponseObject.profileObj, "email").split(
@@ -285,14 +283,14 @@ const Register = (props) => {
                   <span className="second-grey">Welcome to IdeaTribe</span>
                 </div>
                 <span>
-                  Hi {userDetails.fullName} You have signed up to the unlimited
+                  Hi {userDetails.firstName} You have signed up to the unlimited
                   possibilities in the world of idea sharing.
                 </span>
               </div>
             ) : registration == FAILED ? (
               <div>
                 {" "}
-                Hi {userDetails.fullName}, We were unable to onboard you to the
+                Hi {userDetails.firstName}, We were unable to onboard you to the
                 tribe this time.
                 <br></br>
                 {registrationErrorMessage}
