@@ -446,7 +446,7 @@ const SignatureNew = (props) => {
                         src={_.get(signature,'owner.imageUrl')}
                         alt="profile"
                         onClick={() =>
-                          history.push(`/profile/${_.get(signature,'owner.imageUrl')}`)
+                          history.push(`/profile/${_.get(signature,'owner.userName')}`)
                         }
                       />
                     )}

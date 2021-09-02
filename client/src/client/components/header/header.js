@@ -73,7 +73,7 @@ const Header = (props) => {
 
   function gotoPortfolio() {
     setAppLocatoin("profile");
-    history.replace( loggedInUserDetails.userName ? "/profile/"+ loggedInUserDetails.userName : "/profile/create" );
+    history.push( loggedInUserDetails.userName ? "/profile/"+ loggedInUserDetails.userName : "/profile/create" );
   }
 
   function connectWallet() {

@@ -12,7 +12,7 @@ import Clan from "./screens/Clan/Clan";
 import Header from "./components/header/header";
 import Footer from "./components/footer/footer";
 import Banner from "./components/banner/banner";
-import { Switch, Route, Redirect } from "react-router-dom";
+import {BrowserRouter as Router, Route, Switch, Redirect,withRouter } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import DailyReads from "./screens/daily-reads/daily-reads";
 import Tutorial from "./screens/tutorial/tutorial";
@@ -28,13 +28,10 @@ import Support from "./screens/support/support";
 import Partner from "./screens/partner/partner";
 import Contact from "./screens/contact/contact";
 
-class App extends Component {
-  constructor(props) {
-    super(props);
-  }
+const App = () =>  {
 
-  render() {
     return (
+      <Router>  
       <div className="appContainer">
         <ToastContainer></ToastContainer>
         <Header></Header>
@@ -42,16 +39,16 @@ class App extends Component {
         <div className="app-content">
           <Switch>
             <Route path="/home" render={(props) => <Gallery />} />
-            <Route path="/signature/:hashId" children={<Signature />} />
-            <Route path="/create" children={<CreateNew />} />
-            <Route path="/profile/:userName" children={<Profile />} />
-            <Route path="/clan/:clanID" children={<Clan />} />
-            <Route path="/profile" children={<Profile />} />
+            <Route path="/signature/:hashId" component={Signature} />
+            <Route path="/create" component={CreateNew} />
+            <Route path="/profile/:userName" component={Profile} />
+            <Route path="/clan/:clanID" component={Clan} />
+            <Route path="/profile" component={Profile} />
             <Route path="/daily-reads" component={DailyReads} />
             <Route path="/tutorial" component={Tutorial} />
             <Route path="/ico" component={ICO} />
             <Route path="/roadmap" component={Roadmap} />
-            <Route path="/"  render={(props) => <Gallery />} />
+            {/* <Route path="/"  render={(props) => <Gallery />} /> */}
             <Route path="/newsletter" component={Newsletter} />
             <Route path="/blog" component={Blog} />
             <Route path="/help" component={Help} />
@@ -65,8 +62,8 @@ class App extends Component {
         </div>
         <Footer></Footer>
       </div>
+      </Router>
     );
-  }
 }
 
-export default App;
+export default withRouter(App);
