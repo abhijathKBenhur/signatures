@@ -19,6 +19,8 @@ import Tutorial from "./screens/tutorial/tutorial";
 import ICO from "./screens/ico/ico";
 import Roadmap from "./screens/roadmap/roadmap";
 import About from "./screens/about/about";
+import Prelaunch from "./screens/prelaunch/prelaunch";
+
 import Newsletter from "./screens/newsletter/newsletter";
 import Blog from "./screens/blog/blog";
 import Help from "./screens/help/help";
@@ -56,7 +58,9 @@ class App extends Component {
             <Route path="/support" component={Support} />
             <Route path="/partner" component={Partner} />
             <Route path="/contact" component={Contact} />
-            <Route exact path="/" render={() => <Redirect from="/" to="/" />} />
+            <Route path="/about" component={About} />
+            <Route path="/prelaunch" component={Prelaunch} />
+            <Route exact path="/" render={() => <Redirect from="/" to="/prelaunch" />} />
           </Switch>
         </div>
         <Footer></Footer>

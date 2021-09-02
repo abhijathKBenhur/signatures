@@ -59,7 +59,7 @@ const NotificationPanel = (props) => {
   }
 
   return (
-    <ListGroup className="">
+    <ListGroup className="notification-list">
       {props.myNotifications.map((notification) => {
         return (
           <div
@@ -71,7 +71,7 @@ const NotificationPanel = (props) => {
             onClick={() => viewMessageHandler(notification)}
           >
             <Image
-              src={_.get(props, "notification.from.imageUrl")}
+              src={_.get(notification, "from.imageUrl")}
               color="F3F3F3"
               className="user-circle mr-2"
               onClick={() => {
@@ -87,7 +87,7 @@ const NotificationPanel = (props) => {
               }}
             >
               <div className="top master-grey">
-                {_.get(props, "notification.from.userName")}
+                {_.get(notification, "from.userName")}
               </div>
               <div className="bottom second-grey">
                 {getInitialSubString(notification.message, 25)}

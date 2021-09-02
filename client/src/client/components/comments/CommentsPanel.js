@@ -95,7 +95,7 @@ const CommentsPanel = (props) => {
         name="description"
         placeholder="Add a comment"
         onKeyUp={(e) => handleChange(e)}
-        style={{ borderRadius: 5 }}
+        style={{ borderRadius: 5,resize:"none" }}
         className="mb-2 comment-entry"
       />
 
