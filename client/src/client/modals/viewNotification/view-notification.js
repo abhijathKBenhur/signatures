@@ -55,6 +55,9 @@ const ViewNotification = ({ ...props }) => {
       case CONSTANTS.ACTIONS.UPVOTE:
         return "View idea"
         break;
+      case CONSTANTS.ACTIONS.PERSONAL_MESSAGE:
+        return "View profile"
+        break;
     }
   };
 
@@ -71,6 +74,12 @@ const ViewNotification = ({ ...props }) => {
         history.push({
           pathname:
             "/signature/" + _.get(props, "notification.payload.ideaID"),
+        });
+        break;
+      case CONSTANTS.ACTIONS.PERSONAL_MESSAGE:
+        history.push({
+          pathname:
+            "/profile/" + _.get(props, "notification.from.userName"),
         });
         break;
     }

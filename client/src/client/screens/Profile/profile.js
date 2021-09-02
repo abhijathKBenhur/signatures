@@ -21,7 +21,7 @@ import NotificationInterface from "../../interface/NotificationInterface";
 import BlockChainInterface from "../../interface/BlockchainInterface";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { ExternalLink, Award, User } from "react-feather";
-import Clans from "../Clans/Clans";
+import Clans from "./Clan/Clans";
 import ShareModal from "../../modals/share/share.modal";
 
 import Collections from "./collections";
@@ -319,7 +319,9 @@ function Profile(props) {
                           key={"top"}
                           placement="top"
                           overlay={
-                            <Tooltip id={`tooltip-top`}>Edit Profile</Tooltip>
+                            <Tooltip id={`tooltip-top`}>
+                              Edit Profile __ {isMyPage()}
+                            </Tooltip>
                           }
                         >
                           <Button
@@ -355,42 +357,50 @@ function Profile(props) {
                       </div>
                     ) : (
                       <div className="sharables d-flex">
-                        <reactShare.FacebookShareButton
-                          url={window.location.href}
-                          quote={"Hey! Check out this idea."}
-                        >
-                          <div className="social-icon-wrapper fb">
-                            <i class="fa fa-facebook" aria-hidden="true"></i>
-                          </div>
-                          {/* <reactShare.FacebookIcon size={32} round /> */}
-                        </reactShare.FacebookShareButton>
-                        <reactShare.TwitterShareButton
-                          url={window.location.href}
-                          title={"Hey! Check out this idea."}
-                        >
-                          <div className="social-icon-wrapper twitter ml-2">
-                            <i class="fa fa-twitter" aria-hidden="true"></i>
-                          </div>
-                          {/* <reactShare.TwitterIcon size={32} round /> */}
-                        </reactShare.TwitterShareButton>
-                        <reactShare.WhatsappShareButton
-                          url={window.location.href}
-                          title={"Hey! Check out this idea."}
-                          separator=":: "
-                        >
-                          <div className="social-icon-wrapper whatsapp ml-2">
-                            <i class="fa fa-whatsapp" aria-hidden="true"></i>
-                          </div>
-                          {/* <reactShare.WhatsappIcon size={32} round /> */}
-                        </reactShare.WhatsappShareButton>
-                        <reactShare.LinkedinShareButton
-                          url={window.location.href}
-                        >
-                          <div className="social-icon-wrapper linkedin ml-2">
-                            <i class="fa fa-linkedin" aria-hidden="true"></i>
-                          </div>
-                          {/* <reactShare.LinkedinIcon size={32} round /> */}
-                        </reactShare.LinkedinShareButton>
+                        {userDetails.facebookUrl && (
+                          <reactShare.FacebookShareButton
+                            url={userDetails.facebookUrl}
+                            quote={"Hey! Check out this idea."}
+                          >
+                            <div className="social-icon-wrapper fb">
+                              <i class="fa fa-facebook" aria-hidden="true"></i>
+                            </div>
+                            {/* <reactShare.FacebookIcon size={32} round /> */}
+                          </reactShare.FacebookShareButton>
+                        )}
+                        {userDetails.twitterUrl && (
+                          <reactShare.TwitterShareButton
+                            url={userDetails.twitterUrl}
+                            title={"Hey! Check out this idea."}
+                          >
+                            <div className="social-icon-wrapper twitter ml-2">
+                              <i class="fa fa-twitter" aria-hidden="true"></i>
+                            </div>
+                            {/* <reactShare.TwitterIcon size={32} round /> */}
+                          </reactShare.TwitterShareButton>
+                        )}
+                        {userDetails.instaUrl && (
+                          <reactShare.WhatsappShareButton
+                            url={userDetails.instaUrl}
+                            title={"Hey! Check out this idea."}
+                            separator=":: "
+                          >
+                            <div className="social-icon-wrapper whatsapp ml-2">
+                              <i class="fa fa-instagram" aria-hidden="true"></i>
+                            </div>
+                            {/* <reactShare.WhatsappIcon size={32} round /> */}
+                          </reactShare.WhatsappShareButton>
+                        )}
+                        {userDetails.linkedInUrl && (
+                          <reactShare.LinkedinShareButton
+                            url={userDetails.linkedInUrl}
+                          >
+                            <div className="social-icon-wrapper linkedin ml-2">
+                              <i class="fa fa-linkedin" aria-hidden="true"></i>
+                            </div>
+                            {/* <reactShare.LinkedinIcon size={32} round /> */}
+                          </reactShare.LinkedinShareButton>
+                        )}
                       </div>
                     )}
 
@@ -429,7 +439,8 @@ function Profile(props) {
                           <Col md="12">
                             <span className="second-header">
                               {" "}
-                              {loggedInUserDetails.fullName}{" "}
+                              {loggedInUserDetails.firstName}{" "}
+                              {loggedInUserDetails.lastName}{" "}
                             </span>{" "}
                           </Col>
                         </Row>
@@ -643,6 +654,9 @@ function Profile(props) {
         <EditProfile
           userDetails={loggedInUserDetails}
           show={modalShow.editProfile}
+          onupdate={(params) => {
+            setLoggedInUserDetails(_.get(params, "profileData.data"));
+          }}
           onHide={() => setShowModal({ ...modalShow, editProfile: false })}
         />
       )}

@@ -47,21 +47,23 @@ const Register = (props) => {
   ]);
   const [activeStep, setActiveStep] = useState(steps[0]);
   const [registration, setRegistration] = useState("");
-
-  const [validated, setValidated] = useState(false);
-  const [userNameError, setuserNameError] = useState(false);
   const [registrationErrorMessage, setregistrationErrorMessage] = useState("");
+
+
+  const [referralError, setReferralError] = useState(false);
+  const [userNameError, setuserNameError] = useState(false);
+  
 
   const [userDetails, setUserDetails] = useState({
     firstName: _.get(reduxState, "firstName"),
     lastName: _.get(reduxState, "lastName"),
     email: _.get(reduxState, "email"),
-    fullName: _.get(reduxState, "fullName"),
     imageUrl: _.get(reduxState, "imageUrl"),
     metamaskId: _.get(reduxState, "metamaskID"),
     userName: _.get(reduxState, "userName"),
     loginMode: _.get(reduxState, "loginMode"),
-    referral: undefined
+    referredBy: undefined,
+    myReferralCode: (Math.random() + 1).toString(36).substring(7),
   });
 
   function registerUser() {
@@ -98,8 +100,11 @@ const Register = (props) => {
     if (steps[steps.length - 1].key == activeStep.key) {
       if (registration == PASSED) {
         publishUserToApp();
-        history.push("/profile/" +userDetails.userName );
-      } else {
+        history.push("/profile/" + userDetails.userName);
+      } else if(registration == FAILED){
+        setRegistration("")
+      }
+      else {
         setRegistration(PENDING);
         registerUser();
       }
@@ -120,7 +125,7 @@ const Register = (props) => {
     const index = steps.findIndex((x) => x.key === activeStep.key);
     if (index === 0) {
       history.push("/home");
-    };
+    }
 
     setSteps((prevStep) =>
       prevStep.map((x) => {
@@ -129,6 +134,9 @@ const Register = (props) => {
       })
     );
     setActiveStep(steps[index - 1]);
+    if(activeStep.index == 2){
+      setRegistration("")
+    }
   };
 
   useEffect(() => {
@@ -147,11 +155,12 @@ const Register = (props) => {
       firstName: _.get(googleFormResponseObject.profileObj, "givenName"),
       lastName: _.get(googleFormResponseObject.profileObj, "familyName"),
       email: _.get(googleFormResponseObject.profileObj, "email"),
-      fullName: _.get(googleFormResponseObject.profileObj, "name"),
       imageUrl: _.get(googleFormResponseObject.profileObj, "imageUrl"),
       loginMode: "google",
-      userName: _.get(googleFormResponseObject.profileObj, "email").split("@")[0]
-    });
+      userName: _.get(googleFormResponseObject.profileObj, "email").split(
+        "@"
+      )[0],
+    }); 
   }
 
   function metamaskGuide() {
@@ -267,90 +276,84 @@ const Register = (props) => {
       case "userName":
         return (
           <div className="w-100 d-flex flex-row align-items-center justify-content-center">
-              {registration == PASSED ? (
-                <div className="d-flex flex-column align-items-center">
-                  <div className="d-flex align-items-center flex-column mb-2">
-                    <img src={successLogo} width="70"></img>
-                    <span className="second-grey">Welcome to IdeaTribe</span>
-                  </div>
-                  <span>
-                  Hi {userDetails.fullName} You have
-                  signed up to the unlimited possibilities in the world of idea
-                  sharing.
-                  </span>
+            {registration == PASSED ? (
+              <div className="d-flex flex-column align-items-center">
+                <div className="d-flex align-items-center flex-column mb-2">
+                  <img src={successLogo} width="70"></img>
+                  <span className="second-grey">Welcome to IdeaTribe</span>
                 </div>
-              ) : registration == FAILED ? (
-                <div>
-                  {" "}
-                  Hi {userDetails.fullName}, We were unable to onboard you to
-                  the tribe this time. 
-                  <br></br>{registrationErrorMessage}
-                </div>
-              ) : (
-                <>
-                  <Form.Group
-                    as={Col}
-                    className="formEntry userIDSection"
-                    md="6"
-                    controlId="userName"
-                  >
-                    <Image
-                      roundedCircle
-                      src={userDetails.imageUrl}
-                      height={100}
-                      className=""
-                      style={{
-                        background: "#f1f1f1",
-                        borderRadius: "7px",
-                      }}
-                    />
-                    <Form.Control
-                      type="text"
-                      name="userName"
-                      value={userDetails.userName}
-                      className={
-                        userNameError ? "username-error userName" : "userName"
-                      }
-                      placeholder="User name"
-                      onChange={handleChange}
-                    />
-                    {!userNameError &&
-                    userDetails.userName &&
-                    userDetails.userName.length > 0 &&
-                    validated ? (
-                      <Check></Check>
-                    ) : !userNameError &&
-                      userDetails.userName &&
-                      userDetails.userName.length > 0 &&
-                      !validated ? (
-                      <X></X>
-                    ) : null}
-                  </Form.Group>
-                  <Form.Group className="d-flex align-items-center justify-content-end" as={Col}
-                    md="6">
-                
-                    <div>
-                    <Form.Control
-                      type="text"
-                      name="referral"
-                      value={userDetails.referral}
-                      className={
-                        "userName referral"
-                      }
-                      placeholder="referral code"
-                      onChange={(handleChange)}
-                    />
+                <span>
+                  Hi {userDetails.firstName} You have signed up to the unlimited
+                  possibilities in the world of idea sharing.
+                </span>
+              </div>
+            ) : registration == FAILED ? (
+              <div>
+                {" "}
+                Hi {userDetails.firstName}, We were unable to onboard you to the
+                tribe this time.
+                <br></br>
+                {registrationErrorMessage}
+              </div>
+            ) : (
+              <>
+                <Form.Group
+                  as={Col}
+                  className="formEntry userIDSection h-100"
+                  controlId="userName"
+                >
+                  <Image
+                    src={userDetails.imageUrl}
+                    height={200}
+                    width={200}
+                    className=""
+                    style={{
+                      background: "#f1f1f1",
+                      borderRadius: "3px",
+
+                    }}
+                  />
+                  <div className="inputs d-flex flex-column justify-content-around h-100 ml-5 w-100">
+                    <div className="userID">
+                      <span className="second-grey">User name</span>
+                      {userNameError && <span className="error-message ml-2">*Username invalid</span>}
+                      <i className="fa fa-circle-notch fa-spin"></i>
+                      {!userNameError &&
+                        userDetails.userName &&
+                        userDetails.userName.length > 0  ? 
+                        <i className="icon fa fa-check ml-1"></i> : <div></div>}
+                      <Form.Control
+                        type="text"
+                        name="userName"
+                        value={userDetails.userName}
+                        className={
+                          userNameError ? "username-error userName" : "userName"
+                        }
+                        onChange={handleChange}
+                      />
+                      
                     </div>
-                  {/* {userNameError && (
-                    <span className="username-error-txt">
-                      Invalid username please use lowercase with no special
-                      charaters
-                    </span>
-                  )} */}
-                  </Form.Group>
-                  
-                </>
-              )}
+
+                    <div>
+                      <span className="second-grey">Referral Code</span>
+                      {referralError && <span className="error-message ml-2">*Invalid referral code</span>}
+                      <i className="fa fa-circle-notch fa-spin"></i>
+                      {!referralError &&
+                        userDetails.referredBy &&
+                        userDetails.referredBy.length > 0  ? 
+                        <i className="icon fa fa-check ml-1"></i>  : <div></div>}
+                      <Form.Control
+                        type="text"
+                        name="referredBy"
+                        value={userDetails.referredBy}
+                        className={"userName referral"}
+                        onChange={handleChange}
+                      />
+                    </div>
+                  </div>
+                </Form.Group>
+              </>
+            )}
           </div>
         );
 
@@ -368,21 +371,34 @@ const Register = (props) => {
       ...userDetails,
       ...returnObj,
     });
-    if(event.target.name == "userName"){
+    if (event.target.name == "userName") {
       if (/^[A-Z0-9]+$/i.test(value)) {
         setuserNameError(false);
         UserInterface.getUserInfo({ userName: value })
           .then((userDetails) => {
-            setValidated(false);
+            setuserNameError(true);
           })
           .catch((error) => {
-            setValidated(true);
+            setuserNameError(false);
           });
       } else {
         setuserNameError(true);
       }
     }
-    
+    if (event.target.name == "referredBy") {
+      if (/^[A-Z0-9]+$/i.test(value)) {
+        setuserNameError(false);
+        UserInterface.getUserInfo({ myReferralCode: value })
+          .then((userDetails) => {
+            setReferralError(false);
+          })
+          .catch((error) => {
+            setReferralError(true);
+          });
+      } else {
+        setReferralError(true);
+      }
+    }
   }
 
   return (
@@ -441,14 +457,17 @@ const Register = (props) => {
                 handleBack();
               }}
             >
-               {activeStep.index == 0
-              ? "Cancel"
-              : "Back"}
+              {activeStep.index == 0 ? "Cancel" : "Back"}
             </Button>
           )}
           <Button
             disabled={
-              (!validated && activeStep.index == 2) ||
+              ( 
+                ( userNameError || !userDetails.userName || userDetails.userName.length == 0  ||  
+                  referralError
+                  //  || !userDetails.referredBy || userDetails.referredBy.length == 0   
+                ) 
+                && activeStep.index == 2) ||
               registration == PENDING ||
               (_.isEmpty(userDetails.metamaskId) && activeStep.index == 1) ||
               (_.isEmpty(userDetails.email) && activeStep.index == 0) ||
@@ -461,10 +480,10 @@ const Register = (props) => {
               handleNext();
             }}
           >
-            {activeStep.index == steps.length - 1
-              ? registration == PASSED
-                ? "Done"
-                : "Register"
+            {activeStep.index == steps.length - 1 ? 
+              registration == PASSED ? "Done" :
+              registration == PENDING ? "Registering" :
+              registration == FAILED ?  "Retry" : "Register"
               : "Next"}
           </Button>
         </Col>

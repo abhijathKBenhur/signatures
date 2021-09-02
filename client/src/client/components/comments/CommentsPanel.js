@@ -95,15 +95,15 @@ const CommentsPanel = (props) => {
         name="description"
         placeholder="Add a comment"
         onKeyUp={(e) => handleChange(e)}
-        style={{ borderRadius: 5 }}
+        style={{ borderRadius: 5,resize:"none" }}
         className="mb-2 comment-entry"
       />
 
       {_.map(comments, (comment) => {
         return (
-          <div className="comment-item d-flex flex-row align-items-center pb-1">
+          <div className="comment-item d-flex flex-row pb-1">
             <div className="icon mr-2 p-1 cursor-pointer">
-            <Image src={comment.from.imageUrl} color="F3F3F3" className="user-circle" onClick={() => {
+            <Image src={_.get(comment,'from.imageUrl')} color="F3F3F3" className="user-circle" onClick={() => {
               history.push({
                 pathname: "/profile/" + comment.from.userName,
               });
@@ -111,7 +111,7 @@ const CommentsPanel = (props) => {
             </div>
             <div className="content">
               <div className="top master-grey  cursor-pointer">{comment.from.userName}</div>
-              <div className="bottom second-grey">{getInitialSubString(comment.comment,25)}</div>
+              <div className="bottom second-grey">{comment.comment}</div>
             </div>
           </div>
         );

@@ -7,6 +7,8 @@ import CreateNew from "./screens/Create/Create-new";
 import Signature from "./screens/Signature/Signature-new";
 import Gallery from "./screens/Gallery/gallery";
 import Profile from "./screens/Profile/profile";
+import Clan from "./screens/Clan/Clan";
+
 import Header from "./components/header/header";
 import Footer from "./components/footer/footer";
 import Banner from "./components/banner/banner";
@@ -17,6 +19,8 @@ import Tutorial from "./screens/tutorial/tutorial";
 import ICO from "./screens/ico/ico";
 import Roadmap from "./screens/roadmap/roadmap";
 import About from "./screens/about/about";
+import Prelaunch from "./screens/prelaunch/prelaunch";
+
 import Newsletter from "./screens/newsletter/newsletter";
 import Blog from "./screens/blog/blog";
 import Help from "./screens/help/help";
@@ -41,6 +45,7 @@ class App extends Component {
             <Route path="/signature/:hashId" children={<Signature />} />
             <Route path="/create" children={<CreateNew />} />
             <Route path="/profile/:userName" children={<Profile />} />
+            <Route path="/clan/:clanID" children={<Clan />} />
             <Route path="/profile" children={<Profile />} />
             <Route path="/daily-reads" component={DailyReads} />
             <Route path="/tutorial" component={Tutorial} />
@@ -53,7 +58,9 @@ class App extends Component {
             <Route path="/support" component={Support} />
             <Route path="/partner" component={Partner} />
             <Route path="/contact" component={Contact} />
-            <Route exact path="/" render={() => <Redirect from="/" to="/" />} />
+            <Route path="/about" component={About} />
+            <Route path="/prelaunch" component={Prelaunch} />
+            <Route exact path="/" render={() => <Redirect from="/" to="/prelaunch" />} />
           </Switch>
         </div>
         <Footer></Footer>

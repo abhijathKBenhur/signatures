@@ -38,24 +38,28 @@ const EditProfile = ({ ...props }) => {
 
     ]
 
-    const [selectedSocialLogin, setSelectedSocialLogin] = useState([null]);
+    const [selectedSocialLogin, setSelectedSocialLogin] = useState(
+      _.filter(SocialLoginList , (url) => {
+        return !_.isEmpty(editProfile[url.name])
+      })
+    );
 
-    useEffect(() => {
-        const profileData = {
-            userName: props.userDetails.userName || '',
-            firstName: props.userDetails.firstName ||  '',
-            lastName: props.userDetails.LastName || '',
-            email: props.userDetails.email || '',
-            facebookUrl: props.userDetails.facebookUrl ||'',
-            linkedInUrl: props.userDetails.linkedInUrl ||"",
-            instaUrl: props.userDetails.instaUrl ||"",
-            twitterUrl: props.userDetails.twitterUrl ||"",
-            bio: props.userDetails.bio ||'',
-            imageUrl: props.userDetails.imageUrl ||'',
-        }
+    // useEffect(() => {
+    //     const profileData = {
+    //         userName: props.userDetails.userName || '',
+    //         firstName: props.userDetails.firstName ||  '',
+    //         lastName: props.userDetails.LastName || '',
+    //         email: props.userDetails.email || '',
+    //         facebookUrl: props.userDetails.facebookUrl ||'',
+    //         linkedInUrl: props.userDetails.linkedInUrl ||"",
+    //         instaUrl: props.userDetails.instaUrl ||"",
+    //         twitterUrl: props.userDetails.twitterUrl ||"",
+    //         bio: props.userDetails.bio ||'',
+    //         imageUrl: props.userDetails.imageUrl ||'',
+    //     }
 
-        setEditProfile({...editProfile, ...profileData})
-    },[])
+    //     setEditProfile({...editProfile, ...profileData})
+    // },[])
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -63,8 +67,14 @@ const EditProfile = ({ ...props }) => {
     }
 
     const editProfileHandler = () => {
+        delete editProfile._id
         UserInterface.updateUser(editProfile).then(response => {
         console.log('edit profile success  = ', response)
+        props.onupdate({
+            update:true,
+            profileData : response.data
+        })
+        props.onHide();
         }).catch(err => {
           console.log('error  = ', err)
         })

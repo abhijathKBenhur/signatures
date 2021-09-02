@@ -79,6 +79,7 @@
             gap: 20px;
             input {
               text-transform: lowercase;
+              height: 30px;
               &.username-error{
                 border-bottom: 1px solid $danger;
               }

@@ -50,11 +50,11 @@ const CollectionCard = (props) => {
       <div className="card-container">
         <div className="card-float-header">
           <div className="user-logo">
-            <Image src={signature.owner.imageUrl} color="F3F3F3" />
+            <Image src={_.get(signature,'owner.imageUrl')} color="F3F3F3" />
             <div className="user-popup-outer">
               <div className="user-popup">
                 <div className="user-logo">
-                  <Image src={signature.owner.imageUrl} />
+                  <Image src={_.get(signature,'owner.imageUrl')} />
                 </div>
                 <div>
                   <Button disabled variant="pill">
@@ -67,7 +67,7 @@ const CollectionCard = (props) => {
           <div
             className="user-name third-header ml-2"
             onClick={() => {
-              goToUserProfile(signature.owner.userName);
+              goToUserProfile(_.get(signature,'owner.userName'));
             }}
           >
             {signature.owner.userName}

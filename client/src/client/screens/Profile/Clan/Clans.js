@@ -1,10 +1,10 @@
 import { Container, Row } from "react-bootstrap";
 import React, { useState, useEffect } from "react";
-import ClanInterface from "../../interface/ClanInterface";
+import ClanInterface from "../../../interface/ClanInterface";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import _ from 'lodash'
 import "./Clans.scss";
-import ClanCard from "../../components/clan-card/clan-card";
+import ClanCard from "../../../components/clan-card/clan-card";
 
 const Clans = (props) => {
   const reduxState = useSelector((state) => state, shallowEqual);
@@ -25,13 +25,13 @@ const Clans = (props) => {
   }, [reduxState.userDetails]);
 
   return (
-    <Container className="clans">
+    <Row className="clans">
        {ownClans.map((clan, index) => {
         return (
           <ClanCard clan={clan} key={index} index={index}  />
         );
       })}
-    </Container>
+    </Row>
   );
 };
 

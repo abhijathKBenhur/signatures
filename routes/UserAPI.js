@@ -1,7 +1,7 @@
 const User = require("../db-config/user.schema");
 const express = require("express");
 const router = express.Router();
-
+const mongoose = require('mongoose')
 registerUser = (req, res) => {
   const body = req.body;
   body.balance = 1000;
@@ -42,6 +42,10 @@ getUserInfo = async (req, res) => {
   if (req.body.metamaskId) {
     findCriteria.metamaskId = req.body.metamaskId;
   }
+  if(req.body.myReferralCode){
+    console.log("myReferralCode,"+  req.body.myReferralCode)
+    findCriteria.myReferralCode = req.body.myReferralCode
+  }
   await User.findOne(findCriteria, (err, user) => {
     if (err) {
       return res.status(400).json({ success: false, error: err });
@@ -56,14 +60,24 @@ getUserInfo = async (req, res) => {
 };
 
 updateUser = async (req, res) => {
-  let userName = req.body.userName
-  delete req.body.userName
-  const newUser = new User(req.body);
-  User.findOneAndUpdate({userName: userName},newUser,{upsert: true})
-  .then((notification, b) => {
+  const newUser = req.body;
+  let updates = {
+    firstName: newUser.firstName,
+    lastName: newUser.lastName,
+    email: newUser.email,
+    facebookUrl: newUser.facebookUrl,
+    linkedInUrl: newUser.linkedInUrl,
+    twitterUrl: newUser.twitterUrl,
+    instaUrl: newUser.instaUrl,
+    bio: newUser.bio
+  }
+
+  User.findOneAndUpdate({id:req.body._id},updates,{new:true})
+  .then((user, b) => {
+    console.log("user updated",user, b)
     return res.status(201).json({
       success: true,
-      data: notification,
+      data: user,
       message: "user updated!",
     });
   })
@@ -80,6 +94,19 @@ getUsers = async (req, res) => {
   console.log("getting users", req.body);
 
   let findCriteria = {};
+  let ids = req.body.ids
+  function getMongooseIds (stringId){
+    return mongoose.Types.ObjectId(stringId)
+  }
+  if(req.body.myReferralCode){
+    console.log("myReferralCode,"+  req.body.myReferralCode)
+    findCriteria.myReferralCode = req.body.myReferralCode
+  }
+  if(ids){
+    findCriteria._id = {
+      $in : ids.map(getMongooseIds)
+    }
+  }
   await User.find(findCriteria, (err, user) => {
     if (err) {
       return res.status(400).json({ success: false, error: err });

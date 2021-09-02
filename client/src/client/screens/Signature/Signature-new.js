@@ -259,7 +259,7 @@ const SignatureNew = (props) => {
           signature.ideaID,
           CONSTANTS.ACTIONS.UPVOTE,
           CONSTANTS.ACTION_STATUS.PENDING,
-          loggedInUserDetails.userName + "just upvoted your idea.",
+          loggedInUserDetails.userName + " just upvoted your idea.",
           JSON.stringify({
             ideaID: _.get(signature, "PDFHash"),
           })
@@ -357,7 +357,7 @@ const SignatureNew = (props) => {
                           </OverlayTrigger>
                           {signature.owner &&
                           loggedInUserDetails.userName ==
-                            signature.owner.userName ? (
+                          _.get(signature,'owner.userName') ? (
                             <div>
                               <Button
                                 variant="action"
@@ -423,16 +423,19 @@ const SignatureNew = (props) => {
               </Row>
             </Col>
             <Col md="3" className="conversation-container  pt-2">
+            {!_.isEmpty(signature) && !_.isEmpty(loggedInUserDetails) &&  (<div>
               <span className="conversation-title second-header">
                 Conversation
               </span>
               <hr></hr>
-              {!_.isEmpty(signature) && (
+              
                 <CommentsPanel
                   idea={signature}
                   entity={CONSTANTS.ENTITIES.IDEA}
                 ></CommentsPanel>
+                </div>
               )}
+              
             </Col>
             <Col md="1" className="options-container  pt-2">
               <Row className="justify-content-center">
@@ -440,10 +443,10 @@ const SignatureNew = (props) => {
                   <div className="avatar">
                     {signature.owner && (
                       <img
-                        src={signature.owner.imageUrl}
+                        src={_.get(signature,'owner.imageUrl')}
                         alt="profile"
                         onClick={() =>
-                          history.push(`/profile/${signature.owner.userName}`)
+                          history.push(`/profile/${_.get(signature,'owner.imageUrl')}`)
                         }
                       />
                     )}

@@ -9,6 +9,8 @@ const commentAPI = require("./routes/commentAPI")
 const relationAPI = require("./routes/RelationAPI");
 const blockChainAPI = require("./routes/BlockChainAPIs");
 const ClanAPI = require("./routes/ClanAPI");
+const TransactionAPI = require("./routes/TransactionAPIs");
+const preLaunchAPI = require("./routes/PrelaunchAPIs");
 const dotenv = require("dotenv");
 const path = require("path");
 const app = express();
@@ -39,6 +41,8 @@ app.use("/api", notificationAPI);
 app.use("/api", relationAPI);
 app.use("/api", commentAPI);
 app.use("/api", ClanAPI);
+app.use("/api", TransactionAPI);
+app.use("/api", preLaunchAPI);
 
 
 
