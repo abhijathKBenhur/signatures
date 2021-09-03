@@ -4,7 +4,7 @@ import "./App.scss";
 import "./commons/Common.scss";
 
 import Create from "./screens/Create/Create";
-import Signature from "./screens/Signature/Signature";
+import Signature from "./screens/Signature/Signature-new";
 import Gallery from "./screens/Gallery/gallery";
 import Profile from "./screens/Profile/profile";
 import Header from "./components/header/header";
