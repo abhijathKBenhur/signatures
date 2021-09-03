@@ -12,7 +12,7 @@ import Clan from "./screens/Clan/Clan";
 import Header from "./components/header/header";
 import Footer from "./components/footer/footer";
 import Banner from "./components/banner/banner";
-import {BrowserRouter as Router, Route, Switch, Redirect,withRouter } from "react-router-dom";
+import {BrowserRouter as Router, Route, Switch, Redirect,withRouter, useLocation } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import DailyReads from "./screens/daily-reads/daily-reads";
 import Tutorial from "./screens/tutorial/tutorial";

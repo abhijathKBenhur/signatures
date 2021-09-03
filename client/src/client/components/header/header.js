@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Button, Image, Form, Nav } from "react-bootstrap";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import logo from "../../../assets/logo/signatures.png";
 import _ from "lodash";
 import { User, Plus, Search } from "react-feather";
@@ -132,7 +132,7 @@ const Header = (props) => {
                 height="35"
                 alt=""
                 className="cursor-pointer"
-                onClick={() => gotoGallery()}
+                // onClick={() => gotoGallery()}
               ></img>
             </a>
             {/* <SearchBar /> */}
@@ -161,7 +161,8 @@ const Header = (props) => {
             {/* <Form.Control size="sm" type="text" placeholder="Normal text" /> */}
           </div>
 
-          <div className="right-section">
+          { useLocation().pathName=="prelaunch" 
+          && <div className="right-section">
             <span className="loggedinaccount" title={currentMetamaskAccount} onClick={() => {
               window.open("https://kovan.etherscan.io/address/" + currentMetamaskAccount);
             }}>{currentMetamaskAccount&& currentMetamaskAccount.substring(0,3) + " ... " + currentMetamaskAccount.substring(currentMetamaskAccount.length - 3,currentMetamaskAccount.length)}</span>
@@ -243,7 +244,7 @@ const Header = (props) => {
                 </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown> */}
-          </div>
+          </div>}
         </Container>
       </nav>
     </div>

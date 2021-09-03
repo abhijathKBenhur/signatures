@@ -29,13 +29,18 @@ export const getRelations = (payload) =>  {
 export const markAllAsRead = (payload) =>  { 
     return api.post("/updateRelations",payload) 
 }
+
+export const subscribe = (payload) => {
+    return api.post(`/subscribe`,payload)
+}
   
 
 const RelationsInterface = {
     postRelation,
     getRelations,
     markAllAsRead,
-    removeRelation
+    removeRelation,
+    subscribe
 }
 
 export default RelationsInterface
