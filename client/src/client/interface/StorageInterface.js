@@ -47,7 +47,6 @@ export const getFilePaths = (form) => {
   let promiseList = [];
   promiseList.push(getPDFFilepath(form));
   promiseList.push(getImagePath(form));
-
   return Promise.all(promiseList);
 };
 

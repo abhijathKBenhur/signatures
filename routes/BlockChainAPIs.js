@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const getRevertReason = require("eth-revert-reason");
 const Web3 = require("web3");
-const contractJSON = require("../client/src/contracts/ideaBlocks.json");
+const contractJSON = require("../client/src/contracts/ideaTribe.json");
 const privateKey = process.env.PROGRAMMER_KEY;
 const HDWalletProvider = require("@truffle/hdwallet-provider");
 const _ = require("lodash");
@@ -25,7 +25,7 @@ const transactionObject = {
 
 register_user = (req, res) => {
   let metamaskAddress = req.body.metamaskId;
-  let userName = req.body.userID;
+  let userName = req.body.userName;
   console.log("calling register", deployedContract.address);
 
   deployedContract.methods

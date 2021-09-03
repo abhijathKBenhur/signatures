@@ -3,8 +3,7 @@ import _ from "lodash";
 import "./banner.scss";
 import { Container, Row, Col, Carousel, Button } from "react-bootstrap";
 import { shallowEqual, useSelector } from "react-redux";
-import cover from "../../../assets/images/cover.jpeg";
-import free from "../../../assets/images/free_reg.png";
+import cover from "../../../assets/images/cover.jpg";
 import bg2 from "../../../assets/banners/background2.jpg";
 const Banner = (props) => {
   const [currentMetamaskAccount, setCurrentMetamaskAccount] = useState(

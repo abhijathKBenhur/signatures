@@ -5,7 +5,7 @@ import "./SearchBar.scss";
 import Select from "react-select";
 import { Tag } from "react-feather";
 import _ from "lodash";
-import MongoDBInterface from "../../interface/MongoDBInterface";
+import SignatureInterface from "../../interface/SignatureInterface";
 import CONSTANTS from "../../commons/Constants";
 import { setCollectionList } from "../../redux/actions";
 function Search() {
@@ -37,7 +37,7 @@ function Search() {
     if (tags.length || tagsFromBottom.length)
       postObj.tags = [...tags.map(tag => tag.value), ...tagsFromBottom]
     try {
-      MongoDBInterface.getSignatures(postObj).then(
+      SignatureInterface.getSignatures(postObj).then(
         (signatures) => {
           let response = _.get(signatures, "data.data")
           let isEmptyPresent = _.find(response, (responseItem) => {
@@ -73,7 +73,7 @@ function Search() {
           className="search-box"
           placeholder="Search IdeaTribe"
         />
-        <Tag
+        {/* <Tag
           className="search-tag"
           color="#56288c"
           size={20}
@@ -81,7 +81,7 @@ function Search() {
             event.stopPropagation();
             setShowDropdown(!showDropdown);
           }}
-        ></Tag>
+        ></Tag> */}
         {/* <div className="tags-pills">
           {tags
             .filter((item) => item.isSelected)

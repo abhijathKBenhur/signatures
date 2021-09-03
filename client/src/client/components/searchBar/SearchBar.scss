@@ -1,21 +1,29 @@
 @import "../../commons/Common.scss";
 .search-bar-container {
+    width:40%;
     .search-dropdown-container {
         position: relative;
-        width:500px;
+        width:100%;
+        @media screen and (max-width: 768px) {
+                max-width: 500px;
+                width: 300px;
+        }
         .search-box {
             width: 100%;
-            border: 1px solid $primary;
-            border-radius: 5px;
-            height: 35px;
+            border-radius: 10px;
+            height: 40px;
             padding: 5px 10px;
-            font-size: 12px;
+            font-size: 14px;
+            border: 1px solid $secondary-light;
             outline: none;
+            &:focus{
+                // border: 1px solid $primary;
+            }
         }
         .search-tag{
             position: absolute;
             right: 3px;
-            top: 7px;
+            top: 10px;
             cursor: pointer;
         }
         .tags-pills{
@@ -23,8 +31,7 @@
             right: 25px;
             top: 4px;
             span {
-
-                border: 1px solid $primary-dark;
+                border: 1px solid $primary-light;
                 border-radius: 2px;
                 padding: 2px;
                 font-size: 12px;
@@ -48,7 +55,7 @@
                 padding: 2px;
                 &.selected {
                     background-color: $primary;
-                    border: 1px solid $primary-dark ;
+                    border: 1px solid $primary-light ;
                 }
             }
             

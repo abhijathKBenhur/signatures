@@ -1,7 +1,7 @@
 const User = require("../db-config/user.schema");
 const express = require("express");
 const router = express.Router();
-
+const mongoose = require('mongoose')
 registerUser = (req, res) => {
   const body = req.body;
   body.balance = 1000;
@@ -36,11 +36,15 @@ registerUser = (req, res) => {
 
 getUserInfo = async (req, res) => {
   let findCriteria = {};
+  if (req.body.userName) {
+    findCriteria.userName = req.body.userName;
+  }
   if (req.body.metamaskId) {
     findCriteria.metamaskId = req.body.metamaskId;
   }
-  if (req.body.userID) {
-    findCriteria.userID = req.body.userID;
+  if(req.body.myReferralCode){
+    console.log("myReferralCode,"+  req.body.myReferralCode)
+    findCriteria.myReferralCode = req.body.myReferralCode
   }
   await User.findOne(findCriteria, (err, user) => {
     if (err) {
@@ -55,26 +59,73 @@ getUserInfo = async (req, res) => {
   });
 };
 
-login = async (req, res) => {
-  console.log("checking login", req.body);
-  await User.findOne(
-    { userName: req.body.userName, password: req.body.password },
-    (err, user) => {
-      if (err) {
-        return res.status(400).json({ success: false, error: err });
-      }
-      if (!user) {
-        return res.status(404).json({ success: true, data: [] });
-      }
-      return res.status(200).json({ success: true, data: user });
+updateUser = async (req, res) => {
+  const newUser = req.body;
+  let updates = {
+    firstName: newUser.firstName,
+    lastName: newUser.lastName,
+    email: newUser.email,
+    facebookUrl: newUser.facebookUrl,
+    linkedInUrl: newUser.linkedInUrl,
+    twitterUrl: newUser.twitterUrl,
+    instaUrl: newUser.instaUrl,
+    bio: newUser.bio
+  }
+
+  User.findOneAndUpdate({id:req.body._id},updates,{new:true})
+  .then((user, b) => {
+    console.log("user updated",user, b)
+    return res.status(201).json({
+      success: true,
+      data: user,
+      message: "user updated!",
+    });
+  })
+  .catch((error) => {
+    return res.status(400).json({
+      error,
+      message: "user update failed!",
+    });
+  });
+
+};
+
+getUsers = async (req, res) => {
+  console.log("getting users", req.body);
+
+  let findCriteria = {};
+  let ids = req.body.ids
+  function getMongooseIds (stringId){
+    return mongoose.Types.ObjectId(stringId)
+  }
+  if(req.body.myReferralCode){
+    console.log("myReferralCode,"+  req.body.myReferralCode)
+    findCriteria.myReferralCode = req.body.myReferralCode
+  }
+  if(ids){
+    findCriteria._id = {
+      $in : ids.map(getMongooseIds)
     }
-  ).catch((err) => {
+  }
+  await User.find(findCriteria, (err, user) => {
+    if (err) {
+      return res.status(400).json({ success: false, error: err });
+    }
+    if (!user) {
+      return res.status(404).json({ success: true, data: [] });
+    }
+    console.log("got users", user);
+    return res.status(200).json({ success: true, data: user });
+  }).catch((err) => {
+    console.log("caught users", err);
     return res.status(200).json({ success: false, data: err });
   });
 };
 
 router.post("/registerUser", registerUser);
-router.post("/login", login);
+router.post("/updateUser", updateUser);
 router.post("/getUserInfo", getUserInfo);
+router.post("/getUsers", getUsers);
+
 
 module.exports = router;

@@ -1,7 +1,6 @@
 import _, { defer, has } from "lodash";import  React from 'react';
 import Web3 from "web3";
-import NFTTokenBean from "../beans/Signature";
-import contractJSON from "../../contracts/ideaBlocks.json";
+import contractJSON from "../../contracts/ideaTribe.json";
 import store from '../redux/store';
 import { setReduxMetaMaskID } from "../redux/actions";
 import ENDPOINTS from '../commons/Endpoints';
@@ -45,7 +44,6 @@ class BlockchainInterface {
     this.contractJSON = contractJSON;
     this.contract = undefined;
     this.tokens = [];
-    this.NFTTokenBean = NFTTokenBean;
     let parentThis = this
     window.ethereum && window.ethereum.on('accountsChanged', function (accounts) {
       parentThis.getAccountDetails();
@@ -140,7 +138,7 @@ class BlockchainInterface {
               const contract = this.web3.eth.Contract(abi, contractAddress);
               this.contract = contract;
             } else {
-              window.alert("Smart contract not deployed to detected network.");
+              window.alert("Smart contract not deployed to detected network. Please change the network in mnetamask.");
             }
             resolve(this.metamaskAccount);
           })

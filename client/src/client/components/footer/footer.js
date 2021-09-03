@@ -14,10 +14,16 @@ const Footer = (props) => {
   const redirectTo = (route) => history.push(route);
   return (
     <div>
-      <nav className="navbar navbar-light bg-light flex-md-nowrap shadow appFooter justify-content-center">
+      <nav className="navbar navbar-light bg-light flex-md-nowrap shadow appFooter fixed-bottom">
         <Container fluid>
-          <div className="footer-info">
-            <div className="footer-info-wrapper">
+          <div className="footer-info ">
+            <div className="footer-info-wrapper d-flex justify-content-around">
+              <span className=" cursor-pointer" onClick={() => redirectTo("/about")}>How does this work ?</span>
+              <span className=" cursor-pointer" onClick={() => redirectTo("/about")}>About Us</span>
+              <span className=" cursor-pointer" onClick={() => redirectTo("/about")}>Whitepaper</span>
+              <span className=" cursor-pointer" onClick={() => redirectTo("/about")}>Tokenomics</span>
+
+
               {/* <div className="products">
                 <h6>Products</h6>
                 <div className="products-list">
@@ -35,7 +41,7 @@ const Footer = (props) => {
                   </ul>
                 </div>
               </div> */}
-              <div className="company">
+              {/* <div className="company">
                 <h6>Company</h6>
                 <div className="company-list">
                   <ul>
@@ -43,8 +49,8 @@ const Footer = (props) => {
                       { option: "About us", route: "/about" },
                       { option: "Whitepaper", route: "/ico" },
                       // { option: "Blog", route: "/blog" },
-                    ].map((company) => (
-                      <li onClick={() => redirectTo(company.route)}>
+                    ].map((company,i) => (
+                      <li key={i} onClick={() => redirectTo(company.route)}>
                         {company.option}
                       </li>
                     ))}
@@ -67,7 +73,7 @@ const Footer = (props) => {
                     ))}
                   </ul>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         </Container>

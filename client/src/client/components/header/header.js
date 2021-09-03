@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Button, Image, Form, Nav } from "react-bootstrap";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import logo from "../../../assets/logo/signatures.png";
 import _ from "lodash";
 import { User, Plus, Search } from "react-feather";
@@ -11,7 +11,8 @@ import BlockchainInterface from "../../interface/BlockchainInterface";
 import store from "../../redux/store";
 import { shallowEqual, useSelector } from "react-redux";
 import SearchBar from "../searchBar/SearchBar";
-import MongoDBInterface from "../../interface/MongoDBInterface";
+import SignatureInterface from "../../interface/SignatureInterface";
+import UserInterface from "../../interface/UserInterface";
 import { setReduxUserDetails } from "../../redux/actions";
 import { showToaster } from "../../commons/common.utils";
 const Header = (props) => {
@@ -21,7 +22,7 @@ const Header = (props) => {
   const [currentMetamaskAccount, setCurrentMetamaskAccount] = useState(
     metamaskID
   );
-  const [currentUserDetails, setCurrentUserDetails] = useState(userDetails);
+  const [loggedInUserDetails, setLoggedInUserDetails] = useState(userDetails);
 
   useEffect(() => {
     const { metamaskID = undefined } = reduxState;
@@ -41,13 +42,13 @@ const Header = (props) => {
 
   function refreshUserDetails() {
     if (!_.isEmpty(currentMetamaskAccount)) {
-      MongoDBInterface.getUserInfo({ metamaskId: currentMetamaskAccount })
+      UserInterface.getUserInfo({ metamaskId: currentMetamaskAccount })
         .then((userDetails) => {
           store.dispatch(setReduxUserDetails(_.get(userDetails, "data.data")));
-          setCurrentUserDetails(_.get(userDetails, "data.data"));
+          setLoggedInUserDetails(_.get(userDetails, "data.data"));
         })
         .catch((success) => {
-          setCurrentUserDetails({});
+          setLoggedInUserDetails({});
           store.dispatch(setReduxUserDetails({}));
         });
     }
@@ -72,7 +73,7 @@ const Header = (props) => {
 
   function gotoPortfolio() {
     setAppLocatoin("profile");
-    history.push("/profile");
+    history.push( loggedInUserDetails.userName ? "/profile/"+ loggedInUserDetails.userName : "/profile/create" );
   }
 
   function connectWallet() {
@@ -102,13 +103,13 @@ const Header = (props) => {
      return  (
         <Button
           variant="primary"
-          className="button"
+          className="button uploadButton"
           bsstyle="primary"
           onClick={() => {
             createnew();
           }}
         >
-          Publish NFT
+          Publish Idea
         </Button>
       )
     }
@@ -131,10 +132,10 @@ const Header = (props) => {
                 height="35"
                 alt=""
                 className="cursor-pointer"
-                onClick={() => gotoGallery()}
+                // onClick={() => gotoGallery()}
               ></img>
             </a>
-            <SearchBar />
+            {/* <SearchBar /> */}
             {/* <Nav.Item>
               <Nav.Link
                 active={appLocation == "home"}
@@ -160,7 +161,8 @@ const Header = (props) => {
             {/* <Form.Control size="sm" type="text" placeholder="Normal text" /> */}
           </div>
 
-          <div className="right-section">
+          { useLocation().pathName=="prelaunch" 
+          && <div className="right-section">
             <span className="loggedinaccount" title={currentMetamaskAccount} onClick={() => {
               window.open("https://kovan.etherscan.io/address/" + currentMetamaskAccount);
             }}>{currentMetamaskAccount&& currentMetamaskAccount.substring(0,3) + " ... " + currentMetamaskAccount.substring(currentMetamaskAccount.length - 3,currentMetamaskAccount.length)}</span>
@@ -174,7 +176,7 @@ const Header = (props) => {
             >
               Connect
             </Button> */}
-            {_.isEmpty(currentMetamaskAccount) || _.isEmpty(currentUserDetails) ? (
+            {_.isEmpty(currentMetamaskAccount) || _.isEmpty(loggedInUserDetails) ? (
               <Button
                 variant="primary"
                 className="button"
@@ -189,8 +191,8 @@ const Header = (props) => {
                 isUserAuthForPublish()
             }
 
-            {_.isEmpty(currentUserDetails.imageUrl) ? (
-              <User
+            {_.isEmpty(loggedInUserDetails.imageUrl) ? (
+              <User color="white"
                 className="cursor-pointer header-icons"
                 onClick={() => {
                   gotoPortfolio();
@@ -199,9 +201,9 @@ const Header = (props) => {
             ) : (
               <Image
                 className="cursor-pointer header-icons"
-                src={currentUserDetails.imageUrl}
+                src={loggedInUserDetails.imageUrl}
                 roundedCircle
-                width="20px"
+                width="36px"
                 onClick={() => {
                   gotoPortfolio();
                 }}
@@ -242,7 +244,7 @@ const Header = (props) => {
                 </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown> */}
-          </div>
+          </div>}
         </Container>
       </nav>
     </div>

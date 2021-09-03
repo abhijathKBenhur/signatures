@@ -6,12 +6,12 @@ import _ from "lodash";
 import $ from "jquery";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { updateCategories } from "../../redux/actions";
-import MongoDBInterface from "../../interface/MongoDBInterface";
+import SignatureInterface from "../../interface/SignatureInterface";
 import { setCollectionList } from "../../redux/actions";
 
 const DiscoverMore = () => {
   const reduxState = useSelector((state) => state, shallowEqual);
-  const { categoriesList = [] } = reduxState;
+  const [categoriesList, setCategoriesList] = useState(reduxState.categoriesList);
   const dispatch = useDispatch()
   let categoryCopy = [];
   useEffect(() => {
@@ -27,6 +27,7 @@ const DiscoverMore = () => {
   const categorySelected = (item,index) => {
     categoryCopy = _.cloneDeep(categoriesList)
     categoryCopy[index].isSelected = !item.isSelected;
+    setCategoriesList(categoryCopy)
     dispatch(updateCategories(categoryCopy));
   }
   const getCollectionListBasedOntags = () => {
@@ -34,15 +35,12 @@ const DiscoverMore = () => {
       let postObj = {
         tags: _.filter(categoriesList, function(o) { return o.isSelected; }).map(val => val.value)
       }
-      MongoDBInterface.getSignatures(postObj).then(
+      SignatureInterface.getSignatures(postObj).then(
         (signatures) => {
           let response = _.get(signatures, "data.data");
           let isEmptyPresent = _.find(response, (responseItem) => {
             return _.isEmpty(responseItem.ideaID);
           });
-          // document.querySelector('.deck').scrollIntoView({
-          //   behavior: 'smooth' 
-          // });
           dispatch(setCollectionList(response));
         },
         (error) => {
@@ -56,24 +54,21 @@ const DiscoverMore = () => {
 
     return (
         <div className="discover-topics-section">
-          <div className="card-topics-nav">
-                <h4>Discover</h4>
-          </div>
           <div className="topics-list">
             <ul>
               {
-              categoriesList.map((item,i) => <li>
-                <Button
+              categoriesList.slice(0,10).map((item,i) => <li>
+                <span
                 key={i}
-                  className={item.isSelected ? "btn-secondary selected" : "btn-secondary"}
+                  className={item.isSelected ? "category-name third-header selected mr-2" : "category-name third-header  mr-2"}
                   bsstyle="primary"
 
                   onClick={(event) => {
                       categorySelected(item,i)
                   }}
                 >
-                   {item.value}
-                </Button>
+                   {item.label}
+                </span>
                 </li>)
               }
             </ul>

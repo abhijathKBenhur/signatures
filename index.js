@@ -4,8 +4,13 @@ const cors = require("cors");
 const mongotConnection = require("./db-config/mongodb");
 const tokenAPI = require("./routes/TokenAPIs");
 const userAPI = require("./routes/UserAPI");
-const actionAPI = require("./routes/actionsAPI")
+const notificationAPI = require("./routes/NotificationAPIs")
+const commentAPI = require("./routes/commentAPI")
+const relationAPI = require("./routes/RelationAPI");
 const blockChainAPI = require("./routes/BlockChainAPIs");
+const ClanAPI = require("./routes/ClanAPI");
+const TransactionAPI = require("./routes/TransactionAPIs");
+const preLaunchAPI = require("./routes/PrelaunchAPIs");
 const dotenv = require("dotenv");
 const path = require("path");
 const app = express();
@@ -15,12 +20,30 @@ dotenv.config();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors());
+var whitelist = ['http://localhost:3000','http://localhost:3001','http://localhost:3002', 'https://ideatribe.herokuapp.com']
+app.use(cors(
+  {
+    origin: function (origin, callback) {
+      console.log("API requested from " + origin)
+      if (whitelist.indexOf(origin) !== -1 || !origin) {
+        callback(null, true)
+      } else {
+        callback(new Error('Not allowed by CORS'))
+      }
+    }
+  }
+));
 
 app.use("/api", tokenAPI);
 app.use("/api", userAPI);
 app.use("/api", blockChainAPI);
-app.use("/api", actionAPI);
+app.use("/api", notificationAPI);
+app.use("/api", relationAPI);
+app.use("/api", commentAPI);
+app.use("/api", ClanAPI);
+app.use("/api", TransactionAPI);
+app.use("/api", preLaunchAPI);
+
 
 
 

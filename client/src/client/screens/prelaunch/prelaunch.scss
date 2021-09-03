@@ -1,0 +1,42 @@
+@import "../../commons/Common.scss";
+.prelaunch-container {
+  display: flex;
+  height: 100vh;
+  align-items: center;
+  justify-content: center;
+  .center-box {
+    box-shadow: $shadow;
+    width: 40%;
+    
+    min-width: 400px;
+    padding: 50px;
+    .subscribe-block{
+      text-align: center;
+    }
+    .fa-users{
+      color: $primary-light;
+      font-size: 50px;
+    }
+    .row {
+      .subscribe-btn{
+        width: 100%;
+        border-radius: 0;
+      }
+      .search-box {
+        
+        height: 36px;
+        padding: 5px 10px;
+        margin-right: 20px;
+        font-size: 14px;
+        border: 1px solid $secondary-light;
+        outline: none;
+        display: flex;
+        align-items: center;
+        gap: 30px;
+        &:focus {
+          // border: 1px solid $primary;
+        }
+      }
+    }
+  }
+}

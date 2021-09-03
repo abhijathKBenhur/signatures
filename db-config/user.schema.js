@@ -4,15 +4,28 @@ const Schema = mongoose.Schema;
 const User = new Schema(
   {
     firstName: { type: String },
-    LastName: { type: String },
+    lastName: { type: String },
     email: { type: String },
-    fullName: { type: String },
     imageUrl: { type: String },
     metamaskId: { type: String },
-    userID: { type: String },
+    userName: { type: String, unique: true },
     loginMode: { type: String },
+
+    facebookUrl: { type: String },
+    linkedInUrl: { type: String },
+    twitterUrl: { type: String },
+    instaUrl: { type: String },
+    bio: { type: String },
+
+    tribeCoinBalance: {type: Number},
+    GasBalance: {type: Number},
+    tribeGoldBalance: {type: Number},
+
+    myReferralCode:{ type: String },
+    referredBy:{ type: String },
+
   },
   { timestamps: true }
 );
 
-module.exports = mongoose.model("user", User);
+module.exports = mongoose.model("User", User);

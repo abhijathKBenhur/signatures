@@ -1,5 +1,4 @@
 import _ from "lodash";
-import Signature from "../../beans/Signature";
 import React, { useState, useEffect } from "react";
 import {
   Row,
@@ -9,22 +8,35 @@ import {
   Container,
   Tabs,
   Tab,
+  Tooltip,
+  OverlayTrigger,
 } from "react-bootstrap";
-import Image from "react-image-resizer";
+import NotificationPanel from "../../components/notifications/NotificationPanel";
 import { useHistory } from "react-router-dom";
 import "./profile.scss";
 import { Shimmer } from "react-shimmer";
 import Register from "../../modals/Register/Register";
-import MongoDBInterface from "../../interface/MongoDBInterface";
-import ActionsInterface from "../../interface/ActionsInterface";
+import SignatureInterface from "../../interface/SignatureInterface";
+import NotificationInterface from "../../interface/NotificationInterface";
 import BlockChainInterface from "../../interface/BlockchainInterface";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { ExternalLink, Award, User } from "react-feather";
-import StorageInterface from "../../interface/StorageInterface";
+import Clans from "./Clan/Clans";
+import ShareModal from "../../modals/share/share.modal";
 
 import Collections from "./collections";
 import store from "../../redux/store";
 import { setCollectionList } from "../../redux/actions";
+import SendMessage from "../../modals/send-message/send-message";
+import EditProfile from "../../modals/edit-profile/edit-profile";
+import CreateClan from "../../modals/create-clan/create-clan";
+import UserInterface from "../../interface/UserInterface";
+import * as reactShare from "react-share";
+import Wallet from "../../components/wallet/wallet";
+import Transactions from "../../components/transactions/transaction";
+import RelationsInterface from "../../interface/RelationsInterface";
+import CONSTANTS from "../../commons/Constants";
+import { showToaster } from "../../commons/common.utils";
 function Profile(props) {
   const reduxState = useSelector((state) => state, shallowEqual);
   const {
@@ -32,72 +44,144 @@ function Profile(props) {
     userDetails = {},
     collectionList = [],
   } = reduxState;
-  const [currentMetamaskAccount, setCurrentMetamaskAccount] = useState(
-    metamaskID
-  );
+
   const [profileCollection, setProfileCOllection] = useState([]);
-  const [currentUserDetails, setCurrentUserDetails] = useState({});
+  const [followers, setFollowers] = useState([]);
+  const [loggedInUserDetails, setLoggedInUserDetails] = useState({});
   const [myNotifications, setMyNotifications] = useState([]);
+  const [billetList, setBilletList] = useState([]);
+
   let history = useHistory();
-  const [key, setKey] = useState("collections");
-  const viewUser = _.get(history.location.state, "userID");
+  const [key, setKey] = useState(isMyPage() ? "Wallet" : "collections");
+  const viewUser = _.get(window.location, "pathname").split("profile/")[1];
   const dispatch = useDispatch();
+  const [modalShow, setShowModal] = useState({
+    editProfile: false,
+    createClan: false,
+    sendMessage: false,
+    shareProfile: false,
+  });
+
+  const [walletState, setWalletState] = useState({
+    selectedWallet: "",
+    trasactionList: [],
+  });
+
+  // wallet Dummy Data
+  const WalletData = [
+    // {
+    //   coinType: "Tribe Coin",
+    //   coinBalance: "23 TBC",
+    //   description: "You can create 23 ideas",
+    // },
+    {
+      coinType: "Tribe Gold",
+      coinBalance: "5 TBG",
+      description: "Equalent to 23$",
+    },
+    // {
+    //   coinType: "GAS",
+    //   coinBalance: "0.0003 POLYGON",
+    //   description: "You can post 20 ideas with the remaining gas",
+    // },
+  ];
+
+  const DummyTransactionList = [
+    {
+      from: "account 1",
+      to: "account 2",
+      amount: 1,
+    },
+    {
+      from: "account 3",
+      to: "account 5",
+      amount: 2,
+    },
+    {
+      from: "account 6",
+      to: "account 7",
+      amount: 10,
+    },
+    {
+      from: "account 8",
+      to: "account 10",
+      amount: 6,
+    },
+  ];
 
   useEffect(() => {
     const { userDetails = {} } = reduxState;
-    const viewUser = _.get(history.location.state, "userID");
-    if (viewUser && viewUser.toLowerCase() !== userDetails.userID) {
+    if (viewUser && !isMyPage()) {
       let payLoad = {};
-      payLoad.userID = viewUser;
+      payLoad.userName = viewUser;
       getUserDetails(payLoad);
+    } else if (userDetails && (!viewUser || isMyPage())) {
+      //own profile page
+      setLoggedInUserDetails(userDetails);
     }
-    if (userDetails && !viewUser) {
-      setCurrentUserDetails(userDetails);
-    }
+    console.log("userDetails = ", userDetails);
   }, [reduxState.userDetails]);
 
   useEffect(() => {
-    fetchSignatures(currentUserDetails.metamaskId);
+    fetchSignatures(loggedInUserDetails.userName);
     fetchNotifications();
-  }, [currentUserDetails]);
-
-  useEffect(() => {
-    const { metamaskID = undefined } = reduxState;
-    if (metamaskID) {
-      setCurrentMetamaskAccount(metamaskID);
+    if (!isMyPage()) {
+      loadFollowers();
     }
-  }, [reduxState.metamaskID]);
+  }, [loggedInUserDetails]);
 
   const getUserDetails = (payLoad) => {
-    MongoDBInterface.getUserInfo(payLoad).then((response) => {
+    UserInterface.getUserInfo(payLoad).then((response) => {
       let userDetails = _.get(response, "data.data");
-      setCurrentUserDetails(userDetails);
+      setLoggedInUserDetails(userDetails);
     });
   };
 
-  function fetchSignatures(address) {
-    if (address || currentUserDetails.metamaskId) {
-      MongoDBInterface.getSignatures({
-        ownerAddress: address || currentUserDetails.metamaskId,
-      }).then((signatures) => {
-        let response = _.get(signatures, "data.data");
-        let isEmptyPresent = _.find(response, (responseItem) => {
-          return _.isEmpty(responseItem.ideaID);
-        });
-        setProfileCOllection(response);
-        dispatch(setCollectionList(response));
-      });
+  function isMyPage() {
+    return viewUser === userDetails.userName;
+  }
+
+  function fetchSignatures(userName) {
+    if (userName || loggedInUserDetails.userName) {
+      SignatureInterface.getSignatures({ userName: userName }).then(
+        (signatures) => {
+          let response = _.get(signatures, "data.data");
+          let isEmptyPresent = _.find(response, (responseItem) => {
+            return _.isEmpty(responseItem.ideaID);
+          });
+          const billetList = _.filter(
+            response,
+            (responseItem) =>
+              _.get(responseItem, "owner.userName") ===
+              _.get(loggedInUserDetails, "userName")
+          );
+          console.log("billetList ==> ", billetList);
+          setBilletList([...billetList]);
+          setProfileCOllection(response);
+          dispatch(setCollectionList(response));
+        }
+      );
     }
   }
 
+  function loadFollowers() {
+    RelationsInterface.getRelations({
+      to: viewUser,
+    })
+      .then((success) => {
+        setFollowers(_.map(success.data.data, "from"));
+      })
+      .catch((err) => {});
+  }
+
   function fetchNotifications() {
-    ActionsInterface.getActions({ to: currentUserDetails.metamaskId }).then(
-      (signatures) => {
-        let response = _.get(signatures, "data.data");
-        setMyNotifications(response);
-        console.log(response);
-      }
-    );
+    NotificationInterface.getNotifications({
+      to: loggedInUserDetails.userName,
+    }).then((signatures) => {
+      let response = _.get(signatures, "data.data");
+      setMyNotifications(response);
+      console.log(response);
+    });
   }
 
   function registerCallBacks(params) {
@@ -113,91 +197,417 @@ function Profile(props) {
     history.push("/create");
   }
 
+  function followUser() {
+    if (followers.indexOf(loggedInUserDetails.userName) < 0) {
+      RelationsInterface.postRelation(
+        loggedInUserDetails.userName,
+        viewUser,
+        CONSTANTS.ACTIONS.FOLLOW,
+        CONSTANTS.ACTION_STATUS.PENDING,
+        "I would like to follow you."
+      ).then((success) => {
+        let newFollowlist = _.concat(followers, [loggedInUserDetails.userName]);
+        setFollowers(newFollowlist);
+        NotificationInterface.postNotification(
+          loggedInUserDetails._id,
+          viewUser,
+          CONSTANTS.ACTIONS.FOLLOW,
+          CONSTANTS.ACTION_STATUS.PENDING,
+          loggedInUserDetails.userName + " just followed you."
+        );
+      });
+    } else {
+      RelationsInterface.removeRelation(
+        loggedInUserDetails.userName,
+        viewUser,
+        CONSTANTS.ACTIONS.FOLLOW
+      ).then((success) => {
+        let followeIndex = followers.indexOf(loggedInUserDetails.userName);
+        let followersCopy = _.clone(followers);
+        followersCopy.splice(followeIndex, 1);
+        setFollowers(followersCopy);
+      });
+    }
+  }
+
+  const selectWalletHandler = (seletedWallet) => {
+    console.log("seletedWallet ==> ", seletedWallet);
+    setWalletState({
+      ...walletState,
+      selectedWallet: seletedWallet,
+      trasactionList: DummyTransactionList,
+    });
+  };
+
   return (
     <Container fluid>
       <Row className="profile">
-        {_.isEmpty(currentUserDetails.userID) ? (
+        {_.isEmpty(loggedInUserDetails.userName) ? (
           <Row className="register-modal">
             <Register></Register>
           </Row>
         ) : (
           <div className="separator w-100">
             <Col md="12" className="mycollection">
-              <Row className="loggedIn">
-                <Col md="12" className="p-0">
-                  <div className="userPane align-items-center">
-                    <div className="w-100">
+              <Row className="loggedIn h-100">
+                <Col md="12" className="p-0 d-flex">
+                  <Col md="2" className="userPane w-100 flex-column h-100">
+                    <div className="profile-section d-flex flex-column">
+                      {/* <div className="separatorline"></div> */}
+
+                      <img
+                        src={loggedInUserDetails.imageUrl}
+                        height={140}
+                        width={140}
+                        className=""
+                        style={{
+                          background: "#f1f1f1",
+                          borderRadius: "140px",
+                          zIndex: "1",
+                        }}
+                        alt="user"
+                      />
+                      <div className="d-flex justify-content-center master-grey mt-1"></div>
+                    </div>
                     <div className="profile-info">
                       <Row className="d-flex justify-content-center align-items-center">
-                        <span className="master-header white">{_.get(currentUserDetails, "userID")}</span>
+                        <span className="master-header userName">
+                          {_.get(loggedInUserDetails, "userName")}
+                        </span>
                       </Row>
                       <Row className="">
                         <Col className="address-copy d-flex align-items-center justify-content-center">
-                          <span className="address-value second-header white">
-                            {_.get(currentUserDetails, "metamaskId") &&
-                              _.get(currentUserDetails, "metamaskId").substring(
-                                0,
-                                5
-                              ) +
+                          <span className="address-value third-header">
+                            {_.get(loggedInUserDetails, "metamaskId") &&
+                              _.get(
+                                loggedInUserDetails,
+                                "metamaskId"
+                              ).substring(0, 5) +
                                 " ..... " +
                                 _.get(
-                                  currentUserDetails,
+                                  loggedInUserDetails,
                                   "metamaskId"
                                 ).substring(
-                                  _.get(currentUserDetails, "metamaskId")
+                                  _.get(loggedInUserDetails, "metamaskId")
                                     .length - 5,
-                                  _.get(currentUserDetails, "metamaskId").length
+                                  _.get(loggedInUserDetails, "metamaskId")
+                                    .length
                                 )}
                           </span>
-                          <ExternalLink
-                            size={15}
+                          <i
+                            className="fa fa-external-link ml-2"
                             onClick={() => {
                               window.open(
                                 "https://kovan.etherscan.io/address/" +
-                                  _.get(currentUserDetails, "metamaskId")
+                                  _.get(loggedInUserDetails, "userName")
                               );
                             }}
-                          ></ExternalLink>
+                          ></i>
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col>
+                          <span className="address-value third-header justify-content-center d-flex mt-2">
+                            {followers.length} followers.
+                          </span>
                         </Col>
                       </Row>
                     </div>
-                
-                    </div>
-                  </div>
-                  <div className="profile-secction d-flex justify-content-center flex-column">
-                    {/* <div className="separatorline"></div> */}
-                    
-                    <img
-                      src={currentUserDetails.imageUrl}
-                      height={100}
-                      width={100}
-                      className=""
-                      style={{
-                        background: "#f1f1f1",
-                        borderRadius: "50px",
-                        zIndex: "1",
-                      }}
-                    />
+                    {isMyPage() ? (
+                      <div className="actions mt-4">
+                        <OverlayTrigger
+                          key={"top"}
+                          placement="top"
+                          overlay={
+                            <Tooltip id={`tooltip-top`}>
+                              Edit Profile __ {isMyPage()}
+                            </Tooltip>
+                          }
+                        >
+                          <Button
+                            variant="action"
+                            className="button"
+                            bsstyle="primary"
+                            onClick={() => {
+                              setShowModal({ ...modalShow, editProfile: true });
+                            }}
+                          >
+                            <i className="fa fa-user mr-1"></i>
+                          </Button>
+                        </OverlayTrigger>
+
+                        <OverlayTrigger
+                          key={"top"}
+                          placement="top"
+                          overlay={
+                            <Tooltip id={`tooltip-top`}>Create Clan</Tooltip>
+                          }
+                        >
+                          <Button
+                            variant="action"
+                            className="button"
+                            bsstyle="primary"
+                            onClick={() => {
+                              setShowModal({ ...modalShow, createClan: true });
+                            }}
+                          >
+                            <i className="fa fa-users mr-1"></i>
+                          </Button>
+                        </OverlayTrigger>
                       </div>
-                  <div className="tabs-wrapper">
+                    ) : (
+                      <div className="sharables d-flex">
+                        {userDetails.facebookUrl && (
+                          <reactShare.FacebookShareButton
+                            url={userDetails.facebookUrl}
+                            quote={"Hey! Check out this idea."}
+                          >
+                            <div className="social-icon-wrapper fb">
+                              <i class="fa fa-facebook" aria-hidden="true"></i>
+                            </div>
+                            {/* <reactShare.FacebookIcon size={32} round /> */}
+                          </reactShare.FacebookShareButton>
+                        )}
+                        {userDetails.twitterUrl && (
+                          <reactShare.TwitterShareButton
+                            url={userDetails.twitterUrl}
+                            title={"Hey! Check out this idea."}
+                          >
+                            <div className="social-icon-wrapper twitter ml-2">
+                              <i class="fa fa-twitter" aria-hidden="true"></i>
+                            </div>
+                            {/* <reactShare.TwitterIcon size={32} round /> */}
+                          </reactShare.TwitterShareButton>
+                        )}
+                        {userDetails.instaUrl && (
+                          <reactShare.WhatsappShareButton
+                            url={userDetails.instaUrl}
+                            title={"Hey! Check out this idea."}
+                            separator=":: "
+                          >
+                            <div className="social-icon-wrapper whatsapp ml-2">
+                              <i class="fa fa-instagram" aria-hidden="true"></i>
+                            </div>
+                            {/* <reactShare.WhatsappIcon size={32} round /> */}
+                          </reactShare.WhatsappShareButton>
+                        )}
+                        {userDetails.linkedInUrl && (
+                          <reactShare.LinkedinShareButton
+                            url={userDetails.linkedInUrl}
+                          >
+                            <div className="social-icon-wrapper linkedin ml-2">
+                              <i class="fa fa-linkedin" aria-hidden="true"></i>
+                            </div>
+                            {/* <reactShare.LinkedinIcon size={32} round /> */}
+                          </reactShare.LinkedinShareButton>
+                        )}
+                      </div>
+                    )}
+
+                    <Row className="mt-5">
+                      <Col
+                        md="6"
+                        className="d-flex flex-column align-items-center stats-entry"
+                      >
+                        <span className="stats-title master-grey">113</span>
+                        <span className="stats-value second-grey  text-center">
+                          Posts
+                        </span>
+                      </Col>
+                      <Col
+                        md="6"
+                        className="d-flex flex-column align-items-center stats-entry"
+                      >
+                        <span className="stats-title master-grey">113</span>
+                        <span className="stats-value second-grey  text-center">
+                          Upvotes
+                        </span>
+                      </Col>
+                    </Row>
+                  </Col>
+
+                  <Col
+                    className={
+                      isMyPage()
+                        ? "tabs-wrapper mt-3 col-md-8"
+                        : "tabs-wrapper mt-3 col-md-10"
+                    }
+                  >
+                    <Row className="profile-details">
+                      <Col md="11" className="">
+                        <Row>
+                          <Col md="12">
+                            <span className="second-header">
+                              {" "}
+                              {loggedInUserDetails.firstName}{" "}
+                              {loggedInUserDetails.lastName}{" "}
+                            </span>{" "}
+                          </Col>
+                        </Row>
+                        <Row className="d-flex align-content-center justify-content-center h-100">
+                          {_.isEmpty(loggedInUserDetails.bio) && isMyPage() ? (
+                            <div>
+                              <Row className="d-flex justify-content-center">
+                                <span className="second-grey">
+                                  Your profile might need more information.
+                                  Please try
+                                  <span
+                                    className="cursor-pointer color-secondary"
+                                    onClick={() => {
+                                      setShowModal({
+                                        ...modalShow,
+                                        editProfile: true,
+                                      });
+                                    }}
+                                  >
+                                    {" "}
+                                    adding{" "}
+                                  </span>
+                                  more info.
+                                </span>
+                              </Row>
+                            </div>
+                          ) : (
+                            <span className="second-grey">
+                              {" "}
+                              {loggedInUserDetails.bio}{" "}
+                            </span>
+                          )}
+                        </Row>
+                      </Col>
+                      <Col md="1">
+                        {!isMyPage() && (
+                          <Row className="justify-content-end pr-3 cursor-pointer color-secondary mb-1">
+                            <OverlayTrigger
+                              key={"top"}
+                              placement="top"
+                              overlay={
+                                <Tooltip id={`tooltip-top`}>
+                                  Send Message
+                                </Tooltip>
+                              }
+                            >
+                              <Button
+                                variant="action"
+                                onClick={() => {
+                                  setShowModal({
+                                    ...modalShow,
+                                    sendMessage: true,
+                                  });
+                                }}
+                              >
+                                <i className="fa fa-envelope"></i>
+                              </Button>
+                            </OverlayTrigger>
+                          </Row>
+                        )}
+
+                        <Row className="justify-content-end pr-3 cursor-pointer color-secondary mb-1">
+                          <OverlayTrigger
+                            key={"top"}
+                            placement="top"
+                            overlay={
+                              <Tooltip id={`tooltip-top`}>Share</Tooltip>
+                            }
+                          >
+                            <Button
+                              variant="action"
+                              onClick={() => {
+                                setShowModal({
+                                  ...modalShow,
+                                  shareProfile: true,
+                                });
+                              }}
+                            >
+                              <i className="fa fa-share"></i>
+                            </Button>
+                          </OverlayTrigger>
+                        </Row>
+                        {!isMyPage() && (
+                          <Row className="justify-content-end pr-3 cursor-pointer color-secondary mb-1">
+                            <OverlayTrigger
+                              key={"top"}
+                              placement="top"
+                              overlay={
+                                <Tooltip id={`tooltip-top`}>
+                                  {followers.indexOf(
+                                    loggedInUserDetails.userName
+                                  ) > -1
+                                    ? "Following"
+                                    : "Follow User"}
+                                </Tooltip>
+                              }
+                            >
+                              <Button
+                                variant="action"
+                                className={
+                                  followers.indexOf(
+                                    loggedInUserDetails.userName
+                                  ) > -1
+                                    ? "following"
+                                    : ""
+                                }
+                                onClick={() => {
+                                  followUser();
+                                }}
+                              >
+                                <i className="fa fa-user-plus"></i>
+                              </Button>
+                            </OverlayTrigger>
+                          </Row>
+                        )}
+                      </Col>
+                    </Row>
                     <Tabs
                       id="controlled-tab-example"
                       activeKey={key}
                       onSelect={(k) => setKey(k)}
                     >
+                      {isMyPage() ? (
+                        <Tab eventKey="Wallet" title="Wallets">
+                          <div className="wallet-wrapper">
+                            {WalletData.map((wallet, index) => (
+                              <Wallet
+                                key={index}
+                                {...wallet}
+                                selectWalletHandler={selectWalletHandler}
+                              />
+                            ))}
+                          </div>
+                          <div className="transaction-wrapper">
+                            {
+                              <Transactions
+                                transactionList={walletState.trasactionList}
+                                transactionType={walletState.selectedWallet}
+                              />
+                            }
+                          </div>
+                        </Tab>
+                      ) : (
+                        <div></div>
+                      )}
                       <Tab eventKey="collections" title="Collection">
                         <div className="collection-wrapper">
                           <div className="middle-block">
                             {_.isEmpty(profileCollection) ? (
-                              <Col md="12" className="empty-collection d-flex flex-column align-items-center ">
+                              <Col
+                                md="12"
+                                className="empty-collection d-flex flex-column align-items-center "
+                              >
                                 <Row>
-                                  You currently dont own any ideas. Start by
-                                  uploading one.
-                                </Row>
-                                <Row>
-                                  <Button onClick={() => {
-                                    createnew();
-                                  }} variant="primary"> Upload </Button>
+                                  <span className="second-grey">
+                                    You currently dont own any ideas. Start by
+                                    <span
+                                      className="cursor-pointer color-secondary"
+                                      onClick={() => {
+                                        createnew();
+                                      }}
+                                    >
+                                      {" "}
+                                      uploading{" "}
+                                    </span>{" "}
+                                    one.
+                                  </span>
                                 </Row>
                               </Col>
                             ) : (
@@ -206,50 +616,65 @@ function Profile(props) {
                           </div>
                         </div>
                       </Tab>
-                      <Tab eventKey="profile" title="Notifications">
-                        <div className="transactions-wrapper">
-                          <div className="middle-block">
-                            {myNotifications && myNotifications.length > 0 && (
-                              <table>
-                                <tr>
-                                  <td>From</td>
-                                  <td>Action</td>
-                                  <td>ideaID</td>
-                                  <td>message</td>
-                                </tr>
-                                {myNotifications.map((notification) => {
-                                  return (
-                                    <tr>
-                                      <td>{notification.from}</td>
-                                      <td>{notification.action}</td>
-                                      <td>{notification.ideaID}</td>
-                                      <td>{notification.message}</td>
-                                    </tr>
-                                  );
-                                })}
-                              </table>
-                            )}
-                          </div>
-                        </div>
+                      <Tab eventKey="clan" title="Clans">
+                        <Clans></Clans>
                       </Tab>
                     </Tabs>
-                  </div>
+                  </Col>
+                  {isMyPage() ? (
+                    <Col
+                      md="2"
+                      className="notification-wrapper mt-1 flex-column h-100"
+                    >
+                      <span className="second-grey notification-title pl-2">
+                        Notifications
+                      </span>
+                      <hr></hr>
+                      <NotificationPanel
+                        myNotifications={myNotifications}
+                      ></NotificationPanel>
+                    </Col>
+                  ) : (
+                    <div></div>
+                  )}
                 </Col>
-                {/* <Col md="2" className="right-block">
-                  <div className="right-block-content">
-                    <h5>Awards</h5>
-                    <div className="options">
-                      <p>Website</p>
-                      <p>Blog</p>
-                      <p>Portfolio</p>
-                    </div>
-                  </div>
-                </Col> */}
               </Row>
             </Col>
           </div>
         )}
       </Row>
+      {modalShow.sendMessage && (
+        <SendMessage
+          userDetails={loggedInUserDetails}
+          show={modalShow.sendMessage}
+          onHide={() => setShowModal({ ...modalShow, sendMessage: false })}
+        />
+      )}
+      {modalShow.editProfile && (
+        <EditProfile
+          userDetails={loggedInUserDetails}
+          show={modalShow.editProfile}
+          onupdate={(params) => {
+            setLoggedInUserDetails(_.get(params, "profileData.data"));
+          }}
+          onHide={() => setShowModal({ ...modalShow, editProfile: false })}
+        />
+      )}
+      {modalShow.createClan && (
+        <CreateClan
+          userDetails={loggedInUserDetails}
+          billetList={billetList}
+          show={modalShow.createClan}
+          onHide={() => setShowModal({ ...modalShow, createClan: false })}
+        />
+      )}
+      {modalShow.shareProfile && (
+        <ShareModal
+          thumbnail={loggedInUserDetails.imageUrl}
+          show={modalShow.shareProfile}
+          onHide={() => setShowModal({ ...modalShow, shareProfile: false })}
+        />
+      )}
     </Container>
   );
 }

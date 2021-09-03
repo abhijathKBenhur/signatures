@@ -24,7 +24,7 @@ const ShareModal = (props) => {
         <Modal.Body className="share-modal-body">
           <div className="modal-header-wrapper">
             <div className="image-placeholder">
-              <img src={props.thumbnail} alt="share idea"/>
+              <img src={props.thumbnail} alt="share idea" style={{borderRadius:"100%"}}/>
             </div>
           </div>
             <div className="wrapper">
@@ -38,27 +38,39 @@ const ShareModal = (props) => {
                     url={window.location.href}
                     quote={"Hey! Check out this idea."}
                   >
-                    <reactShare.FacebookIcon size={32} round />
+                    <div className="social-icon-wrapper fb">
+                      <i class="fa fa-facebook" aria-hidden="true"></i>
+                    </div>
+                    {/* <reactShare.FacebookIcon size={32} round /> */}
                   </reactShare.FacebookShareButton>
                   <reactShare.TwitterShareButton
                     url={window.location.href}
                     title={"Hey! Check out this idea."}
                   >
-                    <reactShare.TwitterIcon size={32} round />
+                     <div className="social-icon-wrapper twitter">
+                     <i class="fa fa-twitter" aria-hidden="true"></i>
+                    </div>
+                    {/* <reactShare.TwitterIcon size={32} round /> */}
                   </reactShare.TwitterShareButton>
                   <reactShare.WhatsappShareButton
                     url={window.location.href}
                     title={"Hey! Check out this idea."}
                     separator=":: "
                   >
-                    <reactShare.WhatsappIcon size={32} round />
+                    <div className="social-icon-wrapper whatsapp">
+                    <i class="fa fa-whatsapp" aria-hidden="true"></i>
+                    </div>
+                    {/* <reactShare.WhatsappIcon size={32} round /> */}
                   </reactShare.WhatsappShareButton>
                   <reactShare.LinkedinShareButton url={window.location.href}>
-                    <reactShare.LinkedinIcon size={32} round />
+                  <div className="social-icon-wrapper linkedin">
+                  <i class="fa fa-linkedin" aria-hidden="true"></i>
+                    </div>
+                    {/* <reactShare.LinkedinIcon size={32} round /> */}
                   </reactShare.LinkedinShareButton>
                 </div>
                 <div className="share-copy-action">
-                  <p>
+                  <p className="text-center">
                   or copy link
                   </p>
                   <div className="url-wrapper">

@@ -8,33 +8,11 @@
   scrollbar-width: none; /* Firefox */
   -webkit-font-smoothing: antialiased;
 }
-input[type="radio"]:after {
-  width: 15px;
-  height: 15px;
-  border-radius: 15px;
-  top: -2px;
-  left: -1px;
-  position: relative;
-  background-color: #d1d3d1;
-  content: "";
-  display: inline-block;
-  visibility: visible;
-  border: 2px solid white;
+
+.app-content{
+  margin-bottom: 60px;
 }
 
-input[type="radio"]:checked:after {
-  width: 15px;
-  height: 15px;
-  border-radius: 15px;
-  top: -2px;
-  left: -1px;
-  position: relative;
-  background-color: #ffa500;
-  content: "";
-  display: inline-block;
-  visibility: visible;
-  border: 2px solid white;
-}
 body {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   .signature-icons {
@@ -47,6 +25,10 @@ body {
     #ffffff 0.35000000000000003px
   );
   background-size: 7px 7px;
+}
+
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+  margin-bottom: 0 ;
 }
 
 .btn:focus,
@@ -81,7 +63,7 @@ body {
 .btn {
   font-size: 12px;
   line-height: 16px;
-  height: 26px;
+  height: 36px;
   -webkit-font-smoothing: antialiased !important;
   -moz-osx-font-smoothing: grayscale;
   display: -ms-inline-flexbox;
@@ -109,7 +91,6 @@ body {
   &:focus,
   &:active {
     box-shadow: none;
-    color: white;
   }
   &.btn-primary {
     background-color: $secondary;
@@ -134,13 +115,13 @@ body {
     }
   }
   &.btn-ternary {
-    border-color: $primary-dark !important;
-    color: $primary-dark;
+    border-color: $primary-light !important;
+    color: $primary-light;
     background: transparent;
     &:focus,
     &:hover,
     &:active {
-      background: $primary-dark !important;
+      background: $primary-light !important;
       color: $white !important;
     }
   }
@@ -156,32 +137,58 @@ body {
     }
   }
   &.btn-pill {
+    border-radius: 10px;
     border-color: $secondary !important;
     color: $secondary;
-    background: transparent;
+    background: $greyLight-1;
+    color: $secondary;
     height: 20px;
-    border-radius: 15px;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 18px;
     &:focus,
     &:hover,
     &:active {
-      pointer-events: none;
+      
     }
   }
+  &.btn-action{
+        padding: 10px 12px;
+        height: 50px;
+        width: 50px;
+        border: none !important;
+        border-radius: 25px;
+        box-shadow: $shadow;
+        font-size: 18px;
+        background-color: $white;
+        &:hover, &:active {
+            color: #6c757d;
+        }
+        &:focus{
+          color: unset;
+        }
+        &.small{
+          height: 40px;
+        width: 40px;
+        }
+    }
+  
   &.btn-disabled {
     color: $primary;
-    background-color: $grey-border;
+    background-color: $greyLight-1;
     pointer-events: none;
   }
 }
 .generic-cls {
   color: $secondary !important;
-  background-color: $primary !important;
+  background-color: $white !important;
   .Toastify__close-button {
     svg {
       color: $secondary;
     }
   }
 }
+
 .main-content-component {
   margin-top: 110px;
   height: calc(100vh - 100px);
@@ -216,25 +223,80 @@ body {
   line-height: 20px;
 }
 
+.father-grey {
+  font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial,
+    sans-serif;
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 38px;
+  color: $grey-darker;
+}
+
 .master-grey {
+  font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial,
+    sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 20px;
+  color: $grey-darker;
+}
+
+.second-grey {
   font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial,
     sans-serif;
   font-size: 14px;
   font-weight: 500;
-  line-height: 20px;
-}
-
-.second-grey {
-  font-size: 14px;
-  font-weight: 400;
   line-height: 18px;
+  color: $grey-dark;
 }
 
 .readable-text {
   font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial,
     sans-serif;
-  font-size: 20px;
+  font-size: 16px;
   font-weight: 400;
+}
+
+.link-text {
+  font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial,
+    sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.error-message{
+  font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial,
+    sans-serif;
+  font-size: 12px;
+  font-weight: 300;
+  line-height: 18px;
+  color: red;
+}
+
+.user-circle{
+  height: 30px;
+  width: 30px;
+  border-radius: 21px;
+}
+
+.color-white{
+  color: $white;
+}
+
+.color-primary{
+  color: $primary !important;
+}
+
+.color-primary-light{
+  color: $primary-light !important;;
+}
+
+.color-secondary{
+  color: $secondary;
+}
+
+.color-secondary-light{
+  color: $secondary-light;
 }
 
 .text-banner {
@@ -244,3 +306,11 @@ body {
     font-style: italic;
   }
 }
+
+@media (min-width:1440) {
+  .col-lg-2-4{
+    flex: 0 0 20% !important;
+    max-width: 20% !important;
+  }
+}
+

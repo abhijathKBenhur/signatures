@@ -1,6 +1,6 @@
 import React from 'react';
 import { Container, Row } from "react-bootstrap";
-import CollectionCard from "../../components/CollectionCard/CollectionCard";
+import CollectionCard from "../../components/collection-card/collection-card";
 
 const Collections = ({collectionList = []}) => {
     return(
@@ -9,9 +9,10 @@ const Collections = ({collectionList = []}) => {
 <Row className="collections">
   {collectionList.map((collection, index) => {
     return (
-      <CollectionCard key={index} card={collection}>
-        {" "}
-      </CollectionCard>
+      <CollectionCard collection={collection} index={index}/>
+      // <CollectionCard key={index} card={collection}>
+      //   {" "}
+      // </CollectionCard>
     );
   })}
 </Row>
