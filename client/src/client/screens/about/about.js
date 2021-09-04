@@ -43,7 +43,7 @@ const About = () => {
           <span className="master-grey mb-5">
             All your best ideas. On the blockchain. Immutable forever.{" "}
           </span>
-          <span className="readable-text">
+          <span className="readable-text mb-3">
             Ideatribe knows that the best ideas are truly democratic and
             decentralized. That’s why we make it easy to register your idea with
             us instantly and protect you from those who will want to claim it as
@@ -63,7 +63,7 @@ const About = () => {
         round hole, misfits, rebels, unheralded heroes….get on IdeaTribe, bring
         your ideas to life! */}
         </div>
-        <div className="center-box" style={{width:"100%"}}>
+        <div className="center-box mt-5" style={{width:"100%"}}>
           <Col>
             {subscribed ? (
               <div className="subscribe-block second-grey ">
