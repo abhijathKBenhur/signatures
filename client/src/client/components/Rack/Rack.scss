@@ -1,8 +1,12 @@
 @import "../../commons/Common.scss";
 
-.deck{
-  border-right: 1px solid $greyLight-2;
-}
-.rack {
-  min-height: calc(100vh - 230px);
+
+.racks-container{
+  
+  .rack {
+    min-height: calc(100vh - 230px);
+    .deck{
+      border-right: 1px solid $greyLight-2;
+    }
+  }
 }

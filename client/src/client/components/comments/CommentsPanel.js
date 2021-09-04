@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { ListGroup, Form, Image } from "react-bootstrap";
 import CONSTANTS from "../../commons/Constants";
-import {getInitialSubString} from "../../commons/common.utils"
+import { getInitialSubString } from "../../commons/common.utils";
 import _ from "lodash";
 import { useHistory } from "react-router-dom";
 import "./comments.scss";
@@ -27,13 +27,13 @@ const CommentsPanel = (props) => {
   }, []);
 
   function getCommentDestination() {
-    switch(props.entity){
+    switch (props.entity) {
       case CONSTANTS.ENTITIES.IDEA:
-        return props.idea.ideaID
+        return props.idea.ideaID;
         break;
-        case CONSTANTS.ENTITIES.PUBLIC:
-          return CONSTANTS.ENTITIES.PUBLIC
-          break;
+      case CONSTANTS.ENTITIES.PUBLIC:
+        return CONSTANTS.ENTITIES.PUBLIC;
+        break;
     }
   }
 
@@ -58,18 +58,18 @@ const CommentsPanel = (props) => {
         getCommentDestination(),
         CONSTANTS.ACTIONS.COMMENT,
         value,
-        props.entity,
+        props.entity
       ).then((success) => {
-        let commentsCOpy = _.clone(comments)
+        let commentsCOpy = _.clone(comments);
         commentsCOpy.push({
-          from : loggedInUserDetails,
+          from: loggedInUserDetails,
           to: getCommentDestination(),
           action: CONSTANTS.ACTIONS.COMMENT,
           comment: value,
           entity: props.entity,
-        })
-        setComments(commentsCOpy)
-        if(_.get(props,'idea.owner.userName')){
+        });
+        setComments(commentsCOpy);
+        if (_.get(props, "idea.owner.userName")) {
           NotificationInterface.postNotification(
             loggedInUserDetails._id,
             props.idea.owner.userName,
@@ -77,11 +77,10 @@ const CommentsPanel = (props) => {
             CONSTANTS.ACTION_STATUS.PENDING,
             value,
             JSON.stringify({
-              ideaID: _.get(props.idea,'PDFHash')
+              ideaID: _.get(props.idea, "PDFHash"),
             })
           );
         }
-        
       });
     } else {
       setNewComment(value);
@@ -95,27 +94,35 @@ const CommentsPanel = (props) => {
         name="description"
         placeholder="Add a comment"
         onKeyUp={(e) => handleChange(e)}
-        style={{ borderRadius: 5,resize:"none" }}
+        style={{ borderRadius: 5, resize: "none" }}
         className="mb-2 comment-entry"
       />
-
-      {_.map(comments, (comment) => {
-        return (
-          <div className="comment-item d-flex flex-row pb-1">
-            <div className="icon mr-2 p-1 cursor-pointer">
-            <Image src={_.get(comment,'from.imageUrl')} color="F3F3F3" className="user-circle" onClick={() => {
-              history.push({
-                pathname: "/profile/" + comment.from.userName,
-              });
-            }}/>
+      <div className="scrolable-comments">
+        {_.map(comments, (comment) => {
+          return (
+            <div className="comment-item d-flex flex-row pb-1">
+              <div className="icon mr-2 p-1 cursor-pointer">
+                <Image
+                  src={_.get(comment, "from.imageUrl")}
+                  color="F3F3F3"
+                  className="user-circle"
+                  onClick={() => {
+                    history.push({
+                      pathname: "/profile/" + comment.from.userName,
+                    });
+                  }}
+                />
+              </div>
+              <div className="content">
+                <div className="top master-grey  cursor-pointer">
+                  {comment.from.userName}
+                </div>
+                <div className="bottom second-grey">{comment.comment}</div>
+              </div>
             </div>
-            <div className="content">
-              <div className="top master-grey  cursor-pointer">{comment.from.userName}</div>
-              <div className="bottom second-grey">{comment.comment}</div>
-            </div>
-          </div>
-        );
-      })}
+          );
+        })}
+      </div>
     </ListGroup>
   );
 };

@@ -43,7 +43,7 @@ function gallery(props) {
   return (
     <Container fluid>
       <div className="gallery d-flex flex-row">
-        <Col md="9">
+        <Col md="9" className="galler-area">
           <Row
             className="search-discover d-flex flex-column justify-content-center"
             style={{
@@ -53,14 +53,14 @@ function gallery(props) {
           >
             <div className="ideatribe-stats d-flex align-items-center w-100">
               <Col
-                md="3"
+                md="6"
                 className="d-flex flex-column align-items-center stats-entry"
               >
                 <span className="stats-title master-header"> 113</span>
                 <span className="stats-value second-grey">Ideas submitted</span>
               </Col>
               <Col
-                md="3"
+                md="6"
                 className="d-flex flex-column align-items-center stats-entry"
               >
                 <span className="stats-title master-header">1102</span>
@@ -69,14 +69,14 @@ function gallery(props) {
                 </span>
               </Col>
               <Col
-                md="3"
+                md="6"
                 className="d-flex flex-column align-items-center stats-entry"
               >
                 <span className="stats-title master-header">11 </span>
                 <span className="stats-value second-grey">Gold rewarded</span>
               </Col>
               <Col
-                md="3"
+                md="6"
                 className="d-flex flex-column align-items-center stats-entry"
               >
                 <span className="stats-title master-header">113</span>

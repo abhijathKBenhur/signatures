@@ -2,6 +2,12 @@
 
 .gallery {
   margin-top: 60px;
+  .galler-area{
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
+    overflow-x: hidden;
+
+  }
   .latest-news{
     border-left: 1px solid $greyLight-1;
     

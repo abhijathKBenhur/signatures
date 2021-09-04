@@ -189,14 +189,7 @@ class BlockchainInterface {
     return promise;
   }
 
-  publishOnBehalf(payLoad){
-    payLoad.price = this.web3.utils.toWei(payLoad.price, "ether");
-    return api.post(`/publishOnBehalf`,{payLoad})
-  }
-
-
-
-  publishIdea(payLoad, saveToMongoCallback, udpateIDCallback) {
+  publish(payLoad, transactionInitiated, transactionCompleted) {
     payLoad.price = this.web3.utils.toWei(payLoad.price, "ether");
 
     const transactionObject = {
@@ -204,11 +197,11 @@ class BlockchainInterface {
       from: payLoad.creator,
     };
     this.contract.methods
-      .publish(payLoad.title, payLoad.PDFHash, payLoad.price)
+      .publish(payLoad.PDFHash, payLoad.price)
       .send(transactionObject)
       .on("transactionHash", function(hash) {
         payLoad.transactionID = hash;
-        saveToMongoCallback(payLoad);
+        transactionInitiated(payLoad);
       })
       .once("receipt", function(receipt) {
         let tokenReturns = _.get(
@@ -220,7 +213,7 @@ class BlockchainInterface {
           _.get(receipt.events, "Transfer.returnValues.tokenId").toNumber();
         payLoad.ideaID = tokenID;
         if (tokenID) {
-          udpateIDCallback(payLoad);
+          transactionCompleted(payLoad);
         }
         console.log("receipt received")
       })

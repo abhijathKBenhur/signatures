@@ -1,7 +1,11 @@
-.comment-item{
-    .user-circle{
-        height: 30px;
-        width: 30px;
-        border-radius: 21px;
+.scrolable-comments {
+  height: calc(100vh - 600px);
+  overflow-y: scroll;
+  .comment-item {
+    .user-circle {
+      height: 30px;
+      width: 30px;
+      border-radius: 21px;
     }
+  }
 }

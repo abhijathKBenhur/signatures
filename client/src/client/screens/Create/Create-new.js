@@ -476,7 +476,7 @@ const CreateNew = () => {
   }
   function saveToBlockChain(form) {
     // setPublishState(PROGRESS);
-    BlockChainInterface.publishOnBehalf(form)
+    BlockChainInterface.publish(form)
       .then((success) => {
         if (_.get(success, "data.success")) {
           let successResponse = _.get(success, "data.data");
