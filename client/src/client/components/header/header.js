@@ -33,7 +33,7 @@ const Header = (props) => {
 
   useEffect(() => {
     console.log("getting user ingo");
-    connectWallet();
+    // connectWallet();
   }, []);
 
   useEffect(() => {

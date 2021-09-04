@@ -19,7 +19,6 @@ import Tutorial from "./screens/tutorial/tutorial";
 import ICO from "./screens/ico/ico";
 import Roadmap from "./screens/roadmap/roadmap";
 import About from "./screens/about/about";
-import Prelaunch from "./screens/prelaunch/prelaunch";
 
 import Newsletter from "./screens/newsletter/newsletter";
 import Blog from "./screens/blog/blog";
@@ -56,11 +55,10 @@ const App = () =>  {
             <Route path="/partner" component={Partner} />
             <Route path="/contact" component={Contact} />
             <Route path="/about" component={About} />
-            <Route path="/prelaunch" component={Prelaunch} />
-            <Route exact path="/" render={() => <Redirect from="/" to="/prelaunch" />} />
+            <Route exact path="/" render={() => <Redirect from="/" to="/about" />} />
           </Switch>
         </div>
-        <Footer></Footer>
+        {/* <Footer></Footer> */}
       </div>
       </Router>
     );
