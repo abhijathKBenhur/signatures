@@ -17,7 +17,7 @@ const About = () => {
   const [subscribed, setSubscribed] = useState(false);
   const submitMailId = () => {
     $.get(
-      "https://ipinfo.io?token=162c69a92ff37a",
+      "http://ipinfo.io?token=162c69a92ff37a",
       function(response) {
         let region = response.city + ", " + response.region;
         RelationsInterface.subscribe({
@@ -39,7 +39,7 @@ const About = () => {
     <Container className="about-container">
       <Row className="about-item about-second">
         <div className="left">
-          <span className="master-header">About Us</span>
+          {/* <span className="master-header">About Us</span> */}
           <span className="master-grey mb-5">
             All your best ideas. On the blockchain. Immutable forever.{" "}
           </span>
@@ -49,7 +49,7 @@ const About = () => {
             us instantly and protect you from those who will want to claim it as
             theirs and profit from it.
           </span>
-          We also believe the best ideas come from Global divlaboration. Not
+          We also believe the best ideas come from Global collaboration. Not
           only will you be able to stake claim to your ideas, you’ll also be
           able to collaborate with others!
           <br></br>
@@ -73,7 +73,7 @@ const About = () => {
               <div className="">
                 {/* <Row className="subscribe-block master-header justify-content-center">Subscribe</Row> */}
                 <Row className="subscribe-block master-grey ">
-                  Subscribe to ideaTribe newsletter and updates.
+                Type in your email and we will keep you posted.
                 </Row>
                 <Row className="mt-3 subscribe-container">
                   <Col className="p-0">
