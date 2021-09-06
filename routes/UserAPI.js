@@ -1,7 +1,53 @@
 const User = require("../db-config/user.schema");
 const express = require("express");
+const jwt_decode = require("jwt-decode");
+
 const router = express.Router();
-const mongoose = require('mongoose')
+const mongoose = require("mongoose");
+
+getNonceAndRegister = (req, res) => {
+  const body = req.body;
+  if (!body) {
+    return res.status(400).json({
+      success: false,
+      error: "You must provide a public address",
+    });
+  }
+
+  const newUser = new User({
+    metamaskId: body.metamaskId,
+    nonce : (Math.random() + 1).toString(36).substring(7)
+
+  });
+  User.findOne({ metamaskId: body.metamaskId }, (err, user) => {
+    if (err) {
+      return res.status(400).json({ success: false, error: err });
+    }
+    if (!user) {
+      newUser
+        .save()
+        .then((user, b) => {
+          console.log(user);
+          return res.status(201).json({
+            success: true,
+            data: user.nonce,
+            message: "New nonce created!",
+          });
+        })
+        .catch((error) => {
+          return res.status(400).json({
+            error,
+            message: "New nonce not created!",
+          });
+        });
+    } else {
+      return res.status(200).json({ success: true, data: user.nonce });
+    }
+  }).catch((err) => {
+    return res.status(501).json({ success: false, data: err });
+  });
+};
+
 registerUser = (req, res) => {
   const body = req.body;
   body.balance = 1000;
@@ -11,14 +57,22 @@ registerUser = (req, res) => {
       error: "You must provide a user",
     });
   }
+  let tokenDecoded = jwt_decode(body.googleJWTToken);
+
   const newUser = new User(body);
 
-  if (!newUser) {
-    return res.status(400).json({ success: false, error: err });
+  if (
+    !newUser ||
+    !tokenDecoded.email_verified ||
+    tokenDecoded.email != body.email
+  ) {
+    return res
+      .status(400)
+      .json({ success: false, error: "Invalid userdetails" });
   }
 
-  newUser
-    .save()
+  User
+    .findOneAndUpdate({metamaskId:newUser.metamaskId},newUser, {new:true,upsert:true})
     .then((user, b) => {
       return res.status(201).json({
         success: true,
@@ -42,9 +96,9 @@ getUserInfo = async (req, res) => {
   if (req.body.metamaskId) {
     findCriteria.metamaskId = req.body.metamaskId;
   }
-  if(req.body.myReferralCode){
-    console.log("myReferralCode,"+  req.body.myReferralCode)
-    findCriteria.myReferralCode = req.body.myReferralCode
+  if (req.body.myReferralCode) {
+    console.log("myReferralCode," + req.body.myReferralCode);
+    findCriteria.myReferralCode = req.body.myReferralCode;
   }
   await User.findOne(findCriteria, (err, user) => {
     if (err) {
@@ -69,43 +123,42 @@ updateUser = async (req, res) => {
     linkedInUrl: newUser.linkedInUrl,
     twitterUrl: newUser.twitterUrl,
     instaUrl: newUser.instaUrl,
-    bio: newUser.bio
-  }
+    bio: newUser.bio,
+  };
 
-  User.findOneAndUpdate({id:req.body._id},updates,{new:true})
-  .then((user, b) => {
-    console.log("user updated",user, b)
-    return res.status(201).json({
-      success: true,
-      data: user,
-      message: "user updated!",
+  User.findOneAndUpdate({ id: req.body._id }, updates, { new: true })
+    .then((user, b) => {
+      console.log("user updated", user, b);
+      return res.status(201).json({
+        success: true,
+        data: user,
+        message: "user updated!",
+      });
+    })
+    .catch((error) => {
+      return res.status(400).json({
+        error,
+        message: "user update failed!",
+      });
     });
-  })
-  .catch((error) => {
-    return res.status(400).json({
-      error,
-      message: "user update failed!",
-    });
-  });
-
 };
 
 getUsers = async (req, res) => {
   console.log("getting users", req.body);
 
   let findCriteria = {};
-  let ids = req.body.ids
-  function getMongooseIds (stringId){
-    return mongoose.Types.ObjectId(stringId)
+  let ids = req.body.ids;
+  function getMongooseIds(stringId) {
+    return mongoose.Types.ObjectId(stringId);
   }
-  if(req.body.myReferralCode){
-    console.log("myReferralCode,"+  req.body.myReferralCode)
-    findCriteria.myReferralCode = req.body.myReferralCode
+  if (req.body.myReferralCode) {
+    console.log("myReferralCode," + req.body.myReferralCode);
+    findCriteria.myReferralCode = req.body.myReferralCode;
   }
-  if(ids){
+  if (ids) {
     findCriteria._id = {
-      $in : ids.map(getMongooseIds)
-    }
+      $in: ids.map(getMongooseIds),
+    };
   }
   await User.find(findCriteria, (err, user) => {
     if (err) {
@@ -126,6 +179,7 @@ router.post("/registerUser", registerUser);
 router.post("/updateUser", updateUser);
 router.post("/getUserInfo", getUserInfo);
 router.post("/getUsers", getUsers);
+router.post("/getNonceAndRegister", getNonceAndRegister);
 
 
 module.exports = router;

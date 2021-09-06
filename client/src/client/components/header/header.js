@@ -161,7 +161,7 @@ const Header = (props) => {
             {/* <Form.Control size="sm" type="text" placeholder="Normal text" /> */}
           </div>
 
-          { useLocation().pathName=="prelaunch" 
+          { useLocation().pathName !="prelaunch" 
           && <div className="right-section">
             <span className="loggedinaccount" title={currentMetamaskAccount} onClick={() => {
               window.open("https://kovan.etherscan.io/address/" + currentMetamaskAccount);

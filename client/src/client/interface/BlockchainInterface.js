@@ -1,41 +1,46 @@
-import _, { defer, has } from "lodash";import  React from 'react';
+import _, { defer, has } from "lodash";
+import React from "react";
 import Web3 from "web3";
 import contractJSON from "../../contracts/ideaTribe.json";
-import store from '../redux/store';
+import store from "../redux/store";
 import { setReduxMetaMaskID } from "../redux/actions";
-import ENDPOINTS from '../commons/Endpoints';
+import ENDPOINTS from "../commons/Endpoints";
 
-import axios from 'axios'
+import axios from "axios";
 
 const api = axios.create({
-  baseURL: process.env.NODE_ENV == "production" ? ENDPOINTS.REMOTE_ENDPOINTS: ENDPOINTS.LOCAL_ENDPOINTS
-})
+  baseURL:
+    process.env.NODE_ENV == "production"
+      ? ENDPOINTS.REMOTE_ENDPOINTS
+      : ENDPOINTS.LOCAL_ENDPOINTS,
+});
 
 const chain_id = "0x2a";
 
-const CHAIN_CONFIGS = { "0x38" : {
-  chainId: '0x38',
-  chainName: 'Binance Smart Chain Mainnet',
-  nativeCurrency: {
-    name: 'Binance Coin',
-    symbol: 'BNB',
-    decimals: 18
-  },
-  rpcUrls: ['https://bsc-dataseed1.ninicoin.io'],
-  blockExplorerUrls: ['https://bscscan.com/']
-  },
-  "0x61" : {
-    chainId: '0x61',
-    chainName: 'Binance Smart Chain Testnet',
+const CHAIN_CONFIGS = {
+  "0x38": {
+    chainId: "0x38",
+    chainName: "Binance Smart Chain Mainnet",
     nativeCurrency: {
-      name: 'Binance Coin',
-      symbol: 'BNB',
-      decimals: 18
+      name: "Binance Coin",
+      symbol: "BNB",
+      decimals: 18,
     },
-    rpcUrls: ['https://data-seed-prebsc-1-s1.binance.org:8545/'],
-    blockExplorerUrls: ['https://testnet.bscscan.com']
-  }
-}
+    rpcUrls: ["https://bsc-dataseed1.ninicoin.io"],
+    blockExplorerUrls: ["https://bscscan.com/"],
+  },
+  "0x61": {
+    chainId: "0x61",
+    chainName: "Binance Smart Chain Testnet",
+    nativeCurrency: {
+      name: "Binance Coin",
+      symbol: "BNB",
+      decimals: 18,
+    },
+    rpcUrls: ["https://data-seed-prebsc-1-s1.binance.org:8545/"],
+    blockExplorerUrls: ["https://testnet.bscscan.com"],
+  },
+};
 
 class BlockchainInterface {
   constructor() {
@@ -44,48 +49,55 @@ class BlockchainInterface {
     this.contractJSON = contractJSON;
     this.contract = undefined;
     this.tokens = [];
-    let parentThis = this
-    window.ethereum && window.ethereum.on('accountsChanged', function (accounts) {
-      parentThis.getAccountDetails();
-    })
-    window.ethereum && window.ethereum.on('chainChanged', function (chainId) {
-      parentThis.getAccountDetails();
-    })
+    let parentThis = this;
+    window.ethereum &&
+      window.ethereum.on("accountsChanged", function(accounts) {
+        parentThis.getAccountDetails();
+      });
+    window.ethereum &&
+      window.ethereum.on("chainChanged", function(chainId) {
+        parentThis.getAccountDetails();
+      });
   }
 
   addNetwork(chain_id) {
-    window.ethereum.request({
-      method: 'wallet_addEthereumChain',
-      params: [CHAIN_CONFIGS[chain_id]]
-    }).then(success => {
-      console.log("success",success)
-    }).catch(switchError =>{
-      console.log("switchError",switchError)
-     
-    })
+    window.ethereum
+      .request({
+        method: "wallet_addEthereumChain",
+        params: [CHAIN_CONFIGS[chain_id]],
+      })
+      .then((success) => {
+        console.log("success", success);
+      })
+      .catch((switchError) => {
+        console.log("switchError", switchError);
+      });
   }
 
   switchNetwork() {
     try {
-      window.ethereum.request({
-        method: 'wallet_switchEthereumChain',
-        params: [{ chainId: chain_id }],
-      }).then(success => {
-        console.log("success",success)
-      }).catch(switchError =>{
-        if (switchError.code === 4902) {
-          try {
-            this.addNetwork(chain_id)
-          } catch (addError) {
-            // handle "add" error
+      window.ethereum
+        .request({
+          method: "wallet_switchEthereumChain",
+          params: [{ chainId: chain_id }],
+        })
+        .then((success) => {
+          console.log("success", success);
+        })
+        .catch((switchError) => {
+          if (switchError.code === 4902) {
+            try {
+              this.addNetwork(chain_id);
+            } catch (addError) {
+              // handle "add" error
+            }
           }
-        }
-      })
+        });
     } catch (switchError) {
       // This error code indicates that the chain has not been added to MetaMask.
       if (switchError.code === 4902) {
         try {
-          this.addNetwork(chain_id)
+          this.addNetwork(chain_id);
         } catch (addError) {
           // handle "add" error
         }
@@ -96,60 +108,65 @@ class BlockchainInterface {
 
   addToken(type, address, symbol, decimals) {
     window.ethereum
-        .request({
-          method: 'wallet_watchAsset',
-          params: {
-            type: type,
-            options: {
-              address: address,
-              symbol: symbol,
-              decimals: decimals
-            },
+      .request({
+        method: "wallet_watchAsset",
+        params: {
+          type: type,
+          options: {
+            address: address,
+            symbol: symbol,
+            decimals: decimals,
           },
-        })
-        .then((success) => {
-          if (success) {
-            console.log(symbol + ' successfully added to wallet!')
-          } else {
-            throw new Error('Something went wrong.')
-          }
-        })
-        .catch(console.error)
+        },
+      })
+      .then((success) => {
+        if (success) {
+          console.log(symbol + " successfully added to wallet!");
+        } else {
+          throw new Error("Something went wrong.");
+        }
+      })
+      .catch(console.error);
   }
 
-  register_user = payload => { 
-    console.log("register_user")
-      return api.post(`/register_user`,payload)
-  }
+  register_user = (payload) => {
+    console.log("register_user");
+    return api.post(`/register_user`, payload);
+  };
 
   async getAccountDetails() {
     const promise = new Promise((resolve, reject) => {
-        console.log("returning loadWeb3");
-        this.loadWeb3()
-          .then((success) => {
-            this.metamaskAccount = success.accountId[0];
-            let metamaskNetwork = success.networkId;
-            console.log("setting in redux user info")
-            store.dispatch(setReduxMetaMaskID(this.metamaskAccount))
-            const contractNetworkID = this.contractJSON.network;
-            if (contractNetworkID == metamaskNetwork) {
-              const abi = this.contractJSON.abi;
-              const contractAddress = this.contractJSON.address;
-              const contract = this.web3.eth.Contract(abi, contractAddress);
-              this.contract = contract;
-            } else {
-              window.alert("Smart contract not deployed to detected network. Please change the network in mnetamask.");
-            }
-            resolve(this.metamaskAccount);
-          })
-          .catch((err) => {
-            console.log("catch loadWeb3", err);
-            reject(err);
-          });
-      
+      console.log("returning loadWeb3");
+      this.loadWeb3()
+        .then((success) => {
+          this.metamaskAccount = success.accountId[0];
+          let metamaskNetwork = success.networkId;
+          console.log("setting in redux user info");
+          store.dispatch(setReduxMetaMaskID(this.metamaskAccount));
+          const contractNetworkID = this.contractJSON.network;
+          if (contractNetworkID == metamaskNetwork) {
+            const abi = this.contractJSON.abi;
+            const contractAddress = this.contractJSON.address;
+            const contract = this.web3.eth.Contract(abi, contractAddress);
+            this.contract = contract;
+          } else {
+            window.alert(
+              "Smart contract not deployed to detected network. Please change the network in mnetamask."
+            );
+          }
+          resolve(this.metamaskAccount);
+        })
+        .catch((err) => {
+          console.log("catch loadWeb3", err);
+          reject(err);
+        });
     });
 
     return promise;
+  }
+
+  signToken( nonce) {
+    return this.web3.eth.personal.sign(this.web3.utils.fromUtf8(`I approve and sign to register in ideaTribe.${nonce}`),this.metamaskAccount,"testpassword")
   }
 
   loadWeb3() {
@@ -177,13 +194,22 @@ class BlockchainInterface {
         window.web3 = this.web3;
         resolve(this.web3);
       } else {
-        store.dispatch(setReduxMetaMaskID())
-        let errorMessage =
+        store.dispatch(setReduxMetaMaskID());
+        let errorMessage = (
           <div>
             <br />
-            <a style={{textDecoration: 'underline', color:'white'}} target="blank" href="https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn?hl=en">Add Metamask from here</a>
+            <a
+              style={{ textDecoration: "underline", color: "white" }}
+              target="blank"
+              href="https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn?hl=en"
+            >
+              Add Metamask from here
+            </a>
           </div>
-        reject("Non-Ethereum browser detected. You should consider trying MetaMask!");
+        );
+        reject(
+          "Non-Ethereum browser detected. You should consider trying MetaMask!"
+        );
       }
     });
     return promise;
@@ -215,10 +241,10 @@ class BlockchainInterface {
         if (tokenID) {
           transactionCompleted(payLoad);
         }
-        console.log("receipt received")
+        console.log("receipt received");
       })
       .once("confirmation", function(confirmationNumber, receipt) {
-        console.log("confirmationNumber ::" + confirmationNumber)
+        console.log("confirmationNumber ::" + confirmationNumber);
       })
       .on("error", console.error);
   }
@@ -227,7 +253,12 @@ class BlockchainInterface {
     return this.tokens;
   }
 
-  buySignature(updatePayLoad,successCallback, feedbackCallback, errorCallback) {
+  buySignature(
+    updatePayLoad,
+    successCallback,
+    feedbackCallback,
+    errorCallback
+  ) {
     const transactionObject = {
       value: updatePayLoad.price,
       from: updatePayLoad.buyer,
@@ -236,7 +267,7 @@ class BlockchainInterface {
       .buy(updatePayLoad.ideaID)
       .send(transactionObject)
       .on("transactionHash", function(hash) {
-        console.log("updated with transaction id ::" , hash)
+        console.log("updated with transaction id ::", hash);
         updatePayLoad.transactionID = hash;
         feedbackCallback(updatePayLoad);
       })
@@ -246,18 +277,18 @@ class BlockchainInterface {
           receipt.events,
           "Transfer.returnValues.tokenId"
         );
-          successCallback(updatePayLoad);
+        successCallback(updatePayLoad);
       })
       .once("confirmation", function(confirmationNumber, receipt) {
-        console.log("confirmation :: " + confirmationNumber)
+        console.log("confirmation :: " + confirmationNumber);
       })
       .on("error", (err) => {
-        console.log(err)
-        errorCallback()
+        console.log(err);
+        errorCallback();
       });
   }
 
-  updatePrice(updatePayLoad,successCallback, feedbackCallback) {
+  updatePrice(updatePayLoad, successCallback, feedbackCallback) {
     const transactionObject = {
       from: updatePayLoad.owner,
     };
@@ -272,10 +303,10 @@ class BlockchainInterface {
           receipt.events,
           "Transfer.returnValues.tokenId"
         );
-          successCallback(updatePayLoad);
+        successCallback(updatePayLoad);
       })
       .once("confirmation", function(confirmationNumber, receipt) {
-        console.log("confirmation :: " + confirmationNumber)
+        console.log("confirmation :: " + confirmationNumber);
       })
       .on("error", console.error);
   }

@@ -9,13 +9,15 @@ const User = new Schema(
     imageUrl: { type: String },
     metamaskId: { type: String },
     userName: { type: String, unique: true },
-    loginMode: { type: String },
+    bio: { type: String },
 
+    
+    loginMode: { type: String },
     facebookUrl: { type: String },
     linkedInUrl: { type: String },
     twitterUrl: { type: String },
     instaUrl: { type: String },
-    bio: { type: String },
+    
 
     tribeCoinBalance: {type: Number},
     GasBalance: {type: Number},
@@ -23,6 +25,10 @@ const User = new Schema(
 
     myReferralCode:{ type: String },
     referredBy:{ type: String },
+
+    nonce:{ type: String },
+    secret:{ type: String }
+
 
   },
   { timestamps: true }

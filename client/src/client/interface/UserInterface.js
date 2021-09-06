@@ -28,11 +28,16 @@ export const updateUser = payload => {
     return api.post(`/updateUser`,payload) 
 }
 
+export const getNonceAndRegister = payload => { 
+    return api.post(`/getNonceAndRegister`,payload) 
+}
+
 const UserInterface = {
     registerUser,
     getUserInfo,
     updateUser,
-    getUsers
+    getUsers,
+    getNonceAndRegister
 }
 
 export default UserInterface

@@ -64,7 +64,20 @@ const Register = (props) => {
     loginMode: _.get(reduxState, "loginMode"),
     referredBy: undefined,
     myReferralCode: (Math.random() + 1).toString(36).substring(7),
+    googleJWTToken: "",
+    secret: ""
   });
+
+  function getNonceAndRegister(){
+    UserInterface.getNonceAndRegister({ metamaskId:userDetails.metamaskId}).then(nonce =>{
+      BlockchainInterface.signToken(_.get(nonce,'data.data')).then(success =>{
+        setUserDetails({...userDetails, none:success.data})
+        registerUser();
+      }).catch(err =>{
+        console.log(err)
+      })
+    })
+  }
 
   function registerUser() {
     try {
@@ -106,7 +119,7 @@ const Register = (props) => {
       }
       else {
         setRegistration(PENDING);
-        registerUser();
+        getNonceAndRegister();
       }
       return;
     }
@@ -160,6 +173,7 @@ const Register = (props) => {
       userName: _.get(googleFormResponseObject.profileObj, "email").split(
         "@"
       )[0],
+      googleJWTToken: _.get(googleFormResponseObject.tokenObj, "id_token"),
     }); 
   }
 
@@ -393,10 +407,10 @@ const Register = (props) => {
             setReferralError(false);
           })
           .catch((error) => {
-            setReferralError(true);
+            setReferralError(false);
           });
       } else {
-        setReferralError(true);
+        setReferralError(false);
       }
     }
   }

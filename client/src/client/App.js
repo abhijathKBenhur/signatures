@@ -56,8 +56,7 @@ const App = () =>  {
             <Route path="/partner" component={Partner} />
             <Route path="/contact" component={Contact} />
             <Route path="/about" component={About} />
-            <Route path="/prelaunch" component={Prelaunch} />
-            <Route exact path="/" render={() => <Redirect from="/" to="/prelaunch" />} />
+            <Route exact path="/" render={() => <Redirect from="/" to="/about" />} />
           </Switch>
         </div>
         <Footer></Footer>

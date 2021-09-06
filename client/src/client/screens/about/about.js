@@ -29,11 +29,11 @@ const About = () => {
             you change the world. Ideatribe was born out of a desire by the founding
             team to harness the creativity of the everyman ...You, us, everyone!
           </div>
-          {/* <div>
+          <div>
             <Button variabt="secondary" className="mt-5" onClick={() => {
               history.push("/home");
             }}>Take me to the tribe</Button>
-          </div> */}
+          </div>
         </Col>
         <Col className="right" xs={12} sm={4}>
           <img src={dummyImg} />

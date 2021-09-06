@@ -3,7 +3,6 @@ import { Button, Modal } from "react-bootstrap";
 import _ from "lodash";
 import { Row, Col, Form, InputGroup, Dropdown } from "react-bootstrap";
 import CONSTANTS from "../../commons/Constants";
-import Web3Utils from "web3-utils";
 import { getPurposeIcon } from "../../commons/common.utils";
 import { showToaster } from "../../commons/common.utils";
 import "./info.modal.scss";

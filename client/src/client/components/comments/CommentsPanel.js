@@ -115,7 +115,7 @@ const CommentsPanel = (props) => {
               </div>
               <div className="content">
                 <div className="top master-grey  cursor-pointer">
-                  {comment.from.userName}
+                  {_.get(comment.from,'userName')}
                 </div>
                 <div className="bottom second-grey">{comment.comment}</div>
               </div>
