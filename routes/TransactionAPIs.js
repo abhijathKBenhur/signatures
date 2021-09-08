@@ -10,12 +10,9 @@ setTransactionState = (req, res) => {
       error: "Blank",
     });
   }
-  body.status = body.status
-  console.log( "remove set transactino state")
-  console.log( body.status)
 
   const updatedTransaction = {
-    transactionID: body.transactionID
+    status: body.status
   }
 
   if (!updatedTransaction) {

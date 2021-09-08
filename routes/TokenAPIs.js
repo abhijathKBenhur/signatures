@@ -186,9 +186,8 @@ updateIdeaID = async (req, res) => {
 };
 
 removeIdeaEntry = async (req, res) => {
-  console.log( "remove idea entru")
-  console.log( req.body.status)
-  await IdeaSchema.remove(
+  console.log("deleting ," + req.body.transactionID)
+  await IdeaSchema.deleteOne(
     { transactionID: req.body.transactionID },
     (err, token) => {
       if (err) {

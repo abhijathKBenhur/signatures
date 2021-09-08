@@ -247,8 +247,7 @@ class BlockchainInterface {
         console.log("confirmationNumber ::" + confirmationNumber);
       })
       .on("error", (err) => {
-        console.log(err)
-        transactionFailed()
+        transactionFailed(err,payLoad.transactionID)
       });
   }
 
