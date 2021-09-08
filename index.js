@@ -20,7 +20,8 @@ dotenv.config();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-var whitelist = ['http://localhost:3000','http://localhost:3001','http://localhost:3002', 'https://ideatribe.herokuapp.com']
+var whitelist = ['http://localhost:3000','http://localhost:3001','http://localhost:3002', 'https://ideatribe.herokuapp.com',
+"https://ideatribeprelaunch.herokuapp",'http://ideatribe.herokuapp.com',"https://ideatribe.io",'http://ideatribe.io']
 app.use(cors(
   {
     origin: function (origin, callback) {
