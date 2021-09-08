@@ -45,12 +45,12 @@ class BlockchainInterface {
     this.contract = undefined;
     this.tokens = [];
     let parentThis = this
-    window.ethereum && window.ethereum.on('accountsChanged', function (accounts) {
-      parentThis.getAccountDetails();
-    })
-    window.ethereum && window.ethereum.on('chainChanged', function (chainId) {
-      parentThis.getAccountDetails();
-    })
+    // window.ethereum && window.ethereum.on('accountsChanged', function (accounts) {
+    //   parentThis.getAccountDetails();
+    // })
+    // window.ethereum && window.ethereum.on('chainChanged', function (chainId) {
+    //   parentThis.getAccountDetails();
+    // })
   }
 
   addNetwork(chain_id) {

@@ -164,14 +164,14 @@ const Register = (props) => {
   }
 
   function metamaskGuide() {
-    let metamaskAvailable = window.ethereum || window.web3;
-    if (metamaskAvailable) {
-      BlockchainInterface.getAccountDetails();
-    } else {
-      window.open(
-        "https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn?hl=en"
-      );
-    }
+    // let metamaskAvailable = window.ethereum || window.web3;
+    // if (metamaskAvailable) {
+    //   BlockchainInterface.getAccountDetails();
+    // } else {
+    //   window.open(
+    //     "https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn?hl=en"
+    //   );
+    // }
   }
 
   function getConditionalView(stepKey) {

@@ -16,20 +16,12 @@ const About = () => {
   const [searchText, setSearchText] = useState("");
   const [subscribed, setSubscribed] = useState(false);
   const submitMailId = () => {
-    $.get(
-      "https://ipinfo.io?token=162c69a92ff37a",
-      function(response) {
-        let region = response.city + ", " + response.region;
-        RelationsInterface.subscribe({
-          mailID: searchText,
-          location: region,
-        }).then((success) => {
-          showToaster("Sucbscribed!", { type: "dark" });
-          setSubscribed(true);
-        });
-      },
-      "jsonp"
-    );
+    RelationsInterface.subscribe({
+      mailID: searchText,
+    }).then((success) => {
+      showToaster("Sucbscribed!", { type: "dark" });
+      setSubscribed(true);
+    });
   };
 
   const type = (event) => {

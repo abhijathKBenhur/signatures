@@ -513,23 +513,15 @@ const CreateNew = () => {
       });
   }
   function saveToMongo(form) {
-    $.get(
-      "https://ipinfo.io?token=162c69a92ff37a",
-      function(response) {
-        let region = response.city + ", " + response.region;
-        setFormData({...form, location: region})
-        SignatureInterface.addSignature({ ...form, location: region })
-          .then((success) => {
-            showToaster("Your Idea is now registered on the blockchain!", {
-              type: "dark",
-            });
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      },
-      "jsonp"
-    );
+    SignatureInterface.addSignature({ ...form })
+    .then((success) => {
+      showToaster("Your Idea is now registered on the blockchain!", {
+        type: "dark",
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
   }
 
   const checkValidationBeforeSubmit = () => {
