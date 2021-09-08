@@ -74,7 +74,9 @@ getSignatures = async (req, res) => {
   let tags = req.body.tags;
   let searchString = req.body.searchString;
   let searchOrArray = [];
-  let payLoad = {};
+  let payLoad = {
+    status: "COMPLETED"
+  };
 
   //search string block start
 
@@ -164,6 +166,25 @@ buySignature = async (req, res) => {
     });
 };
 
+updateIdeaID = async (req, res) => {
+  await IdeaSchema.findOneAndUpdate(
+    { transactionID: req.body.transactionID },
+    { ideaID: req.body.ideaID, status: "COMPLETED" },
+    (err, token) => {
+      if (err) {
+        return res.status(400).json({ success: false, error: err });
+      }
+
+      if (!token) {
+        return res.status(404).json({ success: true, data: [] });
+      }
+      return res.status(200).json({ success: true, data: token });
+    }
+  ).catch((err) => {
+    return res.status(200).json({ success: false, data: err });
+  });
+};
+
 updatePurpose = async (req, res) => {
   console.log(
     "updateing token price",
@@ -245,6 +266,8 @@ router.get("/signature/:PDFHash/", getSignatureByHash);
 router.post("/getSignatures", getSignatures);
 router.post("/buySignature", buySignature);
 router.post("/updatePurpose", updatePurpose);
+router.post("/updateIdeaID", updateIdeaID);
+
 router.post(
   "/getCloundinaryImagePath",
   upload.single("thumbnail"),

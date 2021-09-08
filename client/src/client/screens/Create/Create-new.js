@@ -48,6 +48,7 @@ import responseImage from "../../../assets/images/response.jpeg";
 import signatureImage from "../../../assets/logo/signatures.png";
 import imagePlaceholder from "../../../assets/images/image-placeholder.png";
 import CreateIdeaModal from "../../modals/create-idea-modal/create-idea-modal";
+import TransactionsInterface from "../../interface/TransactionInterface";
 const CreateNew = () => {
   const history = useHistory();
   const reduxState = useSelector((state) => state, shallowEqual);
@@ -80,6 +81,7 @@ const CreateNew = () => {
     collab: CONSTANTS.COLLAB_TYPE[0].value,
     units: 1,
     location: "",
+    status: CONSTANTS.ACTION_STATUS.PENDING
   });
   const [formErrors, setFormErrors] = useState({
     title: false,
@@ -468,59 +470,60 @@ const CreateNew = () => {
         saveToBlockChain(params);
       })
       .catch((error) => {
-        return {
-          PDFFile: "error",
-          thumbnail: "error",
-        };
-      });
-  }
-  function saveToBlockChain(form) {
-    // setPublishState(PROGRESS);
-    BlockChainInterface.publish(form)
-      .then((success) => {
-        if (_.get(success, "data.success")) {
-          let successResponse = _.get(success, "data.data");
-          saveToMongo(successResponse);
-          setBillet({
-            creator: userDetails.userName,
-            fullName: userDetails.firstName + " " + userDetails.lastName,
-            title: successResponse.title,
-            time: moment(new Date()).format("MMMM Do YYYY, h:mm:ss a"),
-            tokenID: successResponse.ideaID,
-            transactionID: successResponse.transactionID,
-            PDFHash: successResponse.PDFHash,
-            location: successResponse.location,
-          });
-          setPublishState(PASSED);
-          //   setSlideCount(RESPONSE_SLIDE);
-        } else {
-          let errorReason = _.get(success, "data.data.errorReason");
-          setPublishState(FAILED);
-          //   setSlideCount(RESPONSE_SLIDE);
-
-          setPublishError(
-            "The idea couldnt be published to blockchain. " + errorReason
-          );
-        }
-      })
-      .catch((error) => {
+        showToaster("File upload was unsuccessful! Please check your internet connection.", {
+          type: "dark",
+        });
         setPublishState(FAILED);
-        // setSlideCount(RESPONSE_SLIDE);
-        setPublishError(_.get(error, "data.data.errorreason"));
-        setPublishError(
-          "The idea couldnt be published to blockchain. Please try again later."
-        );
       });
   }
-  function saveToMongo(form) {
+
+  function transactionInitiated(transactionInititationRequest) {
+    TransactionsInterface.postTransaction({
+      transactionID : form.transactionID,
+      Status: "PENDING",
+      type: "POST_IDEA",
+      user: userDetails._id
+    })
+    addIdeaRecordToMongo(transactionInititationRequest);
+  }
+  
+  function transactionCompleted(successResponse) {
+    updateCompletion(successResponse);
+    setBillet({
+      creator: userDetails.userName,
+      fullName: userDetails.firstName + " " + userDetails.lastName,
+      title: successResponse.title,
+      time: moment(new Date()).format("MMMM Do YYYY, h:mm:ss a"),
+      tokenID: successResponse.ideaID,
+      transactionID: successResponse.transactionID,
+      PDFHash: successResponse.PDFHash,
+      location: successResponse.location,
+    });
+    setPublishState(PASSED);
+  }
+
+  function transactionFailed(failedResponse) {
+    let errorReason = _.get(failedResponse, "data.data.errorReason");
+    setPublishState(FAILED);
+    setPublishError(
+      "The idea couldnt be published to blockchain. " + errorReason
+    );
+  }
+
+  function saveToBlockChain(form) {
+    BlockChainInterface.publish(form, transactionInitiated, transactionCompleted, transactionFailed)
+  }
+
+
+  function addIdeaRecordToMongo(form) {
     $.get(
       "https://ipinfo.io?token=162c69a92ff37a",
       function(response) {
         let region = response.city + ", " + response.region;
-        setFormData({...form, location: region})
+        setFormData({ ...form, location: region });
         SignatureInterface.addSignature({ ...form, location: region })
           .then((success) => {
-            showToaster("Your Idea is now registered on the blockchain!", {
+            showToaster("Your Idea is submitted on the blockchain! Please wait for the confirmation billet.", {
               type: "dark",
             });
           })
@@ -530,6 +533,13 @@ const CreateNew = () => {
       },
       "jsonp"
     );
+  }
+
+  const updateCompletion = (successResponse) =>{
+    SignatureInterface.updateIdeaID(successResponse)
+    TransactionsInterface.setTransactionAsCompleted({
+      transactionID:successResponse.transactionID,
+    })
   }
 
   const checkValidationBeforeSubmit = () => {

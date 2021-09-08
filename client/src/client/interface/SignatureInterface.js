@@ -38,7 +38,8 @@ export const addSignature = payload => {
         creator: payload.creator,
         storage: payload.storage,
         purpose: payload.purpose,
-        location: payload.location
+        location: payload.location,
+        status: payload.status
     })
 }
 
@@ -56,13 +57,18 @@ export const buySignature = payload => {
     return api.post(`/buySignature`,payload) 
 }
 
+export const updateIdeaID = payload => { 
+    return api.post(`/updateIdeaID`,payload) 
+}
+
 
 const SignatureInterface = {
     getSignatures,
     addSignature,
     getSignatureByHash,
     buySignature,
-    updatePurpose
+    updatePurpose,
+    updateIdeaID
 
 }
 

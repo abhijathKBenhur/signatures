@@ -25,6 +25,7 @@ const Signature = new Schema(
         
         price: { type: String , required: true},
         units: { type: String },
+        status: { type: String },
         
     },
     { timestamps: true },

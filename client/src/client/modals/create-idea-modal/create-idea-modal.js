@@ -408,7 +408,7 @@ const CreateIdeaModal = ({
                       <img src={signatureImage} alt="logo" width="150px" />
                     </Col>
                   </div>
-                  <div class="code-n-share">
+                  <div className="code-n-share">
                     <Col md="12">
                       <canvas id="canvas"></canvas>
                       {setTimeout(() => {

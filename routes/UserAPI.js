@@ -17,7 +17,7 @@ getNonceAndRegister = (req, res) => {
   const newUser = new User({
     metamaskId: body.metamaskId,
     nonce : (Math.random() + 1).toString(36).substring(7)
-
+    
   });
   User.findOne({ metamaskId: body.metamaskId }, (err, user) => {
     if (err) {
@@ -35,6 +35,7 @@ getNonceAndRegister = (req, res) => {
           });
         })
         .catch((error) => {
+          console.log(error)
           return res.status(400).json({
             error,
             message: "New nonce not created!",
@@ -71,8 +72,11 @@ registerUser = (req, res) => {
       .json({ success: false, error: "Invalid userdetails" });
   }
 
+  let updateParams = body;
+  delete updateParams._id
+
   User
-    .findOneAndUpdate({metamaskId:newUser.metamaskId},newUser, {new:true,upsert:true})
+    .findOneAndUpdate({metamaskId:newUser.metamaskId},updateParams, {new:true,upsert:true})
     .then((user, b) => {
       return res.status(201).json({
         success: true,

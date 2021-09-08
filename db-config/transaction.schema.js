@@ -5,8 +5,8 @@ const Transaction = new Schema(
     transactionID : { type: String },
     Status: { type: String },
     type: { type: String },
-    ID: { type: String },
-    payload: { type: String }
+    payload: { type: String },
+    user: { type: Schema.Types.ObjectId, ref: "User", required: true }
   },
   { timestamps: true }
 );

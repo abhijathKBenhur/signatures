@@ -8,7 +8,7 @@ const User = new Schema(
     email: { type: String },
     imageUrl: { type: String },
     metamaskId: { type: String },
-    userName: { type: String, unique: true },
+    userName: { type: String },
     bio: { type: String },
 
     

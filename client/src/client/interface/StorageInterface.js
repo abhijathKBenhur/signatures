@@ -32,12 +32,14 @@ const getPathsFromIPFS = (form) => {
     reader.readAsArrayBuffer(form.PDFFile);
     reader.onloadend = () => {
       IPFS.files.add(Buffer(reader.result), (error, result) => {
-        if (error) {
+        if (error || _.isUndefined(result) ||  _.isUndefined(result[0])) {
           console.error(error);
           reject(error);
+        }else{
+          console.log("PDF uploaded to IPFS ::" + result[0].path)
+          resolve({ path: result[0].path, type: "PDFFile" });
         }
-        console.log("PDF uploaded to IPFS ::" + result[0].path)
-        resolve({ path: result[0].path, type: "PDFFile" });
+        
       });
     };
   });

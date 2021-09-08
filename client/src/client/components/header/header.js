@@ -132,7 +132,7 @@ const Header = (props) => {
                 height="35"
                 alt=""
                 className="cursor-pointer"
-                // onClick={() => gotoGallery()}
+                onClick={() => gotoGallery()}
               ></img>
             </a>
             {/* <SearchBar /> */}

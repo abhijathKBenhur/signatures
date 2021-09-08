@@ -52,7 +52,7 @@ function Profile(props) {
   const [billetList, setBilletList] = useState([]);
 
   let history = useHistory();
-  const [key, setKey] = useState(isMyPage() ? "Wallet" : "collections");
+  const [key, setKey] = useState("collections");
   const viewUser = _.get(window.location, "pathname").split("profile/")[1];
   const dispatch = useDispatch();
   const [modalShow, setShowModal] = useState({
@@ -332,7 +332,7 @@ function Profile(props) {
                               setShowModal({ ...modalShow, editProfile: true });
                             }}
                           >
-                            <i className="fa fa-user mr-1"></i>
+                            <i className="fa fa-pencil mr-1"></i>
                           </Button>
                         </OverlayTrigger>
 
@@ -563,7 +563,8 @@ function Profile(props) {
                       activeKey={key}
                       onSelect={(k) => setKey(k)}
                     >
-                      {isMyPage() ? (
+                      {/* {isMyPage() ? ( */}
+                      {false ? (
                         <Tab eventKey="Wallet" title="Wallets">
                           <div className="wallet-wrapper">
                             {WalletData.map((wallet, index) => (
@@ -616,9 +617,9 @@ function Profile(props) {
                           </div>
                         </div>
                       </Tab>
-                      <Tab eventKey="clan" title="Clans">
+                      {/* <Tab eventKey="clan" title="Clans">
                         <Clans></Clans>
-                      </Tab>
+                      </Tab> */}
                     </Tabs>
                   </Col>
                   {isMyPage() ? (

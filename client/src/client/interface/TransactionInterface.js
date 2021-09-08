@@ -6,10 +6,7 @@ const api = axios.create({
     baseURL: process.env.NODE_ENV == "production" ? ENDPOINTS.REMOTE_ENDPOINTS: ENDPOINTS.LOCAL_ENDPOINTS
 })
 
-export const postTransaction = (from,to,action,status,message,payload) => {
-    let request = {
-        from, to, action, status, message,payload
-    }
+export const postTransaction = (request) => {
     return api.post("/postTransaction",request)
 }
 

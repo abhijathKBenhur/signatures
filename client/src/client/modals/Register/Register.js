@@ -65,27 +65,27 @@ const Register = (props) => {
     referredBy: undefined,
     myReferralCode: (Math.random() + 1).toString(36).substring(7),
     googleJWTToken: "",
-    secret: ""
   });
 
   function getNonceAndRegister(){
-    UserInterface.getNonceAndRegister({ metamaskId:userDetails.metamaskId}).then(nonce =>{
-      BlockchainInterface.signToken(_.get(nonce,'data.data')).then(success =>{
-        setUserDetails({...userDetails, none:success.data})
-        registerUser();
+    UserInterface.getNonceAndRegister({ metamaskId:userDetails.metamaskId}).then(nonceValue =>{
+      let nonceString = _.get(nonceValue,'data.data')
+      BlockchainInterface.signToken(nonceString).then(secret =>{
+        registerUser(nonceString,secret)
       }).catch(err =>{
         console.log(err)
       })
     })
   }
 
-  function registerUser() {
+  function registerUser(nonce,secret) {
     try {
-      BlockchainInterface.register_user(userDetails)
+      BlockchainInterface.register_user({...userDetails,  secret, nonce })
         .then((success) => {
           let response = success.data;
           if (response.success) {
-            UserInterface.registerUser(userDetails).then((mongoSuccess) => {
+            UserInterface.registerUser({...userDetails,  secret, nonce }).then((mongoSuccess) => {
+              publishUserToApp();
               setRegistration(PASSED);
             });
             console.log(success);

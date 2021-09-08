@@ -166,7 +166,7 @@ class BlockchainInterface {
   }
 
   signToken( nonce) {
-    return this.web3.eth.personal.sign(this.web3.utils.fromUtf8(`I approve and sign to register in ideaTribe.${nonce}`),this.metamaskAccount,"testpassword")
+    return this.web3.eth.personal.sign(this.web3.utils.fromUtf8(`I approve and sign to register in ideaTribe. Nonce:${nonce}`),this.metamaskAccount,"testpassword")
   }
 
   loadWeb3() {
@@ -215,7 +215,7 @@ class BlockchainInterface {
     return promise;
   }
 
-  publish(payLoad, transactionInitiated, transactionCompleted) {
+  publish(payLoad, transactionInitiated, transactionCompleted, transactionFailed) {
     payLoad.price = this.web3.utils.toWei(payLoad.price, "ether");
 
     const transactionObject = {
@@ -246,7 +246,10 @@ class BlockchainInterface {
       .once("confirmation", function(confirmationNumber, receipt) {
         console.log("confirmationNumber ::" + confirmationNumber);
       })
-      .on("error", console.error);
+      .on("error", (err) => {
+        console.log(err)
+        transactionFailed()
+      });
   }
 
   getTokens() {

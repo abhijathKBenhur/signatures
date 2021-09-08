@@ -2,7 +2,7 @@ const TransactionSchema = require("../db-config/transaction.schema");
 const express = require("express");
 const router = express.Router();
 
-markTransactionAsCompleted = (req, res) => {
+setTransactionAsCompleted = (req, res) => {
   const body = req.body;
   if (!body) {
     return res.status(400).json({
@@ -12,10 +12,12 @@ markTransactionAsCompleted = (req, res) => {
   }
   body.status = "COMPLETED"
 
-  const updatedTransaction = new TransactionSchema(body);
+  const updatedTransaction = {
+    transactionID: body.transactionID
+  }
 
   if (!updatedTransaction) {
-    return res.status(400).json({ success: false, error: err });
+    return res.status(400).json({ success: false, error: err});
   }
 
   TransactionSchema.findOneAndUpdate({transactionID:body.transactionID},updatedTransaction)
@@ -88,7 +90,7 @@ getTransactions = async (req, res) => {
 
 router.post("/postTransaction", postTransaction);
 router.post("/getTransactions", getTransactions);
-router.post("/markTransactionAsCompleted", markTransactionAsCompleted);
+router.post("/setTransactionAsCompleted", setTransactionAsCompleted);
 
 
 module.exports = router;
