@@ -17,7 +17,7 @@ const About = () => {
   const [subscribed, setSubscribed] = useState(false);
   const submitMailId = () => {
     $.get(
-      "http://ipinfo.io?token=162c69a92ff37a",
+      "https://ipinfo.io?token=162c69a92ff37a",
       function(response) {
         let region = response.city + ", " + response.region;
         RelationsInterface.subscribe({
