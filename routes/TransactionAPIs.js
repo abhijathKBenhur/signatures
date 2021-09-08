@@ -2,7 +2,7 @@ const TransactionSchema = require("../db-config/transaction.schema");
 const express = require("express");
 const router = express.Router();
 
-setTransactionAsCompleted = (req, res) => {
+setTransactionState = (req, res) => {
   const body = req.body;
   if (!body) {
     return res.status(400).json({
@@ -10,7 +10,9 @@ setTransactionAsCompleted = (req, res) => {
       error: "Blank",
     });
   }
-  body.status = "COMPLETED"
+  body.status = body.status
+  console.log( "remove set transactino state")
+  console.log( body.status)
 
   const updatedTransaction = {
     transactionID: body.transactionID
@@ -90,7 +92,7 @@ getTransactions = async (req, res) => {
 
 router.post("/postTransaction", postTransaction);
 router.post("/getTransactions", getTransactions);
-router.post("/setTransactionAsCompleted", setTransactionAsCompleted);
+router.post("/setTransactionState", setTransactionState);
 
 
 module.exports = router;

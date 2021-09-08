@@ -20,7 +20,7 @@ dotenv.config();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-var whitelist = ['http://localhost:3000','http://localhost:3001','http://localhost:3002', 'https://ideatribe.herokuapp.com']
+var whitelist = ['http://localhost:3000','http://localhost:3001','http://localhost:3002', 'https://ideatribe.io', 'http://ideatribe.io' ,'https://ideatribe.herokuapp.com']
 app.use(cors(
   {
     origin: function (origin, callback) {
@@ -43,9 +43,6 @@ app.use("/api", commentAPI);
 app.use("/api", ClanAPI);
 app.use("/api", TransactionAPI);
 app.use("/api", preLaunchAPI);
-
-
-
 
 console.log("Checking node environment ::" + process.env.NODE_ENV)
 if (process.env.NODE_ENV == "production") {

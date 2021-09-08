@@ -14,15 +14,15 @@ export const getTransactions = (request) =>  {
     return api.post("/getTransactions",request) 
 }
 
-export const setTransactionAsCompleted = (request) =>  { 
-    return api.post("/setTransactionAsCompleted",request) 
+export const setTransactionState = (request) =>  { 
+    return api.post("/setTransactionState",request) 
 }
   
 
 const TransactionsInterface = {
     postTransaction,
     getTransactions,
-    setTransactionAsCompleted,
+    setTransactionState,
 }
 
 export default TransactionsInterface

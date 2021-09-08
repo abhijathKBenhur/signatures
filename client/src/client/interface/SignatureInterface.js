@@ -60,6 +60,11 @@ export const buySignature = payload => {
 export const updateIdeaID = payload => { 
     return api.post(`/updateIdeaID`,payload) 
 }
+export const removeIdeaEntry = payload => { 
+    return api.post(`/removeIdeaEntry`,payload) 
+}
+
+
 
 
 const SignatureInterface = {
@@ -68,7 +73,8 @@ const SignatureInterface = {
     getSignatureByHash,
     buySignature,
     updatePurpose,
-    updateIdeaID
+    updateIdeaID,
+    removeIdeaEntry
 
 }
 

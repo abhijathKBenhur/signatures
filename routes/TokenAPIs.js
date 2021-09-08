@@ -185,6 +185,26 @@ updateIdeaID = async (req, res) => {
   });
 };
 
+removeIdeaEntry = async (req, res) => {
+  console.log( "remove idea entru")
+  console.log( req.body.status)
+  await IdeaSchema.remove(
+    { transactionID: req.body.transactionID },
+    (err, token) => {
+      if (err) {
+        return res.status(400).json({ success: false, error: err });
+      }
+
+      if (!token) {
+        return res.status(404).json({ success: true, data: [] });
+      }
+      return res.status(200).json({ success: true, data: token });
+    }
+  ).catch((err) => {
+    return res.status(200).json({ success: false, data: err });
+  });
+};
+
 updatePurpose = async (req, res) => {
   console.log(
     "updateing token price",
@@ -267,6 +287,8 @@ router.post("/getSignatures", getSignatures);
 router.post("/buySignature", buySignature);
 router.post("/updatePurpose", updatePurpose);
 router.post("/updateIdeaID", updateIdeaID);
+router.post("/removeIdeaEntry", removeIdeaEntry);
+
 
 router.post(
   "/getCloundinaryImagePath",

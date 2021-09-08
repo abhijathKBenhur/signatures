@@ -76,7 +76,7 @@ const CreateNew = () => {
     PDFHash: undefined,
     ideaID: undefined,
     transactionID: undefined,
-    purpose: { type: CONSTANTS.PURPOSES.SELL },
+    purpose: { purposeType: CONSTANTS.PURPOSES.SELL },
     storage: CONSTANTS.STORAGE_TYPE[0].value,
     collab: CONSTANTS.COLLAB_TYPE[0].value,
     units: 1,
@@ -478,8 +478,9 @@ const CreateNew = () => {
   }
 
   function transactionInitiated(transactionInititationRequest) {
+    setFormData({...form, transactionID:transactionInititationRequest.transactionID})
     TransactionsInterface.postTransaction({
-      transactionID : form.transactionID,
+      transactionID : transactionInititationRequest.transactionID,
       Status: "PENDING",
       type: "POST_IDEA",
       user: userDetails._id
@@ -508,6 +509,12 @@ const CreateNew = () => {
     setPublishError(
       "The idea couldnt be published to blockchain. " + errorReason
     );
+    console.log("transactionID", form.transactionID)
+    SignatureInterface.removeIdeaEntry(form.transactionID)
+    TransactionsInterface.setTransactionState({
+      transactionID:form.transactionID,
+      status: CONSTANTS.ACTION_STATUS.FAILED
+    })
   }
 
   function saveToBlockChain(form) {
@@ -537,7 +544,7 @@ const CreateNew = () => {
 
   const updateCompletion = (successResponse) =>{
     SignatureInterface.updateIdeaID(successResponse)
-    TransactionsInterface.setTransactionAsCompleted({
+    TransactionsInterface.setTransactionState({
       transactionID:successResponse.transactionID,
     })
   }
