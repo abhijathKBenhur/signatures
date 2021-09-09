@@ -24,6 +24,7 @@ var whitelist = ['http://localhost:3000','http://localhost:3001','http://localho
 'https://ideatribe.herokuapp.com','http://ideatribe.herokuapp.com',
 "https://ideatribeprelaunch.herokuapp.com","http://ideatribeprelaunch.herokuapp.com",
 "https://ideatribe.io",'http://ideatribe.io'];
+
 app.use(cors(
   {
     origin: function (origin, callback) {
