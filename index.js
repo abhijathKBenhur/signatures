@@ -19,6 +19,14 @@ const PORT = process.env.PORT || 4000;
 dotenv.config();
 
 app.use(express.json());
+app.use(express.static('build'));
+app.use((req, res, next) => {
+  if (req.header('x-forwarded-proto') !== 'https') {
+    res.redirect(`https://${req.header('host')}${req.url}`)
+  } else {
+    next();
+  }
+});
 app.use(express.urlencoded({ extended: true }));
 var whitelist = ['http://localhost:3000','http://localhost:3001','http://localhost:3002', 
 'https://ideatribe.herokuapp.com','http://ideatribe.herokuapp.com',
