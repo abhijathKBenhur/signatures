@@ -92,10 +92,11 @@ const CommentsPanel = (props) => {
       <Form.Control
         as="textarea"
         name="description"
-        placeholder="Add a comment"
+        placeholder={loggedInUserDetails.userName}
         onKeyUp={(e) => handleChange(e)}
         style={{ borderRadius: 5, resize: "none" }}
         className="mb-2 comment-entry"
+        readOnly={_.isUndefined(loggedInUserDetails.userName)}
       />
       <div className="scrolable-comments">
         {_.map(comments, (comment) => {
