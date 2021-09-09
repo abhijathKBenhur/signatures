@@ -19,7 +19,6 @@ import Tutorial from "./screens/tutorial/tutorial";
 import ICO from "./screens/ico/ico";
 import Roadmap from "./screens/roadmap/roadmap";
 import About from "./screens/about/about";
-import Prelaunch from "./screens/prelaunch/prelaunch";
 
 import Newsletter from "./screens/newsletter/newsletter";
 import Blog from "./screens/blog/blog";
