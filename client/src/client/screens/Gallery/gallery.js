@@ -97,7 +97,7 @@ function gallery(props) {
           <Rack deck={collectionList}></Rack>
         </Col>
         <Col md="3" className="latest-news mt-3">
-          <div className="gutter-block">
+          <div className="gutter-block mt-3">
             <span className="second-header color-secondary">Recent stories</span>
             <hr></hr>
             <div className="activity-entry d-flex flex-row">

@@ -27,7 +27,7 @@ app.use((req, res, next) => {
   });
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-var whitelist = ['http://localhost:3000','http://localhost:3001','http://localhost:3002', 'https://ideatribe.io', 'http://ideatribe.io' ,'https://ideatribe.herokuapp.com']
+var whitelist = ['https://localhost:3000','https://localhost:3001','https://localhost:3002', 'https://ideatribe.io', 'http://ideatribe.io' ,'https://ideatribe.herokuapp.com']
 app.use(cors(
   {
     origin: function (origin, callback) {
