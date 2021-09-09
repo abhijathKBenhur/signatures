@@ -44,7 +44,6 @@ import { showToaster } from "../../commons/common.utils";
 import QRCode from "qrcode";
 import $ from "jquery";
 
-import responseImage from "../../../assets/images/response.jpeg";
 import signatureImage from "../../../assets/logo/signatures.png";
 import imagePlaceholder from "../../../assets/images/image-placeholder.png";
 import CreateIdeaModal from "../../modals/create-idea-modal/create-idea-modal";

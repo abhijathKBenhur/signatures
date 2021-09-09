@@ -5,7 +5,8 @@ import {
 } from "react-bootstrap";
 import "./about.scss";
 import { useHistory } from "react-router-dom";
-import dummyImg from "../../../assets/images/dummy.png"
+import girl_idea from "../../../assets/images/girl_idea.png"
+import creativity from "../../../assets/images/creativity.png"
 import user from "../../../assets/images/user.png"
 import cover from "../../../assets/images/cover.jpg"
 import dummy1 from "../../../assets/images/dummy1.png"
@@ -17,13 +18,13 @@ const About = () => {
     <Container className="about-container">
       <Row className="about-item about-first second-grey">
         <Col className="left" xs={12} sm={8}>
-          <h2>
+          <span className="master-header color-secondary-light">
             Doing the right thing,
-          </h2>
-          <h2>
+          </span>
+          <span className="master-header color-secondary">
             at the right time.
-          </h2>
-          <div className="mt-3 second-grey color-white">
+          </span>
+          <div className="mt-5 master-grey color-primary">
             We’ve noticed the best ideas come when
             you least expect them. We’re here to store them for posterity and help
             you change the world. Ideatribe was born out of a desire by the founding
@@ -36,24 +37,24 @@ const About = () => {
           </div>
         </Col>
         <Col className="right" xs={12} sm={4}>
-          <img src={dummyImg} />
+          <img src={girl_idea} />
         </Col>
       </Row>
       <Row className="about-item about-second">
-        <Col className="left">
-          <h2>
+      <Col className="left">
+          <img src={creativity} />
+        </Col>
+        <Col className="right">
+          <span className="master-header color-secondary">
             About Us
-          </h2>
-          <b>All your best ideas. On the blockchain. Immutable forever. </b>
+          </span>
+          <br/>
+          <span className="master-grey mt-3">All your best ideas. On the blockchain. Immutable forever. 
           That's the promise of Ideatribe.
-          <br></br>
-
-          <br></br>
           Ideatribe knows that the best ideas are truly democratic and
           decentralized. That’s why we make it easy to register your idea with us
           instantly and protect you from those who will want to claim it as theirs
           and profit from it.
-          <br></br>
 
           We also believe the best ideas come from Global
           collaboration. Not only will you be able to stake claim to your ideas,
@@ -65,15 +66,14 @@ const About = () => {
           specialists & brilliant engineering talent who have come together for
           one common purpose...to illuminate your ideas and help bring them to
           reality.
+          </span>
           {/* <br></br><br></br>
         
          Here’s to all the artists, creative people, square pegs in a
         round hole, misfits, rebels, unheralded heroes….get on IdeaTribe, bring
         your ideas to life! */}
         </Col>
-        <Col className="right">
-          <img src={dummyImg} />
-        </Col>
+       
 
       </Row>
       <Row className="about-item about-third">
