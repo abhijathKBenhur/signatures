@@ -16,6 +16,10 @@
                 padding: 15px;
             }
         }
+       
+    }
+    .about-first {    
+        color: white;
         .left {
             display: flex;
             flex-direction: column;
@@ -30,22 +34,31 @@
                 height: 350px;
                 width: 350px;
             }
-        }
-    }
-    .about-first {    
-        color: white;
-        .right {
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
         }
+       
     }
     .about-second {
-        margin-top: 100px;
+        .left {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            img {
+                height: 450px;
+                width: 450px;
+            }
+        }
+        .right {
+            flex:1;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
     }
     .about-third {
-        
         background-color: #f8f9fb;
         height: 550px;
         padding-top: 50px;

@@ -95,6 +95,7 @@ const InfoModal = (props) => {
     }
     SignatureInterface.updatePurpose(request).then(success =>{
       showToaster("Idea updated!", { type: "dark" });
+      setFormData(success.data)
       props.onHide()
     })
   };

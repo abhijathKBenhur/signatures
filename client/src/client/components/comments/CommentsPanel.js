@@ -99,9 +99,9 @@ const CommentsPanel = (props) => {
         readOnly={_.isUndefined(loggedInUserDetails.userName)}
       />
       <div className="scrolable-comments">
-        {_.map(comments, (comment) => {
+        {_.map(comments, (comment,index) => {
           return (
-            <div className="comment-item d-flex flex-row pb-1">
+            <div className="comment-item d-flex flex-row pb-1" key={index}>
               <div className="icon mr-2 p-1 cursor-pointer">
                 <Image
                   src={_.get(comment, "from.imageUrl")}
