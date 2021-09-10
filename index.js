@@ -19,21 +19,12 @@ dotenv.config();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-var whitelist = [
-  "http://localhost:3000",
-  "https://localhost:3000",
-  "https://localhost:3001",
-  "https://localhost:3002",
-  "https://ideatribe.io",
-  "http://ideatribe.io",
-  "https://ideatribe.herokuapp.com",
-  "https://testideatribe.herokuapp.com"
-];
+
 app.use(
   cors({
     origin: function (origin, callback) {
       console.log("API requested from " + origin);
-      if (origin.indexOf("localhost") !== -1|| origin.indexOf("ideatribe") !== -1 || !origin) {
+      if (origin.indexOf("localhost") > -1|| origin.indexOf("ideatribe") > -1 || !origin) {
         callback(null, true);
       } else {
         callback(new Error("Not allowed by CORS"));
