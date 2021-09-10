@@ -27,12 +27,13 @@ var whitelist = [
   "https://ideatribe.io",
   "http://ideatribe.io",
   "https://ideatribe.herokuapp.com",
+  "https://testideatribe.herokuapp.com"
 ];
 app.use(
   cors({
     origin: function (origin, callback) {
       console.log("API requested from " + origin);
-      if (whitelist.indexOf(origin) !== -1 || !origin) {
+      if (origin.indexOf("localhost") !== -1|| origin.indexOf("ideatribe") !== -1 || !origin) {
         callback(null, true);
       } else {
         callback(new Error("Not allowed by CORS"));
