@@ -6,6 +6,7 @@ import CONSTANTS from "../../commons/Constants";
 import { getPurposeIcon } from "../../commons/common.utils";
 import { showToaster } from "../../commons/common.utils";
 import "./info.modal.scss";
+import Web3 from "web3";
 import SignatureInterface from "../../interface/SignatureInterface";
 const InfoModal = (props) => {
   const priceRef = useRef(null);
@@ -33,10 +34,7 @@ const InfoModal = (props) => {
 
   const handleChange = (event) => {
     let returnObj = {};
-    returnObj[event.target.name] =
-      _.get(event, "target.name") === "price"
-        ? Number(event.target.value)
-        : event.target.value;
+    returnObj[event.target.name] = event.target.value;
     setFormData({ ...form, ...returnObj });
   };
 
@@ -46,16 +44,16 @@ const InfoModal = (props) => {
     title: props.idea.title,
     category: props.idea.category,
     description: props.idea.description,
-    price: props.idea.price,
+    price: new Web3(window.ethereum).utils.fromWei(props.idea.price, "ether"),
     thumbnail: props.idea.thumbnail,
     PDFFile: props.idea.PDFFile,
     PDFHash: props.idea.PDFHash,
     ideaID: props.idea.ideaID,
     transactionID: props.idea.transactionID,
     purpose: {
-      purposeType: CONSTANTS.PURPOSES.SELL,
-      subType: CONSTANTS.COLLAB_TYPE[0].value,
-      message: "",
+      purposeType: _.get(props.idea,'purpose.purposeType') || CONSTANTS.PURPOSES.SELL,
+      subType:_.get(props.idea,'purpose.subType')  ||  CONSTANTS.COLLAB_TYPE[0].value,
+      message: _.get(props.idea,'purpose.message')  || "",
       ...props.idea.purpose,
     },
     storage: props.idea.storage,
@@ -91,7 +89,12 @@ const InfoModal = (props) => {
   }
 
   const updateIdea = () => {
-    SignatureInterface.updatePurpose(form).then(success =>{
+    let newPriceInWei = new Web3(window.ethereum).utils.toWei(form.price, "ether")
+    let request = {
+      ...form,
+      price: newPriceInWei
+    }
+    SignatureInterface.updatePurpose(request).then(success =>{
       showToaster("Idea updated!", { type: "dark" });
       props.onHide()
     })
@@ -244,12 +247,11 @@ const InfoModal = (props) => {
       className="info-modal"
       dialogClassName="info-modal-dialog"
       centered
-      close
     >
       <Modal.Body className="info-modal-body">
         <div className="modal-header-wrapper">
             <Col md="12" className="">
-              <h4>Engagement</h4>
+              <span className="father-grey">Engagement</span>
             </Col>
         </div>
         <div className="purpose-selection">

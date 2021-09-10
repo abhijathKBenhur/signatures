@@ -40,13 +40,15 @@ app.use(
     },
   })
 );
-// app.use((req, res, next) => {
-//   if (req.header("x-forwarded-proto") !== "https") {
-//     res.redirect(`https://${req.header("host")}${req.url}`);
-//   } else {
-//     next();
-//   }
-// });
+
+app.use((req, res, next) => {
+  
+  if (req.header("x-forwarded-proto") !== "https" && req.headers.referer.indexOf("localhost") == -1) {
+    res.redirect(`https://${req.header("host")}${req.url}`);
+  } else {
+    next();
+  }
+});
 
 app.use("/api", tokenAPI);
 app.use("/api", userAPI);

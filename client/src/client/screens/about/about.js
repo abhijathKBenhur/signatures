@@ -24,16 +24,16 @@ const About = () => {
           <span className="master-header color-secondary">
             at the right time.
           </span>
-          <div className="mt-5 master-grey color-primary">
+          <div className="mt-3 color-primary readable-text">
             We’ve noticed the best ideas come when
             you least expect them. We’re here to store them for posterity and help
             you change the world. Ideatribe was born out of a desire by the founding
-            team to harness the creativity of the everyman ...You, us, everyone!
+            team to harness the creativity of the everyman. You. Us. Everyone!
           </div>
           <div>
             <Button variabt="secondary" className="mt-5" onClick={() => {
               history.push("/home");
-            }}>Take me to the tribe</Button>
+            }}><span className="master-grey color-white">Take me to the tribe</span></Button>
           </div>
         </Col>
         <Col className="right" xs={12} sm={4}>
@@ -45,12 +45,13 @@ const About = () => {
           <img src={creativity} />
         </Col>
         <Col className="right">
+          <span className="father-grey mt-3">All your best ideas. On the blockchain. </span>
+          
           <span className="master-header color-secondary">
-            About Us
-          </span>
+          Immutable forever. 
+           </span>
           <br/>
-          <span className="master-grey mt-3">All your best ideas. On the blockchain. Immutable forever. 
-          That's the promise of Ideatribe.
+          <div className="mt-3 readable-text color-grey">
           Ideatribe knows that the best ideas are truly democratic and
           decentralized. That’s why we make it easy to register your idea with us
           instantly and protect you from those who will want to claim it as theirs
@@ -59,14 +60,14 @@ const About = () => {
           We also believe the best ideas come from Global
           collaboration. Not only will you be able to stake claim to your ideas,
           you’ll also be able to collaborate with others!
-          <br></br><br></br>
+          <br></br>
 
           The founding team of
           Ideatribe are artists, musicians, writers, businesspeople, product
           specialists & brilliant engineering talent who have come together for
           one common purpose...to illuminate your ideas and help bring them to
           reality.
-          </span>
+          </div>
           {/* <br></br><br></br>
         
          Here’s to all the artists, creative people, square pegs in a

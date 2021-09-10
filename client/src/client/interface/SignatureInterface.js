@@ -19,6 +19,7 @@ export const updatePurpose = payload => {
     return api.post(`/updatePurpose`,{
         ideaID: payload.ideaID,
         purpose: payload.purpose,
+        price: payload.purpose
     })
 }
 
