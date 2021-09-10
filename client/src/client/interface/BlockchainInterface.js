@@ -29,6 +29,7 @@ const CHAIN_CONFIGS = {
     rpcUrls: ["https://bsc-dataseed1.ninicoin.io"],
     blockExplorerUrls: ["https://bscscan.com/"],
   },
+  
   "0x61": {
     chainId: "0x61",
     chainName: "Binance Smart Chain Testnet",
