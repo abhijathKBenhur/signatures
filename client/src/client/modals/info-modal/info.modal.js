@@ -138,7 +138,7 @@ const InfoModal = (props) => {
                   onChange={handleChange}
                   ref={priceRef}
                 />
-                <InputGroup.Text>Tribe Coin</InputGroup.Text>
+                <InputGroup.Text>{CONSTANTS.CURRENCY.name}</InputGroup.Text>
               </InputGroup>
             </div>
           </Col>

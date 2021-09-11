@@ -19,7 +19,7 @@ const User = new Schema(
     instaUrl: { type: String },
     
 
-    tribeCoinBalance: {type: Number},
+    balance: {type: Number},
     GasBalance: {type: Number},
     tribeGoldBalance: {type: Number},
 

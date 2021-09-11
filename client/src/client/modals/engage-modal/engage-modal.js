@@ -77,7 +77,6 @@ const EngageModal = (props) => {
     CONSTANTS.PURPOSES.AUCTION,
     CONSTANTS.PURPOSES.LICENCE,
     CONSTANTS.PURPOSES.COLLAB,
-    CONSTANTS.PURPOSES.KEEP,
   ];
 
   function changeCollabSubType(subType) {
@@ -136,7 +135,7 @@ const EngageModal = (props) => {
                   onChange={handleChange}
                   ref={priceRef}
                 />
-                <InputGroup.Text>Tribe Coin</InputGroup.Text>
+                <InputGroup.Text>{CONSTANTS.CURRENCY.name}</InputGroup.Text>
               </InputGroup>
             </div>
           </Col>
@@ -198,12 +197,12 @@ const EngageModal = (props) => {
                     placeholder="Price per unit"
                     min={1}
                     value={form.price ? form.price : undefined}
-                    aria-label="Amount (BNB)"
+                    aria-label="Amount"
                     name="price"
                     onChange={handleChange}
                     ref={priceRef}
                   />
-                  <InputGroup.Text>BNB</InputGroup.Text>
+                  <InputGroup.Text>{CONSTANTS.CURRENCY.name}</InputGroup.Text>
                 </InputGroup>
               </Col>
               <Col md="6" sm="12" xs="12" lg="6">
@@ -312,7 +311,7 @@ const EngageModal = (props) => {
                       }
                     >
                       <i className={getPurposeIcon(entry)}></i>
-                      <span className="second-grey purpose-text">{entry}</span>
+                      <span className="second-grey purpose-text">{getEngageText({purposeType:entry},false)}</span>
                     </div>
                   );
                 })}

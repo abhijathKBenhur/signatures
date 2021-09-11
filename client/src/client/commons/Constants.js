@@ -1,3 +1,10 @@
+const chainID = "";
+const CURRENCY = {
+  name: "Matic",
+  symbol: "MATIC"
+}
+
+
 const CATEGORIES = [
     { value: "Creative_art", label: "Creative art" },
     { value: "Business_idea", label: "Business idea" },
@@ -72,7 +79,8 @@ const CONSTANTS = {
   ACTION_STATUS,
   COLLAB_TYPE,
   ACTIONS,
-  ENTITIES
+  ENTITIES,
+  CURRENCY
 };
 
 export default CONSTANTS;

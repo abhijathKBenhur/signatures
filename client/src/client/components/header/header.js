@@ -175,7 +175,7 @@ const Header = (props) => {
             >
               Connect
             </Button> */}
-            {_.isEmpty(currentMetamaskAccount) || _.isEmpty(loggedInUserDetails) ? (
+            { _.isEmpty(loggedInUserDetails) ? (
               <Button
                 variant="primary"
                 className="button"

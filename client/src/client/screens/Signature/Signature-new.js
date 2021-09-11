@@ -24,7 +24,7 @@ import { useHistory } from "react-router-dom";
 import userImg from "../../../assets/images/user.png";
 import _ from "lodash";
 import ShareModal from "../../modals/share/share.modal";
-import EngageModal from "../../modals/engage-modal/engage-modal"
+import EngageModal from "../../modals/engage-modal/engage-modal";
 
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 
@@ -48,7 +48,7 @@ const SignatureNew = (props) => {
   const [modalShow, setModalShow] = useState({
     shareModal: false,
     infoModal: false,
-    engageModal: false
+    engageModal: false,
   });
 
   const [audioState, setAudioState] = useState({
@@ -233,11 +233,9 @@ const SignatureNew = (props) => {
   const hideModal = (type) => {
     if (type === "share") {
       setModalShow({ ...showModal, shareModal: false });
-    } 
-    else if(type === "info") { 
+    } else if (type === "info") {
       setModalShow({ ...showModal, infoModal: false });
-    } 
-    else {
+    } else {
       setModalShow({ ...showModal, engageModal: false });
     }
   };
@@ -357,7 +355,7 @@ const SignatureNew = (props) => {
                           </OverlayTrigger>
                           {signature.owner &&
                           loggedInUserDetails.userName ==
-                          _.get(signature,'owner.userName') ? (
+                            _.get(signature, "owner.userName") ? (
                             <div>
                               <Button
                                 variant="action"
@@ -369,13 +367,12 @@ const SignatureNew = (props) => {
                               </Button>
                             </div>
                           ) : (
-                             <Button
+                            <Button
                               variant="primary"
                               onClick={() => showModal("engage")}
                             >
-                              {_.get(signature, "purpose") && getIdeaStatus(
-                                _.get(signature, "purpose")
-                              )}
+                              {_.get(signature, "purpose") &&
+                                getIdeaStatus(_.get(signature, "purpose"))}
                             </Button>
                           )}
                         </div>
@@ -423,19 +420,17 @@ const SignatureNew = (props) => {
               </Row>
             </Col>
             <Col md="3" className="conversation-container  pt-2">
-            {!_.isEmpty(signature) && !_.isEmpty(loggedInUserDetails) &&  (<div>
-              <span className="conversation-title second-header">
-                Conversation
-              </span>
-              <hr></hr>
-              
+              <div>
+                <span className="conversation-title second-header">
+                  Conversation
+                </span>
+                <hr></hr>
+
                 <CommentsPanel
                   idea={signature}
                   entity={CONSTANTS.ENTITIES.IDEA}
                 ></CommentsPanel>
-                </div>
-              )}
-              
+              </div>
             </Col>
             <Col md="1" className="options-container  pt-2">
               <Row className="justify-content-center">
@@ -443,10 +438,12 @@ const SignatureNew = (props) => {
                   <div className="avatar">
                     {signature.owner && (
                       <img
-                        src={_.get(signature,'owner.imageUrl')}
+                        src={_.get(signature, "owner.imageUrl")}
                         alt="profile"
                         onClick={() =>
-                          history.push(`/profile/${_.get(signature,'owner.userName')}`)
+                          history.push(
+                            `/profile/${_.get(signature, "owner.userName")}`
+                          )
                         }
                       />
                     )}

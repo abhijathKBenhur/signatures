@@ -15,7 +15,7 @@ const api = axios.create({
       : ENDPOINTS.LOCAL_ENDPOINTS,
 });
 
-const chain_id = "0x2a";
+const chain_id = "80001";
 
 const CHAIN_CONFIGS = {
   "0x38": {
@@ -29,7 +29,7 @@ const CHAIN_CONFIGS = {
     rpcUrls: ["https://bsc-dataseed1.ninicoin.io"],
     blockExplorerUrls: ["https://bscscan.com/"],
   },
-  
+
   "0x61": {
     chainId: "0x61",
     chainName: "Binance Smart Chain Testnet",
@@ -41,6 +41,17 @@ const CHAIN_CONFIGS = {
     rpcUrls: ["https://data-seed-prebsc-1-s1.binance.org:8545/"],
     blockExplorerUrls: ["https://testnet.bscscan.com"],
   },
+  "80001":{
+    chainId: "80001",
+    chainName: "Mumbai Testnet",
+    nativeCurrency: {
+      name: "Binance Coin",
+      symbol: "MATIC",
+      decimals: 18,
+    },
+    rpcUrls: ["https://rpc-mumbai.matic.today"],
+    blockExplorerUrls: ["https://explorer-mumbai.maticvigil.com/"],
+  }
 };
 
 class BlockchainInterface {
@@ -148,7 +159,11 @@ class BlockchainInterface {
           if (contractNetworkID == metamaskNetwork) {
             const abi = this.contractJSON.abi;
             const contractAddress = this.contractJSON.address;
-            const contract = this.web3.eth.Contract(abi, contractAddress);
+            let contractOptions = {
+              gasPrice : "3000000000",
+              gas : 2000000
+            }
+            const contract = this.web3.eth.Contract(abi, contractAddress,contractOptions);
             this.contract = contract;
           } else {
             window.alert(
@@ -220,17 +235,23 @@ class BlockchainInterface {
     payLoad.price = this.web3.utils.toWei(payLoad.price, "ether");
 
     const transactionObject = {
-      value: this.web3.utils.toWei("0.05", "ether"),
+      value: this.web3.utils.toWei("0.0", "ether"),
       from: payLoad.creator,
     };
+    console.log("publishing contract" );
+
     this.contract.methods
       .publish(payLoad.PDFHash, payLoad.price)
       .send(transactionObject)
       .on("transactionHash", function(hash) {
+        console.log("transactionHash received", hash);
+
         payLoad.transactionID = hash;
         transactionInitiated(payLoad);
       })
       .once("receipt", function(receipt) {
+        console.log("receipt received" );
+        // console.log(JSON.stringify(receipt))
         let tokenReturns = _.get(
           receipt.events,
           "Transfer.returnValues.tokenId"
@@ -242,7 +263,7 @@ class BlockchainInterface {
         if (tokenID) {
           transactionCompleted(payLoad);
         }
-        console.log("receipt received");
+        
       })
       .once("confirmation", function(confirmationNumber, receipt) {
         console.log("confirmationNumber ::" + confirmationNumber);
