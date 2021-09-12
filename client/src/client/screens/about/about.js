@@ -75,7 +75,7 @@ const About = () => {
             <Col>
               {subscribed ? (
                 <Row>
-                <div className="subscribe-block master-grey color-secondary ">Thank you for sharing your email. We will be in touch! !</div>
+                <div className="subscribe-block master-grey color-secondary subscribed">Thank you for sharing your email. We will be in touch! !</div>
                 </Row>
               ) : (
                 <div className="">
