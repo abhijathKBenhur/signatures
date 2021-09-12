@@ -104,12 +104,12 @@ const About = () => {
                         }}
                       >
                         {" "}
-                        Let me know.
+                        Let me know
                       </Button>
                     </Col>
                   </Row>
                   <Row className="mt-5 master-grey color-secondary">
-                    {subscribedCount + 10}  Subscribers
+                    {subscribedCount}  Subscribers
                   </Row>
                 </div>
               )}

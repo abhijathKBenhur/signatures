@@ -37,7 +37,7 @@ const App = () =>  {
         {/* <Banner></Banner> */}
         <div className="app-content">
           <Switch>
-            <Route path="/home" render={(props) => <Gallery />} />
+            {/* <Route path="/home" render={(props) => <Gallery />} />
             <Route path="/signature/:hashId" component={Signature} />
             <Route path="/create" component={CreateNew} />
             <Route path="/profile/:userName" component={Profile} />
@@ -47,15 +47,14 @@ const App = () =>  {
             <Route path="/tutorial" component={Tutorial} />
             <Route path="/ico" component={ICO} />
             <Route path="/roadmap" component={Roadmap} />
-            {/* <Route path="/"  render={(props) => <Gallery />} /> */}
             <Route path="/newsletter" component={Newsletter} />
             <Route path="/blog" component={Blog} />
             <Route path="/help" component={Help} />
             <Route path="/support" component={Support} />
             <Route path="/partner" component={Partner} />
-            <Route path="/contact" component={Contact} />
-            <Route path="/about" component={About} />
-            <Route exact path="/" render={() => <Redirect from="/" to="/about" />} />
+            <Route path="/contact" component={Contact} /> */}
+            <Route path="/" component={About} />
+            {/* <Route exact path="/" render={() => <Redirect from="/" to="/about" />} /> */}
           </Switch>
         </div>
         {/* <Footer></Footer> */}
