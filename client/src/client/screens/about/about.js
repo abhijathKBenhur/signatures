@@ -54,12 +54,10 @@ const About = () => {
               blockchain. Instantly.
               <br />
               <br />
-              This will protect you from copycats.
-              <br />
-              <br />
               Not only can you stake claim on your ideas, you can also
               collaborate with others! After all, magic is when great minds come
               together.
+              <br />
               <br />
               The founders of IdeaTribe are artists, musicians, writers,
               businesspeople, product specialists and engineering talent who
@@ -69,14 +67,13 @@ const About = () => {
               <br />
             </span>
 
-            <br></br>
             {/* <br></br><br></br>
         
          Here’s to all the artists, creative people, square pegs in a
         round hole, misfits, rebels, unheralded heroes….get on IdeaTribe, bring
         your ideas to life! */}
           </div>
-          <div className="center-box mt-5" style={{ width: "100%" }}>
+          <div className="center-box mt-3" style={{ width: "100%" }}>
             <Col>
               {subscribed ? (
                 <Row>

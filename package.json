@@ -15,7 +15,8 @@
     "start": "npm run server && npm run client",
     "deploy": "npm run server && npm run client",
     "dev": " run-p server client",
-    "heroku-postbuild": "npm install && npm install --prefix client && npm run build --prefix client"
+    "heroku-postbuild": "npm install && npm install --prefix client && npm run build --prefix client",
+    "build": "react-scripts build"
   },
   "keywords": [],
   "author": "",
