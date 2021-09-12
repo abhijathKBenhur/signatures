@@ -15,7 +15,7 @@ const api = axios.create({
       : ENDPOINTS.LOCAL_ENDPOINTS,
 });
 
-const chain_id = "80001";
+const chain_id = "0x13881";
 
 const CHAIN_CONFIGS = {
   "0x38": {
@@ -41,8 +41,8 @@ const CHAIN_CONFIGS = {
     rpcUrls: ["https://data-seed-prebsc-1-s1.binance.org:8545/"],
     blockExplorerUrls: ["https://testnet.bscscan.com"],
   },
-  "80001":{
-    chainId: "80001",
+  "0x13881":{
+    chainId: "x13881",
     chainName: "Mumbai Testnet",
     nativeCurrency: {
       name: "Binance Coin",
@@ -160,14 +160,14 @@ class BlockchainInterface {
             const abi = this.contractJSON.abi;
             const contractAddress = this.contractJSON.address;
             let contractOptions = {
-              gasPrice : "3000000000",
-              gas : 2000000
+              gasPrice : "5000000000",
+              gas : 1000000
             }
             const contract = this.web3.eth.Contract(abi, contractAddress,contractOptions);
             this.contract = contract;
           } else {
             window.alert(
-              "Smart contract not deployed to detected network. Please change the network in mnetamask."
+              "Smart contract not deployed to detected network. Please change the network in metamask."
             );
           }
           resolve(this.metamaskAccount);
@@ -190,6 +190,7 @@ class BlockchainInterface {
     const promise = new Promise((resolve, reject) => {
       if (window.ethereum) {
         this.web3 = new Web3(window.ethereum);
+        this.web3.eth.handleRevert = true
         window.web3 = this.web3;
         this.switchNetwork();
         window.ethereum
@@ -207,7 +208,9 @@ class BlockchainInterface {
           });
       } else if (window.web3) {
         this.web3 = new Web3(this.web3.currentProvider);
+        this.web3.eth.handleRevert = true
         window.web3 = this.web3;
+        
         resolve(this.web3);
       } else {
         store.dispatch(setReduxMetaMaskID());
@@ -235,7 +238,7 @@ class BlockchainInterface {
     payLoad.price = this.web3.utils.toWei(payLoad.price, "ether");
 
     const transactionObject = {
-      value: this.web3.utils.toWei("0.0", "ether"),
+      value: this.web3.utils.toWei("0.00", "ether"),
       from: payLoad.creator,
     };
     console.log("publishing contract" );
@@ -244,13 +247,10 @@ class BlockchainInterface {
       .publish(payLoad.PDFHash, payLoad.price)
       .send(transactionObject)
       .on("transactionHash", function(hash) {
-        console.log("transactionHash received", hash);
-
         payLoad.transactionID = hash;
         transactionInitiated(payLoad);
       })
       .once("receipt", function(receipt) {
-        console.log("receipt received" );
         // console.log(JSON.stringify(receipt))
         let tokenReturns = _.get(
           receipt.events,
@@ -266,9 +266,10 @@ class BlockchainInterface {
         
       })
       .once("confirmation", function(confirmationNumber, receipt) {
-        console.log("confirmationNumber ::" + confirmationNumber);
+        console.log(receipt);
       })
       .on("error", (err) => {
+        console.log(err);
         transactionFailed(err,payLoad.transactionID)
       });
   }
