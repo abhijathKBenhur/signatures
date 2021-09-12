@@ -1,13 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Row, Col, Container, Button } from "react-bootstrap";
 import "./about.scss";
 import $ from "jquery";
 import { useHistory } from "react-router-dom";
-import dummyImg from "../../../assets/images/dummy.png";
-import user from "../../../assets/images/user.png";
-import cover from "../../../assets/images/cover.jpg";
-import dummy1 from "../../../assets/images/dummy1.png";
-import dummy2 from "../../../assets/images/dummy2.jpg";
+import _ from "lodash";
 import about_idea from "../../../assets/images/about_idea.png";
 import RelationsInterface from "../../interface/RelationsInterface";
 import { showToaster } from "../../commons/common.utils";
@@ -15,14 +11,26 @@ const About = () => {
   let history = useHistory();
   const [searchText, setSearchText] = useState("");
   const [subscribed, setSubscribed] = useState(false);
+  const [subscribedCount, setSubscribedCount] = useState(0);
+
   const submitMailId = () => {
     RelationsInterface.subscribe({
       mailID: searchText,
     }).then((success) => {
       showToaster("Sucbscribed!", { type: "dark" });
       setSubscribed(true);
+      setSubscribed(subscribedCount + 1)
     });
   };
+
+  useEffect(() => {
+    RelationsInterface.getPrelaunches().then((success) => {
+      setSubscribedCount(_.get(success,'data.data').length)
+    }).catch(err => {
+      setSubscribedCount(0);
+
+    })
+  }, []);
 
   const type = (event) => {
     if (event) setSearchText(event.target.value);
@@ -39,12 +47,22 @@ const About = () => {
             </span>
             <span className="readable-text mb-3">
             Great ideas can come to anyone, anywhere. And inspiration is fleeting. 
+            <br/>
+            <br/>
             So, IdeaTribe makes it easy to register your idea on the blockchain. Instantly. 
+            <br/>
+            <br/>
             This will protect you from copycats.
+            <br/>
+            <br/>
             Not only can you stake claim on your ideas, you can also collaborate with others! After all, magic is when great minds come together.
+            <br/>
+            <br/>
             </span>
             The founders of IdeaTribe are artists, musicians, writers, businesspeople, product specialists and engineering talent who have come together for one common purpose,
             to help you to bring your ideas to reality.
+            <br/>
+            <br/>
             Share your email and we will let you know when we launch. 
             <br></br>
             {/* <br></br><br></br>
@@ -57,7 +75,7 @@ const About = () => {
             <Col>
               {subscribed ? (
                 <Row>
-                <div className="subscribe-block master-grey color-secondary ">Thank you!</div>
+                <div className="subscribe-block master-grey color-secondary ">Thank you for sharing your email. We will be in touch! !</div>
                 </Row>
               ) : (
                 <div className="">
@@ -89,6 +107,9 @@ const About = () => {
                         Let me know.
                       </Button>
                     </Col>
+                  </Row>
+                  <Row className="mt-5 master-grey color-secondary">
+                    {subscribedCount + 10}  Subscribers
                   </Row>
                 </div>
               )}

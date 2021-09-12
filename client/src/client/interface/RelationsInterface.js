@@ -34,13 +34,18 @@ export const subscribe = (payload) => {
     return api.post(`/subscribe`,payload)
 }
   
+export const getPrelaunches = (payload) => {
+    return api.post(`/getPrelaunches`,payload)
+}
+
 
 const RelationsInterface = {
     postRelation,
     getRelations,
     markAllAsRead,
     removeRelation,
-    subscribe
+    subscribe,
+    getPrelaunches
 }
 
 export default RelationsInterface
