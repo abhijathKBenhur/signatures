@@ -35,22 +35,18 @@ const About = () => {
             <span className="father-grey">IdeaTribe</span>
             {/* <span className="master-header">About Us</span> */}
             <span className="second-header mb-5 color-secondary-light">
-              All your best ideas. On the blockchain. Immutable forever.{" "}
+              All your best ideas. On the blockchain. Forever.{" "}
             </span>
             <span className="readable-text mb-3">
-              Ideatribe knows that the best ideas are truly democratic and
-              decentralized. That’s why we make it easy to register your idea
-              with us instantly and protect you from those who will want to
-              claim it as theirs and profit from it.
+            Great ideas can come to anyone, anywhere. And inspiration is fleeting. 
+            So, IdeaTribe makes it easy to register your idea on the blockchain. Instantly. 
+            This will protect you from copycats.
+            Not only can you stake claim on your ideas, you can also collaborate with others! After all, magic is when great minds come together.
             </span>
-            We also believe the best ideas come from Global collaboration. Not
-            only will you be able to stake claim to your ideas, you’ll also be
-            able to collaborate with others!
+            The founders of IdeaTribe are artists, musicians, writers, businesspeople, product specialists and engineering talent who have come together for one common purpose,
+            to help you to bring your ideas to reality.
+            Share your email and we will let you know when we launch. 
             <br></br>
-            The founding team of Ideatribe are artists, musicians, writers,
-            businesspeople, product specialists & brilliant engineering talent
-            who have come together for one common purpose...to illuminate your
-            ideas and help bring them to reality.
             {/* <br></br><br></br>
         
          Here’s to all the artists, creative people, square pegs in a
@@ -60,7 +56,9 @@ const About = () => {
           <div className="center-box mt-5" style={{ width: "100%" }}>
             <Col>
               {subscribed ? (
-                <div className="subscribe-block second-grey ">Thank you!</div>
+                <Row>
+                <div className="subscribe-block master-grey color-secondary ">Thank you!</div>
+                </Row>
               ) : (
                 <div className="">
                   {/* <Row className="subscribe-block master-header justify-content-center">Subscribe</Row> */}
@@ -83,13 +81,12 @@ const About = () => {
                       <Button
                         variant="primary"
                         className="subscribe-btn h-100 ml-2"
-                        onChan
                         onClick={() => {
                           submitMailId();
                         }}
                       >
                         {" "}
-                        Subscribe
+                        Let me know.
                       </Button>
                     </Col>
                   </Row>

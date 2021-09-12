@@ -20,31 +20,29 @@ dotenv.config();
 
 app.use(express.json());
 app.use(express.static('build'));
+
+app.use(express.urlencoded({ extended: true }));
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      console.log("API requested from " + origin);
+      if (!origin || ( origin.indexOf("localhost") > -1|| origin.indexOf("ideatribe") > -1)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+  })
+);
+
 app.use((req, res, next) => {
-  if (req.header('x-forwarded-proto') !== 'https') {
-    res.redirect(`https://${req.header('host')}${req.url}`)
+  
+  if (req.header("x-forwarded-proto") !== "https" && req.headers.referer.indexOf("localhost") == -1) {
+    res.redirect(`https://${req.header("host")}${req.url}`);
   } else {
     next();
   }
 });
-app.use(express.urlencoded({ extended: true }));
-var whitelist = ['http://localhost:3000','http://localhost:3001','http://localhost:3002', 
-'https://ideatribe.herokuapp.com','http://ideatribe.herokuapp.com',
-"https://testideatribe.herokuapp.com",
-"https://www.ideatribe.io",'http://www.ideatribe.io'];
-
-app.use(cors(
-  {
-    origin: function (origin, callback) {
-      console.log("API requested from " + origin)
-      if (whitelist.indexOf(origin) !== -1 || !origin) {
-        callback(null, true)
-      } else {
-        callback(new Error('Not allowed by CORS'))
-      }
-    }
-  }
-));
 
 app.use("/api", tokenAPI);
 app.use("/api", userAPI);
