@@ -54,7 +54,6 @@ const InfoModal = (props) => {
       purposeType: _.get(props.idea,'purpose.purposeType') || CONSTANTS.PURPOSES.SELL,
       subType:_.get(props.idea,'purpose.subType')  ||  CONSTANTS.COLLAB_TYPE[0].value,
       message: _.get(props.idea,'purpose.message')  || "",
-      ...props.idea.purpose,
     },
     storage: props.idea.storage,
     units: props.idea.units,
@@ -96,6 +95,7 @@ const InfoModal = (props) => {
     }
     SignatureInterface.updatePurpose(request).then(success =>{
       showToaster("Idea updated!", { type: "dark" });
+      setFormData(success.data)
       props.onHide()
     })
   };
@@ -138,7 +138,7 @@ const InfoModal = (props) => {
                   onChange={handleChange}
                   ref={priceRef}
                 />
-                <InputGroup.Text>Tribe Coin</InputGroup.Text>
+                <InputGroup.Text>{CONSTANTS.CURRENCY.name}</InputGroup.Text>
               </InputGroup>
             </div>
           </Col>
@@ -200,7 +200,6 @@ const InfoModal = (props) => {
                     placeholder="Price per unit"
                     min={1}
                     value={form.price ? form.price : undefined}
-                    aria-label="Amount (BNB)"
                     name="price"
                     onChange={handleChange}
                     ref={priceRef}
@@ -215,9 +214,9 @@ const InfoModal = (props) => {
                     type="number"
                     placeholder="Number of units"
                     min={1}
-                    value={form.umits ? form.umits : undefined}
-                    aria-label="umits"
-                    name="umits"
+                    value={form.units ? form.units : undefined}
+                    aria-label="units"
+                    name="units"
                     onChange={handleChange}
                     ref={priceRef}
                   />

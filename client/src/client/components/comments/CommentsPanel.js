@@ -52,36 +52,41 @@ const CommentsPanel = (props) => {
     const { value } = event.target;
     if (event.key == "Enter") {
       event.target.blur();
-      event.target.value = "";
-      CommentsInterface.postComment(
-        loggedInUserDetails._id,
-        getCommentDestination(),
-        CONSTANTS.ACTIONS.COMMENT,
-        value,
-        props.entity
-      ).then((success) => {
-        let commentsCOpy = _.clone(comments);
-        commentsCOpy.push({
-          from: loggedInUserDetails,
-          to: getCommentDestination(),
-          action: CONSTANTS.ACTIONS.COMMENT,
-          comment: value,
-          entity: props.entity,
+      if(_.isUndefined(loggedInUserDetails.userName)){
+        history.push("/profile");
+      }else{
+        event.target.value = "";
+        CommentsInterface.postComment(
+          loggedInUserDetails._id,
+          getCommentDestination(),
+          CONSTANTS.ACTIONS.COMMENT,
+          value,
+          props.entity
+        ).then((success) => {
+          let commentsCOpy = _.clone(comments);
+          commentsCOpy.push({
+            from: loggedInUserDetails,
+            to: getCommentDestination(),
+            action: CONSTANTS.ACTIONS.COMMENT,
+            comment: value,
+            entity: props.entity,
+          });
+          setComments(commentsCOpy);
+          if (_.get(props, "idea.owner.userName")) {
+            NotificationInterface.postNotification(
+              loggedInUserDetails._id,
+              props.idea.owner.userName,
+              CONSTANTS.ACTIONS.COMMENT,
+              CONSTANTS.ACTION_STATUS.PENDING,
+              value,
+              JSON.stringify({
+                ideaID: _.get(props.idea, "PDFHash"),
+              })
+            );
+          }
         });
-        setComments(commentsCOpy);
-        if (_.get(props, "idea.owner.userName")) {
-          NotificationInterface.postNotification(
-            loggedInUserDetails._id,
-            props.idea.owner.userName,
-            CONSTANTS.ACTIONS.COMMENT,
-            CONSTANTS.ACTION_STATUS.PENDING,
-            value,
-            JSON.stringify({
-              ideaID: _.get(props.idea, "PDFHash"),
-            })
-          );
-        }
-      });
+      }
+      
     } else {
       setNewComment(value);
     }
@@ -96,12 +101,12 @@ const CommentsPanel = (props) => {
         onKeyUp={(e) => handleChange(e)}
         style={{ borderRadius: 5, resize: "none" }}
         className="mb-2 comment-entry"
-        readOnly={_.isUndefined(loggedInUserDetails.userName)}
+        
       />
       <div className="scrolable-comments">
-        {_.map(comments, (comment) => {
+        {_.map(comments, (comment,index) => {
           return (
-            <div className="comment-item d-flex flex-row pb-1">
+            <div className="comment-item d-flex flex-row pb-1" key={index}>
               <div className="icon mr-2 p-1 cursor-pointer">
                 <Image
                   src={_.get(comment, "from.imageUrl")}

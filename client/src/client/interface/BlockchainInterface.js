@@ -15,7 +15,7 @@ const api = axios.create({
       : ENDPOINTS.LOCAL_ENDPOINTS,
 });
 
-const chain_id = "0x2a";
+const chain_id = "0x13881";
 
 const CHAIN_CONFIGS = {
   "0x38": {
@@ -29,6 +29,7 @@ const CHAIN_CONFIGS = {
     rpcUrls: ["https://bsc-dataseed1.ninicoin.io"],
     blockExplorerUrls: ["https://bscscan.com/"],
   },
+
   "0x61": {
     chainId: "0x61",
     chainName: "Binance Smart Chain Testnet",
@@ -40,6 +41,17 @@ const CHAIN_CONFIGS = {
     rpcUrls: ["https://data-seed-prebsc-1-s1.binance.org:8545/"],
     blockExplorerUrls: ["https://testnet.bscscan.com"],
   },
+  "0x13881":{
+    chainId: "x13881",
+    chainName: "Mumbai Testnet",
+    nativeCurrency: {
+      name: "Binance Coin",
+      symbol: "MATIC",
+      decimals: 18,
+    },
+    rpcUrls: ["https://rpc-mumbai.matic.today"],
+    blockExplorerUrls: ["https://explorer-mumbai.maticvigil.com/"],
+  }
 };
 
 class BlockchainInterface {
@@ -147,11 +159,15 @@ class BlockchainInterface {
           if (contractNetworkID == metamaskNetwork) {
             const abi = this.contractJSON.abi;
             const contractAddress = this.contractJSON.address;
-            const contract = this.web3.eth.Contract(abi, contractAddress);
+            let contractOptions = {
+              gasPrice : "5000000000",
+              gas : 1000000
+            }
+            const contract = this.web3.eth.Contract(abi, contractAddress,contractOptions);
             this.contract = contract;
           } else {
             window.alert(
-              "Smart contract not deployed to detected network. Please change the network in mnetamask."
+              "Smart contract not deployed to detected network. Please change the network in metamask."
             );
           }
           resolve(this.metamaskAccount);
@@ -174,6 +190,7 @@ class BlockchainInterface {
     const promise = new Promise((resolve, reject) => {
       if (window.ethereum) {
         this.web3 = new Web3(window.ethereum);
+        this.web3.eth.handleRevert = true
         window.web3 = this.web3;
         this.switchNetwork();
         window.ethereum
@@ -191,7 +208,9 @@ class BlockchainInterface {
           });
       } else if (window.web3) {
         this.web3 = new Web3(this.web3.currentProvider);
+        this.web3.eth.handleRevert = true
         window.web3 = this.web3;
+        
         resolve(this.web3);
       } else {
         store.dispatch(setReduxMetaMaskID());
@@ -219,9 +238,11 @@ class BlockchainInterface {
     payLoad.price = this.web3.utils.toWei(payLoad.price, "ether");
 
     const transactionObject = {
-      value: this.web3.utils.toWei("0.05", "ether"),
+      value: this.web3.utils.toWei("0.00", "ether"),
       from: payLoad.creator,
     };
+    console.log("publishing contract" );
+
     this.contract.methods
       .publish(payLoad.PDFHash, payLoad.price)
       .send(transactionObject)
@@ -230,6 +251,7 @@ class BlockchainInterface {
         transactionInitiated(payLoad);
       })
       .once("receipt", function(receipt) {
+        // console.log(JSON.stringify(receipt))
         let tokenReturns = _.get(
           receipt.events,
           "Transfer.returnValues.tokenId"
@@ -241,12 +263,13 @@ class BlockchainInterface {
         if (tokenID) {
           transactionCompleted(payLoad);
         }
-        console.log("receipt received");
+        
       })
       .once("confirmation", function(confirmationNumber, receipt) {
-        console.log("confirmationNumber ::" + confirmationNumber);
+        console.log(receipt);
       })
       .on("error", (err) => {
+        console.log(err);
         transactionFailed(err,payLoad.transactionID)
       });
   }

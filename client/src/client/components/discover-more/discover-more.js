@@ -57,9 +57,9 @@ const DiscoverMore = () => {
           <div className="topics-list">
             <ul>
               {
-              categoriesList.slice(0,10).map((item,i) => <li>
+              categoriesList.slice(0,10).map((item,i) => <li key={i}>
                 <span
-                key={i}
+                
                   className={item.isSelected ? "category-name third-header selected mr-2" : "category-name third-header  mr-2"}
                   bsstyle="primary"
 

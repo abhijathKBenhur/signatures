@@ -196,7 +196,7 @@ const Register = (props) => {
             {_.isEmpty(userDetails.email) ? (
               <GoogleLogin
                 //secretKey:I0YMKAriMhc6dB7bN44fHuKj
-                clientId="639340003430-d17oardcjjpo9qnj0m02330l5orgn8sp.apps.googleusercontent.com"
+                clientId="639340003430-0gldnqd5a7tll38k5jpa7q6dqtv5c62v.apps.googleusercontent.com"
                 buttonText="Login with Google"
                 onSuccess={googleLogIn}
                 onFailure={googleLogIn}

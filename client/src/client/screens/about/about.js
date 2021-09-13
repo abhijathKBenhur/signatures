@@ -77,7 +77,7 @@ const About = () => {
        
 
       </Row>
-      <Row className="about-item about-third">
+      {/* <Row className="about-item about-third">
         <Col xs={12} md={12} lg={12} className="heading">
           <h3>Meet our Solution for you</h3>
         </Col>
@@ -239,7 +239,7 @@ const About = () => {
           </div>
         </Col>
        
-      </Row>
+      </Row> */}
     </Container>
   );
 };
