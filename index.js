@@ -35,7 +35,7 @@ app.use(
 
 app.use((req, res, next) => {
   
-  if (req.header("x-forwarded-proto") !== "https" && req.headers.referer.indexOf("localhost") == -1) {
+  if (req.header("x-forwarded-proto") !== "https") {
     res.redirect(`https://${req.header("host")}${req.url}`);
   } else {
     next();
