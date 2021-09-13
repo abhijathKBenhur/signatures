@@ -74,6 +74,7 @@ const Register = (props) => {
         registerUser(nonceString,secret)
       }).catch(err =>{
         console.log(err)
+        setRegistration(FAILED);
       })
     })
   }
@@ -106,7 +107,7 @@ const Register = (props) => {
   }
 
   function publishUserToApp() {
-    store.dispatch(setReduxUserDetails(userDetails));
+    store.dispatch(setReduxUserDetails(userDetails.metamaskId));
   }
 
   const handleNext = () => {
@@ -114,6 +115,7 @@ const Register = (props) => {
       if (registration == PASSED) {
         publishUserToApp();
         history.push("/profile/" + userDetails.userName);
+        window.location.reload()
       } else if(registration == FAILED){
         setRegistration("")
       }

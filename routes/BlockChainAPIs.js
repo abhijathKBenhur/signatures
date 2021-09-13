@@ -46,15 +46,13 @@ register_user = (req, res) => {
         .on("error", function (error) {
           console.log("error ", error)
           let transactionHash = _.get(error,'receipt.transactionHash');
-          if(_.isUndefined(transactionHash)){
-            return res.status(400).json({ success: false, data: errorReason });
-          }
-          getRevertReason(transactionHash, process.env.NETWORK_NAME).then(
-            (errorReason) => {
-              error.errorReason = errorReason;
-              return res.status(400).json({ success: false, data: errorReason });
-            }
-          );
+          return res.status(400).json({ success: false, data: transactionHash });
+          // getRevertReason(transactionHash, process.env.NETWORK_NAME).then(
+          //   (errorReason) => {
+          //     error.errorReason = errorReason;
+          //     return res.status(400).json({ success: false, data: errorReason });
+          //   }
+          // );
         });
       }
     })
@@ -62,50 +60,7 @@ register_user = (req, res) => {
   })
 };
 
-publishOnBehalf = async (req, res) => {
-  let payLoad = req.body.payLoad;
-  let metamaskAddress = payLoad.creator;
-  let title = payLoad.title;
-  let PDFHash = payLoad.PDFHash;
-  let price = payLoad.price;
-  deployedContract.methods
-    .publishOnBehalf(title, PDFHash, price, metamaskAddress)
-    .send(transactionObject)
-    // .on("transactionHash", function(hash) {
-    //   console.log("receipt transactionHash",hash)
-    //   return res.status(200).json({ success: true, data: hash });
-    // })
-    .once("receipt", function (receipt) {
-      try {
-        let tokenID =
-          receipt && _.get(receipt.events, "Transfer.returnValues.tokenId");
 
-        let hash = receipt && _.get(receipt.events, "Transfer.transactionHash");
-        payLoad.ideaID = tokenID;
-        payLoad.transactionID = hash;
-        return res.status(200).json({ success: true, data: payLoad });
-      } catch (e) {
-        console.log("error", e);
-      }
-    })
-    .on("error", function (error) {
-      try {
-        console.log("error received", error);
-        let transactionHash = _.get(error,'receipt.transactionHash');
-        getRevertReason(transactionHash, process.env.NETWORK_NAME).then(
-          (errorReason) => {
-            console.log("error errorReason", errorReason);
-            error.errorReason = errorReason;
-            return res.status(200).json({ success: false, data: error });
-          }
-        );
-      } catch (e) {
-        console.log("error", e);
-      }
-    });
-};
-
-router.post("/publishOnBehalf", publishOnBehalf);
 router.post("/register_user", register_user);
 
 module.exports = router;
