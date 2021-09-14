@@ -8,6 +8,7 @@ import { getPurposeIcon } from "../../commons/common.utils";
 import { showToaster } from "../../commons/common.utils";
 import "./engage-modal.scss";
 import SignatureInterface from "../../interface/SignatureInterface";
+import BlockchainInterface from "../../interface/BlockchainInterface";
 const EngageModal = (props) => {
   const priceRef = useRef(null);
   const getTagsElement = () => {
@@ -260,6 +261,7 @@ const EngageModal = (props) => {
   const engage = (purpose) =>{
     switch (purpose.purposeType) {
       case CONSTANTS.PURPOSES.SELL:
+        BlockchainInterface.buySignature(form)
       case CONSTANTS.PURPOSES.LICENCE:
         return "Buy";
 
@@ -270,7 +272,7 @@ const EngageModal = (props) => {
         return "Collaborate";
 
       case CONSTANTS.PURPOSES.KEEP:
-        return "View info";
+        props.onHide()
       default:
         return null;
     }

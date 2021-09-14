@@ -426,10 +426,10 @@ const SignatureNew = (props) => {
                 </span>
                 <hr></hr>
 
-                <CommentsPanel
+                { !_.isEmpty(signature) && <CommentsPanel
                   idea={signature}
                   entity={CONSTANTS.ENTITIES.IDEA}
-                ></CommentsPanel>
+                ></CommentsPanel>}
               </div>
             </Col>
             <Col md="1" className="options-container  pt-2">

@@ -97,7 +97,7 @@ const CommentsPanel = (props) => {
       <Form.Control
         as="textarea"
         name="description"
-        placeholder={loggedInUserDetails.userName}
+        placeholder="Your comment"
         onKeyUp={(e) => handleChange(e)}
         style={{ borderRadius: 5, resize: "none" }}
         className="mb-2 comment-entry"

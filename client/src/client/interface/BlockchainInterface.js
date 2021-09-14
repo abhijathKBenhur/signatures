@@ -5,6 +5,8 @@ import contractJSON from "../../contracts/ideaTribe.json";
 import store from "../redux/store";
 import { setReduxMetaMaskID } from "../redux/actions";
 import ENDPOINTS from "../commons/Endpoints";
+import getRevertReason from'eth-revert-reason'
+
 
 import axios from "axios";
 
@@ -270,7 +272,21 @@ class BlockchainInterface {
       })
       .on("error", (err) => {
         console.log(err);
-        transactionFailed(err,payLoad.transactionID)
+        let transactionHash = payLoad.transactionID;
+        
+          if(_.isUndefined(transactionHash)){
+            transactionFailed("Transaction could not be initiated",transactionHash)
+          }else{
+            this.web3.eth.getTransaction(transactionHash).then(tx =>{
+              this.web3.eth.call(tx, tx.blockNumber).then(result => {
+                transactionFailed(result.data.message,transactionHash)
+              }).catch(error =>{
+                transactionFailed(error.data.message,transactionHash)
+              })
+            }).catch(hashError =>{
+              transactionFailed(hashError.data.message,transactionHash)
+            })
+          }
       });
   }
 
@@ -308,8 +324,20 @@ class BlockchainInterface {
         console.log("confirmation :: " + confirmationNumber);
       })
       .on("error", (err) => {
-        console.log(err);
-        errorCallback();
+        let transactionHash = updatePayLoad.transactionID;
+        if(_.isUndefined(transactionHash)){
+          // transactionFailed(err,transactionHash)
+        }else{
+          this.web3.eth.getTransaction(transactionHash).then(tx =>{
+            this.web3.eth.call(tx, tx.blockNumber).then(result => {
+              console.log(result)
+            }).catch(error =>{
+              console.log(error)
+            })
+          }).catch(hashError =>{
+            console.log(hashError)
+          })
+        }
       });
   }
 
