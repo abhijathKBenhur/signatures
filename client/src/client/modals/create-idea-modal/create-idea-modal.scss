@@ -110,6 +110,7 @@
           &.disabled{
             cursor: no-drop;
             background-color: $greyLight-1;
+            pointer-events: none;
           }
           &.selected{
             box-shadow: $shadow;

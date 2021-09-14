@@ -557,7 +557,6 @@ const CreateIdeaModal = ({
                   </div>
                   <Select
                     value={form.category}
-                    closeMenuOnSelect={false}
                     className={
                       formErrors.category
                         ? "input-err tag-selector"

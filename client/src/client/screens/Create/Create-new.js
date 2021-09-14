@@ -589,7 +589,7 @@ const CreateNew = () => {
       <Row className="createform  d-flex">
         <Col xs="12" className="top-bar">
           <Button
-            className=""
+            className="ml-80"
             variant="secondary"
             onClick={() => history.push("/home")}
           >
