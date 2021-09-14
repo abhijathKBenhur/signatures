@@ -502,11 +502,10 @@ const CreateNew = () => {
     setPublishState(PASSED);
   }
 
-  function transactionFailed(err,failedTransactionId) {
-    let errorReason = _.get(err, "data.data.errorReason");
+  function transactionFailed(errorMessage,failedTransactionId) {
     setPublishState(FAILED);
     setPublishError(
-      "The idea couldnt be published to blockchain. " + errorReason
+      "The idea couldnt be published to blockchain. " + errorMessage
     );
     console.log("transactionID", failedTransactionId)
     SignatureInterface.removeIdeaEntry({transactionID: failedTransactionId})

@@ -272,24 +272,21 @@ class BlockchainInterface {
       })
       .on("error", (err) => {
         console.log(err);
-        let transactionHash = _.get(err,'receipt.transactionHash');
-        if(_.isUndefined(transactionHash)){
-          transactionFailed(err,transactionHash)
-        }else{
+        let transactionHash = payLoad.transactionID;
+        
           if(_.isUndefined(transactionHash)){
-            transactionFailed(err,transactionHash)
+            transactionFailed("Transaction could not be initiated",transactionHash)
           }else{
             this.web3.eth.getTransaction(transactionHash).then(tx =>{
-              var result = this.web3.eth.call(tx, tx.blockNumber).then(result => {
-                console.log(result)
+              this.web3.eth.call(tx, tx.blockNumber).then(result => {
+                transactionFailed(result.data.message,transactionHash)
               }).catch(error =>{
-                console.log(error)
+                transactionFailed(error.data.message,transactionHash)
               })
             }).catch(hashError =>{
-              console.log(hashError)
+              transactionFailed(hashError.data.message,transactionHash)
             })
           }
-        }
       });
   }
 
@@ -327,8 +324,7 @@ class BlockchainInterface {
         console.log("confirmation :: " + confirmationNumber);
       })
       .on("error", (err) => {
-        let transactionHash = _.get(err,'receipt.transactionHash');
-        
+        let transactionHash = updatePayLoad.transactionID;
         if(_.isUndefined(transactionHash)){
           // transactionFailed(err,transactionHash)
         }else{
