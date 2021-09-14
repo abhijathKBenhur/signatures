@@ -51,7 +51,7 @@ const CHAIN_CONFIGS = {
       symbol: "MATIC",
       decimals: 18,
     },
-    rpcUrls: ["https://rpc-mumbai.matic.today"],
+    rpcUrls: ["https://rpc-mumbai.maticvigil.com/"],
     blockExplorerUrls: ["https://explorer-mumbai.maticvigil.com/"],
   }
 };
