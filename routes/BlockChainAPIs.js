@@ -13,6 +13,7 @@ const web3Instance = new Web3(hdWallet);
 const UserSchema = require("../db-config/user.schema");
 const publicKey =
   web3Instance.eth.accounts.privateKeyToAccount(privateKey).address;
+
 const deployedContract = new web3Instance.eth.Contract(
   contractJSON.abi,
   contractJSON.address,
@@ -46,13 +47,15 @@ register_user = (req, res) => {
         .on("error", function (error) {
           console.log("error ", error)
           let transactionHash = _.get(error,'receipt.transactionHash');
-          return res.status(400).json({ success: false, data: transactionHash });
-          // getRevertReason(transactionHash, process.env.NETWORK_NAME).then(
-          //   (errorReason) => {
-          //     error.errorReason = errorReason;
-          //     return res.status(400).json({ success: false, data: errorReason });
-          //   }
-          // );
+          getRevertReason(transactionHash, process.env.NETWORK_NAME).then(
+            (errorReason) => {
+              error.errorReason = errorReason;
+              return res.status(400).json({ success: false, data: errorReason });
+            }
+          ).catch(err =>{
+            return res.status(400).json({ success: false, data: transactionHash });
+          })
+
         });
       }
     })
