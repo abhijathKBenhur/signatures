@@ -189,10 +189,12 @@ class BlockchainInterface {
 
   loadWeb3() {
     let parentThis = window;
+    let transactionConfirmationBlocks = 8
     const promise = new Promise((resolve, reject) => {
       if (window.ethereum) {
         this.web3 = new Web3(window.ethereum);
         this.web3.eth.handleRevert = true
+        this.web3.eth.transactionConfirmationBlocks = transactionConfirmationBlocks
         window.web3 = this.web3;
         this.switchNetwork();
         window.ethereum
@@ -211,8 +213,11 @@ class BlockchainInterface {
       } else if (window.web3) {
         this.web3 = new Web3(this.web3.currentProvider);
         this.web3.eth.handleRevert = true
+        this.web3.eth.transactionConfirmationBlocks = transactionConfirmationBlocks
+
+
+
         window.web3 = this.web3;
-        
         resolve(this.web3);
       } else {
         store.dispatch(setReduxMetaMaskID());
@@ -243,7 +248,7 @@ class BlockchainInterface {
       value: this.web3.utils.toWei("0.00", "ether"),
       from: payLoad.creator,
     };
-    console.log("publishing contract" );
+    console.log("publishing contract", this.web3.eth.transactionConfirmationBlocks );
 
     this.contract.methods
       .publish(payLoad.PDFHash, payLoad.price)
