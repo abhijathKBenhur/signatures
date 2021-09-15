@@ -3,7 +3,7 @@ import React from "react";
 import Web3 from "web3";
 import contractJSON from "../../contracts/ideaTribe.json";
 import store from "../redux/store";
-import { setReduxMetaMaskID } from "../redux/actions";
+import { setReduxMetaMaskID,setReduxUserDetails } from "../redux/actions";
 import ENDPOINTS from "../commons/Endpoints";
 import getRevertReason from'eth-revert-reason'
 
@@ -168,6 +168,8 @@ class BlockchainInterface {
             const contract = this.web3.eth.Contract(abi, contractAddress,contractOptions);
             this.contract = contract;
           } else {
+            store.dispatch(setReduxMetaMaskID(undefined));
+            store.dispatch(setReduxUserDetails({}));
             window.alert(
               "Smart contract not deployed to detected network. Please change the network in metamask."
             );

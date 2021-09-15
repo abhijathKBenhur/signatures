@@ -99,6 +99,7 @@ const Header = (props) => {
   ));
 
   const isUserAuthForPublish = () => {
+    
     if(!window.location.href.includes('create') && !_.isEmpty(userDetails)) {
      return  (
         <Button
@@ -189,7 +190,6 @@ const Header = (props) => {
             ) : 
                 isUserAuthForPublish()
             }
-
             {_.isEmpty(loggedInUserDetails.imageUrl) ? (
               <User color="white"
                 className="cursor-pointer header-icons"
