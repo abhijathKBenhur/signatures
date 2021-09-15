@@ -49,7 +49,6 @@ const Register = (props) => {
   const [registration, setRegistration] = useState("");
   const [registrationErrorMessage, setregistrationErrorMessage] = useState("");
 
-
   const [referralError, setReferralError] = useState(false);
   const [userNameError, setuserNameError] = useState(false);
   
@@ -228,11 +227,9 @@ const Register = (props) => {
             {_.isEmpty(userDetails.metamaskId) ? (
               <div className="network-container">
                 <div className="metamaskLogin loginMode d-flex flex-column align-items-center cursor-pointer">
-                  <span className="readable-text">
+                  <span className="readable-text second-grey">
                     We could not recognize any connected wallet on this app.
-                    Please install, login with an account and connect to this
-                    app to continue.You might have to refresh the page after
-                    installation
+                    Please connect metamask to ideaTribe to continue.
                   </span>
                   <img src={metamaskLogo} width="70"></img>
                   <div className="metamask_integration">
