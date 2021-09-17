@@ -131,14 +131,17 @@ buySignature = async (req, res) => {
       error: "Hollow idea",
     });
   }
-  const ownerId = await UserSchema.findOne({ metamaskId: buyer })._id;
-  let buyer = req.body.buyer;
-  let seller = req.body.account;
-  let PDFHash = req.body.PDFHash;
+  
 
-  const findCriteria = { PDFHash: PDFHash, owner: seller };
+  let buyer = req.body.buyer;
+  let seller = req.body.seller;
+  let PDFHash = req.body.PDFHash;
+  console.log("buyer",buyer)
+  console.log("seller",seller._id)
+
+  const findCriteria = { PDFHash: PDFHash };
   const saleCriteria = {
-    owner: ownerId,
+    owner: buyer._id,
     price: 0,
     purpose: {type:"KEEP"},
   };

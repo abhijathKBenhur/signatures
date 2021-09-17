@@ -592,7 +592,7 @@ const CreateIdeaModal = ({
                   />
                 </Form.Group>
               </Col> */}
-              <Col md="12" lg="12" sm="12" xs="12">
+              {/* <Col md="12" lg="12" sm="12" xs="12">
                 <Form.Group
                   as={Col}
                   className="file-storage-group"
@@ -634,7 +634,7 @@ const CreateIdeaModal = ({
                     </Dropdown.Menu>
                   </Dropdown>
                 </Form.Group>
-              </Col>
+              </Col> */}
             </Row>
 
             <div className="purpose-selection">

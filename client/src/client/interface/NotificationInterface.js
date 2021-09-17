@@ -2,27 +2,25 @@ import axios from 'axios'
 import _ from "lodash";
 import ENDPOINTS from '../commons/Endpoints';
 
-const api = axios.create({
-    baseURL: process.env.NODE_ENV == "production" ? ENDPOINTS.REMOTE_ENDPOINTS: ENDPOINTS.LOCAL_ENDPOINTS
-})
+import AxiosInstance from "../wrapper/apiWrapper"
 
 export const postNotification = (from,to,action,status,message,payload) => {
     let request = {
         from, to, action, status, message,payload
     }
-    return api.post("/postNotification",request)
+    return AxiosInstance.post("/postNotification",request)
 }
 
 export const markNotificationAsRead = (request) =>  { 
-    return api.post("/markNotificationAsRead",request) 
+    return AxiosInstance.post("/markNotificationAsRead",request) 
 }
 
 export const getNotifications = (request) =>  { 
-    return api.post("/getNotifications",request) 
+    return AxiosInstance.post("/getNotifications",request) 
 }
 
 export const markAllAsRead = (request) =>  { 
-    return api.post("/markAllAsRead",request) 
+    return AxiosInstance.post("/markAllAsRead",request) 
 }
   
 

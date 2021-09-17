@@ -1,7 +1,7 @@
 const User = require("../db-config/user.schema");
 const express = require("express");
 const jwt_decode = require("jwt-decode");
-
+const jwt = require("jsonwebtoken");
 const router = express.Router();
 const mongoose = require("mongoose");
 
@@ -74,13 +74,19 @@ registerUser = (req, res) => {
 
   let updateParams = body;
   delete updateParams._id
+  var token = jwt.sign({ 
+    metamaskId: newUser.metamaskId ,
+    userName: newUser.userName,
+    secret: body.secret,
+    nonce: body.nonce
+  }, process.env.TOKEN_KEY);
 
   User
     .findOneAndUpdate({metamaskId:newUser.metamaskId},updateParams, {new:true,upsert:true})
     .then((user, b) => {
       return res.status(201).json({
         success: true,
-        data: user,
+        data: {...user,token:token},
         message: "New user created!",
       });
     })

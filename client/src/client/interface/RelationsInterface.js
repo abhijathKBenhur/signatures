@@ -2,36 +2,34 @@ import axios from 'axios'
 import _ from "lodash";
 import ENDPOINTS from '../commons/Endpoints';
 
-const api = axios.create({
-    baseURL: process.env.NODE_ENV == "production" ? ENDPOINTS.REMOTE_ENDPOINTS: ENDPOINTS.LOCAL_ENDPOINTS
-})
+import AxiosInstance from "../wrapper/apiWrapper"
 
 export const postRelation = (from,to,relation,status,message) => {
     let payload = {
         from, to, relation, status, message
     }
-    return api.post(`/postRelation`,payload)
+    return AxiosInstance.post(`/postRelation`,payload)
 }
 
 export const removeRelation = (from,to,relation) => {
     let payload = {
         from, to, relation
     }
-    return api.post(`/removeRelation`,payload)
+    return AxiosInstance.post(`/removeRelation`,payload)
 }
 
 
 
 export const getRelations = (payload) =>  { 
-    return api.post("/getRelations",payload) 
+    return AxiosInstance.post("/getRelations",payload) 
 }
 
 export const markAllAsRead = (payload) =>  { 
-    return api.post("/updateRelations",payload) 
+    return AxiosInstance.post("/updateRelations",payload) 
 }
 
 export const subscribe = (payload) => {
-    return api.post(`/subscribe`,payload)
+    return AxiosInstance.post(`/subscribe`,payload)
 }
   
 

@@ -6,6 +6,7 @@ const Transaction = new Schema(
     status: { type: String },
     type: { type: String },
     payload: { type: String },
+    amount:{type:String},
     user: { type: Schema.Types.ObjectId, ref: "User", required: true }
   },
   { timestamps: true }

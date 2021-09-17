@@ -51,37 +51,43 @@ const EngageModal = (props) => {
   ];
 
   function transactionInitiated(transactionInititationRequest) {
+    console.log("transactionInititationRequest")
     TransactionsInterface.postTransaction({
       transactionID: transactionInititationRequest.transactionID,
       Status: app_constants.ACTION_STATUS.PENDING,
-      type: app_constants.TRANSACTION_TYPES.POST_IDEA,
+      type: app_constants.ACTIONS.BUY_IDEA,
       user: form.creator._id,
     });
     setEngaging(app_constants.ACTION_STATUS.PENDING);
   }
 
   function transactionCompleted(successResponse) {
+    console.log("transactionCompleted")
     let buyer = successResponse.buyer;
-    let seller = successResponse.account;
+    let seller = successResponse.owner;
     let PDFHash = successResponse.PDFHash;
     SignatureInterface.buySignature({
       buyer,
       seller,
       PDFHash,
-    });
-    TransactionsInterface.setTransactionState({
-      transactionID: successResponse.transactionID,
-      state: app_constants.ACTION_STATUS.COMPLETED,
-    });
-    setEngaging(app_constants.ACTION_STATUS.PASSED);
+    }).then(success=>{
+      TransactionsInterface.setTransactionState({
+        transactionID: successResponse.transactionID,
+        status: app_constants.ACTION_STATUS.COMPLETED,
+      });
+      setEngaging(app_constants.ACTION_STATUS.PASSED);
+    })
+    
   }
 
   function transactionFailed(errorMessage, failedTransactionId) {
+    console.log("transactionFailed")
     setEngaging(app_constants.ACTION_STATUS.FAILED);
     TransactionsInterface.setTransactionState({
       transactionID: failedTransactionId,
       status: app_constants.ACTION_STATUS.FAILED,
     });
+    console.log(errorMessage)
   }
 
   const getEngageText = (purpose, isVerb) => {
@@ -144,7 +150,7 @@ const EngageModal = (props) => {
         return minions;
         break;
       case CONSTANTS.ACTION_STATUS.COMPLETED:
-        return loadingGif;
+        return purchased;
         break;
       case CONSTANTS.ACTION_STATUS.FAILED:
         return error;

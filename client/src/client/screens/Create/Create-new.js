@@ -544,7 +544,7 @@ const CreateNew = () => {
     SignatureInterface.updateIdeaID(successResponse)
     TransactionsInterface.setTransactionState({
       transactionID:successResponse.transactionID,
-      state: CONSTANTS.ACTION_STATUS.COMPLETED
+      status: CONSTANTS.ACTION_STATUS.COMPLETED
     })
   }
 

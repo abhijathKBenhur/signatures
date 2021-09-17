@@ -6,6 +6,7 @@ import store from "../redux/store";
 import { setReduxMetaMaskID,setReduxUserDetails } from "../redux/actions";
 import ENDPOINTS from "../commons/Endpoints";
 import getRevertReason from'eth-revert-reason'
+import AxiosInstance from "../wrapper/apiWrapper"
 
 
 import axios from "axios";
@@ -149,7 +150,7 @@ class BlockchainInterface {
 
   register_user = (payload) => {
     console.log("register_user");
-    return api.post(`/register_user`, payload);
+    return AxiosInstance.post(`/register_user`, payload);
   };
 
   async getAccountDetails() {
@@ -311,8 +312,6 @@ class BlockchainInterface {
       value: this.web3.utils.toWei(updatePayLoad.price, "ether"),
       from: this.web3.utils.toChecksumAddress(metamaskAddress),
     };
-    updatePayLoad.buyer = updatePayLoad.buyer._id
-    updatePayLoad.seller = updatePayLoad.seller._id
     this.contract.methods
       .buy(updatePayLoad.ideaID)
       .send(transactionObject)
