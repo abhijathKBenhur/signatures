@@ -19,6 +19,7 @@ const ShareModal = (props) => {
        className="share-modal"
        dialogClassName="share-modal-dialog"
        centered
+       close
       >
         
         <Modal.Body className="share-modal-body">
@@ -71,7 +72,6 @@ const ShareModal = (props) => {
                 </div>
                 <div className="share-copy-action">
                   <p className="text-center">
-                  or copy link
                   </p>
                   <div className="url-wrapper">
                     <span className="url">

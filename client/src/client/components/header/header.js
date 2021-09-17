@@ -100,7 +100,7 @@ const Header = (props) => {
 
   const isUserAuthForPublish = () => {
     
-    if(!window.location.href.includes('create') && !_.isEmpty(userDetails)) {
+    if(!window.location.href.includes('create')) {
      return  (
         <Button
           variant="primary"
@@ -135,6 +135,8 @@ const Header = (props) => {
                 className="cursor-pointer"
                 onClick={() => gotoGallery()}
               ></img>
+              
+              {/* <span class="master-header color-primary">ideaTribe</span> */}
             </a>
             {/* <SearchBar /> */}
             {/* <Nav.Item>
@@ -162,8 +164,8 @@ const Header = (props) => {
             {/* <Form.Control size="sm" type="text" placeholder="Normal text" /> */}
           </div>
 
-          {  <div className="right-section">
-            <span className="loggedinaccount" title={currentMetamaskAccount} onClick={() => {
+           {!_.isEmpty(currentMetamaskAccount) &&  <div className="right-section">
+            <span className="loggedinaccount secondary-grey color-white" title={currentMetamaskAccount} onClick={() => {
               window.open("https://kovan.etherscan.io/address/" + currentMetamaskAccount);
             }}>{currentMetamaskAccount&& currentMetamaskAccount.substring(0,3) + " ... " + currentMetamaskAccount.substring(currentMetamaskAccount.length - 3,currentMetamaskAccount.length)}</span>
             {/* <Button

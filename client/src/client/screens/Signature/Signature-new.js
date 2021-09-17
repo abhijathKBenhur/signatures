@@ -497,6 +497,7 @@ const SignatureNew = (props) => {
           {...signature}
           show={modalShow.engageModal}
           idea={signature}
+          currentUser={loggedInUserDetails}
           onHide={() => hideModal("engage")}
         />
       )}

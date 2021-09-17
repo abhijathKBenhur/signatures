@@ -135,14 +135,11 @@ buySignature = async (req, res) => {
   let buyer = req.body.buyer;
   let seller = req.body.account;
   let PDFHash = req.body.PDFHash;
-  let price = req.body.price;
-  let transactionID = req.body.transactionID;
 
   const findCriteria = { PDFHash: PDFHash, owner: seller };
   const saleCriteria = {
     owner: ownerId,
     price: 0,
-    transactionID: transactionID,
     purpose: {type:"KEEP"},
   };
 

@@ -48,12 +48,7 @@ const CreateIdeaModal = ({
   const reduxState = useSelector((state) => state, shallowEqual);
   const [userClans, setUserClans] = useState( [] );
   const history = useHistory();
-  // useEffect(() => {
-  //   const { userDetails = {} } = reduxState;
-  //   ClanInterface.getClans({leader:userDetails.userName}).then(result => {
-  //     setUserClans(result.datat)
-  //   })
-  // }, [reduxState.userDetails]);
+ 
   
   const getThumbnailImage = () => {
     return form.thumbnail ? (

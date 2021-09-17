@@ -11,7 +11,6 @@ import Clan from "./screens/Clan/Clan";
 
 import Header from "./components/header/header";
 import Footer from "./components/footer/footer";
-import Banner from "./components/banner/banner";
 import {BrowserRouter as Router, Route, Switch, Redirect,withRouter, useLocation } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import DailyReads from "./screens/daily-reads/daily-reads";
@@ -34,7 +33,6 @@ const App = () =>  {
       <div className="appContainer">
         <ToastContainer></ToastContainer>
         <Header></Header>
-        {/* <Banner></Banner> */}
         <div className="app-content">
           <Switch>
             <Route path="/home" render={(props) => <Gallery />} />

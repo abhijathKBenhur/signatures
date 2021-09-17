@@ -19,6 +19,10 @@
             }
             .purpose-selection {
                 margin: 15px;
+                .image-placeholder{
+                  display: flex;
+                  justify-content: center;
+                }
                 .purpose-tabs {
                   display: flex;
                   gap: 15px;
