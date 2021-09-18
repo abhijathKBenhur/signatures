@@ -1,6 +1,7 @@
 const TransactionSchema = require("../db-config/prelaunch.schema");
 const express = require("express");
 const router = express.Router();
+const nodeMailer = require(‘nodemailer’);
 
 
 subscribe = (req, res) => {
@@ -52,10 +53,50 @@ getPrelaunches = async (req, res) => {
   });
 };
 
+sendMail = async (req, res) => {
+  let sendTo = req.body.mailID
+  let ourMailId = "contact@ideatribe.io"
+
+  let transporter = nodemailer.createTransport({
+    host: "smtp.zoho.com",
+    secure: true,
+    port: 465,
+    auth: {
+      user: ourMailId,
+      pass: "Mail@zoho@10",
+    },
+  });
+
+  const mailOptions = {
+    from: ourMailId,
+    to: sendTo,
+    subject: "Some subject",
+    html: <p>test</p>, // plain text body
+   };
+  await transporter.sendMail(mailOptions, (err, info) => {
+    if (err) {
+      console.log("mail failed")
+      return res.status(400).json({ success: false, error: err });
+    }
+    console.log(
+      "sending email"
+    )
+    return res.status(200).json({ success: true, data: info });
+  }).catch((err) => {
+    console.log("mail failed"+ err)
+    return res.status(200).json({ success: false, data: err });
+  });
+};
+
+
+
+
 
 
 router.post("/subscribe", subscribe);
 router.post("/getPrelaunches", getPrelaunches);
+router.post("/sendMail", sendMail);
+
 
 
 

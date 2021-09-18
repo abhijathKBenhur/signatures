@@ -41,8 +41,9 @@ app.use(
 );
 
 app.use((req, res, next) => {
-  console.log(req.headers.referer)
-  if (req.header("x-forwarded-proto") !== "https") {
+  console.log("req.headers.referer" )
+  console.log(req.header("x-forwarded-proto"))
+  if (req.header("x-forwarded-proto") != undefined && req.header("x-forwarded-proto") !== "https") {
     res.redirect(`https://${req.header("host")}${req.url}`);
   }
   else {
@@ -60,7 +61,7 @@ app.use("/api", relationAPI);
 app.use("/api", commentAPI);
 app.use("/api", ClanAPI);
 app.use("/api", TransactionAPI);
-app.use("/api", preLaunchAPI);
+app.use("/api", preLaunchAPI); 
 
 console.log("Checking node environment ::" + process.env.NODE_ENV);
 if (process.env.NODE_ENV == "production") {
