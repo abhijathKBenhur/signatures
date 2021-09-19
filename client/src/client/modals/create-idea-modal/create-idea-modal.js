@@ -12,6 +12,9 @@ import {
 import React, { useState, useEffect } from "react";
 import Dropzone from "react-dropzone";
 import imagePlaceholder from "../../../assets/images/image-placeholder.png";
+import artPlaceHolder from "../../../assets/images/art.png";
+import businessPlaceHolder from "../../../assets/images/business.png";
+import technicalPlaceHolder from "../../../assets/images/technical.png";
 import CONSTANTS from "../../commons/Constants";
 import Select from "react-select";
 import * as reactShare from "react-share";
@@ -47,6 +50,7 @@ const CreateIdeaModal = ({
 }) => {
   const reduxState = useSelector((state) => state, shallowEqual);
   const [userClans, setUserClans] = useState( [] );
+  const [imgHolder, setImgHolder] = useState(imagePlaceholder)
   const history = useHistory();
  
   
@@ -86,7 +90,7 @@ const CreateIdeaModal = ({
               >
                 <input {...getInputProps()} />
                 <img
-                  src={imagePlaceholder}
+                  src={imgHolder}
                   className="placeholder-image"
                   alt=" placehoder"
                 />
@@ -329,6 +333,16 @@ const CreateIdeaModal = ({
       CONSTANTS.PURPOSES.LICENCE].indexOf(action) > -1
   }
 
+  const handleCategoryChange = (ev) => {
+    handleTagsChange(ev);
+    switch(_.get(ev, 'value')){
+      case "Creative_art" : setImgHolder(artPlaceHolder); break;
+      case "Technical_inventions" : setImgHolder(technicalPlaceHolder); break;
+      case "Business_idea" : setImgHolder(businessPlaceHolder); break;
+      default: break;
+    }
+  }
+
   const getElement = () => {
     let pusposeList = [
       CONSTANTS.PURPOSES.SELL,
@@ -558,7 +572,7 @@ const CreateIdeaModal = ({
                         : "tag-selector"
                     }
                     options={CONSTANTS.CATEGORIES}
-                    onChange={handleTagsChange}
+                    onChange={(e) => handleCategoryChange(e)}
                     placeholder=""
                   />
                 </Form.Group>
