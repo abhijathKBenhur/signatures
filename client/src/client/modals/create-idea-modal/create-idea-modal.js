@@ -52,12 +52,7 @@ const CreateIdeaModal = ({
   const [userClans, setUserClans] = useState( [] );
   const [imgHolder, setImgHolder] = useState(imagePlaceholder)
   const history = useHistory();
-  // useEffect(() => {
-  //   const { userDetails = {} } = reduxState;
-  //   ClanInterface.getClans({leader:userDetails.userName}).then(result => {
-  //     setUserClans(result.datat)
-  //   })
-  // }, [reduxState.userDetails]);
+ 
   
   const getThumbnailImage = () => {
     return form.thumbnail ? (
@@ -611,7 +606,7 @@ const CreateIdeaModal = ({
                   />
                 </Form.Group>
               </Col> */}
-              <Col md="12" lg="12" sm="12" xs="12">
+              {/* <Col md="12" lg="12" sm="12" xs="12">
                 <Form.Group
                   as={Col}
                   className="file-storage-group"
@@ -653,7 +648,7 @@ const CreateIdeaModal = ({
                     </Dropdown.Menu>
                   </Dropdown>
                 </Form.Group>
-              </Col>
+              </Col> */}
             </Row>
 
             <div className="purpose-selection">

@@ -617,9 +617,9 @@ function Profile(props) {
                           </div>
                         </div>
                       </Tab>
-                      {/* <Tab eventKey="clan" title="Clans">
-                        <Clans></Clans>
-                      </Tab> */}
+                      <Tab eventKey="wallet" title="Wallet">
+                        testing wallet
+                      </Tab>
                     </Tabs>
                   </Col>
                   {isMyPage() ? (

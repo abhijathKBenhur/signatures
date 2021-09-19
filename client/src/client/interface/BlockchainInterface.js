@@ -3,11 +3,12 @@ import React from "react";
 import Web3 from "web3";
 import contractJSON from "../../contracts/ideaTribe.json";
 import store from "../redux/store";
-import { setReduxMetaMaskID } from "../redux/actions";
+import { setReduxMetaMaskID,setReduxUserDetails } from "../redux/actions";
 import ENDPOINTS from "../commons/Endpoints";
 import getRevertReason from'eth-revert-reason';
 import ReactDOM from 'react-dom';
 import AlertBanner from "../components/alert/alert"
+import AxiosInstance from "../wrapper/apiWrapper"
 
 
 import axios from "axios";
@@ -68,11 +69,15 @@ class BlockchainInterface {
     let parentThis = this;
     window.ethereum &&
       window.ethereum.on("accountsChanged", function(accounts) {
-        parentThis.getAccountDetails();
+        {setTimeout(() => {
+          parentThis.getAccountDetails();
+        }, 100)}
       });
     window.ethereum &&
       window.ethereum.on("chainChanged", function(chainId) {
-        parentThis.getAccountDetails();
+        {setTimeout(() => {
+          parentThis.getAccountDetails();
+        }, 100)}
       });
   }
 
@@ -147,7 +152,7 @@ class BlockchainInterface {
 
   register_user = (payload) => {
     console.log("register_user");
-    return api.post(`/register_user`, payload);
+    return AxiosInstance.post(`/register_user`, payload);
   };
 
   async getAccountDetails() {
@@ -181,9 +186,11 @@ class BlockchainInterface {
                 actionFunction: CalledFunction
               }
               ReactDOM.render(<AlertBanner {...alertProperty}></AlertBanner>, document.body)
-            window.alert(
-              "Smart contract not deployed to detected network. Please change the network in metamask."
-            );
+            store.dispatch(setReduxMetaMaskID(undefined));
+            store.dispatch(setReduxUserDetails({}));
+            // window.alert(
+            //   "Smart contract not deployed to detected network. Please change the network in metamask."
+            // );
           }
           resolve(this.metamaskAccount);
         })
@@ -321,15 +328,11 @@ class BlockchainInterface {
     return this.tokens;
   }
 
-  buySignature(
-    updatePayLoad,
-    successCallback,
-    feedbackCallback,
-    errorCallback
-  ) {
+  buySignature(updatePayLoad, transactionInitiated, transactionCompleted, transactionFailed) {
+    let metamaskAddress = _.clone(updatePayLoad.buyer.metamaskId)
     const transactionObject = {
-      value: updatePayLoad.price,
-      from: updatePayLoad.buyer,
+      value: this.web3.utils.toWei(updatePayLoad.price, "ether"),
+      from: this.web3.utils.toChecksumAddress(metamaskAddress),
     };
     this.contract.methods
       .buy(updatePayLoad.ideaID)
@@ -337,34 +340,30 @@ class BlockchainInterface {
       .on("transactionHash", function(hash) {
         console.log("updated with transaction id ::", hash);
         updatePayLoad.transactionID = hash;
-        feedbackCallback(updatePayLoad);
+        transactionInitiated(updatePayLoad);
       })
       .once("receipt", function(receipt) {
-        updatePayLoad.price = "0";
-        let tokenReturns = _.get(
-          receipt.events,
-          "Transfer.returnValues.tokenId"
-        );
-        successCallback(updatePayLoad);
+        transactionCompleted(updatePayLoad);
       })
       .once("confirmation", function(confirmationNumber, receipt) {
         console.log("confirmation :: " + confirmationNumber);
       })
       .on("error", (err) => {
+        console.log(err);
         let transactionHash = updatePayLoad.transactionID;
-        if(_.isUndefined(transactionHash)){
-          // transactionFailed(err,transactionHash)
-        }else{
-          this.web3.eth.getTransaction(transactionHash).then(tx =>{
-            this.web3.eth.call(tx, tx.blockNumber).then(result => {
-              console.log(result)
-            }).catch(error =>{
-              console.log(error)
+          if(_.isUndefined(transactionHash)){
+            transactionFailed("Transaction could not be initiated",transactionHash)
+          }else{
+            this.web3.eth.getTransaction(transactionHash).then(tx =>{
+              this.web3.eth.call(tx, tx.blockNumber).then(result => {
+                transactionFailed(result.data.message,transactionHash)
+              }).catch(error =>{
+                transactionFailed(error.data.message,transactionHash)
+              })
+            }).catch(hashError =>{
+              transactionFailed(hashError.data.message,transactionHash)
             })
-          }).catch(hashError =>{
-            console.log(hashError)
-          })
-        }
+          }
       });
   }
 
@@ -376,7 +375,7 @@ class BlockchainInterface {
       .set_price(updatePayLoad.ideaID, updatePayLoad.price)
       .send(transactionObject)
       .on("transactionHash", function(hash) {
-        feedbackCallback();
+        feedbackCallback({transactionID:hash});
       })
       .once("receipt", function(receipt) {
         let tokenReturns = _.get(

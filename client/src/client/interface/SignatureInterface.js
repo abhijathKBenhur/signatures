@@ -1,22 +1,11 @@
 import axios from 'axios'
 import _ from "lodash";
 import ENDPOINTS from '../commons/Endpoints';
-const api = axios.create({
-    baseURL: process.env.NODE_ENV == "production" ? ENDPOINTS.REMOTE_ENDPOINTS: ENDPOINTS.LOCAL_ENDPOINTS
-    // baseURL: '/api',
-})
-
-const fileAPI = axios.create({
-    baseURL: process.env.NODE_ENV == "production" ? ENDPOINTS.REMOTE_ENDPOINTS: ENDPOINTS.LOCAL_ENDPOINTS,
-    // baseURL: '/api',
-    headers: {
-        'Content-Type': 'multipart/form-data'
-    }
-})
+import AxiosInstance from "../wrapper/apiWrapper"
 
 
 export const updatePurpose = payload => {
-    return api.post(`/updatePurpose`,{
+    return AxiosInstance.post(`/updatePurpose`,{
         ideaID: payload.ideaID,
         purpose: payload.purpose,
         price: payload.purpose
@@ -24,7 +13,7 @@ export const updatePurpose = payload => {
 }
 
 export const addSignature = payload => {
-    return api.post(`/addSignature`,{
+    return AxiosInstance.post(`/addSignature`,{
         owner: payload.owner,
         title: payload.title,
         category: payload.category,
@@ -47,22 +36,22 @@ export const addSignature = payload => {
 
 
 export const getSignatures = (payload) =>  { 
-    return api.post("/getSignatures",payload) 
+    return AxiosInstance.post("/getSignatures",payload) 
 }
 
 export const getSignatureByHash = (tokenId) => { 
-    return api.get(`/signature/${tokenId}`) 
+    return AxiosInstance.get(`/signature/${tokenId}`) 
 }
 
 export const buySignature = payload => { 
-    return api.post(`/buySignature`,payload) 
+    return AxiosInstance.post(`/buySignature`,payload) 
 }
 
 export const updateIdeaID = payload => { 
-    return api.post(`/updateIdeaID`,payload) 
+    return AxiosInstance.post(`/updateIdeaID`,payload) 
 }
 export const removeIdeaEntry = payload => { 
-    return api.post(`/removeIdeaEntry`,payload) 
+    return AxiosInstance.post(`/removeIdeaEntry`,payload) 
 }
 
 

@@ -27,7 +27,6 @@ const User = new Schema(
     referredBy:{ type: String },
 
     nonce:{ type: String },
-    secret:{ type: String }
 
 
   },

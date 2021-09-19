@@ -1,46 +1,25 @@
 import React, { useState, useRef } from "react";
 import { Button, Modal } from "react-bootstrap";
 import _ from "lodash";
-import { Row, Col, Form, InputGroup, Dropdown } from "react-bootstrap";
+import { Row, Col, Form, InputGroup, Dropdown, Image } from "react-bootstrap";
 import CONSTANTS from "../../commons/Constants";
-import Web3Utils from "web3-utils";
+import minions from "../../../assets/images/minions.png";
+import loadingGif from "../../../assets/images/loader_blocks.gif";
+import error from "../../../assets/images/error.png";
+import purchased from "../../../assets/images/purchased.png";
 import { getPurposeIcon } from "../../commons/common.utils";
 import { showToaster } from "../../commons/common.utils";
 import "./engage-modal.scss";
 import SignatureInterface from "../../interface/SignatureInterface";
 import BlockchainInterface from "../../interface/BlockchainInterface";
+import Web3 from "web3";
+import TransactionsInterface from "../../interface/TransactionInterface";
 const EngageModal = (props) => {
-  const priceRef = useRef(null);
-  const getTagsElement = () => {
-    try {
-      if (!_.isEmpty(_.get(props, "category"))) {
-        const category = JSON.parse(_.get(props, "category"));
-        return (
-          !_.isEmpty(category) &&
-          category.map((tag) => (
-            <span className="tag-item" key={tag.label}>
-              {tag.label}
-            </span>
-          ))
-        );
-      }
-    } catch (err) {
-      return null;
-    }
-  };
-
   const isSelectedPurpose = (purpose) => {
     return form.purpose.purposeType === purpose;
   };
-
-  const handleChange = (event) => {
-    let returnObj = {};
-    returnObj[event.target.name] =
-      _.get(event, "target.name") === "price"
-        ? Number(event.target.value)
-        : event.target.value;
-    setFormData({ ...form, ...returnObj });
-  };
+  const app_constants = CONSTANTS
+  const [engaging, setEngaging] = useState(CONSTANTS.ACTION_STATUS.INIT);
 
   const [form, setFormData] = useState({
     owner: props.idea.owner,
@@ -48,7 +27,7 @@ const EngageModal = (props) => {
     title: props.idea.title,
     category: props.idea.category,
     description: props.idea.description,
-    price: props.idea.price,
+    price: new Web3(window.ethereum).utils.fromWei(props.idea.price, "ether"),
     thumbnail: props.idea.thumbnail,
     PDFFile: props.idea.PDFFile,
     PDFHash: props.idea.PDFHash,
@@ -64,15 +43,6 @@ const EngageModal = (props) => {
     units: props.idea.units,
   });
 
-  const setPurpose = (entry) => {
-    let currentPurpose = form.purpose;
-    setFormData({
-      ...form,
-      purpose: { ...currentPurpose, purposeType: entry },
-    });
-  };
-
-  
   let pusposeList = [
     CONSTANTS.PURPOSES.SELL,
     CONSTANTS.PURPOSES.AUCTION,
@@ -80,176 +50,59 @@ const EngageModal = (props) => {
     CONSTANTS.PURPOSES.COLLAB,
   ];
 
-  function changeCollabSubType(subType) {
-    let currentPurpose = form.purpose;
-    setFormData({
-      ...form,
-      purpose: {
-        ...currentPurpose,
-        subType: subType,
-      },
+  function transactionInitiated(transactionInititationRequest) {
+    console.log("transactionInititationRequest")
+    TransactionsInterface.postTransaction({
+      transactionID: transactionInititationRequest.transactionID,
+      Status: app_constants.ACTION_STATUS.PENDING,
+      type: app_constants.ACTIONS.BUY_IDEA,
+      user: form.creator._id,
     });
+    setEngaging(app_constants.ACTION_STATUS.PENDING);
   }
 
-  const updateIdea = () => {
-    SignatureInterface.updatePurpose(form).then(success =>{
-      showToaster("Idea updated!", { type: "dark" });
-      props.onHide()
+  function transactionCompleted(successResponse) {
+    console.log("transactionCompleted")
+    let buyer = successResponse.buyer;
+    let seller = successResponse.owner;
+    let PDFHash = successResponse.PDFHash;
+    SignatureInterface.buySignature({
+      buyer,
+      seller,
+      PDFHash,
+    }).then(success=>{
+      TransactionsInterface.setTransactionState({
+        transactionID: successResponse.transactionID,
+        status: app_constants.ACTION_STATUS.COMPLETED,
+      });
+      setEngaging(app_constants.ACTION_STATUS.PASSED);
     })
-  };
+    
+  }
 
-  function getConditionalCompnent() {
-    switch (form.purpose.purposeType) {
-      case CONSTANTS.PURPOSES.AUCTION:
-        return (
-          <Col md="12">
-            <span className="purpose-message second-grey">
-              We know your idea is worth the traction. We will get you there
-              sooon.
-            </span>
-          </Col>
-        );
-
-      case CONSTANTS.PURPOSES.SELL:
-        return (
-          <Col md="12">
-            <span className="purpose-message second-grey">
-              Set a price to the idea and it will be sold immediately when there
-              is a buyer.
-            </span>
-            <div className="price-section">
-              <div className="price-label second-grey">
-                <Form.Label>
-                  {CONSTANTS.PURPOSES.AUCTION === form.purpose.purposeType
-                    ? "Base price"
-                    : "Price"}
-                </Form.Label>
-              </div>
-              <InputGroup className="price-input-group">
-                <Form.Control
-                  type="number"
-                  placeholder="how much do you think your idea is worth ?"
-                  min={1}
-                  value={form.price ? form.price : undefined}
-                  aria-label="Amount (ether)"
-                  name="price"
-                  onChange={handleChange}
-                  ref={priceRef}
-                />
-                <InputGroup.Text>{CONSTANTS.CURRENCY.name}</InputGroup.Text>
-              </InputGroup>
-            </div>
-          </Col>
-        );
-        break;
-      case CONSTANTS.PURPOSES.COLLAB:
-        return (
-          <Col md="12">
-            <span className="purpose-message second-grey">
-              You may chose to licence it to multiple people. Only your idea
-              will be available in the market.
-            </span>
-            <div className="collab-section">
-              <Dropdown className="w-100">
-                <Dropdown.Toggle
-                  variant="light"
-                  id="dropdown-basic"
-                  className="w-100 justify-content-start"
-                >
-                  {
-                    _.find(CONSTANTS.COLLAB_TYPE, {
-                      value: form.purpose.subType,
-                    }).label
-                  }
-                </Dropdown.Toggle>
-                <Dropdown.Menu>
-                  {CONSTANTS.COLLAB_TYPE.map((item) => (
-                    <Dropdown.Item
-                      name="storageGroup"
-                      className="collabSubType"
-                      onClick={() => changeCollabSubType(item.value)}
-                    >
-                      {item.label}
-                    </Dropdown.Item>
-                  ))}
-                </Dropdown.Menu>
-              </Dropdown>
-            </div>
-          </Col>
-        );
-        break;
-      case CONSTANTS.PURPOSES.LICENCE:
-        return (
-          <Col md="12" sm="12" lg="12" cs="12">
-            <Row>
-              <Col md="12">
-                <span className="purpose-message second-grey">
-                  You may chose to licence it to multiple people. Only your idea
-                  will be available in the market.
-                </span>
-              </Col>
-            </Row>
-            <Row>
-              <Col md="6" sm="12" xs="12" lg="6">
-                {/* <span className="purpose-message second-grey">Amount per unit</span> */}
-                <InputGroup className="price-input-group">
-                  <Form.Control
-                    type="number"
-                    placeholder="Price per unit"
-                    min={1}
-                    value={form.price ? form.price : undefined}
-                    aria-label="Amount"
-                    name="price"
-                    onChange={handleChange}
-                    ref={priceRef}
-                  />
-                  <InputGroup.Text>{CONSTANTS.CURRENCY.name}</InputGroup.Text>
-                </InputGroup>
-              </Col>
-              <Col md="6" sm="12" xs="12" lg="6">
-                {/* <span className="purpose-message second-grey">Number of units</span> */}
-                <InputGroup className="price-input-group">
-                  <Form.Control
-                    type="number"
-                    placeholder="Number of units"
-                    min={1}
-                    value={form.umits ? form.umits : undefined}
-                    aria-label="umits"
-                    name="umits"
-                    onChange={handleChange}
-                    ref={priceRef}
-                  />
-                  <InputGroup.Text>UNITS</InputGroup.Text>
-                </InputGroup>
-              </Col>
-            </Row>
-          </Col>
-        );
-      case CONSTANTS.PURPOSES.KEEP:
-        return (
-          <Col md="12">
-            <span className="purpose-message second-grey">
-              The record will not be open for any interaction. It will be still
-              be visible for everyone.
-            </span>
-          </Col>
-        );
-    }
+  function transactionFailed(errorMessage, failedTransactionId) {
+    console.log("transactionFailed")
+    setEngaging(app_constants.ACTION_STATUS.FAILED);
+    TransactionsInterface.setTransactionState({
+      transactionID: failedTransactionId,
+      status: app_constants.ACTION_STATUS.FAILED,
+    });
+    console.log(errorMessage)
   }
 
   const getEngageText = (purpose, isVerb) => {
     switch (purpose.purposeType) {
       case CONSTANTS.PURPOSES.SELL:
-        return isVerb ? "available for purchase" :"Buy";
-      
+        return isVerb ? "available for purchase" : "Buy";
+
       case CONSTANTS.PURPOSES.LICENCE:
-        return isVerb ? "available for licensing" :"Buy";
+        return isVerb ? "available for licensing" : "Buy";
 
       case CONSTANTS.PURPOSES.AUCTION:
-        return isVerb ? "available for auction" :"Bid";
+        return isVerb ? "available for auction" : "Bid";
 
       case CONSTANTS.PURPOSES.COLLAB:
-        return isVerb ? "available for collaboration" :"Collaborate";
+        return isVerb ? "available for collaboration" : "Collaborate";
 
       case CONSTANTS.PURPOSES.KEEP:
         return "Not availble to engage.";
@@ -258,10 +111,20 @@ const EngageModal = (props) => {
     }
   };
 
-  const engage = (purpose) =>{
+  const engage = (purpose) => {
     switch (purpose.purposeType) {
       case CONSTANTS.PURPOSES.SELL:
-        BlockchainInterface.buySignature(form)
+        let payLoad = {
+          ...form,
+          buyer: props.currentUser,
+          seller: form.owner,
+        };
+        BlockchainInterface.buySignature(
+          payLoad,
+          transactionInitiated,
+          transactionCompleted,
+          transactionFailed
+        );
       case CONSTANTS.PURPOSES.LICENCE:
         return "Buy";
 
@@ -272,12 +135,28 @@ const EngageModal = (props) => {
         return "Collaborate";
 
       case CONSTANTS.PURPOSES.KEEP:
-        props.onHide()
+        props.onHide();
       default:
         return null;
     }
-  }
+  };
 
+  const getPlaceholder = () => {
+    switch (engaging) {
+      case CONSTANTS.ACTION_STATUS.PENDING:
+        return loadingGif;
+        break;
+      case CONSTANTS.ACTION_STATUS.INIT:
+        return minions;
+        break;
+      case CONSTANTS.ACTION_STATUS.COMPLETED:
+        return purchased;
+        break;
+      case CONSTANTS.ACTION_STATUS.FAILED:
+        return error;
+        break;
+    }
+  };
   return (
     <Modal
       show={true}
@@ -290,16 +169,16 @@ const EngageModal = (props) => {
     >
       <Modal.Body className="info-modal-body">
         <div className="modal-header-wrapper">
-            <Col md="12" className="">
-              <h4>Engage</h4>
-            </Col>
+          <Col md="12" className="">
+            <h4>Engage</h4>
+          </Col>
         </div>
         <div className="purpose-selection">
           <Row className="purpose-selector-row">
             <Col md="12" className="">
               <div className="purpose-label master-grey">
                 <Form.Label>
-                  This idea is  {getEngageText(form.purpose,true)}
+                  This idea is {getEngageText(form.purpose, true)}
                 </Form.Label>
               </div>
               <div className="purpose-tabs">
@@ -312,12 +191,28 @@ const EngageModal = (props) => {
                           : "purpose-entry disabled"
                       }
                     >
-                      <i className={getPurposeIcon(entry)}></i>
-                      <span className="second-grey purpose-text">{getEngageText({purposeType:entry},false)}</span>
+                      <span className="master-grey purpose-text">
+                        {getEngageText({ purposeType: entry }, false)}
+                      </span>
+
+                      {form.purpose.purposeType == CONSTANTS.PURPOSES.SELL &&
+                      form.purpose.purposeType == entry ? (
+                        <span className="color-white">
+                          {" "}
+                          {form.price} MATIC{" "}
+                        </span>
+                      ) : (
+                        <i className={getPurposeIcon(entry)}></i>
+                      )}
                     </div>
                   );
                 })}
               </div>
+              <div className="image-placeholder">
+              <Image className="img-fluid" src={getPlaceholder()}>
+              </Image>
+                </div>
+              
             </Col>
           </Row>
         </div>
@@ -330,19 +225,23 @@ const EngageModal = (props) => {
           </Col>
           {/* } */}
         </div>
-        
-          <Col xs="12" className="button-bar justify-content-between d-flex">
-            <Button className="cancel-btn mr-2 mt-2" onClick={props.onHide}>
-              Cancel
-            </Button>
-            <Button className="submit-btn  mt-2" onClick={() => engage(form.purpose)}>
-              {getEngageText(form.purpose)}
-            </Button>
-          </Col>
+
+        <Col xs="12" className="button-bar justify-content-between d-flex">
+          <Button className="cancel-btn mr-2 mt-2" onClick={props.onHide}
+          disabled={engaging == CONSTANTS.ACTION_STATUS.PENDING}
+          >
+            Cancel
+          </Button>
+          <Button
+            className="submit-btn  mt-2"
+            disabled={engaging == CONSTANTS.ACTION_STATUS.PENDING}
+            onClick={() => engage(form.purpose)}
+          >
+            {getEngageText(form.purpose)}
+          </Button>
+        </Col>
       </Modal.Body>
     </Modal>
   );
-
- 
 };
 export default EngageModal;

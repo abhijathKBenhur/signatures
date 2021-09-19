@@ -8,7 +8,6 @@ import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import SignatureInterface from "../../interface/SignatureInterface";
 import { useHistory } from "react-router-dom";
 import Cookies from "universal-cookie";
-import Banner from "../../components/banner/banner";
 import DiscoverMore from "../../components/discover-more/discover-more";
 import SearchBar from "../../components/searchBar/SearchBar";
 import cover from "../../../assets/images/cover.jpg";

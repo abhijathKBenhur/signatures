@@ -88,6 +88,7 @@ const InfoModal = (props) => {
   }
 
   const updateIdea = () => {
+    debugger
     let newPriceInWei = new Web3(window.ethereum).utils.toWei(form.price, "ether")
     let request = {
       ...form,

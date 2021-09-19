@@ -8,13 +8,15 @@ import { shallowEqual, useSelector } from "react-redux";
 import CONSTANTS from "../../commons/Constants";
 import { setReduxUserDetails } from "../../redux/actions";
 import metamaskLogo from "../../../assets/images/metamask.png";
-import successLogo from "../../../assets/images/sucess.png";
+import successLogo from "../../../assets/images/success.png";
 import SignatureInterface from "../../interface/SignatureInterface";
 import BlockchainInterface from "../../interface/BlockchainInterface";
 import { Check, RefreshCcw, X } from "react-feather";
 import { useHistory } from "react-router-dom";
 import store from "../../redux/store";
 import UserInterface from "../../interface/UserInterface";
+import Cookies from "universal-cookie";
+
 // MetamaskID and userDetails are stored in separate redux stores
 // userDetails are stored as state
 
@@ -49,10 +51,8 @@ const Register = (props) => {
   const [registration, setRegistration] = useState("");
   const [registrationErrorMessage, setregistrationErrorMessage] = useState("");
 
-
   const [referralError, setReferralError] = useState(false);
   const [userNameError, setuserNameError] = useState(false);
-  
 
   const [userDetails, setUserDetails] = useState({
     firstName: _.get(reduxState, "firstName"),
@@ -67,28 +67,38 @@ const Register = (props) => {
     googleJWTToken: "",
   });
 
-  function getNonceAndRegister(){
-    UserInterface.getNonceAndRegister({ metamaskId:userDetails.metamaskId}).then(nonceValue =>{
-      let nonceString = _.get(nonceValue,'data.data')
-      BlockchainInterface.signToken(nonceString).then(secret =>{
-        registerUser(nonceString,secret)
-      }).catch(err =>{
-        console.log(err)
-        setRegistration(FAILED);
-      })
-    })
+  function getNonceAndRegister() {
+    UserInterface.getNonceAndRegister({
+      metamaskId: userDetails.metamaskId,
+    }).then((nonceValue) => {
+      let nonceString = _.get(nonceValue, "data.data");
+      BlockchainInterface.signToken(nonceString)
+        .then((secret) => {
+          registerUser(nonceString, secret);
+        })
+        .catch((err) => {
+          console.log(err);
+          setRegistration(FAILED);
+        });
+    });
   }
 
-  function registerUser(nonce,secret) {
+  function registerUser(nonce, secret) {
     try {
-      BlockchainInterface.register_user({...userDetails,  secret, nonce })
+      BlockchainInterface.register_user({ ...userDetails, secret, nonce })
         .then((success) => {
           let response = success.data;
           if (response.success) {
-            UserInterface.registerUser({...userDetails,  secret, nonce }).then((mongoSuccess) => {
-              publishUserToApp();
-              setRegistration(PASSED);
-            });
+            UserInterface.registerUser({ ...userDetails, secret, nonce })
+              .then((mongoSuccess) => {
+                setCookie(mongoSuccess.token);
+                publishUserToApp();
+                setRegistration(PASSED);
+              })
+              .catch((err) => {
+                setRegistration(FAILED);
+                setregistrationErrorMessage(_.get(err, "data.message"));
+              });
             console.log(success);
           } else {
             setRegistration(FAILED);
@@ -110,16 +120,20 @@ const Register = (props) => {
     store.dispatch(setReduxUserDetails(userDetails.metamaskId));
   }
 
+  const setCookie = (token) => {
+    const cookies = new Cookies();
+    cookies.set("ideaTribeAuthtoken", token);
+  };
+
   const handleNext = () => {
     if (steps[steps.length - 1].key == activeStep.key) {
       if (registration == PASSED) {
         publishUserToApp();
         history.push("/profile/" + userDetails.userName);
-        window.location.reload()
-      } else if(registration == FAILED){
-        setRegistration("")
-      }
-      else {
+        window.location.reload();
+      } else if (registration == FAILED) {
+        setRegistration("");
+      } else {
         setRegistration(PENDING);
         getNonceAndRegister();
       }
@@ -149,8 +163,8 @@ const Register = (props) => {
       })
     );
     setActiveStep(steps[index - 1]);
-    if(activeStep.index == 2){
-      setRegistration("")
+    if (activeStep.index == 2) {
+      setRegistration("");
     }
   };
 
@@ -176,7 +190,7 @@ const Register = (props) => {
         "@"
       )[0],
       googleJWTToken: _.get(googleFormResponseObject.tokenObj, "id_token"),
-    }); 
+    });
   }
 
   function metamaskGuide() {
@@ -228,11 +242,9 @@ const Register = (props) => {
             {_.isEmpty(userDetails.metamaskId) ? (
               <div className="network-container">
                 <div className="metamaskLogin loginMode d-flex flex-column align-items-center cursor-pointer">
-                  <span className="readable-text">
+                  <span className="readable-text second-grey">
                     We could not recognize any connected wallet on this app.
-                    Please install, login with an account and connect to this
-                    app to continue.You might have to refresh the page after
-                    installation
+                    Please connect metamask to ideaTribe to continue.
                   </span>
                   <img src={metamaskLogo} width="70"></img>
                   <div className="metamask_integration">
@@ -326,18 +338,24 @@ const Register = (props) => {
                     style={{
                       background: "#f1f1f1",
                       borderRadius: "3px",
-
                     }}
                   />
                   <div className="inputs d-flex flex-column justify-content-around h-100 ml-5 w-100">
                     <div className="userID">
                       <span className="second-grey">User name</span>
-                      {userNameError && <span className="error-message ml-2">*Username invalid</span>}
+                      {userNameError && (
+                        <span className="error-message ml-2">
+                          *Username invalid
+                        </span>
+                      )}
                       <i className="fa fa-circle-notch fa-spin"></i>
                       {!userNameError &&
-                        userDetails.userName &&
-                        userDetails.userName.length > 0  ? 
-                        <i className="icon fa fa-check ml-1"></i> : <div></div>}
+                      userDetails.userName &&
+                      userDetails.userName.length > 0 ? (
+                        <i className="icon fa fa-check ml-1"></i>
+                      ) : (
+                        <div></div>
+                      )}
                       <Form.Control
                         type="text"
                         name="userName"
@@ -347,17 +365,23 @@ const Register = (props) => {
                         }
                         onChange={handleChange}
                       />
-                      
                     </div>
 
                     <div>
                       <span className="second-grey">Referral Code</span>
-                      {referralError && <span className="error-message ml-2">*Invalid referral code</span>}
+                      {referralError && (
+                        <span className="error-message ml-2">
+                          *Invalid referral code
+                        </span>
+                      )}
                       <i className="fa fa-circle-notch fa-spin"></i>
                       {!referralError &&
-                        userDetails.referredBy &&
-                        userDetails.referredBy.length > 0  ? 
-                        <i className="icon fa fa-check ml-1"></i>  : <div></div>}
+                      userDetails.referredBy &&
+                      userDetails.referredBy.length > 0 ? (
+                        <i className="icon fa fa-check ml-1"></i>
+                      ) : (
+                        <div></div>
+                      )}
                       <Form.Control
                         type="text"
                         name="referredBy"
@@ -478,12 +502,12 @@ const Register = (props) => {
           )}
           <Button
             disabled={
-              ( 
-                ( userNameError || !userDetails.userName || userDetails.userName.length == 0  ||  
-                  referralError
-                  //  || !userDetails.referredBy || userDetails.referredBy.length == 0   
-                ) 
-                && activeStep.index == 2) ||
+              ((userNameError ||
+                !userDetails.userName ||
+                userDetails.userName.length == 0 ||
+                referralError) &&
+                //  || !userDetails.referredBy || userDetails.referredBy.length == 0
+                activeStep.index == 2) ||
               registration == PENDING ||
               (_.isEmpty(userDetails.metamaskId) && activeStep.index == 1) ||
               (_.isEmpty(userDetails.email) && activeStep.index == 0) ||
@@ -496,10 +520,14 @@ const Register = (props) => {
               handleNext();
             }}
           >
-            {activeStep.index == steps.length - 1 ? 
-              registration == PASSED ? "Done" :
-              registration == PENDING ? "Registering" :
-              registration == FAILED ?  "Retry" : "Register"
+            {activeStep.index == steps.length - 1
+              ? registration == PASSED
+                ? "Done"
+                : registration == PENDING
+                ? "Registering"
+                : registration == FAILED
+                ? "Retry"
+                : "Register"
               : "Next"}
           </Button>
         </Col>

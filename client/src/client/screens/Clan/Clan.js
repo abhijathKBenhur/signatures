@@ -207,7 +207,6 @@ function Clan(props) {
   };
 
   const respondToInvite = (member,acceptance) => {
-    debugger
     let memberIndex = _.findIndex(clan.members, { memberId: member._id })
     let members = clan.members;
     let newStatus = acceptance ? CONSTANTS.ACTION_STATUS.COMPLETED : CONSTANTS.ACTION_STATUS.DECLINED;

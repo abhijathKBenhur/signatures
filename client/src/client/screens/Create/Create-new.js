@@ -545,6 +545,7 @@ const CreateNew = () => {
     SignatureInterface.updateIdeaID(successResponse)
     TransactionsInterface.setTransactionState({
       transactionID:successResponse.transactionID,
+      status: CONSTANTS.ACTION_STATUS.COMPLETED
     })
   }
 
@@ -600,7 +601,7 @@ const CreateNew = () => {
             className="submit-btn"
             onClick={() => checkValidationOnButtonClick()}
           >
-            Submit
+            Continue
           </Button>
         </Col>
         <Col md="11" sm="11" lg="11" xs="12" className="page-content">
