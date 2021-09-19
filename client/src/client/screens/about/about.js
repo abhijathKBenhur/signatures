@@ -12,10 +12,12 @@ import cover from "../../../assets/images/cover.jpg"
 import dummy1 from "../../../assets/images/dummy1.png"
 import dummy2 from "../../../assets/images/dummy2.jpg"
 import dummy3 from "../../../assets/images/dummy3.jpeg"
+import ProgressBar from "../../components/progress-bar/progressbar"
 const About = () => {
   let history = useHistory();
   return (
     <Container className="about-container">
+      <ProgressBar></ProgressBar>
       <Row className="about-item about-first second-grey">
         <Col className="left" xs={12} sm={8}>
           <span className="master-header color-secondary-light">

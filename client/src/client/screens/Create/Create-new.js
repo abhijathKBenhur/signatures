@@ -46,6 +46,7 @@ import $ from "jquery";
 
 import signatureImage from "../../../assets/logo/signatures.png";
 import imagePlaceholder from "../../../assets/images/image-placeholder.png";
+import addFiles from "../../../assets/images/add_files.png";
 import CreateIdeaModal from "../../modals/create-idea-modal/create-idea-modal";
 import TransactionsInterface from "../../interface/TransactionInterface";
 const CreateNew = () => {
@@ -406,7 +407,7 @@ const CreateNew = () => {
     return (
       <div className="file-drop-contatiner" {...getRootProps()}>
         <input {...getInputProps()} />
-        <i className="fa fa-cloud-upload mb-3" style={{ fontSize: "50px" }}></i>
+        <img className="w-200" src={addFiles}></img>
         <p className="drag-drop-txt second-grey">
           Drag 'n Drop or Upload the file containing your idea or{" "}
           <span>Browse</span>

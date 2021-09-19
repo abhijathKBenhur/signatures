@@ -5,7 +5,9 @@ import contractJSON from "../../contracts/ideaTribe.json";
 import store from "../redux/store";
 import { setReduxMetaMaskID } from "../redux/actions";
 import ENDPOINTS from "../commons/Endpoints";
-import getRevertReason from'eth-revert-reason'
+import getRevertReason from'eth-revert-reason';
+import ReactDOM from 'react-dom';
+import AlertBanner from "../components/alert/alert"
 
 
 import axios from "axios";
@@ -168,6 +170,17 @@ class BlockchainInterface {
             const contract = this.web3.eth.Contract(abi, contractAddress,contractOptions);
             this.contract = contract;
           } else {
+            const CalledFunction = () => {
+              this.switchNetwork()
+            }
+            const alertProperty = {
+                isDismissible: false,
+                variant: "danger",
+                content: "Smart contract not deployed to detected network. Please change the network in metamask.",
+                actionText: "Switch",
+                actionFunction: CalledFunction
+              }
+              ReactDOM.render(<AlertBanner {...alertProperty}></AlertBanner>, document.body)
             window.alert(
               "Smart contract not deployed to detected network. Please change the network in metamask."
             );
@@ -233,9 +246,18 @@ class BlockchainInterface {
             </a>
           </div>
         );
-        reject(
-          "Non-Ethereum browser detected. You should consider trying MetaMask!"
-        );
+        const CalledFunction = () => {
+          console.log("jsdfghgsdf");
+        }
+        // const alertProperty = {
+        //     isDismissible: false,
+        //     variant: "danger",
+        //     content: "Non-Ethereum browser detected. You should consider trying MetaMask!",
+        //   }
+        //   ReactDOM.render(<AlertBanner {...alertProperty}></AlertBanner>, document.querySelector('.appHeader'))
+        // reject(
+        //   "Non-Ethereum browser detected. You should consider trying MetaMask!"
+        // );
       }
     });
     return promise;
