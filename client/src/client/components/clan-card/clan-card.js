@@ -9,7 +9,7 @@ import CONSTANTS from "../../commons/Constants";
 import { showToaster } from "../../commons/common.utils";
 import { getPurposeIcon } from "../../commons/common.utils";
 import ClanInterface from "../../interface/ClanInterface";
-
+import { getInitialSubString } from "../../commons/common.utils";
 const ClanCard = (props) => {
   const [clanMembers, setClanMembers] = useState([]);
   const [clan, setclan] = useState(props.clan);
@@ -62,10 +62,10 @@ const ClanCard = (props) => {
             <span className="p-2 color-primary">{clan.name}</span>
             <div className="masking third-header h-100">
               <div className="description">
-                {clan.description
-                  .split("")
-                  .slice(0, 40)
-                  .join("") + " ..."}
+                           
+
+              {getInitialSubString(clan.description,40)}
+                
               </div>
             </div>
           </div>

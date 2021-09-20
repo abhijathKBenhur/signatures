@@ -8,7 +8,7 @@ import "./collection-card.scss";
 import CONSTANTS from "../../commons/Constants";
 import { showToaster } from "../../commons/common.utils";
 import { getPurposeIcon } from "../../commons/common.utils";
-
+import { getInitialSubString } from "../../commons/common.utils";
 const CollectionCard = (props) => {
   let history = useHistory();
   function openCardView() {
@@ -81,13 +81,11 @@ const CollectionCard = (props) => {
         >
           <div className="masking third-header h-100">
             <div className="description">
-              {signature.description
-                .split("")
-                .slice(0, 40)
-                .join("") + " ..."}
+              {
+               getInitialSubString(signature.description, 40)}
             </div>
             <div className="title master-grey color-white h-100">
-              {signature.title}
+            {getInitialSubString(signature.title,20)}
             </div>
           </div>
           <Image

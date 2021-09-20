@@ -4,6 +4,8 @@ const cors = require("cors");
 const mongotConnection = require("./db-config/mongodb");
 const tokenAPI = require("./routes/TokenAPIs");
 const userAPI = require("./routes/UserAPI");
+const StatsAPI = require("./routes/statsAPI");
+
 const notificationAPI = require("./routes/NotificationAPIs");
 const commentAPI = require("./routes/commentAPI");
 const relationAPI = require("./routes/RelationAPI");
@@ -50,6 +52,7 @@ app.use("/api", relationAPI);
 app.use("/api", commentAPI);
 app.use("/api", ClanAPI);
 app.use("/api", TransactionAPI);
+app.use("/api", StatsAPI);
 console.log("Deploying full application")
 console.log("Checking node environment ::" + process.env.NODE_ENV);
 if (process.env.NODE_ENV == "production") {

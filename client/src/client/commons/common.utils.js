@@ -19,8 +19,6 @@ export const showToaster = (text, data) => {
 }
 
 
-
-
 export const getPurposeIcon = (item) => {
     if (item == CONSTANTS.PURPOSES.SELL) {
       return "fa fa-usd purpose-icon second-grey";
@@ -40,7 +38,7 @@ export const getPurposeIcon = (item) => {
       return string.substring(0,limit) + "... "
     }
     else{
-      return string
+      return string || ""
     }
   }
 
