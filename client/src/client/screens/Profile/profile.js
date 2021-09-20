@@ -420,7 +420,7 @@ function Profile(props) {
                       >
                         <span className="stats-title master-grey">{ideasCount}</span>
                         <span className="stats-value second-grey  text-center">
-                          Ideas Posted
+                          Ideas
                         </span>
                       </Col>
                       <Col
@@ -429,7 +429,7 @@ function Profile(props) {
                       >
                         <span className="stats-title master-grey">{upvotesCount}</span>
                         <span className="stats-value second-grey  text-center">
-                          Total upvotes
+                          Upvotes
                         </span>
                       </Col>
                     </Row>

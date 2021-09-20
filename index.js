@@ -25,7 +25,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(
   cors({
     origin: function (origin, callback) {
-      console.log("API requested from " + origin);
+      // console.log("API requested from " + origin);
       if (!origin || ( origin.indexOf("localhost") > -1|| origin.indexOf("ideatribe") > -1)) {
         callback(null, true);
       } else {

@@ -97,7 +97,7 @@ const CollectionCard = (props) => {
           />
         </div>
         <div className={getClassNames()}>
-          <div class="tag-n-location">
+          <div className="tag-n-location">
             <div className=" second-header timestamp">
               {moment(signature.createdAt).format("YYYY-MM-DD HH:mm:ss")}
             </div>
@@ -105,7 +105,7 @@ const CollectionCard = (props) => {
               {signature.location || "Global"}
             </div>
           </div>
-          <div class="purpose-badge">
+          <div className="purpose-badge">
             <i
               className={getPurposeIcon(
                 _.get(signature, "purpose.purposeType") ||

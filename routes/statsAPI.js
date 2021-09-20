@@ -5,27 +5,23 @@ const RelationSchema = require("../db-config/relation.schema");
 const express = require("express");
 const router = express.Router();
 
-
-
 getTotalIdeasOnTribe = async (req, res) => {
   let findCriteria = {};
-  IdeaSchema.find(findCriteria).count().then(err, user => {
-    if (err) {
-      return res.status(400).json({ success: false, error: err });
-    }
-    if (!user) {
+  console.log("requesting getTotalIdeasOnTribe")
+
+  IdeaSchema.find(findCriteria).count().then( count => {
+    if (!count) {
       return res.status(404).json({ success: true, data: [] });
     }
-    return res.status(200).json({ success: true, data: user });
+    return res.status(200).json({ success: true, data: count });
   })
 };
 
 getTotalUsersOnTribe = async (req, res) => {
   let findCriteria = {};
-  UserSchema.find(findCriteria).count().then(err, user => {
-    if (err) {
-      return res.status(400).json({ success: false, error: err });
-    }
+  console.log("requesting getTotalUsersOnTribe")
+  UserSchema.find(findCriteria).count().then( user => {
+ 
     if (!user) {
       return res.status(404).json({ success: true, data: [] });
     }
@@ -34,14 +30,8 @@ getTotalUsersOnTribe = async (req, res) => {
 };
 
 getIdeasFromUser = async (req, res) => {
-  console.log("requesting getIdeasFromUser")
-  let findCriteria = {
-    owner: req.body.id
-  };
-  IdeaSchema.find(findCriteria).count().then(err, user => {
-    if (err) {
-      return res.status(400).json({ success: false, error: err });
-    }
+  console.log("finding by ID" + req.body.owner)
+  IdeaSchema.findById(req.body.owner).count().then( user => {
     if (!user) {
       return res.status(404).json({ success: true, data: [] });
     }
@@ -54,10 +44,8 @@ getTotalUpvotesForUser = async (req, res) => {
     relation: "UPVOTE",
     to: req.body.userName
   };
-  RelationSchema.find(findCriteria).count().then(err, user => {
-    if (err) {
-      return res.status(400).json({ success: false, error: err });
-    }
+  RelationSchema.find(findCriteria).count().then( user => {
+    
     if (!user) {
       return res.status(404).json({ success: true, data: [] });
     }
@@ -70,10 +58,7 @@ getUpvotesForIdea = async (req, res) => {
     relation: "UPVOTE",
     to: req.body.ideaId
   };
-  RelationSchema.find(findCriteria).count().then(err, user => {
-    if (err) {
-      return res.status(400).json({ success: false, error: err });
-    }
+  RelationSchema.find(findCriteria).count().then( user => {
     if (!user) {
       return res.status(404).json({ success: true, data: [] });
     }
@@ -81,12 +66,12 @@ getUpvotesForIdea = async (req, res) => {
   })
 };
 
-router.post("getTotalIdeasOnTribe",getTotalIdeasOnTribe);
-router.post("getTotalUsersOnTribe",getTotalUsersOnTribe);
-router.post("getIdeasFromUser",getIdeasFromUser);
-router.post("getTotalUpvotesForUser",getTotalUpvotesForUser);
-router.post("getUpvotesForIdea",getUpvotesForIdea);
-// router.post("getTotalGoldForUser",getTotalGoldForUser);
-// router.post("getTotalGoldForIdea",getTotalGoldForIdea);
+router.post("/getTotalIdeasOnTribe",getTotalIdeasOnTribe);
+router.post("/getTotalUsersOnTribe",getTotalUsersOnTribe);
+router.post("/getIdeasFromUser",getIdeasFromUser);
+router.post("/getTotalUpvotesForUser",getTotalUpvotesForUser);
+router.post("/getUpvotesForIdea",getUpvotesForIdea);
+// router.post("/getTotalGoldForUser",getTotalGoldForUser);
+// router.post("/getTotalGoldForIdea",getTotalGoldForIdea);
 
 module.exports = router;

@@ -1,6 +1,4 @@
-import axios from 'axios'
 import _ from "lodash";
-import ENDPOINTS from '../commons/Endpoints';
 
 import AxiosInstance from "../wrapper/apiWrapper"
 

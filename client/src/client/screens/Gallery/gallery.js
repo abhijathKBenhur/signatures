@@ -6,6 +6,7 @@ import "./gallery.scss";
 import CONSTANTS from "../../commons/Constants";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import SignatureInterface from "../../interface/SignatureInterface";
+import StatsInterface from "../../interface/StatsInterface"
 import { useHistory } from "react-router-dom";
 import Cookies from "universal-cookie";
 import DiscoverMore from "../../components/discover-more/discover-more";
@@ -20,9 +21,16 @@ function gallery(props) {
   const reduxState = useSelector((state) => state, shallowEqual);
   const { collectionList = [] } = reduxState;
   //const [visitedUser, setIsVisitedUser] = useState(cookies.get("visitedUser"));
+  const [stats, setStats] = useState({
+    totalIdeas:0,
+    totalusers: 0,
+    totalTribegoldDistributed:0,
+    totalSaleVale:0
+  });
   const dispatch = useDispatch();
   useEffect(() => {
     console.log("getting signatures ");
+    getStats()
     SignatureInterface.getSignatures().then((signatures) => {
       let response = _.get(signatures, "data.data");
       dispatch(setCollectionList(response));
@@ -35,6 +43,22 @@ function gallery(props) {
       //setIsVisitedUser(true);
     };
   }, []);
+
+  const getStats = () =>{
+    StatsInterface.getTotalIdeasOnTribe().then(success =>{
+      setStats({
+        ...stats,
+        totalIdeas: _.get(success,"data.data")
+      })
+    })
+    StatsInterface.getTotalUsersOnTribe().then(success =>{
+      setStats({
+        ...stats,
+        totalusers: _.get(success,"data.data")
+      })
+    })
+  }
+
   function gotoProfile() {
     history.push("/profile");
   }
@@ -52,35 +76,35 @@ function gallery(props) {
           >
             <div className="ideatribe-stats d-flex align-items-center w-100">
               <Col
-                md="6"
+                md="3" sm="6"
                 className="d-flex flex-column align-items-center stats-entry"
               >
-                <span className="stats-title master-header"> 113</span>
+                <span className="stats-title master-header"> {stats.totalIdeas}</span>
                 <span className="stats-value second-grey">Ideas submitted</span>
               </Col>
               <Col
-                md="6"
+                md="3" sm="6"
                 className="d-flex flex-column align-items-center stats-entry"
               >
-                <span className="stats-title master-header">1102</span>
+                <span className="stats-title master-header">{stats.totalusers}</span>
                 <span className="stats-value second-grey">
                   Users registered
                 </span>
               </Col>
               <Col
-                md="6"
+                md="3" sm="6"
                 className="d-flex flex-column align-items-center stats-entry"
               >
                 <span className="stats-title master-header">11 </span>
                 <span className="stats-value second-grey">Gold rewarded</span>
               </Col>
               <Col
-                md="6"
+                md="3" sm="6"
                 className="d-flex flex-column align-items-center stats-entry"
               >
                 <span className="stats-title master-header">113</span>
                 <span className="stats-value second-grey">
-                  Users registered
+                  Total Sales
                 </span>
               </Col>
             </div>
