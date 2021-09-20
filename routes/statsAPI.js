@@ -85,6 +85,6 @@ router.post("/getIdeasFromUser",getIdeasFromUser);
 router.post("/getTotalUpvotesForUser",getTotalUpvotesForUser);
 router.post("/getUpvotesForIdea",getUpvotesForIdea);
 // router.post("/getTotalGoldForUser",getTotalGoldForUser);
-router.post("/getTotalSalesValue",getTotalGoldForIdea);
+// router.post("/getTotalSalesValue",getTotalGoldForIdea);
 
 module.exports = router;
