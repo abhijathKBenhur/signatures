@@ -60,6 +60,7 @@ const EngageModal = (props) => {
       Status: app_constants.ACTION_STATUS.PENDING,
       type: app_constants.ACTIONS.BUY_IDEA,
       user: form.creator._id,
+      value: this.web3.utils.toWei(transactionInititationRequest.price, "ether")
     });
     setEngaging(app_constants.ACTION_STATUS.PENDING);
   }

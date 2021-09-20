@@ -8,7 +8,7 @@ const AlertBanner = ({isDismissible = true, variant="success", heading, content,
   
     return (
         <>
-            {show && <Alert className="special-alert" onClose={() => setShow(false)}  variant={variant} dismissible={isDismissible}>
+            {show && <Alert className="special-alert d-flex align-items-center justify-content-center" onClose={() => setShow(false)}  variant={variant} dismissible={isDismissible}>
                 {heading && <Alert.Heading> {heading} </Alert.Heading>}
                 {content && <p> 
                     {content} 
