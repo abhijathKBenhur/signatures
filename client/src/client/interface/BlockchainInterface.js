@@ -182,7 +182,7 @@ class BlockchainInterface {
                 isDismissible: false,
                 variant: "danger",
                 content: "Smart contract not deployed to detected network. Please change the network in metamask.",
-                actionText: "Switch",
+                actionText: "Switch Network",
                 actionFunction: CalledFunction
               }
               ReactDOM.render(<AlertBanner {...alertProperty}></AlertBanner>, document.querySelector('.appHeader'))
@@ -253,10 +253,15 @@ class BlockchainInterface {
             </a>
           </div>
         );
+        const redirectToMetaMask = () => {
+          window.location = "https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn?hl=en"
+        }
         const alertProperty = {
             isDismissible: false,
             variant: "danger",
-            content: "Non-Ethereum browser detected. You should consider trying MetaMask!",
+            content: "Non-Ethereum browser detected. You should consider trying",
+            actionFunction: redirectToMetaMask,
+            actionText: 'MetaMask!'
           }
           ReactDOM.render(<AlertBanner {...alertProperty}></AlertBanner>, document.querySelector('.appHeader'))
         reject(
