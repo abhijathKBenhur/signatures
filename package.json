@@ -32,6 +32,7 @@
     "mongoose": "^5.12.3",
     "multer": "^1.4.2",
     "node-env-run": "^4.0.2",
+    "nodemailer": "^6.6.3",
     "nodemon": "^2.0.7",
     "notenv": "^2.0.3",
     "react-redux": "^7.2.4",

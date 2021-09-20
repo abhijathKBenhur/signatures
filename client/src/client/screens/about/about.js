@@ -11,26 +11,46 @@ const About = () => {
   let history = useHistory();
   const [searchText, setSearchText] = useState("");
   const [subscribed, setSubscribed] = useState(false);
-  const [subscribedCount, setSubscribedCount] = useState(0);
+  const [subscribedList, setSubscribedList] = useState(0);
+  const [showMembers, setShowMembers] = useState(false);
+  const [errorMailId, setErrorMail] = useState(false);
 
   const submitMailId = () => {
-    RelationsInterface.subscribe({
-      mailID: searchText,
-    }).then((success) => {
-      setSubscribed(true);
-      setSubscribed(subscribedCount + 1);
-    });
+    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    if(!re.test(String(searchText).toLowerCase())){
+      setErrorMail(true)
+    }else{
+      setErrorMail(false)
+      RelationsInterface.subscribe({
+        mailID: searchText,
+      }).then((success) => {
+        setSubscribed(true);
+        let list = _.clone(subscribedList)
+        list.push(_.get(success,"data.data"))
+        setSubscribedList(list);
+        RelationsInterface.sendMail({mailID:searchText}).then(succes =>{
+          console.log(success)
+        }).catch(err =>{
+          console.error(err)
+        })
+      });
+    }
+    
   };
 
   useEffect(() => {
     RelationsInterface.getPrelaunches()
       .then((success) => {
-        setSubscribedCount(_.get(success, "data.data").length);
+        setSubscribedList(success.data.data)
       })
       .catch((err) => {
-        setSubscribedCount(0);
+        setSubscribedList([])
       });
   }, []);
+
+  const getSubscribers = () => {
+    setShowMembers(true)
+  }
 
   const type = (event) => {
     if (event) setSearchText(event.target.value);
@@ -95,10 +115,10 @@ const About = () => {
                         id="search-box"
                         autoComplete="off"
                         className="search-box w-100 h-100"
-                        placeholder="Email"
+                        placeholder="E-mail"
                         style={{ paddingLeft: "10px" }}
                       />
-                    </Col>
+                    </Col> 
                     <Col className="p-0">
                       <Button
                         variant="primary"
@@ -112,8 +132,12 @@ const About = () => {
                       </Button>
                     </Col>
                   </Row>
+                  <Row>
+                  {errorMailId &&  <span className="second-grey color-red mt-2">Please enter a valid e-mail address.</span>}
+                    </Row>
+                 
                   <Row className="mt-5 master-grey color-secondary">
-                    {subscribedCount} Subscribers
+                    {subscribedList.length} Subscribers
                   </Row>
                 </div>
               )}
@@ -121,7 +145,8 @@ const About = () => {
           </div>
         </Col>
         <Col md="5" lg="4" sm="12">
-          <img src={about_idea} width="100%"></img>
+          <img src={about_idea} onDoubleClick={() => {getSubscribers()}} width="100%"></img>
+          {showMembers && JSON.stringify(_.map(subscribedList,"mailID"))}
         </Col>
       </Row>
       <Row></Row>
