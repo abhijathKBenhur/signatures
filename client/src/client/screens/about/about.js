@@ -7,6 +7,7 @@ import _ from "lodash";
 import about_idea from "../../../assets/images/about_idea.png";
 import RelationsInterface from "../../interface/RelationsInterface";
 import { showToaster } from "../../commons/common.utils";
+import reactGA from 'react-ga'
 const About = () => {
   let history = useHistory();
   const [searchText, setSearchText] = useState("");
@@ -24,6 +25,12 @@ const About = () => {
       RelationsInterface.subscribe({
         mailID: searchText,
       }).then((success) => {
+        reactGA.event({
+          category:'Button',
+          action:"SUBSCRIBED",
+          label:"Subscribed for mail",
+          value: searchText
+        })
         setSubscribed(true);
         let list = _.clone(subscribedList)
         list.push(_.get(success,"data.data"))
@@ -46,6 +53,9 @@ const About = () => {
       .catch((err) => {
         setSubscribedList([])
       });
+
+      reactGA.initialize("UA-207963115-1")
+      reactGA.pageview("Subscribe Page")
   }, []);
 
   const getSubscribers = () => {
