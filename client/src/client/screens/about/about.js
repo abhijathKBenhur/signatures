@@ -18,7 +18,6 @@ const About = () => {
   const submitMailId = () => {
     const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     if(!re.test(String(searchText).toLowerCase())){
-      debugger
       setErrorMail(true)
     }else{
       setErrorMail(false)
@@ -29,7 +28,11 @@ const About = () => {
         let list = _.clone(subscribedList)
         list.push(_.get(success,"data.data"))
         setSubscribedList(list);
-        RelationsInterface.sendMail({mailID:searchText})
+        RelationsInterface.sendMail({mailID:searchText}).then(succes =>{
+          console.log(success)
+        }).catch(err =>{
+          console.error(err)
+        })
       });
     }
     
