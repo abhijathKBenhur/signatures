@@ -70,13 +70,13 @@ class BlockchainInterface {
     window.ethereum &&
       window.ethereum.on("accountsChanged", function(accounts) {
         {setTimeout(() => {
-          parentThis.getAccountDetails();
+          window.location.reload()
         }, 100)}
       });
     window.ethereum &&
       window.ethereum.on("chainChanged", function(chainId) {
         {setTimeout(() => {
-          parentThis.getAccountDetails();
+          window.location.reload()
         }, 100)}
       });
   }

@@ -9,9 +9,6 @@ import girl_idea from "../../../assets/images/girl_idea.png"
 import creativity from "../../../assets/images/creativity.png"
 import user from "../../../assets/images/user.png"
 import cover from "../../../assets/images/cover.jpg"
-import dummy1 from "../../../assets/images/dummy1.png"
-import dummy2 from "../../../assets/images/dummy2.jpg"
-import dummy3 from "../../../assets/images/dummy3.jpeg"
 import ProgressBar from "../../components/progress-bar/progressbar"
 const About = () => {
   let history = useHistory();

@@ -18,8 +18,9 @@ const EngageModal = (props) => {
   const isSelectedPurpose = (purpose) => {
     return form.purpose.purposeType === purpose;
   };
-  const app_constants = CONSTANTS
+  const app_constants = CONSTANTS;
   const [engaging, setEngaging] = useState(CONSTANTS.ACTION_STATUS.INIT);
+  const [statusMessage, setStatusMessage] = useState("");
 
   const [form, setFormData] = useState({
     owner: props.idea.owner,
@@ -51,7 +52,7 @@ const EngageModal = (props) => {
   ];
 
   function transactionInitiated(transactionInititationRequest) {
-    console.log("transactionInititationRequest")
+    console.log("transactionInititationRequest");
     TransactionsInterface.postTransaction({
       transactionID: transactionInititationRequest.transactionID,
       Status: app_constants.ACTION_STATUS.PENDING,
@@ -62,7 +63,7 @@ const EngageModal = (props) => {
   }
 
   function transactionCompleted(successResponse) {
-    console.log("transactionCompleted")
+    console.log("transactionCompleted");
     let buyer = successResponse.buyer;
     let seller = successResponse.owner;
     let PDFHash = successResponse.PDFHash;
@@ -70,24 +71,23 @@ const EngageModal = (props) => {
       buyer,
       seller,
       PDFHash,
-    }).then(success=>{
+    }).then((success) => {
       TransactionsInterface.setTransactionState({
         transactionID: successResponse.transactionID,
         status: app_constants.ACTION_STATUS.COMPLETED,
       });
       setEngaging(app_constants.ACTION_STATUS.PASSED);
-    })
-    
+    });
   }
 
   function transactionFailed(errorMessage, failedTransactionId) {
-    console.log("transactionFailed")
+    console.log("transactionFailed");
     setEngaging(app_constants.ACTION_STATUS.FAILED);
     TransactionsInterface.setTransactionState({
       transactionID: failedTransactionId,
       status: app_constants.ACTION_STATUS.FAILED,
     });
-    console.log(errorMessage)
+    setStatusMessage(errorMessage)
   }
 
   const getEngageText = (purpose, isVerb) => {
@@ -209,10 +209,10 @@ const EngageModal = (props) => {
                 })}
               </div>
               <div className="image-placeholder">
-              <Image className="img-fluid" src={getPlaceholder()}>
-              </Image>
-                </div>
-              
+                <Image className="img-fluid" src={getPlaceholder()} width="300px"></Image>
+                
+              </div>
+              <span className={"status_message " + engaging}>{statusMessage}</span>
             </Col>
           </Row>
         </div>
@@ -227,8 +227,10 @@ const EngageModal = (props) => {
         </div>
 
         <Col xs="12" className="button-bar justify-content-between d-flex">
-          <Button className="cancel-btn mr-2 mt-2" onClick={props.onHide}
-          disabled={engaging == CONSTANTS.ACTION_STATUS.PENDING}
+          <Button
+            className="cancel-btn mr-2 mt-2"
+            onClick={props.onHide}
+            disabled={engaging == CONSTANTS.ACTION_STATUS.PENDING}
           >
             Cancel
           </Button>

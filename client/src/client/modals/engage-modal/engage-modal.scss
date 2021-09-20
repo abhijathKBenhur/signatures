@@ -23,6 +23,14 @@
                   display: flex;
                   justify-content: center;
                 }
+                .status_message{
+                  &.SUCCESS{
+                    
+                  }
+                  &.FAILED{
+                    
+                  }
+                }
                 .purpose-tabs {
                   display: flex;
                   gap: 15px;

@@ -15,6 +15,7 @@ import SignatureInterface from "../../interface/SignatureInterface";
 import UserInterface from "../../interface/UserInterface";
 import { setReduxUserDetails } from "../../redux/actions";
 import { showToaster } from "../../commons/common.utils";
+import Register from "../../modals/Register/Register";
 const Header = (props) => {
   let history = useHistory();
   const reduxState = useSelector((state) => state, shallowEqual);
@@ -23,6 +24,7 @@ const Header = (props) => {
     metamaskID
   );
   const [loggedInUserDetails, setLoggedInUserDetails] = useState(userDetails);
+  const [showRegisterPopup, setShowRegisterPopup] = useState(false);
 
   useEffect(() => {
     const { metamaskID = undefined } = reduxState;
@@ -73,7 +75,9 @@ const Header = (props) => {
 
   function gotoPortfolio() {
     setAppLocatoin("profile");
-    history.push( loggedInUserDetails.userName ? "/profile/"+ loggedInUserDetails.userName : "/profile/create" );
+    loggedInUserDetails.userName ?
+    history.push( "/profile/"+ loggedInUserDetails.userName) :
+    setShowRegisterPopup(true)
   }
 
   function connectWallet() {
@@ -248,6 +252,7 @@ const Header = (props) => {
           </div>}
         </Container>
       </nav>
+      {showRegisterPopup && <Register></Register>}
     </div>
   );
 };
