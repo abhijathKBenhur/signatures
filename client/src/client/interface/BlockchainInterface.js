@@ -185,7 +185,7 @@ class BlockchainInterface {
                 actionText: "Switch",
                 actionFunction: CalledFunction
               }
-              ReactDOM.render(<AlertBanner {...alertProperty}></AlertBanner>, document.body)
+              ReactDOM.render(<AlertBanner {...alertProperty}></AlertBanner>, document.querySelector('.appHeader'))
             store.dispatch(setReduxMetaMaskID(undefined));
             store.dispatch(setReduxUserDetails({}));
             // window.alert(
@@ -253,18 +253,15 @@ class BlockchainInterface {
             </a>
           </div>
         );
-        const CalledFunction = () => {
-          console.log("jsdfghgsdf");
-        }
-        // const alertProperty = {
-        //     isDismissible: false,
-        //     variant: "danger",
-        //     content: "Non-Ethereum browser detected. You should consider trying MetaMask!",
-        //   }
-        //   ReactDOM.render(<AlertBanner {...alertProperty}></AlertBanner>, document.querySelector('.appHeader'))
-        // reject(
-        //   "Non-Ethereum browser detected. You should consider trying MetaMask!"
-        // );
+        const alertProperty = {
+            isDismissible: false,
+            variant: "danger",
+            content: "Non-Ethereum browser detected. You should consider trying MetaMask!",
+          }
+          ReactDOM.render(<AlertBanner {...alertProperty}></AlertBanner>, document.querySelector('.appHeader'))
+        reject(
+          "Non-Ethereum browser detected. You should consider trying MetaMask!"
+        );
       }
     });
     return promise;
