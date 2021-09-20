@@ -246,7 +246,7 @@ const SignatureNew = (props) => {
         loggedInUserDetails.userName,
         signature.ideaID,
         CONSTANTS.ACTIONS.UPVOTE,
-        CONSTANTS.ACTION_STATUS.PENDING,
+        CONSTANTS.ACTION_STATUS.COMPLETED,
         "Upvoting."
       ).then((success) => {
         const upVotesClone = _.cloneDeep(upvotes);
@@ -256,7 +256,7 @@ const SignatureNew = (props) => {
           loggedInUserDetails._id,
           signature.ideaID,
           CONSTANTS.ACTIONS.UPVOTE,
-          CONSTANTS.ACTION_STATUS.PENDING,
+          CONSTANTS.ACTION_STATUS.COMPLETED,
           loggedInUserDetails.userName + " just upvoted your idea.",
           JSON.stringify({
             ideaID: _.get(signature, "PDFHash"),

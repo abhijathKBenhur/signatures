@@ -16,6 +16,7 @@ import UserInterface from "../../interface/UserInterface";
 import { setReduxUserDetails } from "../../redux/actions";
 import { showToaster } from "../../commons/common.utils";
 import Register from "../../modals/Register/Register";
+import { getInitialSubString } from "../../commons/common.utils";
 const Header = (props) => {
   let history = useHistory();
   const reduxState = useSelector((state) => state, shallowEqual);
@@ -171,7 +172,9 @@ const Header = (props) => {
            {!_.isEmpty(currentMetamaskAccount) &&  <div className="right-section">
             <span className="loggedinaccount secondary-grey color-white" title={currentMetamaskAccount} onClick={() => {
               window.open("https://kovan.etherscan.io/address/" + currentMetamaskAccount);
-            }}>{currentMetamaskAccount&& currentMetamaskAccount.substring(0,3) + " ... " + currentMetamaskAccount.substring(currentMetamaskAccount.length - 3,currentMetamaskAccount.length)}</span>
+            }}>
+              {getInitialSubString(currentMetamaskAccount,4)}
+            </span>
             {/* <Button
               variant="primary"
               className="button"

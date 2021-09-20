@@ -103,12 +103,8 @@ $card-height: 200px;
         color: $white;
         justify-content: space-between;
         .title {
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
-          width: 80%;
-          font-size: 28px;
-          padding: 10px;
+          font-size: 35px;
+          line-height: 30px;
         }
         .description {
           overflow: hidden;

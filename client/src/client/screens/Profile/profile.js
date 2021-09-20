@@ -17,13 +17,14 @@ import "./profile.scss";
 import { Shimmer } from "react-shimmer";
 import Register from "../../modals/Register/Register";
 import SignatureInterface from "../../interface/SignatureInterface";
+import StatsInterface from "../../interface/StatsInterface"
 import NotificationInterface from "../../interface/NotificationInterface";
 import BlockChainInterface from "../../interface/BlockchainInterface";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { ExternalLink, Award, User } from "react-feather";
 import Clans from "./Clan/Clans";
 import ShareModal from "../../modals/share/share.modal";
-
+import { getInitialSubString } from "../../commons/common.utils";
 import Collections from "./collections";
 import store from "../../redux/store";
 import { setCollectionList } from "../../redux/actions";
@@ -46,8 +47,11 @@ function Profile(props) {
   } = reduxState;
 
   const [profileCollection, setProfileCOllection] = useState([]);
-  const [followers, setFollowers] = useState([]);
+  
   const [loggedInUserDetails, setLoggedInUserDetails] = useState({});
+  const [followers, setFollowers] = useState([]);
+  const [upvotesCount, setUpvotesCount] = useState(0);
+  const [ideasCount, setIdeasCount] = useState(0);
   const [myNotifications, setMyNotifications] = useState([]);
   const [billetList, setBilletList] = useState([]);
 
@@ -109,6 +113,8 @@ function Profile(props) {
     },
   ];
 
+  
+
   useEffect(() => {
     const { userDetails = {} } = reduxState;
     if (viewUser && !isMyPage()) {
@@ -125,10 +131,27 @@ function Profile(props) {
   useEffect(() => {
     fetchSignatures(loggedInUserDetails.userName);
     fetchNotifications();
+    getStats()
+
     if (!isMyPage()) {
       loadFollowers();
     }
   }, [loggedInUserDetails]);
+
+  const getStats = () =>{
+    StatsInterface.getIdeasFromUser({
+      owner:loggedInUserDetails._id
+    }).then(success =>{
+      setIdeasCount(_.get(success,"data.data"))
+    })
+    
+    StatsInterface.getTotalUpvotesForUser({
+      userName: loggedInUserDetails.userName
+    }).then(success =>{
+      setUpvotesCount(_.get(success,"data.data"))
+    })
+
+  }
 
   const getUserDetails = (payLoad) => {
     UserInterface.getUserInfo(payLoad).then((response) => {
@@ -213,7 +236,7 @@ function Profile(props) {
           viewUser,
           CONSTANTS.ACTIONS.FOLLOW,
           CONSTANTS.ACTION_STATUS.PENDING,
-          loggedInUserDetails.userName + " just followed you."
+          loggedInUserDetails.userName + " followed you."
         );
       });
     } else {
@@ -278,21 +301,7 @@ function Profile(props) {
                       <Row className="">
                         <Col className="address-copy d-flex align-items-center justify-content-center">
                           <span className="address-value third-header">
-                            {_.get(loggedInUserDetails, "metamaskId") &&
-                              _.get(
-                                loggedInUserDetails,
-                                "metamaskId"
-                              ).substring(0, 5) +
-                                " ..... " +
-                                _.get(
-                                  loggedInUserDetails,
-                                  "metamaskId"
-                                ).substring(
-                                  _.get(loggedInUserDetails, "metamaskId")
-                                    .length - 5,
-                                  _.get(loggedInUserDetails, "metamaskId")
-                                    .length
-                                )}
+                          {getInitialSubString(_.get(loggedInUserDetails, "metamaskId"),4)}
                           </span>
                           <i
                             className="fa fa-external-link ml-2"
@@ -409,18 +418,18 @@ function Profile(props) {
                         md="6"
                         className="d-flex flex-column align-items-center stats-entry"
                       >
-                        <span className="stats-title master-grey">113</span>
+                        <span className="stats-title master-grey">{ideasCount}</span>
                         <span className="stats-value second-grey  text-center">
-                          Posts
+                          Ideas Posted
                         </span>
                       </Col>
                       <Col
                         md="6"
                         className="d-flex flex-column align-items-center stats-entry"
                       >
-                        <span className="stats-title master-grey">113</span>
+                        <span className="stats-title master-grey">{upvotesCount}</span>
                         <span className="stats-value second-grey  text-center">
-                          Upvotes
+                          Total upvotes
                         </span>
                       </Col>
                     </Row>
