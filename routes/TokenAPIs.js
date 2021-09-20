@@ -143,7 +143,7 @@ buySignature = async (req, res) => {
   const saleCriteria = {
     owner: buyer._id,
     price: 0,
-    purpose: {type:"KEEP"},
+    purpose: {purposeType:"KEEP"},
   };
 
   IdeaSchema.findOneAndUpdate(findCriteria, saleCriteria)

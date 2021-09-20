@@ -2,6 +2,7 @@ import React, { useState, useRef } from "react";
 import { Button, Modal } from "react-bootstrap";
 import _ from "lodash";
 import { Row, Col, Form, InputGroup, Dropdown, Image } from "react-bootstrap";
+import { useHistory, useLocation } from "react-router-dom";
 import CONSTANTS from "../../commons/Constants";
 import minions from "../../../assets/images/minions.png";
 import loadingGif from "../../../assets/images/loader_blocks.gif";
@@ -15,6 +16,7 @@ import BlockchainInterface from "../../interface/BlockchainInterface";
 import Web3 from "web3";
 import TransactionsInterface from "../../interface/TransactionInterface";
 const EngageModal = (props) => {
+  let history = useHistory();
   const isSelectedPurpose = (purpose) => {
     return form.purpose.purposeType === purpose;
   };
@@ -77,6 +79,8 @@ const EngageModal = (props) => {
         status: app_constants.ACTION_STATUS.COMPLETED,
       });
       setEngaging(app_constants.ACTION_STATUS.PASSED);
+      history.push( "/profile/"+ successResponse.buyer.metamaskId);
+    
     });
   }
 
