@@ -360,10 +360,10 @@ class BlockchainInterface {
               this.web3.eth.call(tx, tx.blockNumber).then(result => {
                 transactionFailed(result.data.message,transactionHash)
               }).catch(error =>{
-                transactionFailed(error.data.message,transactionHash)
+                transactionFailed(_.get(error,"data.message"),transactionHash)
               })
             }).catch(hashError =>{
-              transactionFailed(hashError.data.message,transactionHash)
+              transactionFailed(_.get(hashError,"data.message"),transactionHash)
             })
           }
       });

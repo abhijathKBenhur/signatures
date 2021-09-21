@@ -49,14 +49,16 @@ function gallery(props) {
       setStats({
         ...stats,
         totalIdeas: _.get(success,"data.data")
+      }, ()=> {
+        StatsInterface.getTotalUsersOnTribe().then(success =>{
+          setStats({
+            ...stats,
+            totalusers: _.get(success,"data.data")
+          })
+        })
       })
     })
-    StatsInterface.getTotalUsersOnTribe().then(success =>{
-      setStats({
-        ...stats,
-        totalusers: _.get(success,"data.data")
-      })
-    })
+   
   }
 
   function gotoProfile() {

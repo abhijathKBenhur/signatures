@@ -30,7 +30,7 @@ const EngageModal = (props) => {
     title: props.idea.title,
     category: props.idea.category,
     description: props.idea.description,
-    price: new Web3(window.ethereum).utils.fromWei(props.idea.price, "ether"),
+    price: window.web3.utils.fromWei(props.idea.price, "ether"),
     thumbnail: props.idea.thumbnail,
     PDFFile: props.idea.PDFFile,
     PDFHash: props.idea.PDFHash,
@@ -60,8 +60,9 @@ const EngageModal = (props) => {
       Status: app_constants.ACTION_STATUS.PENDING,
       type: app_constants.ACTIONS.BUY_IDEA,
       user: form.creator._id,
-      value: this.web3.utils.toWei(transactionInititationRequest.price, "ether")
+      value: window.web3.utils.toWei(transactionInititationRequest.price, "ether")
     });
+    
     setEngaging(app_constants.ACTION_STATUS.PENDING);
   }
 
@@ -80,7 +81,7 @@ const EngageModal = (props) => {
         status: app_constants.ACTION_STATUS.COMPLETED,
       });
       setEngaging(app_constants.ACTION_STATUS.PASSED);
-      history.push( "/profile/"+ successResponse.buyer.metamaskId);
+      history.push( "/profile/"+ successResponse.buyer.userName);
     
     });
   }
