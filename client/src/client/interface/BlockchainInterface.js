@@ -312,12 +312,16 @@ class BlockchainInterface {
         console.log(receipt);
       })
       .on("error", (err) => {
-        console.log(err);
         let transactionHash = payLoad.transactionID;
-        transactionFailed(err,transactionHash)
-          if(_.isUndefined(transactionHash)){
-            transactionFailed("Transaction could not be initiated",transactionHash)
-          }
+        this.web3.eth.getTransaction(transactionHash).then(tx =>{
+          this.web3.eth.call(tx, tx.blockNumber).then(result => {
+            transactionFailed(result.data.message,transactionHash)
+          }).catch(error =>{
+            transactionFailed(_.get(error,"data.message"),transactionHash)
+          })
+        }).catch(hashError =>{
+          transactionFailed(_.get(hashError,"data.message"),transactionHash)
+        })
       });
   }
 
