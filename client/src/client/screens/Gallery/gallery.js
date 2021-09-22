@@ -6,7 +6,7 @@ import "./gallery.scss";
 import CONSTANTS from "../../commons/Constants";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import SignatureInterface from "../../interface/SignatureInterface";
-import StatsInterface from "../../interface/StatsInterface"
+import StatsInterface from "../../interface/StatsInterface";
 import { useHistory } from "react-router-dom";
 import Cookies from "universal-cookie";
 import DiscoverMore from "../../components/discover-more/discover-more";
@@ -18,73 +18,66 @@ function gallery(props) {
   let history = useHistory();
   const cookies = new Cookies();
   const reduxState = useSelector((state) => state, shallowEqual);
-  const { collectionList, setCollectionList } = useState([]);
-  //const [visitedUser, setIsVisitedUser] = useState(cookies.get("visitedUser"));
-
+  const [collectionList, setCollectionList] = useState([]);
+  const [visitedUser, setIsVisitedUser] = useState(cookies.get("visitedUser"));
 
   const [galleryFilters, setGalleryFilters] = useState({
-    searchString:"",
-    category: "",
+    searchString: "",
+    categories: "",
   });
 
   const [stats, setStats] = useState({
-    totalIdeas:0,
+    totalIdeas: 0,
     totalusers: 0,
-    totalTribegoldDistributed:0,
-    totalSaleValue:0
+    totalTribegoldDistributed: 0,
+    totalSaleValue: 0,
   });
-  
+
   useEffect(() => {
     cookies.set("visitedUser", true);
-
-    getStats()
-    // reloadGallery()
+    getStats();
   }, []);
 
-  const reloadGallery =() => {
-    let filter ={}
-    if(galleryFilters.searchString){
-      filter.searchString = filter
+  function refreshCollection(type, filter) {
+    let constraints = {}
+    switch (type) {
+      case CONSTANTS.FILTERS_TYPES.SEARCH:
+        setGalleryFilters({ ...galleryFilters, searchString: filter });
+        constraints = {...galleryFilters, searchString: filter}
+        break;
+      case CONSTANTS.FILTERS_TYPES.CATEGORY_FILTER:
+        setGalleryFilters({ ...galleryFilters, categories: filter });
+        constraints = {...galleryFilters, categories: filter}
+        break;
     }
-    if(galleryFilters.category){
-      filter.tags = galleryFilters.category
-    }
-    SignatureInterface.getSignatures(galleryFilters).then((signatures) => {
-      let response = _.get(signatures, "data.data");
-      debugger
-      // setCollectionList(response)
-    });
+    reloadGallery(constraints);
   }
 
-  const getStats = () =>{
+  const reloadGallery = (constraints) => {
+    SignatureInterface.getSignatures(constraints).then((signatures) => {
+      let response = _.get(signatures, "data.data");
+      console.log(response)
+      setCollectionList(response)
+    });
+  };
+
+  const getStats = () => {
     let statsList = [
       StatsInterface.getTotalIdeasOnTribe(),
       StatsInterface.getTotalUsersOnTribe(),
       StatsInterface.getTotalSalesHeld(),
       // StatsInterface.getTotalTribeGoldDistributed()
-    ]
+    ];
     Promise.all(statsList).then((values) => {
       setStats({
         ...stats,
-        totalIdeas: _.get(values[0],"data.data"),
-        totalusers: _.get(values[1],"data.data"),
-        totalSaleValue: _.get(values[2],"data.data"),
+        totalIdeas: _.get(values[0], "data.data"),
+        totalusers: _.get(values[1], "data.data"),
+        totalSaleValue: _.get(values[2], "data.data"),
         // totalTribegoldDistributed:_.get(values[3],"data.data"),
-      })
+      });
     });
-   
-  }
-
-  function refreshCollection(type, filter) {
-    switch(type){
-      case CONSTANTS.FILTERS_TYPES.SEARCH:
-        console.log("filter" + type, "based on " + filter)
-      break;
-      case CONSTANTS.FILTERS_TYPES.CATEGORY_FILTER:
-        console.log("filter" + type, "based on " + filter)
-      break;
-    }
-  }
+  };
 
   return (
     <Container fluid>
@@ -99,36 +92,47 @@ function gallery(props) {
           >
             <div className="ideatribe-stats d-flex align-items-center w-100">
               <Col
-                md="3" sm="6"
+                md="3"
+                sm="6"
                 className="d-flex flex-column align-items-center stats-entry"
               >
-                <span className="stats-title master-header"> {stats.totalIdeas}</span>
+                <span className="stats-title master-header">
+                  {" "}
+                  {stats.totalIdeas}
+                </span>
                 <span className="stats-value second-grey">Ideas submitted</span>
               </Col>
               <Col
-                md="3" sm="6"
+                md="3"
+                sm="6"
                 className="d-flex flex-column align-items-center stats-entry"
               >
-                <span className="stats-title master-header">{stats.totalusers}</span>
+                <span className="stats-title master-header">
+                  {stats.totalusers}
+                </span>
                 <span className="stats-value second-grey">
                   Users registered
                 </span>
               </Col>
               <Col
-                md="3" sm="6"
+                md="3"
+                sm="6"
                 className="d-flex flex-column align-items-center stats-entry"
               >
                 <span className="stats-title master-header">0 </span>
-                <span className="stats-value second-grey">Gold Incentiviced</span>
+                <span className="stats-value second-grey">
+                  Gold Incentiviced
+                </span>
               </Col>
               <Col
-                md="3" sm="6"
+                md="3"
+                sm="6"
                 className="d-flex flex-column align-items-center stats-entry"
               >
-                <span className="stats-title master-header">{stats.totalSaleValue}</span>
-                <span className="stats-value second-grey">
-                  Total Sales
+                <span className="stats-title master-header">
+                  {stats.totalSaleValue}
                 </span>
+                <span className="stats-value second-grey">Total Sales</span>
               </Col>
             </div>
           </Row>
@@ -136,19 +140,23 @@ function gallery(props) {
             className="d-flex flex-column align-content-center position-relative"
             style={{ top: "-10px" }}
           >
-            {/* <SearchBar searchTextChanged={refreshCollection}/> */}
-            {/* <DiscoverMore categorySelected={refreshCollection}></DiscoverMore> */}
+            <SearchBar searchTextChanged={refreshCollection} />
+            <DiscoverMore categorySelected={refreshCollection}></DiscoverMore>
           </Row>
           <div className="separator"> </div>
-          <Rack deck={collectionList}></Rack>
+          {collectionList && <Rack deck={collectionList}></Rack>}
         </Col>
         <Col md="3" className="latest-news mt-3">
           <div className="gutter-block mt-3">
-            <span className="second-header color-secondary">Recent stories</span>
+            <span className="second-header color-secondary">
+              Recent stories
+            </span>
             <hr></hr>
             <div className="activity-entry d-flex flex-row">
               <div className="activity-content  d-flex flex-column">
-                <div className="activity-title master-grey">Elon in the Tribe</div>
+                <div className="activity-title master-grey">
+                  Elon in the Tribe
+                </div>
                 <div className="activity-description second-grey">
                   Elon musk upvoted ideaTribe in producthunt.
                 </div>
@@ -160,9 +168,12 @@ function gallery(props) {
 
             <div className="activity-entry d-flex flex-row mt-3">
               <div className="activity-content  d-flex flex-column">
-                <div className="activity-title master-grey">Surprise airdrop incoming!</div>
+                <div className="activity-title master-grey">
+                  Surprise airdrop incoming!
+                </div>
                 <div className="activity-description second-grey">
-                  0.5 Tribe Gold for completing first 10 ideas by 1st of January 2022
+                  0.5 Tribe Gold for completing first 10 ideas by 1st of January
+                  2022
                 </div>
               </div>
               <div className="activity-thumbnail">
@@ -172,16 +183,17 @@ function gallery(props) {
 
             <div className="activity-entry d-flex flex-row mt-3">
               <div className="activity-content  d-flex flex-column">
-                <div className="activity-title master-grey">David guetta in the Tribe</div>
+                <div className="activity-title master-grey">
+                  David guetta in the Tribe
+                </div>
                 <div className="activity-description second-grey">
-                David guetta signed up on ideatTribe
+                  David guetta signed up on ideatTribe
                 </div>
               </div>
               <div className="activity-thumbnail">
                 <img src="https://pbs.twimg.com/profile_images/1335939208595329025/6pVApHxk_400x400.jpg"></img>
               </div>
             </div>
-
           </div>
           <hr></hr>
 

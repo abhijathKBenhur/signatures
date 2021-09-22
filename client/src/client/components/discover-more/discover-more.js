@@ -10,29 +10,10 @@ import SignatureInterface from "../../interface/SignatureInterface";
 const DiscoverMore = (props) => {
   const [selectedCateogory, setSelectedCateogory] = useState("");
   const categorySelected = (item,index) => {
-    selectedCateogory.value == item.value? setSelectedCateogory("") : setSelectedCateogory(item)
-    props.categorySelected(CONSTANTS.FILTERS_TYPES.CATEGORY_FILTER,item)
+    let targetCateogry = selectedCateogory == item.value?  "" : item.value;
+    setSelectedCateogory(targetCateogry)
+    props.categorySelected(CONSTANTS.FILTERS_TYPES.CATEGORY_FILTER,targetCateogry)
   }
-  const getCollectionListBasedOntags = () => {
-    try {
-      let postObj = {
-        tags: [selectedCateogory]
-      }
-      SignatureInterface.getSignatures(postObj).then(
-        (signatures) => {
-          let response = _.get(signatures, "data.data");
-          let isEmptyPresent = _.find(response, (responseItem) => {
-            return _.isEmpty(responseItem.ideaID);
-          });
-        },
-        (error) => {
-        }
-      );
-    } catch (e) {
-      console.log(e);
-    }
-  }
-
     return (
         <div className="discover-topics-section">
           <div className="topics-list">
@@ -41,7 +22,7 @@ const DiscoverMore = (props) => {
               CONSTANTS.CATEGORIES.slice(0,10).map((item,i) => <li key={i}>
                 <span
                 
-                  className={selectedCateogory.value == item.value ? "category-name third-header selected mr-2" : "category-name third-header  mr-2"}
+                  className={selectedCateogory == item.value ? "category-name third-header selected mr-2" : "category-name third-header  mr-2"}
                   bsstyle="primary"
                   onClick={(event) => {
                       categorySelected(item,i)

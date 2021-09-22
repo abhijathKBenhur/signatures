@@ -9,7 +9,7 @@ import SignatureInterface from "../../interface/SignatureInterface";
 import CONSTANTS from "../../commons/Constants";
 function Search(props) {
   const reduxState = useSelector((state) => state, shallowEqual);
-  const dispatch = useDispatch();
+  const appConstants = CONSTANTS;
   const wrapperRef = useRef(null);
   const [tags, setTags] = useState([]);
   const [searchText, setSearchText] = useState("");
@@ -33,7 +33,7 @@ function Search(props) {
     // let tagsFromBottom = _.filter(categoriesList, function(o) { return o.isSelected; }).map(val => val.value) || [];
     // if (tags.length || tagsFromBottom.length)
     //   postObj.tags = [...tags.map(tag => tag.value), ...tagsFromBottom]
-    props.searchTextChanged(CONSTANTS.FILTERS_TYPES.SEARCH,searchText)
+    props.searchTextChanged(appConstants.FILTERS_TYPES.SEARCH,searchText)
   
   }, [searchText, tags]);
   const search = (event) => {
