@@ -307,7 +307,7 @@ function Profile(props) {
                             className="fa fa-external-link ml-2"
                             onClick={() => {
                               window.open(
-                                "https://kovan.etherscan.io/address/" +
+                                "https://mumbai.polygonscan.com/address/" +
                                   _.get(loggedInUserDetails, "userName")
                               );
                             }}

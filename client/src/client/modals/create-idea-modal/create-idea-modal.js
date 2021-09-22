@@ -107,13 +107,13 @@ const CreateIdeaModal = ({
       </Form.Row>
     );
   };
-  function openInEtherscan() {
-    window.open("https://kovan.etherscan.io/tx/" + billet.transactionID);
+  function showInChainExplorer() {
+    window.open("https://mumbai.polygonscan.com/tx/" + billet.transactionID);
   }
   const getQrcode = () => {
     QRCode.toCanvas(
       document.getElementById("canvas"),
-      "https://kovan.etherscan.io/address/" + _.get(billet, "transactionID"),
+      "https://mumbai.polygonscan.com/address/" + _.get(billet, "transactionID"),
       {
         color: {
           dark: "#1b1919", // black dots
@@ -449,7 +449,7 @@ const CreateIdeaModal = ({
                       className="cursor-pointer signature-icons"
                       color="#F39422"
                       onClick={() => {
-                        openInEtherscan();
+                        showInChainExplorer();
                       }}
                     ></Crosshair>
                     <Download
