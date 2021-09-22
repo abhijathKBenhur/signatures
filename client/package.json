@@ -23,7 +23,6 @@
     "dom-to-image": "^2.6.0",
     "eth-revert-reason": "^1.0.3",
     "feather-icons-react": "^0.4.3",
-    "font-awesome": "^4.7.0",
     "formik": "^2.2.6",
     "ipfs-api": "^26.1.2",
     "ipfs-only-hash": "^4.0.0",

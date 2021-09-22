@@ -224,8 +224,8 @@ function Clan(props) {
     <Container fluid>
       <Row className="profile">
         {_.isEmpty(loggedInUserDetails.userName) ? (
-          <Row className="register-modal">
-            <Register></Register>
+          <Row className="clan-modal">
+            <Register ></Register>
           </Row>
         ) : (
           <div className="separator w-100">

@@ -170,6 +170,7 @@ const CreateNew = () => {
 
   useEffect(() => {
     const { metamaskID = undefined } = reduxState;
+    
     if (metamaskID) {
       setFormData({
         ...form,

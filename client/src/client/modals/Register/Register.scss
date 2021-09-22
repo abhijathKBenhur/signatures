@@ -3,6 +3,10 @@
 .register-modal {
     .modal-content {
       .modal-header {
+        .close{
+          position: absolute;
+          right: 15px;
+        }
           .steps{
               margin-top: 20px;
               width: 100%;
@@ -59,9 +63,6 @@
         }
         .steps ul li.active div::after {
           border-left: 30px solid $primary;
-        }
-        .close {
-          display: none !important;
         }
       }
       .modal-body {

@@ -1,7 +1,15 @@
 import _ from "lodash";
 import React, { useState, useEffect } from "react";
 import { GoogleLogin } from "react-google-login";
-import { Row, Col, Form, Modal, Button, Image } from "react-bootstrap";
+import {
+  Row,
+  Col,
+  Form,
+  Modal,
+  Button,
+  Image,
+  CloseButton,
+} from "react-bootstrap";
 import "./Register.scss";
 import "react-step-progress-bar/styles.css";
 import { shallowEqual, useSelector } from "react-redux";
@@ -97,19 +105,17 @@ const Register = (props) => {
               })
               .catch((err) => {
                 setRegistration(FAILED);
-                setregistrationErrorMessage(_.get(err, "data.message"));
+                setregistrationErrorMessage("FAILED TO REGISTER USER");
               });
-            console.log(success);
           } else {
             setRegistration(FAILED);
-            setregistrationErrorMessage(response.data);
-            console.log(response.data);
+            setregistrationErrorMessage(response.data.split("\n")[0]);
           }
         })
         .catch((error) => {
           setRegistration(FAILED);
-          setregistrationErrorMessage(error.data);
-          console.log(error.data);
+          setregistrationErrorMessage(error);
+          console.log(error);
         });
     } catch (e) {
       console.log("shiotter", e);
@@ -153,18 +159,18 @@ const Register = (props) => {
   const handleBack = () => {
     const index = steps.findIndex((x) => x.key === activeStep.key);
     if (index === 0) {
-      history.push("/home");
-    }
-
-    setSteps((prevStep) =>
-      prevStep.map((x) => {
-        if (x.key === activeStep.key) x.isDone = false;
-        return x;
-      })
-    );
-    setActiveStep(steps[index - 1]);
-    if (activeStep.index == 2) {
-      setRegistration("");
+      props.onHide();
+    } else {
+      setSteps((prevStep) =>
+        prevStep.map((x) => {
+          if (x.key === activeStep.key) x.isDone = false;
+          return x;
+        })
+      );
+      setActiveStep(steps[index - 1]);
+      if (activeStep.index == 2) {
+        setRegistration("");
+      }
     }
   };
 
@@ -440,28 +446,35 @@ const Register = (props) => {
       }
     }
   }
+  const closePopup = () =>{
+    props.onHide()
+  }
 
   return (
     <Modal
-      show={true}
+      show={props.show}
       dialogClassName="register-modal"
-      backdrop="static"
-      keyboard={false}
       centered
-      showClose="false"
       size="lg"
+      fullscreen={true}
+      onHide={props.onHide}
     >
       <Modal.Header className="d-flex flex-column">
-        <Modal.Title>Hi! You are not yet registered with us.</Modal.Title>
+        <Modal.Title>
+          <span className="master-grey">
+            Hi, You are not yet registered with us. Yet!
+          </span>
+          <CloseButton onClick={() => {closePopup()}}></CloseButton>
+        </Modal.Title>
         <div className="steps">
           <ul className="nav">
             {steps.map((step, i) => {
               return (
                 <li
                   key={i}
-                  className={`${activeStep.key === step.key ? "active" : ""} ${
-                    step.isDone ? "done" : ""
-                  }`}
+                  className={`${
+                    _.get(activeStep, "key") === step.key ? "active" : ""
+                  } ${step.isDone ? "done" : ""}`}
                 >
                   <div className="step-content d-flex align-items-center">
                     <span>{step.label}</span>
@@ -486,7 +499,7 @@ const Register = (props) => {
           md="12"
           className="d-flex justify-content-between align-items-center "
         >
-          {registration == PASSED ? (
+          {registration == PASSED || registration == FAILED ? (
             <div></div>
           ) : (
             <Button

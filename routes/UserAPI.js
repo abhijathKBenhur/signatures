@@ -114,7 +114,7 @@ getUserInfo = async (req, res) => {
     if (err) {
       return res.status(400).json({ success: false, error: err });
     }
-    if (!user) {
+    if (!user || !user.userName) {
       return res.status(404).json({ success: true, data: [] });
     }
     return res.status(200).json({ success: true, data: user });

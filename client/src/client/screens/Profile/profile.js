@@ -24,7 +24,7 @@ import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { ExternalLink, Award, User } from "react-feather";
 import Clans from "./Clan/Clans";
 import ShareModal from "../../modals/share/share.modal";
-import { getInitialSubString } from "../../commons/common.utils";
+import { getShortAddress } from "../../commons/common.utils";
 import Collections from "./collections";
 import store from "../../redux/store";
 import { setCollectionList } from "../../redux/actions";
@@ -301,7 +301,7 @@ function Profile(props) {
                       <Row className="">
                         <Col className="address-copy d-flex align-items-center justify-content-center">
                           <span className="address-value third-header">
-                          {getInitialSubString(_.get(loggedInUserDetails, "metamaskId"),4)}
+                          {getShortAddress(_.get(loggedInUserDetails, "metamaskId"),4)}
                           </span>
                           <i
                             className="fa fa-external-link ml-2"

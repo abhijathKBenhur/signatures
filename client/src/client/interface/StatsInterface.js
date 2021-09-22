@@ -27,13 +27,27 @@ export const getTotalGoldForIdea = (payload) =>  {
     return AxiosInstance.post("/getTotalGoldForIdea",payload) 
 }
 
+export const getTotalSalesHeld = (payload) =>  { 
+    return AxiosInstance.post("/getTotalSalesHeld",payload) 
+}
+
+export const getTotalTribeGoldDistributed = (payload) =>  { 
+    return AxiosInstance.post("/getTotalTribeGoldDistributed",payload) 
+}
+
+
+
+
+
 const ClanInterface = {
     getTotalIdeasOnTribe,
     getTotalUsersOnTribe,
     getIdeasFromUser,
     getTotalUpvotesForUser,
     getTotalGoldForUser,
-    getTotalGoldForIdea
+    getTotalGoldForIdea,
+    getTotalSalesHeld,
+    getTotalTribeGoldDistributed
 }
 
 export default ClanInterface

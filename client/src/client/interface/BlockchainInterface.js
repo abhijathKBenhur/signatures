@@ -5,7 +5,7 @@ import contractJSON from "../../contracts/ideaTribe.json";
 import store from "../redux/store";
 import { setReduxMetaMaskID,setReduxUserDetails } from "../redux/actions";
 import ENDPOINTS from "../commons/Endpoints";
-import getRevertReason from'eth-revert-reason';
+import { useHistory } from "react-router-dom";
 import ReactDOM from 'react-dom';
 import AlertBanner from "../components/alert/alert"
 import AxiosInstance from "../wrapper/apiWrapper"
@@ -59,7 +59,10 @@ const CHAIN_CONFIGS = {
   }
 };
 
+
+
 class BlockchainInterface {
+  
   constructor() {
     this.web3 = undefined;
     this.metamaskAccount = undefined;
@@ -70,16 +73,19 @@ class BlockchainInterface {
     window.ethereum &&
       window.ethereum.on("accountsChanged", function(accounts) {
         {setTimeout(() => {
-          window.location.reload()
+          window.location.href = '/home';
         }, 100)}
       });
     window.ethereum &&
       window.ethereum.on("chainChanged", function(chainId) {
         {setTimeout(() => {
-          window.location.reload()
+          window.location.href = '/home';
+          
         }, 100)}
       });
   }
+
+  
 
   addNetwork(chain_id) {
     window.ethereum
@@ -216,7 +222,6 @@ class BlockchainInterface {
         this.web3.eth.handleRevert = true
         this.web3.eth.transactionConfirmationBlocks = transactionConfirmationBlocks
         window.web3 = this.web3;
-        this.switchNetwork();
         window.ethereum
           .enable()
           .then((accountId) => {
@@ -259,7 +264,7 @@ class BlockchainInterface {
         const alertProperty = {
             isDismissible: false,
             variant: "danger",
-            content: "Non-Ethereum browser detected. You should consider trying",
+            content: "Non-Ethereum browser detected. You should consider trying ",
             actionFunction: redirectToMetaMask,
             actionText: 'MetaMask!'
           }
@@ -309,19 +314,9 @@ class BlockchainInterface {
       .on("error", (err) => {
         console.log(err);
         let transactionHash = payLoad.transactionID;
-        
+        transactionFailed(err,transactionHash)
           if(_.isUndefined(transactionHash)){
             transactionFailed("Transaction could not be initiated",transactionHash)
-          }else{
-            this.web3.eth.getTransaction(transactionHash).then(tx =>{
-              this.web3.eth.call(tx, tx.blockNumber).then(result => {
-                transactionFailed(result.data.message,transactionHash)
-              }).catch(error =>{
-                transactionFailed(error.data.message,transactionHash)
-              })
-            }).catch(hashError =>{
-              transactionFailed(hashError.data.message,transactionHash)
-            })
           }
       });
   }
