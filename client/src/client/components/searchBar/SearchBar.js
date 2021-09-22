@@ -7,12 +7,10 @@ import { Tag } from "react-feather";
 import _ from "lodash";
 import SignatureInterface from "../../interface/SignatureInterface";
 import CONSTANTS from "../../commons/Constants";
-import { setCollectionList } from "../../redux/actions";
-function Search() {
+function Search(props) {
   const reduxState = useSelector((state) => state, shallowEqual);
-  const dispatch = useDispatch();
+  const appConstants = CONSTANTS;
   const wrapperRef = useRef(null);
-  const { categoriesList = [] } = reduxState;
   const [tags, setTags] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [showDropdown, setShowDropdown] = useState(false);
@@ -32,26 +30,11 @@ function Search() {
 
   useEffect(() => {
     const { metamaskID = undefined } = reduxState;
-    let postObj = { searchString: searchText };
-    let tagsFromBottom = _.filter(categoriesList, function(o) { return o.isSelected; }).map(val => val.value) || [];
-    if (tags.length || tagsFromBottom.length)
-      postObj.tags = [...tags.map(tag => tag.value), ...tagsFromBottom]
-    try {
-      SignatureInterface.getSignatures(postObj).then(
-        (signatures) => {
-          let response = _.get(signatures, "data.data")
-          let isEmptyPresent = _.find(response, (responseItem) => {
-            return _.isEmpty(responseItem.ideaID);
-          });
-          dispatch(setCollectionList(response));
-        },
-        (error) => {
-          dispatch(setCollectionList([]));
-        }
-      );
-    } catch (e) {
-      console.log(e);
-    }
+    // let tagsFromBottom = _.filter(categoriesList, function(o) { return o.isSelected; }).map(val => val.value) || [];
+    // if (tags.length || tagsFromBottom.length)
+    //   postObj.tags = [...tags.map(tag => tag.value), ...tagsFromBottom]
+    props.searchTextChanged(appConstants.FILTERS_TYPES.SEARCH,searchText)
+  
   }, [searchText, tags]);
   const search = (event) => {
     if (event) setSearchText(event.target.value);
@@ -73,22 +56,7 @@ function Search() {
           className="search-box"
           placeholder="Search IdeaTribe"
         />
-        {/* <Tag
-          className="search-tag"
-          color="#56288c"
-          size={20}
-          onClick={(event) => {
-            event.stopPropagation();
-            setShowDropdown(!showDropdown);
-          }}
-        ></Tag> */}
-        {/* <div className="tags-pills">
-          {tags
-            .filter((item) => item.isSelected)
-            .map((item) => (
-              <span>{item.value}</span>
-            ))}
-        </div> */}
+       
         {showDropdown && (
           <Form.Group as={Col} className="dropdown" md="12">
             <Select

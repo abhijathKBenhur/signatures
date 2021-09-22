@@ -26,8 +26,6 @@ import Clans from "./Clan/Clans";
 import ShareModal from "../../modals/share/share.modal";
 import { getShortAddress } from "../../commons/common.utils";
 import Collections from "./collections";
-import store from "../../redux/store";
-import { setCollectionList } from "../../redux/actions";
 import SendMessage from "../../modals/send-message/send-message";
 import EditProfile from "../../modals/edit-profile/edit-profile";
 import CreateClan from "../../modals/create-clan/create-clan";
@@ -181,7 +179,6 @@ function Profile(props) {
           console.log("billetList ==> ", billetList);
           setBilletList([...billetList]);
           setProfileCOllection(response);
-          dispatch(setCollectionList(response));
         }
       );
     }

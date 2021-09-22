@@ -71,7 +71,7 @@ getSignatures = async (req, res) => {
   let userName = req.body.userName;
   let limit = req.body.limit;
   let offset = req.body.offset;
-  let tags = req.body.tags;
+  let categories = req.body.categories;
   let searchString = req.body.searchString;
   let searchOrArray = [];
   let payLoad = {
@@ -80,19 +80,17 @@ getSignatures = async (req, res) => {
 
   //search string block start
 
-  if (tags) {
-    for (let i = 0; i < tags.length; i++) {
-      let tag = tags[0];
-      searchOrArray.push({ category: { $regex: new RegExp(tag, "i") } });
-    }
-    console.log(searchOrArray);
+  if (categories) {
+    let tag = categories;
+    console.log(tag);
+    searchOrArray.push({ category: { $regex: new RegExp(tag, "i") } });
+    
   }
   if (searchString) {
     searchOrArray.push({ title: { $regex: new RegExp(searchString, "i") } });
     searchOrArray.push({ description: { $regex: new RegExp(searchString, "i") } });
   }
   if (searchOrArray.length > 0) {
-
     payLoad.$or = searchOrArray;
   }
 
