@@ -26,7 +26,6 @@ import { ExternalLink, Award, User } from "react-feather";
 import ShareModal from "../../modals/share/share.modal";
 
 import store from "../../redux/store";
-import { setCollectionList } from "../../redux/actions";
 import SendMessage from "../../modals/send-message/send-message";
 import EditProfile from "../../modals/edit-profile/edit-profile";
 import CreateClan from "../../modals/create-clan/create-clan";
@@ -171,7 +170,6 @@ function Clan(props) {
           console.log("billetList ==> ", billetList);
           setClanBilletList([...billetList]);
           setclanCollection(response);
-          dispatch(setCollectionList(response));
         }
       );
     }

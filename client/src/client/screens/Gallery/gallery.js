@@ -12,37 +12,49 @@ import Cookies from "universal-cookie";
 import DiscoverMore from "../../components/discover-more/discover-more";
 import SearchBar from "../../components/searchBar/SearchBar";
 import cover from "../../../assets/images/cover.jpg";
-import { setCollectionList } from "../../redux/actions";
 import CommentsPanel from "../../components/comments/CommentsPanel";
 import logo from "../../../assets/logo/signatures.png";
 function gallery(props) {
   let history = useHistory();
   const cookies = new Cookies();
   const reduxState = useSelector((state) => state, shallowEqual);
-  const { collectionList = [] } = reduxState;
+  const { collectionList, setCollectionList } = useState([]);
   //const [visitedUser, setIsVisitedUser] = useState(cookies.get("visitedUser"));
+
+
+  const [galleryFilters, setGalleryFilters] = useState({
+    searchString:"",
+    category: "",
+  });
+
   const [stats, setStats] = useState({
     totalIdeas:0,
     totalusers: 0,
     totalTribegoldDistributed:0,
     totalSaleValue:0
   });
-  const dispatch = useDispatch();
+  
   useEffect(() => {
-    console.log("getting signatures ");
+    cookies.set("visitedUser", true);
+
     getStats()
-    SignatureInterface.getSignatures().then((signatures) => {
-      let response = _.get(signatures, "data.data");
-      dispatch(setCollectionList(response));
-    });
+    // reloadGallery()
   }, []);
 
-  useEffect(() => {
-    return function cleanup() {
-      cookies.set("visitedUser", true);
-      //setIsVisitedUser(true);
-    };
-  }, []);
+  const reloadGallery =() => {
+    let filter ={}
+    if(galleryFilters.searchString){
+      filter.searchString = filter
+    }
+    if(galleryFilters.category){
+      filter.tags = galleryFilters.category
+    }
+    SignatureInterface.getSignatures(galleryFilters).then((signatures) => {
+      let response = _.get(signatures, "data.data");
+      debugger
+      // setCollectionList(response)
+    });
+  }
 
   const getStats = () =>{
     let statsList = [
@@ -63,8 +75,15 @@ function gallery(props) {
    
   }
 
-  function gotoProfile() {
-    history.push("/profile");
+  function refreshCollection(type, filter) {
+    switch(type){
+      case CONSTANTS.FILTERS_TYPES.SEARCH:
+        console.log("filter" + type, "based on " + filter)
+      break;
+      case CONSTANTS.FILTERS_TYPES.CATEGORY_FILTER:
+        console.log("filter" + type, "based on " + filter)
+      break;
+    }
   }
 
   return (
@@ -117,8 +136,8 @@ function gallery(props) {
             className="d-flex flex-column align-content-center position-relative"
             style={{ top: "-10px" }}
           >
-            <SearchBar />
-            <DiscoverMore></DiscoverMore>
+            {/* <SearchBar searchTextChanged={refreshCollection}/> */}
+            {/* <DiscoverMore categorySelected={refreshCollection}></DiscoverMore> */}
           </Row>
           <div className="separator"> </div>
           <Rack deck={collectionList}></Rack>

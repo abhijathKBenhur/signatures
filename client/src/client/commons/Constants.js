@@ -4,6 +4,11 @@ const CURRENCY = {
   symbol: "MATIC"
 }
 
+const FILTERS_TYPES ={
+  SEARCH: "SEARCH",
+  CATEGORY_FILTER:"CATEGORY_FILTER"
+}
+
 
 const CATEGORIES = [
     { value: "Creative_art", label: "Creative art" },
@@ -78,6 +83,7 @@ const CONSTANTS = {
   ACTIONS,
   ENTITIES,
   CURRENCY,
+  FILTERS_TYPES
 };
 
 export default CONSTANTS;
