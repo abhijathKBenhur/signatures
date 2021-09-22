@@ -300,3 +300,29 @@
     border: 1px solid $danger;
   }
 }
+
+.billet-item {
+  .user {
+    color: #755b99;
+    font-size: 24px;
+  }
+  .link {
+    font-size: 10px;
+    opacity: .7;
+  }
+  .transaction-head {
+    color: #776ce2;
+    font-size: 10px;
+  }
+  .hashValue{
+    color: #3d3c39;
+    font-size: 10px;
+  }
+  .item {
+    color: #403b6c;
+    font-size: 24px;
+  }
+  .time {
+    color: #6a6967;
+  }
+}

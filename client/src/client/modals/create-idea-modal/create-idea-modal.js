@@ -51,6 +51,7 @@ const CreateIdeaModal = ({
   const reduxState = useSelector((state) => state, shallowEqual);
   const [userClans, setUserClans] = useState( [] );
   const [imgHolder, setImgHolder] = useState(imagePlaceholder)
+  const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
   const history = useHistory();
  
   
@@ -343,6 +344,20 @@ const CreateIdeaModal = ({
     }
   }
 
+  const nth = function(d) {
+    if (d > 3 && d < 21) return 'th';
+    switch (d % 10) {
+      case 1:  return "st";
+      case 2:  return "nd";
+      case 3:  return "rd";
+      default: return "th";
+    }
+  }
+
+  const timeFormatted = (time) => {
+    return "on " + time.getDate() + nth(time.getDate()) + " " +months[time.getMonth()] + " " + time.getFullYear() + " " + (time.getHours() > 12 ? time.getHours() - 12: time.getHours()) + ":" + time.getMinutes() + (time.getHours() > 12 ? "PM" : "AM") + " GMT";
+  }
+
   const getElement = () => {
     let pusposeList = [
       CONSTANTS.PURPOSES.SELL,
@@ -371,15 +386,25 @@ const CreateIdeaModal = ({
                       <div className="billet-item">
                         <div className="user">@{billet.creator}</div>
                         <div className="name">{billet.fullName}</div>
-                        <div>ideaTribe.com</div>
+                        <div className="link">ideaTribe.com | Your ideas on blockchain </div>
                       </div>
                     </Col>
                   </Row>
+                  <Row className="justify-content-center">
+                    <div className="code-n-share">
+                      <Col md="12">
+                        <canvas id="canvas"></canvas>
+                        {setTimeout(() => {
+                          getQrcode();
+                        })}
+                      </Col>
+                    </div>
+                  </Row>
                   <Row className="row2">
                     <Col md="12">
-                      <div className="billet-item">
+                      <div className="billet-item justify-content-center">
                         <div className="item">{billet.title}</div><br></br>
-                        <div className="time"> {billet.time}, {billet.location}</div>
+                        <div className="time"> on {timeFormatted(billet.time)}, {billet.location}</div>
                       </div>
                     </Col>
                     <Col md="12"></Col>
@@ -388,17 +413,17 @@ const CreateIdeaModal = ({
                     <Col md="12">
                       <div className="billet-item">
                         <div className="trasnection-details">
-                          <div>TRANSACTION ID:</div>
+                          <div className="transaction-head">TRANSACTION ID:</div>
                           <span className="hashValue">
                             {billet.transactionID}
                           </span>
                         </div>
                         <div className="trasnection-details">
-                          <div>FILE HASH:</div>
+                          <div className="transaction-head">FILE HASH:</div>
                           <span className="hashValue">{billet.PDFHash}</span>
                         </div>
                         <div className="trasnection-details">
-                          <div>TOKEN ID:</div>
+                          <div className="transaction-head">TOKEN ID:</div>
                           <span className="hashValue">{billet.tokenID}</span>
                         </div>
                       </div>
@@ -415,14 +440,6 @@ const CreateIdeaModal = ({
                     </Col>
                     <Col md="12" className="p-0">
                       <img src={signatureImage} alt="logo" width="150px" />
-                    </Col>
-                  </div>
-                  <div className="code-n-share">
-                    <Col md="12">
-                      <canvas id="canvas"></canvas>
-                      {setTimeout(() => {
-                        getQrcode();
-                      })}
                     </Col>
                   </div>
                 </Col>
