@@ -25,7 +25,7 @@ function gallery(props) {
     totalIdeas:0,
     totalusers: 0,
     totalTribegoldDistributed:0,
-    totalSaleVale:0
+    totalSaleValue:0
   });
   const dispatch = useDispatch();
   useEffect(() => {
@@ -45,19 +45,21 @@ function gallery(props) {
   }, []);
 
   const getStats = () =>{
-    StatsInterface.getTotalIdeasOnTribe().then(success =>{
+    let statsList = [
+      StatsInterface.getTotalIdeasOnTribe(),
+      StatsInterface.getTotalUsersOnTribe(),
+      StatsInterface.getTotalSalesHeld(),
+      // StatsInterface.getTotalTribeGoldDistributed()
+    ]
+    Promise.all(statsList).then((values) => {
       setStats({
         ...stats,
-        totalIdeas: _.get(success,"data.data")
-      }, ()=> {
-        StatsInterface.getTotalUsersOnTribe().then(success =>{
-          setStats({
-            ...stats,
-            totalusers: _.get(success,"data.data")
-          })
-        })
+        totalIdeas: _.get(values[0],"data.data"),
+        totalusers: _.get(values[1],"data.data"),
+        totalSaleValue: _.get(values[2],"data.data"),
+        // totalTribegoldDistributed:_.get(values[3],"data.data"),
       })
-    })
+    });
    
   }
 
@@ -97,14 +99,14 @@ function gallery(props) {
                 md="3" sm="6"
                 className="d-flex flex-column align-items-center stats-entry"
               >
-                <span className="stats-title master-header">11 </span>
-                <span className="stats-value second-grey">Gold rewarded</span>
+                <span className="stats-title master-header">0 </span>
+                <span className="stats-value second-grey">Gold Incentiviced</span>
               </Col>
               <Col
                 md="3" sm="6"
                 className="d-flex flex-column align-items-center stats-entry"
               >
-                <span className="stats-title master-header">113</span>
+                <span className="stats-title master-header">{stats.totalSaleValue}</span>
                 <span className="stats-value second-grey">
                   Total Sales
                 </span>

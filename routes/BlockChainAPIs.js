@@ -47,13 +47,15 @@ register_user = (req, res) => {
           console.log("error ", error)
           let transactionHash = _.get(error,'receipt.transactionHash');
             web3Instance.eth.getTransaction(transactionHash).then(tx =>{
-              web3Instance.eth.call(tx, tx.blockNumber).then(result => {
-                console.log("A ", result)
-                return res.status(400).json({ success: false, data: result });
-            }).catch(result =>{
-              console.log("B ", result)
-              return res.status(400).json({ success: false, data: result});
-            })
+                web3Instance.eth.call(tx, tx.blockNumber).then(result => {
+                  return res.status(400).json({ success: false, data: result });
+              }).catch(err =>{
+                console.log("********"+err.toString())
+                return res.status(200).json({ success: false, data: err.toString() });
+              })
+          }).catch(err =>{
+            console.log("********"+err.toString())
+            return res.status(200).json({ success: false, data: "FAILED TO REGISTER" });
           })
         });
       }

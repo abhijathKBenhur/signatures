@@ -105,13 +105,11 @@ const Register = (props) => {
               })
               .catch((err) => {
                 setRegistration(FAILED);
-                setregistrationErrorMessage(_.get(err, "data.message"));
+                setregistrationErrorMessage("FAILED TO REGISTER USER");
               });
-            console.log(success);
           } else {
             setRegistration(FAILED);
-            setregistrationErrorMessage(response.data);
-            console.log(response.data);
+            setregistrationErrorMessage(response.data.split("\n")[0]);
           }
         })
         .catch((error) => {
