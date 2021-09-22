@@ -70,7 +70,7 @@ const CollectionCard = (props) => {
               goToUserProfile(_.get(signature,'owner.userName'));
             }}
           >
-            {signature.owner.userName}
+            {_.get(signature,"owner.userName")}
           </div>
         </div>
         <div

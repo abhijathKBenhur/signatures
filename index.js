@@ -36,14 +36,10 @@ app.use(
 );
 
 app.use((req, res, next) => {
-  console.log("req.headers.referer" )
-  console.log(req.header("x-forwarded-proto"))
   if (req.header("x-forwarded-proto") != undefined && req.header("x-forwarded-proto") !== "https") {
-    console.log("redirecting")
     res.redirect(`https://${req.header("host")}${req.url}`);
   }
   else {
-    console.log("not redirecting")
     next();
   }
 });

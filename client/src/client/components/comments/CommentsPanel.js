@@ -75,7 +75,7 @@ const CommentsPanel = (props) => {
           if (_.get(props, "idea.owner.userName")) {
             NotificationInterface.postNotification(
               loggedInUserDetails._id,
-              props.idea.owner.userName,
+              _.get(props,"idea.owner.userName"),
               CONSTANTS.ACTIONS.COMMENT,
               CONSTANTS.ACTION_STATUS.PENDING,
               value,

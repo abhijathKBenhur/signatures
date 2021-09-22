@@ -12,7 +12,7 @@ const AlertBanner = ({isDismissible = true, variant="success", heading, content,
                 {heading && <Alert.Heading> {heading} </Alert.Heading>}
                 {content && <p> 
                     {content} 
-                    {actionFunction &&  <Alert.Link  onClick={actionFunction}> {actionText} </Alert.Link> }
+                    {actionFunction &&  <Alert.Link  className="linkable" onClick={actionFunction}> {actionText} </Alert.Link> }
                 </p>}
                 {extraContent && <hr />}
                 {extraContent && <p className="mb-0"> {extraContent} </p>}

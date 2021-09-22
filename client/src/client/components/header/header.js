@@ -16,7 +16,7 @@ import UserInterface from "../../interface/UserInterface";
 import { setReduxUserDetails } from "../../redux/actions";
 import { showToaster } from "../../commons/common.utils";
 import Register from "../../modals/Register/Register";
-import { getInitialSubString } from "../../commons/common.utils";
+import { getShortAddress } from "../../commons/common.utils";
 const Header = (props) => {
   let history = useHistory();
   const reduxState = useSelector((state) => state, shallowEqual);
@@ -55,13 +55,6 @@ const Header = (props) => {
           store.dispatch(setReduxUserDetails({}));
         });
     }
-  }
-
-  function logoutUser() {
-    console.log("logging out");
-    localStorage.removeItem("userInfo");
-    showToaster("Logged out!", {type: 'error'})
-    window.location.reload();
   }
 
   function createnew() {
@@ -121,6 +114,9 @@ const Header = (props) => {
     }
     return null
   }
+  const hideModal = (type) => {
+    setShowRegisterPopup(false)
+  };
 
   return (
     <div>
@@ -173,7 +169,7 @@ const Header = (props) => {
             <span className="loggedinaccount secondary-grey color-white" title={currentMetamaskAccount} onClick={() => {
               window.open("https://kovan.etherscan.io/address/" + currentMetamaskAccount);
             }}>
-              {getInitialSubString(currentMetamaskAccount,4)}
+              {getShortAddress(currentMetamaskAccount,4)}
             </span>
             {/* <Button
               variant="primary"
@@ -255,9 +251,11 @@ const Header = (props) => {
           </div>}
         </Container>
       </nav>
-      {showRegisterPopup && <Register></Register>}
+      <Register show={showRegisterPopup} onHide={() => hideModal()}></Register>
     </div>
   );
+
+ 
 };
 
 export default Header;

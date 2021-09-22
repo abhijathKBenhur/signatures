@@ -42,3 +42,8 @@ export const getPurposeIcon = (item) => {
     }
   }
 
+
+  export const getShortAddress = (address) => {
+    return address? address.substring(0,3) + " ... " + address.substring(address.length - 3) : ""
+  }
+

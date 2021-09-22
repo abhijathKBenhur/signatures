@@ -51,6 +51,7 @@ const EngageModal = (props) => {
     CONSTANTS.PURPOSES.AUCTION,
     CONSTANTS.PURPOSES.LICENCE,
     CONSTANTS.PURPOSES.COLLAB,
+    CONSTANTS.PURPOSES.KEEP
   ];
 
   function transactionInitiated(transactionInititationRequest) {
@@ -111,7 +112,7 @@ const EngageModal = (props) => {
         return isVerb ? "available for collaboration" : "Collaborate";
 
       case CONSTANTS.PURPOSES.KEEP:
-        return "Not availble to engage.";
+        return "Okay";
       default:
         return null;
     }
@@ -171,7 +172,7 @@ const EngageModal = (props) => {
       className="info-modal"
       dialogClassName="info-modal-dialog"
       centered
-      close
+      close="true"
     >
       <Modal.Body className="info-modal-body">
         <div className="modal-header-wrapper">
