@@ -53,7 +53,7 @@ const App = () =>  {
             <Route path="/partner" component={Partner} />
             <Route path="/contact" component={Contact} />
             <Route path="/about" component={About} />
-            <Route exact path="/" render={() => <Redirect from="/" to="/about" />} />
+            <Route exact path="/" render={() => <Redirect from="/" to="/home" />} />
           </Switch>
         </div>
         <Footer></Footer>
