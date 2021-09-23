@@ -167,7 +167,7 @@ const Header = (props) => {
 
            {!_.isEmpty(currentMetamaskAccount) &&  <div className="right-section">
             <span className="loggedinaccount secondary-grey color-white" title={currentMetamaskAccount} onClick={() => {
-              window.open("https://kovan.etherscan.io/address/" + currentMetamaskAccount);
+              window.open("https://mumbai.polygonscan.com/address/" + currentMetamaskAccount);
             }}>
               {getShortAddress(currentMetamaskAccount,4)}
             </span>

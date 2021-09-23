@@ -60,13 +60,15 @@ const SignatureNew = (props) => {
     let signatureFromParent = location.state;
     if (signatureFromParent) {
       setSignature({ ...signature, ...signatureFromParent });
+      loadUpvotes(signatureFromParent.ideaID);
     } else {
       SignatureInterface.getSignatureByHash(hashId).then((response) => {
         let signatureObject = _.get(response, "data.data");
         setSignature({ ...signature, ...signatureObject });
+        loadUpvotes(signatureObject.ideaID);
       });
     }
-    loadUpvotes();
+    
     // setSignature({...signature, ...dummmySignature});
     getIPSPDFFile(hashId);
   }, []);
@@ -111,9 +113,9 @@ const SignatureNew = (props) => {
     };
   };
 
-  const loadUpvotes = () => {
+  const loadUpvotes = (id) => {
     RelationsInterface.getRelations({
-      to: signature.ideaID,
+      to: id,
     })
       .then((success) => {
         setUpvotes(_.map(success.data.data, "from"));
