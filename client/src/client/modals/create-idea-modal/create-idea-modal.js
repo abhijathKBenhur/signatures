@@ -29,6 +29,7 @@ import domtoimage from "dom-to-image";
 import { getPurposeIcon } from "../../commons/common.utils";
 import { shallowEqual, useSelector } from "react-redux";
 import ClanInterface from "../../interface/ClanInterface";
+import cover from "../../../assets/images/cover_opacity.png";
 import { useHistory } from "react-router-dom";
 const CreateIdeaModal = ({
   formErrors,
@@ -431,73 +432,19 @@ const CreateIdeaModal = ({
                   </Row>
                 </Col>
                 <Col
-                  md="3"
-                  className="right-strip   d-flex flex-column justify-content-around"
+                  md="4"
+                  className="right-strip   d-flex flex-column justify-content-around" style={{background:`url(${cover})`}}
                 >
                   <div className="brand">
-                    <Col md="12" className="p-0">
+                    <Col md="12" className="p-0 justify-content-center billet-item-head">
                       BILLET
                     </Col>
                     <Col md="12" className="p-0">
                       <img src={signatureImage} alt="logo" width="150px" />
                     </Col>
-                  </div>
-                </Col>
-                <Col md="1" className="actionables p-0 flex-column">
-                  <div className="in-app-actions d-flex flex-column pt-3">
-                    <Crosshair
-                      className="cursor-pointer signature-icons"
-                      color="#F39422"
-                      onClick={() => {
-                        openInEtherscan();
-                      }}
-                    ></Crosshair>
-                    <Download
-                      className="cursor-pointer signature-icons"
-                      color="#F39422"
-                      onClick={() => {
-                        exportToPdf();
-                      }}
-                    ></Download>
-                  </div>
-                  <div className="sharables d-flex flex-column align-flex-start">
-                    <reactShare.FacebookShareButton
-                      url={
-                        window.location.origin + "/signature/" + billet.PDFHash
-                      }
-                      quote={
-                        "Hey! I registered an original idea on blockchain!"
-                      }
-                    >
-                       <div className="social-icon-wrapper fb">
-                      <i class="fa fa-facebook" aria-hidden="true"></i>
-                    </div>
-                      {/* <reactShare.FacebookIcon size={32} round /> */}
-                    </reactShare.FacebookShareButton>
-                    <reactShare.WhatsappShareButton
-                      url={
-                        window.location.origin + "/signature/" + billet.PDFHash
-                      }
-                      title={
-                        "Hey! I registered an original idea on blockchain!"
-                      }
-                      separator=" "
-                    >
-                       <div className="social-icon-wrapper whatsapp">
-                    <i class="fa fa-whatsapp" aria-hidden="true"></i>
-                    </div>
-                      {/* <reactShare.WhatsappIcon size={32} round /> */}
-                    </reactShare.WhatsappShareButton>
-                    <reactShare.LinkedinShareButton
-                      url={
-                        window.location.origin + "/signature/" + billet.PDFHash
-                      }
-                    >
-                       <div className="social-icon-wrapper linkedin">
-                  <i class="fa fa-linkedin" aria-hidden="true"></i>
-                    </div>
-                      {/* <reactShare.LinkedinIcon size={32} round /> */}
-                    </reactShare.LinkedinShareButton>
+                    <Col md="12" className="p-0 justify-content-center billet-item-text">
+                      IdeaTribe.io
+                    </Col>
                   </div>
                 </Col>
               </Col>
