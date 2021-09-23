@@ -79,7 +79,7 @@ const CollectionCard = (props) => {
             openCardView();
           }}
         >
-          <div className="masking third-header h-100">
+          <div className={_.get(JSON.parse(signature.category), "value") + " masking third-header h-100"}>
             <div className="description">
               {
                getInitialSubString(signature.description, 40)}

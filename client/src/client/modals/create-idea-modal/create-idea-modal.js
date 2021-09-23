@@ -336,6 +336,7 @@ const CreateIdeaModal = ({
   }
 
   const handleCategoryChange = (ev) => {
+    debugger
     handleTagsChange(ev);
     switch(_.get(ev, 'value')){
       case "Creative_art" : setImgHolder(artPlaceHolder); break;

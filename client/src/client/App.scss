@@ -116,13 +116,16 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
     }
   }
   &.btn-ternary {
-    border-color: $primary-light !important;
-    color: $primary-light;
-    background: transparent;
+    color: $secondary;
+    background: $white !important;
     &:focus,
-    &:hover,
+    &:hover{
+      border-color: $white !important;
+      background: $secondary !important;
+      color: $white;
+    }
     &:active {
-      background: $primary-light !important;
+      background: $secondary !important;
       color: $white !important;
     }
   }

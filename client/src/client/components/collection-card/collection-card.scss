@@ -90,7 +90,7 @@ $card-height: 200px;
       .masking {
         position: absolute;
         display: flex;
-        opacity: 0.8;
+        opacity: 0.5;
         display: block;
         transition: opacity 300ms ease-in-out;
         top: 0px;
@@ -99,7 +99,15 @@ $card-height: 200px;
         border-radius: 10px 10px 0 0;
         text-align: left;
         padding: 5px 10px;
-        background-color: $primary;
+        &.Creative_art{
+          background-color: $category1;
+        }
+        &.Business_idea{
+          background-color: $category2;
+        }
+        &.Technical_inventions{
+          background-color: $category3;
+        }
         color: $white;
         justify-content: space-between;
         .title {

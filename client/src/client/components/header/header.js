@@ -101,7 +101,7 @@ const Header = (props) => {
     if(!window.location.href.includes('create')) {
      return  (
         <Button
-          variant="primary"
+          variant="ternary"
           className="button uploadButton"
           bsstyle="primary"
           onClick={() => {
