@@ -451,7 +451,7 @@ const CreateIdeaModal = ({
               </Col>
             </Row>
             <Row className="button-section  d-flex">
-              <Col xs="12" className="button-bar">
+              <Col xs="12" className="button-bar done-btn">
                 <Button
                   className="submit-btn"
                   onClick={gotoIdea}
