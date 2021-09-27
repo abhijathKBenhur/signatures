@@ -282,7 +282,7 @@ const SignatureNew = (props) => {
   const getIdeaStatus = (purpose) => {
     switch (purpose.purposeType) {
       case CONSTANTS.PURPOSES.SELL:
-      case CONSTANTS.PURPOSES.LICENCE:
+      case CONSTANTS.PURPOSES.LICENSE:
         return "Buy";
 
       case CONSTANTS.PURPOSES.AUCTION:

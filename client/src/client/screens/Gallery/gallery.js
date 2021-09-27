@@ -11,7 +11,7 @@ import { useHistory } from "react-router-dom";
 import Cookies from "universal-cookie";
 import DiscoverMore from "../../components/discover-more/discover-more";
 import SearchBar from "../../components/searchBar/SearchBar";
-import cover from "../../../assets/images/cover.jpg";
+import cover from "../../../assets/images/cover2.jpg";
 import CommentsPanel from "../../components/comments/CommentsPanel";
 import logo from "../../../assets/logo/signatures.png";
 function gallery(props) {

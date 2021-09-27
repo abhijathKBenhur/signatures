@@ -28,7 +28,7 @@ export const getPurposeIcon = (item) => {
       return "fa fa-handshake-o purpose-icon second-grey";
     } else if (item == CONSTANTS.PURPOSES.KEEP) {
       return "fa fa-floppy-o purpose-icon second-grey";
-    } else if (item == CONSTANTS.PURPOSES.LICENCE) {
+    } else if (item == CONSTANTS.PURPOSES.LICENSE) {
       return "fa fa-id-card-o purpose-icon second-grey";
     }
   }

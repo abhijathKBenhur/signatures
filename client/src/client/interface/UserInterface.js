@@ -22,13 +22,18 @@ export const updateUser = payload => {
 export const getNonceAndRegister = payload => { 
     return AxiosInstance.post(`/getNonceAndRegister`,payload) 
 }
+export const renewNonce = payload => { 
+    return AxiosInstance.post(`/renewNonce`,payload) 
+}
+
 
 const UserInterface = {
     registerUser,
     getUserInfo,
     updateUser,
     getUsers,
-    getNonceAndRegister
+    getNonceAndRegister,
+    renewNonce
 }
 
 export default UserInterface

@@ -1,6 +1,7 @@
 const NotificationSchema = require("../db-config/notification.schema");
 const express = require("express");
 const router = express.Router();
+ 
 
 markNotificationAsRead = (req, res) => {
   const body = req.body;

@@ -3,7 +3,43 @@ const express = require("express");
 const jwt_decode = require("jwt-decode");
 const jwt = require("jsonwebtoken");
 const router = express.Router();
+ 
 const mongoose = require("mongoose");
+
+
+const renewNonce = (req, res) => {
+  const body = req.body;
+  if (!body) {
+    return res.status(400).json({
+      success: false,
+      error: "You must provide a public address",
+    });
+  }
+
+  let targetMetamaskAddress = body.metamaskId;
+  let newNonce =  (Math.random() + 1).toString(36).substring(7);
+  console.log("Generating new nonce " + newNonce + " for " + targetMetamaskAddress)
+
+  User
+    .findOneAndUpdate({metamaskId:targetMetamaskAddress},{
+      nonce: newNonce
+    }, {new:true,upsert:true})
+    .then((user, b) => {
+      return res.status(201).json({
+        success: true,
+        data: user,
+        message: "New nonce saved!",
+      });
+    })
+    .catch((error) => {
+      return res.status(400).json({
+        error,
+        message: "New nonce not created!",
+      });
+    });
+};
+
+
 
 getNonceAndRegister = (req, res) => {
   const body = req.body;
@@ -17,8 +53,8 @@ getNonceAndRegister = (req, res) => {
   const newUser = new User({
     metamaskId: body.metamaskId,
     nonce : (Math.random() + 1).toString(36).substring(7)
-    
   });
+
   User.findOne({ metamaskId: body.metamaskId }, (err, user) => {
     if (err) {
       return res.status(400).json({ success: false, error: err });
@@ -72,12 +108,10 @@ registerUser = (req, res) => {
       .json({ success: false, error: "Invalid userdetails" });
   }
 
-  let updateParams = body;
+  let updateParams = Object.assign({}, body);
   delete updateParams._id
   var token = jwt.sign({ 
     metamaskId: newUser.metamaskId ,
-    userName: newUser.userName,
-    secret: body.secret,
     nonce: body.nonce
   }, process.env.TOKEN_KEY);
 
@@ -185,11 +219,13 @@ getUsers = async (req, res) => {
   });
 };
 
-router.post("/registerUser", registerUser);
+router.post("/registerUser" ,registerUser);
 router.post("/updateUser", updateUser);
-router.post("/getUserInfo", getUserInfo);
+router.post("/getUserInfo" , getUserInfo);
 router.post("/getUsers", getUsers);
 router.post("/getNonceAndRegister", getNonceAndRegister);
+router.post("/renewNonce", renewNonce);
+
 
 
 module.exports = router;

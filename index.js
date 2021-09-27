@@ -14,11 +14,14 @@ const ClanAPI = require("./routes/ClanAPI");
 const TransactionAPI = require("./routes/TransactionAPIs");
 const dotenv = require("dotenv");
 const path = require("path");
+const authorizer = require("./routes/middleware/authorizer");
+
 const app = express();
 const PORT = process.env.PORT || 4000;
 
 dotenv.config();
 
+app.use(authorizer)
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

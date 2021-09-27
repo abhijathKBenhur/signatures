@@ -1,6 +1,7 @@
 const TransactionSchema = require("../db-config/transaction.schema");
 const express = require("express");
 const router = express.Router();
+ 
 
 setTransactionState = (req, res) => {
   const body = req.body;
@@ -45,7 +46,6 @@ postTransaction = (req, res) => {
       error: "Blank",
     });
   }
-  
   const newTransaction = new TransactionSchema(body);
 
   if (!newTransaction) {

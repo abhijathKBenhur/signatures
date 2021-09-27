@@ -99,6 +99,7 @@ const Register = (props) => {
           if (response.success) {
             UserInterface.registerUser({ ...userDetails, secret, nonce })
               .then((mongoSuccess) => {
+                console.log("setting token :: " + mongoSuccess.token)
                 setCookie(mongoSuccess.token);
                 publishUserToApp();
                 setRegistration(PASSED);
@@ -128,7 +129,7 @@ const Register = (props) => {
 
   const setCookie = (token) => {
     const cookies = new Cookies();
-    cookies.set("ideaTribeAuthtoken", token);
+    cookies.set(CONSTANTS.COOKIE_TOKEN_PHRASE, token);
   };
 
   const handleNext = () => {

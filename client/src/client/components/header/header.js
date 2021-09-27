@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Button, Image, Form, Nav } from "react-bootstrap";
 import { useHistory, useLocation } from "react-router-dom";
 import logo from "../../../assets/logo/signatures.png";
-import _ from "lodash";
+import _, { isEmpty } from "lodash";
 import { User, Plus, Search } from "react-feather";
 import "./header.scss";
 import "react-toastify/dist/ReactToastify.css";
@@ -17,7 +17,15 @@ import { setReduxUserDetails } from "../../redux/actions";
 import { showToaster } from "../../commons/common.utils";
 import Register from "../../modals/Register/Register";
 import { getShortAddress } from "../../commons/common.utils";
+import Cookies from "universal-cookie";
+import jwt_decode from "jwt-decode";
+import CONSTANTS from "../../commons/Constants";
+import AlertBanner from "../alert/alert";
+import ReactDOM from 'react-dom';
 const Header = (props) => {
+  const decoder = jwt_decode;
+  const cookies = new Cookies();
+  const appConstants = CONSTANTS
   let history = useHistory();
   const reduxState = useSelector((state) => state, shallowEqual);
   const { metamaskID = undefined, userDetails = {} } = reduxState;
@@ -35,20 +43,72 @@ const Header = (props) => {
   }, [reduxState]);
 
   useEffect(() => {
-    console.log("getting user ingo");
-    connectWallet();
+    if (_.isEmpty(currentMetamaskAccount)) {
+      connectWallet();
+    }
   }, []);
 
   useEffect(() => {
     refreshUserDetails();
   }, [currentMetamaskAccount]);
 
+  function manageCookies(userData) {
+    let authToken = cookies.get(appConstants.COOKIE_TOKEN_PHRASE);
+    let decoded = {};
+    let reRequestSignature = false;
+    if (!_.isEmpty(authToken) || authToken != "undefined") {
+      try {
+        decoded = decoder(authToken);
+      } catch (err) {
+        reRequestSignature = true;
+      }
+      if (_.get(decoded, "metamaskId") != userData.metamaskId) {
+        reRequestSignature = true;
+      }
+    }
+    if (_.isEmpty(authToken) || authToken == "undefined") {
+      reRequestSignature = true;
+    }
+    if (reRequestSignature) {
+      UserInterface.renewNonce({
+        metamaskId: userData.metamaskId,
+      })
+        .then((success) => {
+          let nonce = _.get(success, "data.data.nonce");
+          BlockchainInterface.signToken(nonce).then((secret) => {
+            BlockchainInterface.verifySignature({
+              nonce,
+              secret,
+            }).then((success) => {
+              let token = _.get(success, "data.data.token");
+              const cookies = new Cookies();
+              console.log("setting token :: " +  token)
+              cookies.set(appConstants.COOKIE_TOKEN_PHRASE, token);
+              console.log("verified cookies token")
+            });
+          }).catch((err) => {
+            const alertProperty = {
+              isDismissible: false,
+              variant: "danger",
+              content: "Your account was not signed with metamask.",
+              actionText: "Sign",
+              actionFunction: manageCookies
+            }
+            ReactDOM.render(<AlertBanner {...alertProperty}></AlertBanner>, document.querySelector('.appHeader'))
+          });
+        })
+        
+    }
+  }
+
   function refreshUserDetails() {
     if (!_.isEmpty(currentMetamaskAccount)) {
       UserInterface.getUserInfo({ metamaskId: currentMetamaskAccount })
         .then((userDetails) => {
-          store.dispatch(setReduxUserDetails(_.get(userDetails, "data.data")));
-          setLoggedInUserDetails(_.get(userDetails, "data.data"));
+          let userData = _.get(userDetails, "data.data");
+          store.dispatch(setReduxUserDetails(userData));
+          setLoggedInUserDetails(userData);
+          manageCookies(userData);
         })
         .catch((success) => {
           setLoggedInUserDetails({});
@@ -69,9 +129,9 @@ const Header = (props) => {
 
   function gotoPortfolio() {
     setAppLocatoin("profile");
-    loggedInUserDetails.userName ?
-    history.push( "/profile/"+ loggedInUserDetails.userName) :
-    setShowRegisterPopup(true)
+    loggedInUserDetails.userName
+      ? history.push("/profile/" + loggedInUserDetails.userName)
+      : setShowRegisterPopup(true);
   }
 
   function connectWallet() {
@@ -97,9 +157,8 @@ const Header = (props) => {
   ));
 
   const isUserAuthForPublish = () => {
-    
-    if(!window.location.href.includes('create')) {
-     return  (
+    if (!window.location.href.includes("create")) {
+      return (
         <Button
           variant="ternary"
           className="button uploadButton"
@@ -110,12 +169,12 @@ const Header = (props) => {
         >
           Publish Idea
         </Button>
-      )
+      );
     }
-    return null
-  }
+    return null;
+  };
   const hideModal = (type) => {
-    setShowRegisterPopup(false)
+    setShowRegisterPopup(false);
   };
 
   return (
@@ -136,7 +195,7 @@ const Header = (props) => {
                 className="cursor-pointer"
                 onClick={() => gotoGallery()}
               ></img>
-              
+
               {/* <span class="master-header color-primary">ideaTribe</span> */}
             </a>
             {/* <SearchBar /> */}
@@ -165,13 +224,21 @@ const Header = (props) => {
             {/* <Form.Control size="sm" type="text" placeholder="Normal text" /> */}
           </div>
 
-           {!_.isEmpty(currentMetamaskAccount) &&  <div className="right-section">
-            <span className="loggedinaccount secondary-grey color-white" title={currentMetamaskAccount} onClick={() => {
-              window.open("https://mumbai.polygonscan.com/address/" + currentMetamaskAccount);
-            }}>
-              {getShortAddress(currentMetamaskAccount,4)}
-            </span>
-            {/* <Button
+          {!_.isEmpty(currentMetamaskAccount) && (
+            <div className="right-section">
+              <span
+                className="loggedinaccount secondary-grey color-white"
+                title={currentMetamaskAccount}
+                onClick={() => {
+                  window.open(
+                    "https://mumbai.polygonscan.com/address/" +
+                      currentMetamaskAccount
+                  );
+                }}
+              >
+                {getShortAddress(currentMetamaskAccount, 4)}
+              </span>
+              {/* <Button
               variant="primary"
               className="button"
               bsstyle="primary"
@@ -181,40 +248,41 @@ const Header = (props) => {
             >
               Connect
             </Button> */}
-            { _.isEmpty(loggedInUserDetails) ? (
-              <Button
-                variant="primary"
-                className="button"
-                bsstyle="primary"
-                onClick={() => {
-                  gotoPortfolio();
-                }}
-              >
-                Register
-              </Button>
-            ) : 
+              {_.isEmpty(loggedInUserDetails) ? (
+                <Button
+                  variant="primary"
+                  className="button"
+                  bsstyle="primary"
+                  onClick={() => {
+                    gotoPortfolio();
+                  }}
+                >
+                  Register
+                </Button>
+              ) : (
                 isUserAuthForPublish()
-            }
-            {_.isEmpty(loggedInUserDetails.imageUrl) ? (
-              <User color="white"
-                className="cursor-pointer header-icons"
-                onClick={() => {
-                  gotoPortfolio();
-                }}
-              ></User>
-            ) : (
-              <Image
-                className="cursor-pointer header-icons"
-                src={loggedInUserDetails.imageUrl}
-                roundedCircle
-                width="36px"
-                onClick={() => {
-                  gotoPortfolio();
-                }}
-              ></Image>
-            )}
+              )}
+              {_.isEmpty(loggedInUserDetails.imageUrl) ? (
+                <User
+                  color="white"
+                  className="cursor-pointer header-icons"
+                  onClick={() => {
+                    gotoPortfolio();
+                  }}
+                ></User>
+              ) : (
+                <Image
+                  className="cursor-pointer header-icons"
+                  src={loggedInUserDetails.imageUrl}
+                  roundedCircle
+                  width="36px"
+                  onClick={() => {
+                    gotoPortfolio();
+                  }}
+                ></Image>
+              )}
 
-            {/* <Dropdown>
+              {/* <Dropdown>
               <Dropdown.Toggle
                 as={ProfileDropDown}
                 id="dropdown-custom-components"
@@ -248,14 +316,13 @@ const Header = (props) => {
                 </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown> */}
-          </div>}
+            </div>
+          )}
         </Container>
       </nav>
       <Register show={showRegisterPopup} onHide={() => hideModal()}></Register>
     </div>
   );
-
- 
 };
 
 export default Header;

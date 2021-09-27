@@ -5,6 +5,7 @@ const RelationSchema = require("../db-config/relation.schema");
 const TransactionSchema = require("../db-config/transaction.schema");
 const express = require("express");
 const router = express.Router();
+ 
 
 getTotalIdeasOnTribe = async (req, res) => {
   let findCriteria = {};
@@ -20,7 +21,6 @@ getTotalIdeasOnTribe = async (req, res) => {
 
 getTotalUsersOnTribe = async (req, res) => {
   let findCriteria = {};
-  console.log("requesting getTotalUsersOnTribe")
   UserSchema.find(findCriteria).count().then( user => {
  
     if (!user) {

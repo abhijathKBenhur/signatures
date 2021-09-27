@@ -3,6 +3,7 @@ const UserSchema = require("../db-config/user.schema");
 const UserAPI = require("../routes/UserAPI");
 const express = require("express");
 const router = express.Router();
+ 
 const upload = require("../db-config/multer");
 const path = require("path");
 var fs = require("fs");
@@ -165,8 +166,9 @@ buySignature = async (req, res) => {
 };
 
 updateIdeaID = async (req, res) => {
+  const creatorId = await UserSchema.findOne({ metamaskId: req.body.creator });
   await IdeaSchema.findOneAndUpdate(
-    { transactionID: req.body.transactionID },
+    { transactionID: req.body.transactionID,  creator: creatorId },
     { ideaID: req.body.ideaID, status: "COMPLETED" },
     (err, token) => {
       if (err) {
@@ -185,8 +187,9 @@ updateIdeaID = async (req, res) => {
 
 removeIdeaEntry = async (req, res) => {
   console.log("deleting ," + req.body.transactionID)
+  const ownerId = await UserSchema.findOne({ metamaskId: req.body.owner });
   await IdeaSchema.deleteOne(
-    { transactionID: req.body.transactionID },
+    { transactionID: req.body.transactionID, owner: ownerId  },
     (err, token) => {
       if (err) {
         return res.status(400).json({ success: false, error: err });
@@ -213,7 +216,7 @@ updatePurpose = async (req, res) => {
   );
 
   await IdeaSchema.findOneAndUpdate(
-    { ideaID: req.body.ideaID },
+    { ideaID: req.body.ideaID, owner: req.body.owner },
     { purpose: req.body.purpose },
     (err, token) => {
       if (err) {

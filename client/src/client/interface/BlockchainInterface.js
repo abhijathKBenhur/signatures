@@ -12,6 +12,7 @@ import AxiosInstance from "../wrapper/apiWrapper"
 
 
 import axios from "axios";
+import CONSTANTS from "../commons/Constants";
 
 const api = axios.create({
   baseURL:
@@ -161,6 +162,12 @@ class BlockchainInterface {
     return AxiosInstance.post(`/register_user`, payload);
   };
 
+  verifySignature = (payload) => {
+    console.log("verifySignature");
+    return AxiosInstance.post(`/verifySignature`, payload);
+  };
+
+
   async getAccountDetails() {
     const promise = new Promise((resolve, reject) => {
       console.log("returning loadWeb3");
@@ -210,7 +217,10 @@ class BlockchainInterface {
   }
 
   signToken( nonce) {
-    return this.web3.eth.personal.sign(this.web3.utils.fromUtf8(`I approve and sign to register in ideaTribe. Nonce:${nonce}`),this.metamaskAccount,"testpassword")
+    console.log("Metamask request for signing")
+    console.log(CONSTANTS.SIGNATURE_MESSAGE+nonce)
+    console.log("from adddress   " + this.metamaskAccount)
+    return this.web3.eth.personal.sign(this.web3.utils.fromUtf8(CONSTANTS.SIGNATURE_MESSAGE+nonce),this.metamaskAccount, CONSTANTS.COOKIE_TOKEN_PHRASE)
   }
 
   loadWeb3() {
