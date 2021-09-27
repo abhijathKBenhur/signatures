@@ -49,7 +49,7 @@ const EngageModal = (props) => {
   let pusposeList = [
     CONSTANTS.PURPOSES.SELL,
     CONSTANTS.PURPOSES.AUCTION,
-    CONSTANTS.PURPOSES.LICENCE,
+    CONSTANTS.PURPOSES.LICENSE,
     CONSTANTS.PURPOSES.COLLAB,
     CONSTANTS.PURPOSES.KEEP
   ];
@@ -60,7 +60,7 @@ const EngageModal = (props) => {
       transactionID: transactionInititationRequest.transactionID,
       Status: app_constants.ACTION_STATUS.PENDING,
       type: app_constants.ACTIONS.BUY_IDEA,
-      user: form.creator._id,
+      user: props.currentUser._id,
       value: window.web3.utils.toWei(transactionInititationRequest.price, "ether")
     });
     
@@ -80,6 +80,7 @@ const EngageModal = (props) => {
       TransactionsInterface.setTransactionState({
         transactionID: successResponse.transactionID,
         status: app_constants.ACTION_STATUS.COMPLETED,
+        user: successResponse.buyer._id
       });
       setEngaging(app_constants.ACTION_STATUS.PASSED);
       history.push( "/profile/"+ successResponse.buyer.userName);
@@ -93,6 +94,7 @@ const EngageModal = (props) => {
     TransactionsInterface.setTransactionState({
       transactionID: failedTransactionId,
       status: app_constants.ACTION_STATUS.FAILED,
+      user: props.currentUser._id
     });
     setStatusMessage(errorMessage)
   }
@@ -102,7 +104,7 @@ const EngageModal = (props) => {
       case CONSTANTS.PURPOSES.SELL:
         return isVerb ? "available for purchase" : "Buy";
 
-      case CONSTANTS.PURPOSES.LICENCE:
+      case CONSTANTS.PURPOSES.LICENSE:
         return isVerb ? "available for licensing" : "Buy";
 
       case CONSTANTS.PURPOSES.AUCTION:
@@ -132,7 +134,7 @@ const EngageModal = (props) => {
           transactionCompleted,
           transactionFailed
         );
-      case CONSTANTS.PURPOSES.LICENCE:
+      case CONSTANTS.PURPOSES.LICENSE:
         return "Buy";
 
       case CONSTANTS.PURPOSES.AUCTION:

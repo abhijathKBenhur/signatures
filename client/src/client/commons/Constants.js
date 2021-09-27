@@ -1,4 +1,7 @@
 const chainID = "";
+const COOKIE_TOKEN_PHRASE = "ideaTribeAuthToken";
+const SIGNATURE_MESSAGE = "Hello from ideaTribe. Sign this message to prove that you have access to this wallet and we'll log you in. To stop hackers from using your wallet, here is a unique code that they cannot guess. ";
+
 const CURRENCY = {
   name: "Matic",
   symbol: "MATIC"
@@ -21,7 +24,7 @@ const PURPOSES = {
   SELL: "SELL",
   COLLAB: "COLLABORATE",
   KEEP: "KEEP",
-  LICENCE:  "LICENCE",
+  LICENSE:  "LICENSE",
 };
 
 const ENTITIES = {
@@ -83,7 +86,9 @@ const CONSTANTS = {
   ACTIONS,
   ENTITIES,
   CURRENCY,
-  FILTERS_TYPES
+  FILTERS_TYPES,
+  COOKIE_TOKEN_PHRASE,
+  SIGNATURE_MESSAGE
 };
 
 export default CONSTANTS;

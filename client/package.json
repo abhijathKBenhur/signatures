@@ -20,6 +20,7 @@
     "chai-as-promised": "7.1.1",
     "chai-bignumber": "3.0.0",
     "crypto-js": "^4.1.1",
+    "css-doodle": "^0.19.2",
     "dom-to-image": "^2.6.0",
     "eth-revert-reason": "^1.0.3",
     "feather-icons-react": "^0.4.3",

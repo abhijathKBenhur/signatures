@@ -24,6 +24,7 @@
     "@truffle/hdwallet-provider": "^1.4.1",
     "body-parser": "^1.19.0",
     "cloudinary": "^1.25.2",
+    "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "css-doodle": "^0.19.2",
     "eth-revert-reason": "^1.0.3",

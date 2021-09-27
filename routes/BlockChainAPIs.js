@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+ 
 const getRevertReason = require("eth-revert-reason");
 const Web3 = require("web3");
 const contractJSON = require("../client/src/contracts/ideaTribe.json");
@@ -13,7 +14,7 @@ const web3Instance = new Web3(hdWallet);
 const UserSchema = require("../db-config/user.schema");
 const publicKey =
   web3Instance.eth.accounts.privateKeyToAccount(privateKey).address;
-
+  const jwt = require("jsonwebtoken");
 const deployedContract = new web3Instance.eth.Contract(
   contractJSON.abi,
   contractJSON.address,
@@ -25,12 +26,39 @@ const transactionObject = {
   from: publicKey,
 };
 
+
+verifySignature =  (req, res) => {
+  const SIGNATURE_MESSAGE = "Hello from ideaTribe. Sign this message to prove that you have access to this wallet and we'll log you in. To stop hackers from using your wallet, here is a unique code that they cannot guess. ";
+  let nonce = req.body.nonce;
+  let messageHash = web3Instance.utils.fromUtf8(SIGNATURE_MESSAGE+ nonce)
+  console.log("recovering hash")
+  web3Instance.eth.personal.ecRecover(messageHash, req.body.secret).then(success => {
+    console.log("recovered hash" + success)
+    UserSchema.findOne({ metamaskId: success }).then(signedUser =>{
+      console.log("received signatures for" , signedUser.userName)
+      if(signedUser.nonce == req.body.nonce){
+        var token = jwt.sign({ 
+          metamaskId: signedUser.metamaskId ,
+          nonce: req.body.nonce
+        }, process.env.TOKEN_KEY);
+        return res.status(200).json({ success: true, data: {...signedUser,token:token} });
+      }
+      else{
+        return res.status(400).json({ success: false, data: "FAILED TO SIGN" });
+      }
+    })
+  }).catch(err => {
+    console.log("kopile ec recover")
+  })
+}
+
 register_user = (req, res) => {
   let metamaskAddress = req.body.metamaskId;
   let userName = req.body.userName;
-  let messageHash = web3Instance.utils.fromUtf8(`I approve and sign to register in ideaTribe. Nonce:${req.body.nonce}`)
-  console.log("Signing messageHash", messageHash)
+  const SIGNATURE_MESSAGE = "Hello from ideaTribe. Sign this message to prove that you have access to this wallet and we'll log you in. To stop hackers from using your wallet, here is a unique code that they cannot guess. ";
+  let messageHash = web3Instance.utils.fromUtf8(SIGNATURE_MESSAGE+ req.body.nonce)
   web3Instance.eth.personal.ecRecover(messageHash, req.body.secret).then(success => {
+    console.log("recover success  " + success)
     UserSchema.findOne({ metamaskId: success }).then(user =>{
       if(user.nonce == req.body.nonce){
         deployedContract.methods
@@ -66,5 +94,7 @@ register_user = (req, res) => {
 
 
 router.post("/register_user", register_user);
+router.post("/verifySignature", verifySignature);
+
 
 module.exports = router;

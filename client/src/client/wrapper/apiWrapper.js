@@ -1,5 +1,6 @@
 import axios from "axios";
 import Cookies from "universal-cookie";
+import CONSTANTS from "../commons/Constants";
 import ENDPOINTS from "../commons/Endpoints";
 
 const AxiosInstance = axios.create({
@@ -10,8 +11,8 @@ const AxiosInstance = axios.create({
 });
 
 AxiosInstance.interceptors.request.use(function(config) {
-  const token = new Cookies().get("ideaTribeAuthtoken");
-  config.headers.Authorization = token;
+  const token = new Cookies().get(CONSTANTS.COOKIE_TOKEN_PHRASE);
+  config.headers["x-access-token"] =  token;
   return config;
 });
 
@@ -27,3 +28,6 @@ AxiosInstance.interceptors.response.use(
 );
 
 export default AxiosInstance;
+
+
+

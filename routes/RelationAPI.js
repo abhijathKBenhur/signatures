@@ -1,6 +1,7 @@
 const RelationSchema = require("../db-config/relation.schema");
 const express = require("express");
 const router = express.Router();
+ 
 
 // upvotes, downvotes, followEtc
 postRelation = (req, res) => {

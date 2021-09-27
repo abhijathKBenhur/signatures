@@ -71,7 +71,7 @@ const InfoModal = (props) => {
   let pusposeList = [
     CONSTANTS.PURPOSES.SELL,
     CONSTANTS.PURPOSES.AUCTION,
-    CONSTANTS.PURPOSES.LICENCE,
+    CONSTANTS.PURPOSES.LICENSE,
     CONSTANTS.PURPOSES.COLLAB,
     CONSTANTS.PURPOSES.KEEP,
   ];
@@ -149,7 +149,7 @@ const InfoModal = (props) => {
         return (
           <Col md="12">
             <span className="purpose-message second-grey">
-              You may chose to licence it to multiple people. Only your idea
+              You may chose to license it to multiple people. Only your idea
               will be available in the market.
             </span>
             <div className="collab-section">
@@ -181,13 +181,13 @@ const InfoModal = (props) => {
           </Col>
         );
         break;
-      case CONSTANTS.PURPOSES.LICENCE:
+      case CONSTANTS.PURPOSES.LICENSE:
         return (
           <Col md="12" sm="12" lg="12" cs="12">
             <Row>
               <Col md="12">
                 <span className="purpose-message second-grey">
-                  You may chose to licence it to multiple people. Only your idea
+                  You may chose to license it to multiple people. Only your idea
                   will be available in the market.
                 </span>
               </Col>

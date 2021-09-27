@@ -510,10 +510,11 @@ const CreateNew = () => {
       "The idea couldnt be published to blockchain. " + errorMessage
     );
     console.log("transactionID", failedTransactionId)
-    SignatureInterface.removeIdeaEntry({transactionID: failedTransactionId})
+    SignatureInterface.removeIdeaEntry({transactionID: failedTransactionId, ownerId: form.owner})
     TransactionsInterface.setTransactionState({
       transactionID:failedTransactionId,
-      status: CONSTANTS.ACTION_STATUS.FAILED
+      status: CONSTANTS.ACTION_STATUS.FAILED,
+      user: userDetails._id
     })
   }
 
@@ -546,7 +547,8 @@ const CreateNew = () => {
     SignatureInterface.updateIdeaID(successResponse)
     TransactionsInterface.setTransactionState({
       transactionID:successResponse.transactionID,
-      status: CONSTANTS.ACTION_STATUS.COMPLETED
+      status: CONSTANTS.ACTION_STATUS.COMPLETED,
+      user: userDetails._id
     })
   }
 
