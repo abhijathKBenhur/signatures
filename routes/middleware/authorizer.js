@@ -3,28 +3,27 @@ const UserSchema = require("../../db-config/user.schema");
 
 const authorizer = (req, res, next) => {
   let authRoutes = [
-    "/api/updateUser",
-    "/api/postComment",
-    "/api/markNotificationAsRead",
-    "/api/markNotificationAsRead",
-    "/api/postNotification",
-    "/api/getNotifications",
-    "/api/getNotifications",
-    "/api/postRelation",
-    "/api/getRelations",
-    "/api/addSignature",
-    "/api/buySignature",
-    "/api/updateIdeaID",
-    "/api/removeIdeaEntry",
-    "/api/updatePurpose",
-    "/api/postTransaction",
-    "/api/setTransactionState",
+    // "/api/updateUser",
+    // "/api/postComment",
+    // "/api/markNotificationAsRead",
+    // "/api/markNotificationAsRead",
+    // "/api/postNotification",
+    // "/api/getNotifications",
+    // "/api/getNotifications",
+    // "/api/postRelation",
+    // "/api/getRelations",
+    // "/api/addSignature",
+    // "/api/buySignature",
+    // "/api/updateIdeaID",
+    // "/api/removeIdeaEntry",
+    // "/api/updatePurpose",
+    // "/api/postTransaction",
+    // "/api/setTransactionState",
   ];
-  if (authRoutes.includes(req.path)) {
 
-    const token = req.headers["Authorization"];
-    console.log("interctokenepting " + token);
-    console.log("interctokenepting " + JSON.stringify(req.headers));
+  if (authRoutes.includes(req.path)) {
+  const token = req.headers["x-access-token"];
+
 
     if (!token) {
       return res.status(403).json({

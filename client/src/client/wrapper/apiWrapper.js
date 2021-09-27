@@ -12,7 +12,7 @@ const AxiosInstance = axios.create({
 
 AxiosInstance.interceptors.request.use(function(config) {
   const token = new Cookies().get(CONSTANTS.COOKIE_TOKEN_PHRASE);
-  config.headers.Authorization =  token;
+  config.headers["x-access-token"] =  token;
   return config;
 });
 

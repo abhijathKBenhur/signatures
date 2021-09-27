@@ -48,10 +48,10 @@ const CHAIN_CONFIGS = {
     blockExplorerUrls: ["https://testnet.bscscan.com"],
   },
   "0x13881":{
-    chainId: "x13881",
+    chainId: "0x13881",
     chainName: "Mumbai Testnet",
     nativeCurrency: {
-      name: "Binance Coin",
+      name: "Polygon",
       symbol: "MATIC",
       decimals: 18,
     },
