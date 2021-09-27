@@ -191,7 +191,6 @@
 
 
 body {
-	display: flex;
 	align-items: center;
 	justify-content: center;
 	width: 100%;
@@ -221,7 +220,10 @@ body {
 
 	&.hover {
 		color: white;
-		transition-delay: 0;
+    transition-delay: 0;
+    .second-grey {
+      color: $white;
+    }
 	}
 
 	&,
@@ -375,7 +377,8 @@ body {
 
 	&__header {
 		margin: 0;
-		font-weight: 600;
+    font-weight: 600;
+    font-size: 20px;
 	}
 
 	&__subheader {

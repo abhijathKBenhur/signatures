@@ -254,6 +254,9 @@
     .passed-section {
       background-color: $greyLight-1;
       border-radius: 12px;
+      .code-n-share{
+        color: #e4ebf5;
+      }
     }
 
     .opcity-bg{
@@ -302,11 +305,14 @@
         }
       }
       .done-btn {
-        margin-bottom: 10px;
-        background: #ced4da;
+        background: #79579f;
+        border-bottom-left-radius: 12px;
+        border-bottom-right-radius: 12px;
+        border-top-left-radius: 0px;
         .submit-btn {
-          background: #ced4da;
-          color: $secondary;
+          background: #79579F;
+          color: white;
+          box-shadow: none;
         }
       }
     }
@@ -337,17 +343,18 @@
   .item {
     color: #403b6c;
     font-size: 24px;
+    text-align: center;
   }
   .time {
     color: #6a6967;
   }
 }
 .right-strip {
-  border-left: 18px solid #72599c;
-  border-right: 18px solid #72599c;
+  // border-left: 18px solid #72599c;
+  // border-right: 18px solid #72599c;
   border-top-right-radius: 10px;
   .billet-item-head{
-    color: #40386c;
+    color: $white;
     font-size: 30px;
     text-align: center;
     font-weight: 600;
