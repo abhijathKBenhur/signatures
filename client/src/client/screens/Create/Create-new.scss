@@ -31,8 +31,8 @@
                 box-shadow: $shadow;
                 cursor: pointer;
                 &.cancel-btn{
-                    background: $greyLight-1;
-                    color: $greyLight-3;
+                    background: $white;
+                    color: $secondary;
                     &:hover,&:active {
                         background: transparent !important;
                     }
