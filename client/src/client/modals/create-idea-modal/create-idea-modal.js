@@ -9,6 +9,7 @@ import {
   InputGroup,
   Dropdown,
 } from "react-bootstrap";
+import 'css-doodle';
 import React, { useState, useEffect } from "react";
 import Dropzone from "react-dropzone";
 import imagePlaceholder from "../../../assets/images/image-placeholder.png";
@@ -29,7 +30,7 @@ import domtoimage from "dom-to-image";
 import { getPurposeIcon } from "../../commons/common.utils";
 import { shallowEqual, useSelector } from "react-redux";
 import ClanInterface from "../../interface/ClanInterface";
-import cover from "../../../assets/images/cover_opacity.png";
+import cover from "../../../assets/images/backgroundcss.png";
 import { useHistory } from "react-router-dom";
 const CreateIdeaModal = ({
   formErrors,
@@ -402,16 +403,16 @@ const CreateIdeaModal = ({
                       </Col>
                     </div>
                   </Row>
-                  <Row className="row2">
-                    <Col md="12">
+                  <Row className="row2 justify-content-center row">
+                    <Col md="12" className="justify-content-center row">
                       <div className="billet-item justify-content-center">
                         <div className="item">{billet.title}</div><br></br>
-                        <div className="time"> on {timeFormatted(billet.time)}, {billet.location}</div>
+                        <div className="time"> {timeFormatted(billet.time)} {billet.location}</div>
                       </div>
                     </Col>
                     <Col md="12"></Col>
                   </Row>
-                  <Row className="row3">
+                  <Row className="row3 mt-3">
                     <Col md="12">
                       <div className="billet-item">
                         <div className="trasnection-details">
@@ -436,7 +437,7 @@ const CreateIdeaModal = ({
                   md="4"
                   className="right-strip   d-flex flex-column justify-content-around" style={{background:`url(${cover})`}}
                 >
-                  <div className="brand">
+                  <div className="brand text-center">
                     <Col md="12" className="p-0 justify-content-center billet-item-head">
                       BILLET
                     </Col>
@@ -451,9 +452,9 @@ const CreateIdeaModal = ({
               </Col>
             </Row>
             <Row className="button-section  d-flex">
-              <Col xs="12" className="button-bar">
+              <Col xs="12" className="button-bar done-btn">
                 <Button
-                  className="submit-btn"
+                  className="submit-btn btn-block"
                   onClick={gotoIdea}
                 >
                   Done

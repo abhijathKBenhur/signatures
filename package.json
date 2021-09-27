@@ -26,6 +26,7 @@
     "cloudinary": "^1.25.2",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
+    "css-doodle": "^0.19.2",
     "eth-revert-reason": "^1.0.3",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
