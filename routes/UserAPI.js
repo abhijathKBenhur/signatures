@@ -144,7 +144,7 @@ getUserInfo = async (req, res) => {
     console.log("myReferralCode," + req.body.myReferralCode);
     findCriteria.myReferralCode = req.body.myReferralCode;
   }
-  await User.findOne(findCriteria, (err, user) => {
+  await User.findOne(findCriteria,{email:0}, (err, user) => {
     if (err) {
       return res.status(400).json({ success: false, error: err });
     }

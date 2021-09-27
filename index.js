@@ -5,6 +5,7 @@ const mongotConnection = require("./db-config/mongodb");
 const tokenAPI = require("./routes/TokenAPIs");
 const userAPI = require("./routes/UserAPI");
 const StatsAPI = require("./routes/statsAPI");
+const cookieParser = require("cookie-parser");
 
 const notificationAPI = require("./routes/NotificationAPIs");
 const commentAPI = require("./routes/commentAPI");
@@ -21,9 +22,10 @@ const PORT = process.env.PORT || 4000;
 
 dotenv.config();
 
-app.use(authorizer)
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(authorizer)
+
 
 app.use(
   cors({
@@ -35,7 +37,6 @@ app.use(
         callback(new Error("Not allowed by CORS"));
       }
     },
-    allowedHeaders: "*",
   })
 );
 

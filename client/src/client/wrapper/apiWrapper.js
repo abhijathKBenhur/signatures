@@ -10,6 +10,8 @@ const AxiosInstance = axios.create({
       : ENDPOINTS.LOCAL_ENDPOINTS,
 });
 
+
+
 AxiosInstance.interceptors.request.use(function(config) {
   const token = new Cookies().get(CONSTANTS.COOKIE_TOKEN_PHRASE);
   config.headers["x-access-token"] =  token;
