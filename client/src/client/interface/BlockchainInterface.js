@@ -269,7 +269,7 @@ class BlockchainInterface {
           </div>
         );
         const redirectToMetaMask = () => {
-          window.location = "https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn?hl=en"
+          window.open("https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn?hl=en", "_blank")
         }
         const alertProperty = {
             isDismissible: false,
