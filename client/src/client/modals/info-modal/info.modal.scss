@@ -54,6 +54,14 @@
                       background-color: $secondary;
                     }
                   }
+                  .disabled{
+                    &:hover{
+                      &::after{
+                        content: "Coming Soon";
+                      }
+                    }
+                   
+                  }
                 }
               }
         }

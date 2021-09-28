@@ -222,25 +222,24 @@ $card-height: 200px;
   .card {
     &.Creative_art {
       .card__border {
-        background: #79579f;
+        background: linear-gradient(to right, #726f9a, #7549cd);
         transform: none;
       }
     }
     &.Business_idea {
       .card__border {
-        background: #5352d0;
+        background: linear-gradient(to right, #726f9a, #49a0cd);
         transform: none;
       }
     }
     &.Technical_inventions {
       .card__border {
-        background: #3e346e;
+        background: #726f9a;
         transform: none;
       }
     }
     .purpose-icons {
       background: #79579f;
-      border: 3px solid white;
       border-radius: 50%;
       padding: 2px 9px;
       color: white;

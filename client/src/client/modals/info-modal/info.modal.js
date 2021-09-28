@@ -239,6 +239,11 @@ const InfoModal = (props) => {
     }
   }
 
+  const isDisabled = (action) =>{
+    return [ CONSTANTS.PURPOSES.AUCTION,
+      CONSTANTS.PURPOSES.LICENSE].indexOf(action) > -1
+  }
+
   return (
     <Modal
       show={true}
@@ -266,10 +271,10 @@ const InfoModal = (props) => {
                 {pusposeList.map((entry) => {
                   return (
                     <div
-                      className={
+                      className={`${
                         isSelectedPurpose(entry)
                           ? "purpose-entry selected"
-                          : "purpose-entry"
+                          : "purpose-entry"} ${isDisabled(entry)? 'disabled':''}`
                       }
                       onClick={() => {
                         setPurpose(entry);
