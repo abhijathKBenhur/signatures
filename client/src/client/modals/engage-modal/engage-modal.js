@@ -237,7 +237,7 @@ const EngageModal = (props) => {
 
         <Col xs="12" className="button-bar justify-content-between d-flex">
           <Button
-            className="cancel-btn mr-2 mt-2"
+            className="btn-ternary mr-2 mt-2"
             onClick={props.onHide}
             disabled={engaging == CONSTANTS.ACTION_STATUS.PENDING}
           >

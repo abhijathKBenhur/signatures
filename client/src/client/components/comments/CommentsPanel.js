@@ -94,6 +94,7 @@ const CommentsPanel = (props) => {
 
   return (
     <ListGroup className="">
+      {(!comments || comments.length == 0) && <div className="third-header mb-2">No conversation</div>}
       <Form.Control
         as="textarea"
         name="description"

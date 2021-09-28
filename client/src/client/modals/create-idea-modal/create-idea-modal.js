@@ -638,7 +638,7 @@ const CreateIdeaModal = ({
                               ? "purpose-entry disabled" : "purpose-entry"
                           }
                           onClick={() => {
-                            setPurpose(entry);
+                            !isDisabled(entry) && setPurpose(entry);
                           }}
                         >
                           <i className={getPurposeIcon(entry)}></i>

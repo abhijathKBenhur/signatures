@@ -125,7 +125,23 @@
           &.disabled{
             cursor: no-drop;
             background-color: $greyLight-1;
-            pointer-events: none;
+            &:hover{
+              &::after{
+                content: "Coming Soon";
+                position: absolute;
+                background: #e4ebf5;
+                width: 97px;
+                height: 50px;
+                animation: ball-scale 1s ease-in forwards;
+                animation-direction: reverse;
+                font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif;
+                font-size: 14px;
+                font-weight: 500;
+                line-height: 20px;
+                color: $grey-dark;
+                text-align: center;
+              }
+            }
           }
           &.selected{
             box-shadow: $shadow;
