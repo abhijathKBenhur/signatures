@@ -215,8 +215,7 @@ const CreateIdeaModal = ({
         return (
           <Col md="12">
             <span className="purpose-message second-grey">
-              You may chose to license it to multiple people. Only your idea
-              will be available in the market.
+              You may chose to collaborate ideas to make single.
             </span>
             <div className="collab-section">
               <Dropdown className="w-100">
@@ -228,15 +227,18 @@ const CreateIdeaModal = ({
                   {form.collab}
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
-                  {CONSTANTS.COLLAB_TYPE.map((item) => (
-                    <Dropdown.Item
+                  {CONSTANTS.COLLAB_TYPE.map((item, index) => (
+                    <Dropdown.Item key={index}
                       name="storageGroup"
-                      onClick={() =>
+                      className={`${form.collab == item.value ? 'active': ''}`}
+                      onClick={(e) =>
                         setFormData({
                           ...form,
+                          collab: item.value,
                           purpose: {
                             type: form.purpose.purposeType,
                             subType: item.value,
+                            purposeType: form.purpose.purposeType
                           },
                         })
                       }
@@ -626,9 +628,9 @@ const CreateIdeaModal = ({
                     </Form.Label>
                   </div>
                   <div className="purpose-tabs">
-                    {pusposeList.map((entry) => {
+                    {pusposeList.map((entry, entryIndex) => {
                       return (
-                        <div
+                        <div key={entryIndex}
                           className={
                             isSelectedPurpose(entry)
                               ? "purpose-entry selected"

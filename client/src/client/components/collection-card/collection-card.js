@@ -143,14 +143,6 @@ const CollectionCard = (props) => {
               <div className="card__image" style={{ backgroundImage: `url(${signature.thumbnail}` }}></div>
               <div className="card__author">
                 <div className="author">
-                  <div className="purpose-icons">
-                    <i
-                      className={getPurposeIcon(
-                        _.get(signature, "purpose.purposeType") ||
-                        _.get(signature, "purpose")
-                      )}
-                    ></i>
-                  </div>
                   <div className="author__content">
                     <p className="author__header">{signature.title}</p>
                     <p className="author__subheader">{signature.description}</p>
@@ -165,9 +157,18 @@ const CollectionCard = (props) => {
                     {moment(signature.createdAt).format("YYYY-MM-DD HH:mm:ss")}
                   </div>
                   <div className="tags second-grey">
+                    <i class="fa fa-solid fa-location-pin"></i> 
                     {signature.location || "Global"}
                   </div>
                 </div>
+                <div className="purpose-icons">
+                    <i
+                      className={getPurposeIcon(
+                        _.get(signature, "purpose.purposeType") ||
+                        _.get(signature, "purpose")
+                      )}
+                    ></i>
+                  </div>
               </div>
             </div>
             <div className="card__foot">
