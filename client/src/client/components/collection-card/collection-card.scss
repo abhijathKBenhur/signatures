@@ -3,7 +3,7 @@ $card-height: 200px;
 .main-container {
   display: flex;
   justify-content: center;
-  margin-bottom :25px;
+  margin-bottom :90px;
   margin-top :25px;
   .card-container {
     width: 100%;
@@ -25,7 +25,6 @@ $card-height: 200px;
       &.Technical_inventions{
         // background-color: $category3;
       }
-      padding: 0.5rem;
       .purpose-badge{
         border: 2px solid $greyLight-1;
         border-radius: 100%;
@@ -215,6 +214,10 @@ $card-height: 200px;
         }
       }
     }
+  }
+  .location-bar {
+    bottom: 0px;
+    position: absolute;
   }
   a:hover{
     text-decoration: none !important;

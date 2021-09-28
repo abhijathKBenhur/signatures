@@ -360,7 +360,7 @@ const CreateClan = ({ ...props }) => {
 
           <Row className="button-section  d-flex mb-4  ">
             <Col xs="12" className="button-bar justify-content-end d-flex">
-              <Button className="cancel-btn mr-2" onClick={props.onHide}>
+              <Button className="btn-ternary mr-2" onClick={props.onHide}>
                 Cancel
               </Button>
               <Button

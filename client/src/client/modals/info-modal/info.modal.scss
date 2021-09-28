@@ -1,4 +1,16 @@
 @import "../../commons/Common.scss";
+@keyframes ball-scale {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.1);
+  }
+}
+
+.ball--circling {
+  animation: ball-circular 2s ease-in-out forwards;
+}
 .info-modal-dialog{
     top: 30px;
     .modal-content{
@@ -58,6 +70,18 @@
                     &:hover{
                       &::after{
                         content: "Coming Soon";
+                        position: absolute;
+                        background: #e4ebf5;
+                        width: 97px;
+                        height: 50px;
+                        animation: ball-scale 1s ease-in forwards;
+                        animation-direction: reverse;
+                        font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif;
+                        font-size: 14px;
+                        font-weight: 500;
+                        line-height: 20px;
+                        color: $grey-dark;
+                        text-align: center;
                       }
                     }
                    
