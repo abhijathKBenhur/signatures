@@ -52,11 +52,10 @@ const CreateIdeaModal = ({
 }) => {
   const reduxState = useSelector((state) => state, shallowEqual);
   const [userClans, setUserClans] = useState( [] );
-  const [imgHolder, setImgHolder] = useState(imagePlaceholder)
+  const [imgHolder, setImgHolder] = useState(artPlaceHolder)
   const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
   const history = useHistory();
  
-  
   const getThumbnailImage = () => {
     return form.thumbnail ? (
       <div className="imageUploaded w-100 h-100">
@@ -97,7 +96,7 @@ const CreateIdeaModal = ({
                   className="placeholder-image"
                   alt=" placehoder"
                 />
-                <p className="dropfile-text">Drop your thumbnail here</p>
+                <p className="dropfile-text">Click to change thumbnail</p>
 
                 {formErrors.thumbnail && (
                   <p className="invalid-paragraph"> Thumbnail is required </p>
@@ -159,8 +158,6 @@ const CreateIdeaModal = ({
       );
   };
   const isSelectedPurpose = (purpose) => _.get(form,'purpose.purposeType') === purpose;
-
-  
 
   function getConditionalCompnent() {
     switch (_.get(form,'purpose.purposeType')) {
@@ -339,7 +336,6 @@ const CreateIdeaModal = ({
   }
 
   const handleCategoryChange = (ev) => {
-    debugger
     handleTagsChange(ev);
     switch(_.get(ev, 'value')){
       case "Creative_art" : setImgHolder(artPlaceHolder); break;

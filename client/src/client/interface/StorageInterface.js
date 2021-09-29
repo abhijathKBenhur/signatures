@@ -45,10 +45,12 @@ const getPathsFromIPFS = (form) => {
   });
 };
 
-export const getFilePaths = (form) => {
+export const getFilePaths = (form, addThumbnail) => {
   let promiseList = [];
   promiseList.push(getPDFFilepath(form));
-  promiseList.push(getImagePath(form));
+  if(addThumbnail){
+    promiseList.push(getImagePath(form));
+  }
   return Promise.all(promiseList);
 };
 

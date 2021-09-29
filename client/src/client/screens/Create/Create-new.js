@@ -13,9 +13,14 @@ import BlockChainInterface from "../../interface/BlockchainInterface";
 import StorageInterface from "../../interface/StorageInterface";
 import Dropzone, { useDropzone } from "react-dropzone";
 import CONSTANTS from "../../commons/Constants";
-import * as reactShare from "react-share";
+import artPlaceHolder from "../../../assets/images/art.png";
+import businessPlaceHolder from "../../../assets/images/business.png";
+import technicalPlaceHolder from "../../../assets/images/technical.png";
 import { useHistory } from "react-router-dom";
 import "./Create-new.scss";
+
+// import creativeArt from "../../../assets/palceholders"
+
 import {
   X,
   Image as ImageFile,
@@ -68,7 +73,7 @@ const CreateNew = () => {
     owner: metamaskID,
     creator: metamaskID,
     title: "",
-    category: [CONSTANTS.CATEGORIES[0]],
+    category: CONSTANTS.CATEGORIES[0],
     description: "",
     price: 0,
     thumbnail: undefined,
@@ -213,9 +218,13 @@ const CreateNew = () => {
       ...form,
       thumbnail: Object.assign(acceptedFiles[0], {
         preview: URL.createObjectURL(acceptedFiles[0]),
+        updated: true
       }),
     });
   };
+
+
+
   const checkDisablePrice = () => {
     if (
       CONSTANTS.PURPOSES.COLLAB === form.purpose.purposeType ||
@@ -448,6 +457,7 @@ const CreateNew = () => {
   };
   function handleSubmit() {
     const params = _.clone({ ...form });
+    let defaultPlaceHolder = getThumbnailForCategory(params.category)
     params.category = JSON.stringify(params.category);
     params.creator = metamaskID;
     params.IPFS = true;
@@ -460,14 +470,18 @@ const CreateNew = () => {
     params.userName = reduxState.userDetails.userName;
 
     setPublishState(PROGRESS);
-    // setSlideCount(LOADING_SLIDE);
-    StorageInterface.getFilePaths(params)
+    StorageInterface.getFilePaths(params, _.get(form.thumbnail,'updated'))
       .then((success) => {
         params.PDFFile = _.get(_.find(success, { type: "PDFFile" }), "path");
-        params.thumbnail = _.get(
-          _.find(_.map(success, "data"), { type: "thumbnail" }),
-          "path"
-        );
+        if(_.get(form.thumbnail,'updated')){
+          params.thumbnail = _.get(
+            _.find(_.map(success, "data"), { type: "thumbnail" }),
+            "path"
+          );
+        }else{
+          params.thumbnail = getThumbnailForCategory(JSON.parse(params.category))
+        }
+        
         saveToBlockChain(params);
       })
       .catch((error) => {
@@ -554,20 +568,20 @@ const CreateNew = () => {
 
   const checkValidationBeforeSubmit = () => {
     const { category, price, thumbnail } = form;
-    if (_.isEmpty(category) || _.isEmpty(thumbnail)) {
+    if (_.isEmpty(category)) {
       if (!checkDisablePrice()) {
         setFormErrors({
           ...formErrors,
           price: price <= 0,
           category: _.isEmpty(category),
-          thumbnail: _.isEmpty(thumbnail),
+          // thumbnail: _.isEmpty(thumbnail),
         });
       } else {
         setFormErrors({
           ...formErrors,
           price: false,
           category: _.isEmpty(category),
-          thumbnail: _.isEmpty(thumbnail),
+          // thumbnail: _.isEmpty(thumbnail),
         });
       }
     } else {
@@ -588,6 +602,15 @@ const CreateNew = () => {
     console.log("item ==> ", item);
     setFormData({ ...form, storage: item.value });
   };
+
+  const getThumbnailForCategory = (category) => {
+    switch(_.get(category, 'value')){
+      case "Creative_art" : return artPlaceHolder;
+      case "Technical_inventions" : return technicalPlaceHolder;
+      case "Business_idea" : return businessPlaceHolder;
+      default: break;
+    }
+  }
 
   return (
     <Container fluid className="create-container">
