@@ -46,7 +46,7 @@ $card-height: 200px;
         }
         .timestamp{
           font-size: 11px !important;
-
+          text-align: left;
         }
       }
     }
@@ -215,10 +215,7 @@ $card-height: 200px;
       }
     }
   }
-  .location-bar {
-    bottom: 0px;
-    position: absolute;
-  }
+ 
   a:hover{
     text-decoration: none !important;
   }
