@@ -64,52 +64,7 @@ function Profile(props) {
     shareProfile: false,
   });
 
-  const [walletState, setWalletState] = useState({
-    selectedWallet: "",
-    trasactionList: [],
-  });
-
-  // wallet Dummy Data
-  const WalletData = [
-    // {
-    //   coinType: "Tribe Coin",
-    //   coinBalance: "23 TBC",
-    //   description: "You can create 23 ideas",
-    // },
-    {
-      coinType: "Tribe Gold",
-      coinBalance: "5 TBG",
-      description: "Equalent to 23$",
-    },
-    // {
-    //   coinType: "GAS",
-    //   coinBalance: "0.0003 POLYGON",
-    //   description: "You can post 20 ideas with the remaining gas",
-    // },
-  ];
-
-  const DummyTransactionList = [
-    {
-      from: "account 1",
-      to: "account 2",
-      amount: 1,
-    },
-    {
-      from: "account 3",
-      to: "account 5",
-      amount: 2,
-    },
-    {
-      from: "account 6",
-      to: "account 7",
-      amount: 10,
-    },
-    {
-      from: "account 8",
-      to: "account 10",
-      amount: 6,
-    },
-  ];
+  
 
   
 
@@ -250,14 +205,6 @@ function Profile(props) {
     }
   }
 
-  const selectWalletHandler = (seletedWallet) => {
-    console.log("seletedWallet ==> ", seletedWallet);
-    setWalletState({
-      ...walletState,
-      selectedWallet: seletedWallet,
-      trasactionList: DummyTransactionList,
-    });
-  };
 
   return (
     <Container fluid>
@@ -326,7 +273,7 @@ function Profile(props) {
                           placement="top"
                           overlay={
                             <Tooltip id={`tooltip-top`}>
-                              Edit Profile __ {isMyPage()}
+                              Edit Profile 
                             </Tooltip>
                           }
                         >
@@ -569,30 +516,7 @@ function Profile(props) {
                       activeKey={key}
                       onSelect={(k) => setKey(k)}
                     >
-                      {/* {isMyPage() ? ( */}
-                      {false ? (
-                        <Tab eventKey="Wallet" title="Wallets">
-                          <div className="wallet-wrapper">
-                            {WalletData.map((wallet, index) => (
-                              <Wallet
-                                key={index}
-                                {...wallet}
-                                selectWalletHandler={selectWalletHandler}
-                              />
-                            ))}
-                          </div>
-                          <div className="transaction-wrapper">
-                            {
-                              <Transactions
-                                transactionList={walletState.trasactionList}
-                                transactionType={walletState.selectedWallet}
-                              />
-                            }
-                          </div>
-                        </Tab>
-                      ) : (
-                        <div></div>
-                      )}
+                      
                       <Tab eventKey="collections" title="Collection">
                         <div className="collection-wrapper">
                           <div className="middle-block">
@@ -623,9 +547,14 @@ function Profile(props) {
                           </div>
                         </div>
                       </Tab>
-                      <Tab eventKey="wallet" title="Wallet">
-                        testing wallet
-                      </Tab>
+                      {isMyPage() ? (
+                        <Tab eventKey="Wallet" title="Wallet">
+                          <Wallet></Wallet>
+                        </Tab>
+                      ) : (
+                        <div></div>
+                      )}
+                     
                     </Tabs>
                   </Col>
                   {isMyPage() ? (

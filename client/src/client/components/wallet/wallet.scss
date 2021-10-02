@@ -1,5 +1,7 @@
 @import'../../commons/Common.scss';
-.wallet-container{
+.wallet-wrapper{
+  display: flex;
+  .wallet-container{
     display: flex;
     flex-flow: column;
     flex: 0.3;
@@ -52,4 +54,10 @@
         color: $white;
       }
   }
+}
+}
+.transaction-wrapper{
+  min-height: 200px;
+  overflow-y: auto;
+  margin-top: 20px;
 }

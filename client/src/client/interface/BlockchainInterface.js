@@ -100,6 +100,7 @@ class BlockchainInterface {
       .catch((switchError) => {
         console.log("switchError", switchError);
       });
+      this.addToken('ERC20', this.metamaskAccount, "TRBG", 18)
   }
 
   switchNetwork() {
@@ -166,6 +167,10 @@ class BlockchainInterface {
     console.log("verifySignature");
     return AxiosInstance.post(`/verifySignature`, payload);
   };
+
+  getGoldBalance = (address) => {
+    return this.web3.eth.getBalance(address)
+  }
 
 
   async getAccountDetails() {

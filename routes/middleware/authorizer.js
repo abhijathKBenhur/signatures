@@ -78,6 +78,8 @@ const conditionalAuthCheck = (tokenOwner, req) => {
       return tokenOwner.userName == "";
       break;
     case "/api/updateUser":
+      console.log("req.body._id", req.body._id)
+      console.log("tokenOwner", tokenOwner._id)
       return tokenOwner._id == req.body._id;
       break;
     case "/api/postComment":

@@ -3,6 +3,7 @@ const express = require("express");
 const jwt_decode = require("jwt-decode");
 const jwt = require("jsonwebtoken");
 const router = express.Router();
+const depositEvaluator = require("../routes/middleware/depositEvaluator");
  
 const mongoose = require("mongoose");
 
@@ -118,6 +119,7 @@ registerUser = (req, res) => {
   User
     .findOneAndUpdate({metamaskId:newUser.metamaskId},updateParams, {new:true,upsert:true})
     .then((user, b) => {
+      depositEvaluator.depostToNewUser(newUser.metamaskId)
       return res.status(201).json({
         success: true,
         data: {...user,token:token},

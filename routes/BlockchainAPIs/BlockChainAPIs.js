@@ -3,7 +3,7 @@ const router = express.Router();
  
 const getRevertReason = require("eth-revert-reason");
 const Web3 = require("web3");
-const contractJSON = require("../client/src/contracts/ideaTribe.json");
+const contractJSON = require("../../client/src/contracts/ideaTribe.json");
 const privateKey = process.env.PROGRAMMER_KEY;
 const HDWalletProvider = require("@truffle/hdwallet-provider");
 const _ = require("lodash");
@@ -11,7 +11,7 @@ const Web3Utils  = require("web3-utils");
 const networkURL = process.env.NETWORK_URL;
 let hdWallet = new HDWalletProvider({privateKeys:[privateKey] , providerOrUrl : process.env.NETWORK_URL, pollingInterval : 20000})
 const web3Instance = new Web3(hdWallet);
-const UserSchema = require("../db-config/user.schema");
+const UserSchema = require("../../db-config/user.schema");
 const publicKey =
   web3Instance.eth.accounts.privateKeyToAccount(privateKey).address;
   const jwt = require("jsonwebtoken");
@@ -88,7 +88,6 @@ register_user = (req, res) => {
         });
       }
     })
-    
   })
 };
 
