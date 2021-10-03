@@ -410,6 +410,10 @@ class BlockchainInterface {
   retrieveConfirmStatus() {
     return isConfirmed;
   }
+
+  retrieveWeb3 () {
+    return this.web3;
+  }
   
 }
 

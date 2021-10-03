@@ -61,31 +61,24 @@ const Header = (props) => {
   function updatePendingTransactions() {
     console.log("inside pending")
     TransactionsInterface.getTransactions({
-      status: CONSTANTS.ACTION_STATUS.COMPLETED
+      status: CONSTANTS.ACTION_STATUS.PENDING,
+      type: CONSTANTS.ACTIONS.POST_IDEA
     }).then(result=> {
-      let web3;
-      if (window.ethereum) {
-        
-        web3 = new Web3(window.ethereum);
-        web3.eth.handleRevert = true
-        window.web3 = web3;
-      } else if (window.web3) {
-        web3 = new Web3(web3.currentProvider);
-        web3.eth.handleRevert = true;
-        window.web3 = web3;
-      }
-        window.web3 = web3;
+      let web3 = BlockchainInterface.retrieveWeb3();
         _.forEach(_.get(result, 'data.data'), (item) => {
           web3.eth.getTransaction(item.transactionID).then(tx =>{
             web3.eth.call(tx, tx.blockNumber).then(res => {
-            console.log(res)
             TransactionsInterface.setTransactionState({
               transactionID:item.transactionID,
-              status: CONSTANTS.ACTION_STATUS.FAILED,
+              status: CONSTANTS.ACTION_STATUS.COMPLETED,
               user: userDetails._id
             })
             }).catch(error =>{
-            console.log(error)
+              TransactionsInterface.setTransactionState({
+                transactionID:item.transactionID,
+                status: CONSTANTS.ACTION_STATUS.FAILED,
+                user: userDetails._id
+              })
             })
           }).catch(hashError =>{
             console.log(hashError)
