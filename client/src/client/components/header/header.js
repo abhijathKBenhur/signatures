@@ -22,6 +22,10 @@ import jwt_decode from "jwt-decode";
 import CONSTANTS from "../../commons/Constants";
 import AlertBanner from "../alert/alert";
 import ReactDOM from 'react-dom';
+import { func } from "prop-types";
+import Web3 from "web3";
+
+import TransactionsInterface from "../../interface/TransactionInterface";
 const Header = (props) => {
   const decoder = jwt_decode;
   const cookies = new Cookies();
@@ -46,12 +50,50 @@ const Header = (props) => {
     if (_.isEmpty(currentMetamaskAccount)) {
       connectWallet();
     }
+    updatePendingTransactions()
   }, []);
 
   useEffect(() => {
     refreshUserDetails();
   }, [currentMetamaskAccount]);
 
+
+  function updatePendingTransactions() {
+    console.log("inside pending")
+    TransactionsInterface.getTransactions({
+      status: CONSTANTS.ACTION_STATUS.COMPLETED
+    }).then(result=> {
+      let web3;
+      if (window.ethereum) {
+        
+        web3 = new Web3(window.ethereum);
+        web3.eth.handleRevert = true
+        window.web3 = web3;
+      } else if (window.web3) {
+        web3 = new Web3(web3.currentProvider);
+        web3.eth.handleRevert = true;
+        window.web3 = web3;
+      }
+        window.web3 = web3;
+        _.forEach(_.get(result, 'data.data'), (item) => {
+          web3.eth.getTransaction(item.transactionID).then(tx =>{
+            web3.eth.call(tx, tx.blockNumber).then(res => {
+            console.log(res)
+            TransactionsInterface.setTransactionState({
+              transactionID:item.transactionID,
+              status: CONSTANTS.ACTION_STATUS.FAILED,
+              user: userDetails._id
+            })
+            }).catch(error =>{
+            console.log(error)
+            })
+          }).catch(hashError =>{
+            console.log(hashError)
+          })
+        })
+      console.log(result)
+    })
+  }
   function manageCookies(userData) {
     let authToken = cookies.get(appConstants.COOKIE_TOKEN_PHRASE);
     let decoded = {};
