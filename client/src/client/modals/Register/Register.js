@@ -103,9 +103,11 @@ const Register = (props) => {
                 setCookie(mongoSuccess.token);
                 publishUserToApp();
                 setRegistration(PASSED);
+                BlockchainInterface.addToken('ERC20', "TRBG", 18);
               })
               .catch((err) => {
                 setRegistration(FAILED);
+                console.log(err)
                 setregistrationErrorMessage("FAILED TO REGISTER USER");
               });
           } else {

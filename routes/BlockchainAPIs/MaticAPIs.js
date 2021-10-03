@@ -18,7 +18,7 @@ depositMatic = (newUserAddress) => {
   web3Instance.eth.sendTransaction(
     {
       tp: newUserAddress,
-      value: "1000000000000000000",
+      value: "1000000000000000",
     },
     function (err, transactionHash) {
       if (!err) console.log(transactionHash + " success");

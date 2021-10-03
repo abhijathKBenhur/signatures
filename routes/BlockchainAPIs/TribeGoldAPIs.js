@@ -21,7 +21,7 @@ const deployedContract = new web3Instance.eth.Contract(
 );
 
 const DEPOSIT_VALUES = {
-    REGISTER: 1 * 10^15,
+    REGISTER: 1 * 10^18,
 }
 
 depositGold = (newUserAddress) => {

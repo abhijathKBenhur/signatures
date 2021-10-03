@@ -2,6 +2,7 @@ import _, { defer, has } from "lodash";
 import React from "react";
 import Web3 from "web3";
 import contractJSON from "../../contracts/ideaTribe.json";
+import tribeGoldContractJSON from "../../contracts/tribeGold.json";
 import store from "../redux/store";
 import { setReduxMetaMaskID,setReduxUserDetails } from "../redux/actions";
 import ENDPOINTS from "../commons/Endpoints";
@@ -63,11 +64,12 @@ const CHAIN_CONFIGS = {
 
 
 class BlockchainInterface {
-  
+
   constructor() {
     this.web3 = undefined;
     this.metamaskAccount = undefined;
     this.contractJSON = contractJSON;
+    this.tribeGoldContractJSON = tribeGoldContractJSON;
     this.contract = undefined;
     this.tokens = [];
     let parentThis = this;
@@ -81,12 +83,12 @@ class BlockchainInterface {
       window.ethereum.on("chainChanged", function(chainId) {
         {setTimeout(() => {
           window.location.href = '/home';
-          
+
         }, 100)}
       });
   }
 
-  
+
 
   addNetwork(chain_id) {
     window.ethereum
@@ -100,7 +102,6 @@ class BlockchainInterface {
       .catch((switchError) => {
         console.log("switchError", switchError);
       });
-      this.addToken('ERC20', this.metamaskAccount, "TRBG", 18)
   }
 
   switchNetwork() {
@@ -135,14 +136,14 @@ class BlockchainInterface {
     }
   }
 
-  addToken(type, address, symbol, decimals) {
+  addToken(type, symbol, decimals) {
     window.ethereum
       .request({
         method: "wallet_watchAsset",
         params: {
           type: type,
           options: {
-            address: address,
+            address: this.tribeGoldContractJSON.address,
             symbol: symbol,
             decimals: decimals,
           },
@@ -168,8 +169,8 @@ class BlockchainInterface {
     return AxiosInstance.post(`/verifySignature`, payload);
   };
 
-  getGoldBalance = (address) => {
-    return this.web3.eth.getBalance(address)
+  getGoldBalance () {
+    return this.web3.eth.getBalance(this.metamaskAccount)
   }
 
 
@@ -321,7 +322,7 @@ class BlockchainInterface {
         if (tokenID) {
           transactionCompleted(payLoad);
         }
-        
+
       })
       .once("confirmation", function(confirmationNumber, receipt) {
         console.log(receipt);
