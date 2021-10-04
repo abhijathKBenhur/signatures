@@ -64,7 +64,7 @@ const CommentsPanel = (props) => {
           props.entity
         ).then((success) => {
           let commentsCOpy = _.clone(comments);
-          commentsCOpy.push({
+          commentsCOpy.unshift({
             from: loggedInUserDetails,
             to: getCommentDestination(),
             action: CONSTANTS.ACTIONS.COMMENT,
