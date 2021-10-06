@@ -32,6 +32,7 @@ import { shallowEqual, useSelector } from "react-redux";
 import ClanInterface from "../../interface/ClanInterface";
 import cover from "../../../assets/images/backgroundcss.png";
 import { useHistory } from "react-router-dom";
+import EmitInterface from "../../interface/emitInterface"
 const CreateIdeaModal = ({
   formErrors,
   form,
@@ -52,9 +53,26 @@ const CreateIdeaModal = ({
 }) => {
   const reduxState = useSelector((state) => state, shallowEqual);
   const [userClans, setUserClans] = useState( [] );
+  const [metaMastConfirmed, setMetaMastConfirmed] = useState(false);
   const [imgHolder, setImgHolder] = useState(artPlaceHolder)
   const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
   const history = useHistory();
+
+  useEffect(() => {
+    let subscription = EmitInterface.getMessage().subscribe(event => 
+        {
+            switch(event.id){
+                case 'METAMAST_CONFIRMATION':
+                    setMetaMastConfirmed(event.options);
+                    break;
+                default: break;
+            }
+          
+      });
+    return ()=>{
+     subscription.unsubscribe();
+   }
+}, [])
  
   const getThumbnailImage = () => {
     return form.thumbnail ? (
@@ -506,6 +524,16 @@ const CreateIdeaModal = ({
                 xs="12"
                 className="publishing-wrapper d-flex flex-column justify-content-center"
               >
+                <div className="words">
+                  {!metaMastConfirmed && <span className="word">Preparing to post your Idea to Blockchain</span>}
+                  {!metaMastConfirmed && <span className="word">Connecting with Metamask to sign your transaction </span>}
+                  {!metaMastConfirmed && <span className="word">Preparing to post your Idea to Blockchain</span>}
+                  {!metaMastConfirmed && <span className="word">Connecting with Metamask to sign your transaction </span>}
+                  {metaMastConfirmed && <span className="word">Sending your Txn to the Pool</span>}
+                  {metaMastConfirmed && <span className="word">Waiting for blocks to be mined</span> }
+                  {metaMastConfirmed && <span className="word">Waiting for your txn to be included in the block</span> }
+                  {metaMastConfirmed && <span className="word">Waiting for transaction receipt</span> }
+                </div>
                 <div className="gif-wrapper d-flex justify-content-center">
                   <img src={loadingGif} alt="" />
                 </div>

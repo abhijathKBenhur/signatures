@@ -27,13 +27,12 @@
       }
       .tag-n-location{
         .tags{
-          text-align: left;
+          text-align: center;
           color: $greyLight-1;
         }
       }
     }
     .image-container {
-      height: 223px;
       min-width: 100%;
       border-radius: 0 10px 0 10px ;
       background-color: $greyLight-1;
@@ -80,7 +79,7 @@
         height: 100%;
         width: 100%;
         border-radius: 10px ;
-        text-align: left;
+        text-align: center;
         padding: 5px 10px;
         background-color: $greyLight-1;
         color: $white;
@@ -234,7 +233,7 @@ body {
       -webkit-line-clamp: 7; /* number of lines to show */
       height: 140px;
     }
-    .location-bar {
+    .card__author {
       display: none;
     }
 	}
@@ -254,18 +253,27 @@ body {
 		position: relative;
     padding-top: 70%;
     height: 115px;
-	}
-	
-	&__author {
-		position: absolute;
+  }
+  
+  &__title{
+    position: absolute;
 		padding: 10px;
 		left: 0;
-		bottom: 0;
-		color: white;
+		top: 0;
+  }
+	
+	&__author {
+	
+		color: #696978;
 		transition-property: transform;
     transition-delay: $delay;
     width: 100%;
     height: 100%;
+    .like-bar{
+      line-height: 25px;
+      text-align: left;
+      margin: 0;
+    }
 	}
 	
 	&.hover &__author {
@@ -398,14 +406,13 @@ body {
     font-weight: 600;
     font-size: 20px;
     display: block;
-    color: #696978;
+    color: $white;
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
     -webkit-line-clamp: 2; /* number of lines to show */
     -webkit-box-orient: vertical;
     line-height: 22px;
-    height: 45px;
 	}
 
 	&__subheader {
@@ -418,7 +425,6 @@ body {
     -webkit-line-clamp: 5; /* number of lines to show */
     -webkit-box-orient: vertical;
     line-height: 20px;
-    height: 100px;
 	}
 
 }

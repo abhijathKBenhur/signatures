@@ -51,7 +51,7 @@ getComments = async (req, res) => {
       if (!comment) {
         return res.status(404).json({ success: true, data: [] });
       }
-      return res.status(200).json({ success: true, data: comment });
+      return res.status(200).json({ success: true, data: comment.reverse() });
     })
 };
 

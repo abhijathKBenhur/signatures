@@ -24,6 +24,7 @@ import { useHistory } from "react-router-dom";
 import store from "../../redux/store";
 import UserInterface from "../../interface/UserInterface";
 import Cookies from "universal-cookie";
+import ProgressBar from "../../components/progressbar/progress"
 
 // MetamaskID and userDetails are stored in separate redux stores
 // userDetails are stored as state
@@ -463,6 +464,7 @@ const Register = (props) => {
       onHide={props.onHide}
     >
       <Modal.Header className="d-flex flex-column">
+        {registration == PENDING && <ProgressBar class="mt-14"></ProgressBar>}
         <Modal.Title>
           <span className="master-grey">
             Hi, You are not yet registered with us. Yet!

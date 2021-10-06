@@ -10,10 +10,12 @@ import { useHistory } from "react-router-dom";
 import ReactDOM from 'react-dom';
 import AlertBanner from "../components/alert/alert"
 import AxiosInstance from "../wrapper/apiWrapper"
+import { Subject } from 'rxjs';
 
 
 import axios from "axios";
 import CONSTANTS from "../commons/Constants";
+import EmitInterface from "./emitInterface"
 
 const api = axios.create({
   baseURL:
@@ -23,6 +25,7 @@ const api = axios.create({
 });
 
 const chain_id = "0x13881";
+let isConfirmed = false;
 
 const CHAIN_CONFIGS = {
   "0x38": {
@@ -295,6 +298,7 @@ class BlockchainInterface {
 
   publish(payLoad, transactionInitiated, transactionCompleted, transactionFailed) {
     payLoad.price = this.web3.utils.toWei(payLoad.price, "ether");
+    isConfirmed = false;
 
     const transactionObject = {
       value: this.web3.utils.toWei("0.00", "ether"),
@@ -325,6 +329,8 @@ class BlockchainInterface {
 
       })
       .once("confirmation", function(confirmationNumber, receipt) {
+        isConfirmed = true;
+        EmitInterface.sendMessage('METAMAST_CONFIRMATION', isConfirmed);
         console.log(receipt);
       })
       .on("error", (err) => {
@@ -406,6 +412,15 @@ class BlockchainInterface {
       })
       .on("error", console.error);
   }
+
+  retrieveConfirmStatus() {
+    return isConfirmed;
+  }
+
+  retrieveWeb3 () {
+    return this.web3;
+  }
+  
 }
 
 export default new BlockchainInterface();
