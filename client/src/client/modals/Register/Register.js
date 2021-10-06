@@ -315,12 +315,11 @@ const Register = (props) => {
             {registration == PASSED ? (
               <div className="d-flex flex-column align-items-center">
                 <div className="d-flex align-items-center flex-column mb-2">
-                  <img src={successLogo} width="70"></img>
-                  <span className="second-grey">Welcome to IdeaTribe</span>
+                  <img src={successLogo} className="success-logo"></img>
+                  <span className="second-grey">Hi {userDetails.firstName}, Welcome to IdeaTribe! The world of idea sharing</span>
                 </div>
                 <span>
-                  Hi {userDetails.firstName} You have signed up to the unlimited
-                  possibilities in the world of idea sharing.
+                  Congratulations! You have earned 5 TribeGold and your wallet is loaded with Matic to start sharing!
                 </span>
               </div>
             ) : registration == FAILED ? (
@@ -353,7 +352,7 @@ const Register = (props) => {
                       <span className="second-grey">User name</span>
                       {userNameError && (
                         <span className="error-message ml-2">
-                          *Username invalid
+                          *{userNameError}
                         </span>
                       )}
                       <i className="fa fa-circle-notch fa-spin"></i>
@@ -424,13 +423,13 @@ const Register = (props) => {
         setuserNameError(false);
         UserInterface.getUserInfo({ userName: value })
           .then((userDetails) => {
-            setuserNameError(true);
+            setuserNameError("Username already taken");
           })
           .catch((error) => {
             setuserNameError(false);
           });
       } else {
-        setuserNameError(true);
+        setuserNameError("Username invalid");
       }
     }
     if (event.target.name == "referredBy") {
@@ -465,7 +464,7 @@ const Register = (props) => {
         {registration == PENDING && <ProgressBar class="mt-14"></ProgressBar>}
         <Modal.Title>
           <span className="master-grey">
-            Hi, You are not yet registered with us. Yet!
+            Hi, You are not yet registered with us!
           </span>
           <CloseButton onClick={() => {closePopup()}}></CloseButton>
         </Modal.Title>
@@ -506,7 +505,6 @@ const Register = (props) => {
             <div></div>
           ) : (
             <Button
-              variant="secondary"
               className="button"
               bsstyle="primary"
               onClick={() => {
@@ -538,7 +536,7 @@ const Register = (props) => {
           >
             {activeStep.index == steps.length - 1
               ? registration == PASSED
-                ? "Done"
+                ? "Get Started"
                 : registration == PENDING
                 ? "Registering"
                 : registration == FAILED
