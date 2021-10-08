@@ -119,6 +119,7 @@ registerUser = (req, res) => {
   User
     .findOneAndUpdate({metamaskId:newUser.metamaskId},updateParams, {new:true,upsert:true})
     .then((user, b) => {
+      console.log("Depositing to new user")
       depositEvaluator.depostToNewUser(newUser.metamaskId)
       return res.status(201).json({
         success: true,

@@ -413,6 +413,7 @@ class BlockchainInterface {
       .on("error", console.error);
   }
 
+
   retrieveConfirmStatus() {
     return isConfirmed;
   }

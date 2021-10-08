@@ -14,18 +14,38 @@ let hdWallet = new HDWalletProvider({
 });
 const web3Instance = new Web3(hdWallet);
 
-depositMatic = (newUserAddress) => {
-  web3Instance.eth.sendTransaction(
-    {
-      tp: newUserAddress,
-      value: "1000000000000000",
-    },
-    function (err, transactionHash) {
-      if (!err) console.log(transactionHash + " success");
-    }
-  );
-};
 
-router.post("/depositGold", depositGold);
+depositMatic = (newUserAddress) => {
+  console.log("Depositing to new user in TBGApi");
+  const promise = new Promise((resolve, reject) => {
+      Web3Utils.sendTransaction({to:newUserAddress, from:publicKey, value:web3.toWei("0.5", "ether")})
+      .on("receipt", function (receipt) {
+        resolve(receipt.transactionHash);
+      })
+      .on("error", function (error) {
+        console.log("error ", error);
+        let transactionHash = _.get(error, "receipt.transactionHash");
+        web3Instance.eth
+          .getTransaction(transactionHash)
+          .then((tx) => {
+            web3Instance.eth
+              .call(tx, tx.blockNumber)
+              .then((result) => {
+                resolve(result)
+              })
+              .catch((err) => {
+                reject(err.message);
+              });
+          })
+          .catch((err) => {
+            reject(err.toString());
+          });
+      });
+
+    return promise;
+  });
+}
+
+router.post("/depositMatic", depositMatic);
 
 module.exports = router;

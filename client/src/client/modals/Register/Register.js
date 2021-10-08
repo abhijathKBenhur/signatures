@@ -107,6 +107,7 @@ const Register = (props) => {
                 BlockchainInterface.addToken('ERC20', "TRBG", 18);
               })
               .catch((err) => {
+                debugger
                 setRegistration(FAILED);
                 console.log(err)
                 setregistrationErrorMessage("FAILED TO REGISTER USER");
@@ -118,8 +119,8 @@ const Register = (props) => {
         })
         .catch((error) => {
           setRegistration(FAILED);
-          setregistrationErrorMessage(error);
-          console.log(error);
+          setregistrationErrorMessage(error.data);
+          console.log(error.data);
         });
     } catch (e) {
       console.log("shiotter", e);
