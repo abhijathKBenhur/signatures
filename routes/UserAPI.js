@@ -53,7 +53,7 @@ getNonceAndRegister = (req, res) => {
 
   const newUser = new User({
     metamaskId: body.metamaskId,
-    nonce : (Math.random() + 1).toString(36).substring(7)
+    nonce : (Math.random() + 1).toString(36).substring(7),
   });
 
   User.findOne({ metamaskId: body.metamaskId }, (err, user) => {

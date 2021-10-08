@@ -79,11 +79,11 @@ register_user = (req, res) => {
                   return res.status(400).json({ success: false, data: result });
               }).catch(err =>{
                 console.log("********"+err)
-                return res.status(400).json({ success: false, data: err.message });
+                return res.status(400).json({ success: false, data: err.message.toString() });
               })
           }).catch(err =>{
             console.log("********"+err.toString())
-            return res.status(400).json({ success: false, data: "FAILED TO REGISTER" });
+            return res.status(400).json({ success: false, data: "Transaction invalid" });
           })
         });
       }

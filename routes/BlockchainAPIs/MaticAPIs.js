@@ -18,7 +18,7 @@ const web3Instance = new Web3(hdWallet);
 depositMatic = (newUserAddress) => {
   console.log("Depositing to new user in TBGApi");
   const promise = new Promise((resolve, reject) => {
-      Web3Utils.sendTransaction({to:newUserAddress, from:publicKey, value:web3.toWei("0.5", "ether")})
+      Web3Utils.sendTransaction({to:newUserAddress, from:publicKey, value:web3.toWei("0.03", "ether")})
       .on("receipt", function (receipt) {
         resolve(receipt.transactionHash);
       })
