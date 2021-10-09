@@ -96,35 +96,28 @@ const Register = (props) => {
     try {
       BlockchainInterface.register_user({ ...userDetails, secret, nonce })
         .then((success) => {
-          let response = success.data;
-          if (response.success) {
             UserInterface.registerUser({ ...userDetails, secret, nonce })
               .then((mongoSuccess) => {
-                console.log("setting token :: " + mongoSuccess.token)
                 setCookie(mongoSuccess.token);
                 publishUserToApp();
                 setRegistration(PASSED);
                 BlockchainInterface.addToken('ERC20', "TRBG", 18);
               })
               .catch((err) => {
-                debugger
-                setRegistration(FAILED);
-                console.log(err)
-                setregistrationErrorMessage("FAILED TO REGISTER USER");
+                registrationFailure(err.data)
               });
-          } else {
-            setRegistration(FAILED);
-            setregistrationErrorMessage(response.data.split("\n")[0]);
-          }
         })
         .catch((error) => {
-          setRegistration(FAILED);
-          setregistrationErrorMessage(error.data);
-          console.log(error.data);
+          registrationFailure(error.data)
         });
     } catch (e) {
       console.log("shiotter", e);
     }
+  }
+
+  function registrationFailure(message){
+    setRegistration(FAILED);
+    setregistrationErrorMessage(message)
   }
 
   function publishUserToApp() {

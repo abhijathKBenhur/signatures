@@ -10,42 +10,47 @@ const networkURL = process.env.NETWORK_URL;
 let hdWallet = new HDWalletProvider({
   privateKeys: [privateKey],
   providerOrUrl: process.env.NETWORK_URL,
-  pollingInterval: 20000,
+  pollingInterval: 2000000,
 });
 const web3Instance = new Web3(hdWallet);
-
+const publicKey =
+  web3Instance.eth.accounts.privateKeyToAccount(privateKey).address;
 
 depositMatic = (newUserAddress) => {
-  console.log("Depositing to new user in TBGApi");
+  console.log("Depositing to new user in MaticAPI");
   const promise = new Promise((resolve, reject) => {
-      Web3Utils.sendTransaction({to:newUserAddress, from:publicKey, value:web3.toWei("0.03", "ether")})
-      .on("receipt", function (receipt) {
-        resolve(receipt.transactionHash);
-      })
-      .on("error", function (error) {
-        console.log("error ", error);
-        let transactionHash = _.get(error, "receipt.transactionHash");
-        web3Instance.eth
-          .getTransaction(transactionHash)
-          .then((tx) => {
-            web3Instance.eth
-              .call(tx, tx.blockNumber)
-              .then((result) => {
-                resolve(result)
-              })
-              .catch((err) => {
-                reject(err.message);
-              });
-          })
-          .catch((err) => {
-            reject(err.toString());
-          });
-      });
+    web3Instance.eth.sendTransaction({to:newUserAddress, from:publicKey, value:Web3Utils.toWei("0.03", "ether")})
+    .on("receipt", function (receipt) {
+    console.log("Deposited to new user in MaticAPI");
 
-    return promise;
-  });
-}
+      resolve(receipt.transactionHash);
+    })
+    .on("error", function (error) {
+      console.log("failed depostto new user in MaticAPI");
+      console.log("error ", error);
+      let transactionHash = _.get(error, "receipt.transactionHash");
+      web3Instance.eth
+        .getTransaction(transactionHash)
+        .then((tx) => {
+          web3Instance.eth
+            .call(tx, tx.blockNumber)
+            .then((result) => {
+              resolve(result)
+            })
+            .catch((err) => {
+              reject(err.message);
+            });
+        })
+        .catch((err) => {
+          reject(err.toString());
+        });
+    });
 
-router.post("/depositMatic", depositMatic);
+});
+return promise;
 
-module.exports = router;
+};
+
+module.exports = {
+  depositMatic,
+};

@@ -9,7 +9,7 @@ const HDWalletProvider = require("@truffle/hdwallet-provider");
 const _ = require("lodash");
 const Web3Utils  = require("web3-utils");
 const networkURL = process.env.NETWORK_URL;
-let hdWallet = new HDWalletProvider({privateKeys:[privateKey] , providerOrUrl : process.env.NETWORK_URL, pollingInterval : 20000})
+let hdWallet = new HDWalletProvider({privateKeys:[privateKey] , providerOrUrl : process.env.NETWORK_URL, pollingInterval : 2000000})
 const web3Instance = new Web3(hdWallet);
 const UserSchema = require("../../db-config/user.schema");
 const publicKey =
@@ -19,7 +19,7 @@ const deployedContract = new web3Instance.eth.Contract(
   contractJSON.abi,
   contractJSON.address,
   {
-    gas: 500000
+    gas: 3000000
   }
 );
 const transactionObject = {
@@ -64,9 +64,6 @@ register_user = (req, res) => {
         deployedContract.methods
         .register_user(metamaskAddress, userName)
         .send(transactionObject)
-        // .on("transactionHash", function (hash) {
-        //   console.log("receipt transactionHash", hash);
-        // })
         .on("receipt", function (receipt) {
           console.log("receipt ", receipt)
           return res.status(200).json({ success: true, data: receipt });
