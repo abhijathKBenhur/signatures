@@ -15,7 +15,6 @@ const transactionObject = {
   from: publicKey,
 };
 
-console.log(ideaTribeContract.methods)
 
 verifySignature =  (req, res) => {
   const SIGNATURE_MESSAGE = "Hello from ideaTribe. Click sign to prove that you have access to this wallet and we'll log you in. To stop hackers from using your wallet, here is a unique code that they cannot guess. ";

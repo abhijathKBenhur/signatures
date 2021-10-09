@@ -233,12 +233,33 @@ getUsers = async (req, res) => {
   });
 };
 
+
+removeUser = async (req, res) => {
+  let findCriteria = {
+    userName: req.body.userName
+  };
+  await User.remove(findCriteria, (err, user) => {
+    if (err) {
+      return res.status(400).json({ success: false, error: err });
+    }
+    if (!user) {
+      return res.status(404).json({ success: true, data: [] });
+    }
+    console.log("removed users", user);
+    return res.status(200).json({ success: true, data: user });
+  }).catch((err) => {
+    console.log("removed users", err);
+    return res.status(200).json({ success: false, data: err });
+  });
+};
+
 router.post("/registerUser" ,registerUser);
 router.post("/updateUser", updateUser);
 router.post("/getUserInfo" , getUserInfo);
 router.post("/getUsers", getUsers);
 router.post("/getNonceAndRegister", getNonceAndRegister);
 router.post("/renewNonce", renewNonce);
+router.post("/removeUser", removeUser);
 
 
 

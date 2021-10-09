@@ -76,6 +76,7 @@ class BlockchainInterface {
     this.contract = undefined;
     this.tokens = [];
     let parentThis = this;
+
     window.ethereum &&
       window.ethereum.on("accountsChanged", function(accounts) {
         {setTimeout(() => {
@@ -173,9 +174,19 @@ class BlockchainInterface {
   };
 
   getGoldBalance () {
-    return this.web3.eth.getBalance(this.metamaskAccount)
+    const abi = this.tribeGoldContractJSON.abi;
+    const contractAddress = this.tribeGoldContractJSON.address;
+    let contractOptions = {
+      gasPrice : "3000000000",
+      gas : 1000000
+    }
+    const contract = this.web3.eth.Contract(abi, contractAddress,contractOptions);
+    return contract.methods.balanceOf(this.metamaskAccount).call()
   }
 
+  getMaticBalance () {
+    return this.web3.eth.getBalance(this.metamaskAccount)
+  }
 
   async getAccountDetails() {
     const promise = new Promise((resolve, reject) => {
