@@ -25,6 +25,7 @@ import store from "../../redux/store";
 import UserInterface from "../../interface/UserInterface";
 import Cookies from "universal-cookie";
 import ProgressBar from "../../components/progressbar/progress"
+import NotificationInterface from "../../interface/NotificationInterface";
 
 // MetamaskID and userDetails are stored in separate redux stores
 // userDetails are stored as state
@@ -62,6 +63,12 @@ const Register = (props) => {
 
   const [referralError, setReferralError] = useState(false);
   const [userNameError, setuserNameError] = useState(false);
+  const [loggedInUserDetails, setLoggedInUserDetails] = useState({});
+
+  useEffect(() => {
+    const { userDetails = {} } = reduxState;
+    setLoggedInUserDetails(userDetails);
+  }, [reduxState.userDetails]);
 
   const [userDetails, setUserDetails] = useState({
     firstName: _.get(reduxState, "firstName"),
@@ -96,6 +103,8 @@ const Register = (props) => {
     try {
       BlockchainInterface.register_user({ ...userDetails, secret, nonce })
         .then((success) => {
+          console.log(loggedInUserDetails)
+          NotificationInterface.postNotification(CONSTANTS.ENTITIES.PUBLIC, _.get(loggedInUserDetails, '_id'), CONSTANTS.ACTIONS.UPVOTE, CONSTANTS.ACTION_STATUS.PENDING,  "Invite 10 friends and this is your referral code: " + userDetails.myReferralCode)
           let response = success.data;
           if (response.success) {
             UserInterface.registerUser({ ...userDetails, secret, nonce })
@@ -412,7 +421,7 @@ const Register = (props) => {
   function handleChange(event) {
     var key = event.keyCode;
     let returnObj = {};
-    const value = String(event.target.value).toLowerCase();
+    const value = event.target.value;
     returnObj[event.target.name] = value;
     setUserDetails({
       ...userDetails,

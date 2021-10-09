@@ -26,14 +26,14 @@
     background-color: $primary-light;
 }
   .wallet-type{
-    font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: "Inter, system-ui", "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 25px;
     font-weight: 700;
     line-height: 38px;
     color: $white;
   }
   .coin-amount{
-    font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: "Inter, system-ui", "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 18px;
     font-weight: 500;
     line-height: 18px;
@@ -45,7 +45,7 @@
     display: flex;
     align-items: flex-end;
       span{
-        font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-family: "Inter, system-ui", "Helvetica Neue", Helvetica, Arial, sans-serif;
         font-size: 14px;
         font-weight: 500;
         line-height: 18px;
