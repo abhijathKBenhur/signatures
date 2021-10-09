@@ -1,6 +1,6 @@
 const chainID = "";
 const COOKIE_TOKEN_PHRASE = "ideaTribeAuthToken";
-const SIGNATURE_MESSAGE = "Hello from ideaTribe. Click Sign to prove that you have access to this wallet and we'll log you in. To stop hackers from using your wallet, here is a unique code that they cannot guess. ";
+const SIGNATURE_MESSAGE = "Hello from ideaTribe. Click sign to prove that you have access to this wallet and we'll log you in. To stop hackers from using your wallet, here is a unique code that they cannot guess. ";
 
 const CURRENCY = {
   name: "Matic",
@@ -42,6 +42,7 @@ const ACTIONS = {
   COMMENT: "COMMENT",
   POST_IDEA: "POST_IDEA",
   BUY_IDEA: "BUY_IDEA",
+  BUY_IDEA: "UPDATE_PRICE",
   CREATE_CLAN: "CREATE_CLAN",
   INCENTIVICED: "INCENTIVICED",
   DEPOSIT: "DEPOSIT",

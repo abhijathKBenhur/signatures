@@ -12,7 +12,6 @@ const authorizer = (req, res, next) => {
     "/api/getNotifications",
     "/api/getNotifications",
     "/api/postRelation",
-    "/api/getRelations",
     "/api/addSignature",
     "/api/buySignature",
     "/api/updateIdeaID",
@@ -24,7 +23,7 @@ const authorizer = (req, res, next) => {
 
   
   if (authRoutes.indexOf(req.path) > -1 && req.method != "OPTIONS") {
-    console.log(req.body)
+    console.log("Authorizing api " + req.path)
     const token = req.headers["x-access-token"];
     if (!token) {
       return res.status(403).json({
@@ -45,11 +44,11 @@ const authorizer = (req, res, next) => {
             },
           });
         }
+
         if (user.nonce == decoded.nonce && conditionalAuthCheck(user, req)) {
           console.log("valid user request")
           return next();
         } else {
-          console.log("Auth Failed")
           return res.status(401).json({
             success: true,
             data: {

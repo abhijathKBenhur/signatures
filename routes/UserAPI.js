@@ -18,7 +18,7 @@ const renewNonce = (req, res) => {
   }
 
   let targetMetamaskAddress = body.metamaskId;
-  let newNonce =  (Math.random() + 1).toString(36).substring(7);
+  let newNonce =  (Math.random() + 1).toString(36).substring(2);
   console.log("Generating new nonce " + newNonce + " for " + targetMetamaskAddress)
 
   User

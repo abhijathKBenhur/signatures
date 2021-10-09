@@ -1,25 +1,18 @@
-const express = require("express");
-const router = express.Router();
-const Web3 = require("web3");
-const contractJSON = require("../../client/src/contracts/tribeGold.json");
-const privateKey = process.env.MATIC_TREASURER;
-const HDWalletProvider = require("@truffle/hdwallet-provider");
 const _ = require("lodash");
 const Web3Utils = require("web3-utils");
-const networkURL = process.env.NETWORK_URL;
-let hdWallet = new HDWalletProvider({
-  privateKeys: [privateKey],
-  providerOrUrl: process.env.NETWORK_URL,
-  pollingInterval: 2000000,
-});
-const web3Instance = new Web3(hdWallet);
-const publicKey =
-  web3Instance.eth.accounts.privateKeyToAccount(privateKey).address;
+const BlockchainUtils = require("../BlockchainAPIs/BlockChainUtils");
+const web3Instance = BlockchainUtils.web3Instance
+const publicKey = BlockchainUtils.publicKey
+
+const DEPOSIT_VALUES = {
+  REGISTER: Web3Utils.toWei("1","ether"),
+};
+
 
 depositMatic = (newUserAddress) => {
   console.log("Depositing to new user in MaticAPI");
   const promise = new Promise((resolve, reject) => {
-    web3Instance.eth.sendTransaction({to:newUserAddress, from:publicKey, value:Web3Utils.toWei("0.03", "ether")})
+    web3Instance.eth.sendTransaction({to:newUserAddress, from:publicKey, value:DEPOSIT_VALUES.REGISTER})
     .on("receipt", function (receipt) {
     console.log("Deposited to new user in MaticAPI");
 
