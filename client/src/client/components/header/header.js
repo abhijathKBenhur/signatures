@@ -95,13 +95,16 @@ const Header = (props) => {
       try {
         decoded = decoder(authToken);
       } catch (err) {
+        console.log("couldnt decode")
         reRequestSignature = true;
       }
       if (_.get(decoded, "metamaskId") != userData.metamaskId) {
+        console.log("id mismatch")
         reRequestSignature = true;
       }
     }
     if (_.isEmpty(authToken) || authToken == "undefined") {
+      console.log("authToken mismatch")
       reRequestSignature = true;
     }
     if (reRequestSignature) {
@@ -125,7 +128,7 @@ const Header = (props) => {
             const alertProperty = {
               isDismissible: false,
               variant: "danger",
-              content: "Your account was not signed with metamask.",
+              content: "Your account is not signed with metamask.",
               actionText: "Sign",
               actionFunction: manageCookies
             }

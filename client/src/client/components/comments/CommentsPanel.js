@@ -94,7 +94,6 @@ const CommentsPanel = (props) => {
 
   return (
     <ListGroup className="">
-      {(!comments || comments.length == 0) && <div className="third-header mb-2">No conversation</div>}
       <Form.Control
         as="textarea"
         name="description"
@@ -104,6 +103,8 @@ const CommentsPanel = (props) => {
         className="mb-2 comment-entry"
         
       />
+      {(!comments || comments.length == 0) && <div className="second-grey mb-2 ">Be the first to add a comment.</div>}
+
       <div className="scrolable-comments">
         {_.map(comments, (comment,index) => {
           return (

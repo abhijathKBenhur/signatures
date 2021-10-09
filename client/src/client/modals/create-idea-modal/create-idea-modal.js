@@ -9,7 +9,7 @@ import {
   InputGroup,
   Dropdown,
 } from "react-bootstrap";
-import 'css-doodle';
+import "css-doodle";
 import React, { useState, useEffect } from "react";
 import Dropzone from "react-dropzone";
 import imagePlaceholder from "../../../assets/images/image-placeholder.png";
@@ -32,7 +32,7 @@ import { shallowEqual, useSelector } from "react-redux";
 import ClanInterface from "../../interface/ClanInterface";
 import cover from "../../../assets/images/backgroundcss.png";
 import { useHistory } from "react-router-dom";
-import EmitInterface from "../../interface/emitInterface"
+import EmitInterface from "../../interface/emitInterface";
 const CreateIdeaModal = ({
   formErrors,
   form,
@@ -52,43 +52,58 @@ const CreateIdeaModal = ({
   ...props
 }) => {
   const reduxState = useSelector((state) => state, shallowEqual);
-  const [userClans, setUserClans] = useState( [] );
+  const [userClans, setUserClans] = useState([]);
   const [metaMastConfirmed, setMetaMastConfirmed] = useState(false);
-  const [imgHolder, setImgHolder] = useState(artPlaceHolder)
-  const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  const [imgHolder, setImgHolder] = useState(artPlaceHolder);
+  const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
   const history = useHistory();
 
   useEffect(() => {
-    let subscription = EmitInterface.getMessage().subscribe(event => 
-        {
-            switch(event.id){
-                case 'METAMAST_CONFIRMATION':
-                    setMetaMastConfirmed(event.options);
-                    break;
-                default: break;
-            }
-          
-      });
-    return ()=>{
-     subscription.unsubscribe();
-   }
-}, [])
- 
+    let subscription = EmitInterface.getMessage().subscribe((event) => {
+      switch (event.id) {
+        case "METAMAST_CONFIRMATION":
+          setMetaMastConfirmed(event.options);
+          break;
+        default:
+          break;
+      }
+    });
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, []);
+
   const getThumbnailImage = () => {
     return form.thumbnail ? (
       <div className="imageUploaded w-100 h-100">
-        { publishState == "INIT" ? 
-        <OverlayTrigger placement="left" overlay={<Tooltip>Remove</Tooltip>}>
-          <Button
-            className="remove-thumbnail-btn"
-            variant="outline-secondary"
-            onClick={() => {
-              clearImage();
-            }}
-          >
-            <i className="fa fa-trash" aria-hidden="true"></i>
-          </Button>
-        </OverlayTrigger> : <div></div> }
+        {publishState == "INIT" ? (
+          <OverlayTrigger placement="left" overlay={<Tooltip>Remove</Tooltip>}>
+            <Button
+              className="remove-thumbnail-btn"
+              variant="outline-secondary"
+              onClick={() => {
+                clearImage();
+              }}
+            >
+              <i className="fa fa-trash" aria-hidden="true"></i>
+            </Button>
+          </OverlayTrigger>
+        ) : (
+          <div></div>
+        )}
         <img
           src={form.thumbnail.preview || form.thumbnail}
           className="uploadedImage"
@@ -132,7 +147,8 @@ const CreateIdeaModal = ({
   const getQrcode = () => {
     QRCode.toCanvas(
       document.getElementById("canvas"),
-      "https://mumbai.polygonscan.com/address/" + _.get(billet, "transactionID"),
+      "https://mumbai.polygonscan.com/address/" +
+        _.get(billet, "transactionID"),
       {
         color: {
           dark: "#1b1919", // black dots
@@ -175,10 +191,11 @@ const CreateIdeaModal = ({
         }
       );
   };
-  const isSelectedPurpose = (purpose) => _.get(form,'purpose.purposeType') === purpose;
+  const isSelectedPurpose = (purpose) =>
+    _.get(form, "purpose.purposeType") === purpose;
 
   function getConditionalCompnent() {
-    switch (_.get(form,'purpose.purposeType')) {
+    switch (_.get(form, "purpose.purposeType")) {
       case CONSTANTS.PURPOSES.AUCTION:
         return (
           <Col md="12">
@@ -243,9 +260,10 @@ const CreateIdeaModal = ({
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
                   {CONSTANTS.COLLAB_TYPE.map((item, index) => (
-                    <Dropdown.Item key={index}
+                    <Dropdown.Item
+                      key={index}
                       name="storageGroup"
-                      className={`${form.collab == item.value ? 'active': ''}`}
+                      className={`${form.collab == item.value ? "active" : ""}`}
                       onClick={(e) =>
                         setFormData({
                           ...form,
@@ -253,7 +271,7 @@ const CreateIdeaModal = ({
                           purpose: {
                             type: form.purpose.purposeType,
                             subType: item.value,
-                            purposeType: form.purpose.purposeType
+                            purposeType: form.purpose.purposeType,
                           },
                         })
                       }
@@ -301,24 +319,24 @@ const CreateIdeaModal = ({
                 </InputGroup>
               </Col>
               <Col md="6" sm="12" xs="12" lg="6">
-              {/* <span className="purpose-message second-grey">Number of units</span> */}
-              <InputGroup className="price-input-group">
-                <Form.Control
-                  type="number"
-                  placeholder="Number of units"
-                  min={1}
-                  value={form.umits ? form.umits : undefined}
-                  className={
-                    formErrors.umits
-                      ? `input-err umits-selector `
-                      : `umits-selector `
-                  }
-                  aria-label="umits"
-                  name="umits"
-                  onChange={handleChange}
-                  ref={priceRef}
-                />
-                <InputGroup.Text>UNITS</InputGroup.Text>
+                {/* <span className="purpose-message second-grey">Number of units</span> */}
+                <InputGroup className="price-input-group">
+                  <Form.Control
+                    type="number"
+                    placeholder="Number of units"
+                    min={1}
+                    value={form.umits ? form.umits : undefined}
+                    className={
+                      formErrors.umits
+                        ? `input-err umits-selector `
+                        : `umits-selector `
+                    }
+                    aria-label="umits"
+                    name="umits"
+                    onChange={handleChange}
+                    ref={priceRef}
+                  />
+                  <InputGroup.Text>UNITS</InputGroup.Text>
                 </InputGroup>
               </Col>
             </Row>
@@ -336,45 +354,92 @@ const CreateIdeaModal = ({
     }
   }
 
-  const gotoIdea = () =>{
+  const gotoIdea = () => {
     history.push({
       pathname: "/signature/" + form.PDFHash,
-    })
-  }
+    });
+  };
 
-  const gotoCreate = () =>{
+  const gotoCreate = () => {
     history.push({
-      pathname: "/create"
-    })
-  }
+      pathname: "/create",
+    });
+  };
 
-  const isDisabled = (action) =>{
-    return [ CONSTANTS.PURPOSES.AUCTION,
-      CONSTANTS.PURPOSES.LICENSE].indexOf(action) > -1
-  }
+  const isDisabled = (action) => {
+    return (
+      [CONSTANTS.PURPOSES.AUCTION, CONSTANTS.PURPOSES.LICENSE].indexOf(action) >
+      -1
+    );
+  };
 
   const handleCategoryChange = (ev) => {
     handleTagsChange(ev);
-    switch(_.get(ev, 'value')){
-      case "Creative_art" : setImgHolder(artPlaceHolder); break;
-      case "Technical_inventions" : setImgHolder(technicalPlaceHolder); break;
-      case "Business_idea" : setImgHolder(businessPlaceHolder); break;
-      default: break;
+    switch (_.get(ev, "value")) {
+      case "Creative_art":
+        setImgHolder(artPlaceHolder);
+        break;
+      case "Technical_inventions":
+        setImgHolder(technicalPlaceHolder);
+        break;
+      case "Business_idea":
+        setImgHolder(businessPlaceHolder);
+        break;
+      default:
+        break;
     }
-  }
+  };
 
   const nth = function(d) {
-    if (d > 3 && d < 21) return 'th';
+    if (d > 3 && d < 21) return "th";
     switch (d % 10) {
-      case 1:  return "st";
-      case 2:  return "nd";
-      case 3:  return "rd";
-      default: return "th";
+      case 1:
+        return "st";
+      case 2:
+        return "nd";
+      case 3:
+        return "rd";
+      default:
+        return "th";
     }
-  }
+  };
 
   const timeFormatted = (time) => {
-    return "on " + time.getDate() + nth(time.getDate()) + " " +months[time.getMonth()] + " " + time.getFullYear() + " " + (time.getHours() > 12 ? time.getHours() - 12: time.getHours()) + ":" + time.getMinutes() + (time.getHours() > 12 ? "PM" : "AM") + " GMT";
+    return (
+      "on " +
+      time.getDate() +
+      nth(time.getDate()) +
+      " " +
+      months[time.getMonth()] +
+      " " +
+      time.getFullYear() +
+      " " +
+      (time.getHours() > 12 ? time.getHours() - 12 : time.getHours()) +
+      ":" +
+      time.getMinutes() +
+      (time.getHours() > 12 ? "PM" : "AM")
+      + getTimeZonsShort()
+    );
+  };
+
+  function getTimeZonsShort() {
+    let result = "";
+    try {
+      // Chrome, Firefox
+      result = /.*\s(.+)/.exec(
+        new Date().toLocaleDateString(navigator.language, {
+          timeZoneName: "short",
+        })
+      )[1];
+    } catch (e) {
+      // IE, some loss in accuracy due to guessing at the abbreviation
+      // Note: This regex adds a grouping around the open paren as a
+      //       workaround for an IE regex parser bug
+      result = new Date()
+        .toTimeString()
+        .match(new RegExp("[A-Z](?!.*[(])", "g"))
+        .join("");
+    }
   }
 
   const getElement = () => {
@@ -405,7 +470,9 @@ const CreateIdeaModal = ({
                       <div className="billet-item">
                         <div className="user">@{billet.creator}</div>
                         <div className="name">{billet.fullName}</div>
-                        <div className="link">ideaTribe.com | Your ideas on blockchain </div>
+                        <div className="link">
+                          ideaTribe.com | Your ideas on blockchain{" "}
+                        </div>
                       </div>
                     </Col>
                   </Row>
@@ -422,8 +489,12 @@ const CreateIdeaModal = ({
                   <Row className="row2 justify-content-center row">
                     <Col md="12" className="justify-content-center row">
                       <div className="billet-item justify-content-center">
-                        <div className="item">{billet.title}</div><br></br>
-                        <div className="time"> {timeFormatted(billet.time)} {billet.location}</div>
+                        <div className="item">{billet.title}</div>
+                        <br></br>
+                        <div className="time">
+                          {" "}
+                          {timeFormatted(billet.time)} {billet.location}
+                        </div>
                       </div>
                     </Col>
                     <Col md="12"></Col>
@@ -432,7 +503,9 @@ const CreateIdeaModal = ({
                     <Col md="12">
                       <div className="billet-item">
                         <div className="trasnection-details">
-                          <div className="transaction-head">TRANSACTION ID:</div>
+                          <div className="transaction-head">
+                            TRANSACTION ID:
+                          </div>
                           <span className="hashValue">
                             {billet.transactionID}
                           </span>
@@ -451,16 +524,23 @@ const CreateIdeaModal = ({
                 </Col>
                 <Col
                   md="4"
-                  className="right-strip   d-flex flex-column justify-content-around" style={{background:`url(${cover})`}}
+                  className="right-strip   d-flex flex-column justify-content-around"
+                  style={{ background: `url(${cover})` }}
                 >
                   <div className="brand text-center">
-                    <Col md="12" className="p-0 justify-content-center billet-item-head">
+                    <Col
+                      md="12"
+                      className="p-0 justify-content-center billet-item-head"
+                    >
                       BILLET
                     </Col>
                     <Col md="12" className="p-0">
                       <img src={signatureImage} alt="logo" width="150px" />
                     </Col>
-                    <Col md="12" className="p-0 justify-content-center billet-item-text">
+                    <Col
+                      md="12"
+                      className="p-0 justify-content-center billet-item-text"
+                    >
                       IdeaTribe.io
                     </Col>
                   </div>
@@ -469,10 +549,7 @@ const CreateIdeaModal = ({
             </Row>
             <Row className="button-section  d-flex">
               <Col xs="12" className="button-bar done-btn">
-                <Button
-                  className="submit-btn btn-block"
-                  onClick={gotoIdea}
-                >
+                <Button className="submit-btn btn-block" onClick={gotoIdea}>
                   Done
                 </Button>
               </Col>
@@ -505,8 +582,9 @@ const CreateIdeaModal = ({
                 <Button
                   className="submit-btn"
                   onClick={() => {
-                    window.location.reload()
-                  }}>
+                    window.location.reload();
+                  }}
+                >
                   Retry
                 </Button>
               </Col>
@@ -525,22 +603,49 @@ const CreateIdeaModal = ({
                 className="publishing-wrapper d-flex flex-column justify-content-center"
               >
                 <div className="words">
-                  {!metaMastConfirmed && <span className="word">Preparing to post your Idea to Blockchain</span>}
-                  {!metaMastConfirmed && <span className="word">Connecting with Metamask to sign your transaction </span>}
-                  {!metaMastConfirmed && <span className="word">Preparing to post your Idea to Blockchain</span>}
-                  {!metaMastConfirmed && <span className="word">Connecting with Metamask to sign your transaction </span>}
-                  {metaMastConfirmed && <span className="word">Sending your Txn to the Pool</span>}
-                  {metaMastConfirmed && <span className="word">Waiting for blocks to be mined</span> }
-                  {metaMastConfirmed && <span className="word">Waiting for your txn to be included in the block</span> }
-                  {metaMastConfirmed && <span className="word">Waiting for transaction receipt</span> }
+                  {!metaMastConfirmed && (
+                    <span className="word">
+                      Preparing to post your Idea to Blockchain
+                    </span>
+                  )}
+                  {!metaMastConfirmed && (
+                    <span className="word">
+                      Connecting with Metamask to sign your transaction{" "}
+                    </span>
+                  )}
+                  {!metaMastConfirmed && (
+                    <span className="word">
+                      Preparing to post your Idea to Blockchain
+                    </span>
+                  )}
+                  {!metaMastConfirmed && (
+                    <span className="word">
+                      Connecting with Metamask to sign your transaction{" "}
+                    </span>
+                  )}
+                  {metaMastConfirmed && (
+                    <span className="word">Sending your Txn to the Pool</span>
+                  )}
+                  {metaMastConfirmed && (
+                    <span className="word">Waiting for blocks to be mined</span>
+                  )}
+                  {metaMastConfirmed && (
+                    <span className="word">
+                      Waiting for your txn to be included in the block
+                    </span>
+                  )}
+                  {metaMastConfirmed && (
+                    <span className="word">
+                      Waiting for transaction receipt
+                    </span>
+                  )}
                 </div>
                 <div className="gif-wrapper d-flex justify-content-center">
                   <img src={loadingGif} alt="" />
                 </div>
                 <div className="publishing-block-text second-grey">
                   <p>
-                    We are posting your idea on the Blockchain. Hold on
-                    tight!
+                    We are posting your idea on the Blockchain. Hold on tight!
                   </p>
                 </div>
               </Col>
@@ -654,12 +759,14 @@ const CreateIdeaModal = ({
                   <div className="purpose-tabs">
                     {pusposeList.map((entry, entryIndex) => {
                       return (
-                        <div key={entryIndex}
+                        <div
+                          key={entryIndex}
                           className={
                             isSelectedPurpose(entry)
                               ? "purpose-entry selected"
                               : isDisabled(entry)
-                              ? "purpose-entry disabled" : "purpose-entry"
+                              ? "purpose-entry disabled"
+                              : "purpose-entry"
                           }
                           onClick={() => {
                             !isDisabled(entry) && setPurpose(entry);
@@ -677,15 +784,18 @@ const CreateIdeaModal = ({
               </Row>
             </div>
             <div className="selective-component">
-              <div>
-                {getConditionalCompnent()}
-              </div>
+              <div>{getConditionalCompnent()}</div>
             </div>
             <Row className="button-section  d-flex">
               <Col xs="12" className="button-bar">
-                <Button className="cancel-btn" onClick={() => {
-                  history.push(`/home`)
-                }}>Cancel</Button>
+                <Button
+                  className="cancel-btn"
+                  onClick={() => {
+                    history.push(`/home`);
+                  }}
+                >
+                  Cancel
+                </Button>
                 <Button
                   className="submit-btn"
                   onClick={checkValidationBeforeSubmit}
@@ -707,12 +817,13 @@ const CreateIdeaModal = ({
       dialogClassName="create-idea-modal-dialog"
       centered
       backdrop="static"
-
     >
       <Modal.Body className="create-idea-modal-body">
-        {publishState != "PASSED" && <div className="modal-header-wrapper">
-          <div className="image-placeholder">{getThumbnailImage()}</div>
-        </div> }
+        {publishState != "PASSED" && (
+          <div className="modal-header-wrapper">
+            <div className="image-placeholder">{getThumbnailImage()}</div>
+          </div>
+        )}
         <div className="wrapper">{getElement()}</div>
       </Modal.Body>
     </Modal>

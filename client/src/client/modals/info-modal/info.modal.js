@@ -8,6 +8,12 @@ import { showToaster } from "../../commons/common.utils";
 import "./info.modal.scss";
 import Web3 from "web3";
 import SignatureInterface from "../../interface/SignatureInterface";
+import TransactionsInterface from "../../interface/TransactionInterface";
+import BlockChainInterface from "../../interface/BlockchainInterface";
+const PASSED = "PASSED",
+  FAILED = "FAILED",
+  PROGRESS = "PROGRESS",
+  INIT = "INIT";
 const InfoModal = (props) => {
   const priceRef = useRef(null);
   const getTagsElement = () => {
@@ -31,10 +37,16 @@ const InfoModal = (props) => {
   const isSelectedPurpose = (purpose) => {
     return form.purpose.purposeType === purpose;
   };
+  const [publishState, setPublishState] = useState(INIT);
+  const [publishError, setPublishError] = useState(INIT);
+  const [priceUpdated, setPriceUpdated] = useState(false);
 
   const handleChange = (event) => {
     let returnObj = {};
     returnObj[event.target.name] = event.target.value;
+    if (event.target.name == "price") {
+      setPriceUpdated(true);
+    }
     setFormData({ ...form, ...returnObj });
   };
 
@@ -51,9 +63,11 @@ const InfoModal = (props) => {
     ideaID: props.idea.ideaID,
     transactionID: props.idea.transactionID,
     purpose: {
-      purposeType: _.get(props.idea,'purpose.purposeType') || CONSTANTS.PURPOSES.SELL,
-      subType:_.get(props.idea,'purpose.subType')  ||  CONSTANTS.COLLAB_TYPE[0].value,
-      message: _.get(props.idea,'purpose.message')  || "",
+      purposeType:
+        _.get(props.idea, "purpose.purposeType") || CONSTANTS.PURPOSES.SELL,
+      subType:
+        _.get(props.idea, "purpose.subType") || CONSTANTS.COLLAB_TYPE[0].value,
+      message: _.get(props.idea, "purpose.message") || "",
     },
     storage: props.idea.storage,
     units: props.idea.units,
@@ -67,7 +81,6 @@ const InfoModal = (props) => {
     });
   };
 
-  
   let pusposeList = [
     CONSTANTS.PURPOSES.SELL,
     CONSTANTS.PURPOSES.AUCTION,
@@ -87,18 +100,58 @@ const InfoModal = (props) => {
     });
   }
 
+  function transactionInitiated(transactionInititationRequest) {
+    TransactionsInterface.postTransaction({
+      transactionID: transactionInititationRequest.transactionID,
+      Status: "PENDING",
+      type: "UPDATE_PRICE",
+      user: form.owner,
+    });
+  }
+
+  function transactionCompleted(successResponse) {
+    updatePriceInMonge(successResponse);
+    setPublishState(PASSED);
+  }
+
+  function transactionFailed(errorMessage, failedTransactionId) {
+    setPublishState(FAILED);
+    setPublishError("Price couldnot be updated on blockchain. " + errorMessage);
+    console.log("transactionID", failedTransactionId);
+    TransactionsInterface.setTransactionState({
+      transactionID: failedTransactionId,
+      status: CONSTANTS.ACTION_STATUS.FAILED,
+      user: form.owner,
+    });
+  }
+
   const updateIdea = () => {
-    debugger
-    let newPriceInWei = new Web3(window.ethereum).utils.toWei(form.price, "ether")
     let request = {
       ...form,
-      price: newPriceInWei
+    };
+    if (priceUpdated) {
+      let newPriceInWei = new Web3(window.ethereum).utils.toWei(
+        form.price,
+        "ether"
+      );
+      request.price = newPriceInWei;
+      BlockChainInterface.updatePrice(
+        form,
+        transactionInitiated,
+        transactionCompleted,
+        transactionFailed
+      );
+    } else {
+      updatePriceInMonge(request);
     }
-    SignatureInterface.updatePurpose(request).then(success =>{
+  };
+
+  const updatePriceInMonge = (request) => {
+    SignatureInterface.updatePurpose(request).then((success) => {
       showToaster("Idea updated!", { type: "dark" });
-      setFormData(success.data)
-      props.onHide()
-    })
+      setFormData(success.data);
+      props.onHide();
+    });
   };
 
   function getConditionalCompnent() {
@@ -239,10 +292,12 @@ const InfoModal = (props) => {
     }
   }
 
-  const isDisabled = (action) =>{
-    return [ CONSTANTS.PURPOSES.AUCTION,
-      CONSTANTS.PURPOSES.LICENSE].indexOf(action) > -1
-  }
+  const isDisabled = (action) => {
+    return (
+      [CONSTANTS.PURPOSES.AUCTION, CONSTANTS.PURPOSES.LICENSE].indexOf(action) >
+      -1
+    );
+  };
 
   return (
     <Modal
@@ -255,9 +310,9 @@ const InfoModal = (props) => {
     >
       <Modal.Body className="info-modal-body">
         <div className="modal-header-wrapper">
-            <Col md="12" className="">
-              <span className="father-grey">Engagement</span>
-            </Col>
+          <Col md="12" className="">
+            <span className="father-grey">Engagement</span>
+          </Col>
         </div>
         <div className="purpose-selection">
           <Row className="purpose-selector-row">
@@ -274,8 +329,8 @@ const InfoModal = (props) => {
                       className={`${
                         isSelectedPurpose(entry)
                           ? "purpose-entry selected"
-                          : "purpose-entry"} ${isDisabled(entry)? 'disabled':''}`
-                      }
+                          : "purpose-entry"
+                      } ${isDisabled(entry) ? "disabled" : ""}`}
                       onClick={() => {
                         setPurpose(entry);
                       }}
@@ -330,7 +385,5 @@ const InfoModal = (props) => {
       </Modal.Body>
     </Modal>
   );
-
- 
 };
 export default InfoModal;

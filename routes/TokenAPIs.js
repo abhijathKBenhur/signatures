@@ -63,9 +63,6 @@ getSignatureByHash = async (req, res) => {
       }
       return res.status(200).json({ success: true, data: signature });
     })
-    .catch((err) => {
-      return res.status(400).json({ success: false, data: err });
-    });
 };
 
 getSignatures = async (req, res) => {
@@ -215,9 +212,11 @@ updatePurpose = async (req, res) => {
     req.body.price
   );
 
+
+
   await IdeaSchema.findOneAndUpdate(
     { ideaID: req.body.ideaID, owner: req.body.owner },
-    { purpose: req.body.purpose },
+    { purpose: req.body.purpose, price: req.body.price },
     (err, token) => {
       if (err) {
         return res.status(400).json({ success: false, error: err });

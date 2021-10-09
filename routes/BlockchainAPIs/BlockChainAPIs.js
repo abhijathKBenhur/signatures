@@ -1,31 +1,17 @@
 const express = require("express");
 const router = express.Router();
- 
-const getRevertReason = require("eth-revert-reason");
-const Web3 = require("web3");
-const contractJSON = require("../../client/src/contracts/ideaTribe.json");
-const privateKey = process.env.PROGRAMMER_KEY;
-const HDWalletProvider = require("@truffle/hdwallet-provider");
+const jwt = require("jsonwebtoken");
 const _ = require("lodash");
-const Web3Utils  = require("web3-utils");
-const networkURL = process.env.NETWORK_URL;
-let hdWallet = new HDWalletProvider({privateKeys:[privateKey] , providerOrUrl : process.env.NETWORK_URL, pollingInterval : 2000000})
-const web3Instance = new Web3(hdWallet);
 const UserSchema = require("../../db-config/user.schema");
-const publicKey =
-  web3Instance.eth.accounts.privateKeyToAccount(privateKey).address;
-  const jwt = require("jsonwebtoken");
-const deployedContract = new web3Instance.eth.Contract(
-  contractJSON.abi,
-  contractJSON.address,
-  {
-    gas: 3000000
-  }
-);
+
+
+const BlockchainUtils = require("../BlockchainAPIs/BlockChainUtils");
+const web3Instance = BlockchainUtils.web3Instance
+const publicKey = BlockchainUtils.publicKey
+
 const transactionObject = {
   from: publicKey,
 };
-
 
 verifySignature =  (req, res) => {
   const SIGNATURE_MESSAGE = "Hello from ideaTribe. Click Sign to prove that you have access to this wallet and we'll log you in. To stop hackers from using your wallet, here is a unique code that they cannot guess. ";
