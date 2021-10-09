@@ -3,7 +3,8 @@ const express = require("express");
 const jwt_decode = require("jwt-decode");
 const jwt = require("jsonwebtoken");
 const router = express.Router();
- 
+const depositEvaluator = require("../routes/middleware/depositEvaluator");
+const _ = require("lodash");
 const mongoose = require("mongoose");
 
 
@@ -52,7 +53,7 @@ getNonceAndRegister = (req, res) => {
 
   const newUser = new User({
     metamaskId: body.metamaskId,
-    nonce : (Math.random() + 1).toString(36).substring(7)
+    nonce : (Math.random() + 1).toString(36).substring(7),
   });
 
   User.findOne({ metamaskId: body.metamaskId }, (err, user) => {
@@ -97,7 +98,11 @@ registerUser = (req, res) => {
   let tokenDecoded = jwt_decode(body.googleJWTToken);
 
   const newUser = new User(body);
-
+  let responseMap = {
+    created : false,
+    maticDeposit: false,
+    goldDeposit: false
+  }
   if (
     !newUser ||
     !tokenDecoded.email_verified ||
@@ -118,15 +123,24 @@ registerUser = (req, res) => {
   User
     .findOneAndUpdate({metamaskId:newUser.metamaskId},updateParams, {new:true,upsert:true})
     .then((user, b) => {
-      return res.status(201).json({
-        success: true,
-        data: {...user,token:token},
-        message: "New user created!",
-      });
+      responseMap.created = true
+      depositEvaluator.depostToNewUser(newUser.metamaskId).then(response =>{
+        console.log("response",response)
+        return res.status(201).json({
+          success: true,
+          data: {...user,token:token, ...{
+            goldDeposit: !_.isEmpty(response[0]),
+            maticDeposit: !_.isEmpty(response[1])
+          }},
+          message: "New user created!",
+        });
+      })
+      
     })
     .catch((error) => {
       return res.status(400).json({
         error,
+        data: responseMap,
         message: "New user not created!",
       });
     });
@@ -153,7 +167,7 @@ getUserInfo = async (req, res) => {
     }
     return res.status(200).json({ success: true, data: user });
   }).catch((err) => {
-    return res.status(200).json({ success: false, data: err });
+    return res.status(400).json({ success: false, data: err });
   });
 };
 

@@ -24,7 +24,7 @@ import { useHistory } from "react-router-dom";
 import store from "../../redux/store";
 import UserInterface from "../../interface/UserInterface";
 import Cookies from "universal-cookie";
-import ProgressBar from "../../components/progressbar/progress"
+import ProgressBar from "../../components/progressbar/progress";
 import NotificationInterface from "../../interface/NotificationInterface";
 
 // MetamaskID and userDetails are stored in separate redux stores
@@ -103,34 +103,38 @@ const Register = (props) => {
     try {
       BlockchainInterface.register_user({ ...userDetails, secret, nonce })
         .then((success) => {
-          console.log(loggedInUserDetails)
-          NotificationInterface.postNotification(CONSTANTS.ENTITIES.PUBLIC, _.get(loggedInUserDetails, '_id'), CONSTANTS.ACTIONS.UPVOTE, CONSTANTS.ACTION_STATUS.PENDING,  "Invite 10 friends and this is your referral code: " + userDetails.myReferralCode)
+          console.log(loggedInUserDetails);
+          NotificationInterface.postNotification(
+            CONSTANTS.ENTITIES.PUBLIC,
+            _.get(loggedInUserDetails, "_id"),
+            CONSTANTS.ACTIONS.UPVOTE,
+            CONSTANTS.ACTION_STATUS.PENDING,
+            "Invite 10 friends and this is your referral code: " +
+              userDetails.myReferralCode
+          );
           let response = success.data;
-          if (response.success) {
-            UserInterface.registerUser({ ...userDetails, secret, nonce })
-              .then((mongoSuccess) => {
-                console.log("setting token :: " + mongoSuccess.token)
-                setCookie(mongoSuccess.token);
-                publishUserToApp();
-                setRegistration(PASSED);
-              })
-              .catch((err) => {
-                setRegistration(FAILED);
-                setregistrationErrorMessage("FAILED TO REGISTER USER");
-              });
-          } else {
-            setRegistration(FAILED);
-            setregistrationErrorMessage(response.data.split("\n")[0]);
-          }
+          UserInterface.registerUser({ ...userDetails, secret, nonce })
+            .then((mongoSuccess) => {
+              setCookie(mongoSuccess.token);
+              publishUserToApp();
+              setRegistration(PASSED);
+              BlockchainInterface.addToken("ERC20", "TRBG", 18);
+            })
+            .catch((err) => {
+              registrationFailure(err.data);
+            });
         })
         .catch((error) => {
-          setRegistration(FAILED);
-          setregistrationErrorMessage(error);
-          console.log(error);
+          registrationFailure(error.data);
         });
     } catch (e) {
       console.log("shiotter", e);
     }
+  }
+
+  function registrationFailure(message) {
+    setRegistration(FAILED);
+    setregistrationErrorMessage(message);
   }
 
   function publishUserToApp() {
@@ -325,10 +329,14 @@ const Register = (props) => {
               <div className="d-flex flex-column align-items-center">
                 <div className="d-flex align-items-center flex-column mb-2">
                   <img src={successLogo} className="success-logo"></img>
-                  <span className="second-grey">Hi {userDetails.firstName}, Welcome to IdeaTribe! The world of idea sharing</span>
+                  <span className="second-grey">
+                    Hi {userDetails.firstName}, Welcome to IdeaTribe! The world
+                    of idea sharing
+                  </span>
                 </div>
                 <span>
-                  Congratulations! You have earned 5 TribeGold and your wallet is loaded with Matic to start sharing!
+                  Congratulations! You have earned 5 TribeGold and your wallet
+                  is loaded with Matic to start sharing!
                 </span>
               </div>
             ) : registration == FAILED ? (
@@ -456,9 +464,9 @@ const Register = (props) => {
       }
     }
   }
-  const closePopup = () =>{
-    props.onHide()
-  }
+  const closePopup = () => {
+    props.onHide();
+  };
 
   return (
     <Modal
@@ -475,7 +483,11 @@ const Register = (props) => {
           <span className="master-grey">
             Hi, You are not yet registered with us!
           </span>
-          <CloseButton onClick={() => {closePopup()}}></CloseButton>
+          <CloseButton
+            onClick={() => {
+              closePopup();
+            }}
+          ></CloseButton>
         </Modal.Title>
         <div className="steps">
           <ul className="nav">

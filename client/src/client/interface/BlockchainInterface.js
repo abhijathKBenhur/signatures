@@ -2,6 +2,7 @@ import _, { defer, has } from "lodash";
 import React from "react";
 import Web3 from "web3";
 import contractJSON from "../../contracts/ideaTribe.json";
+import tribeGoldContractJSON from "../../contracts/tribeGold.json";
 import store from "../redux/store";
 import { setReduxMetaMaskID,setReduxUserDetails } from "../redux/actions";
 import ENDPOINTS from "../commons/Endpoints";
@@ -66,11 +67,12 @@ const CHAIN_CONFIGS = {
 
 
 class BlockchainInterface {
-  
+
   constructor() {
     this.web3 = undefined;
     this.metamaskAccount = undefined;
     this.contractJSON = contractJSON;
+    this.tribeGoldContractJSON = tribeGoldContractJSON;
     this.contract = undefined;
     this.tokens = [];
     let parentThis = this;
@@ -84,12 +86,12 @@ class BlockchainInterface {
       window.ethereum.on("chainChanged", function(chainId) {
         {setTimeout(() => {
           window.location.href = '/home';
-          
+
         }, 100)}
       });
   }
 
-  
+
 
   addNetwork(chain_id) {
     window.ethereum
@@ -137,14 +139,14 @@ class BlockchainInterface {
     }
   }
 
-  addToken(type, address, symbol, decimals) {
+  addToken(type, symbol, decimals) {
     window.ethereum
       .request({
         method: "wallet_watchAsset",
         params: {
           type: type,
           options: {
-            address: address,
+            address: this.tribeGoldContractJSON.address,
             symbol: symbol,
             decimals: decimals,
           },
@@ -169,6 +171,10 @@ class BlockchainInterface {
     console.log("verifySignature");
     return AxiosInstance.post(`/verifySignature`, payload);
   };
+
+  getGoldBalance () {
+    return this.web3.eth.getBalance(this.metamaskAccount)
+  }
 
 
   async getAccountDetails() {
@@ -320,7 +326,7 @@ class BlockchainInterface {
         if (tokenID) {
           transactionCompleted(payLoad);
         }
-        
+
       })
       .once("confirmation", function(confirmationNumber, receipt) {
         isConfirmed = true;
@@ -406,6 +412,7 @@ class BlockchainInterface {
       })
       .on("error", console.error);
   }
+
 
   retrieveConfirmStatus() {
     return isConfirmed;
