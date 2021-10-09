@@ -79,7 +79,7 @@
             align-items: center;
             gap: 20px;
             input {
-              text-transform: lowercase;
+              // text-transform: lowercase;
               height: 30px;
               &.username-error{
                 border-bottom: 1px solid $danger;
@@ -106,5 +106,9 @@
       .modal-footer {
         background-color: $primary-light;
       }
+    }
+    .success-logo { 
+      width: 200px;
+      height: 125px;
     }
   }

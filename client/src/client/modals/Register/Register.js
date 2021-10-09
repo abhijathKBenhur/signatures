@@ -24,7 +24,8 @@ import { useHistory } from "react-router-dom";
 import store from "../../redux/store";
 import UserInterface from "../../interface/UserInterface";
 import Cookies from "universal-cookie";
-import ProgressBar from "../../components/progressbar/progress"
+import ProgressBar from "../../components/progressbar/progress";
+import NotificationInterface from "../../interface/NotificationInterface";
 
 // MetamaskID and userDetails are stored in separate redux stores
 // userDetails are stored as state
@@ -62,6 +63,12 @@ const Register = (props) => {
 
   const [referralError, setReferralError] = useState(false);
   const [userNameError, setuserNameError] = useState(false);
+  const [loggedInUserDetails, setLoggedInUserDetails] = useState({});
+
+  useEffect(() => {
+    const { userDetails = {} } = reduxState;
+    setLoggedInUserDetails(userDetails);
+  }, [reduxState.userDetails]);
 
   const [userDetails, setUserDetails] = useState({
     firstName: _.get(reduxState, "firstName"),
@@ -96,28 +103,38 @@ const Register = (props) => {
     try {
       BlockchainInterface.register_user({ ...userDetails, secret, nonce })
         .then((success) => {
-            UserInterface.registerUser({ ...userDetails, secret, nonce })
-              .then((mongoSuccess) => {
-                setCookie(mongoSuccess.token);
-                publishUserToApp();
-                setRegistration(PASSED);
-                BlockchainInterface.addToken('ERC20', "TRBG", 18);
-              })
-              .catch((err) => {
-                registrationFailure(err.data)
-              });
+          console.log(loggedInUserDetails);
+          NotificationInterface.postNotification(
+            CONSTANTS.ENTITIES.PUBLIC,
+            _.get(loggedInUserDetails, "_id"),
+            CONSTANTS.ACTIONS.UPVOTE,
+            CONSTANTS.ACTION_STATUS.PENDING,
+            "Invite 10 friends and this is your referral code: " +
+              userDetails.myReferralCode
+          );
+          let response = success.data;
+          UserInterface.registerUser({ ...userDetails, secret, nonce })
+            .then((mongoSuccess) => {
+              setCookie(mongoSuccess.token);
+              publishUserToApp();
+              setRegistration(PASSED);
+              BlockchainInterface.addToken("ERC20", "TRBG", 18);
+            })
+            .catch((err) => {
+              registrationFailure(err.data);
+            });
         })
         .catch((error) => {
-          registrationFailure(error.data)
+          registrationFailure(error.data);
         });
     } catch (e) {
       console.log("shiotter", e);
     }
   }
 
-  function registrationFailure(message){
+  function registrationFailure(message) {
     setRegistration(FAILED);
-    setregistrationErrorMessage(message)
+    setregistrationErrorMessage(message);
   }
 
   function publishUserToApp() {
@@ -311,12 +328,15 @@ const Register = (props) => {
             {registration == PASSED ? (
               <div className="d-flex flex-column align-items-center">
                 <div className="d-flex align-items-center flex-column mb-2">
-                  <img src={successLogo} width="70"></img>
-                  <span className="second-grey">Welcome to IdeaTribe</span>
+                  <img src={successLogo} className="success-logo"></img>
+                  <span className="second-grey">
+                    Hi {userDetails.firstName}, Welcome to IdeaTribe! The world
+                    of idea sharing
+                  </span>
                 </div>
                 <span>
-                  Hi {userDetails.firstName} You have signed up to the unlimited
-                  possibilities in the world of idea sharing.
+                  Congratulations! You have earned 5 TribeGold and your wallet
+                  is loaded with Matic to start sharing!
                 </span>
               </div>
             ) : registration == FAILED ? (
@@ -349,7 +369,7 @@ const Register = (props) => {
                       <span className="second-grey">User name</span>
                       {userNameError && (
                         <span className="error-message ml-2">
-                          *Username invalid
+                          *{userNameError}
                         </span>
                       )}
                       <i className="fa fa-circle-notch fa-spin"></i>
@@ -409,7 +429,7 @@ const Register = (props) => {
   function handleChange(event) {
     var key = event.keyCode;
     let returnObj = {};
-    const value = String(event.target.value).toLowerCase();
+    const value = event.target.value;
     returnObj[event.target.name] = value;
     setUserDetails({
       ...userDetails,
@@ -420,13 +440,13 @@ const Register = (props) => {
         setuserNameError(false);
         UserInterface.getUserInfo({ userName: value })
           .then((userDetails) => {
-            setuserNameError(true);
+            setuserNameError("Username already taken");
           })
           .catch((error) => {
             setuserNameError(false);
           });
       } else {
-        setuserNameError(true);
+        setuserNameError("Username invalid");
       }
     }
     if (event.target.name == "referredBy") {
@@ -444,9 +464,9 @@ const Register = (props) => {
       }
     }
   }
-  const closePopup = () =>{
-    props.onHide()
-  }
+  const closePopup = () => {
+    props.onHide();
+  };
 
   return (
     <Modal
@@ -461,9 +481,13 @@ const Register = (props) => {
         {registration == PENDING && <ProgressBar class="mt-14"></ProgressBar>}
         <Modal.Title>
           <span className="master-grey">
-            Hi, You are not yet registered with us. Yet!
+            Hi, You are not yet registered with us!
           </span>
-          <CloseButton onClick={() => {closePopup()}}></CloseButton>
+          <CloseButton
+            onClick={() => {
+              closePopup();
+            }}
+          ></CloseButton>
         </Modal.Title>
         <div className="steps">
           <ul className="nav">
@@ -502,7 +526,6 @@ const Register = (props) => {
             <div></div>
           ) : (
             <Button
-              variant="secondary"
               className="button"
               bsstyle="primary"
               onClick={() => {
@@ -534,7 +557,7 @@ const Register = (props) => {
           >
             {activeStep.index == steps.length - 1
               ? registration == PASSED
-                ? "Done"
+                ? "Get Started"
                 : registration == PENDING
                 ? "Registering"
                 : registration == FAILED
