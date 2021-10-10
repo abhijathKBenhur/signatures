@@ -103,7 +103,6 @@ const Register = (props) => {
     try {
       BlockchainInterface.register_user({ ...userDetails, secret, nonce })
         .then((success) => {
-          console.log(loggedInUserDetails);
           NotificationInterface.postNotification(
             CONSTANTS.ENTITIES.PUBLIC,
             _.get(loggedInUserDetails, "_id"),
@@ -477,8 +476,8 @@ const Register = (props) => {
       fullscreen={true}
       onHide={props.onHide}
     >
+      {registration == PENDING && <ProgressBar class="mt-14"></ProgressBar>}
       <Modal.Header className="d-flex flex-column">
-        {registration == PENDING && <ProgressBar class="mt-14"></ProgressBar>}
         <Modal.Title>
           <span className="master-grey">
             Hi, You are not yet registered with us!

@@ -38,6 +38,7 @@ const Header = (props) => {
   );
   const [loggedInUserDetails, setLoggedInUserDetails] = useState(userDetails);
   const [showRegisterPopup, setShowRegisterPopup] = useState(false);
+  const [showMenu, setShowMenu] = useState(false);
 
   useEffect(() => {
     const { metamaskID = undefined } = reduxState;
@@ -178,6 +179,10 @@ const Header = (props) => {
       .catch((err) => {});
   }
 
+  function openOption(e) {
+    setShowMenu(!showMenu);
+  }
+
   const [appLocation, setAppLocatoin] = useState("home");
   // const [loggedUserInfo, setLoggedUserInfo] = useState(undefined);
 
@@ -303,14 +308,14 @@ const Header = (props) => {
               {_.isEmpty(loggedInUserDetails.imageUrl) ? (
                 <User
                   color="white"
-                  className="cursor-pointer header-icons"
+                  className="cursor-pointer header-icons desktop-view"
                   onClick={() => {
                     gotoPortfolio();
                   }}
                 ></User>
               ) : (
                 <Image
-                  className="cursor-pointer header-icons"
+                  className="cursor-pointer header-icons desktop-view"
                   src={loggedInUserDetails.imageUrl}
                   roundedCircle
                   width="36px"
@@ -318,7 +323,9 @@ const Header = (props) => {
                     gotoPortfolio();
                   }}
                 ></Image>
-              )}
+              )
+            }
+            <i class="fa fa-bars responsive-icons mobile-view" onClick={(e) => openOption()}></i>
 
               {/* <Dropdown>
               <Dropdown.Toggle
@@ -359,6 +366,10 @@ const Header = (props) => {
         </Container>
       </nav>
       <Register show={showRegisterPopup} onHide={() => hideModal()}></Register>
+      {showMenu && <div className="mobile-menu"> 
+          <div className="items"> Profile </div>
+          <div className="items"> Notification </div>
+      </div>}
     </div>
   );
 };
