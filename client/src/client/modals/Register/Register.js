@@ -133,8 +133,7 @@ const Register = (props) => {
   }
 
   function registrationFailure(message, userDetails) {
-    // remove user - userDetails
-    BlockchainInterface.removeUser({
+    UserInterface.removeUser({
       userName: userDetails.userName
     })
     setRegistration(FAILED);

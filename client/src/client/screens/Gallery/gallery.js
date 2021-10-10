@@ -86,7 +86,6 @@ function gallery(props) {
           <Row
             className="search-discover d-flex flex-column justify-content-center"
             style={{
-              background: `linear-gradient(rgba(255,255,255,.95), rgba(255,255,255,.95)), url(${cover})`,
               height: "300px",
             }}
           >

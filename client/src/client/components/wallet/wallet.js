@@ -27,26 +27,27 @@ const Wallet = (props) => {
         // onClick={() => selectWalletHandler(coinType)}
       >
       <div className="wallet-type">
-        <p> {goldBalance}</p>
+        <p className="father-grey color-white"> {goldBalance} TRBG</p>
       </div>
       <div className="coin-amount">
-        <h5> TRBG </h5>
+        <p className="master-grey color-white"> TRIBE GOLD </p>
       </div>
+        
+      </div>
+      <div
+        className="wallet-container"
+        // onClick={() => selectWalletHandler(coinType)}
+      >
         <div className="wallet-type">
-          <p> {maticBalance}</p>
+          <p className="father-grey color-white"> {maticBalance}</p>
         </div>
         <div className="coin-amount">
-          <h5> MATIC </h5>
+          <p className="master-grey color-white"> MATIC </p>
         </div>
       </div>
-      <div className="transaction-wrapper">
-        {/* {
-          <Transactions
-            transactionList={walletState.trasactionList}
-            transactionType={walletState.selectedWallet}
-          />
-        } */}
-      </div>
+      {/* <div className="transaction-wrapper">
+       <span class="second-header">You can earn more tribe gold by</span>
+      </div> */}
     </div>
   );
 };

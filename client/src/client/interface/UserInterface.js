@@ -26,6 +26,10 @@ export const renewNonce = payload => {
     return AxiosInstance.post(`/renewNonce`,payload) 
 }
 
+export const removeUser = payload => { 
+    return AxiosInstance.post(`/removeUser`,payload) 
+}
+
 
 const UserInterface = {
     registerUser,
@@ -33,7 +37,8 @@ const UserInterface = {
     updateUser,
     getUsers,
     getNonceAndRegister,
-    renewNonce
+    renewNonce,
+    removeUser
 }
 
 export default UserInterface

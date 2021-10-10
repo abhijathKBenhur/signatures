@@ -426,19 +426,20 @@ const CreateIdeaModal = ({
     let result = "";
     try {
       // Chrome, Firefox
+      result = new Date()
+        .toTimeString()
+        .match(new RegExp("[A-Z](?!.*[(])", "g"))
+        .join("");
+    } catch (e) {
+      // IE, some loss in accuracy due to guessing at the abbreviation
+      // Note: This regex adds a grouping around the open paren as a
+      //       workaround for an IE regex parser bug
       result = /.*\s(.+)/.exec(
         new Date().toLocaleDateString(navigator.language, {
           timeZoneName: "short",
         })
       )[1];
-    } catch (e) {
-      // IE, some loss in accuracy due to guessing at the abbreviation
-      // Note: This regex adds a grouping around the open paren as a
-      //       workaround for an IE regex parser bug
-      result = new Date()
-        .toTimeString()
-        .match(new RegExp("[A-Z](?!.*[(])", "g"))
-        .join("");
+      
     }
   }
 

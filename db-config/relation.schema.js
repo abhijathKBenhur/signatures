@@ -5,8 +5,8 @@ const Schema = mongoose.Schema;
 
 const Relation = new Schema(
   {
-    from : { type: String },
-    to: { type: String },
+    from : { type: String }, // userName
+    to: { type: String }, // userName
     relation: { type: String },
     status: { type: String },
     message: { type: String },
