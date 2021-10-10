@@ -356,7 +356,7 @@ const InfoModal = (props) => {
               rows={7}
               aria-describedby="inputGroupAppend"
               name="description"
-              placeholder="Description upto 250 words"
+              placeholder="Description upto 250 words*"
               style={{ resize: "none", borderRadius: "5px" }}
               onChange={(event) => {
                 setFormData({

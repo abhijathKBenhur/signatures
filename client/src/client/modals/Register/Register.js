@@ -120,18 +120,21 @@ const Register = (props) => {
               BlockchainInterface.addToken("ERC20", "TRBG", 18);
             })
             .catch((err) => {
-              registrationFailure(err.data);
+              registrationFailure(err.data, userDetails);
             });
         })
         .catch((error) => {
-          registrationFailure(error.data);
+          registrationFailure(error.data, userDetails);
         });
     } catch (e) {
       console.log("shiotter", e);
     }
   }
 
-  function registrationFailure(message) {
+  function registrationFailure(message, userDetails) {
+    UserInterface.removeUser({
+      userName: userDetails.userName
+    })
     setRegistration(FAILED);
     setregistrationErrorMessage(message);
   }
@@ -329,14 +332,10 @@ const Register = (props) => {
                 <div className="d-flex align-items-center flex-column mb-2">
                   <img src={successLogo} className="success-logo"></img>
                   <span className="second-grey">
-                    Hi {userDetails.firstName}, Welcome to IdeaTribe! The world
-                    of idea sharing
+                    Hi {userDetails.firstName}, Congratulations! You have earned 1 TribeGold and your wallet
+                  is loaded with MATIC to get started!
                   </span>
                 </div>
-                <span>
-                  Congratulations! You have earned 5 TribeGold and your wallet
-                  is loaded with Matic to start sharing!
-                </span>
               </div>
             ) : registration == FAILED ? (
               <div>

@@ -8,13 +8,16 @@ const UserSchema = require("../../db-config/user.schema");
 const BlockchainUtils = require("../BlockchainAPIs/BlockChainUtils");
 const web3Instance = BlockchainUtils.web3Instance
 const publicKey = BlockchainUtils.publicKey
+const ideaTribeContract = BlockchainUtils.ideaTribeContract
+
 
 const transactionObject = {
   from: publicKey,
 };
 
+
 verifySignature =  (req, res) => {
-  const SIGNATURE_MESSAGE = "Hello from ideaTribe. Click Sign to prove that you have access to this wallet and we'll log you in. To stop hackers from using your wallet, here is a unique code that they cannot guess. ";
+  const SIGNATURE_MESSAGE = "Hello from ideaTribe. Click sign to prove that you have access to this wallet and we'll log you in. To stop hackers from using your wallet, here is a unique code that they cannot guess. ";
   let nonce = req.body.nonce;
   let messageHash = web3Instance.utils.fromUtf8(SIGNATURE_MESSAGE+ nonce)
   console.log("recovering hash")
@@ -41,13 +44,14 @@ verifySignature =  (req, res) => {
 register_user = (req, res) => {
   let metamaskAddress = req.body.metamaskId;
   let userName = req.body.userName;
-  const SIGNATURE_MESSAGE = "Hello from ideaTribe. Click Sign to prove that you have access to this wallet and we'll log you in. To stop hackers from using your wallet, here is a unique code that they cannot guess. ";
+  const SIGNATURE_MESSAGE = "Hello from ideaTribe. Click sign to prove that you have access to this wallet and we'll log you in. To stop hackers from using your wallet, here is a unique code that they cannot guess. ";
   let messageHash = web3Instance.utils.fromUtf8(SIGNATURE_MESSAGE+ req.body.nonce)
   web3Instance.eth.personal.ecRecover(messageHash, req.body.secret).then(success => {
     console.log("recover success  " + success)
     UserSchema.findOne({ metamaskId: success }).then(user =>{
+      console.log(user)
       if(user.nonce == req.body.nonce){
-        deployedContract.methods
+        ideaTribeContract.methods
         .register_user(metamaskAddress, userName)
         .send(transactionObject)
         .on("receipt", function (receipt) {
