@@ -172,8 +172,8 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
           color: unset;
         }
         &.small{
-          height: 40px;
-        width: 40px;
+          height: 50px;
+          width: 50px;
         }
     }
   
@@ -326,6 +326,31 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
   .mobile-view {
     display: block !important;
   }
+  .d-flex-mobile{
+    display: initial !important;
+  }
+  .main-container:not(:nth-child(1)){
+    margin-top: 120px;
+  }
+  .signature-mobile-view {
+    .d-flex {
+      flex-direction: column !important;
+      margin-bottom: 1rem;
+      .user-details {
+        margin-bottom: 1rem;
+      }
+    }
+  }
+  .fixed-bottom {
+    position: relative;
+    height: auto !important;
+    .footer-info-wrapper {
+      flex-flow: column;
+    }
+  }
+  .profile-detail{
+    margin: 0 15px;
+  }
 }
 
 
@@ -342,23 +367,25 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 .desktop-view {
   display: block;
 }
+.display-none {
+  display: none !important;
+}
 .mobile-menu {
   position: absolute;
   background: white;
-  left: 39%;
   z-index: 99;
-  top: 25px;
-  left: 0;
-  right: 0;
-  margin-left: 1rem;
-  margin-right: 1rem;
-  margin-top: 1.5rem;
-  margin-bottom: 1.5rem;
-  padding: 2rem;
+  top: 40px;
+  right: 31px;
+  padding: 1rem;
   border-width: 1px;
   text-align: center;
   border-radius: 0.5rem;
+  border: 1px solid rgba(0,0,0,.15);
+  width: 50%;
   .items{
     
   }
+}
+.d-flex-mobile{
+  display: flex;
 }

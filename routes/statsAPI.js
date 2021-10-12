@@ -22,7 +22,7 @@ getTotalIdeasOnTribe = async (req, res) => {
 getTotalUsersOnTribe = async (req, res) => {
   let findCriteria = {};
   UserSchema.find(findCriteria).count().then( user => {
- 
+
     if (!user) {
       return res.status(404).json({ success: true, data: [] });
     }
@@ -32,7 +32,7 @@ getTotalUsersOnTribe = async (req, res) => {
 
 getIdeasFromUser = async (req, res) => {
   console.log("finding by ID" + req.body.owner)
-  IdeaSchema.findById(req.body.owner).count().then( user => {
+  IdeaSchema.find(req.body.owner).count().then( user => {
     if (!user) {
       return res.status(404).json({ success: true, data: [] });
     }
