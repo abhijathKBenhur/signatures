@@ -1,5 +1,5 @@
 const REMOTE_ENDPOINTS = "/api";
-const LOCAL_ENDPOINTS = "http://localhost:4002/api";
+const LOCAL_ENDPOINTS = "http://localhost:4000/api";
 
 
 const ENDPOINTS = {
