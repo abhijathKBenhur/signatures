@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Button, Image, Form, Nav } from "react-bootstrap";
+import { Button, Image, Form, Nav, DropdownButton, Dropdown } from "react-bootstrap";
 import { useHistory, useLocation } from "react-router-dom";
 import logo from "../../../assets/logo/signatures.png";
 import _, { isEmpty } from "lodash";
@@ -23,7 +23,7 @@ import CONSTANTS from "../../commons/Constants";
 import AlertBanner from "../alert/alert";
 import ReactDOM from 'react-dom';
 import { func } from "prop-types";
-import Web3 from "web3";
+import EmitInterface from "../../interface/emitInterface";
 
 import TransactionsInterface from "../../interface/TransactionInterface";
 const Header = (props) => {
@@ -38,6 +38,11 @@ const Header = (props) => {
   );
   const [loggedInUserDetails, setLoggedInUserDetails] = useState(userDetails);
   const [showRegisterPopup, setShowRegisterPopup] = useState(false);
+  const [menu, setMenu] = useState({
+    showMenu: false,
+    showNotification: false
+  });
+  const [pathName, setPathName] = useState(false);
 
   useEffect(() => {
     const { metamaskID = undefined } = reduxState;
@@ -51,7 +56,12 @@ const Header = (props) => {
       connectWallet();
     }
     updatePendingTransactions()
+    setPathName(window.location.pathname)
   }, []);
+
+  useEffect(() => {
+    setPathName(window.location.pathname)
+  }, [appLocation]);
 
   useEffect(() => {
     refreshUserDetails();
@@ -178,6 +188,10 @@ const Header = (props) => {
       .catch((err) => {});
   }
 
+  function openOption(e) {
+    setMenu({ ...menu, showMenu: !menu.showMenu});
+  }
+
   const [appLocation, setAppLocatoin] = useState("home");
   // const [loggedUserInfo, setLoggedUserInfo] = useState(undefined);
 
@@ -214,6 +228,32 @@ const Header = (props) => {
   const hideModal = (type) => {
     setShowRegisterPopup(false);
   };
+  const gotoProfile = (isMobileView) => {
+    setMenu({ ...menu, showMenu: false, showNotification: false});
+    setAppLocatoin("profile");
+    loggedInUserDetails.userName
+      ? history.push({pathname: "/profile/" + loggedInUserDetails.userName, state: {mobileView: isMobileView}})
+      : setShowRegisterPopup(true);
+  }
+
+  const gotoHome = () => {
+    gotoGallery(true); 
+    setMenu({...menu, showMenu: false, showNotification: false})
+  }
+
+  const gotoNotification = () => {
+    setMenu({ ...menu, showMenu: false, showNotification: true});
+    EmitInterface.sendMessage('SHOW_NOTIFICAION');
+  }
+
+  const gotoComments = () => {
+    setMenu({...menu, showMenu: false})
+    EmitInterface.sendMessage('SHOW_COMMENTS');
+  }
+
+  const isIdeaPage = () => {
+    return window.location.pathname.indexOf("signature") > -1;
+  }
 
   return (
     <div>
@@ -303,14 +343,14 @@ const Header = (props) => {
               {_.isEmpty(loggedInUserDetails.imageUrl) ? (
                 <User
                   color="white"
-                  className="cursor-pointer header-icons"
+                  className="cursor-pointer header-icons desktop-view"
                   onClick={() => {
                     gotoPortfolio();
                   }}
                 ></User>
               ) : (
                 <Image
-                  className="cursor-pointer header-icons"
+                  className="cursor-pointer header-icons desktop-view"
                   src={loggedInUserDetails.imageUrl}
                   roundedCircle
                   width="36px"
@@ -318,7 +358,9 @@ const Header = (props) => {
                     gotoPortfolio();
                   }}
                 ></Image>
-              )}
+              )
+            }
+            <i className="fa fa-bars responsive-icons mobile-view" onClick={(e) => openOption()}></i>
 
               {/* <Dropdown>
               <Dropdown.Toggle
@@ -359,6 +401,15 @@ const Header = (props) => {
         </Container>
       </nav>
       <Register show={showRegisterPopup} onHide={() => hideModal()}></Register>
+      {menu.showMenu && <div className="mobile-menu"> 
+          {appLocation == "home" && <div className="items" onClick={(e) => gotoProfile(false)}> Profile </div>}
+          {appLocation == "home" && <div className="items" onClick={(e) => gotoProfile(true)}> Notification </div>} 
+          {(appLocation == "profile" && !menu.showNotification) && <div className="items" onClick={(e) => gotoNotification()}> Notification </div>}
+          {(appLocation == "profile" && menu.showNotification) && <div className="items" onClick={(e) => gotoHome(true)}> Home </div>}
+          {(appLocation == "profile" && menu.showNotification) && <div className="items" onClick={(e) => gotoProfile()}> Profile </div>}
+          {isIdeaPage() && <div className="items" onClick={(e) => gotoComments()}> Comments </div>}
+          {isIdeaPage() && <div className="items" onClick={(e) => gotoHome(true)}> Home </div>}
+      </div>}
     </div>
   );
 };

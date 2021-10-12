@@ -36,6 +36,7 @@ import Transactions from "../../components/transactions/transaction";
 import RelationsInterface from "../../interface/RelationsInterface";
 import CONSTANTS from "../../commons/Constants";
 import { showToaster } from "../../commons/common.utils";
+import EmitInterface from "../../interface/emitInterface";
 function Profile(props) {
   const reduxState = useSelector((state) => state, shallowEqual);
   const {
@@ -52,6 +53,7 @@ function Profile(props) {
   const [ideasCount, setIdeasCount] = useState(0);
   const [myNotifications, setMyNotifications] = useState([]);
   const [billetList, setBilletList] = useState([]);
+  const [mobileView, setMobileView] = useState([])
 
   let history = useHistory();
   const [key, setKey] = useState("collections");
@@ -65,11 +67,25 @@ function Profile(props) {
   });
 
   
-
+  useEffect(() => {
+    let subscription = EmitInterface.getMessage().subscribe((event) => {
+      switch (event.id) {
+        case "SHOW_NOTIFICAION":
+        setMobileView(true);
+          break;
+        default:
+          break;
+      }
+    });
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, []);
   
 
   useEffect(() => {
     const { userDetails = {} } = reduxState;
+    
     if (viewUser && !isMyPage()) {
       let payLoad = {};
       payLoad.userName = viewUser;
@@ -78,6 +94,7 @@ function Profile(props) {
       //own profile page
       setLoggedInUserDetails(userDetails);
     }
+    setMobileView(_.get(history, 'location.state.mobileView'))
     console.log("userDetails = ", userDetails);
   }, [reduxState.userDetails]);
 
@@ -91,7 +108,7 @@ function Profile(props) {
     }
   }, [loggedInUserDetails]);
 
-  const getStats = () =>{
+  const getStats = () => {
     StatsInterface.getIdeasFromUser({
       owner:loggedInUserDetails._id
     }).then(success =>{
@@ -217,8 +234,8 @@ function Profile(props) {
           <div className="separator w-100">
             <Col md="12" className="mycollection">
               <Row className="loggedIn h-100">
-                <Col md="12" className="p-0 d-flex">
-                  <Col md="2" className="userPane w-100 flex-column h-100">
+                <Col md="12" className="p-0 d-flex-mobile">
+                  <Col md="2" className={`userPane w-100 flex-column h-10 ${mobileView ? 'display-none': ''}`}>
                     <div className="profile-section d-flex flex-column">
                       {/* <div className="separatorline"></div> */}
 
@@ -269,7 +286,7 @@ function Profile(props) {
                     {isMyPage() ? (
                       <div className="actions mt-4">
                         <OverlayTrigger
-                          key={"top"}
+                          key={"editProfile"}
                           placement="top"
                           overlay={
                             <Tooltip id={`tooltip-top`}>
@@ -380,11 +397,12 @@ function Profile(props) {
                   </Col>
 
                   <Col
-                    className={
-                      isMyPage()
+                    className={`
+                      ${isMyPage()
                         ? "tabs-wrapper mt-3 col-md-8"
-                        : "tabs-wrapper mt-3 col-md-10"
-                    }
+                        : "tabs-wrapper mt-3 col-md-10"}
+                        ${mobileView ? 'display-none': ''}
+                    `}
                   >
                     <Row className="profile-details">
                       <Col md="11" className="">
@@ -397,7 +415,7 @@ function Profile(props) {
                             </span>{" "}
                           </Col>
                         </Row>
-                        <Row className="d-flex align-content-center justify-content-center h-100">
+                        <Row className="d-flex align-content-center justify-content-center h-100 profile-detail">
                           {_.isEmpty(loggedInUserDetails.bio) && isMyPage() ? (
                             <div>
                               <Row className="d-flex justify-content-center">
@@ -432,7 +450,7 @@ function Profile(props) {
                         {!isMyPage() && (
                           <Row className="justify-content-end pr-3 cursor-pointer color-secondary mb-1">
                             <OverlayTrigger
-                              key={"top"}
+                              key={"sendMessage"}
                               placement="top"
                               overlay={
                                 <Tooltip id={`tooltip-top`}>
@@ -457,7 +475,7 @@ function Profile(props) {
 
                         <Row className="justify-content-end pr-3 cursor-pointer color-secondary mb-1">
                           <OverlayTrigger
-                            key={"top"}
+                            key={"share"}
                             placement="top"
                             overlay={
                               <Tooltip id={`tooltip-top`}>Share</Tooltip>
@@ -479,7 +497,7 @@ function Profile(props) {
                         {!isMyPage() && (
                           <Row className="justify-content-end pr-3 cursor-pointer color-secondary mb-1">
                             <OverlayTrigger
-                              key={"top"}
+                              key={"follow"}
                               placement="top"
                               overlay={
                                 <Tooltip id={`tooltip-top`}>
@@ -559,8 +577,7 @@ function Profile(props) {
                   </Col>
                   {isMyPage() ? (
                     <Col
-                      md="2"
-                      className="notification-wrapper mt-1 flex-column h-100"
+                      className={`notification-wrapper mt-1 flex-column h-100 ${mobileView ? 'col-md-12': 'col-md-2'}`}
                     >
                       <span className="second-grey notification-title pl-2">
                         Notifications

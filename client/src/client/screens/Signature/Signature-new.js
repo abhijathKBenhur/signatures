@@ -31,6 +31,7 @@ import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import "./Signature-new.scss";
 import InfoModal from "../../modals/info-modal/info.modal";
 import RelationsInterface from "../../interface/RelationsInterface";
+import EmitInterface from "../../interface/emitInterface";
 const SignatureNew = (props) => {
   const { hashId } = useParams();
   const [upvotes, setUpvotes] = useState([]);
@@ -40,6 +41,7 @@ const SignatureNew = (props) => {
   const audioRef = useRef(null);
   const [signature, setSignature] = useState({});
   const [PDFFile, setPDFFile] = useState(undefined);
+  const [showComment, setShowComment] = useState(false);
   const [pdfPages, setPdfPages] = useState({
     currentPage: 1,
     totalPages: 1,
@@ -103,6 +105,21 @@ const SignatureNew = (props) => {
       );
     }
   }, [audioRef.current]);
+
+  useEffect(() => {
+    let subscription = EmitInterface.getMessage().subscribe((event) => {
+      switch (event.id) {
+        case "SHOW_COMMENTS":
+        setShowComment(true);
+          break;
+        default:
+          break;
+      }
+    });
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, []);
 
   const loadFile = (pdfData) => {
     var reader = new FileReader();
@@ -303,8 +320,8 @@ const SignatureNew = (props) => {
       <div className="wrapper">
         <div className="wrapper-margin">
           <Row className="user-row  ">
-            <Col md="8" className="document-container pt-2">
-              <Row className="justify-content-between align-items-center mb-1">
+            <Col md="8" className={`document-container pt-2 ${showComment ? 'desktop-view' : ''}`}>
+              <Row className="justify-content-between align-items-center mb-1 signature-mobile-view">
                 <Col
                   md="12"
                   className="d-flex flex-row justify-content-between align-items-center"
@@ -321,6 +338,38 @@ const SignatureNew = (props) => {
                       <div className="sidebar">
                         <div className="action-btns align-items-center">
                           {/* <span className="second-grey">{upvotes.length} upvotes</span> */}
+                          <div className="avatar">
+                            {signature.owner && (
+                              <img
+                                src={_.get(signature, "owner.imageUrl")}
+                                alt={_.get(signature, "owner.userName")}
+                                onClick={() =>
+                                  history.push(
+                                    `/profile/${_.get(signature, "owner.userName")}`
+                                  )
+                                }
+                              />
+                            )}
+                          </div>
+                          <OverlayTrigger
+                            placement="left"
+                            overlay={<Tooltip>View on chain</Tooltip>}
+                          >
+                            <Button variant="action">
+                              <i className="fa fa-link" aria-hidden="true"></i>
+                            </Button>
+                          </OverlayTrigger>
+                          <OverlayTrigger
+                            placement="left"
+                            overlay={<Tooltip>Share</Tooltip>}
+                          >
+                            <Button
+                              variant="action"
+                              onClick={() => showModal("share")}
+                            >
+                              <i className="fa fa-bullhorn" aria-hidden="true"></i>
+                            </Button>
+                          </OverlayTrigger>
                           <OverlayTrigger
                             placement="left"
                             overlay={
@@ -421,7 +470,7 @@ const SignatureNew = (props) => {
                 </Col>
               </Row>
             </Col>
-            <Col md="3" className="conversation-container  pt-2">
+            <Col md="3" className={`conversation-container pt-2 ${showComment ? 'mobile-view' : 'desktop-view'}`}>
               <div>
                 <span className="conversation-title second-header">
                   Conversation
@@ -437,40 +486,10 @@ const SignatureNew = (props) => {
             <Col md="1" className="options-container  pt-2">
               <Row className="justify-content-center">
                 <div className="sidebar d-flex flex-column">
-                  <div className="avatar">
-                    {signature.owner && (
-                      <img
-                        src={_.get(signature, "owner.imageUrl")}
-                        alt={_.get(signature, "owner.userName")}
-                        onClick={() =>
-                          history.push(
-                            `/profile/${_.get(signature, "owner.userName")}`
-                          )
-                        }
-                      />
-                    )}
-                  </div>
                   <div className="action-btns d-flex flex-column align-items-center">
-                    <OverlayTrigger
-                      placement="left"
-                      overlay={<Tooltip>View on chain</Tooltip>}
-                    >
-                      <Button variant="action">
-                        <i className="fa fa-link" aria-hidden="true"></i>
-                      </Button>
-                    </OverlayTrigger>
+                    
 
-                    <OverlayTrigger
-                      placement="left"
-                      overlay={<Tooltip>Share</Tooltip>}
-                    >
-                      <Button
-                        variant="action"
-                        onClick={() => showModal("share")}
-                      >
-                        <i className="fa fa-bullhorn" aria-hidden="true"></i>
-                      </Button>
-                    </OverlayTrigger>
+                    
                   </div>
                 </div>
               </Row>

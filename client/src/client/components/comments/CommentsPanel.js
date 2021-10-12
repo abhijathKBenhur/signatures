@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
+import { MentionsInput, Mention } from 'react-mentions'
 import { ListGroup, Form, Image } from "react-bootstrap";
 import CONSTANTS from "../../commons/Constants";
 import { getInitialSubString } from "../../commons/common.utils";
@@ -8,6 +9,7 @@ import "./comments.scss";
 import CommentsInterface from "../../interface/CommentsInterface";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import NotificationInterface from "../../interface/NotificationInterface";
+import UserInterface from "../../interface/UserInterface";
 
 const CommentsPanel = (props) => {
   let history = useHistory();
@@ -15,6 +17,9 @@ const CommentsPanel = (props) => {
   const [comments, setComments] = useState("");
   const [newComment, setNewComment] = useState("");
   const [loggedInUserDetails, setLoggedInUserDetails] = useState({});
+  const [users, setUsers] = useState([
+      
+    ]);
 
   useEffect(() => {
     const { userDetails = {} } = reduxState;
@@ -24,6 +29,16 @@ const CommentsPanel = (props) => {
 
   useEffect(() => {
     loadComments();
+    UserInterface.getUsers().then((succes) => {
+      let res = [];
+      _.forEach(succes.data.data, item=>{
+        res.push({
+          id: item.userName,
+          display: item.firstName
+        })
+      });
+      setUsers(res)
+    });
   }, []);
 
   function getCommentDestination() {
@@ -91,18 +106,22 @@ const CommentsPanel = (props) => {
       setNewComment(value);
     }
   };
+  const onAdd = () => (...args) => console.log("added a new mention", ...args);
 
   return (
     <ListGroup className="">
-      <Form.Control
-        as="textarea"
-        name="description"
-        placeholder="Your comment"
-        onKeyUp={(e) => handleChange(e)}
-        style={{ borderRadius: 5, resize: "none" }}
-        className="mb-2 comment-entry"
-        
-      />
+      <MentionsInput className="mentions-area" value={newComment} onChange={(e) => handleChange(e)}  placeholder="Your comment">
+        <Mention
+          trigger="@"
+          data={users}
+          displayTransform={display=> `@${display}`}
+        />
+        <Mention
+          trigger="#"
+          data={users}
+          onAdd={onAdd}
+        />
+      </MentionsInput>
       {(!comments || comments.length == 0) && <div className="second-grey mb-2 ">Be the first to add a comment.</div>}
 
       <div className="scrolable-comments">
