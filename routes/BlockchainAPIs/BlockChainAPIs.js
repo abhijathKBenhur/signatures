@@ -52,7 +52,7 @@ register_user = (req, res) => {
       console.log(user)
       if(user.nonce == req.body.nonce){
         ideaTribeContract.methods
-        .register_user(metamaskAddress, userName)
+        .registerUser(metamaskAddress, userName)
         .send(transactionObject)
         .on("receipt", function (receipt) {
           console.log("receipt ", receipt)

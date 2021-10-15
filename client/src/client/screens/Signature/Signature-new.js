@@ -70,7 +70,7 @@ const SignatureNew = (props) => {
         loadUpvotes(signatureObject.ideaID);
       });
     }
-    
+
     // setSignature({...signature, ...dummmySignature});
     getIPSPDFFile(hashId);
   }, []);
@@ -110,7 +110,7 @@ const SignatureNew = (props) => {
     let subscription = EmitInterface.getMessage().subscribe((event) => {
       switch (event.id) {
         case "SHOW_COMMENTS":
-        setShowComment(true);
+          setShowComment(true);
           break;
         default:
           break;
@@ -320,7 +320,12 @@ const SignatureNew = (props) => {
       <div className="wrapper">
         <div className="wrapper-margin">
           <Row className="user-row  ">
-            <Col md="8" className={`document-container pt-2 ${showComment ? 'desktop-view' : ''}`}>
+            <Col
+              md="9"
+              className={`document-container pt-2 ${
+                showComment ? "desktop-view" : ""
+              }`}
+            >
               <Row className="justify-content-between align-items-center mb-1 signature-mobile-view">
                 <Col
                   md="12"
@@ -338,19 +343,7 @@ const SignatureNew = (props) => {
                       <div className="sidebar">
                         <div className="action-btns align-items-center">
                           {/* <span className="second-grey">{upvotes.length} upvotes</span> */}
-                          <div className="avatar">
-                            {signature.owner && (
-                              <img
-                                src={_.get(signature, "owner.imageUrl")}
-                                alt={_.get(signature, "owner.userName")}
-                                onClick={() =>
-                                  history.push(
-                                    `/profile/${_.get(signature, "owner.userName")}`
-                                  )
-                                }
-                              />
-                            )}
-                          </div>
+
                           <OverlayTrigger
                             placement="left"
                             overlay={<Tooltip>View on chain</Tooltip>}
@@ -367,9 +360,14 @@ const SignatureNew = (props) => {
                               variant="action"
                               onClick={() => showModal("share")}
                             >
-                              <i className="fa fa-bullhorn" aria-hidden="true"></i>
+                              <i
+                                className="fa fa-bullhorn"
+                                aria-hidden="true"
+                              ></i>
                             </Button>
                           </OverlayTrigger>
+                          
+                          {loggedInUserDetails.userName && 
                           <OverlayTrigger
                             placement="left"
                             overlay={
@@ -404,20 +402,25 @@ const SignatureNew = (props) => {
                               ></i>
                             </Button>
                           </OverlayTrigger>
+                          }
+
+
+
                           {signature.owner &&
-                          loggedInUserDetails.userName ==
-                            _.get(signature, "owner.userName") ? (
-                            <div>
-                              <Button
-                                variant="action"
-                                className="small ml-1"
-                                onClick={() => showModal("info")}
-                              >
-                                {" "}
-                                <i className="fa fa-cog"></i>
-                              </Button>
-                            </div>
-                          ) : (
+                            loggedInUserDetails.userName ==
+                              _.get(signature, "owner.userName") && (
+                              <div>
+                                <Button
+                                  variant="action"
+                                  className="small ml-1"
+                                  onClick={() => showModal("info")}
+                                >
+                                  {" "}
+                                  <i className="fa fa-cog"></i>
+                                </Button>
+                              </div>
+                            )}
+                          {loggedInUserDetails.userName && (
                             <Button
                               variant="primary"
                               onClick={() => showModal("engage")}
@@ -426,6 +429,22 @@ const SignatureNew = (props) => {
                                 getIdeaStatus(_.get(signature, "purpose"))}
                             </Button>
                           )}
+                          <div className="avatar cursor-pointer">
+                            {signature.owner && (
+                              <img
+                                src={_.get(signature, "owner.imageUrl")}
+                                alt={_.get(signature, "owner.userName")}
+                                onClick={() =>
+                                  history.push(
+                                    `/profile/${_.get(
+                                      signature,
+                                      "owner.userName"
+                                    )}`
+                                  )
+                                }
+                              />
+                            )}
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -470,27 +489,30 @@ const SignatureNew = (props) => {
                 </Col>
               </Row>
             </Col>
-            <Col md="3" className={`conversation-container pt-2 ${showComment ? 'mobile-view' : 'desktop-view'}`}>
+            <Col
+              md="3"
+              className={`conversation-container pt-2 ${
+                showComment ? "mobile-view" : "desktop-view"
+              }`}
+            >
               <div>
                 <span className="conversation-title second-header">
                   Conversation
                 </span>
                 <hr></hr>
 
-                { !_.isEmpty(signature) && <CommentsPanel
-                  idea={signature}
-                  entity={CONSTANTS.ENTITIES.IDEA}
-                ></CommentsPanel>}
+                {!_.isEmpty(signature) && (
+                  <CommentsPanel
+                    idea={signature}
+                    entity={CONSTANTS.ENTITIES.IDEA}
+                  ></CommentsPanel>
+                )}
               </div>
             </Col>
             <Col md="1" className="options-container  pt-2">
               <Row className="justify-content-center">
                 <div className="sidebar d-flex flex-column">
-                  <div className="action-btns d-flex flex-column align-items-center">
-                    
-
-                    
-                  </div>
+                  <div className="action-btns d-flex flex-column align-items-center"></div>
                 </div>
               </Row>
             </Col>

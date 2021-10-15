@@ -142,7 +142,7 @@ const CollectionCard = (props) => {
           openCardView();
         }}
       >
-          <a href="#" className={`card ${(_.get(JSON.parse(signature.category)[0], 'value'))}`}>
+          <a href="#" className={`card ${(_.get(JSON.parse(signature.category), 'value'))}`}>
             <div className="card__head" >
               <div className="card__image" style={{ backgroundImage: `url(${signature.thumbnail}` }}></div>
               <div className="author card__title">
@@ -155,27 +155,27 @@ const CollectionCard = (props) => {
               <div className={getClassNames()}>
                 <div className="card__author">
                 <div className="tag-n-location">
-                  <div className=" second-header timestamp third-header">
+                  <div className=" timestamp second-header">
                     {moment(signature.createdAt).format("YYYY-MM-DD HH:mm:ss")}
                   </div>
                 </div>
                   <div className="like-bar align-items-sm-baseline third-header row justify-content-between">
                     <div>
                       <i className="fa fa-globe mr-1"></i>
-                      {signature.location.split(" ")[1] || "Global"}
+                      {signature.location && signature.location.split(" ")[signature.location.split(" ").length - 1] || "Global"}
                     </div>
                     <div>
-                      <i className="fa fa-commenting-o "></i>
+                      {/* <i className="fa fa-commenting-o "></i>
                       <span className=""> 90 </span>
                       <i className="fa fa-heart-o "></i>
-                      <span className=""> 54 </span>
+                      <span className=""> 54 </span> */}
                     </div>
                   </div>
                   
                 </div>
                 <div className="author third-header">
                   <div className="author__content">
-                    <p className="author__subheader">{signature.description}</p>
+                    <p className="author__subheader  second-header mt-3">{signature.description}</p>
                   </div>
                 </div>
                

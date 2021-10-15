@@ -147,10 +147,14 @@ registerUser = (req, res) => {
 };
 
 getUserInfo = async (req, res) => {
+  console.log("requets" + getUserInfo)
+
   let findCriteria = {};
   if (req.body.userName) {
-    findCriteria.userName = "$regex: " + req.body.userName +" , $options: 'i'";
+    findCriteria.userName =  req.body.userName;
   }
+  // findCriteria.userName = "$regex: " + req.body.userName +" , $options: 'i'";
+
   if (req.body.metamaskId) {
     findCriteria.metamaskId = req.body.metamaskId;
   }
@@ -158,6 +162,7 @@ getUserInfo = async (req, res) => {
     console.log("myReferralCode," + req.body.myReferralCode);
     findCriteria.myReferralCode = req.body.myReferralCode;
   }
+  console.log("findCriteria" + JSON.stringify(findCriteria))
   await User.findOne(findCriteria,{email:0}, (err, user) => {
     if (err) {
       return res.status(400).json({ success: false, error: err });

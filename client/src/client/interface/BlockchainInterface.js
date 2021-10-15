@@ -406,7 +406,7 @@ class BlockchainInterface {
       from: updatePayLoad.owner,
     };
     this.contract.methods
-      .set_price(updatePayLoad.ideaID, this.web3.utils.toWei(updatePayLoad.price, "ether"))
+      .setPrice(updatePayLoad.ideaID, this.web3.utils.toWei(updatePayLoad.price, "ether"))
       .send(transactionObject)
       .on("transactionHash", function(hash) {
         feedbackCallback({transactionID:hash});

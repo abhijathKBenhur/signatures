@@ -1,5 +1,5 @@
 {
-  "address": "0xe1F4Ae326cD236191FbAE1674EB884Edc529a303",
+  "address": "0x0Ebb4881a3fa19C527010083bEc22AE408782616",
   "network": 80001,
   "abi": [
     {
@@ -31,7 +31,7 @@
         },
         {
           "internalType": "uint256",
-          "name": "_publish_fees",
+          "name": "_publishFees",
           "type": "uint256"
         },
         {
@@ -185,11 +185,11 @@
       "inputs": [
         {
           "internalType": "address",
-          "name": "_programmer",
+          "name": "account",
           "type": "address"
         }
       ],
-      "name": "add_programmer",
+      "name": "addProgrammer",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -197,6 +197,34 @@
     {
       "inputs": [],
       "name": "admin",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
+    },
+    {
+      "inputs": [],
+      "name": "baseURI",
+      "outputs": [
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
+    },
+    {
+      "inputs": [],
+      "name": "contractOwner",
       "outputs": [
         {
           "internalType": "address",
@@ -224,35 +252,7 @@
     },
     {
       "inputs": [],
-      "name": "getContractOwner",
-      "outputs": [
-        {
-          "internalType": "address",
-          "name": "",
-          "type": "address"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function",
-      "constant": true
-    },
-    {
-      "inputs": [],
-      "name": "getTreasurer",
-      "outputs": [
-        {
-          "internalType": "address",
-          "name": "",
-          "type": "address"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function",
-      "constant": true
-    },
-    {
-      "inputs": [],
-      "name": "get_txn_fees_percent",
+      "name": "getTxnFeesPercent",
       "outputs": [
         {
           "internalType": "uint256",
@@ -268,11 +268,11 @@
       "inputs": [
         {
           "internalType": "address",
-          "name": "_programmer",
+          "name": "account",
           "type": "address"
         }
       ],
-      "name": "is_programmer",
+      "name": "isProgrammerAccount",
       "outputs": [
         {
           "internalType": "bool",
@@ -306,7 +306,7 @@
           "type": "uint256"
         }
       ],
-      "name": "programmer_wallets",
+      "name": "programmerAccounts",
       "outputs": [
         {
           "internalType": "address",
@@ -319,8 +319,28 @@
       "constant": true
     },
     {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "programmers",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
+    },
+    {
       "inputs": [],
-      "name": "publish_fees",
+      "name": "publishFees",
       "outputs": [
         {
           "internalType": "uint256",
@@ -345,14 +365,14 @@
           "type": "string"
         }
       ],
-      "name": "register_user",
+      "name": "registerUser",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
     },
     {
       "inputs": [],
-      "name": "remove_programmers",
+      "name": "removeProgrammers",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -365,7 +385,7 @@
           "type": "address"
         }
       ],
-      "name": "remove_user",
+      "name": "removeUser",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -374,11 +394,11 @@
       "inputs": [
         {
           "internalType": "address",
-          "name": "_admin",
+          "name": "account",
           "type": "address"
         }
       ],
-      "name": "set_admin",
+      "name": "setAdmin",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -391,7 +411,7 @@
           "type": "string"
         }
       ],
-      "name": "set_baseURI",
+      "name": "setBaseURI",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -400,11 +420,11 @@
       "inputs": [
         {
           "internalType": "address",
-          "name": "_contractOwner",
+          "name": "account",
           "type": "address"
         }
       ],
-      "name": "set_contract_owner",
+      "name": "setContractOwner",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -413,11 +433,11 @@
       "inputs": [
         {
           "internalType": "address",
-          "name": "_devops",
+          "name": "account",
           "type": "address"
         }
       ],
-      "name": "set_devops",
+      "name": "setDevops",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -426,11 +446,11 @@
       "inputs": [
         {
           "internalType": "uint256",
-          "name": "_publish_fees",
+          "name": "fees",
           "type": "uint256"
         }
       ],
-      "name": "set_publish_fees",
+      "name": "setPublishFees",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -439,11 +459,11 @@
       "inputs": [
         {
           "internalType": "address",
-          "name": "_treasurer",
+          "name": "account",
           "type": "address"
         }
       ],
-      "name": "set_treasurer",
+      "name": "setTreasurer",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -452,11 +472,11 @@
       "inputs": [
         {
           "internalType": "uint256",
-          "name": "_txn_fees_percent",
+          "name": "feesPercent",
           "type": "uint256"
         }
       ],
-      "name": "set_txn_fees_percent",
+      "name": "setTxnFeesPercent",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -531,7 +551,7 @@
     },
     {
       "inputs": [],
-      "name": "total_programmers",
+      "name": "totalProgrammers",
       "outputs": [
         {
           "internalType": "uint256",
@@ -555,6 +575,34 @@
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "treasurer",
+      "outputs": [
+        {
+          "internalType": "address payable",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
+    },
+    {
+      "inputs": [],
+      "name": "txnFeesPercent",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [
@@ -609,7 +657,7 @@
           "type": "uint256"
         }
       ],
-      "name": "set_price",
+      "name": "setPrice",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -904,7 +952,7 @@
         },
         {
           "internalType": "uint256",
-          "name": "block_time",
+          "name": "blockTime",
           "type": "uint256"
         },
         {
@@ -944,7 +992,7 @@
         },
         {
           "internalType": "uint256",
-          "name": "block_time",
+          "name": "blockTime",
           "type": "uint256"
         },
         {
@@ -989,7 +1037,7 @@
         },
         {
           "internalType": "uint256",
-          "name": "block_time",
+          "name": "blockTime",
           "type": "uint256"
         },
         {

@@ -100,8 +100,11 @@ function Profile(props) {
 
   useEffect(() => {
     fetchSignatures(loggedInUserDetails.userName);
-    fetchNotifications();
-    getStats()
+    if(loggedInUserDetails.userName){
+      fetchNotifications();
+      getStats()
+
+    }
 
     if (!isMyPage()) {
       loadFollowers();
@@ -412,6 +415,7 @@ function Profile(props) {
                               {" "}
                               {loggedInUserDetails.firstName}{" "}
                               {loggedInUserDetails.lastName}{" "}
+                              
                             </span>{" "}
                           </Col>
                         </Row>
@@ -494,7 +498,7 @@ function Profile(props) {
                             </Button>
                           </OverlayTrigger>
                         </Row>
-                        {!isMyPage() && (
+                        {userDetails.userName && !isMyPage() &&  (
                           <Row className="justify-content-end pr-3 cursor-pointer color-secondary mb-1">
                             <OverlayTrigger
                               key={"follow"}

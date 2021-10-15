@@ -418,7 +418,7 @@ const CreateIdeaModal = ({
       ":" +
       time.getMinutes() +
       (time.getHours() > 12 ? "PM" : "AM")
-      + getTimeZonsShort()
+      + getTimeZonsShort() || ""
     );
   };
 
