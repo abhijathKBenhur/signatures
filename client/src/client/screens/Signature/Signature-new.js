@@ -366,45 +366,45 @@ const SignatureNew = (props) => {
                               ></i>
                             </Button>
                           </OverlayTrigger>
-                          
-                          {loggedInUserDetails.userName && 
-                          <OverlayTrigger
-                            placement="left"
-                            overlay={
-                              <Tooltip>
-                                {" "}
-                                {upvotes.indexOf(loggedInUserDetails.userName) >
-                                -1
-                                  ? "unvote"
-                                  : "upvote"}
-                              </Tooltip>
-                            }
-                          >
-                            <Button
-                              variant="action"
-                              onClick={() => setVoting()}
-                              className={
-                                upvotes.indexOf(loggedInUserDetails.userName) >
-                                -1
-                                  ? "upvoted small"
-                                  : "small"
+
+                          {loggedInUserDetails.userName && (
+                            <OverlayTrigger
+                              placement="left"
+                              overlay={
+                                <Tooltip>
+                                  {" "}
+                                  {upvotes.indexOf(
+                                    loggedInUserDetails.userName
+                                  ) > -1
+                                    ? "unvote"
+                                    : "upvote"}
+                                </Tooltip>
                               }
                             >
-                              <i
-                                aria-hidden="true"
+                              <Button
+                                variant="action"
+                                onClick={() => setVoting()}
                                 className={
                                   upvotes.indexOf(
                                     loggedInUserDetails.userName
                                   ) > -1
-                                    ? "fa fa-thumbs-o-up upvoted"
-                                    : "fa fa-thumbs-o-up"
+                                    ? "upvoted small"
+                                    : "small"
                                 }
-                              ></i>
-                            </Button>
-                          </OverlayTrigger>
-                          }
-
-
+                              >
+                                <i
+                                  aria-hidden="true"
+                                  className={
+                                    upvotes.indexOf(
+                                      loggedInUserDetails.userName
+                                    ) > -1
+                                      ? "fa fa-thumbs-o-up upvoted"
+                                      : "fa fa-thumbs-o-up"
+                                  }
+                                ></i>
+                              </Button>
+                            </OverlayTrigger>
+                          )}
 
                           {signature.owner &&
                             loggedInUserDetails.userName ==
@@ -420,31 +420,36 @@ const SignatureNew = (props) => {
                                 </Button>
                               </div>
                             )}
-                          {loggedInUserDetails.userName && (
-                            <Button
-                              variant="primary"
-                              onClick={() => showModal("engage")}
-                            >
-                              {_.get(signature, "purpose") &&
-                                getIdeaStatus(_.get(signature, "purpose"))}
-                            </Button>
-                          )}
-                          <div className="avatar cursor-pointer">
-                            {signature.owner && (
-                              <img
-                                src={_.get(signature, "owner.imageUrl")}
-                                alt={_.get(signature, "owner.userName")}
-                                onClick={() =>
-                                  history.push(
-                                    `/profile/${_.get(
-                                      signature,
-                                      "owner.userName"
-                                    )}`
-                                  )
-                                }
-                              />
+                          {loggedInUserDetails.userName &&
+                            loggedInUserDetails.userName !=
+                              _.get(signature, "owner.userName") && (
+                              <div>
+                                <Button
+                                  variant="primary"
+                                  onClick={() => showModal("engage")}
+                                >
+                                  {_.get(signature, "purpose") &&
+                                    getIdeaStatus(_.get(signature, "purpose"))}
+                                </Button>
+
+                                <div className="avatar cursor-pointer">
+                                  {signature.owner && (
+                                    <img
+                                      src={_.get(signature, "owner.imageUrl")}
+                                      alt={_.get(signature, "owner.userName")}
+                                      onClick={() =>
+                                        history.push(
+                                          `/profile/${_.get(
+                                            signature,
+                                            "owner.userName"
+                                          )}`
+                                        )
+                                      }
+                                    />
+                                  )}
+                                </div>
+                              </div>
                             )}
-                          </div>
                         </div>
                       </div>
                     </div>

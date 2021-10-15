@@ -83,7 +83,7 @@ function gallery(props) {
     <Container fluid>
       <div className="gallery d-flex flex-row">
         <Col md="9" className="galler-area">
-          <Row
+          {/* <Row
             className="search-discover d-flex flex-column justify-content-center"
             style={{
               height: "300px",
@@ -134,10 +134,9 @@ function gallery(props) {
                 <span className="stats-value second-grey">Total Sales</span>
               </Col>
             </div>
-          </Row>
+          </Row> */}
           <Row
             className="d-flex flex-column align-content-center position-relative"
-            style={{ top: "-10px" }}
           >
             <SearchBar searchTextChanged={refreshCollection} />
             <DiscoverMore categorySelected={refreshCollection}></DiscoverMore>
