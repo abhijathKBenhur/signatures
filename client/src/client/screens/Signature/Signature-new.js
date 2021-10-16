@@ -329,7 +329,7 @@ const SignatureNew = (props) => {
               <Row className="justify-content-between align-items-center mb-1 signature-mobile-view">
                 <Col
                   md="12"
-                  className="d-flex flex-row justify-content-between align-items-center"
+                  className="d-flex flex-row justify-content-between"
                 >
                   <div className="user-details">
                     <div className="user-metadata">
@@ -338,6 +338,9 @@ const SignatureNew = (props) => {
                       </span>
                     </div>
                   </div>
+                  </Col>
+                  <Col md="12"
+                  className="d-flex flex-row justify-content-between align-items-center">
                   <div className="action-section">
                     <div className="justify-content-center">
                       <div className="sidebar">
@@ -466,7 +469,7 @@ const SignatureNew = (props) => {
                   md="12"
                   className="meta mb-2 justify-content-between d-flex flex-row"
                 >
-                  <div className="tags second-grey">
+                  <div className="tags second-grey mr-2">
                     <Button disabled variant="pill">
                       {signature.category &&
                         JSON.parse(signature.category) &&
