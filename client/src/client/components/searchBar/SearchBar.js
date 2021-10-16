@@ -46,7 +46,7 @@ function Search(props) {
 
   
   return (
-    <div className="search-bar-container">
+    <div className="search-bar-container flex-row justify-content-between">
       <div className="search-dropdown-container" ref={wrapperRef}>
         <input
           type="text"

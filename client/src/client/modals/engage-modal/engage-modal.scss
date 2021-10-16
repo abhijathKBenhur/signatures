@@ -77,6 +77,7 @@
                       border: 2px solid $secondary;
                       background-color: $secondary;
                     }
+                    .disabled{
                     &:hover{
                       &::after{
                         content: "Coming Soon";
@@ -94,6 +95,7 @@
                         text-align: center;
                       }
                     }
+                  }
                   }
                 }
               }
