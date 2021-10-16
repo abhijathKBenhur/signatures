@@ -18,6 +18,18 @@ const CommentsPanel = (props) => {
   const [newComment, setNewComment] = useState("");
   const [loggedInUserDetails, setLoggedInUserDetails] = useState({});
   const [notifiedUsersList, setNotifiedUsersList] = useState([]);
+  const [state, setState] = useState(
+    {
+      name: 'Comment',
+      value: '',
+      singleLineValue: '',
+      mentionData: null,
+      users: [
+       
+      ]
+    }
+  );
+  let value;
   const [users, setUsers] = useState([
       
     ]);
@@ -25,7 +37,6 @@ const CommentsPanel = (props) => {
   useEffect(() => {
     const { userDetails = {} } = reduxState;
     setLoggedInUserDetails(userDetails);
-    console.log("userDetails = ", userDetails);
   }, [reduxState.userDetails]);
 
   useEffect(() => {
@@ -36,21 +47,10 @@ const CommentsPanel = (props) => {
         console.log(item)
         res.push({
           id: item._id,
-          display: item.firstName,
-          userName: item.userName
+          display: item.firstName + " " + item.lastName
         })
       });
-      res.push({
-        id: "dsfsdfs",
-        display: "dsfsdfs",
-        userName: "sdfsdfsdf"
-      })
-      res.push({
-        id: "sss",
-        display: "ss",
-        userName: "sss"
-      })
-
+      
       setUsers(res)
     });
   }, []);
@@ -75,6 +75,20 @@ const CommentsPanel = (props) => {
       let comments = success.data;
       setComments(comments.data);
     });
+  }
+
+  const handleChanges = (event, newValue, newPlainTextValue, mentions) => {
+    console.log(newValue, newPlainTextValue, mentions)
+    setState({
+      value: newValue,
+      mentionData: {newValue, newPlainTextValue, mentions}
+    })
+  }
+
+  const handleChangeSingle = (e, newValue, newPLainTextValue, mentions) => {
+    setState({
+      singleLineValue: newValue
+    })
   }
 
   const handleChange = (event) => {
@@ -113,6 +127,18 @@ const CommentsPanel = (props) => {
               })
             );
           }
+          _.forEach(_.get(state, 'mentionData.mentions'), (mention) => {
+            NotificationInterface.postNotification(
+              loggedInUserDetails._id,
+              _.get(props,"idea.owner.userName"),
+              CONSTANTS.ACTIONS.COMMENT,
+              CONSTANTS.ACTION_STATUS.PENDING,
+              mention.display + " mentioned you in a comment",
+              JSON.stringify({
+                ideaID: _.get(props.idea, "PDFHash"),
+              })
+            );
+          })
         });
       }
       
@@ -123,24 +149,26 @@ const CommentsPanel = (props) => {
   const onAdd = (id, display) => {
     notifiedUsersList.push(display)
     setNotifiedUsersList(notifiedUsersList)
+    console.log(notifiedUsersList)
   }
 
   return (
     <ListGroup className="">
-      <MentionsInput className="mentions-area" value={newComment} onChange={(e) => handleChange(e)}  placeholder="Your comment">
-        <Mention
-          trigger="@"
-          data={users}
-          displayTransform={(id, display) => `@${display}`}
-          className="special-mention"
-          onAdd={onAdd}
-        />
-        <Mention
-          trigger="#"
-          data={users}
-          onAdd={(id, display) => onAdd(id, display)}
-        />
-      </MentionsInput>
+    <MentionsInput
+          value={state.value}
+          onChange={handleChanges}
+          markup="@{{__type__||__id__||__display__}}"
+          placeholder="Your comment"
+          className="mentions"
+          onKeyUp={(e) => handleChange(e)}
+        >
+          <Mention
+            type="user"
+            trigger="@"
+            data={users}
+            className="mentions__mention"
+          />
+        </MentionsInput>
       {(!comments || comments.length == 0) && <div className="second-grey mb-2 ">Be the first to add a comment.</div>}
 
       <div className="scrolable-comments">

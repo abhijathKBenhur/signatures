@@ -15,7 +15,7 @@
     display: block;
     height: 65px !important;
     padding: 0.375rem 0.75rem;
-    font-size: 1rem;
+    // font-size: 1rem;
     font-weight: 400;
     line-height: 1.5;
     color: #495057;
@@ -30,16 +30,71 @@
 .special-mention {
   color: green;
 }
-.mentions-area__suggestions {
-  top: 11px !important;
-  border: 1px solid #ced4da !important;
-  border-radius: 0.25rem !important;
-  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out !important;
-  .mentions-area__suggestions__item:not(:last-child) {
-    border-bottom: 1px solid #ced4da !important;
-  }
-  .mentions-area__suggestions__item{
-    border-bottom: 1px solid #ced4da !important;
-    padding: 5px;
-  }
+
+.mentions {
+  margin: 1em 0;
+}
+
+.mentions--singleLine .mentions__control {
+  display: inline-block;
+}
+.mentions--singleLine .mentions__higlighter {
+  padding: 1px;
+  border: 2px inset transparent;
+}
+.mentions--singleLine .mentions__input {
+  padding: 5px;
+  border: 2px inset;
+}
+
+.mentions--multiLine .mentions__control {
+  // font-size: 14pt;
+  background-color: #fff !important;
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  overflow-y: scroll !important;
+  height: 65px;
+}
+.mentions--multiLine .mentions__highlighter {
+  padding: 7px;
+}
+.mentions--multiLine .mentions__input {
+  padding: 9px;
+  min-height: 63px;
+  outline: 0;
+  border: 0;
+}
+
+.mentions__suggestions__list {
+  background-color: white;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 9px;
+}
+
+.mentions__suggestions__item {
+  padding: 2px 5px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+}
+.mentions__suggestions__item:last-child {
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+.mentions__suggestions__item:first-child {
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+}
+
+
+.mentions__suggestions__item--focused {
+  background-color: lighten(#79579F, 30%);
+}
+.mentions__suggestions {
+  top: 15px !important;
+}
+
+.mentions__mention {
+  background-color: lighten(#79579F, 30%);
+  border-radius: 4px
 }
