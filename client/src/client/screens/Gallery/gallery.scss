@@ -22,6 +22,8 @@
     .activity-entry{
       padding: 1px;
       justify-content: space-between;
+      align-items: center;
+      gap: 10px;
       .activity-title{
         color: $primary;
       }

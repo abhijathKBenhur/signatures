@@ -328,7 +328,7 @@ const Header = (props) => {
             </Button> */}
               {_.isEmpty(loggedInUserDetails) ? (
                 <Button
-                  variant="primary"
+                  variant="ternary"
                   className="button"
                   bsstyle="primary"
                   onClick={() => {
@@ -340,15 +340,7 @@ const Header = (props) => {
               ) : (
                 isUserAuthForPublish()
               )}
-              {_.isEmpty(loggedInUserDetails.imageUrl) ? (
-                <User
-                  color="white"
-                  className="cursor-pointer header-icons desktop-view"
-                  onClick={() => {
-                    gotoPortfolio();
-                  }}
-                ></User>
-              ) : (
+              {!_.isEmpty(loggedInUserDetails.imageUrl) && (
                 <Image
                   className="cursor-pointer header-icons desktop-view"
                   src={loggedInUserDetails.imageUrl}

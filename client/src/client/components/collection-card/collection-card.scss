@@ -222,7 +222,7 @@ $card-height: 200px;
   .card {
     &.Creative_art {
       .card__border {
-        background: linear-gradient(to right, #726f9a, #7549cd);
+        background: linear-gradient(to right, #726f9a, #d84b81);
         transform: none;
       }
     }
@@ -234,7 +234,7 @@ $card-height: 200px;
     }
     &.Technical_inventions {
       .card__border {
-        background: #726f9a;
+        background: linear-gradient(to right, #3819e7, #2bbe63);
         transform: none;
       }
     }
