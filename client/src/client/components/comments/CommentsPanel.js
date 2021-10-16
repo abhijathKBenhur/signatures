@@ -17,6 +17,7 @@ const CommentsPanel = (props) => {
   const [comments, setComments] = useState("");
   const [newComment, setNewComment] = useState("");
   const [loggedInUserDetails, setLoggedInUserDetails] = useState({});
+  const [notifiedUsersList, setNotifiedUsersList] = useState([]);
   const [users, setUsers] = useState([
       
     ]);
@@ -32,11 +33,24 @@ const CommentsPanel = (props) => {
     UserInterface.getUsers().then((succes) => {
       let res = [];
       _.forEach(succes.data.data, item=>{
+        console.log(item)
         res.push({
-          id: item.userName,
-          display: item.firstName
+          id: item._id,
+          display: item.firstName,
+          userName: item.userName
         })
       });
+      res.push({
+        id: "dsfsdfs",
+        display: "dsfsdfs",
+        userName: "sdfsdfsdf"
+      })
+      res.push({
+        id: "sss",
+        display: "ss",
+        userName: "sss"
+      })
+
       setUsers(res)
     });
   }, []);
@@ -106,7 +120,10 @@ const CommentsPanel = (props) => {
       setNewComment(value);
     }
   };
-  const onAdd = () => (...args) => console.log("added a new mention", ...args);
+  const onAdd = (id, display) => {
+    notifiedUsersList.push(display)
+    setNotifiedUsersList(notifiedUsersList)
+  }
 
   return (
     <ListGroup className="">
@@ -114,12 +131,14 @@ const CommentsPanel = (props) => {
         <Mention
           trigger="@"
           data={users}
-          displayTransform={display=> `@${display}`}
+          displayTransform={(id, display) => `@${display}`}
+          className="special-mention"
+          onAdd={onAdd}
         />
         <Mention
           trigger="#"
           data={users}
-          onAdd={onAdd}
+          onAdd={(id, display) => onAdd(id, display)}
         />
       </MentionsInput>
       {(!comments || comments.length == 0) && <div className="second-grey mb-2 ">Be the first to add a comment.</div>}

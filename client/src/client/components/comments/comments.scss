@@ -27,3 +27,19 @@
     overflow-y: scroll !important;
   }
 }
+.special-mention {
+  color: green;
+}
+.mentions-area__suggestions {
+  top: 11px !important;
+  border: 1px solid #ced4da !important;
+  border-radius: 0.25rem !important;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out !important;
+  .mentions-area__suggestions__item:not(:last-child) {
+    border-bottom: 1px solid #ced4da !important;
+  }
+  .mentions-area__suggestions__item{
+    border-bottom: 1px solid #ced4da !important;
+    padding: 5px;
+  }
+}

@@ -475,7 +475,7 @@ const Register = (props) => {
       fullscreen={true}
       onHide={props.onHide}
     >
-      {registration == PENDING && <ProgressBar class="mt-14"></ProgressBar>}
+      {registration == PENDING && <ProgressBar></ProgressBar>}
       <Modal.Header className="d-flex flex-column">
         <Modal.Title>
           <span className="master-grey">
