@@ -147,8 +147,6 @@ registerUser = (req, res) => {
 };
 
 getUserInfo = async (req, res) => {
-  console.log("requets" + getUserInfo)
-
   let findCriteria = {};
   if (req.body.userName) {
     findCriteria.userName =  req.body.userName;

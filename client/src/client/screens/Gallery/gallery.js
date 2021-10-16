@@ -136,7 +136,7 @@ function gallery(props) {
             </div>
           </Row> */}
           <Row
-            className="d-flex flex-column align-content-center position-relative"
+            className="d-flex flex-column align-content-center position-relative justify-content-center search-container"
           >
             <SearchBar searchTextChanged={refreshCollection} />
             <DiscoverMore categorySelected={refreshCollection}></DiscoverMore>
