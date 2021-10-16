@@ -149,7 +149,8 @@ const InfoModal = (props) => {
   const updatePriceInMonge = (request) => {
     SignatureInterface.updatePurpose(request).then((success) => {
       showToaster("Idea updated!", { type: "dark" });
-      setFormData(success.data);
+      debugger
+      setFormData(_.get(success,"data.data"));
       props.onHide();
     });
   };

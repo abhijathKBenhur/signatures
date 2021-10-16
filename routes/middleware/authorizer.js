@@ -37,6 +37,7 @@ const authorizer = (req, res, next) => {
       const decoded = jwt.verify(token, process.env.TOKEN_KEY);
       UserSchema.findOne({ metamaskId: decoded.metamaskId }).then((user) => {
         if (!user || !user.userName) {
+          console.log("B")
           return res.status(401).json({
             success: true,
             data: {
@@ -44,11 +45,11 @@ const authorizer = (req, res, next) => {
             },
           });
         }
-
         if (user.nonce == decoded.nonce && conditionalAuthCheck(user, req)) {
           console.log("valid user request")
           return next();
         } else {
+          console.log("C")
           return res.status(401).json({
             success: true,
             data: {
@@ -109,7 +110,9 @@ const conditionalAuthCheck = (tokenOwner, req) => {
       return tokenOwner.metamaskId == req.body.owner;
       break;
     case "/api/updatePurpose":
-      return tokenOwner.owner == req.body.owner;
+      console.log("tokenOwner",tokenOwner)
+      console.log("req.body.owner",req.body.owner)
+      return tokenOwner._id == req.body.owner;
       break;
     case "/api/postTransaction":
       return tokenOwner._id == req.body.user;

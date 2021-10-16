@@ -403,13 +403,13 @@ class BlockchainInterface {
 
   updatePrice(updatePayLoad, successCallback, feedbackCallback) {
     const transactionObject = {
-      from: updatePayLoad.owner,
+      from: updatePayLoad.owner.metamaskId,
     };
     this.contract.methods
       .setPrice(updatePayLoad.ideaID, this.web3.utils.toWei(updatePayLoad.price, "ether"))
       .send(transactionObject)
       .on("transactionHash", function(hash) {
-        feedbackCallback({transactionID:hash});
+        feedbackCallback(updatePayLoad);
       })
       .once("receipt", function(receipt) {
         let tokenReturns = _.get(

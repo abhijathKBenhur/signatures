@@ -2,13 +2,14 @@ import axios from 'axios'
 import _ from "lodash";
 import ENDPOINTS from '../commons/Endpoints';
 import AxiosInstance from "../wrapper/apiWrapper"
-
+const Web3Utils = require("web3-utils");
 
 export const updatePurpose = payload => {
     return AxiosInstance.post(`/updatePurpose`,{
         ideaID: payload.ideaID,
         purpose: payload.purpose,
-        price: payload.purpose
+        price:  Web3Utils.toWei(payload.price,"ether"),
+        owner: payload.owner._id
     })
 }
 

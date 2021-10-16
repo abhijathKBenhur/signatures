@@ -103,11 +103,13 @@ function Profile(props) {
     if(loggedInUserDetails.userName){
       fetchNotifications();
       getStats()
-
     }
 
     if (!isMyPage()) {
       loadFollowers();
+      setKey("collections")
+    }else{
+      setKey("wallet")
     }
   }, [loggedInUserDetails]);
 
@@ -538,7 +540,13 @@ function Profile(props) {
                       activeKey={key}
                       onSelect={(k) => setKey(k)}
                     >
-                      
+                       {isMyPage() ? (
+                        <Tab eventKey="wallet" title="Wallet">
+                          <Wallet></Wallet>
+                        </Tab>
+                      ) : (
+                        <div></div>
+                      )}
                       <Tab eventKey="collections" title="Collection">
                         <div className="collection-wrapper">
                           <div className="middle-block">
@@ -569,13 +577,7 @@ function Profile(props) {
                           </div>
                         </div>
                       </Tab>
-                      {isMyPage() ? (
-                        <Tab eventKey="Wallet" title="Wallet">
-                          <Wallet></Wallet>
-                        </Tab>
-                      ) : (
-                        <div></div>
-                      )}
+                     
                      
                     </Tabs>
                   </Col>
