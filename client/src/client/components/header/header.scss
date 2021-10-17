@@ -14,11 +14,16 @@
         display: flex;
         flex: .6;
         align-items: center;
+        .navbar-brand{
+            .logo_text{
+                font-size: 25px;
+            }
+        }
         .nav-link {
-                color: $primary !important;
-                &.active{
+            color: $primary !important;
+            &.active{
 
-                }
+            }
         }
     }
     .middle-section {

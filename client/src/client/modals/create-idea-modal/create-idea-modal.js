@@ -116,7 +116,7 @@ const CreateIdeaModal = ({
           onDrop={onImageDrop}
           acceptedFiles={".jpeg"}
           className="dropzoneContainer"
-        >
+      >
           {({ getRootProps, getInputProps }) => (
             <section className="container h-100 ">
               <div
@@ -129,7 +129,7 @@ const CreateIdeaModal = ({
                   className="placeholder-image"
                   alt=" placehoder"
                 />
-                <p className="dropfile-text">Click to change thumbnail</p>
+                <p className="dropfile-text">Edit thumbnail</p>
 
                 {formErrors.thumbnail && (
                   <p className="invalid-paragraph"> Thumbnail is required </p>

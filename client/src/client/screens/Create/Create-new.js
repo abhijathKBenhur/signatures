@@ -425,7 +425,7 @@ const CreateNew = () => {
         </p>
         <div>{/* <Plus /> */}</div>
         {formErrors.pdf && (
-          <p className="invalid-paragraph"> File is required </p>
+          <p className="invalid-paragraph"> Please upload a file </p>
         )}
         {formErrors.maxFileError && (
           <p className="invalid-paragraph"> Max file size is 5MB </p>

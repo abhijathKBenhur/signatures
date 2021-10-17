@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Button, Image, Form, Nav, DropdownButton, Dropdown } from "react-bootstrap";
 import { useHistory, useLocation } from "react-router-dom";
-import logo from "../../../assets/logo/signatures.png";
+import logo from "../../../assets/logo/logo_blue.png";
 import _, { isEmpty } from "lodash";
 import { User, Plus, Search } from "react-feather";
 import "./header.scss";
@@ -261,20 +261,19 @@ const Header = (props) => {
         <Container fluid>
           <div className="left-section">
             <a
-              className="navbar-brand"
+              className="navbar-brand cursor-pointer d-flex align-items-center"
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() => gotoGallery()}
             >
               <img
                 src={logo}
-                width="35"
-                height="35"
+                width="45"
+                height="45"
                 alt=""
-                className="cursor-pointer"
-                onClick={() => gotoGallery()}
+                className=""
               ></img>
-
-              {/* <span class="master-header color-primary">ideaTribe</span> */}
+              <span class="second-header logo_text color-white ml-1">IdeaTribe</span>
             </a>
             {/* <SearchBar /> */}
             {/* <Nav.Item>

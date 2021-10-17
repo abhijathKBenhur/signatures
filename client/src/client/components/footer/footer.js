@@ -18,10 +18,10 @@ const Footer = (props) => {
         <Container fluid>
           <div className="footer-info ">
             <div className="footer-info-wrapper d-flex justify-content-around">
-              <span className=" cursor-pointer" onClick={() => redirectTo("/about")}>How does this work ?</span>
-              <span className=" cursor-pointer" onClick={() => redirectTo("/about")}>About Us</span>
-              <span className=" cursor-pointer" onClick={() => redirectTo("/about")}>Whitepaper</span>
-              <span className=" cursor-pointer" onClick={() => redirectTo("/about")}>Tokenomics</span>
+              <span className="secondary-grey cursor-pointer" onClick={() => redirectTo("/about")}>How does this work ?</span>
+              <span className="secondary-grey cursor-pointer" onClick={() => redirectTo("/about")}>About Us</span>
+              <span className="secondary-grey cursor-pointer" onClick={() => redirectTo("/about")}>Whitepaper</span>
+              <span className="secondary-grey cursor-pointer" onClick={() => redirectTo("/about")}>Tokenomics</span>
 
 
               {/* <div className="products">

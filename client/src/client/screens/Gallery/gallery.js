@@ -12,6 +12,9 @@ import Cookies from "universal-cookie";
 import DiscoverMore from "../../components/discover-more/discover-more";
 import SearchBar from "../../components/searchBar/SearchBar";
 import berklee from "../../../assets/images/announcements/berklee.png"
+import TRBG from "../../../assets/images/announcements/TRBG.png"
+import brand from "../../../assets/images/announcements/logo_blue.png"
+
 import CommentsPanel from "../../components/comments/CommentsPanel";
 function gallery(props) {
   let history = useHistory();
@@ -159,7 +162,7 @@ function gallery(props) {
                 </div>
               </div>
               <div className="activity-thumbnail">
-                <Image src={berklee} rounded />
+                <Image src={berklee}  height="50px" width="50px" roundedCircle />
               </div>
             </div>
 
@@ -173,7 +176,7 @@ function gallery(props) {
                 </div>
               </div>
               <div className="activity-thumbnail">
-              <Image src={berklee} rounded />
+              <Image src={TRBG} width="50px"  height="50px"  />
               </div>
             </div>
 
@@ -187,7 +190,7 @@ function gallery(props) {
                 </div>
               </div>
               <div className="activity-thumbnail">
-              <Image src={berklee} rounded />
+              <Image src={brand}  width="50px"  height="50px" roundedCircle />
               </div>
             </div>
           </div>
