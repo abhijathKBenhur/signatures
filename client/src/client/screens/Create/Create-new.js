@@ -50,8 +50,6 @@ import { showToaster } from "../../commons/common.utils";
 import QRCode from "qrcode";
 import $ from "jquery";
 
-import signatureImage from "../../../assets/logo/signatures.png";
-import imagePlaceholder from "../../../assets/images/image-placeholder.png";
 import addFiles from "../../../assets/images/add_files.png";
 import CreateIdeaModal from "../../modals/create-idea-modal/create-idea-modal";
 import TransactionsInterface from "../../interface/TransactionInterface";
@@ -447,7 +445,7 @@ const CreateNew = () => {
         </p>
         <div>{/* <Plus /> */}</div>
         {formErrors.pdf && (
-          <p className="invalid-paragraph"> File is required </p>
+          <p className="invalid-paragraph"> Please upload a file </p>
         )}
         {formErrors.maxFileError && (
           <p className="invalid-paragraph"> Max file size is 5MB </p>

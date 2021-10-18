@@ -207,7 +207,7 @@ updatePurpose = async (req, res) => {
     "updateing token price",
     req.body.ideaID,
     " ",
-    req.body.setter,
+    req.body.owner,
     " price ",
     req.body.price
   );
@@ -215,13 +215,12 @@ updatePurpose = async (req, res) => {
 
 
   await IdeaSchema.findOneAndUpdate(
-    { ideaID: req.body.ideaID, owner: req.body.owner },
+    { ideaID: req.body.ideaID },
     { purpose: req.body.purpose, price: req.body.price },
     (err, token) => {
       if (err) {
         return res.status(400).json({ success: false, error: err });
       }
-
       if (!token) {
         return res.status(404).json({ success: true, data: [] });
       }

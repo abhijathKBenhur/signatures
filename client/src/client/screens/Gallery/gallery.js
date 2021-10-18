@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { Row, Col, Carousel, Container, Button } from "react-bootstrap";
+import { Row, Col, Carousel, Container, Image } from "react-bootstrap";
 import React, { useState, useEffect } from "react";
 import Rack from "../../components/Rack/Rack";
 import "./gallery.scss";
@@ -11,9 +11,11 @@ import { useHistory } from "react-router-dom";
 import Cookies from "universal-cookie";
 import DiscoverMore from "../../components/discover-more/discover-more";
 import SearchBar from "../../components/searchBar/SearchBar";
-import cover from "../../../assets/images/cover2.jpg";
+import berklee from "../../../assets/images/announcements/berklee.png"
+import TRBG from "../../../assets/images/announcements/TRBG.png"
+import brand from "../../../assets/images/announcements/logo_blue.png"
+
 import CommentsPanel from "../../components/comments/CommentsPanel";
-import logo from "../../../assets/logo/signatures.png";
 function gallery(props) {
   let history = useHistory();
   const cookies = new Cookies();
@@ -136,7 +138,7 @@ function gallery(props) {
             </div>
           </Row> */}
           <Row
-            className="d-flex flex-column align-content-center position-relative"
+            className="d-flex flex-column align-content-center position-relative justify-content-center search-container"
           >
             <SearchBar searchTextChanged={refreshCollection} />
             <DiscoverMore categorySelected={refreshCollection}></DiscoverMore>
@@ -146,50 +148,49 @@ function gallery(props) {
         </Col>
         <Col md="3" className="latest-news desktop-view mt-3">
           <div className="gutter-block mt-3">
-            <span className="second-header color-secondary">
+            {/* <span className="second-header color-secondary">
               Recent stories
             </span>
-            <hr></hr>
+            <hr></hr> */}
             <div className="activity-entry d-flex flex-row">
               <div className="activity-content  d-flex flex-column">
                 <div className="activity-title master-grey">
-                  Elon in the Tribe
+                  Partnership announcement
                 </div>
                 <div className="activity-description second-grey">
-                  Elon musk upvoted ideaTribe in producthunt.
+                  IdeaTribe inks MoU with Berklee School of Music to collaborate on developing principles for music rights and their use.
                 </div>
               </div>
               <div className="activity-thumbnail">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/8/85/Elon_Musk_Royal_Society_%28crop1%29.jpg"></img>
+                <Image src={berklee}  height="50px" width="50px" roundedCircle />
               </div>
             </div>
 
             <div className="activity-entry d-flex flex-row mt-3">
               <div className="activity-content  d-flex flex-column">
                 <div className="activity-title master-grey">
-                  Surprise airdrop incoming!
+                  It’s raining TribeGold!
                 </div>
                 <div className="activity-description second-grey">
-                  0.5 Tribe Gold for completing first 10 ideas by 1st of January
-                  2022
+                  Earn TribeGold for publishing ideas and inviting friends.
                 </div>
               </div>
               <div className="activity-thumbnail">
-                <img src={logo} className="primary"></img>
+              <Image src={TRBG} width="50px"  height="50px"  />
               </div>
             </div>
 
             <div className="activity-entry d-flex flex-row mt-3">
               <div className="activity-content  d-flex flex-column">
                 <div className="activity-title master-grey">
-                  David guetta in the Tribe
+                  Versioning Feature coming soon
                 </div>
                 <div className="activity-description second-grey">
-                  David guetta signed up on ideatTribe
+                  You can soon update & re-tokenize your ideas. That way you don’t have to wait for your idea to be perfect to mint an NFT of it.
                 </div>
               </div>
               <div className="activity-thumbnail">
-                <img src="https://pbs.twimg.com/profile_images/1335939208595329025/6pVApHxk_400x400.jpg"></img>
+              <Image src={brand}  width="50px"  height="50px" roundedCircle />
               </div>
             </div>
           </div>
@@ -197,7 +198,6 @@ function gallery(props) {
 
           <div className="gutter-block mt-5">
             <span className="second-header color-secondary">We hear you</span>
-            <hr></hr>
             <CommentsPanel entity={CONSTANTS.ENTITIES.PUBLIC}></CommentsPanel>
           </div>
         </Col>

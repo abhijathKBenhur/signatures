@@ -16,7 +16,7 @@ const About = () => {
       <ProgressBar></ProgressBar>
       <Row className="about-item about-first second-grey">
         <Col className="left" xs={12} sm={8}>
-          <span className="master-header color-secondary-light">
+          <span className="master-header color-primary-light">
             Doing the right thing,
           </span>
           <span className="master-header color-secondary">

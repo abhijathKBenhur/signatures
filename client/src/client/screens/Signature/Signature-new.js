@@ -351,7 +351,12 @@ const SignatureNew = (props) => {
                             placement="left"
                             overlay={<Tooltip>View on chain</Tooltip>}
                           >
-                            <Button variant="action">
+                            <Button variant="action" onClick={() => {
+                              window.open(
+                                "https://mumbai.polygonscan.com/address/" +
+                                  _.get(signature, "PDFHash")
+                              );
+                            }}>
                               <i className="fa fa-link" aria-hidden="true"></i>
                             </Button>
                           </OverlayTrigger>

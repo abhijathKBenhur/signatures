@@ -6,7 +6,10 @@
     max-height: calc(100vh - 120px);
     overflow-y: auto;
     overflow-x: hidden;
-    margin-top: 40px;
+    // margin-top: 40px;
+    .search-container{
+      margin-top: 5rem;  
+    }
   }
   .latest-news{
     border-left: 1px solid $greyLight-1;
@@ -20,14 +23,13 @@
     .activity-entry{
       padding: 1px;
       justify-content: space-between;
+      align-items: center;
+      gap: 10px;
       .activity-title{
         color: $primary;
       }
       .activity-thumbnail{
         img{
-          height: 50px;
-          width: 50px;
-          border-radius: 50px;
           &.primary{
             background-color: $primary;
             color: white;

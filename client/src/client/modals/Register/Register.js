@@ -546,7 +546,7 @@ const Register = (props) => {
               (_.isEmpty(userDetails.email) && activeStep.index == 0) ||
               userNameError
             }
-            variant="primary"
+            variant="ternary"
             className="button"
             bsstyle="primary"
             onClick={() => {
