@@ -719,7 +719,7 @@ const CreateNew = () => {
                       style={{ resize: "none" }}
                       onChange={handleChange}
                     />
-                    <MentionsInput
+                    {/* <MentionsInput
                       value={desc.value}
                       onChange={handleChanges}
                       markup="#{{__type__||__id__||__display__}}"
@@ -733,7 +733,7 @@ const CreateNew = () => {
                         data={hashList}
                         className="mentions__mention"
                       />
-                    </MentionsInput>
+                    </MentionsInput> */}
                   </Form.Group>
                 )}
               </>
