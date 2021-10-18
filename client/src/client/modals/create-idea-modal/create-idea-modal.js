@@ -129,7 +129,7 @@ const CreateIdeaModal = ({
                   className="placeholder-image"
                   alt=" placehoder"
                 />
-                <p className="dropfile-text">Edit thumbnail</p>
+                {publishState == "INIT" && <p className="dropfile-text">Edit thumbnail</p>}
 
                 {formErrors.thumbnail && (
                   <p className="invalid-paragraph"> Thumbnail is required </p>
@@ -494,7 +494,7 @@ const CreateIdeaModal = ({
                         <br></br>
                         <div className="time">
                           {" "}
-                          {timeFormatted(billet.time)} {billet.location}
+                          {timeFormatted(billet.time)}, {billet.location}
                         </div>
                       </div>
                     </Col>
@@ -641,14 +641,14 @@ const CreateIdeaModal = ({
                     </span>
                   )}
                 </div>
-                <div className="gif-wrapper d-flex justify-content-center">
+                {/* <div className="gif-wrapper d-flex justify-content-center">
                   <img src={loadingGif} alt="" />
-                </div>
-                <div className="publishing-block-text second-grey">
+                </div> */}
+                {/* <div className="publishing-block-text second-grey">
                   <p>
                     We are posting your idea on the Blockchain. Hold on tight!
                   </p>
-                </div>
+                </div> */}
               </Col>
             </Row>
           </div>

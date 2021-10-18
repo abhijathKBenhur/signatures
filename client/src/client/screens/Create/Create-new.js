@@ -18,6 +18,7 @@ import businessPlaceHolder from "../../../assets/images/business.png";
 import technicalPlaceHolder from "../../../assets/images/technical.png";
 import { useHistory } from "react-router-dom";
 import { MentionsInput, Mention } from 'react-mentions'
+import countryJSON from "../../../assets/data/countries.json"
 import "./Create-new.scss";
 
 // import creativeArt from "../../../assets/palceholders"
@@ -165,6 +166,7 @@ const CreateNew = () => {
 
   useEffect(() => {
     pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
+
     CommentsInterface.getHashTags().then((res) => {
       let arr = [];
       _.forEach(_.get(res, 'data.data'), item=>{
@@ -537,6 +539,7 @@ const CreateNew = () => {
   
   function transactionCompleted(successResponse) {
     updateCompletion(successResponse);
+    debugger
     setBillet({
       creator: userDetails.userName,
       fullName: userDetails.firstName + " " + userDetails.lastName,
@@ -570,10 +573,11 @@ const CreateNew = () => {
 
 
   function addIdeaRecordToMongo(form) {
+    let countryMapping = countryJSON
     $.get(
       "https://ipinfo.io?token=162c69a92ff37a",
       function(response) {
-        let region = response.city + ", " + response.region;
+        let region = countryMapping[response.country] || "Global"
         setFormData({ ...form, location: region });
         SignatureInterface.addSignature({ ...form, location: region })
           .then((success) => {

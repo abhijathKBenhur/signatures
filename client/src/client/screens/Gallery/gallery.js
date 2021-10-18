@@ -14,6 +14,7 @@ import SearchBar from "../../components/searchBar/SearchBar";
 import berklee from "../../../assets/images/announcements/berklee.png"
 import TRBG from "../../../assets/images/announcements/TRBG.png"
 import brand from "../../../assets/images/announcements/logo_blue.png"
+import cover from "../../../assets/images/cover.png"
 
 import CommentsPanel from "../../components/comments/CommentsPanel";
 function gallery(props) {
@@ -139,6 +140,10 @@ function gallery(props) {
           </Row> */}
           <Row
             className="d-flex flex-column align-content-center position-relative justify-content-center search-container"
+            style={{
+              background: `url(${cover})`,
+                height: "300px",
+            }}
           >
             <SearchBar searchTextChanged={refreshCollection} />
             <DiscoverMore categorySelected={refreshCollection}></DiscoverMore>
