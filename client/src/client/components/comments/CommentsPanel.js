@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { MentionsInput, Mention } from 'react-mentions'
+import { MentionsInput, Mention } from "react-mentions";
 import { ListGroup, Form, Image } from "react-bootstrap";
 import CONSTANTS from "../../commons/Constants";
 import { getInitialSubString } from "../../commons/common.utils";
@@ -18,21 +18,15 @@ const CommentsPanel = (props) => {
   const [newComment, setNewComment] = useState("");
   const [loggedInUserDetails, setLoggedInUserDetails] = useState({});
   const [notifiedUsersList, setNotifiedUsersList] = useState([]);
-  const [state, setState] = useState(
-    {
-      name: 'Comment',
-      value: '',
-      singleLineValue: '',
-      mentionData: null,
-      users: [
-       
-      ]
-    }
-  );
+  const [state, setState] = useState({
+    name: "Comment",
+    value: "",
+    singleLineValue: "",
+    mentionData: null,
+    users: [],
+  });
   let value;
-  const [users, setUsers] = useState([
-      
-    ]);
+  const [users, setUsers] = useState([]);
 
   useEffect(() => {
     const { userDetails = {} } = reduxState;
@@ -43,15 +37,15 @@ const CommentsPanel = (props) => {
     loadComments();
     UserInterface.getUsers().then((succes) => {
       let res = [];
-      _.forEach(succes.data.data, item=>{
-        console.log(item)
+      _.forEach(succes.data.data, (item) => {
+        console.log(item);
         res.push({
           id: item.userName,
-          display: item.firstName + " " + item.lastName
-        })
+          display: item.firstName + " " + item.lastName,
+        });
       });
-      
-      setUsers(res)
+
+      setUsers(res);
     });
   }, []);
 
@@ -80,23 +74,23 @@ const CommentsPanel = (props) => {
   const handleChanges = (event, newValue, newPlainTextValue, mentions) => {
     setState({
       value: newValue,
-      mentionData: {newValue, newPlainTextValue, mentions}
-    })
-  }
+      mentionData: { newValue, newPlainTextValue, mentions },
+    });
+  };
 
   const handleChangeSingle = (e, newValue, newPLainTextValue, mentions) => {
     setState({
-      singleLineValue: newValue
-    })
-  }
+      singleLineValue: newValue,
+    });
+  };
 
   const handleChange = (event) => {
     const { value } = event.target;
     if (event.key == "Enter") {
       event.target.blur();
-      if(_.isUndefined(loggedInUserDetails.userName)){
+      if (_.isUndefined(loggedInUserDetails.userName)) {
         history.push("/profile");
-      }else{
+      } else {
         event.target.value = "";
         CommentsInterface.postComment(
           loggedInUserDetails._id,
@@ -117,7 +111,7 @@ const CommentsPanel = (props) => {
           if (_.get(props, "idea.owner.userName")) {
             NotificationInterface.postNotification(
               loggedInUserDetails._id,
-              _.get(props,"idea.owner.userName"),
+              _.get(props, "idea.owner.userName"),
               CONSTANTS.ACTIONS.COMMENT,
               CONSTANTS.ACTION_STATUS.PENDING,
               value,
@@ -126,7 +120,7 @@ const CommentsPanel = (props) => {
               })
             );
           }
-          _.forEach(_.get(state, 'mentionData.mentions'), (mention) => {
+          _.forEach(_.get(state, "mentionData.mentions"), (mention) => {
             NotificationInterface.postNotification(
               loggedInUserDetails._id,
               mention.id,
@@ -137,23 +131,23 @@ const CommentsPanel = (props) => {
                 ideaID: _.get(props.idea, "PDFHash"),
               })
             );
-          })
+          });
         });
       }
-      
     } else {
       setNewComment(value);
     }
   };
   const onAdd = (id, display) => {
-    notifiedUsersList.push(display)
-    setNotifiedUsersList(notifiedUsersList)
-    console.log(notifiedUsersList)
-  }
+    notifiedUsersList.push(display);
+    setNotifiedUsersList(notifiedUsersList);
+    console.log(notifiedUsersList);
+  };
 
   return (
     <ListGroup className="">
-      {!_.isEmpty(loggedInUserDetails.userName) && <MentionsInput
+      {!_.isEmpty(loggedInUserDetails.userName) && (
+        <MentionsInput
           value={state.value}
           onChange={handleChanges}
           markup="@{{__type__||__id__||__display__}}"
@@ -167,16 +161,23 @@ const CommentsPanel = (props) => {
             data={users}
             className="mentions__mention"
           />
-        </MentionsInput>}
-      {(!comments || comments.length == 0) && 
-      !_.isEmpty(loggedInUserDetails.userName) ?
-      <div className="second-grey mb-2 ">Be the first to add a comment.</div>
-        :
-        <div className="second-grey mb-2 ">Please sign in to post your comment.</div>
-    }
+        </MentionsInput>
+      )}
+      {(!comments || comments.length == 0) && (
+        <div>
+          !_.isEmpty(loggedInUserDetails.userName) ?
+          <div className="second-grey mb-2 ">
+            Be the first to add a comment.
+          </div>
+          :
+          <div className="second-grey mb-2 ">
+            Please sign in to post your comment.
+          </div>
+        </div>
+      )}
 
       <div className="scrolable-comments">
-        {_.map(comments, (comment,index) => {
+        {_.map(comments, (comment, index) => {
           return (
             <div className="comment-item d-flex flex-row pb-1" key={index}>
               <div className="icon mr-2 p-1 cursor-pointer">
@@ -193,7 +194,7 @@ const CommentsPanel = (props) => {
               </div>
               <div className="content">
                 <div className="top master-grey  cursor-pointer">
-                  {_.get(comment.from,'userName')}
+                  {_.get(comment.from, "userName")}
                 </div>
                 <div className="bottom second-grey">{comment.comment}</div>
               </div>
