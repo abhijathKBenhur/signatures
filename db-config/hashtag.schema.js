@@ -5,10 +5,9 @@ const Schema = mongoose.Schema;
 
 const Hashtag = new Schema(
   {
-    hashtag : { type: String }, 
-    trend: { type: Number }, 
+    hashtag : { type: String },
   },
   { timestamps: true }
 );
 
-module.exports = mongoose.model("Relation", Hashtag);
+module.exports = mongoose.model("Hashtag", Hashtag);

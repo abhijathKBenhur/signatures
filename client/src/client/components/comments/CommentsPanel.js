@@ -46,7 +46,7 @@ const CommentsPanel = (props) => {
       _.forEach(succes.data.data, item=>{
         console.log(item)
         res.push({
-          id: item._id,
+          id: item.userName,
           display: item.firstName + " " + item.lastName
         })
       });
@@ -78,7 +78,6 @@ const CommentsPanel = (props) => {
   }
 
   const handleChanges = (event, newValue, newPlainTextValue, mentions) => {
-    console.log(newValue, newPlainTextValue, mentions)
     setState({
       value: newValue,
       mentionData: {newValue, newPlainTextValue, mentions}
@@ -130,7 +129,7 @@ const CommentsPanel = (props) => {
           _.forEach(_.get(state, 'mentionData.mentions'), (mention) => {
             NotificationInterface.postNotification(
               loggedInUserDetails._id,
-              _.get(props,"idea.owner.userName"),
+              mention.id,
               CONSTANTS.ACTIONS.COMMENT,
               CONSTANTS.ACTION_STATUS.PENDING,
               mention.display + " mentioned you in a comment",

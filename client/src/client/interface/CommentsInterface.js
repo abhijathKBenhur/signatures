@@ -18,12 +18,22 @@ export const getComments = (request) =>  {
 export const markAllAsRead = (request) =>  { 
     return AxiosInstance.post("/updateNotifications",request) 
 }
+
+export const postHashtag = (request) => {
+    return AxiosInstance.post("/postHashtag",request) 
+}
+
+export const getHashTags = (request) => {
+    return AxiosInstance.post("/getHashTags", request);
+}
   
 
 const CommentsInterface = {
     postComment,
     getComments,
     markAllAsRead,
+    postHashtag,
+    getHashTags
 }
 
 export default CommentsInterface
