@@ -351,6 +351,15 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
   .profile-detail{
     margin: 0 15px;
   }
+  .about-item {
+    img {
+      width: auto !important;
+      height: auto !important;
+    }
+  }
+  .about-first {
+    margin-top: 80px !important;
+  }
 }
 
 

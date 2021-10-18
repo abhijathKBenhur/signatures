@@ -17,6 +17,7 @@ import artPlaceHolder from "../../../assets/images/art.png";
 import businessPlaceHolder from "../../../assets/images/business.png";
 import technicalPlaceHolder from "../../../assets/images/technical.png";
 import { useHistory } from "react-router-dom";
+import { MentionsInput, Mention } from 'react-mentions'
 import "./Create-new.scss";
 
 // import creativeArt from "../../../assets/palceholders"
@@ -52,6 +53,8 @@ import $ from "jquery";
 import addFiles from "../../../assets/images/add_files.png";
 import CreateIdeaModal from "../../modals/create-idea-modal/create-idea-modal";
 import TransactionsInterface from "../../interface/TransactionInterface";
+import CommentsInterface from "../../interface/CommentsInterface";
+
 const CreateNew = () => {
   const history = useHistory();
   const reduxState = useSelector((state) => state, shallowEqual);
@@ -118,6 +121,13 @@ const CreateNew = () => {
     // PDFHash: billet.PDFHash,
   });
 
+  const [desc, setDesc] = useState({
+    value: '',
+    mentionData: undefined
+
+  })
+  const [hashList, setHashList] = useState([])
+
   const checkMaxFileSize = (file) => {
     try {
       const size = Math.floor(file.size / 1000000);
@@ -155,6 +165,16 @@ const CreateNew = () => {
 
   useEffect(() => {
     pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
+    CommentsInterface.getHashTags().then((res) => {
+      let arr = [];
+      _.forEach(_.get(res, 'data.data'), item=>{
+        arr.push({
+          id: item._id,
+          display: item.hashtag
+        })
+      })
+      setHashList(arr)
+    })
   }, []);
 
   useEffect(() => {
@@ -436,6 +456,20 @@ const CreateNew = () => {
 
   const checkValidationOnButtonClick = () => {
     const { title, description, PDFFile, category, price, thumbnail } = form;
+    _.forEach(_.get(desc, 'mentionData.mentions'), (display, id) => {
+      let obj = _.find(hashList, item => {
+        return item.display == display.display
+      })
+      if(_.isUndefined(obj)) {
+        CommentsInterface.postHashtag({hashtag: display.display})
+      }
+    })
+    const regexExp = /^#[^ !@#$%^&*(),.?":{}|<>]*$/gi;
+    _.forEach(desc.value.split(" "), item=> {
+      if(regexExp.test(item)){
+        CommentsInterface.postHashtag({hashtag: item.replace('#','')})
+      }
+    })
     if (_.isEmpty(title) || _.isEmpty(description) || _.isEmpty(PDFFile)) {
       setFormErrors({
         ...formErrors,
@@ -610,6 +644,13 @@ const CreateNew = () => {
     }
   }
 
+  const handleChanges = (event, newValue, newPlainTextValue, mentions) => {
+    setDesc({
+      value: newValue,
+      mentionData: {newValue, newPlainTextValue, mentions}
+    })
+  }
+
   return (
     <Container fluid className="create-container">
       <Row className="createform  d-flex">
@@ -674,12 +715,27 @@ const CreateNew = () => {
                       style={{ resize: "none" }}
                       onChange={handleChange}
                     />
+                    <MentionsInput
+                      value={desc.value}
+                      onChange={handleChanges}
+                      markup="#{{__type__||__id__||__display__}}"
+                      placeholder="Your comment"
+                      className="mentions"
+                      onKeyUp={(e) => handleChange(e)}
+                    >
+                      <Mention
+                        type="user"
+                        trigger="#"
+                        data={hashList}
+                        className="mentions__mention"
+                      />
+                    </MentionsInput>
                   </Form.Group>
                 )}
               </>
             ) : (
               <>
-                <h2 className="master-header ">Share you idea</h2>
+                <h2 className="master-header col">Share your idea</h2>
               </>
             )}
             <Col md="12" sm="12" lg="12" xs="12">

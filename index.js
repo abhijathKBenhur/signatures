@@ -5,6 +5,7 @@ const mongotConnection = require("./db-config/mongodb");
 const tokenAPI = require("./routes/TokenAPIs");
 const userAPI = require("./routes/UserAPI");
 const StatsAPI = require("./routes/statsAPI");
+const HashAPI = require("./routes/hashAPI");
 const cookieParser = require("cookie-parser");
 
 const notificationAPI = require("./routes/NotificationAPIs");
@@ -58,6 +59,7 @@ app.use("/api", commentAPI);
 app.use("/api", ClanAPI);
 app.use("/api", TransactionAPI);
 app.use("/api", StatsAPI);
+app.use("/api", HashAPI);
 console.log("Deploying full application")
 console.log("Checking node environment ::" + process.env.NODE_ENV);
 if (process.env.NODE_ENV == "production") {

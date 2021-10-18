@@ -34,7 +34,7 @@ const About = () => {
             }}><span className="master-grey color-white">Take me to the tribe</span></Button>
           </div>
         </Col>
-        <Col className="right" xs={12} sm={4}>
+        <Col className="right desktop-view" xs={12} sm={4}>
           <img src={girl_idea} />
         </Col>
       </Row>

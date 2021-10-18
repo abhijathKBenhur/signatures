@@ -121,7 +121,7 @@ function Profile(props) {
     })
     
     StatsInterface.getTotalUpvotesForUser({
-      userName: loggedInUserDetails.userName
+      userName: loggedInUserDetails._id
     }).then(success =>{
       setUpvotesCount(_.get(success,"data.data"))
     })

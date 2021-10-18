@@ -41,17 +41,28 @@ getIdeasFromUser = async (req, res) => {
 };
 
 getTotalUpvotesForUser = async (req, res) => {
-  let findCriteria = {
-    relation: "UPVOTE",
-    to: req.body.userName
-  };
-  RelationSchema.find(findCriteria).count().then( user => {
-    
-    if (!user) {
-      return res.status(404).json({ success: true, data: [] });
+  IdeaSchema.find(req.body.owner).then( ideas => {
+    if (!ideas) {
+      return res.status(404).json({ success: true, data: 0 });
     }
-    return res.status(200).json({ success: true, data: user });
+    let count = 0;
+    for(let i=0; i<ideas.length ; i++){
+      let findCriteria = {
+        relation: "UPVOTE",
+        to: ideas[i].ideaID
+      };
+      RelationSchema.find(findCriteria).count().then( user => {
+        if (user) {
+          count = user + count
+        }
+        if(i == ideas.length - 1) {
+          return res.status(200).json({ success: true, data: count });
+        }
+      })
+    }
   })
+
+ 
 };
 
 getUpvotesForIdea = async (req, res) => {
