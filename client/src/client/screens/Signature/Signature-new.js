@@ -333,7 +333,7 @@ const SignatureNew = (props) => {
                 >
                   <div className="user-details">
                     <div className="user-metadata">
-                      <span className="master-header justify-content-left">
+                      <span className="master-header justify-content-left color-primary mb-1">
                         {signature.title}
                       </span>
                     </div>
@@ -483,7 +483,7 @@ const SignatureNew = (props) => {
                 </Col>
                 <Col md="12">
                   <div className="description-section">
-                    <p>{_.get(signature, "description")}</p>
+                    <p className="second-grey">{_.get(signature, "description")}</p>
                   </div>
                   <div oncontextmenu="return false;">
                     <section className="doc-section" >
@@ -509,7 +509,7 @@ const SignatureNew = (props) => {
               }`}
             >
               <div>
-                <span className="conversation-title second-header">
+                <span className="conversation-title second-header  color-primary">
                   Conversation
                 </span>
                 <hr></hr>

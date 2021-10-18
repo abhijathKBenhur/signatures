@@ -334,7 +334,7 @@ const CreateClan = ({ ...props }) => {
                       onChange={(e) => handleMembersChange(e, index)}
                       placeholder="Select Member"
                     />
-                    <div className="action color-secondary readable-text">
+                    <div className="action color-primary readable-text">
                       <p onClick={(e) => visitClanMemberProfile(index)}>
                         Visit Profile
                       </p>

@@ -429,7 +429,7 @@ function Profile(props) {
                                   Your profile might need more information.
                                   Please try
                                   <span
-                                    className="cursor-pointer color-secondary"
+                                    className="cursor-pointer color-primary"
                                     onClick={() => {
                                       setShowModal({
                                         ...modalShow,
@@ -454,7 +454,7 @@ function Profile(props) {
                       </Col>
                       <Col md="1">
                         {!isMyPage() && (
-                          <Row className="justify-content-end pr-3 cursor-pointer color-secondary mb-1">
+                          <Row className="justify-content-end pr-3 cursor-pointer color-primary mb-1">
                             <OverlayTrigger
                               key={"sendMessage"}
                               placement="top"
@@ -479,7 +479,7 @@ function Profile(props) {
                           </Row>
                         )}
 
-                        <Row className="justify-content-end pr-3 cursor-pointer color-secondary mb-1">
+                        <Row className="justify-content-end pr-3 cursor-pointer color-primary mb-1">
                           <OverlayTrigger
                             key={"share"}
                             placement="top"
@@ -501,7 +501,7 @@ function Profile(props) {
                           </OverlayTrigger>
                         </Row>
                         {userDetails.userName && !isMyPage() &&  (
-                          <Row className="justify-content-end pr-3 cursor-pointer color-secondary mb-1">
+                          <Row className="justify-content-end pr-3 cursor-pointer color-primary mb-1">
                             <OverlayTrigger
                               key={"follow"}
                               placement="top"
@@ -559,7 +559,7 @@ function Profile(props) {
                                   <span className="second-grey">
                                     You currently dont own any ideas. Start by
                                     <span
-                                      className="cursor-pointer color-secondary"
+                                      className="cursor-pointer color-primary"
                                       onClick={() => {
                                         createnew();
                                       }}

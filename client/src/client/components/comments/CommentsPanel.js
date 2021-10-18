@@ -153,7 +153,7 @@ const CommentsPanel = (props) => {
 
   return (
     <ListGroup className="">
-    <MentionsInput
+      {!_.isEmpty(loggedInUserDetails.userName) && <MentionsInput
           value={state.value}
           onChange={handleChanges}
           markup="@{{__type__||__id__||__display__}}"
@@ -167,8 +167,13 @@ const CommentsPanel = (props) => {
             data={users}
             className="mentions__mention"
           />
-        </MentionsInput>
-      {(!comments || comments.length == 0) && <div className="second-grey mb-2 ">Be the first to add a comment.</div>}
+        </MentionsInput>}
+      {(!comments || comments.length == 0) && 
+      !_.isEmpty(loggedInUserDetails.userName) ?
+      <div className="second-grey mb-2 ">Be the first to add a comment.</div>
+        :
+        <div className="second-grey mb-2 ">Please sign in to post your comment.</div>
+    }
 
       <div className="scrolable-comments">
         {_.map(comments, (comment,index) => {

@@ -40,11 +40,11 @@ $card-height: 200px;
       .tag-n-location{
         .tags{
           text-align: left;
-          color: #5a5a5a;
+          color: $secondary;
         }
         .timestamp{
-          font-size: 11px !important;
           text-align: left;
+          color: $primary;
         }
       }
     }

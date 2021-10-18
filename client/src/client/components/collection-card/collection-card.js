@@ -159,7 +159,7 @@ const CollectionCard = (props) => {
                     {moment(signature.createdAt).format("YYYY-MM-DD HH:mm:ss")}
                   </div>
                 </div>
-                  <div className="like-bar align-items-sm-baseline third-header row justify-content-between">
+                  <div className="like-bar align-items-sm-baseline third-header row justify-content-between color-primary">
                     <div>
                       <i className="fa fa-globe mr-1"></i>
                       {signature.location || "Global"}

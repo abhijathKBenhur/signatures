@@ -494,7 +494,7 @@ const CreateIdeaModal = ({
                         <br></br>
                         <div className="time">
                           {" "}
-                          {timeFormatted(billet.time)}, {billet.location}
+                          {timeFormatted(billet.time)}
                         </div>
                       </div>
                     </Col>

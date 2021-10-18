@@ -442,7 +442,7 @@ const CreateNew = () => {
           Drag 'n Drop or Upload the file containing your idea or{" "}
           <span>Browse</span>
         </p>
-        <p className="supported-type-txt second-grey color-secondary">
+        <p className="supported-type-txt second-grey color-primary">
           (Upload pdf / mp3 / image)
         </p>
         <div>{/* <Plus /> */}</div>

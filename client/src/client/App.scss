@@ -142,10 +142,10 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
   }
   &.btn-pill {
     border-radius: 10px;
-    border-color: $secondary !important;
-    color: $secondary;
+    border-color: $primary !important;
+    color: $primary;
     background: $greyLight-1;
-    color: $secondary;
+    color: $primary;
     height: 20px;
     font-size: 14px;
     font-weight: 500;

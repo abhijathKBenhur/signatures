@@ -153,7 +153,7 @@ function gallery(props) {
         </Col>
         <Col md="3" className="latest-news desktop-view mt-3">
           <div className="gutter-block mt-3">
-            {/* <span className="second-header color-secondary">
+            {/* <span className="second-header color-primary">
               Recent stories
             </span>
             <hr></hr> */}
@@ -202,7 +202,7 @@ function gallery(props) {
           <hr></hr>
 
           <div className="gutter-block mt-5">
-            <span className="second-header color-secondary">We hear you</span>
+            <span className="second-header color-primary">We hear you</span>
             <CommentsPanel entity={CONSTANTS.ENTITIES.PUBLIC}></CommentsPanel>
           </div>
         </Col>
