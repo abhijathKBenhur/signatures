@@ -5,7 +5,7 @@
     position: fixed;
     top:0;
     height: 70px;
-    background: linear-gradient(to right, #49a0cd, $secondary);
+    background: linear-gradient(to right, $secondary, $primary);
     ;
     .header-icons{
         color: $primary;

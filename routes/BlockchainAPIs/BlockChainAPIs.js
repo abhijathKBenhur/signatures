@@ -5,7 +5,7 @@ const _ = require("lodash");
 const UserSchema = require("../../db-config/user.schema");
 
 
-const BlockchainUtils = require("../BlockchainAPIs/BlockChainUtils");
+const BlockchainUtils = require("./BlockChainUtils");
 const web3Instance = BlockchainUtils.web3Instance
 const publicKey = BlockchainUtils.publicKey
 const ideaTribeContract = BlockchainUtils.ideaTribeContract

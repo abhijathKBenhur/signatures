@@ -14,6 +14,7 @@ import SearchBar from "../../components/searchBar/SearchBar";
 import berklee from "../../../assets/images/announcements/berklee.png"
 import TRBG from "../../../assets/images/announcements/TRBG.png"
 import brand from "../../../assets/images/announcements/logo_blue.png"
+import cover from "../../../assets/images/cover.png"
 
 import CommentsPanel from "../../components/comments/CommentsPanel";
 function gallery(props) {
@@ -139,6 +140,10 @@ function gallery(props) {
           </Row> */}
           <Row
             className="d-flex flex-column align-content-center position-relative justify-content-center search-container"
+            style={{
+              background: `url(${cover})`,
+                height: "300px",
+            }}
           >
             <SearchBar searchTextChanged={refreshCollection} />
             <DiscoverMore categorySelected={refreshCollection}></DiscoverMore>
@@ -148,7 +153,7 @@ function gallery(props) {
         </Col>
         <Col md="3" className="latest-news desktop-view mt-3">
           <div className="gutter-block mt-3">
-            {/* <span className="second-header color-secondary">
+            {/* <span className="second-header color-primary">
               Recent stories
             </span>
             <hr></hr> */}
@@ -197,7 +202,7 @@ function gallery(props) {
           <hr></hr>
 
           <div className="gutter-block mt-5">
-            <span className="second-header color-secondary">We hear you</span>
+            <span className="second-header color-primary">We hear you</span>
             <CommentsPanel entity={CONSTANTS.ENTITIES.PUBLIC}></CommentsPanel>
           </div>
         </Col>

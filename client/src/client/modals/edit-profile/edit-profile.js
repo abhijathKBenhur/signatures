@@ -291,7 +291,7 @@ const EditProfile = ({ ...props }) => {
                       onChange={(e) => handleSocialProfileChange(e, index)}
                       placeholder="Select Social Profile"
                     />
-                    <div className="action color-secondary readable-text">
+                    <div className="action color-primary readable-text">
                       {getSocialMediaItem(socialLogin,index)}
                       {/* <p onClick={(e) => visitClanMemberProfile(index)}>
                         Visit Profile

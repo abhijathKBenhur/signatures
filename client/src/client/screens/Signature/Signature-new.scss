@@ -5,7 +5,7 @@
     position: relative;
     .wrapper{
         @media (min-width: 920px) {
-            padding: 50px 0;
+            // padding: 50px 0;
             transition-delay: 0.15s;
         }
         .wrapper-margin{
@@ -65,7 +65,7 @@
 
                 .pdfUploaded{
                     flex-flow: column;
-                    pointer-events: none;
+                    // pointer-events: none;
                     .pdf-document{
                         width: 100%;
                         .react-pdf__Page__canvas{

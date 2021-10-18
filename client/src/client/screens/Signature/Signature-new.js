@@ -216,7 +216,7 @@ const SignatureNew = (props) => {
             </div>
 
             {/* <img src={audio} alt="" /> */}
-            <audio controls ref={audioRef}>
+            <audio controls ref={audioRef} controlsList="nodownload">
               <source src={`data:audio/mpeg;base64,` + file}></source>
               Your browser does not support the
               <code>audio</code> element.
@@ -333,7 +333,7 @@ const SignatureNew = (props) => {
                 >
                   <div className="user-details">
                     <div className="user-metadata">
-                      <span className="master-header justify-content-left">
+                      <span className="master-header justify-content-left color-primary mb-1">
                         {signature.title}
                       </span>
                     </div>
@@ -483,10 +483,10 @@ const SignatureNew = (props) => {
                 </Col>
                 <Col md="12">
                   <div className="description-section">
-                    <p>{_.get(signature, "description")}</p>
+                    <p className="second-grey">{_.get(signature, "description")}</p>
                   </div>
-                  <div>
-                    <section className="doc-section">
+                  <div oncontextmenu="return false;">
+                    <section className="doc-section" >
                       {PDFFile ? (
                         <div className="pdfUploaded h-100 overflow-auto align-items-center justify-content-center d-flex">
                           {/* <Document file={PDFFile} className="pdf-document">
@@ -509,7 +509,7 @@ const SignatureNew = (props) => {
               }`}
             >
               <div>
-                <span className="conversation-title second-header">
+                <span className="conversation-title second-header  color-primary">
                   Conversation
                 </span>
                 <hr></hr>

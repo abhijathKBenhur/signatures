@@ -19,7 +19,7 @@ const About = () => {
           <span className="master-header color-primary-light">
             Doing the right thing,
           </span>
-          <span className="master-header color-secondary">
+          <span className="master-header color-primary">
             at the right time.
           </span>
           <div className="mt-3 color-primary readable-text">
@@ -45,7 +45,7 @@ const About = () => {
         <Col className="right">
           <span className="father-grey mt-3">All your best ideas. On the blockchain. </span>
           
-          <span className="master-header color-secondary">
+          <span className="master-header color-primary">
           Immutable forever. 
            </span>
           <br/>

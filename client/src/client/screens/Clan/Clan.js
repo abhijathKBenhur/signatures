@@ -341,7 +341,7 @@ function Clan(props) {
                                   Your profile might need more information.
                                   Please try
                                   <span
-                                    className="cursor-pointer color-secondary"
+                                    className="cursor-pointer color-primary"
                                     onClick={() => {
                                       setShowModal({
                                         ...modalShow,
@@ -366,7 +366,7 @@ function Clan(props) {
                       </Col>
                       <Col md="1">
                         {!isMyClan() && (
-                          <Row className="justify-content-end pr-3 cursor-pointer color-secondary mb-1">
+                          <Row className="justify-content-end pr-3 cursor-pointer color-primary mb-1">
                             <OverlayTrigger
                               key={"top"}
                               placement="top"
@@ -391,7 +391,7 @@ function Clan(props) {
                           </Row>
                         )}
 
-                        <Row className="justify-content-end pr-3 cursor-pointer color-secondary mb-1">
+                        <Row className="justify-content-end pr-3 cursor-pointer color-primary mb-1">
                           <OverlayTrigger
                             key={"top"}
                             placement="top"

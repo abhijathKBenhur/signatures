@@ -105,7 +105,7 @@ const CollectionCard = (props) => {
   return (
     <Col
     key={signature._id}
-    className="main-container col-lg-2-4"
+    className="main-container col-lg-2-4 mb-5"
     md="4"
     lg="3"
     sm="6"
@@ -159,10 +159,10 @@ const CollectionCard = (props) => {
                     {moment(signature.createdAt).format("YYYY-MM-DD HH:mm:ss")}
                   </div>
                 </div>
-                  <div className="like-bar align-items-sm-baseline third-header row justify-content-between">
+                  <div className="like-bar align-items-sm-baseline third-header row justify-content-between color-primary">
                     <div>
                       <i className="fa fa-globe mr-1"></i>
-                      {signature.location && signature.location.split(" ")[signature.location.split(" ").length - 1] || "Global"}
+                      {signature.location || "Global"}
                     </div>
                     <div>
                       {/* <i className="fa fa-commenting-o "></i>

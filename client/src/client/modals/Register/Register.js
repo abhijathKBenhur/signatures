@@ -478,8 +478,8 @@ const Register = (props) => {
       {registration == PENDING && <ProgressBar></ProgressBar>}
       <Modal.Header className="d-flex flex-column">
         <Modal.Title>
-          <span className="master-grey">
-            Hi, You are not yet registered with us!
+          <span className="master-grey color-primary">
+            Sign up
           </span>
           <CloseButton
             onClick={() => {

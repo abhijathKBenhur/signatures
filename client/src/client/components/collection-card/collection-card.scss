@@ -3,8 +3,6 @@ $card-height: 200px;
 .main-container {
   display: flex;
   justify-content: center;
-  margin-bottom :90px;
-  margin-top :25px;
   .card-container {
     width: 100%;
     border-radius: 10px;
@@ -42,19 +40,17 @@ $card-height: 200px;
       .tag-n-location{
         .tags{
           text-align: left;
-          color: #5a5a5a;
+          color: $secondary;
         }
         .timestamp{
-          font-size: 11px !important;
           text-align: left;
+          color: $primary;
         }
       }
     }
     .image-container {
-      height: $card-height;
       min-width: 100%;
       background-color: $greyLight-1;
-      margin-bottom: 75px;
       cursor: pointer;
       position: relative;
       .card {
