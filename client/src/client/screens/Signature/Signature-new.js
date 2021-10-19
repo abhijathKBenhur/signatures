@@ -510,7 +510,7 @@ const SignatureNew = (props) => {
             >
               <div>
                 <span className="conversation-title second-header  color-primary">
-                  Conversation
+                  Comments
                 </span>
                 <hr></hr>
 

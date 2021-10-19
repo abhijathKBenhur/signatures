@@ -581,7 +581,7 @@ const CreateNew = () => {
         setFormData({ ...form, location: region });
         SignatureInterface.addSignature({ ...form, location: region })
           .then((success) => {
-            showToaster("Your Idea is submitted on the blockchain! Please wait for the confirmation billet.", {
+            showToaster("Your idea is being submitted on the blockchain! Please wait for the confirmation billet.", {
               type: "dark",
             });
           })
@@ -659,13 +659,7 @@ const CreateNew = () => {
     <Container fluid className="create-container">
       <Row className="createform  d-flex">
         <Col xs="12" className="top-bar">
-          <Button
-            className="ml-80"
-            variant="secondary"
-            onClick={() => history.push("/home")}
-          >
-            Cancel
-          </Button>
+          <div/>
           <Button
             className="submit-btn"
             onClick={() => checkValidationOnButtonClick()}
