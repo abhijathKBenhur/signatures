@@ -625,14 +625,14 @@ const CreateIdeaModal = ({
                     </span>
                   )}
                   {metaMastConfirmed && (
-                    <span className="word">Sending your Txn to the Pool</span>
+                    <span className="word">Sending your transaction to the Pool</span>
                   )}
                   {metaMastConfirmed && (
                     <span className="word">Waiting for blocks to be mined</span>
                   )}
                   {metaMastConfirmed && (
                     <span className="word">
-                      Waiting for your txn to be included in the block
+                      Waiting for your transaction to be included in the block
                     </span>
                   )}
                   {metaMastConfirmed && (

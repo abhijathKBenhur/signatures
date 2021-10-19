@@ -286,7 +286,7 @@ const InfoModal = (props) => {
           <Col md="12">
             <span className="purpose-message master-grey">
               The record will not be open for any interaction. It will be still
-              be visible for everyone.
+              be visible to everyone.
             </span>
           </Col>
         );

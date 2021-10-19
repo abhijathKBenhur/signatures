@@ -161,7 +161,8 @@ getUserInfo = async (req, res) => {
     findCriteria.myReferralCode = req.body.myReferralCode;
   }
   console.log("findCriteria" + JSON.stringify(findCriteria))
-  await User.findOne(findCriteria,{email:0}, (err, user) => {
+  // await User.findOne(findCriteria,{email:0}, (err, user) => {
+    await User.findOne(findCriteria, (err, user) => {
     if (err) {
       return res.status(400).json({ success: false, error: err });
     }
@@ -186,7 +187,7 @@ updateUser = async (req, res) => {
     instaUrl: newUser.instaUrl,
     bio: newUser.bio,
   };
-
+  console.log("testing")
   User.findOneAndUpdate({ id: req.body._id }, updates, { new: true })
     .then((user, b) => {
       console.log("user updated", user, b);

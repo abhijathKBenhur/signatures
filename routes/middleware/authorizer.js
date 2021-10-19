@@ -45,11 +45,16 @@ const authorizer = (req, res, next) => {
             },
           });
         }
+        console.log("W", decoded)
+        console.log("X", user)
+        
+        console.log("C", user.nonce == decoded.nonce)
+        console.log("D", conditionalAuthCheck(user, req))
+
         if (user.nonce == decoded.nonce && conditionalAuthCheck(user, req)) {
           console.log("valid user request")
           return next();
         } else {
-          console.log("C")
           return res.status(401).json({
             success: true,
             data: {
@@ -78,9 +83,7 @@ const conditionalAuthCheck = (tokenOwner, req) => {
       return tokenOwner.userName == "";
       break;
     case "/api/updateUser":
-      console.log("req.body._id", req.body._id)
-      console.log("tokenOwner", tokenOwner._id)
-      return tokenOwner._id == req.body._id;
+      return tokenOwner._id == req.body.id;
       break;
     case "/api/postComment":
       return tokenOwner._id == req.body.from;

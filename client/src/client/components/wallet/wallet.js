@@ -27,11 +27,14 @@ const Wallet = (props) => {
         // onClick={() => selectWalletHandler(coinType)}
       >
       <div className="wallet-type">
-        <p className="father-grey color-white"> {goldBalance} TRBG</p>
+        <p className="father-grey"> {goldBalance} TRBG</p>
       </div>
       <div className="coin-amount">
-        <p className="master-grey color-white"> TRIBE GOLD </p>
+        <p className="master-grey"> TRIBE GOLD </p>
       </div>
+        <div className="next-step">
+          <p className="second-grey"> You can earn gold by flourishing the community. </p>
+        </div>
         
       </div>
       <div
@@ -39,10 +42,13 @@ const Wallet = (props) => {
         // onClick={() => selectWalletHandler(coinType)}
       >
         <div className="wallet-type">
-          <p className="father-grey color-white"> {maticBalance}</p>
+          <p className="father-grey"> {maticBalance}</p>
         </div>
         <div className="coin-amount">
-          <p className="master-grey color-white"> MATIC </p>
+          <p className="master-grey"> MATIC </p>
+        </div>
+        <div className="next-step">
+          <p className="second-grey"> You can load matic form other wallets. </p>
         </div>
       </div>
       {/* <div className="transaction-wrapper">

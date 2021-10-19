@@ -433,7 +433,7 @@ const SignatureNew = (props) => {
                               _.get(signature, "owner.userName") && (
                               <div>
                                 <Button
-                                  variant="primary"
+                                  variant="secondary"
                                   onClick={() => showModal("engage")}
                                 >
                                   {_.get(signature, "purpose") &&
