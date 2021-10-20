@@ -83,7 +83,7 @@ const EngageModal = (props) => {
         user: successResponse.buyer._id
       });
       setEngaging(app_constants.ACTION_STATUS.PASSED);
-      history.push( "/profile/"+ successResponse.buyer.userName);
+      history.push({pathname: "/profile/"+ successResponse.buyer.userName, state: {showCollections: true}});
     
     });
   }

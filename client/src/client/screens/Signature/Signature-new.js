@@ -328,7 +328,7 @@ const SignatureNew = (props) => {
             >
               <Row className="justify-content-between align-items-center mb-1 signature-mobile-view">
                 <Col
-                  md="12"
+                  md="6"
                   className="d-flex flex-row justify-content-between"
                 >
                   <div className="user-details">
@@ -339,8 +339,8 @@ const SignatureNew = (props) => {
                     </div>
                   </div>
                   </Col>
-                  <Col md="12"
-                  className="d-flex flex-row justify-content-between align-items-center">
+                  <Col md="6"
+                  className="d-flex flex-row justify-content-between justify-content-lg-end">
                   <div className="action-section">
                     <div className="justify-content-center">
                       <div className="sidebar">
@@ -431,18 +431,11 @@ const SignatureNew = (props) => {
                           {loggedInUserDetails.userName &&
                             loggedInUserDetails.userName !=
                               _.get(signature, "owner.userName") && (
-                              <div>
-                                <Button
-                                  variant="secondary"
-                                  onClick={() => showModal("engage")}
-                                >
-                                  {_.get(signature, "purpose") &&
-                                    getIdeaStatus(_.get(signature, "purpose"))}
-                                </Button>
-
+                              <div className="row m-0 align-items-center">
+                               
                                 <div className="avatar cursor-pointer">
                                   {signature.owner && (
-                                    <img
+                                    <img className="mr-3" 
                                       src={_.get(signature, "owner.imageUrl")}
                                       alt={_.get(signature, "owner.userName")}
                                       onClick={() =>
@@ -456,6 +449,13 @@ const SignatureNew = (props) => {
                                     />
                                   )}
                                 </div>
+                                <Button
+                                  variant="secondary"
+                                  onClick={() => showModal("engage")}
+                                >
+                                  {_.get(signature, "purpose") &&
+                                    getIdeaStatus(_.get(signature, "purpose"))}
+                                </Button>
                               </div>
                             )}
                         </div>
