@@ -456,6 +456,18 @@ const CreateNew = () => {
     );
   };
 
+  const addHashTags = (value) => {
+    const regexExp = /^#[^ !@#$%^&*(),.?":{}|<>]*$/gi;
+    _.forEach(value.split(" "), item=> {
+      let present = _.find(hashList, v => { return v.display == item.replace('#','')})
+      if(regexExp.test(item) && _.isUndefined(present)){
+        CommentsInterface.postHashtag({hashtag: item.replace('#','')})
+        hashList.push({id: item.replace('#',''), display: item.replace('#','')})
+      }
+    })
+    setHashList(hashList)
+  }
+
   const checkValidationOnButtonClick = () => {
     const { title, description, PDFFile, category, price, thumbnail } = form;
     _.forEach(_.get(desc, 'mentionData.mentions'), (display, id) => {
@@ -466,12 +478,7 @@ const CreateNew = () => {
         CommentsInterface.postHashtag({hashtag: display.display})
       }
     })
-    const regexExp = /^#[^ !@#$%^&*(),.?":{}|<>]*$/gi;
-    _.forEach(desc.value.split(" "), item=> {
-      if(regexExp.test(item)){
-        CommentsInterface.postHashtag({hashtag: item.replace('#','')})
-      }
-    })
+    addHashTags(desc.value);
     if (_.isEmpty(title) || _.isEmpty(description) || _.isEmpty(PDFFile)) {
       setFormErrors({
         ...formErrors,
@@ -649,6 +656,9 @@ const CreateNew = () => {
   }
 
   const handleChanges = (event, newValue, newPlainTextValue, mentions) => {
+    if(_.last(newValue) == ' ') {
+      addHashTags(newValue);
+    }
     setDesc({
       value: newValue,
       mentionData: {newValue, newPlainTextValue, mentions}
@@ -704,7 +714,7 @@ const CreateNew = () => {
                     md="12"
                     controlId="description"
                   >
-                    <Form.Control
+                    {/* <Form.Control
                       value={form.description}
                       className={
                         formErrors.description
@@ -718,8 +728,8 @@ const CreateNew = () => {
                       placeholder="Description upto 250 words*"
                       style={{ resize: "none" }}
                       onChange={handleChange}
-                    />
-                    {/* <MentionsInput
+                    /> */}
+                    <MentionsInput
                       value={desc.value}
                       onChange={handleChanges}
                       markup="#{{__type__||__id__||__display__}}"
@@ -733,7 +743,7 @@ const CreateNew = () => {
                         data={hashList}
                         className="mentions__mention"
                       />
-                    </MentionsInput> */}
+                    </MentionsInput>
                   </Form.Group>
                 )}
               </>

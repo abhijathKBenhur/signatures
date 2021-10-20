@@ -14,6 +14,8 @@
   }
   .latest-news{
     border-left: 1px solid $greyLight-1;
+    height: calc(100vh - 120px);
+    overflow: scroll;
     
     .second-header{
       padding-left: 1px;

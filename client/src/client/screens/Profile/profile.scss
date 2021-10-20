@@ -82,6 +82,11 @@
       .address-copy{
         color: $secondary;
       }
+      .master-header {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        width: 85%;
+      }
     }
 
     .actions{
