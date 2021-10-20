@@ -68,6 +68,9 @@ function Profile(props) {
 
   
   useEffect(() => {
+    if(_.get(history, 'location.state.showCollections')){
+      setKey("collections")
+    }
     let subscription = EmitInterface.getMessage().subscribe((event) => {
       switch (event.id) {
         case "SHOW_NOTIFICAION":
@@ -105,7 +108,7 @@ function Profile(props) {
       getStats()
     }
 
-    if (!isMyPage()) {
+    if (!isMyPage() || _.get(history, 'location.state.showCollections')) {
       loadFollowers();
       setKey("collections")
     }else{

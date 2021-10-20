@@ -469,6 +469,7 @@ const CreateNew = () => {
   }
 
   const checkValidationOnButtonClick = () => {
+    form.description = _.get(desc, 'value')
     const { title, description, PDFFile, category, price, thumbnail } = form;
     _.forEach(_.get(desc, 'mentionData.mentions'), (display, id) => {
       let obj = _.find(hashList, item => {
@@ -479,11 +480,11 @@ const CreateNew = () => {
       }
     })
     addHashTags(desc.value);
-    if (_.isEmpty(title) || _.isEmpty(description) || _.isEmpty(PDFFile)) {
+    if (_.isEmpty(title) || _.isEmpty(_.get(desc, 'value')) || _.isEmpty(PDFFile)) {
       setFormErrors({
         ...formErrors,
         title: _.isEmpty(title),
-        description: _.isEmpty(description),
+        description: _.isEmpty(_.get(desc, 'value')),
         pdf: _.isEmpty(PDFFile),
       });
     } else {
