@@ -187,6 +187,10 @@
                 .formEntry{
                     &.desc-group{
                         margin-top: 1rem;
+                        .mentions__control {
+                            background-color: transparent !important;
+                            border: none !important;
+                        }
                     }
                     .titleArea, .descriptionArea{
                             border: none;

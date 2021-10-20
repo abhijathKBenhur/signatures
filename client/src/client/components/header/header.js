@@ -24,6 +24,7 @@ import AlertBanner from "../alert/alert";
 import ReactDOM from 'react-dom';
 import { func } from "prop-types";
 import EmitInterface from "../../interface/emitInterface";
+import CommentsInterface from "../../interface/CommentsInterface";
 
 import TransactionsInterface from "../../interface/TransactionInterface";
 const Header = (props) => {
@@ -57,6 +58,7 @@ const Header = (props) => {
     }
     updatePendingTransactions()
     setPathName(window.location.pathname)
+    addDefaultHashtags();
   }, []);
 
   useEffect(() => {
@@ -67,6 +69,17 @@ const Header = (props) => {
     refreshUserDetails();
   }, [currentMetamaskAccount]);
 
+
+  function addDefaultHashtags() {
+    CommentsInterface.getHashTags().then((res) => {
+      if(_.isEmpty(_.get(res, 'data.data'))){
+        let defaultValues = ["Apparel", "App", "Art", "Book", "Business", "Research", "Craft", "Design", "Discovery", "DIY", "Engineering", "Equipment", "Fashion", "Fitness", "Home", "Invention", "Jewelry", "Logo", "Lyrics", "Material", "Meme", "Method", "Music", "Painting", "Photo", "Phrase", "Poem", "Process", "Product", "Recipe", "Science", "Screenplay", "Script", "Society", "Song", "Sound", "Story", "System", "Technology", "Theme", "Thesis", "Thought", "Tune", "Video", "Word"];
+        _.forEach(defaultValues, item=>{
+          CommentsInterface.postHashtag({hashtag: item})
+        })
+      }
+    })
+  }
 
   function updatePendingTransactions() {
     console.log("inside pending")
