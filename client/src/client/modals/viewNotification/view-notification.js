@@ -131,7 +131,7 @@ const ViewNotification = ({ ...props }) => {
                     onChange={(e) => handleChange(e)}
                   />
                   <Button
-                    variant="primary"
+                    variant="secondary"
                     className=" mt-3 justify-self-end"
                     aria-hidden="true"
                     onClick={() => sendMessage()}
@@ -141,7 +141,7 @@ const ViewNotification = ({ ...props }) => {
                 </div>
               ) : (
                 <Button
-                  variant="primary"
+                  variant="secondary"
                   className="mt-3  justify-self-end"
                   aria-hidden="true"
                   onClick={() => replyMessage()}
@@ -155,7 +155,7 @@ const ViewNotification = ({ ...props }) => {
         </div>
         <div className="footer">
           <Button
-            variant="primary"
+            variant="secondary"
             className="button"
             bsstyle="primary"
             onClick={() => {
@@ -166,7 +166,7 @@ const ViewNotification = ({ ...props }) => {
             {getNotificationActionText(_.get(props, "notification"))}
           </Button>
           <Button
-            variant="primary"
+            variant="secondary"
             className="button ml-2"
             bsstyle="primary"
             onClick={() => {

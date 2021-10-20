@@ -71,9 +71,9 @@ const STORAGE_TYPE = [
 
 const COLLAB_TYPE = [
   { value: "ENHANCE", label: "ENHANCE - Find people to enhance and grow your idea." },
-  { value: "PRODUCTIONISE", label: "PRODUCTIONISE - Find people to take your idea to a complete shape." },
-  { value: "FINANCE", label: "FINANCE - Find people to provide financial assistance to realtize your idea." },
-  { value: "PROMOTE", label: "PROMOTE - Find people to spread the work about your idea to the world." },
+  { value: "PRODUCTIONIZE", label: "PRODUCTIONIZE - Find people to take your idea to a complete shape." },
+  { value: "FINANCE", label: "FINANCE - Find people to provide financial assistance to realize your idea." },
+  { value: "PROMOTE", label: "PROMOTE - Find people to spread the word about your idea to the world." },
  
 ];
 

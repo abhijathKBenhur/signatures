@@ -50,9 +50,7 @@
                       margin-bottom: 10px;
                       color: $primary;
                     }
-                    .purpose-text{
-                      color: $primary;
-                    }
+                    
                 
                     &.selected{
                       box-shadow: $shadow;
@@ -60,30 +58,30 @@
                         color: $white;
                       }
                       .purpose-text{
-                        color: $white;
+                        color: $white !important;
                       }
-                      border: 2px solid $secondary;
-                      background-color: $secondary;
+                      border: 2px solid $primary;
+                      background-color: $primary;
                     }
                   }
                   .disabled{
-                    &:hover{
-                      &::after{
-                        content: "Coming Soon";
-                        position: absolute;
-                        background: #e4ebf5;
-                        width: 97px;
-                        height: 50px;
-                        animation: ball-scale 1s ease-in forwards;
-                        animation-direction: reverse;
-                        font-family: "Inter, system-ui", "Helvetica Neue", Helvetica, Arial, sans-serif;
-                        font-size: 14px;
-                        font-weight: 500;
-                        line-height: 20px;
-                        color: $grey-dark;
-                        text-align: center;
-                      }
-                    }
+                    //  &:hover{
+                    //    &::after{
+                    //      content: "Coming Soon";
+                    //      position: absolute;
+                    //      background: #e4ebf5;
+                    //      width: 97px;
+                    //      height: 50px;
+                    //      animation: ball-scale 1s ease-in forwards;
+                    //      animation-direction: reverse;
+                    //      font-family: "Inter, system-ui", "Helvetica Neue", Helvetica, Arial, sans-serif;
+                    //      font-size: 14px;
+                    //      font-weight: 500;
+                    //      line-height: 20px;
+                    //      color: $grey-dark;
+                    //      text-align: center;
+                    //    }
+                    //  }
                    
                   }
                 }

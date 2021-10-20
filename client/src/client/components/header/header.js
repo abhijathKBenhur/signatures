@@ -329,7 +329,7 @@ const Header = (props) => {
                 {getShortAddress(currentMetamaskAccount, 4)}
               </span>
               {/* <Button
-              variant="primary"
+              variant="secondary"
               className="button"
               bsstyle="primary"
               onClick={() => {

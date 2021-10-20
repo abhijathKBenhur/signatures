@@ -272,7 +272,7 @@ const Register = (props) => {
                   <img src={metamaskLogo} width="70"></img>
                   <div className="metamask_integration">
                     <Button
-                      variant="primary"
+                      variant="secondary"
                       className="button mt-2"
                       bsstyle="primary"
                       onClick={() => {

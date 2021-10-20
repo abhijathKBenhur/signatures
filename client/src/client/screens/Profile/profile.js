@@ -194,6 +194,10 @@ function Profile(props) {
     history.push("/create");
   }
 
+  function gotoHome() {
+    history.push("/home");
+  }
+
   function followUser() {
     if (followers.indexOf(loggedInUserDetails.userName) < 0) {
       RelationsInterface.postRelation(
@@ -300,18 +304,19 @@ function Profile(props) {
                           }
                         >
                           <Button
-                            variant="action"
+                            variant="primary"
                             className="button"
                             bsstyle="primary"
                             onClick={() => {
                               setShowModal({ ...modalShow, editProfile: true });
                             }}
                           >
-                            <i className="fa fa-pencil mr-1"></i>
+                            <i className="fa fa-pencil mr-1">  </i>
+                            <span class=" ">Edit Profile</span>
                           </Button>
                         </OverlayTrigger>
 
-                        <OverlayTrigger
+                        {/* <OverlayTrigger
                           key={"top"}
                           placement="top"
                           overlay={
@@ -328,7 +333,7 @@ function Profile(props) {
                           >
                             <i className="fa fa-users mr-1"></i>
                           </Button>
-                        </OverlayTrigger>
+                        </OverlayTrigger> */}
                       </div>
                     ) : (
                       <div className="sharables d-flex">
@@ -541,13 +546,13 @@ function Profile(props) {
                       onSelect={(k) => setKey(k)}
                     >
                        {isMyPage() ? (
-                        <Tab eventKey="wallet" title="Wallet">
+                        <Tab eventKey="wallet" title="Wallet" tabClassName="tab_category">
                           <Wallet></Wallet>
                         </Tab>
                       ) : (
                         <div></div>
                       )}
-                      <Tab eventKey="collections" title="Collection">
+                      <Tab eventKey="collections" title="Collection"  tabClassName="tab_category">
                         <div className="collection-wrapper">
                           <div className="middle-block">
                             {_.isEmpty(profileCollection) ? (
@@ -557,17 +562,26 @@ function Profile(props) {
                               >
                                 <Row>
                                   <span className="second-grey">
-                                    You currently dont own any ideas. Start by
+                                    You currently do not own any billets.
                                     <span
                                       className="cursor-pointer color-primary"
                                       onClick={() => {
                                         createnew();
                                       }}
                                     >
-                                      {" "}
-                                      uploading{" "}
-                                    </span>{" "}
-                                    one.
+                                      {" "}Publish 
+                                    </span>
+                                    {" "}an idea or  {" "}
+                                    <span
+                                      className="cursor-pointer color-primary"
+                                      onClick={() => {
+                                        gotoHome();
+                                      }}
+                                    >
+                                      buy
+                                    </span> one
+
+
                                   </span>
                                 </Row>
                               </Col>

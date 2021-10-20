@@ -94,6 +94,18 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
     box-shadow: none;
   }
   &.btn-primary {
+    background-color: $primary;
+    border-color: $primary !important;
+    color: $white;
+    &:focus,
+    &:hover,
+    &:active {
+      background-color: $primary !important;
+      box-shadow: none;
+    }
+  }
+
+  &.btn-secondary {
     background-color: $secondary;
     border-color: $secondary !important;
     color: $white;
@@ -102,18 +114,6 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
     &:active {
       background-color: $secondary !important;
       box-shadow: none;
-    }
-  }
-
-  &.btn-secondary {
-    border-color: $secondary !important;
-    color: $secondary;
-    background: transparent;
-    &:focus,
-    &:hover,
-    &:active {
-      background: $secondary !important;
-      color: $white !important;
     }
   }
   &.btn-ternary {

@@ -170,11 +170,11 @@ const InfoModal = (props) => {
       case CONSTANTS.PURPOSES.SELL:
         return (
           <Col md="12">
-            <span className="purpose-message second-grey">
+            <span className="purpose-message master-grey">
               Set a price to the idea and it will be sold immediately when there
               is a buyer.
             </span>
-            <div className="price-section">
+            <div className="price-section mt-3">
               <div className="price-label second-grey">
                 <Form.Label>
                   {CONSTANTS.PURPOSES.AUCTION === form.purpose.purposeType
@@ -202,7 +202,7 @@ const InfoModal = (props) => {
       case CONSTANTS.PURPOSES.COLLAB:
         return (
           <Col md="12">
-            <span className="purpose-message second-grey">
+            <span className="purpose-message master-grey">
               You may chose to license it to multiple people. Only your idea
               will be available in the market.
             </span>
@@ -284,9 +284,9 @@ const InfoModal = (props) => {
       case CONSTANTS.PURPOSES.KEEP:
         return (
           <Col md="12">
-            <span className="purpose-message second-grey">
+            <span className="purpose-message master-grey">
               The record will not be open for any interaction. It will be still
-              be visible for everyone.
+              be visible to everyone.
             </span>
           </Col>
         );
@@ -337,7 +337,8 @@ const InfoModal = (props) => {
                       }}
                     >
                       <i className={getPurposeIcon(entry)}></i>
-                      <span className="second-grey purpose-text">{entry}</span>
+                      <span className="second-grey color-primary purpose-text">{entry}</span>
+                      { isDisabled(entry) && <span className="second-grey">Coming soon</span>}
                     </div>
                   );
                 })}
@@ -357,7 +358,7 @@ const InfoModal = (props) => {
               rows={7}
               aria-describedby="inputGroupAppend"
               name="description"
-              placeholder="Description upto 250 words*"
+              placeholder="What are you looking forward from others? *"
               style={{ resize: "none", borderRadius: "5px" }}
               onChange={(event) => {
                 setFormData({
