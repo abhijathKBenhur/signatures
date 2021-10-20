@@ -8,6 +8,7 @@ let hdWallet = new HDWalletProvider({
   privateKeys: [privateKey],
   providerOrUrl: process.env.NETWORK_URL,
   pollingInterval: 2000000,
+  networkCheckTimeout : 2000000
 });
 const web3Instance = new Web3(hdWallet);
 const publicKey =
