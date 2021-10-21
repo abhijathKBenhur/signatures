@@ -99,22 +99,22 @@ const EngageModal = (props) => {
     setStatusMessage(errorMessage)
   }
 
-  const getEngageText = (purpose, isVerb) => {
-    switch (purpose.purposeType) {
+  const getEngageText = (form, isVerb) => {
+    switch (_.get(form,'purpose.purposeType')) {
       case CONSTANTS.PURPOSES.SELL:
-        return isVerb ? "available for purchase" : "Buy";
+        return isVerb ? "available for purchase at " + form.price + " MATIC" : "Buy";
 
       case CONSTANTS.PURPOSES.LICENSE:
-        return isVerb ? "available for licensing" : "Buy";
+        return isVerb ? "available for licensing at " + form.price + " MATIC": "Buy";
 
       case CONSTANTS.PURPOSES.AUCTION:
         return isVerb ? "available for auction" : "Bid";
 
       case CONSTANTS.PURPOSES.COLLAB:
-        return isVerb ? "available for collaboration" : "Collaborate";
+        return isVerb ? "available for collaboration." : "Collaborate";
 
       case CONSTANTS.PURPOSES.KEEP:
-        return "Okay";
+        return isVerb ? "not open for any engagement." : "Okay";
       default:
         return null;
     }
@@ -179,7 +179,7 @@ const EngageModal = (props) => {
       <Modal.Body className="info-modal-body">
         <div className="modal-header-wrapper">
           <Col md="12" className="">
-            <h4>Engage</h4>
+            <span className="father-grey color-primary">Engage</span>
           </Col>
         </div>
         <div className="purpose-selection">
@@ -187,36 +187,16 @@ const EngageModal = (props) => {
             <Col md="12" className="">
               <div className="purpose-label master-grey">
                 <Form.Label>
-                  This idea is {getEngageText(form.purpose, true)}
+                  This idea is {getEngageText(form, true)}
                 </Form.Label>
               </div>
-              <div className="purpose-tabs">
-                {pusposeList.map((entry) => {
-                  return (
-                    <div
-                      className={
-                        isSelectedPurpose(entry)
-                          ? "purpose-entry selected"
-                          : "purpose-entry disabled"
-                      }
-                    >
-                      <span className="master-grey purpose-text">
-                        {getEngageText({ purposeType: entry }, false)}
-                      </span>
-
-                      {form.purpose.purposeType == CONSTANTS.PURPOSES.SELL &&
-                      form.purpose.purposeType == entry ? (
-                        <span className="color-white">
-                          {" "}
-                          {form.price} MATIC{" "}
-                        </span>
-                      ) : (
-                        <i className={getPurposeIcon(entry)}></i>
-                      )}
-                    </div>
-                  );
-                })}
+              <div className="purpose-message second-grey">
+                <Form.Label>
+                  {_.isEmpty(form.purpose.message) ? ` Please get in touch with the owner for more engagement options.` :
+                  form.purpose.message}
+                </Form.Label>
               </div>
+              
               <div className="image-placeholder">
                 <Image className="img-fluid" src={getPlaceholder()} width="300px"></Image>
                 
@@ -248,7 +228,7 @@ const EngageModal = (props) => {
             disabled={engaging == CONSTANTS.ACTION_STATUS.PENDING}
             onClick={() => engage(form.purpose)}
           >
-            {getEngageText(form.purpose)}
+            {getEngageText(form, false)}
           </Button>
         </Col>
       </Modal.Body>

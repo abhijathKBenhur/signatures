@@ -20,7 +20,7 @@ import { Document, Page, pdfjs } from "react-pdf";
 import SignatureInterface from "../../interface/SignatureInterface";
 import CommentsInterface from "../../interface/CommentsInterface";
 import { useHistory } from "react-router-dom";
-
+import Web3Utils from "web3-utils";
 import userImg from "../../../assets/images/user.png";
 import _ from "lodash";
 import ShareModal from "../../modals/share/share.modal";
@@ -296,11 +296,12 @@ const SignatureNew = (props) => {
     }
   };
 
-  const getIdeaStatus = (purpose) => {
-    switch (purpose.purposeType) {
+  const getIdeaStatus = (signature) => {
+    switch (signature.purpose.purposeType) {
       case CONSTANTS.PURPOSES.SELL:
       case CONSTANTS.PURPOSES.LICENSE:
-        return "Buy";
+        return "Buy for " + Web3Utils.fromWei(signature.price, "ether")
+
 
       case CONSTANTS.PURPOSES.AUCTION:
         return "Bid";
@@ -453,8 +454,9 @@ const SignatureNew = (props) => {
                                   variant="secondary"
                                   onClick={() => showModal("engage")}
                                 >
-                                  {_.get(signature, "purpose") &&
-                                    getIdeaStatus(_.get(signature, "purpose"))}
+                                  {
+                                    getIdeaStatus(signature)
+                                  }
                                 </Button>
                               </div>
                             )}
