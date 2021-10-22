@@ -74,11 +74,13 @@ const InfoModal = (props) => {
   });
 
   const setPurpose = (entry) => {
-    let currentPurpose = form.purpose;
-    setFormData({
-      ...form,
-      purpose: { ...currentPurpose, purposeType: entry },
-    });
+    if([CONSTANTS.PURPOSES.AUCTION, CONSTANTS.PURPOSES.LICENSE].indexOf(entry) < 0){
+      let currentPurpose = form.purpose;
+      setFormData({
+        ...form,
+        purpose: { ...currentPurpose, purposeType: entry },
+      });
+    }
   };
 
   let pusposeList = [
