@@ -286,7 +286,7 @@ const Header = (props) => {
                 alt=""
                 className=""
               ></img>
-              <span class="second-header logo_text color-white ml-1">IdeaTribe</span>
+              <span class="second-header logo_text color-white ml-2">IdeaTribe</span>
             </a>
             {/* <SearchBar /> */}
             {/* <Nav.Item>

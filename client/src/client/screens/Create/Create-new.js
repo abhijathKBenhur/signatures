@@ -720,7 +720,7 @@ const CreateNew = () => {
                       rows={7}
                       aria-describedby="inputGroupAppend"
                       name="description"
-                      placeholder="Description upto 250 words*"
+                      placeholder="Description upto 250 words. Use hashtags for better reach."
                       style={{ resize: "none" }}
                       onChange={handleChange}
                     /> */}
