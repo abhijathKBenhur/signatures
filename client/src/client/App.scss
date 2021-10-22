@@ -18,6 +18,10 @@ body {
   font-family: "Inter, system-ui", Tahoma, Geneva, Verdana, sans-serif;
   .signature-icons {
     color: $primary !important;
+    stroke: $white;
+  }
+  .react-share__ShareButton {
+    color: $white;
   }
   background-color: #ffffff;
   opacity: 1;

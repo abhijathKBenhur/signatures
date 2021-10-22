@@ -157,17 +157,17 @@ $secondary-button-shadow:inset .2rem .2rem 1rem $secondary,
 
   .social-icon-wrapper{
     &.fb{
-      @include social-icon-wrapper(#3b5997)
+      @include social-icon-wrapper(white)
     }
     &.twitter{
-      @include social-icon-wrapper(#01acec)
+      @include social-icon-wrapper(white)
 
     }
     &.whatsapp{
-      @include social-icon-wrapper(#23d366)
+      @include social-icon-wrapper(white)
     }
     &.linkedin{
-      @include social-icon-wrapper(#037fb1)
+      @include social-icon-wrapper(white)
     }
   }
 

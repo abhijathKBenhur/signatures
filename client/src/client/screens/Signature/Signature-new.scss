@@ -109,6 +109,13 @@
                 }
             }
         }
+        #dropdown-link {
+            border: none !important;
+            background: transparent;
+            &::after{
+                display: none;
+            }
+        }
     }
     .sidebar{
         display: flex;

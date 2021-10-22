@@ -249,6 +249,9 @@
             color: $grey-dark;
           }
         }
+        .dropdown-item:hover, .dropdown-item:focus{
+          background: transparent !important;
+        }
         .dropdown-menu {
           .dropdown-item {
             padding: 5px;
@@ -256,6 +259,9 @@
             font-weight: 500;
             line-height: 18px;
             color: $grey-dark;
+            &:hover {
+              background: transparent !important;
+            }
           }
         }
       }
@@ -333,7 +339,27 @@
       margin-bottom: 20px;
     }
     .button-section {
-      margin: 0 0px 10px 0;
+      margin: 0 0px 0px 0;
+      border-bottom-left-radius: 6px;
+      border-bottom-right-radius: 6px;
+      background: linear-gradient(to right, #4AA0CD, #79579F);
+      padding: 10px 0;
+      .dropdown-toggle {
+        background: transparent;
+        border: none !important;
+        box-shadow: none !important;
+        color: $white;
+        &::after{
+          content: '';
+        }
+      }
+      .dropdown-menu {
+        background: linear-gradient(to right, #4AA0CD, #887a98);
+        min-width: 3rem;
+      }
+      .justify-content-start{
+        justify-content: start !important;
+      }
       .button-bar {
         width: 100%;
         display: flex;
@@ -361,22 +387,18 @@
               background: transparent !important;
             }
           }
-          &.submit-btn {
-            background: $secondary;
-            color: $white;
-          }
         }
       }
       .done-btn {
-        background: #79579f;
         border-bottom-left-radius: 12px;
         border-bottom-right-radius: 12px;
         border-top-left-radius: 0px;
         .submit-btn {
-          background: #79579F;
-          color: white;
           box-shadow: none;
         }
+      }
+      .social-icon-wrapper.fb, .social-icon-wrapper.whatsapp, .social-icon-wrapper.linkedin {
+        color: $white;
       }
     }
   }

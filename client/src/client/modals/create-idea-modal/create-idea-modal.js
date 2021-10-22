@@ -8,6 +8,7 @@ import {
   Row,
   InputGroup,
   Dropdown,
+  Popover
 } from "react-bootstrap";
 import "css-doodle";
 import React, { useState, useEffect } from "react";
@@ -49,6 +50,7 @@ const CreateIdeaModal = ({
   publishState,
   publishError,
   billet,
+  closeBtn,
   ...props
 }) => {
   const reduxState = useSelector((state) => state, shallowEqual);
@@ -85,6 +87,17 @@ const CreateIdeaModal = ({
       subscription.unsubscribe();
     };
   }, []);
+
+
+  const popover = (
+    <Popover id="popover-basic">
+      <Popover.Header as="h3">Popover right</Popover.Header>
+      <Popover.Body>
+        And here's some <strong>amazing</strong> content. It's very engaging.
+        right?
+      </Popover.Body>
+    </Popover>
+  );
 
   const getThumbnailImage = () => {
     return form.thumbnail ? (
@@ -418,7 +431,8 @@ const CreateIdeaModal = ({
       ":" +
       time.getMinutes() +
       (time.getHours() > 12 ? "PM" : "AM")
-      + getTimeZonsShort() || ""
+      + ""
+      // getTimeZonsShort() || ""
     );
   };
 
@@ -442,6 +456,9 @@ const CreateIdeaModal = ({
       
     }
   }
+  function openInEtherscan() {
+    window.open("https://kovan.etherscan.io/tx/" + billet.transactionID);
+  }
 
   const getElement = () => {
     let pusposeList = [
@@ -459,7 +476,7 @@ const CreateIdeaModal = ({
               <Col
                 md="12"
                 id="published-wrapper-block"
-                className="published-wrapper p-0 d-flex flex-row justify-content-space-around"
+                className="published-wrapper p-0 d-flex flex-row justify-content-start"
               >
                 <div className="left-strip"> </div>
                 <Col
@@ -469,8 +486,8 @@ const CreateIdeaModal = ({
                   <Row className="row1">
                     <Col md="12">
                       <div className="billet-item">
-                        <div className="user">@{billet.creator}</div>
-                        <div className="name">{billet.fullName}</div>
+                        <div className="user second-grey">@{billet.creator}</div>
+                        {/* <div className="name">{billet.fullName}</div> */}
                         <div className="link">
                           ideaTribe.com | Your ideas on blockchain{" "}
                         </div>
@@ -549,10 +566,81 @@ const CreateIdeaModal = ({
               </Col>
             </Row>
             <Row className="button-section  d-flex">
-              <Col xs="12" className="button-bar done-btn">
-                <Button className="submit-btn btn-block" onClick={gotoIdea}>
+              <Col xs="10" className="button-bar justify-content-start">
+                  <Crosshair
+                    className="cursor-pointer signature-icons mr-2"
+                    color="#F39422"
+                    onClick={() => {
+                      openInEtherscan();
+                    }}
+                  ></Crosshair>
+                  <Download
+                    className="cursor-pointer signature-icons"
+                    color="#F39422"
+                    onClick={() => {
+                      exportToPdf();
+                    }}
+                  ></Download>
+                  <Dropdown>
+                    <Dropdown.Toggle variant="success" id="dropdown-share">
+                      <i className="fa fa-bullhorn"></i>
+                    </Dropdown.Toggle>
+
+                    <Dropdown.Menu>
+                      <Dropdown.Item href="#/action-1"><reactShare.FacebookShareButton
+                    url={
+                      window.location.origin + "/signature/" + billet.PDFHash
+                    }
+                    quote={
+                      "Hey! I registered an original idea on blockchain!"
+                    }
+                  >
+                      <div className="social-icon-wrapper fb">
+                    <i class="fa fa-facebook" aria-hidden="true"></i>
+                  </div>
+                    {/* <reactShare.FacebookIcon size={32} round /> */}
+                  </reactShare.FacebookShareButton>
+                  
+                  </Dropdown.Item>
+                      <Dropdown.Item href="#/action-2">
+                      <reactShare.WhatsappShareButton
+                    url={
+                      window.location.origin + "/signature/" + billet.PDFHash
+                    }
+                    title={
+                      "Hey! I registered an original idea on blockchain!"
+                    }
+                    separator=" "
+                  >
+                      <div className="social-icon-wrapper whatsapp">
+                  <i class="fa fa-whatsapp" aria-hidden="true"></i>
+                  </div>
+                    {/* <reactShare.WhatsappIcon size={32} round /> */}
+                  </reactShare.WhatsappShareButton>
+                  </Dropdown.Item>
+                      <Dropdown.Item href="#/action-3">
+                      <reactShare.LinkedinShareButton
+                    url={
+                      window.location.origin + "/signature/" + billet.PDFHash
+                    }
+                  >
+                      <div className="social-icon-wrapper linkedin">
+                <i class="fa fa-linkedin" aria-hidden="true"></i>
+                  </div>
+                    {/* <reactShare.LinkedinIcon size={32} round /> */}
+                  </reactShare.LinkedinShareButton>
+                  </Dropdown.Item>
+                    </Dropdown.Menu>
+                  </Dropdown>
+                  
+              </Col>
+              <Col xs="2" className="button-bar done-btn">
+                {!closeBtn && <Button className="submit-btn btn-ternary" onClick={gotoIdea}>
                   Done
-                </Button>
+                </Button>}
+                {closeBtn && <Button className="submit-btn btn-ternary" onClick={closeBtn}>
+                  Close
+                </Button>}
               </Col>
             </Row>
           </div>
