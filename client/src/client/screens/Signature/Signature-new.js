@@ -13,6 +13,7 @@ import {
   Spinner,
   OverlayTrigger,
   Tooltip,
+  Dropdown
 } from "react-bootstrap";
 import StorageInterface from "../../interface/StorageInterface";
 import { ChevronRight, ChevronLeft } from "react-feather";
@@ -27,6 +28,7 @@ import ShareModal from "../../modals/share/share.modal";
 import EngageModal from "../../modals/engage-modal/engage-modal";
 
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
+import CreateIdeaModal from "../../modals/create-idea-modal/create-idea-modal";
 
 import "./Signature-new.scss";
 import InfoModal from "../../modals/info-modal/info.modal";
@@ -42,6 +44,7 @@ const SignatureNew = (props) => {
   const [signature, setSignature] = useState({});
   const [PDFFile, setPDFFile] = useState(undefined);
   const [showComment, setShowComment] = useState(false);
+  const [modalShowBillet, setModalShowBillet] = useState(false);
   const [pdfPages, setPdfPages] = useState({
     currentPage: 1,
     totalPages: 1,
@@ -315,6 +318,23 @@ const SignatureNew = (props) => {
     }
   };
 
+  const viewBillet = () => {
+    setModalShowBillet(true)
+  }
+
+  const getSignature = () => {
+    return {
+      ...signature,
+      creator: _.get(signature, 'creator.email'),
+      fullName: _.get(signature, 'creator.firstName') + " " + _.get(signature, 'creator.lastName'),
+      time: new Date(_.get(signature, 'createdAt'))
+    }
+  }
+
+  const closeBtnFn = () => {
+    setModalShowBillet(false);
+  }
+
   return (
     <div className="signature-new">
       <div className="wrapper">
@@ -347,19 +367,28 @@ const SignatureNew = (props) => {
                         <div className="action-btns align-items-center">
                           {/* <span className="second-grey">{upvotes.length} upvotes</span> */}
 
-                          <OverlayTrigger
-                            placement="left"
-                            overlay={<Tooltip>View on chain</Tooltip>}
-                          >
-                            <Button variant="action" onClick={() => {
+                         
+                          <Dropdown>
+                            <Dropdown.Toggle variant="success" id="dropdown-link">
+                            <Button variant="action">
+                              <i className="fa fa-link" aria-hidden="true"></i>
+                            </Button>
+                            </Dropdown.Toggle>
+
+                            <Dropdown.Menu>
+                              <Dropdown.Item onClick={() => {
                               window.open(
                                 "https://mumbai.polygonscan.com/address/" +
                                   _.get(signature, "PDFHash")
                               );
                             }}>
-                              <i className="fa fa-link" aria-hidden="true"></i>
-                            </Button>
-                          </OverlayTrigger>
+                              View on chain
+                            </Dropdown.Item>
+                                <Dropdown.Item onClick={() => { viewBillet()}}>
+                                View  Billet
+                            </Dropdown.Item>
+                              </Dropdown.Menu>
+                          </Dropdown>
                           <OverlayTrigger
                             placement="left"
                             overlay={<Tooltip>Share</Tooltip>}
@@ -555,6 +584,15 @@ const SignatureNew = (props) => {
           idea={signature}
           currentUser={loggedInUserDetails}
           onHide={() => hideModal("engage")}
+        />
+      )}
+      {modalShowBillet && (
+        <CreateIdeaModal
+          show={modalShowBillet}
+          form={signature}
+          publishState={"PASSED"}
+          billet={getSignature()}
+          closeBtn={closeBtnFn}
         />
       )}
     </div>

@@ -99,6 +99,7 @@ const CommentsPanel = (props) => {
           value,
           props.entity
         ).then((success) => {
+          setState({...state, value:''})
           let commentsCOpy = _.clone(comments);
           commentsCOpy.unshift({
             from: loggedInUserDetails,
@@ -180,7 +181,7 @@ const CommentsPanel = (props) => {
       <div className="scrolable-comments">
         {_.map(comments, (comment, index) => {
           return (
-            <div className="comment-item d-flex flex-row pb-1" key={index}>
+            <div className="comment-item d-flex flex-row" key={index}>
               <div className="icon mr-2 p-1 cursor-pointer">
                 <Image
                   src={_.get(comment, "from.imageUrl")}
