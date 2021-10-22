@@ -728,7 +728,7 @@ const CreateNew = () => {
                       value={desc.value}
                       onChange={handleChanges}
                       markup="#{{__type__||__id__||__display__}}"
-                      placeholder="Your comment"
+                      placeholder="Description upto 250 words. Use hashtags for better reach."
                       className="mentions"
                       onKeyUp={(e) => handleChange(e)}
                     >

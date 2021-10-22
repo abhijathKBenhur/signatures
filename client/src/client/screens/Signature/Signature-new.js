@@ -300,7 +300,7 @@ const SignatureNew = (props) => {
   };
 
   const getIdeaStatus = (signature) => {
-    switch (signature.purpose.purposeType) {
+    switch (_.get(signature,"purpose.purposeType")) {
       case CONSTANTS.PURPOSES.SELL:
       case CONSTANTS.PURPOSES.LICENSE:
         return "Buy for " + Web3Utils.fromWei(signature.price, "ether")
@@ -315,7 +315,7 @@ const SignatureNew = (props) => {
       case CONSTANTS.PURPOSES.KEEP:
         return "View info";
       default:
-        return null;
+        return "";
     }
   };
 
