@@ -180,7 +180,9 @@ const CreateIdeaModal = ({
     domtoimage
       .toJpeg(document.getElementById("published-wrapper-block"), {
         quality: 1,
-        style: {},
+        style: {
+          "background-color":"white"
+        },
         // filter: function filter(node) {
         //   return (
         //     ["filterAddition", "bottom-contents"].indexOf(node.className) < 0

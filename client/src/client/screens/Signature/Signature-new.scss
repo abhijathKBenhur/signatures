@@ -131,6 +131,11 @@
             display: flex;
             flex-flow: row;
             gap: 10px;
+            .dropdown{
+                .dropdown-toggle {
+                    padding: 0;
+                }
+            }
             .upvoted{
                 background-color: $secondary;
                 .upvoted{

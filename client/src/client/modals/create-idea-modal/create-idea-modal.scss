@@ -354,7 +354,6 @@
         }
       }
       .dropdown-menu {
-        background: linear-gradient(to right, #4AA0CD, #887a98);
         min-width: 3rem;
       }
       .justify-content-start{
@@ -398,7 +397,7 @@
         }
       }
       .social-icon-wrapper.fb, .social-icon-wrapper.whatsapp, .social-icon-wrapper.linkedin {
-        color: $white;
+        color: $primary;
       }
     }
   }
