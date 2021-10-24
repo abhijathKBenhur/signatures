@@ -21,19 +21,19 @@ const Wallet = (props) => {
   }, []);
 
   return (
-    <div className="wallet-wrapper">
+    <div className="wallet-wrapper mb-3">
       <div
         className="wallet-container"
         // onClick={() => selectWalletHandler(coinType)}
       >
       <div className="wallet-type">
-        <p className="father-grey"> {goldBalance} TRBG</p>
+        <p className="father-grey color-primary"> {goldBalance} TRIBE GOLD</p>
       </div>
       <div className="coin-amount">
-        <p className="master-grey"> TRIBE GOLD </p>
+        {/* <p className="master-grey"> TRIBE GOLD </p> */}
       </div>
         <div className="next-step">
-          <p className="second-grey"> You can earn gold by flourishing the community. </p>
+          <p className="second-header"> You can earn gold by flourishing the community. </p>
         </div>
         
       </div>
@@ -42,13 +42,13 @@ const Wallet = (props) => {
         // onClick={() => selectWalletHandler(coinType)}
       >
         <div className="wallet-type">
-          <p className="father-grey"> {maticBalance}</p>
+          <p className="father-grey color-secondary"> {maticBalance} MATIC</p>
         </div>
         <div className="coin-amount">
-          <p className="master-grey"> MATIC </p>
+          {/* <p className="master-grey"> MATIC </p> */}
         </div>
         <div className="next-step">
-          <p className="second-grey"> You can load matic form other wallets. </p>
+          <p className="second-header "> You can load matic from other wallets. </p>
         </div>
       </div>
       {/* <div className="transaction-wrapper">

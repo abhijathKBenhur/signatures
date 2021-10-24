@@ -141,7 +141,8 @@ const EngageModal = (props) => {
         return "Bid";
 
       case CONSTANTS.PURPOSES.COLLAB:
-        return "Collaborate";
+        
+        history.push( "/profile/" + form.owner.userName)
 
       case CONSTANTS.PURPOSES.KEEP:
         props.onHide();

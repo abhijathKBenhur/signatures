@@ -17,7 +17,7 @@ import "./profile.scss";
 import { Shimmer } from "react-shimmer";
 import Register from "../../modals/Register/Register";
 import SignatureInterface from "../../interface/SignatureInterface";
-import StatsInterface from "../../interface/StatsInterface"
+import StatsInterface from "../../interface/StatsInterface";
 import NotificationInterface from "../../interface/NotificationInterface";
 import BlockChainInterface from "../../interface/BlockchainInterface";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
@@ -46,14 +46,13 @@ function Profile(props) {
   } = reduxState;
 
   const [profileCollection, setProfileCOllection] = useState([]);
-  
+
   const [loggedInUserDetails, setLoggedInUserDetails] = useState({});
   const [followers, setFollowers] = useState([]);
   const [upvotesCount, setUpvotesCount] = useState(0);
-  const [ideasCount, setIdeasCount] = useState(0);
   const [myNotifications, setMyNotifications] = useState([]);
   const [billetList, setBilletList] = useState([]);
-  const [mobileView, setMobileView] = useState([])
+  const [mobileView, setMobileView] = useState([]);
 
   let history = useHistory();
   const [key, setKey] = useState("collections");
@@ -66,15 +65,14 @@ function Profile(props) {
     shareProfile: false,
   });
 
-  
   useEffect(() => {
-    if(_.get(history, 'location.state.showCollections')){
-      setKey("collections")
+    if (_.get(history, "location.state.showCollections")) {
+      setKey("collections");
     }
     let subscription = EmitInterface.getMessage().subscribe((event) => {
       switch (event.id) {
         case "SHOW_NOTIFICAION":
-        setMobileView(true);
+          setMobileView(true);
           break;
         default:
           break;
@@ -84,11 +82,10 @@ function Profile(props) {
       subscription.unsubscribe();
     };
   }, []);
-  
 
   useEffect(() => {
     const { userDetails = {} } = reduxState;
-    
+
     if (viewUser && !isMyPage()) {
       let payLoad = {};
       payLoad.userName = viewUser;
@@ -97,39 +94,32 @@ function Profile(props) {
       //own profile page
       setLoggedInUserDetails(userDetails);
     }
-    setMobileView(_.get(history, 'location.state.mobileView'))
+    setMobileView(_.get(history, "location.state.mobileView"));
     console.log("userDetails = ", userDetails);
   }, [reduxState.userDetails]);
 
   useEffect(() => {
     fetchSignatures(loggedInUserDetails.userName);
-    if(loggedInUserDetails.userName){
+    if (loggedInUserDetails.userName) {
       fetchNotifications();
-      getStats()
+      getStats();
     }
+    setKey("collections");
 
-    if (!isMyPage() || _.get(history, 'location.state.showCollections')) {
-      loadFollowers();
-      setKey("collections")
-    }else{
-      setKey("wallet")
-    }
+    // if (!isMyPage() || _.get(history, "location.state.showCollections")) {
+    //   loadFollowers();
+    // } else {
+    //   setKey("wallet");
+    // }
   }, [loggedInUserDetails]);
 
   const getStats = () => {
-    StatsInterface.getIdeasFromUser({
-      owner:loggedInUserDetails._id
-    }).then(success =>{
-      setIdeasCount(_.get(success,"data.data"))
-    })
-    
     StatsInterface.getTotalUpvotesForUser({
-      userName: loggedInUserDetails._id
-    }).then(success =>{
-      setUpvotesCount(_.get(success,"data.data"))
-    })
-
-  }
+      userName: loggedInUserDetails._id,
+    }).then((success) => {
+      setUpvotesCount(_.get(success, "data.data"));
+    });
+  };
 
   const getUserDetails = (payLoad) => {
     UserInterface.getUserInfo(payLoad).then((response) => {
@@ -234,7 +224,6 @@ function Profile(props) {
     }
   }
 
-
   return (
     <Container fluid>
       <Row className="profile">
@@ -247,7 +236,12 @@ function Profile(props) {
             <Col md="12" className="mycollection">
               <Row className="loggedIn h-100">
                 <Col md="12" className="p-0 d-flex-mobile">
-                  <Col md="2" className={`userPane w-100 flex-column h-10 ${mobileView ? 'display-none': ''}`}>
+                  <Col
+                    md="2"
+                    className={`userPane w-100 flex-column h-10 ${
+                      mobileView ? "display-none" : ""
+                    }`}
+                  >
                     <div className="profile-section d-flex flex-column">
                       {/* <div className="separatorline"></div> */}
 
@@ -274,7 +268,10 @@ function Profile(props) {
                       <Row className="">
                         <Col className="address-copy d-flex align-items-center justify-content-center">
                           <span className="address-value third-header">
-                          {getShortAddress(_.get(loggedInUserDetails, "metamaskId"),4)}
+                            {getShortAddress(
+                              _.get(loggedInUserDetails, "metamaskId"),
+                              4
+                            )}
                           </span>
                           <i
                             className="fa fa-external-link ml-2"
@@ -301,9 +298,7 @@ function Profile(props) {
                           key={"editProfile"}
                           placement="top"
                           overlay={
-                            <Tooltip id={`tooltip-top`}>
-                              Edit Profile 
-                            </Tooltip>
+                            <Tooltip id={`tooltip-top`}>Edit Profile</Tooltip>
                           }
                         >
                           <Button
@@ -314,7 +309,7 @@ function Profile(props) {
                               setShowModal({ ...modalShow, editProfile: true });
                             }}
                           >
-                            <i className="fa fa-pencil mr-1">  </i>
+                            <i className="fa fa-pencil mr-1"> </i>
                             <span class=" ">Edit Profile</span>
                           </Button>
                         </OverlayTrigger>
@@ -392,7 +387,9 @@ function Profile(props) {
                         md="6"
                         className="d-flex flex-column align-items-center stats-entry"
                       >
-                        <span className="stats-title master-grey">{ideasCount}</span>
+                        <span className="stats-title master-grey">
+                          {billetList.length}
+                        </span>
                         <span className="stats-value second-grey  text-center">
                           Ideas
                         </span>
@@ -401,64 +398,108 @@ function Profile(props) {
                         md="6"
                         className="d-flex flex-column align-items-center stats-entry"
                       >
-                        <span className="stats-title master-grey">{upvotesCount}</span>
+                        <span className="stats-title master-grey">
+                          {upvotesCount}
+                        </span>
                         <span className="stats-value second-grey  text-center">
                           Upvotes
                         </span>
                       </Col>
                     </Row>
+                    <div className="p-2 mt-1">
+                      {_.isEmpty(loggedInUserDetails.bio) && isMyPage() ? (
+                        <div className="d-flex justify-content-center text-center">
+                          <span className="second-grey">
+                            Your profile might need more information. Please try
+                            <span
+                              className="cursor-pointer color-primary"
+                              onClick={() => {
+                                setShowModal({
+                                  ...modalShow,
+                                  editProfile: true,
+                                });
+                              }}
+                            >
+                              {" "}
+                              adding{" "}
+                            </span>
+                            more info.
+                          </span>
+                        </div>
+                      ) : (
+                        <span className="second-grey">
+                          {" "}
+                          {loggedInUserDetails.bio}{" "}
+                        </span>
+                      )}
+                    </div>
                   </Col>
 
                   <Col
                     className={`
-                      ${isMyPage()
-                        ? "tabs-wrapper mt-3 col-md-8"
-                        : "tabs-wrapper mt-3 col-md-10"}
-                        ${mobileView ? 'display-none': ''}
+                      ${
+                        isMyPage()
+                          ? "tabs-wrapper mt-3 col-md-8"
+                          : "tabs-wrapper mt-3 col-md-10"
+                      }
+                        ${mobileView ? "display-none" : ""}
                     `}
                   >
                     <Row className="profile-details">
-                      <Col md="11" className="">
-                        <Row>
-                          <Col md="12">
-                            <span className="second-header">
-                              {" "}
-                              {loggedInUserDetails.firstName}{" "}
-                              {loggedInUserDetails.lastName}{" "}
-                              
-                            </span>{" "}
-                          </Col>
-                        </Row>
-                        <Row className="d-flex align-content-center justify-content-center h-100 profile-detail">
-                          {_.isEmpty(loggedInUserDetails.bio) && isMyPage() ? (
-                            <div>
-                              <Row className="d-flex justify-content-center">
-                                <span className="second-grey">
-                                  Your profile might need more information.
-                                  Please try
-                                  <span
-                                    className="cursor-pointer color-primary"
-                                    onClick={() => {
-                                      setShowModal({
-                                        ...modalShow,
-                                        editProfile: true,
-                                      });
-                                    }}
+                      <Col md="11" >
+                        {isMyPage() ? <Wallet className=""></Wallet> : <div></div>}
+                        <Tabs
+                          id="controlled-tab-example"
+                          activeKey={key}
+                          onSelect={(k) => setKey(k)}
+                          className=""
+                        >
+                          <Tab
+                            eventKey="collections"
+                            title="Collection"
+                            tabClassName="tab_category"
+                          >
+                            <div className="collection-wrapper">
+                              <div className="middle-block">
+                                {_.isEmpty(profileCollection) ? (
+                                  <Col
+                                    md="12"
+                                    className="empty-collection d-flex flex-column align-items-center "
                                   >
-                                    {" "}
-                                    adding{" "}
-                                  </span>
-                                  more info.
-                                </span>
-                              </Row>
+                                    <Row>
+                                      <span className="second-grey">
+                                        You currently do not own any billets.
+                                        <span
+                                          className="cursor-pointer color-primary"
+                                          onClick={() => {
+                                            createnew();
+                                          }}
+                                        >
+                                          {" "}
+                                          Publish
+                                        </span>{" "}
+                                        an idea or{" "}
+                                        <span
+                                          className="cursor-pointer color-primary"
+                                          onClick={() => {
+                                            gotoHome();
+                                          }}
+                                        >
+                                          buy
+                                        </span>{" "}
+                                        one
+                                      </span>
+                                    </Row>
+                                  </Col>
+                                ) : (
+                                  <Collections
+                                    collectionList={profileCollection}
+                                  />
+                                )}
+                              </div>
                             </div>
-                          ) : (
-                            <span className="second-grey">
-                              {" "}
-                              {loggedInUserDetails.bio}{" "}
-                            </span>
-                          )}
-                        </Row>
+                          </Tab>
+                        </Tabs>
                       </Col>
                       <Col md="1">
                         {!isMyPage() && (
@@ -508,7 +549,7 @@ function Profile(props) {
                             </Button>
                           </OverlayTrigger>
                         </Row>
-                        {userDetails.userName && !isMyPage() &&  (
+                        {userDetails.userName && !isMyPage() && (
                           <Row className="justify-content-end pr-3 cursor-pointer color-primary mb-1">
                             <OverlayTrigger
                               key={"follow"}
@@ -543,64 +584,12 @@ function Profile(props) {
                         )}
                       </Col>
                     </Row>
-                    <Tabs
-                      id="controlled-tab-example"
-                      activeKey={key}
-                      onSelect={(k) => setKey(k)}
-                    >
-                       {isMyPage() ? (
-                        <Tab eventKey="wallet" title="Wallet" tabClassName="tab_category">
-                          <Wallet></Wallet>
-                        </Tab>
-                      ) : (
-                        <div></div>
-                      )}
-                      <Tab eventKey="collections" title="Collection"  tabClassName="tab_category">
-                        <div className="collection-wrapper">
-                          <div className="middle-block">
-                            {_.isEmpty(profileCollection) ? (
-                              <Col
-                                md="12"
-                                className="empty-collection d-flex flex-column align-items-center "
-                              >
-                                <Row>
-                                  <span className="second-grey">
-                                    You currently do not own any billets.
-                                    <span
-                                      className="cursor-pointer color-primary"
-                                      onClick={() => {
-                                        createnew();
-                                      }}
-                                    >
-                                      {" "}Publish 
-                                    </span>
-                                    {" "}an idea or  {" "}
-                                    <span
-                                      className="cursor-pointer color-primary"
-                                      onClick={() => {
-                                        gotoHome();
-                                      }}
-                                    >
-                                      buy
-                                    </span> one
-
-
-                                  </span>
-                                </Row>
-                              </Col>
-                            ) : (
-                              <Collections collectionList={profileCollection} />
-                            )}
-                          </div>
-                        </div>
-                      </Tab>
-                     
-                     
-                    </Tabs>
                   </Col>
                   {isMyPage() ? (
                     <Col
-                      className={`notification-wrapper mt-1 flex-column h-100 ${mobileView ? 'col-md-12': 'col-md-2'}`}
+                      className={`notification-wrapper mt-1 flex-column h-100 ${
+                        mobileView ? "col-md-12" : "col-md-2"
+                      }`}
                     >
                       <span className="second-grey notification-title pl-2">
                         Notifications

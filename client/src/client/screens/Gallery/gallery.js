@@ -152,7 +152,7 @@ function gallery(props) {
           {collectionList && <Rack deck={collectionList}></Rack>}
         </Col>
         <Col md="3" className="latest-news desktop-view mt-3">
-          <div className="gutter-block mt-3">
+          <div className="gutter-block mt-3 announcements">
             {/* <span className="second-header color-primary">
               Recent stories
             </span>
@@ -201,7 +201,7 @@ function gallery(props) {
           </div>
           <hr></hr>
 
-          <div className="gutter-block mt-5">
+          <div className="gutter-block mt-3 comments">
             <span className="second-header color-primary">Talk to the tribe</span>
             <CommentsPanel entity={CONSTANTS.ENTITIES.PUBLIC}></CommentsPanel>
           </div>

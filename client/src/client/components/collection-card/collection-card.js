@@ -8,7 +8,7 @@ import "./collection-card.scss";
 import CONSTANTS from "../../commons/Constants";
 import { showToaster } from "../../commons/common.utils";
 import { getPurposeIcon } from "../../commons/common.utils";
-import { getInitialSubString } from "../../commons/common.utils";
+import Web3Utils from "web3-utils";
 const CollectionCard = (props) => {
   let history = useHistory();
   function openCardView() {
@@ -102,6 +102,33 @@ const CollectionCard = (props) => {
   
   }
 
+  const getEngageText = (signature) => {
+    switch (signature.purpose.purposeType) {
+      case CONSTANTS.PURPOSES.SELL:
+        return "Buy" + " (" + Web3Utils.fromWei(signature.price, "ether") + " MATIC)";
+        break;
+
+      case CONSTANTS.PURPOSES.LICENSE:
+        return "Buy"+ " (" + Web3Utils.fromWei(signature.price, "ether") + " MATIC)";
+        break;
+
+      case CONSTANTS.PURPOSES.AUCTION:
+        return "Bid";
+        break;
+
+      case CONSTANTS.PURPOSES.COLLAB:
+        return "Collaborate";
+        break;
+
+      case CONSTANTS.PURPOSES.KEEP:
+        return "View";
+        break;
+
+      default:
+        return null;
+    }
+  };
+
   return (
     <Col
     key={signature._id}
@@ -114,11 +141,15 @@ const CollectionCard = (props) => {
     <div className="card-container">
       <div className="card-float-header">
         <div className="user-logo">
-          <Image src={_.get(signature,'owner.imageUrl')} color="F3F3F3" />
+          <Image src={_.get(signature,'owner.imageUrl')} color="F3F3F3" onClick={() => {
+            goToUserProfile(_.get(signature,'owner.userName'));
+          }}/>
           <div className="user-popup-outer">
             <div className="user-popup">
               <div className="user-logo">
-                <Image src={_.get(signature,'owner.imageUrl')} />
+                <Image src={_.get(signature,'owner.imageUrl')} onClick={() => {
+            goToUserProfile(_.get(signature,'owner.userName'));
+            }}/>
               </div>
               <div>
                 <Button disabled variant="pill">
@@ -129,9 +160,9 @@ const CollectionCard = (props) => {
           </div>
         </div>
         <div className="user-name third-header ml-2"
-          // onClick={() => {
-          //   goToUserProfile(_.get(signature,'owner.userName'));
-          // }}
+          onClick={() => {
+            goToUserProfile(_.get(signature,'owner.userName'));
+          }}
         >
           {_.get(signature, 'owner.userName') || signature.userName}
         </div>
@@ -182,7 +213,8 @@ const CollectionCard = (props) => {
               </div>
             </div>
             <div className="card__foot">
-              <span className="card__link"> View </span>
+              <span className="card__link"> {getEngageText(signature)} </span>
+
             </div>
             <div className="card__border"></div>
           </a>
