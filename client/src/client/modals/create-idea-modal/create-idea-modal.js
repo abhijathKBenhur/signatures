@@ -181,6 +181,7 @@ const CreateIdeaModal = ({
       .toJpeg(document.getElementById("published-wrapper-block"), {
         quality: 1,
         style: {
+          "background-color":"white"
         },
         // filter: function filter(node) {
         //   return (

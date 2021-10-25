@@ -1,6 +1,6 @@
 const chainID = "";
 const COOKIE_TOKEN_PHRASE = "ideaTribeAuthToken";
-const SIGNATURE_MESSAGE = "Hello from ideaTribe. Click sign to prove that you have access to this wallet and we'll log you in. To stop hackers from using your wallet, here is a unique code that they cannot guess. ";
+const SIGNATURE_MESSAGE = "Welcome to IdeaTribe! Click 'Sign' to sign in. No password needed! This request will not trigger a blockchain transaction or cost any gas fees. Your authentication status will be reset after 24 hours. I accept the IdeaTribe Terms of Service: https://ideatribe.io. Nonce: ";
 
 const CURRENCY = {
   name: "Matic",

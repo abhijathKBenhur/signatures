@@ -728,7 +728,7 @@ const CreateNew = () => {
                       value={desc.value}
                       onChange={handleChanges}
                       markup="#{{__type__||__id__||__display__}}"
-                      placeholder="Your comment"
+                      placeholder="Description upto 250 words. Use hashtags for better reach."
                       className="mentions"
                       onKeyUp={(e) => handleChange(e)}
                     >
@@ -744,7 +744,7 @@ const CreateNew = () => {
               </>
             ) : (
               <>
-                <h2 className="master-header col">Share your idea</h2>
+                <h2 className="master-header col">Claim your idea</h2>
               </>
             )}
             <Col md="12" sm="12" lg="12" xs="12">

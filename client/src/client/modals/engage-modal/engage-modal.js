@@ -111,7 +111,7 @@ const EngageModal = (props) => {
         return isVerb ? "available for auction" : "Bid";
 
       case CONSTANTS.PURPOSES.COLLAB:
-        return isVerb ? "available for collaboration." : "Collaborate";
+        return isVerb ? "available for collaboration." : "Connect";
 
       case CONSTANTS.PURPOSES.KEEP:
         return isVerb ? "not open for any engagement." : "Okay";
@@ -141,7 +141,8 @@ const EngageModal = (props) => {
         return "Bid";
 
       case CONSTANTS.PURPOSES.COLLAB:
-        return "Collaborate";
+        
+        history.push( "/profile/" + form.owner.userName)
 
       case CONSTANTS.PURPOSES.KEEP:
         props.onHide();

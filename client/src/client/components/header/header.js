@@ -232,7 +232,7 @@ const Header = (props) => {
             createnew();
           }}
         >
-          Publish Idea
+          Claim Idea
         </Button>
       );
     }
