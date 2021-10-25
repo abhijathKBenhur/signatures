@@ -48,7 +48,7 @@ function Profile(props) {
   const [profileCollection, setProfileCOllection] = useState([]);
 
   const [loggedInUserDetails, setLoggedInUserDetails] = useState({});
-  const [followers, setFollowers] = useState([]);
+  const [followers, setFollowers] = useState(undefined);
   const [upvotesCount, setUpvotesCount] = useState(0);
   const [myNotifications, setMyNotifications] = useState([]);
   const [billetList, setBilletList] = useState([]);
@@ -102,6 +102,7 @@ function Profile(props) {
     fetchSignatures(loggedInUserDetails.userName);
     if (loggedInUserDetails.userName) {
       fetchNotifications();
+      loadFollowers()
       getStats();
     }
     setKey("collections");
@@ -194,29 +195,29 @@ function Profile(props) {
   function followUser() {
     if (followers.indexOf(loggedInUserDetails.userName) < 0) {
       RelationsInterface.postRelation(
-        loggedInUserDetails.userName,
+        userDetails.userName,
         viewUser,
         CONSTANTS.ACTIONS.FOLLOW,
         CONSTANTS.ACTION_STATUS.PENDING,
         "I would like to follow you."
       ).then((success) => {
-        let newFollowlist = _.concat(followers, [loggedInUserDetails.userName]);
+        let newFollowlist = _.concat(followers, [userDetails.userName]);
         setFollowers(newFollowlist);
         NotificationInterface.postNotification(
           loggedInUserDetails._id,
           viewUser,
           CONSTANTS.ACTIONS.FOLLOW,
           CONSTANTS.ACTION_STATUS.PENDING,
-          loggedInUserDetails.userName + " followed you."
+          userDetails.userName + " followed you."
         );
       });
     } else {
       RelationsInterface.removeRelation(
-        loggedInUserDetails.userName,
+        userDetails.userName,
         viewUser,
         CONSTANTS.ACTIONS.FOLLOW
       ).then((success) => {
-        let followeIndex = followers.indexOf(loggedInUserDetails.userName);
+        let followeIndex = followers.indexOf(userDetails.userName);
         let followersCopy = _.clone(followers);
         followersCopy.splice(followeIndex, 1);
         setFollowers(followersCopy);
@@ -286,9 +287,9 @@ function Profile(props) {
                       </Row>
                       <Row>
                         <Col>
-                          <span className="address-value third-header justify-content-center d-flex mt-2">
+                          {followers && <span className="address-value third-header justify-content-center d-flex mt-2">
                             {followers.length} followers.
-                          </span>
+                          </span>}
                         </Col>
                       </Row>
                     </div>
@@ -382,7 +383,7 @@ function Profile(props) {
                       </div>
                     )}
 
-                    <Row className="mt-5">
+                    <Row className="mt-3">
                       <Col
                         md="6"
                         className="d-flex flex-column align-items-center stats-entry"
@@ -406,7 +407,7 @@ function Profile(props) {
                         </span>
                       </Col>
                     </Row>
-                    <div className="p-2 mt-1">
+                    <div className="p-2 mt-3 text-center color-secondary">
                       {_.isEmpty(loggedInUserDetails.bio) && isMyPage() ? (
                         <div className="d-flex justify-content-center text-center">
                           <span className="second-grey">
@@ -504,7 +505,7 @@ function Profile(props) {
                       <Col md="1">
                         {!isMyPage() && (
                           <Row className="justify-content-end pr-3 cursor-pointer color-primary mb-1">
-                            <OverlayTrigger
+                            {userDetails.userName && <OverlayTrigger
                               key={"sendMessage"}
                               placement="top"
                               overlay={
@@ -524,7 +525,7 @@ function Profile(props) {
                               >
                                 <i className="fa fa-envelope"></i>
                               </Button>
-                            </OverlayTrigger>
+                            </OverlayTrigger>}
                           </Row>
                         )}
 
@@ -549,7 +550,7 @@ function Profile(props) {
                             </Button>
                           </OverlayTrigger>
                         </Row>
-                        {userDetails.userName && !isMyPage() && (
+                        {!_.isUndefined(followers) && userDetails.userName && !isMyPage() && (
                           <Row className="justify-content-end pr-3 cursor-pointer color-primary mb-1">
                             <OverlayTrigger
                               key={"follow"}
@@ -557,7 +558,7 @@ function Profile(props) {
                               overlay={
                                 <Tooltip id={`tooltip-top`}>
                                   {followers.indexOf(
-                                    loggedInUserDetails.userName
+                                    userDetails.userName
                                   ) > -1
                                     ? "Following"
                                     : "Follow User"}
@@ -568,7 +569,7 @@ function Profile(props) {
                                 variant="action"
                                 className={
                                   followers.indexOf(
-                                    loggedInUserDetails.userName
+                                    userDetails.userName
                                   ) > -1
                                     ? "following"
                                     : ""

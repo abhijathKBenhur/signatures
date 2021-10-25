@@ -19,10 +19,10 @@ const Footer = (props) => {
           <div className="footer-info ">
             <div className="footer-info-wrapper d-flex justify-content-around">
               <span className="secondary-grey cursor-pointer" onClick={() => redirectTo("/about")}>About IdeaTribe</span>
-              <span className="secondary-grey cursor-pointer" onClick={() => redirectTo("/about")}>Tokenomics</span>
+              <span className="secondary-grey cursor-pointer" onClick={() => redirectTo("/Tokenomics")}>Tokenomics</span>
+              <span className="secondary-grey cursor-pointer" onClick={() => redirectTo("/FAQ")}>FAQs</span>
               <span className="secondary-grey cursor-pointer" onClick={() => redirectTo("/about")}>Terms</span>
               <span className="secondary-grey cursor-pointer" onClick={() => redirectTo("/about")}>Privacy</span>
-              <span className="secondary-grey cursor-pointer" onClick={() => redirectTo("/about")}>FAQs</span>
               <span className="secondary-grey cursor-pointer" onClick={() => redirectTo("/about")}>Contact Us</span>
 
 

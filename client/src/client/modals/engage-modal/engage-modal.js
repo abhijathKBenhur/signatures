@@ -198,7 +198,7 @@ const EngageModal = (props) => {
                 </Form.Label>
               </div>
               
-              <div className="image-placeholder">
+              <div className="image-placeholder mt-1">
                 <Image className="img-fluid" src={getPlaceholder()} width="300px"></Image>
                 
               </div>

@@ -65,7 +65,7 @@
 
                 .pdfUploaded{
                     flex-flow: column;
-                    // pointer-events: none;
+                    pointer-events: none;
                     .pdf-document{
                         width: 100%;
                         .react-pdf__Page__canvas{
@@ -75,6 +75,7 @@
                     }
                     .audio-wrapper{
                         flex-flow: column;
+                        pointer-events: visible !important;
                         display: flex;
                         align-items: center;
                         @include play-pause-animated-btn ();

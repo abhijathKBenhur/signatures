@@ -395,7 +395,7 @@ const CreateNew = () => {
               <span className="circle__back-2"></span>
             </div>
             {/* <img src={audio} alt="" className="mb-1" /> */}
-            <audio controls ref={audioRef}>
+            <audio controls ref={audioRef} controlsList="nodownload">
               <source src={fileData.fileData}></source>
               Your browser does not support the
               <code>audio</code> element.
@@ -547,7 +547,6 @@ const CreateNew = () => {
   
   function transactionCompleted(successResponse) {
     updateCompletion(successResponse);
-    debugger
     setBillet({
       creator: userDetails.userName,
       fullName: userDetails.firstName + " " + userDetails.lastName,
@@ -744,7 +743,7 @@ const CreateNew = () => {
               </>
             ) : (
               <>
-                <h2 className="master-header col">Claim your idea</h2>
+                <h2 className="master-header col">Mint your idea</h2>
               </>
             )}
             <Col md="12" sm="12" lg="12" xs="12">

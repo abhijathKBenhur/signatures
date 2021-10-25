@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Modal, Form, Button, Image } from "react-bootstrap";
 import _ from "lodash";
 import NotificationInterface from "../../interface/NotificationInterface";
@@ -6,13 +6,15 @@ import CONSTANTS from "../../commons/Constants";
 import "./view-notification.scss";
 import { showToaster } from "../../commons/common.utils";
 import { useHistory } from "react-router-dom";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
 const ViewNotification = ({ ...props }) => {
   let history = useHistory();
   const [viewNotificationState, setViewNotificationState] = useState({
     showReply: false,
     replyTxt: "",
   });
-
+  const reduxState = useSelector((state) => state, shallowEqual);
+  const [loggedInUserDetails, setLoggedInUserDetails] = useState({});
   const showReplyBlock = () =>
     _.get(props, "notification.action") === "PERSONAL_MESSAGE";
 
@@ -24,6 +26,11 @@ const ViewNotification = ({ ...props }) => {
     setViewNotificationState({ ...viewNotificationState, replyTxt: value });
   };
 
+  useEffect(() => {
+    const { userDetails = {} } = reduxState;
+    setLoggedInUserDetails(userDetails);
+  }, [reduxState.userDetails]);
+
   const sendMessage = () => {
     console.log(
       "viewNotificationState.replyTxt ===",
@@ -31,11 +38,12 @@ const ViewNotification = ({ ...props }) => {
     );
 
     NotificationInterface.postNotification(
-      _.get(props, "notification.to"),
-      _.get(props, "notification._id"),
+      _.get(loggedInUserDetails, "_id"),
+      _.get(props, "notification.from.userName"),
       _.get(props, "notification.action"),
       CONSTANTS.ACTION_STATUS.PENDING,
-      viewNotificationState.replyTxt
+      viewNotificationState.replyTxt,
+      _.get(props, "notification.payload")
     )
       .then((success) => {
         props.onHide();
@@ -71,9 +79,10 @@ const ViewNotification = ({ ...props }) => {
         break;
       case CONSTANTS.ACTIONS.COMMENT:
       case CONSTANTS.ACTIONS.UPVOTE:
+        let ideaID = JSON.parse(_.get(props, "notification.payload")).ideaID
         history.push({
           pathname:
-            "/signature/" + _.get(props, "notification.payload.ideaID"),
+            "/signature/" + ideaID,
         });
         break;
       case CONSTANTS.ACTIONS.PERSONAL_MESSAGE:
@@ -153,7 +162,7 @@ const ViewNotification = ({ ...props }) => {
           )}
           <hr></hr>
         </div>
-        <div className="footer">
+        { !viewNotificationState.showReply &&  <div className="footer">
           <Button
             variant="secondary"
             className="button"
@@ -176,7 +185,7 @@ const ViewNotification = ({ ...props }) => {
             {" "}
             Send a message
           </Button>
-        </div>
+        </div>}
       </Modal.Body>
     </Modal>
   );

@@ -40,6 +40,7 @@ const SendMessage = ({ ...props }) => {
     let payload = {
       ...sendMessage,
     };
+    debugger
     NotificationInterface.postNotification(sendMessage.from, sendMessage.to, CONSTANTS.ACTIONS.PERSONAL_MESSAGE, sendMessage.status, sendMessage.message)
       .then((success) => {
         console.log("message created");

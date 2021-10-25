@@ -232,7 +232,7 @@ const Header = (props) => {
             createnew();
           }}
         >
-          Claim Idea
+          Mint Idea
         </Button>
       );
     }

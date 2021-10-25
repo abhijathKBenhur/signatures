@@ -303,7 +303,7 @@ const SignatureNew = (props) => {
     switch (_.get(signature,"purpose.purposeType")) {
       case CONSTANTS.PURPOSES.SELL:
       case CONSTANTS.PURPOSES.LICENSE:
-        return "Buy for " + Web3Utils.fromWei(signature.price, "ether")
+        return "Buy for " + Web3Utils.fromWei(signature.price, "ether") +" MATIC"
 
 
       case CONSTANTS.PURPOSES.AUCTION:
