@@ -24,7 +24,7 @@ const ShareModal = (props) => {
         
         <Modal.Body className="share-modal-body">
           <div className="modal-header-wrapper">
-            <div className="image-placeholder">
+            <div className="image-placeholder p-3">
               <img src={props.thumbnail} alt="share idea" style={{borderRadius:"100%"}}/>
             </div>
           </div>

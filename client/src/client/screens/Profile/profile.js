@@ -504,7 +504,7 @@ function Profile(props) {
                                 });
                               }}
                             >
-                              <i className="fa fa-share"></i>
+                              <i className="fa fa-bullhorn"></i>
                             </Button>
                           </OverlayTrigger>
                         </Row>
