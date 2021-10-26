@@ -5,7 +5,7 @@ const FAQ = () => {
   return (
     <div className="main-content-component container">
       
-      {/* <Accordion >
+      <Accordion >
         <Accordion.Item eventKey="0">
           <Accordion.Header>What is IdeaTribe?</Accordion.Header>
           <Accordion.Body>
@@ -177,7 +177,7 @@ const FAQ = () => {
             are ready!
           </Accordion.Body>
         </Accordion.Item>
-      </Accordion> */}
+      </Accordion>
     </div>
   );
 };
