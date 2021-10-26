@@ -1,8 +1,8 @@
 {
-  "name": "eth-marketplace",
+  "name": "IdeaTribe",
   "version": "0.1.0",
-  "description": "An Ethereum Marketplace",
-  "author": "gregory@dappuniversity.com",
+  "description": "Ideas on Blockchain",
+  "author": "abhijathkbenhur@gmail.com",
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.35",
     "@fortawesome/free-solid-svg-icons": "^5.15.3",

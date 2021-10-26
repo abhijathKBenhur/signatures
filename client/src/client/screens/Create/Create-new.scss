@@ -166,7 +166,7 @@
                                 width: 16px;
                                 cursor: pointer;
                                 &.disable {
-                                pointer-events: none;
+                                    // pointer-events: none;
                                 }
                             }
                         }

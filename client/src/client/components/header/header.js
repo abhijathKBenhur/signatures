@@ -347,7 +347,7 @@ const Header = (props) => {
                     gotoPortfolio();
                   }}
                 >
-                  Register
+                  Sign Up
                 </Button>
               ) : (
                 isUserAuthForPublish()
