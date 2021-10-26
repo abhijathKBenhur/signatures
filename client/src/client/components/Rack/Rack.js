@@ -18,7 +18,7 @@ const Rack = (props) => {
       
       <Row className="rack mt-2">
         <Col md="12">
-          <span className="father-grey color-primary">Explore The tribe</span>
+          <span className="father-grey color-primary">Explore the Tribe</span>
 
           <Row className="deck-row text-center mt-4">
             {[...props.deck].map((signature, index) => {

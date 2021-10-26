@@ -48,7 +48,7 @@ const Wallet = (props) => {
           {/* <p className="master-grey"> MATIC </p> */}
         </div>
         <div className="next-step">
-          <p className="second-header "> You can load matic from other wallets. </p>
+          <p className="second-header "> You can load MATIC from other wallets. </p>
         </div>
       </div>
       {/* <div className="transaction-wrapper">
