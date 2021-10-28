@@ -586,6 +586,10 @@ const CreateNew = () => {
       function(response) {
         let region = countryMapping[response.country] || "Global"
         setFormData({ ...form, location: region });
+        setBillet({
+          ...billet,
+          location: region,
+        });
         SignatureInterface.addSignature({ ...form, location: region })
           .then((success) => {
             showToaster("Your idea is being submitted on the blockchain! Please wait for the confirmation billet.", {
@@ -736,6 +740,10 @@ const CreateNew = () => {
                         trigger="#"
                         data={hashList}
                         className="mentions__mention"
+                        appendSpaceOnAdd={true}
+                        displayTransform={(id, display) => {
+                          return "#"+display
+                        }}
                       />
                     </MentionsInput>
                   </Form.Group>

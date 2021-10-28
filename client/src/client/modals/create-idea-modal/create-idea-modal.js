@@ -459,8 +459,8 @@ const CreateIdeaModal = ({
       
     }
   }
-  function openInEtherscan() {
-    window.open("https://kovan.etherscan.io/tx/" + billet.transactionID);
+  function openInPolygon() {
+    window.open("https://mumbai.polygonscan.com/tx/" + billet.transactionID);
   }
 
   const getElement = () => {
@@ -493,7 +493,7 @@ const CreateIdeaModal = ({
                         <div className="user second-grey">@{billet.creator}</div>
                         {/* <div className="name">{billet.fullName}</div> */}
                         <div className="link">
-                          ideaTribe.com | Your ideas on blockchain{" "}
+                          IdeaTribe.com | Your Ideas on blockchain{" "}
                         </div>
                       </div>
                     </Col>
@@ -576,7 +576,7 @@ const CreateIdeaModal = ({
                   <i className="fa fa-crosshairs cursor-pointer signature-icons mr-2"
                     color="#F39422"
                     onClick={() => {
-                      openInEtherscan();
+                      openInPolygon();
                     }}
                   ></i>
                   <i

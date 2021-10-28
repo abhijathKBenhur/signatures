@@ -1,8 +1,15 @@
+@import "../../commons/Common.scss";
 .scrolable-comments {
   // height: calc(100vh - 600px);
   overflow-y: scroll;
   .comment-item {
     padding-bottom: 1.1rem;
+    .content{
+      .person-mention{
+        color: $secondary;
+        cursor: pointer;
+      }
+    }
     .user-circle {
       height: 30px;
       width: 30px;
@@ -19,7 +26,7 @@
     // font-size: 1rem;
     font-weight: 400;
     line-height: 1.5;
-    color: #495057;
+    color: transparent;
     background-color: #fff !important;
     background-clip: padding-box;
     border: 1px solid #ced4da;
@@ -43,10 +50,6 @@
   padding: 1px;
   border: 2px inset transparent;
 }
-.mentions--singleLine .mentions__input {
-  padding: 5px;
-  border: 2px inset;
-}
 
 .mentions--multiLine .mentions__control {
   // font-size: 14pt;
@@ -62,11 +65,17 @@
   padding: 7px;
 }
 .mentions--multiLine .mentions__input {
-  padding: 9px;
+  padding: 8px;
   min-height: 63px;
   outline: 0;
   border: 0;
-  font-size: 1.3rem;
+  caret-color: $primary;
+  color: transparent;
+}
+
+.mentions__highlighter__substring{
+  visibility: visible !important;
+  color: $grey-dark !important;
 }
 
 .mentions__suggestions__list {
@@ -79,7 +88,11 @@
 .mentions__suggestions__item {
   padding: 2px 10px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.15);
-  font-size: 1.3rem;
+  font-size: 1rem;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 18px;
+  color: $grey-dark;
 }
 
 
@@ -91,6 +104,7 @@
 }
 
 .mentions__mention {
-  background-color: lighten(#79579F, 30%);
-  font-size: 1.3rem;
+  // background-color: lighten(#79579F, 30%);
+  // font-size: 1.3rem;
+  color: $secondary;
 }

@@ -79,10 +79,10 @@ const ViewNotification = ({ ...props }) => {
         break;
       case CONSTANTS.ACTIONS.COMMENT:
       case CONSTANTS.ACTIONS.UPVOTE:
-        let ideaID = JSON.parse(_.get(props, "notification.payload")).ideaID
+        let PDFHash = JSON.parse(_.get(props, "notification.payload")).PDFHash
         history.push({
           pathname:
-            "/signature/" + ideaID,
+            "/signature/" + PDFHash,
         });
         break;
       case CONSTANTS.ACTIONS.PERSONAL_MESSAGE:

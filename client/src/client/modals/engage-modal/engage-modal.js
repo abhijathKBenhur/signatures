@@ -64,7 +64,6 @@ const EngageModal = (props) => {
       value: window.web3.utils.toWei(transactionInititationRequest.price, "ether")
     });
     
-    setEngaging(app_constants.ACTION_STATUS.PENDING);
   }
 
   function transactionCompleted(successResponse) {
@@ -121,6 +120,7 @@ const EngageModal = (props) => {
   };
 
   const engage = (purpose) => {
+    setEngaging(app_constants.ACTION_STATUS.PENDING);
     switch (purpose.purposeType) {
       case CONSTANTS.PURPOSES.SELL:
         let payLoad = {
@@ -206,15 +206,7 @@ const EngageModal = (props) => {
             </Col>
           </Row>
         </div>
-        <div className="selective-component">
-          {/* <div>{getConditionalCompnent()}</div> */}
-
-          {/* {form.purpose.purposeType == CONSTANTS.PURPOSES.COLLAB &&  */}
-          <Col>
-            <span>{form.purpose.message}</span>
-          </Col>
-          {/* } */}
-        </div>
+    
 
         <Col xs="12" className="button-bar justify-content-between d-flex">
           <Button
