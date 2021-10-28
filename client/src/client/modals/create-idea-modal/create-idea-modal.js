@@ -20,18 +20,18 @@ import technicalPlaceHolder from "../../../assets/images/technical.png";
 import CONSTANTS from "../../commons/Constants";
 import Select from "react-select";
 import * as reactShare from "react-share";
-import { Download, Crosshair } from "react-feather";
+import { Download } from "react-feather";
 import "./create-idea-modal.scss";
 import loadingGif from "../../../assets/images/loader_blocks.gif";
 import QRCode from "qrcode";
-import signatureImage from "../../../assets/logo/signatures.png";
+import signatureImage from "../../../assets/logo/gradiant_logo.png";
 import jspdf from "jspdf";
 import _ from "lodash";
 import domtoimage from "dom-to-image";
 import { getPurposeIcon } from "../../commons/common.utils";
 import { shallowEqual, useSelector } from "react-redux";
 import ClanInterface from "../../interface/ClanInterface";
-import cover from "../../../assets/images/backgroundcss.png";
+import cover from "../../../assets/images/billet_background.png";
 import { useHistory } from "react-router-dom";
 import EmitInterface from "../../interface/emitInterface";
 const CreateIdeaModal = ({
@@ -51,6 +51,7 @@ const CreateIdeaModal = ({
   publishError,
   billet,
   closeBtn,
+  isView,
   ...props
 }) => {
   const reduxState = useSelector((state) => state, shallowEqual);
@@ -483,7 +484,8 @@ const CreateIdeaModal = ({
                 <div className="left-strip"> </div>
                 <Col
                   md="8"
-                  className="center-strip d-flex flex-column justify-content-around"
+                  className="center-strip d-flex flex-column justify-content-around" 
+                  style={{ background: `url(${cover})`}}
                 >
                   <Row className="row1">
                     <Col md="12">
@@ -508,10 +510,9 @@ const CreateIdeaModal = ({
                   </Row>
                   <Row className="row2 justify-content-center row">
                     <Col md="12" className="justify-content-center row">
-                      <div className="billet-item justify-content-center">
-                        <div className="item">{billet.title}</div>
-                        <br></br>
-                        <div className="time">
+                      <div className="billet-item justify-content-center text-center">
+                        <div className="item uppercase">{billet.title}</div>
+                        <div className="time uppercase">
                           {" "}
                           {timeFormatted(billet.time)}
                         </div>
@@ -522,21 +523,22 @@ const CreateIdeaModal = ({
                   <Row className="row3 mt-3">
                     <Col md="12">
                       <div className="billet-item">
-                        <div className="trasnection-details">
+                        
+                        <div className="trasnection-details mt-3">
+                          <div className="transaction-head">TOKEN ID:</div>
+                          <span className="hashValue">{billet.ideaID}</span>
+                        </div>
+                        <div className="trasnection-details mt-3">
+                          <div className="transaction-head">FILE HASH:</div>
+                          <span className="hashValue uppercase">{billet.PDFHash}</span>
+                        </div>
+                        <div className="trasnection-details mt-3">
                           <div className="transaction-head">
                             TRANSACTION ID:
                           </div>
-                          <span className="hashValue">
+                          <span className="hashValue uppercase">
                             {billet.transactionID}
                           </span>
-                        </div>
-                        <div className="trasnection-details">
-                          <div className="transaction-head">FILE HASH:</div>
-                          <span className="hashValue">{billet.PDFHash}</span>
-                        </div>
-                        <div className="trasnection-details">
-                          <div className="transaction-head">TOKEN ID:</div>
-                          <span className="hashValue">{billet.tokenID}</span>
                         </div>
                       </div>
                     </Col>
@@ -544,8 +546,7 @@ const CreateIdeaModal = ({
                 </Col>
                 <Col
                   md="4"
-                  className="right-strip   d-flex flex-column justify-content-around"
-                  style={{ background: `url(${cover})` }}
+                  className="right-strip d-flex flex-column justify-content-around"
                 >
                   <div className="brand text-center">
                     <Col
@@ -567,22 +568,24 @@ const CreateIdeaModal = ({
                 </Col>
               </Col>
             </Row>
-            <Row className="button-section  d-flex">
+            {isView && <Row className="view-close-btn">
+              <i className="fa fa-close" onClick={closeBtn}></i>
+            </Row>}
+            <Row className={`button-section d-flex ${isView? 'view-only': ''}`}>
               <Col xs="10" className="button-bar justify-content-start">
-                  <Crosshair
-                    className="cursor-pointer signature-icons mr-2"
+                  <i className="fa fa-crosshairs cursor-pointer signature-icons mr-2"
                     color="#F39422"
                     onClick={() => {
                       openInEtherscan();
                     }}
-                  ></Crosshair>
-                  <Download
-                    className="cursor-pointer signature-icons"
+                  ></i>
+                  <i
+                    className="fa fa-download cursor-pointer signature-icons"
                     color="#F39422"
                     onClick={() => {
                       exportToPdf();
                     }}
-                  ></Download>
+                  ></i>
                   <Dropdown>
                     <Dropdown.Toggle variant="success" id="dropdown-share">
                       <i className="fa fa-bullhorn"></i>
@@ -640,7 +643,7 @@ const CreateIdeaModal = ({
                 {!closeBtn && <Button className="submit-btn btn-ternary" onClick={gotoIdea}>
                   Done
                 </Button>}
-                {closeBtn && <Button className="submit-btn btn-ternary" onClick={closeBtn}>
+                {closeBtn && !isView && <Button className="submit-btn btn-ternary" onClick={closeBtn}>
                   Close
                 </Button>}
               </Col>

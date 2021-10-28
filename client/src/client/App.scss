@@ -18,7 +18,7 @@ body {
   font-family: "Inter, system-ui", Tahoma, Geneva, Verdana, sans-serif;
   .signature-icons {
     color: $primary !important;
-    stroke: $white;
+    stroke: $primary;
   }
   .react-share__ShareButton {
     color: $white;
@@ -401,4 +401,8 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 }
 .d-flex-mobile{
   display: flex;
+}
+
+.uppercase{
+  text-transform: uppercase;
 }
