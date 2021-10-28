@@ -26,6 +26,7 @@ import userImg from "../../../assets/images/user.png";
 import _ from "lodash";
 import ShareModal from "../../modals/share/share.modal";
 import EngageModal from "../../modals/engage-modal/engage-modal";
+import DetailsModal from "../../modals/details-modal/details-modal";
 
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import CreateIdeaModal from "../../modals/create-idea-modal/create-idea-modal";
@@ -54,6 +55,7 @@ const SignatureNew = (props) => {
     shareModal: false,
     infoModal: false,
     engageModal: false,
+    detailsModal: false
   });
 
   const [audioState, setAudioState] = useState({
@@ -247,6 +249,9 @@ const SignatureNew = (props) => {
       case "engage":
         setModalShow({ ...showModal, engageModal: true });
         break;
+      case "details":
+        setModalShow({ ...showModal, detailsModal: true });
+        break;
       default:
         break;
     }
@@ -386,7 +391,7 @@ const SignatureNew = (props) => {
                               View on chain
                             </Dropdown.Item>
                                 <Dropdown.Item onClick={() => { viewBillet()}}>
-                                View  Billet
+                                View Billet
                             </Dropdown.Item>
                               </Dropdown.Menu>
                           </Dropdown>
@@ -447,15 +452,30 @@ const SignatureNew = (props) => {
                           {signature.owner &&
                             loggedInUserDetails.userName ==
                               _.get(signature, "owner.userName") && (
-                              <div>
-                                <Button
-                                  variant="action"
-                                  className="small ml-1"
-                                  onClick={() => showModal("info")}
-                                >
-                                  {" "}
-                                  <i className="fa fa-cog"></i>
-                                </Button>
+                              <div className="action-btns">
+                                
+                                <Dropdown>
+                                  <Dropdown.Toggle variant="success" id="dropdown-settings">
+                                  <Button
+                                        variant="action"
+                                        className="small ml-1"
+                                      >
+                                        {" "}
+                                        <i className="fa fa-cog"></i>
+                                      </Button>
+                                  </Dropdown.Toggle>
+
+                                  <Dropdown.Menu>
+                                    <Dropdown.Item onClick={() => {
+                                        showModal("info")
+                                  }}>
+                                    Edit Engagement
+                                  </Dropdown.Item>
+                                      <Dropdown.Item onClick={() => { showModal("details")}}>
+                                      Edit details
+                                  </Dropdown.Item>
+                                    </Dropdown.Menu>
+                                </Dropdown>
                               </div>
                             )}
                           {loggedInUserDetails.userName &&
@@ -588,6 +608,15 @@ const SignatureNew = (props) => {
           onHide={() => hideModal("engage")}
         />
       )}
+      {modalShow.detailsModal && (
+        <DetailsModal
+          {...signature}
+          show={modalShow.engageModal}
+          idea={signature}
+          currentUser={loggedInUserDetails}
+          onHide={() => hideModal("details")}
+        />
+      )}
       {modalShowBillet && (
         <CreateIdeaModal
           show={modalShowBillet}
@@ -595,6 +624,7 @@ const SignatureNew = (props) => {
           publishState={"PASSED"}
           billet={getSignature()}
           closeBtn={closeBtnFn}
+          isView={"true"}
         />
       )}
     </div>

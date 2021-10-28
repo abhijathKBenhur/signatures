@@ -335,20 +335,28 @@
       opacity: 0.1;
     }
     .center-strip{
-      margin-top: 20px;
-      margin-bottom: 20px;
+      padding-top: 20px;
+      padding-bottom: 20px;
+      background-repeat: repeat !important;
+      background-size: cover !important;
+      border-right: 1px solid white;
+    }
+    .view-only {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      right: 11px;
     }
     .button-section {
       margin: 0 0px 0px 0;
       border-bottom-left-radius: 6px;
       border-bottom-right-radius: 6px;
-      background: linear-gradient(to right, #4AA0CD, #79579F);
       padding: 10px 0;
       .dropdown-toggle {
         background: transparent;
         border: none !important;
         box-shadow: none !important;
-        color: $white;
+        color: $primary;
         &::after{
           content: '';
         }
@@ -365,6 +373,11 @@
         justify-content: flex-end;
         align-items: center;
         z-index: 3;
+        #dropdown-share{
+          &::after{
+            display: none;
+          }
+        }
         @media (min-width: 920px) {
           position: sticky;
           top: 40px;
@@ -416,21 +429,26 @@
     font-size: 10px;
     opacity: .7;
   }
+  .trasnection-details {
+    line-height: 10px;
+  }
   .transaction-head {
     color: #776ce2;
     font-size: 12px;
   }
   .hashValue{
     color: #3d3c39;
-    font-size: 11px;
+    font-size: 0.5rem;
+    word-break: break-word;
   }
   .item {
     color: #403b6c;
     font-size: 24px;
     text-align: center;
+    font-weight: bold;
   }
   .time {
-    color: #6a6967;
+    color: $secondary;
   }
 }
 .right-strip {
@@ -438,17 +456,24 @@
   // border-right: 18px solid #72599c;
   border-top-right-radius: 10px;
   .billet-item-head{
-    color: $white;
+    color: $primary;
     font-size: 30px;
     text-align: center;
     font-weight: 600;
+    line-height: 10px;
   }
   .billet-item-text{
-    color: white;
+    color: $primary;
     font-size: 14px;
     font-weight: 600;
     font-family: system-ui;
     text-align: center;
 
   }
+}
+.view-close-btn {
+  position: absolute;
+  top: 8px;
+  right: 25px;
+  color: $primary;
 }
