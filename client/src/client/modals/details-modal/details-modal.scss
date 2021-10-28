@@ -1,0 +1,110 @@
+@import "../../commons/Common.scss";
+.info-modal-dialog{
+    top: 30px;
+    .modal-content{
+        border-radius: 12px;
+        .info-modal-body{
+           
+            padding: 48px;
+            .selective-component{
+              
+              .collab-section{
+                .dropdown{
+                  .dropdown-toggle{
+                    border: 1px solid #cccccc !important;
+                    &::after{
+                      margin-left: 0;
+                      position: absolute;
+                      right: 8px;
+                    }
+                    &:focus, &:active, &:hover{
+                      color: #48484a;
+                      background: $white;
+                    }
+                  }
+                }
+              }
+            }
+            .purpose-selection {
+                margin: 15px;
+                .status_message{
+                  &.SUCCESS{
+                    
+                  }
+                  &.FAILED{
+                    
+                  }
+                }
+                .purpose-message{
+                }
+              }
+        }
+    }
+    .image-placeholder {
+      width: 100%;
+      background: #fff;
+      color: #fff;
+      position: relative;
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      img {
+        width: 300px;
+        height: 300px;
+        object-fit: contain;
+      }
+      .empty-image-row {
+        padding: 35px;
+        width: 300px;
+        height: 300px;
+        .emptyImage {
+          border: 1px dashed $greyLight-3;
+          padding: 10px;
+          border-radius: 8px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          .placeholder-image {
+            width: 100px;
+            height: 100px;
+          }
+          p {
+            margin: 10px 0;
+            color: $primary-light;
+            text-align: center;
+            &.invalid-paragraph {
+              color: $danger;
+              margin: 1rem 0;
+              font-size: 12px;
+            }
+          }
+          &:hover{
+            cursor: url("../../../assets/images/art.png"), auto;
+          }
+        }
+      }
+      .imageUploaded {
+        display: flex;
+        justify-content: center;
+        .remove-thumbnail-btn {
+          margin-bottom: 16px;
+          padding: 10px;
+          height: auto;
+          border: none !important;
+          border-radius: 8px;
+          color: $grey-dark;
+          font-size: 15px;
+          position: absolute;
+          right: 15px;
+          top: 10px;
+          &:hover,
+          &:active {
+            background-color: transparent;
+            color: #6c757d;
+          }
+        }
+      }
+    }
+}
