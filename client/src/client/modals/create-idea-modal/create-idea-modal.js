@@ -514,7 +514,7 @@ const CreateIdeaModal = ({
                         <div className="item uppercase">{billet.title}</div>
                         <div className="time uppercase">
                           {" "}
-                          {timeFormatted(billet.time)}
+                          {timeFormatted(billet.time) } {billet.location}
                         </div>
                       </div>
                     </Col>

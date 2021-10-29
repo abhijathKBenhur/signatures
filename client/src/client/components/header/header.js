@@ -25,6 +25,7 @@ import ReactDOM from 'react-dom';
 import { func } from "prop-types";
 import EmitInterface from "../../interface/emitInterface";
 import CommentsInterface from "../../interface/CommentsInterface";
+import reactGA from "react-ga";
 
 import TransactionsInterface from "../../interface/TransactionInterface";
 const Header = (props) => {
@@ -59,6 +60,9 @@ const Header = (props) => {
     updatePendingTransactions()
     setPathName(window.location.pathname)
     addDefaultHashtags();
+
+    reactGA.initialize("UA-207963115-1");
+    reactGA.pageview("Subscribe Page");
   }, []);
 
   useEffect(() => {
@@ -180,6 +184,12 @@ const Header = (props) => {
 
   function createnew() {
     history.push("/create");
+
+  reactGA.event({
+    category: "Button",
+    action: "CLICK_MINT",
+    label: "Clicked mint button",
+  });
     setAppLocatoin("create");
   }
 
@@ -344,6 +354,11 @@ const Header = (props) => {
                   className="button"
                   bsstyle="primary"
                   onClick={() => {
+                    reactGA.event({
+                      category: "Button",
+                      action: "REGISTER_BUTTON",
+                      label: "Clicked register button",
+                    });
                     gotoPortfolio();
                   }}
                 >

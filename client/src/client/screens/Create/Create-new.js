@@ -20,7 +20,7 @@ import { useHistory } from "react-router-dom";
 import { MentionsInput, Mention } from 'react-mentions'
 import countryJSON from "../../../assets/data/countries.json"
 import "./Create-new.scss";
-
+import reactGA from "react-ga";
 // import creativeArt from "../../../assets/palceholders"
 
 import {
@@ -112,6 +112,7 @@ const CreateNew = () => {
   });
   const [modalShow, setModalShow] = useState(false);
   const [billet, setBillet] = useState({
+    ...billet, 
     creator: form.owner,
     fullName: userDetails.firstName + " " + userDetails.lastName,
     title: form.title,
@@ -546,6 +547,11 @@ const CreateNew = () => {
   }
   
   function transactionCompleted(successResponse) {
+    reactGA.event({
+      category: "Button",
+      action: "MINT_SUCCESS",
+      label: "User minted the idea",
+    });
     updateCompletion(successResponse);
     setBillet({
       creator: userDetails.userName,
@@ -561,6 +567,11 @@ const CreateNew = () => {
   }
 
   function transactionFailed(errorMessage,failedTransactionId) {
+    reactGA.event({
+      category: "Button",
+      action: "MINT_FAILED",
+      label: "User failed to mint the idea",
+    });
     setPublishState(FAILED);
     setPublishError(
       "The idea couldnt be published to blockchain. " + errorMessage
@@ -586,10 +597,6 @@ const CreateNew = () => {
       function(response) {
         let region = countryMapping[response.country] || "Global"
         setFormData({ ...form, location: region });
-        setBillet({
-          ...billet,
-          location: region,
-        });
         SignatureInterface.addSignature({ ...form, location: region })
           .then((success) => {
             showToaster("Your idea is being submitted on the blockchain! Please wait for the confirmation billet.", {

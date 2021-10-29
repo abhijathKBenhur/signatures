@@ -26,7 +26,7 @@ import UserInterface from "../../interface/UserInterface";
 import Cookies from "universal-cookie";
 import ProgressBar from "../../components/progressbar/progress";
 import NotificationInterface from "../../interface/NotificationInterface";
-
+import reactGA from "react-ga";
 // MetamaskID and userDetails are stored in separate redux stores
 // userDetails are stored as state
 
@@ -117,6 +117,11 @@ const Register = (props) => {
               setCookie(mongoSuccess.token);
               publishUserToApp();
               setRegistration(PASSED);
+              reactGA.event({
+                category: "Button",
+                action: "USER_REGISTERED",
+                label: "User registered",
+              });
               BlockchainInterface.addToken("ERC20", "TRBG", 18);
             })
             .catch((err) => {
@@ -135,6 +140,11 @@ const Register = (props) => {
     UserInterface.removeUser({
       userName: userDetails.userName
     })
+    reactGA.event({
+      category: "Button",
+      action: "USER_REGISTER_FAILED",
+      label: "User registered failed",
+    });
     setRegistration(FAILED);
     setregistrationErrorMessage(message);
   }
