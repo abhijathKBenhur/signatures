@@ -268,6 +268,11 @@ const Header = (props) => {
     return window.location.pathname.indexOf("signature") > -1;
   }
 
+  const redirectTo = (route) => {
+    setMenu({ ...menu, showMenu: false});
+    history.push(route);
+  }
+
   return (
     <div>
       <nav className="navbar navbar-light bg-light flex-md-nowrap shadow appHeader justify-content-center">
@@ -406,13 +411,31 @@ const Header = (props) => {
       </nav>
       <Register show={showRegisterPopup} onHide={() => hideModal()}></Register>
       {menu.showMenu && <div className="mobile-menu"> 
-          {appLocation == "home" && <div className="items" onClick={(e) => gotoProfile(false)}> Profile </div>}
-          {appLocation == "home" && <div className="items" onClick={(e) => gotoProfile(true)}> Notification </div>} 
-          {(appLocation == "profile" && !menu.showNotification) && <div className="items" onClick={(e) => gotoNotification()}> Notification </div>}
-          {(appLocation == "profile" && menu.showNotification) && <div className="items" onClick={(e) => gotoHome(true)}> Home </div>}
-          {(appLocation == "profile" && menu.showNotification) && <div className="items" onClick={(e) => gotoProfile()}> Profile </div>}
-          {isIdeaPage() && <div className="items" onClick={(e) => gotoComments()}> Comments </div>}
+          {appLocation == "home" && <div className="items" onClick={(e) => gotoProfile(false)}> <img
+                src={logo}
+                width="45"
+                height="45"
+                alt=""
+                className=""
+              ></img> Profile </div>}
+          {appLocation == "home" && <div className="items" onClick={(e) => gotoProfile(true)}> <i className="fa fa-bell"></i>Notification </div>} 
+          {(appLocation == "profile" && !menu.showNotification) && <div className="items" onClick={(e) => gotoNotification()}> <i className="fa fa-bell"></i> Notification </div>}
+          {(appLocation == "profile" && menu.showNotification) && <div className="items" onClick={(e) => gotoHome(true)}>  Home </div>}
+          {(appLocation == "profile" && menu.showNotification) && <div className="items" onClick={(e) => gotoProfile()}> <img
+                src={logo}
+                width="45"
+                height="45"
+                alt=""
+                className=""
+              ></img> Profile </div>}
+          {isIdeaPage() && <div className="items" onClick={(e) => gotoComments()}> <i className="fa fa-comment"></i> Comments </div>}
           {isIdeaPage() && <div className="items" onClick={(e) => gotoHome(true)}> Home </div>}
+          {/* <div className="items" onClick={(e) => redirectTo("/about")}> <i className="fa fa-info"></i> About IdeaTribe </div>
+          <div className="items" onClick={(e) => redirectTo("/Tokenomics")}> <i className="fa fa-dollar"></i>Tokenomics </div>
+          <div className="items" onClick={(e) => redirectTo("/FAQ")}> <i className="fa fa-question-circle"></i>FAQs </div>
+          <div className="items" onClick={(e) => redirectTo("/about")}> <i className="fa fa-file-text"></i> Terms </div>
+          <div className="items" onClick={(e) => redirectTo("/about")}> <i className="fa fa-lock"></i> Privacy </div>
+          <div className="items" onClick={(e) => redirectTo("/about")}> <i className="fa fa-comment"></i>Contact Us </div> */}
       </div>}
     </div>
   );

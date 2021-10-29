@@ -668,16 +668,7 @@ const CreateNew = () => {
   return (
     <Container fluid className="create-container">
       <Row className="createform  d-flex">
-        <Col xs="12" className="top-bar">
-          <div/>
-          <Button
-            className="submit-btn"
-            onClick={() => checkValidationOnButtonClick()}
-          >
-            Continue
-          </Button>
-        </Col>
-        <Col md="11" sm="11" lg="11" xs="12" className="page-content">
+        <Col md="11" sm="11" lg="11" xs="12" className="page-content mb-3">
           <div className="step-container">
             {form.PDFFile ? (
               <>
@@ -752,6 +743,15 @@ const CreateNew = () => {
               </div>
             </Col>
           </div>
+        </Col>
+        <Col xs="12" className="top-bar">
+          <div/>
+          <Button
+            className="submit-btn"
+            onClick={() => checkValidationOnButtonClick()}
+          >
+            Continue
+          </Button>
         </Col>
       </Row>
       {modalShow && (

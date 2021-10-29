@@ -174,7 +174,7 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
             color: #6c757d;
         }
         &:focus{
-          color: unset;
+          color: initial;
         }
         &.small{
           height: 50px;
@@ -328,6 +328,26 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
   .desktop-view {
     display: none !important;
   }
+  #txtmeLivechatWrapper, .loggedinaccount, .fixed-bottom {
+    display: none !important;
+  }
+  .app-content {
+    margin-bottom: 20px;
+  }
+  .search-container{
+    height: 160px !important;
+    .search-bar-container{
+      width: 100% !important;
+      .search-dropdown-container{
+        width: 100% !important;
+        text-align: center;
+        #search-box {
+          width: 100%;
+        }
+      }
+    }
+  }
+  
   .mobile-view {
     display: block !important;
   }
@@ -396,7 +416,14 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
   border: 1px solid rgba(0,0,0,.15);
   width: 50%;
   .items{
-    
+    text-align: left;
+    i{
+      color: $secondary;
+      font-size: 24px;
+      width: 45px;
+      height: 45px;
+      padding-left: 10px;
+    }
   }
 }
 .d-flex-mobile{
