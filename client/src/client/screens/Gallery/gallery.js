@@ -11,10 +11,10 @@ import { useHistory } from "react-router-dom";
 import Cookies from "universal-cookie";
 import DiscoverMore from "../../components/discover-more/discover-more";
 import SearchBar from "../../components/searchBar/SearchBar";
-import berklee from "../../../assets/images/announcements/berklee.png"
-import TRBG from "../../../assets/images/announcements/TRBG.png"
-import brand from "../../../assets/images/announcements/logo_blue.png"
-import cover from "../../../assets/images/cover.png"
+import berklee from "../../../assets/images/announcements/berklee.png";
+import TRBG from "../../../assets/images/announcements/TRBG.png";
+import brand from "../../../assets/images/announcements/logo_blue.png";
+import cover from "../../../assets/images/cover.png";
 
 import CommentsPanel from "../../components/comments/CommentsPanel";
 function gallery(props) {
@@ -42,15 +42,15 @@ function gallery(props) {
   }, []);
 
   function refreshCollection(type, filter) {
-    let constraints = {}
+    let constraints = {};
     switch (type) {
       case CONSTANTS.FILTERS_TYPES.SEARCH:
         setGalleryFilters({ ...galleryFilters, searchString: filter });
-        constraints = {...galleryFilters, searchString: filter}
+        constraints = { ...galleryFilters, searchString: filter };
         break;
       case CONSTANTS.FILTERS_TYPES.CATEGORY_FILTER:
         setGalleryFilters({ ...galleryFilters, categories: filter });
-        constraints = {...galleryFilters, categories: filter}
+        constraints = { ...galleryFilters, categories: filter };
         break;
     }
     reloadGallery(constraints);
@@ -59,8 +59,8 @@ function gallery(props) {
   const reloadGallery = (constraints) => {
     SignatureInterface.getSignatures(constraints).then((signatures) => {
       let response = _.get(signatures, "data.data");
-      console.log(response)
-      setCollectionList(response)
+      console.log(response);
+      setCollectionList(response);
     });
   };
 
@@ -81,6 +81,72 @@ function gallery(props) {
       });
     });
   };
+
+  const getThreeNotifications = () => {
+    let array = [
+      <div className="activity-entry d-flex flex-row">
+        <div className="activity-content  d-flex flex-column">
+          <div className="activity-title master-grey">
+            Partnership announcement
+          </div>
+          <div className="activity-description second-grey">
+            IdeaTribe inks MoU with Berklee School of Music to collaborate on
+            developing principles for music rights and their use.
+          </div>
+        </div>
+        <div className="activity-thumbnail">
+          <Image src={berklee} height="50px" width="50px" roundedCircle />
+        </div>
+      </div>,
+
+      <div className="activity-entry d-flex flex-row mt-3">
+        <div className="activity-content  d-flex flex-column">
+          <div className="activity-title master-grey">
+            It’s raining TribeGold!
+          </div>
+          <div className="activity-description second-grey">
+            Earn TribeGold for publishing ideas and inviting friends.
+          </div>
+        </div>
+        <div className="activity-thumbnail">
+          <Image src={TRBG} width="50px" height="50px" />
+        </div>
+      </div>,
+
+<div className="activity-entry d-flex flex-row mt-3">
+  <div className="activity-content  d-flex flex-column">
+    <div className="activity-title master-grey">
+      Versioning Feature coming soon
+    </div>
+    <div className="activity-description second-grey">
+      You can soon update & re-tokenize your ideas. That way you don’t
+      have to wait for your idea to be perfect to mint an NFT of it.
+    </div>
+  </div>
+  <div className="activity-thumbnail">
+    <Image src={brand} width="50px" height="50px" roundedCircle />
+  </div>
+</div>,
+
+<div className="activity-entry d-flex flex-row mt-3">
+  <div className="activity-content  d-flex flex-column">
+    <div className="activity-title master-grey">
+      First ideas are on us!
+    </div>
+    <div className="activity-description second-grey">
+      We are payiing your gas fee to post your initial 5 ideas!
+    </div>
+  </div>
+  <div className="activity-thumbnail">
+    <Image src={brand} width="50px" height="50px" roundedCircle />
+  </div>
+</div>
+    ];
+    const shuffled = array.sort(() =>  Math.random() - 0.5);
+
+    // Get sub-array of first n elements after shuffled
+    return shuffled.slice(0, 3);
+  }
 
   return (
     <Container fluid>
@@ -142,7 +208,7 @@ function gallery(props) {
             className="d-flex flex-column align-content-center position-relative justify-content-center search-container"
             style={{
               background: `url(${cover})`,
-                height: "300px",
+              height: "300px",
             }}
           >
             <SearchBar searchTextChanged={refreshCollection} />
@@ -157,52 +223,14 @@ function gallery(props) {
               Recent stories
             </span>
             <hr></hr> */}
-            <div className="activity-entry d-flex flex-row">
-              <div className="activity-content  d-flex flex-column">
-                <div className="activity-title master-grey">
-                  Partnership announcement
-                </div>
-                <div className="activity-description second-grey">
-                  IdeaTribe inks MoU with Berklee School of Music to collaborate on developing principles for music rights and their use.
-                </div>
-              </div>
-              <div className="activity-thumbnail">
-                <Image src={berklee}  height="50px" width="50px" roundedCircle />
-              </div>
-            </div>
-
-            <div className="activity-entry d-flex flex-row mt-3">
-              <div className="activity-content  d-flex flex-column">
-                <div className="activity-title master-grey">
-                  It’s raining TribeGold!
-                </div>
-                <div className="activity-description second-grey">
-                  Earn TribeGold for publishing ideas and inviting friends.
-                </div>
-              </div>
-              <div className="activity-thumbnail">
-              <Image src={TRBG} width="50px"  height="50px"  />
-              </div>
-            </div>
-
-            <div className="activity-entry d-flex flex-row mt-3">
-              <div className="activity-content  d-flex flex-column">
-                <div className="activity-title master-grey">
-                  Versioning Feature coming soon
-                </div>
-                <div className="activity-description second-grey">
-                  You can soon update & re-tokenize your ideas. That way you don’t have to wait for your idea to be perfect to mint an NFT of it.
-                </div>
-              </div>
-              <div className="activity-thumbnail">
-              <Image src={brand}  width="50px"  height="50px" roundedCircle />
-              </div>
-            </div>
+            {getThreeNotifications()}
           </div>
           <hr></hr>
 
           <div className="gutter-block mt-3 comments">
-            <span className="second-header color-primary">Talk to the tribe</span>
+            <span className="second-header color-primary">
+              Talk to the tribe
+            </span>
             <CommentsPanel entity={CONSTANTS.ENTITIES.PUBLIC}></CommentsPanel>
           </div>
         </Col>

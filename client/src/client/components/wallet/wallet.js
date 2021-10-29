@@ -8,6 +8,7 @@ const Wallet = (props) => {
   const [goldBalance, setGoldBalance] = useState(0);
   const [maticBalance, setMaticBalance] = useState(0);
 
+
   useEffect(() => {
     BlockchainInterface.getGoldBalance()
     .then((success) => {
@@ -24,7 +25,9 @@ const Wallet = (props) => {
     <div className="wallet-wrapper mb-3">
       <div
         className="wallet-container"
-        // onClick={() => selectWalletHandler(coinType)}
+        onClick={() => 
+          window.open("https://mumbai.polygonscan.com")
+        }
       >
       <div className="wallet-type">
         <p className="father-grey color-primary"> {goldBalance} TRIBE GOLD</p>
@@ -39,7 +42,9 @@ const Wallet = (props) => {
       </div>
       <div
         className="wallet-container"
-        // onClick={() => selectWalletHandler(coinType)}
+        onClick={() => 
+          window.open("https://mumbai.polygonscan.com")
+        }
       >
         <div className="wallet-type">
           <p className="father-grey color-secondary"> {maticBalance} MATIC</p>

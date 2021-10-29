@@ -41,7 +41,7 @@ const CommentsPanel = (props) => {
         console.log(item);
         res.push({
           id: item.userName,
-          display: item.firstName + " " + item.lastName,
+          display: item.userName,
         });
       });
 
@@ -99,7 +99,7 @@ const CommentsPanel = (props) => {
           value,
           props.entity
         ).then((success) => {
-          setState({...state, value:''})
+          setState({ ...state, value: "" });
           let commentsCOpy = _.clone(comments);
           commentsCOpy.unshift({
             from: loggedInUserDetails,
@@ -145,14 +145,38 @@ const CommentsPanel = (props) => {
     console.log(notifiedUsersList);
   };
 
+  const gotoProfile = (userName) =>{
+    history.push({
+      pathname: "/profile/" + userName,
+    })
+  }
+
+  const destructureComment = (comment) => {
+    return (
+      <div>
+        {_.map(comment.split(" "), (word) => {
+          return (
+            _.startsWith(word, "@") ? 
+             <span className="person-mention"
+             onClick={() => {
+               gotoProfile(word.replace("@",""))
+             }}
+             >{word}  {" "}</span>:
+             <span className="">{word} {" "}</span>
+          )
+        })}
+      </div>
+    );
+  };
+
   return (
-    <ListGroup className="">
+    <ListGroup className="comments-panel">
       {!_.isEmpty(loggedInUserDetails.userName) && (
         <MentionsInput
           value={state.value}
           onChange={handleChanges}
           markup="@{{__type__||__id__||__display__}}"
-          placeholder="Your comment"
+          placeholder="Your thoughts on this idea."
           className="mentions"
           onKeyUp={(e) => handleChange(e)}
         >
@@ -161,20 +185,23 @@ const CommentsPanel = (props) => {
             trigger="@"
             data={users}
             className="mentions__mention"
+            displayTransform={(id, display) => {
+              return "@" + display;
+            }}
           />
         </MentionsInput>
       )}
       {(!comments || comments.length == 0) && (
         <div>
-          {!_.isEmpty(loggedInUserDetails.userName) ?
-          <div className="second-grey mb-2 ">
-            Be the first to add a comment.
-          </div>
-          :
-          <div className="second-grey mb-2 ">
-            Please sign in to post your comment.
-          </div>
-          }
+          {!_.isEmpty(loggedInUserDetails.userName) ? (
+            <div className="second-grey mb-2 ">
+              Be the first to add a comment.
+            </div>
+          ) : (
+            <div className="second-grey mb-2 ">
+              Please sign in to post your comment.
+            </div>
+          )}
         </div>
       )}
 
@@ -198,7 +225,9 @@ const CommentsPanel = (props) => {
                 <div className="top master-grey  cursor-pointer">
                   {_.get(comment.from, "userName")}
                 </div>
-                <div className="bottom second-grey">{comment.comment}</div>
+                <div className="bottom second-grey">
+                  {destructureComment(comment.comment)}
+                </div>
               </div>
             </div>
           );
