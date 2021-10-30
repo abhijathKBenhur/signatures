@@ -426,25 +426,14 @@ const Header = (props) => {
       </nav>
       <Register show={showRegisterPopup} onHide={() => hideModal()}></Register>
       {menu.showMenu && <div className="mobile-menu"> 
-          {appLocation == "home" && <div className="items" onClick={(e) => gotoProfile(false)}> <img
-                src={logo}
-                width="45"
-                height="45"
-                alt=""
-                className=""
-              ></img> Profile </div>}
+          {appLocation == "home" && <div className="items" onClick={(e) => gotoProfile(false)}> <i className="fa fa-user"></i>Profile </div>} 
           {appLocation == "home" && <div className="items" onClick={(e) => gotoProfile(true)}> <i className="fa fa-bell"></i>Notification </div>} 
           {(appLocation == "profile" && !menu.showNotification) && <div className="items" onClick={(e) => gotoNotification()}> <i className="fa fa-bell"></i> Notification </div>}
           {(appLocation == "profile" && menu.showNotification) && <div className="items" onClick={(e) => gotoHome(true)}>  Home </div>}
-          {(appLocation == "profile" && menu.showNotification) && <div className="items" onClick={(e) => gotoProfile()}> <img
-                src={logo}
-                width="45"
-                height="45"
-                alt=""
-                className=""
-              ></img> Profile </div>}
+          {(appLocation == "profile" && menu.showNotification) && <div className="items " onClick={(e) => gotoProfile()}><i className="fa fa-user"></i>Profile </div>}
+
           {isIdeaPage() && <div className="items" onClick={(e) => gotoComments()}> <i className="fa fa-comment"></i> Comments </div>}
-          {isIdeaPage() && <div className="items" onClick={(e) => gotoHome(true)}> Home </div>}
+          {isIdeaPage() && <div className="items" onClick={(e) => gotoHome(true)}><i className="fa fa-home"></i> Home </div>}
           {/* <div className="items" onClick={(e) => redirectTo("/about")}> <i className="fa fa-info"></i> About IdeaTribe </div>
           <div className="items" onClick={(e) => redirectTo("/Tokenomics")}> <i className="fa fa-dollar"></i>Tokenomics </div>
           <div className="items" onClick={(e) => redirectTo("/FAQ")}> <i className="fa fa-question-circle"></i>FAQs </div>

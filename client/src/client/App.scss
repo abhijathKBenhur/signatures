@@ -409,14 +409,19 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
   z-index: 99;
   top: 40px;
   right: 31px;
-  padding: 1rem;
+  padding: 0.4rem;
   border-width: 1px;
   text-align: center;
   border-radius: 0.5rem;
   border: 1px solid rgba(0,0,0,.15);
-  width: 50%;
+  width: 40%;
   .items{
     text-align: left;
+    height: 35px;
+    .fa{
+      font-size: 0.8rem;
+      text-align: center;
+    }
     i{
       color: $secondary;
       font-size: 24px;
