@@ -374,6 +374,7 @@
         align-items: center;
         z-index: 3;
         #dropdown-share{
+          padding: 10px 8px;
           &::after{
             display: none;
           }

@@ -48,6 +48,10 @@ export const buySignature = payload => {
     return AxiosInstance.post(`/buySignature`,payload) 
 }
 
+export const updateSignature = payload => { 
+    return AxiosInstance.post(`/updateSignature`,payload) 
+}
+
 export const updateIdeaID = payload => { 
     return AxiosInstance.post(`/updateIdeaID`,payload) 
 }
@@ -65,7 +69,8 @@ const SignatureInterface = {
     buySignature,
     updatePurpose,
     updateIdeaID,
-    removeIdeaEntry
+    removeIdeaEntry,
+    updateSignature
 
 }
 

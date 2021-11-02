@@ -12,6 +12,7 @@ import { getPurposeIcon } from "../../commons/common.utils";
 import { showToaster } from "../../commons/common.utils";
 import "./details-modal.scss";
 import SignatureInterface from "../../interface/SignatureInterface";
+import StorageInterface from "../../interface/StorageInterface";
 import BlockchainInterface from "../../interface/BlockchainInterface";
 import Web3 from "web3";
 import TransactionsInterface from "../../interface/TransactionInterface";
@@ -90,6 +91,37 @@ const DetailsModal = (props) => {
       });
     };
 
+    const updateSignature = () => {
+      SignatureInterface.updateSignature({
+        update: {...form,
+        category: JSON.stringify(form.category)
+      },
+        id: props.idea._id,
+      }).then((success) => {
+      });
+    }
+
+    const updateFunction = () => {
+      props.onHide()
+      if(form.thumbnail != props.idea.thumbnail){
+        StorageInterface.getFilePaths(form, _.get(form.thumbnail,'updated'))
+        .then((success) => {
+          form.PDFFile = _.get(_.find(success, { type: "PDFFile" }), "path");
+          if(_.get(form.thumbnail,'updated')){
+            form.thumbnail = _.get(
+              _.find(_.map(success, "data"), { type: "thumbnail" }),
+              "path"
+            );
+          }
+          
+          updateSignature();
+        })
+      } else {
+        updateSignature();
+      }
+     
+    }
+
   return (
     <Modal
       show={true}
@@ -101,32 +133,6 @@ const DetailsModal = (props) => {
       close="true"
     >
       <Modal.Body className="info-modal-body">
-      <Form.Row className="image-placeholder">
-      <div className="empty-image-row">
-        <Dropzone
-          onDrop={onImageDrop}
-          acceptedFiles={".jpeg"}
-          className="dropzoneContainer"
-        >
-          {({ getRootProps, getInputProps }) => (
-            <section className="container h-100 ">
-              <div
-                {...getRootProps()}
-                className="emptyImage dropZone h-100 d-flex flex-column align-items-center"
-              >
-                <input {...getInputProps()} />
-                <img
-                  src={form.thumbnail}
-                  className="placeholder-image"
-                  alt=" placehoder"
-                />
-                <p className="dropfile-text">Edit thumbnail</p>
-              </div>
-            </section>
-          )}
-        </Dropzone>
-        </div>
-      </Form.Row>
       <Row>
         <Col>
         <Form.Group
@@ -145,10 +151,37 @@ const DetailsModal = (props) => {
                     placeholder="Title*"
                     maxLength={50}
                     onChange={handleChange}
+                    className="color-primary master-header border-0"
                   />
                 </Form.Group>
                 </Col>
       </Row>
+      <Form.Row className="image-placeholder">
+      <div className="empty-image-row">
+        <Dropzone
+          onDrop={onImageDrop}
+          acceptedFiles={".jpeg"}
+          className="dropzoneContainer"
+        >
+          {({ getRootProps, getInputProps }) => (
+            <section className="container h-100 ">
+              <div
+                {...getRootProps()}
+                className="emptyImage dropZone h-100 d-flex flex-column align-items-center"
+              >
+                <input {...getInputProps()} />
+                <img
+                  src={_.get(form, 'thumbnail.preview') || form.thumbnail}
+                  className="placeholder-image"
+                  alt=" placehoder"
+                />
+                <p className="dropfile-text">Edit thumbnail</p>
+              </div>
+            </section>
+          )}
+        </Dropzone>
+        </div>
+      </Form.Row>
       <Row>
         <Col>
         <Form.Group
@@ -208,7 +241,7 @@ const DetailsModal = (props) => {
                 {<Button className="submit-btn btn-ternary mr-3" onClick={props.onHide}>
                   Cancel
                 </Button>}
-                {<Button className="submit-btn btn-primary">
+                {<Button className="submit-btn btn-primary" onClick={updateFunction}>
                   Update
                 </Button>}
               </Col>
