@@ -47,7 +47,9 @@ const getPathsFromIPFS = (form) => {
 
 export const getFilePaths = (form, addThumbnail) => {
   let promiseList = [];
-  promiseList.push(getPDFFilepath(form));
+  if(form.PDFFile){
+    promiseList.push(getPDFFilepath(form));
+  }
   if(addThumbnail){
     promiseList.push(getImagePath(form));
   }

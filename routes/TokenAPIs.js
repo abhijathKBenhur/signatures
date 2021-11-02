@@ -279,10 +279,28 @@ getImagePathFromCloudinary = (req, res) => {
   };
 };
 
+updateSignature = async (req, res) => {
+  IdeaSchema.findOneAndUpdate({_id: req.body.id}, req.body.update)
+    .then((user, b) => {
+      return res.status(201).json({
+        success: true,
+        data: user,
+        message: "signature updated!",
+      });
+    })
+    .catch((error) => {
+      return res.status(400).json({
+        error,
+        message: "signature update failed!",
+      });
+    });
+};
+
 router.post("/addSignature", addSignature);
 router.get("/signature/:PDFHash/", getSignatureByHash);
 router.post("/getSignatures", getSignatures);
 router.post("/buySignature", buySignature);
+router.post("/updateSignature", updateSignature);
 router.post("/updatePurpose", updatePurpose);
 router.post("/updateIdeaID", updateIdeaID);
 router.post("/removeIdeaEntry", removeIdeaEntry);
