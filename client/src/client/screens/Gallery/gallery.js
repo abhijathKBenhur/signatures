@@ -229,7 +229,7 @@ function gallery(props) {
 
           <div className="gutter-block mt-3 comments">
             <span className="second-header color-primary">
-              Talk to the tribe
+              Talk to the Tribe
             </span>
             <CommentsPanel entity={CONSTANTS.ENTITIES.PUBLIC}></CommentsPanel>
           </div>

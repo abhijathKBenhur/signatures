@@ -477,7 +477,7 @@ function Profile(props) {
                                           }}
                                         >
                                           {" "}
-                                          Publish
+                                          Mint
                                         </span>{" "}
                                         an idea or{" "}
                                         <span
