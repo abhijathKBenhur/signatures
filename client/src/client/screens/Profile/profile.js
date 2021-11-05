@@ -28,6 +28,7 @@ import { getShortAddress } from "../../commons/common.utils";
 import Collections from "./collections";
 import SendMessage from "../../modals/send-message/send-message";
 import EditProfile from "../../modals/edit-profile/edit-profile";
+import UpvotedList from "../../modals/upvoted-list/upvoted-list";
 import CreateClan from "../../modals/create-clan/create-clan";
 import UserInterface from "../../interface/UserInterface";
 import * as reactShare from "react-share";
@@ -53,6 +54,7 @@ function Profile(props) {
   const [myNotifications, setMyNotifications] = useState([]);
   const [billetList, setBilletList] = useState([]);
   const [mobileView, setMobileView] = useState([]);
+  const [upvottedList, setUpvottedList] = useState([]);
 
   let history = useHistory();
   const [key, setKey] = useState("collections");
@@ -63,6 +65,7 @@ function Profile(props) {
     createClan: false,
     sendMessage: false,
     shareProfile: false,
+    showUpvotedList: false,
   });
 
   useEffect(() => {
@@ -118,7 +121,16 @@ function Profile(props) {
     StatsInterface.getTotalUpvotesForUser({
       userName: loggedInUserDetails._id,
     }).then((success) => {
-      setUpvotesCount(_.get(success, "data.data"));
+      let upvotedUsers = [];
+      _.forEach(_.get(success, "data.data"), item=> {
+        _.forEach(item, val=> {
+          if(upvotedUsers.indexOf(val.from) == -1){
+            upvotedUsers.push(val.from)
+          }
+        })
+      })
+      setUpvottedList(upvotedUsers)
+      setUpvotesCount(_.get(success, "data.data").length);
     });
   };
 
@@ -402,7 +414,12 @@ function Profile(props) {
                         <span className="stats-title master-grey">
                           {upvotesCount}
                         </span>
-                        <span className="stats-value second-grey  text-center">
+                        <span className="stats-value second-grey  text-center" onClick={() => {
+                                setShowModal({
+                                  ...modalShow,
+                                  showUpvotedList: true,
+                                });
+                              }}>
                           Upvotes
                         </span>
                       </Col>
@@ -624,6 +641,14 @@ function Profile(props) {
             setLoggedInUserDetails(_.get(params, "profileData.data"));
           }}
           onHide={() => setShowModal({ ...modalShow, editProfile: false })}
+        />
+      )}
+      {modalShow.showUpvotedList && (
+        <UpvotedList
+          userDetails={loggedInUserDetails}
+          list={upvottedList}
+          show={modalShow.showUpvotedList}
+          onHide={() => setShowModal({ ...modalShow, showUpvotedList: false })}
         />
       )}
       {modalShow.createClan && (

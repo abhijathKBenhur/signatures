@@ -82,13 +82,7 @@ getRelations = async (req, res) => {
     findCriteria.status = req.body.status;
   }
 
-  await RelationSchema.find(findCriteria, (err, user) => {
-    if (err) {
-      return res.status(400).json({ success: false, error: err });
-    }
-    if (!user) {
-      return res.status(404).json({ success: true, data: [] });
-    }
+  await RelationSchema.find(findCriteria).then(user => {
     return res.status(200).json({ success: true, data: user });
   }).catch((err) => {
     return res.status(200).json({ success: false, data: err });
