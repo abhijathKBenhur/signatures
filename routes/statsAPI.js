@@ -48,15 +48,17 @@ getTotalUpvotesForUser = async (req, res) => {
     if (!ideas) {
       return res.status(404).json({ success: true, data: 0 });
     }
-    let count = 0;
+    let count = [];
+
     for(let i=0; i<ideas.length ; i++){
       let findCriteria = {
         relation: "UPVOTE",
         to: ideas[i].ideaID
       };
-      RelationSchema.find(findCriteria).count().then( user => {
-        if (user) {
-          count = user + count
+      RelationSchema.find(findCriteria).then( user => {
+       
+        if (user.length) {
+          count.push(user)
         }
         if(i == ideas.length - 1) {
           return res.status(200).json({ success: true, data: count });
