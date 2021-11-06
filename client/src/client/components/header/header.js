@@ -149,6 +149,7 @@ const Header = (props) => {
               const cookies = new Cookies();
               console.log("setting token :: " +  token)
               cookies.set(appConstants.COOKIE_TOKEN_PHRASE, token);
+              debugger;
               console.log("verified cookies token")
             });
           }).catch((err) => {

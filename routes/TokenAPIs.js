@@ -8,6 +8,7 @@ const upload = require("../db-config/multer");
 const path = require("path");
 var fs = require("fs");
 const { cloudinary } = require("../db-config/cloudinary");
+const depositEvaluator = require("./middleware/depositEvaluator");
 
 addSignature = async (req, res) => {
   const creatorId = await UserSchema.findOne({ metamaskId: req.body.creator });
@@ -35,6 +36,8 @@ addSignature = async (req, res) => {
   newIdea
     .save()
     .then(() => {
+      conso.log("depositForNthIdea")
+      depositEvaluator.depositForNthIdea(req.body.creator)
       return res.status(201).json({
         success: true,
         tokenId: newIdea.tokenId,

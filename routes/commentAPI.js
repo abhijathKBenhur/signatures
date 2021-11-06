@@ -1,7 +1,7 @@
 const CommentSchema = require("../db-config/Comment.schema");
 const express = require("express");
 const router = express.Router();
- 
+
 
 // comments on ideas, profile etc
 postComment = (req, res) => {

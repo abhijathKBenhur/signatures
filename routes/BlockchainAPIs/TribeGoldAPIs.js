@@ -7,15 +7,11 @@ const web3Instance = BlockchainUtils.web3Instance
 const publicKey = BlockchainUtils.publicKey
 const tribeGoldContract = BlockchainUtils.tribeGoldContract
 
-const DEPOSIT_VALUES = {
-  REGISTER: Web3Utils.toWei("1","ether"),
-};
-
-depositGold = (newUserAddress) => {
+depositGold = (newUserAddress, ethValue) => {
   console.log("Depositing to new user in TBGApi");
   const promise = new Promise((resolve, reject) => {
     tribeGoldContract.methods
-      .transfer(newUserAddress, DEPOSIT_VALUES.REGISTER)
+      .transfer(newUserAddress, ethValue)
       .send({
         from: publicKey,
       })

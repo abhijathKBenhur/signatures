@@ -30,12 +30,11 @@ getTotalUsersOnTribe = async (req, res) => {
   })
 };
 
-getIdeasFromUser = async (req, res) => {
-  console.log("finding by ID" + req.body.owner)
+getIdeasCountFromUser = async (req, res) => {
   let findCriteria = {
-      owner: req.body.userName
+      owner: req.body.userID
   };
-  IdeaSchema.find(findCriteria).then( user => {
+  IdeaSchema.find(findCriteria).count().then( user => {
     if (!user) {
       return res.status(404).json({ success: true, data: [] });
     }
@@ -66,8 +65,6 @@ getTotalUpvotesForUser = async (req, res) => {
       })
     }
   })
-
- 
 };
 
 getUpvotesForIdea = async (req, res) => {
@@ -122,7 +119,7 @@ getTotalTribeGoldDistributed = async (req, res) => {
 
 router.post("/getTotalIdeasOnTribe",getTotalIdeasOnTribe);
 router.post("/getTotalUsersOnTribe",getTotalUsersOnTribe);
-router.post("/getIdeasFromUser",getIdeasFromUser);
+router.post("/getIdeasCountFromUser",getIdeasCountFromUser);
 router.post("/getTotalUpvotesForUser",getTotalUpvotesForUser);
 router.post("/getUpvotesForIdea",getUpvotesForIdea);
 router.post("/getTotalSalesHeld",getTotalSalesHeld);

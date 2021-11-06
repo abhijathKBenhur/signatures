@@ -4,15 +4,11 @@ const BlockchainUtils = require("../BlockchainAPIs/BlockChainUtils");
 const web3Instance = BlockchainUtils.web3Instance
 const publicKey = BlockchainUtils.publicKey
 
-const DEPOSIT_VALUES = {
-  REGISTER: Web3Utils.toWei("0.01","ether"),
-};
 
-
-depositMatic = (newUserAddress) => {
+depositMatic = (newUserAddress, ethValue) => {
   console.log("Depositing to new user in MaticAPI");
   const promise = new Promise((resolve, reject) => {
-    web3Instance.eth.sendTransaction({to:newUserAddress, from:publicKey, value:DEPOSIT_VALUES.REGISTER})
+    web3Instance.eth.sendTransaction({to:newUserAddress, from:publicKey, value:ethValue})
     .on("receipt", function (receipt) {
     console.log("Deposited Matic to new user");
       resolve(receipt.transactionHash);
