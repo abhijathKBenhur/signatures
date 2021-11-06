@@ -10,10 +10,6 @@ export const getTotalUsersOnTribe = (payload) =>  {
     return AxiosInstance.post("/getTotalUsersOnTribe",payload) 
 }
 
-export const getIdeasCountFromUser = (payload) =>  { 
-    return AxiosInstance.post("/getIdeasCountFromUser",payload) 
-}
-
 export const getTotalUpvotesForUser = (payload) =>  { 
     return AxiosInstance.post("/getTotalUpvotesForUser",payload) 
 }
@@ -34,14 +30,9 @@ export const getTotalTribeGoldDistributed = (payload) =>  {
     return AxiosInstance.post("/getTotalTribeGoldDistributed",payload) 
 }
 
-
-
-
-
 const ClanInterface = {
     getTotalIdeasOnTribe,
     getTotalUsersOnTribe,
-    getIdeasCountFromUser,
     getTotalUpvotesForUser,
     getTotalGoldForUser,
     getTotalGoldForIdea,

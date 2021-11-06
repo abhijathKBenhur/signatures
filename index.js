@@ -58,7 +58,6 @@ app.use("/api", relationAPI);
 app.use("/api", commentAPI);
 app.use("/api", ClanAPI);
 app.use("/api", TransactionAPI);
-app.use("/api", StatsAPI);
 app.use("/api", HashAPI);
 console.log("Deploying full application")
 console.log("Checking node environment ::" + process.env.NODE_ENV);

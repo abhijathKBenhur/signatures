@@ -7,6 +7,19 @@ const GOLD_DEPOSIT_VALUES = {
   IDEA_POST: {
     1: Web3Utils.toWei("1", "ether"),
     2: Web3Utils.toWei("2", "ether"),
+    5:Web3Utils.toWei("1", "ether"),
+    6:Web3Utils.toWei("1", "ether"),
+    7:Web3Utils.toWei("1", "ether"),
+    8:Web3Utils.toWei("1", "ether"),
+    10:Web3Utils.toWei("1", "ether"),
+    11:Web3Utils.toWei("1", "ether"),
+    12:Web3Utils.toWei("1", "ether"),
+    13:Web3Utils.toWei("1", "ether"),
+    14:Web3Utils.toWei("1", "ether"),
+    20:Web3Utils.toWei("1", "ether"),
+    19:Web3Utils.toWei("1", "ether"),
+    18:Web3Utils.toWei("1", "ether"),
+    17:Web3Utils.toWei("1", "ether"),
   },
 };
 
@@ -21,16 +34,14 @@ const depostToNewUser = (newUserAddress) => {
   ]);
 };
 
-function depositForNthIdea(creatorMetamaskAddress) {
-  conso.log("inside depositForNthIdea")
-  StatsAPI.getIdeasCountFromUser({
-    metamasId: creatorMetamaskAddress,
-  }).then((result) => {
-    console.log("count of ideas " + result.data);
-    if (Object.keys(GOLD_DEPOSIT_VALUES).indexOf(result.data) > -1) {
+
+function depositForNthIdea(creator) {
+  return StatsAPI.getIdeasCountFromUser(creator._id).then((result) => {
+    console.log("incetivicing for  ", result + " th idea")
+    if (Object.keys(GOLD_DEPOSIT_VALUES.IDEA_POST).indexOf(""+result) > -1) {
       TribeGoldAPIs.depositGold(
-        creatorMetamaskAddress,
-        GOLD_DEPOSIT_VALUES.IDEA_POST[result.data]
+        creator.metamaskId,
+        GOLD_DEPOSIT_VALUES.IDEA_POST[Number(result)]
       );
     }
   });

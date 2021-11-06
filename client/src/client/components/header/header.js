@@ -233,7 +233,6 @@ const Header = (props) => {
   ));
 
   const isUserAuthForPublish = () => {
-    if (!window.location.href.includes("create")) {
       return (
         <Button
           variant="ternary"
@@ -246,8 +245,6 @@ const Header = (props) => {
           Mint Idea
         </Button>
       );
-    }
-    return null;
   };
   const hideModal = (type) => {
     setShowRegisterPopup(false);

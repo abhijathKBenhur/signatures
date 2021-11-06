@@ -37,7 +37,6 @@ const authorizer = (req, res, next) => {
       const decoded = jwt.verify(token, process.env.TOKEN_KEY);
       UserSchema.findOne({ metamaskId: decoded.metamaskId }).then((user) => {
         if (!user || !user.userName) {
-          console.log("B")
           return res.status(401).json({
             success: true,
             data: {
@@ -45,9 +44,6 @@ const authorizer = (req, res, next) => {
             },
           });
         }
-        console.log("W", decoded)
-        console.log("X", user)
-        
         console.log("C", user.nonce == decoded.nonce)
         console.log("D", conditionalAuthCheck(user, req))
 
@@ -64,7 +60,6 @@ const authorizer = (req, res, next) => {
         }
       });
     } catch (err) {
-      console.log("Catch" , err)
       return res.status(401).json({
         success: true,
         data: {

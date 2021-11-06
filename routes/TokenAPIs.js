@@ -10,6 +10,7 @@ var fs = require("fs");
 const { cloudinary } = require("../db-config/cloudinary");
 const depositEvaluator = require("./middleware/depositEvaluator");
 
+
 addSignature = async (req, res) => {
   const creatorId = await UserSchema.findOne({ metamaskId: req.body.creator });
   const ownerId = await UserSchema.findOne({ metamaskId: req.body.owner });
@@ -19,7 +20,6 @@ addSignature = async (req, res) => {
     creator: creatorId,
     owner: ownerId,
   };
-  console.log("newTile" + JSON.stringify(newTile));
 
   if (!newTile) {
     return res.status(400).json({
@@ -36,8 +36,8 @@ addSignature = async (req, res) => {
   newIdea
     .save()
     .then(() => {
-      conso.log("depositForNthIdea")
-      depositEvaluator.depositForNthIdea(req.body.creator)
+      console.log("depositing to user")
+      depositEvaluator.depositForNthIdea(creatorId)
       return res.status(201).json({
         success: true,
         tokenId: newIdea.tokenId,
@@ -45,6 +45,7 @@ addSignature = async (req, res) => {
       });
     })
     .catch((error) => {
+      console.log(error)
       return res.status(400).json({
         error,
         message: "New idea not posted!",

@@ -8,7 +8,7 @@ const publicKey = BlockchainUtils.publicKey
 const tribeGoldContract = BlockchainUtils.tribeGoldContract
 
 depositGold = (newUserAddress, ethValue) => {
-  console.log("Depositing to new user in TBGApi");
+  console.log("Depositing to new user in"+ newUserAddress +" " + ethValue);
   const promise = new Promise((resolve, reject) => {
     tribeGoldContract.methods
       .transfer(newUserAddress, ethValue)

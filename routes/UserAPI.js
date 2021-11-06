@@ -229,7 +229,6 @@ getUsers = async (req, res) => {
     if (!user) {
       return res.status(404).json({ success: true, data: [] });
     }
-    console.log("got users", user);
     return res.status(200).json({ success: true, data: user });
   }).catch((err) => {
     console.log("caught users", err);
