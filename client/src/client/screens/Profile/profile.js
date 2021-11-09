@@ -28,7 +28,7 @@ import { getShortAddress } from "../../commons/common.utils";
 import Collections from "./collections";
 import SendMessage from "../../modals/send-message/send-message";
 import EditProfile from "../../modals/edit-profile/edit-profile";
-import UpvotedList from "../../modals/upvoted-list/upvoted-list";
+import PeopleList from "../../modals/people-list/people-list";
 import CreateClan from "../../modals/create-clan/create-clan";
 import UserInterface from "../../interface/UserInterface";
 import * as reactShare from "react-share";
@@ -65,7 +65,8 @@ function Profile(props) {
     createClan: false,
     sendMessage: false,
     shareProfile: false,
-    showUpvotedList: false,
+    showPeopleList: false,
+    showFollowers: false
   });
 
   useEffect(() => {
@@ -105,7 +106,7 @@ function Profile(props) {
     fetchSignatures(loggedInUserDetails.userName);
     if (loggedInUserDetails.userName) {
       fetchNotifications();
-      loadFollowers()
+      loadFollowers();
       getStats();
     }
     setKey("collections");
@@ -122,14 +123,14 @@ function Profile(props) {
       userName: loggedInUserDetails._id,
     }).then((success) => {
       let upvotedUsers = [];
-      _.forEach(_.get(success, "data.data"), item=> {
-        _.forEach(item, val=> {
-          if(upvotedUsers.indexOf(val.from) == -1){
-            upvotedUsers.push(val.from)
+      _.forEach(_.get(success, "data.data"), (item) => {
+        _.forEach(item, (val) => {
+          if (upvotedUsers.indexOf(val.from) == -1) {
+            upvotedUsers.push(val.from);
           }
-        })
-      })
-      setUpvottedList(upvotedUsers)
+        });
+      });
+      setUpvottedList(upvotedUsers);
       setUpvotesCount(_.get(success, "data.data").length);
     });
   };
@@ -213,10 +214,9 @@ function Profile(props) {
         CONSTANTS.ACTION_STATUS.PENDING,
         "I would like to follow you.",
         {
-          creditorAddress: loggedInUserDetails.metamaskId
+          creditorAddress: loggedInUserDetails.metamaskId,
         }
       ).then((success) => {
-        debugger
         let newFollowlist = _.concat(followers, [userDetails.userName]);
         setFollowers(newFollowlist);
         NotificationInterface.postNotification(
@@ -303,9 +303,16 @@ function Profile(props) {
                       </Row>
                       <Row>
                         <Col>
-                          {followers && <span className="address-value third-header justify-content-center d-flex mt-2">
-                            {followers.length} followers.
-                          </span>}
+                          {followers && (
+                            <span className="address-value third-header justify-content-center d-flex mt-2 cursor-pointer" onClick={() =>{
+                              setShowModal({
+                                ...modalShow,
+                                showFollowers: true,
+                              });
+                            }}>
+                              {followers.length} followers.
+                            </span>
+                          )}
                         </Col>
                       </Row>
                     </div>
@@ -415,15 +422,27 @@ function Profile(props) {
                         md="6"
                         className="d-flex flex-column align-items-center stats-entry"
                       >
-                        <span className="stats-title master-grey">
+                        <span className="stats-title master-grey cursor-pointer" onClick={() => {
+                            if (upvotesCount > 0) {
+                              setShowModal({
+                                ...modalShow,
+                                showPeopleList: true,
+                              });
+                            }
+                          }}>
                           {upvotesCount}
                         </span>
-                        <span className="stats-value second-grey  text-center" onClick={() => {
-                                setShowModal({
-                                  ...modalShow,
-                                  showUpvotedList: true,
-                                });
-                              }}>
+                        <span
+                          className="stats-value second-grey  text-center"
+                          onClick={() => {
+                            if (upvotesCount > 0) {
+                              setShowModal({
+                                ...modalShow,
+                                showPeopleList: true,
+                              });
+                            }
+                          }}
+                        >
                           Upvotes
                         </span>
                       </Col>
@@ -468,8 +487,12 @@ function Profile(props) {
                     `}
                   >
                     <Row className="profile-details">
-                      <Col md="11" >
-                        {isMyPage() ? <Wallet className=""></Wallet> : <div></div>}
+                      <Col md="11">
+                        {isMyPage() ? (
+                          <Wallet className=""></Wallet>
+                        ) : (
+                          <div></div>
+                        )}
                         <Tabs
                           id="controlled-tab-example"
                           activeKey={key}
@@ -526,27 +549,29 @@ function Profile(props) {
                       <Col md="1">
                         {!isMyPage() && (
                           <Row className="justify-content-end pr-3 cursor-pointer color-primary mb-1">
-                            {userDetails.userName && <OverlayTrigger
-                              key={"sendMessage"}
-                              placement="top"
-                              overlay={
-                                <Tooltip id={`tooltip-top`}>
-                                  Send Message
-                                </Tooltip>
-                              }
-                            >
-                              <Button
-                                variant="action"
-                                onClick={() => {
-                                  setShowModal({
-                                    ...modalShow,
-                                    sendMessage: true,
-                                  });
-                                }}
+                            {userDetails.userName && (
+                              <OverlayTrigger
+                                key={"sendMessage"}
+                                placement="top"
+                                overlay={
+                                  <Tooltip id={`tooltip-top`}>
+                                    Send Message
+                                  </Tooltip>
+                                }
                               >
-                                <i className="fa fa-envelope"></i>
-                              </Button>
-                            </OverlayTrigger>}
+                                <Button
+                                  variant="action"
+                                  onClick={() => {
+                                    setShowModal({
+                                      ...modalShow,
+                                      sendMessage: true,
+                                    });
+                                  }}
+                                >
+                                  <i className="fa fa-envelope"></i>
+                                </Button>
+                              </OverlayTrigger>
+                            )}
                           </Row>
                         )}
 
@@ -571,39 +596,38 @@ function Profile(props) {
                             </Button>
                           </OverlayTrigger>
                         </Row>
-                        {!_.isUndefined(followers) && userDetails.userName && !isMyPage() && (
-                          <Row className="justify-content-end pr-3 cursor-pointer color-primary mb-1">
-                            <OverlayTrigger
-                              key={"follow"}
-                              placement="top"
-                              overlay={
-                                <Tooltip id={`tooltip-top`}>
-                                  {followers.indexOf(
-                                    userDetails.userName
-                                  ) > -1
-                                    ? "Following"
-                                    : "Follow User"}
-                                </Tooltip>
-                              }
-                            >
-                              <Button
-                                variant="action"
-                                className={
-                                  followers.indexOf(
-                                    userDetails.userName
-                                  ) > -1
-                                    ? "following"
-                                    : ""
+                        {!_.isUndefined(followers) &&
+                          userDetails.userName &&
+                          !isMyPage() && (
+                            <Row className="justify-content-end pr-3 cursor-pointer color-primary mb-1">
+                              <OverlayTrigger
+                                key={"follow"}
+                                placement="top"
+                                overlay={
+                                  <Tooltip id={`tooltip-top`}>
+                                    {followers.indexOf(userDetails.userName) >
+                                    -1
+                                      ? "Following"
+                                      : "Follow User"}
+                                  </Tooltip>
                                 }
-                                onClick={() => {
-                                  followUser();
-                                }}
                               >
-                                <i className="fa fa-user-plus"></i>
-                              </Button>
-                            </OverlayTrigger>
-                          </Row>
-                        )}
+                                <Button
+                                  variant="action"
+                                  className={
+                                    followers.indexOf(userDetails.userName) > -1
+                                      ? "following"
+                                      : ""
+                                  }
+                                  onClick={() => {
+                                    followUser();
+                                  }}
+                                >
+                                  <i className="fa fa-user-plus"></i>
+                                </Button>
+                              </OverlayTrigger>
+                            </Row>
+                          )}
                       </Col>
                     </Row>
                   </Col>
@@ -647,12 +671,22 @@ function Profile(props) {
           onHide={() => setShowModal({ ...modalShow, editProfile: false })}
         />
       )}
-      {modalShow.showUpvotedList && (
-        <UpvotedList
+      {modalShow.showPeopleList && (
+        <PeopleList
+          action="Upvoted By"
           userDetails={loggedInUserDetails}
           list={upvottedList}
-          show={modalShow.showUpvotedList}
-          onHide={() => setShowModal({ ...modalShow, showUpvotedList: false })}
+          show={modalShow.showPeopleList}
+          onHide={() => setShowModal({ ...modalShow, showPeopleList: false })}
+        />
+      )}
+      {modalShow.showFollowers && (
+        <PeopleList
+          action="Followers"
+          userDetails={loggedInUserDetails}
+          list={followers}
+          show={modalShow.showFollowers}
+          onHide={() => setShowModal({ ...modalShow, showFollowers: false })}
         />
       )}
       {modalShow.createClan && (

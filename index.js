@@ -4,7 +4,7 @@ const cors = require("cors");
 const mongotConnection = require("./db-config/mongodb");
 const tokenAPI = require("./routes/TokenAPIs");
 const userAPI = require("./routes/UserAPI");
-const StatsAPI = require("./routes/statsAPI");
+const AggregatesAPI = require("./routes/AggregatesAPI");
 const HashAPI = require("./routes/hashAPI");
 const cookieParser = require("cookie-parser");
 
@@ -58,6 +58,7 @@ app.use("/api", relationAPI);
 app.use("/api", commentAPI);
 app.use("/api", ClanAPI);
 app.use("/api", TransactionAPI);
+app.use("/api", AggregatesAPI);
 app.use("/api", HashAPI);
 console.log("Deploying full application")
 console.log("Checking node environment ::" + process.env.NODE_ENV);

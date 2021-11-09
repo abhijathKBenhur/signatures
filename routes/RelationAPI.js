@@ -21,14 +21,13 @@ postRelation = (req, res) => {
   newRelation
     .save()
     .then((result, b) => {
-        
         if(result.relation == "FOLLOW"){
-          let creditorAddress = JSON.parse(result).creditorAddress
-          depositEvaluator.depostForFollow(creditorAddress)
+          // let creditorAddress = JSON.parse(result).creditorAddress
+          // depositEvaluator.depostForFollow(creditorAddress)
         }
         if(result.relation == "UPVOTE"){
-          let creditorAddress = JSON.parse(result).creditorAddress
-          depositEvaluator.depostForUpvote(creditorAddress)
+          // let creditorAddress = JSON.parse(result).creditorAddress
+          // depositEvaluator.depostForUpvote(creditorAddress)
         }
       return res.status(201).json({
         success: true,

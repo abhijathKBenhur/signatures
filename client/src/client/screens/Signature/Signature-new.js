@@ -413,7 +413,9 @@ const SignatureNew = (props) => {
                             </Button>
                           </OverlayTrigger>
 
-                          {loggedInUserDetails.userName && (
+                          {loggedInUserDetails.userName &&  signature.owner &&
+                            loggedInUserDetails.userName !=
+                              _.get(signature, "owner.userName") && (
                             <OverlayTrigger
                               placement="left"
                               overlay={
@@ -523,12 +525,13 @@ const SignatureNew = (props) => {
                   md="12"
                   className="meta mb-2 justify-content-between d-flex flex-row"
                 >
-                  <div className="tags second-grey mr-2">
+                  <div className="tags second-grey mr-2 d-flex align-content-center">
                     <Button disabled variant="pill">
                       {signature.category &&
                         JSON.parse(signature.category) &&
                         JSON.parse(signature.category).label}
                     </Button>
+                    {upvotes && upvotes.length > 0 && (<span className="second-header color-secondary ml-2 cursor-pointer">{upvotes && upvotes.length} upvotes</span>)}
                   </div>
                   <div className="time second-grey">
                     {moment(signature.createdAt).format("YYYY-MM-DD HH:mm:ss")},{" "}

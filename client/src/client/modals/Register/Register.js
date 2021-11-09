@@ -155,7 +155,6 @@ const Register = (props) => {
 
   const setCookie = (token) => {
     const cookies = new Cookies();
-    debugger;
     cookies.set(CONSTANTS.COOKIE_TOKEN_PHRASE, token);
   };
 
