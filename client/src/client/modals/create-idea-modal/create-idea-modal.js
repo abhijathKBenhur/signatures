@@ -263,7 +263,7 @@ const CreateIdeaModal = ({
         return (
           <Col md="12">
             <span className="purpose-message second-grey">
-              You may chose to collaborate ideas to make single.
+              Find people to collaborate on your ide  a
             </span>
             <div className="collab-section">
               <Dropdown className="w-100">

@@ -205,7 +205,7 @@ function Profile(props) {
   }
 
   function followUser() {
-    if (followers.indexOf(loggedInUserDetails.userName) < 0) {
+    if (followers.indexOf(userDetails.userName) < 0) {
       RelationsInterface.postRelation(
         userDetails.userName,
         viewUser,
@@ -216,6 +216,7 @@ function Profile(props) {
           creditorAddress: loggedInUserDetails.metamaskId
         }
       ).then((success) => {
+        debugger
         let newFollowlist = _.concat(followers, [userDetails.userName]);
         setFollowers(newFollowlist);
         NotificationInterface.postNotification(

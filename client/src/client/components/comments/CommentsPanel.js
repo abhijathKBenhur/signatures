@@ -195,7 +195,7 @@ const CommentsPanel = (props) => {
         <div>
           {!_.isEmpty(loggedInUserDetails.userName) ? (
             <div className="second-grey mb-2 ">
-              Be the first to add a comment.
+              Be the first to comment.
             </div>
           ) : (
             <div className="second-grey mb-2 ">

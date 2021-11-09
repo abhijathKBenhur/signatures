@@ -204,8 +204,7 @@ const InfoModal = (props) => {
         return (
           <Col md="12">
             <span className="purpose-message master-grey">
-              You may chose to license it to multiple people. Only your idea
-              will be available in the market.
+            Find people to collaborate on your idea
             </span>
             <div className="collab-section">
               <Dropdown className="w-100">
@@ -242,8 +241,7 @@ const InfoModal = (props) => {
             <Row>
               <Col md="12">
                 <span className="purpose-message second-grey">
-                  You may chose to license it to multiple people. Only your idea
-                  will be available in the market.
+                Find people to collaborate on your idea
                 </span>
               </Col>
             </Row>

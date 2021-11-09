@@ -8,6 +8,7 @@ import {
   OverlayTrigger,
   Tooltip,
 } from "react-bootstrap";
+import ReactDOM from 'react-dom';
 import SignatureInterface from "../../interface/SignatureInterface";
 import BlockChainInterface from "../../interface/BlockchainInterface";
 import StorageInterface from "../../interface/StorageInterface";
@@ -21,7 +22,7 @@ import { MentionsInput, Mention } from 'react-mentions'
 import countryJSON from "../../../assets/data/countries.json"
 import "./Create-new.scss";
 import reactGA from "react-ga";
-// import creativeArt from "../../../assets/palceholders"
+import AlertBanner from "../../components/alert/alert"
 
 import {
   X,
@@ -618,6 +619,10 @@ const CreateNew = () => {
       status: CONSTANTS.ACTION_STATUS.COMPLETED,
       user: userDetails._id
     })
+    const alertProperty = {
+      content: "Congratulations! Your idea has been published to the blockchain. We will be depositing TribeGold to your wallet shortly!",
+    }
+    ReactDOM.render(<AlertBanner {...alertProperty}></AlertBanner>, document.querySelector('.appHeader'))
   }
 
   const checkValidationBeforeSubmit = () => {

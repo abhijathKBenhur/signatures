@@ -98,6 +98,7 @@ const DetailsModal = (props) => {
       },
         id: props.idea._id,
       }).then((success) => {
+        window.location.reload();
       });
     }
 
