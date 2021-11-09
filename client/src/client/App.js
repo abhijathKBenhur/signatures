@@ -18,9 +18,8 @@ import { ToastContainer } from "react-toastify";
 import About from "./screens/about/about";
 import FAQ from "./screens/FAQ/FAQ";
 import Tokenomics from "./screens/Tokenomics/Tokenomics";
-import Support from "./screens/support/support";
-import Partner from "./screens/partner/partner";
-import Contact from "./screens/contact/contact";
+import Terms from "./screens/terms/terms"
+import Privacy from "./screens/privacy/privacy";
 
 const App = () =>  {
 
@@ -39,6 +38,9 @@ const App = () =>  {
             <Route path="/profile" component={Profile} />
             <Route path="/about" component={About} />
             <Route path="/FAQ" component={FAQ} />
+            <Route path="/terms" component={Terms} />
+            <Route path="/privacy" component={Privacy} />
+
             <Route path="/tokenomics" component={Tokenomics} />
             <Route exact path="/" render={() => <Redirect from="/" to="/home" />} />
           </Switch>

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
 import { ChevronRight, ChevronLeft } from "react-feather";
-import PDFFile from "../../../assets/documents/FAQs.pdf";
-import "./faq.scss"
-const FAQ = () => {
+import PDFFile from "../../../assets/documents/whitepaper.pdf";
+import "./terms.scss"
+const Help = () => {
   const [pdfPages, setPdfPages] = useState({
     currentPage: 1,
     totalPages: 1,
@@ -17,8 +17,8 @@ const FAQ = () => {
     pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
   }, []);
   return (
-    <div className="main-content-component container faq ">
-      <span className="father-grey color-secondary">FAQs</span>
+    <div className="main-content-component container terms ">
+      <span className="father-grey color-secondary">Terms & Conditions</span>
       <>
         <p className="page-container text-center cursor-pointer">
           <ChevronLeft
@@ -55,4 +55,4 @@ const FAQ = () => {
   );
 };
 
-export default FAQ;
+export default Help;

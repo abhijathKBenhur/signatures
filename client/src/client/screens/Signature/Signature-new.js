@@ -274,7 +274,10 @@ const SignatureNew = (props) => {
         signature.ideaID,
         CONSTANTS.ACTIONS.UPVOTE,
         CONSTANTS.ACTION_STATUS.COMPLETED,
-        "Upvoting."
+        "Upvoting.",
+        {
+          creditorAddress: loggedInUserDetails.metamaskId
+        }
       ).then((success) => {
         const upVotesClone = _.cloneDeep(upvotes);
         upVotesClone.push(loggedInUserDetails.userName);

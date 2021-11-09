@@ -211,7 +211,10 @@ function Profile(props) {
         viewUser,
         CONSTANTS.ACTIONS.FOLLOW,
         CONSTANTS.ACTION_STATUS.PENDING,
-        "I would like to follow you."
+        "I would like to follow you.",
+        {
+          creditorAddress: loggedInUserDetails.metamaskId
+        }
       ).then((success) => {
         let newFollowlist = _.concat(followers, [userDetails.userName]);
         setFollowers(newFollowlist);

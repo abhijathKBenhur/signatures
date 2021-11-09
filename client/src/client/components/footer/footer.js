@@ -21,9 +21,11 @@ const Footer = (props) => {
               <span className="secondary-grey cursor-pointer" onClick={() => redirectTo("/about")}>About IdeaTribe</span>
               <span className="secondary-grey cursor-pointer" onClick={() => redirectTo("/Tokenomics")}>Tokenomics</span>
               <span className="secondary-grey cursor-pointer" onClick={() => redirectTo("/FAQ")}>FAQs</span>
-              <span className="secondary-grey cursor-pointer" onClick={() => redirectTo("/about")}>Terms</span>
-              <span className="secondary-grey cursor-pointer" onClick={() => redirectTo("/about")}>Privacy</span>
-              <span className="secondary-grey cursor-pointer" onClick={() => redirectTo("/about")}>Contact Us</span>
+              <span className="secondary-grey cursor-pointer" onClick={() => redirectTo("/terms")}>Terms</span>
+              <span className="secondary-grey cursor-pointer" onClick={() => redirectTo("/privacy")}>Privacy</span>
+              <span className="secondary-grey cursor-pointer" onClick={() => 
+              window.location.href = "mailto:"+"contact@ideatribe.io"+'?subject='+"Query"+'&body='+""
+            }>Contact Us</span>
 
 
               {/* <div className="products">

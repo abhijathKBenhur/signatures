@@ -1,7 +1,7 @@
 const RelationSchema = require("../db-config/relation.schema");
 const express = require("express");
 const router = express.Router();
- 
+const depositEvaluator = require("../routes/middleware/depositEvaluator");
 
 // upvotes, downvotes, followEtc
 postRelation = (req, res) => {
@@ -20,10 +20,19 @@ postRelation = (req, res) => {
 
   newRelation
     .save()
-    .then((user, b) => {
+    .then((result, b) => {
+        
+        if(result.relation == "FOLLOW"){
+          let creditorAddress = JSON.parse(result).creditorAddress
+          depositEvaluator.depostForFollow(creditorAddress)
+        }
+        if(result.relation == "UPVOTE"){
+          let creditorAddress = JSON.parse(result).creditorAddress
+          depositEvaluator.depostForUpvote(creditorAddress)
+        }
       return res.status(201).json({
         success: true,
-        data: user,
+        data: result,
         message: "Relation updated!",
       });
     })
