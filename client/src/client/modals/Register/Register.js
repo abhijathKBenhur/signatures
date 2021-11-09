@@ -219,9 +219,7 @@ const Register = (props) => {
       email: _.get(googleFormResponseObject.profileObj, "email"),
       imageUrl: _.get(googleFormResponseObject.profileObj, "imageUrl"),
       loginMode: "google",
-      userName: _.get(googleFormResponseObject.profileObj, "email").split(
-        "@"
-      )[0],
+      userName: "",
       googleJWTToken: _.get(googleFormResponseObject.tokenObj, "id_token"),
     });
   }

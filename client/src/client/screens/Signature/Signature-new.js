@@ -5,6 +5,7 @@ import moment from "moment";
 import CONSTANTS from "../../commons/Constants";
 import { showToaster } from "../../commons/common.utils";
 import NotificationInterface from "../../interface/NotificationInterface";
+import PeopleList from "../../modals/people-list/people-list"
 import {
   Container,
   Row,
@@ -46,6 +47,7 @@ const SignatureNew = (props) => {
   const [PDFFile, setPDFFile] = useState(undefined);
   const [showComment, setShowComment] = useState(false);
   const [modalShowBillet, setModalShowBillet] = useState(false);
+  const [showUpvotes, setShowUpvotes] = useState(false);
   const [pdfPages, setPdfPages] = useState({
     currentPage: 1,
     totalPages: 1,
@@ -531,7 +533,9 @@ const SignatureNew = (props) => {
                         JSON.parse(signature.category) &&
                         JSON.parse(signature.category).label}
                     </Button>
-                    {upvotes && upvotes.length > 0 && (<span className="second-header color-secondary ml-2 cursor-pointer">{upvotes && upvotes.length} upvotes</span>)}
+                    {upvotes && upvotes.length > 0 && (<span className="second-header color-secondary ml-2 cursor-pointer" onClick={() =>{
+                      setShowUpvotes(true)
+                    }}>{upvotes && upvotes.length} upvotes</span>)}
                   </div>
                   <div className="time second-grey">
                     {moment(signature.createdAt).format("YYYY-MM-DD HH:mm:ss")},{" "}
@@ -632,6 +636,14 @@ const SignatureNew = (props) => {
           closeBtn={closeBtnFn}
           isView={"true"}
         />
+      )}
+      {showUpvotes && (
+       <PeopleList
+        action="Upvoted By"
+        list={upvotes}
+        show={showUpvotes}
+        onHide={() => setShowUpvotes(false)}
+     />
       )}
     </div>
   );
