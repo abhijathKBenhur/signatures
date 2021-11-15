@@ -357,7 +357,7 @@ const InfoModal = (props) => {
               rows={7}
               aria-describedby="inputGroupAppend"
               name="description"
-              placeholder="What are you looking forward from others? *"
+              placeholder="Add comments*"
               style={{ resize: "none", borderRadius: "5px" }}
               onChange={(event) => {
                 setFormData({

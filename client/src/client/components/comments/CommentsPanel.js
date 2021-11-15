@@ -176,7 +176,7 @@ const CommentsPanel = (props) => {
           value={state.value}
           onChange={handleChanges}
           markup="@{{__type__||__id__||__display__}}"
-          placeholder="Your thoughts on this idea."
+          placeholder="Type your thoughts"
           className="mentions"
           onKeyUp={(e) => handleChange(e)}
         >

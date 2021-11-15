@@ -31,7 +31,7 @@ const About = () => {
           <div>
             <Button variabt="secondary" className="mt-5" onClick={() => {
               history.push("/home");
-            }}><span className="master-grey color-white">Take me to the tribe</span></Button>
+            }}><span className="master-grey color-white">Take me to the Tribe</span></Button>
           </div>
         </Col>
         <Col className="right desktop-view" xs={12} sm={4}>
