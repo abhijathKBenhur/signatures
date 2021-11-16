@@ -17,21 +17,18 @@ const About = () => {
       <Row className="about-item about-first second-grey">
         <Col className="left" xs={12} sm={8}>
           <span className="master-header color-primary-light">
-            Doing the right thing,
+            Contact Us
           </span>
-          <span className="master-header color-primary">
+          {/* <span className="master-header color-primary">
             at the right time.
-          </span>
+          </span> */}
           <div className="mt-3 color-primary readable-text">
-            We’ve noticed the best ideas come when
-            you least expect them. We’re here to store them for posterity and help
-            you change the world. Ideatribe was born out of a desire by the founding
-            team to harness the creativity of the everyman. You. Us. Everyone!
+            IdeaTribe, Inc. Attn. DMCA Notice 16192 Coastal Highway, Lewes, Delaware 19958 Email: contact@IdeaTribe.io
           </div>
           <div>
             <Button variabt="secondary" className="mt-5" onClick={() => {
               history.push("/home");
-            }}><span className="master-grey color-white">Take me to the tribe</span></Button>
+            }}><span className="master-grey color-white">  </span></Button>
           </div>
         </Col>
         <Col className="right desktop-view" xs={12} sm={4}>

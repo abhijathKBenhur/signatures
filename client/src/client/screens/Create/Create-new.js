@@ -166,6 +166,10 @@ const CreateNew = () => {
     fr.readAsDataURL(file[0]);
   };
 
+  const closeBtnFn = () => {
+    setModalShow(!modalShow);
+  }
+
   useEffect(() => {
     pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
@@ -471,7 +475,7 @@ const CreateNew = () => {
   }
 
   const checkValidationOnButtonClick = () => {
-    form.description = _.get(desc, 'value')
+    form.description = _.get(desc, 'mentionData.newPlainTextValue')
     const { title, description, PDFFile, category, price, thumbnail } = form;
     _.forEach(_.get(desc, 'mentionData.mentions'), (display, id) => {
       let obj = _.find(hashList, item => {
@@ -486,7 +490,7 @@ const CreateNew = () => {
       setFormErrors({
         ...formErrors,
         title: _.isEmpty(title),
-        description: _.isEmpty(_.get(desc, 'value')),
+        description: _.isEmpty(_.get(desc, 'mentionData.newPlainTextValue')),
         pdf: _.isEmpty(PDFFile),
       });
     } else {
@@ -793,6 +797,7 @@ const CreateNew = () => {
           publishState={publishState}
           publishError={publishError}
           billet={billet}
+          closeBtn={closeBtnFn}
         />
       )}
     </Container>

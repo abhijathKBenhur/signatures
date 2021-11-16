@@ -568,10 +568,10 @@ const CreateIdeaModal = ({
                 </Col>
               </Col>
             </Row>
-            {isView && <Row className="view-close-btn">
+            <Row className="view-close-btn">
               <i className="fa fa-close" onClick={closeBtn}></i>
-            </Row>}
-            <Row className={`button-section d-flex ${isView? 'view-only': ''}`}>
+            </Row>
+            <Row className="button-section d-flex view-only">
               <Col xs="10" className="button-bar justify-content-start">
                   <i className="fa fa-crosshairs cursor-pointer signature-icons mr-2"
                     color="#F39422"
@@ -640,12 +640,12 @@ const CreateIdeaModal = ({
                   
               </Col>
               <Col xs="2" className="button-bar done-btn">
-                {!closeBtn && <Button className="submit-btn btn-ternary" onClick={gotoIdea}>
+                {/* {!closeBtn && <Button className="submit-btn btn-ternary" onClick={gotoIdea}>
                   Done
-                </Button>}
-                {closeBtn && !isView && <Button className="submit-btn btn-ternary" onClick={closeBtn}>
+                </Button>} */}
+                {/* {closeBtn && !isView && <Button className="submit-btn btn-ternary" onClick={closeBtn}>
                   Close
-                </Button>}
+                </Button>} */}
               </Col>
             </Row>
           </div>
