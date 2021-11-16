@@ -28,7 +28,7 @@ const About = () => {
           <div>
             <Button variabt="secondary" className="mt-5" onClick={() => {
               history.push("/home");
-            }}><span className="master-grey color-white">  </span></Button>
+            }}><span className="master-grey color-white" onClick={(e) => window.location.href = "mailto:"+"contact@ideatribe.io"+'?subject='+"Query"+'&body='+""}>Send us an Email</span></Button>
           </div>
         </Col>
         <Col className="right desktop-view" xs={12} sm={4}>

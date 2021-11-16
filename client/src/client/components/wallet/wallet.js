@@ -36,7 +36,7 @@ const Wallet = (props) => {
         {/* <p className="master-grey"> TRIBE GOLD </p> */}
       </div>
         <div className="next-step">
-          <p className="second-header"> You can earn gold by flourishing the community. </p>
+          <p className="second-header"> You can earn TribeGold by building and nurturing the community. </p>
         </div>
         
       </div>

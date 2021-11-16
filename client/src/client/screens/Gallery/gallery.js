@@ -120,7 +120,7 @@ function gallery(props) {
     </div>
     <div className="activity-description second-grey">
       You can soon update & re-tokenize your ideas. That way you don’t
-      have to wait for your idea to be perfect to mint an NFT of it.
+      have to wait for your idea to be perfect to mint.
     </div>
   </div>
   <div className="activity-thumbnail">
@@ -134,7 +134,7 @@ function gallery(props) {
       First ideas are on us!
     </div>
     <div className="activity-description second-grey">
-      We are payiing your gas fee to post your initial 5 ideas!
+      We are payiing your gas fee to post your first 5 ideas!
     </div>
   </div>
   <div className="activity-thumbnail">

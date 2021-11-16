@@ -336,7 +336,7 @@ const SignatureNew = (props) => {
   const getSignature = () => {
     return {
       ...signature,
-      creator: _.get(signature, 'creator.email'),
+      creator: _.get(signature, 'creator.userName'),
       fullName: _.get(signature, 'creator.firstName') + " " + _.get(signature, 'creator.lastName'),
       time: new Date(_.get(signature, 'createdAt'))
     }

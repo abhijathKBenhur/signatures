@@ -263,7 +263,7 @@ const CreateIdeaModal = ({
         return (
           <Col md="12">
             <span className="purpose-message second-grey">
-              Find people to collaborate on your ide  a
+              Find people to collaborate on your idea
             </span>
             <div className="collab-section">
               <Dropdown className="w-100">
