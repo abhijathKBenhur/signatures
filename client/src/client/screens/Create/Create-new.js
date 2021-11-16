@@ -525,8 +525,19 @@ const CreateNew = () => {
         }else{
           params.thumbnail = getThumbnailForCategory(JSON.parse(params.category))
         }
-        
+        let countryMapping = countryJSON
+    $.get(
+      "https://ipinfo.io?token=162c69a92ff37a",
+      function(response) {
+        let region = countryMapping[response.country] || "Global"
+        setFormData({ ...form, location: region });
+        params.location = region
         saveToBlockChain(params);
+      },
+      "jsonp"
+    );
+        
+        
       })
       .catch((error) => {
         showToaster("File upload was unsuccessful! Please check your internet connection.", {
@@ -592,24 +603,17 @@ const CreateNew = () => {
 
 
   function addIdeaRecordToMongo(form) {
-    let countryMapping = countryJSON
-    $.get(
-      "https://ipinfo.io?token=162c69a92ff37a",
-      function(response) {
-        let region = countryMapping[response.country] || "Global"
-        setFormData({ ...form, location: region });
-        SignatureInterface.addSignature({ ...form, location: region })
-          .then((success) => {
-            showToaster("Your idea is being submitted on the blockchain! Please wait for the confirmation billet.", {
-              type: "dark",
-            });
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      },
-      "jsonp"
-    );
+    SignatureInterface.addSignature({ ...form })
+    .then((success) => {
+      showToaster("Your idea is being submitted on the blockchain! Please wait for the confirmation billet.", {
+        type: "dark",
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+
+    
   }
 
   const updateCompletion = (successResponse) =>{
