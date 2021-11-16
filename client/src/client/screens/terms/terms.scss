@@ -2,5 +2,35 @@
     margin: auto;
 }
 .terms{
-    height: calc(100vh + 100px);
+    height: 100%;
+}
+.terms-body{
+    background: white;
+    color: black;
+    padding: 30px;
+    margin: 0 13rem;
+    .faq-title {
+        font-size: 11px;
+        pointer-events: all;
+        font-weight: bold;
+        margin-bottom: 20px;
+        &:hover {
+            cursor: pointer;
+        }
+    }
+    .faq-content {
+        font-size: 11px;
+        pointer-events: all;
+        margin-bottom: 20px;
+    }
+    .author {
+        height: 1em;
+        font-size: 11px;
+        top: 340.06px;
+        left: 270.512px;
+        transform-origin: left bottom;
+        white-space: pre;
+        pointer-events: all;
+        transform: scaleX(0.94052) translateY(25%);
+    }
 }
