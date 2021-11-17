@@ -17,10 +17,10 @@ const MATIC_DEPOSIT_VALUES = {
   REGISTER: Web3Utils.toWei("0.01", "ether"),
 };
 
-const depostToNewUser = (newUserAddress) => {
+const depostToNewUser = (newUserAddress, db_id) => {
   return Promise.all([
-    TribeGoldAPIs.depositGold(newUserAddress, GOLD_DEPOSIT_VALUES.REGISTER),
-    MaticAPIs.depositMatic(newUserAddress, MATIC_DEPOSIT_VALUES.REGISTER),
+    TribeGoldAPIs.depositGold(newUserAddress, GOLD_DEPOSIT_VALUES.REGISTER, db_id),
+    MaticAPIs.depositMatic(newUserAddress, MATIC_DEPOSIT_VALUES.REGISTER, db_id),
   ]);
 };
 

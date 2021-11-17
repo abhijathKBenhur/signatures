@@ -124,7 +124,7 @@ registerUser = (req, res) => {
     .findOneAndUpdate({metamaskId:newUser.metamaskId},updateParams, {new:true,upsert:true})
     .then((user, b) => {
       responseMap.created = true
-      depositEvaluator.depostToNewUser(newUser.metamaskId).then(response =>{
+      depositEvaluator.depostToNewUser(newUser.metamaskId, newUser._id).then(response =>{
         console.log("response",response)
         return res.status(201).json({
           success: true,
