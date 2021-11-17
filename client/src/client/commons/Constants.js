@@ -70,10 +70,10 @@ const STORAGE_TYPE = [
 ];
 
 const COLLAB_TYPE = [
-  { value: "ENHANCE", label: "ENHANCE: Find people to improve your idea" },
-  { value: "PRODUCTIONIZE", label: "PRODUCTIONIZE: Find people to implement your idea" },
-  { value: "FINANCE", label: "FINANCE: Find people to fund your idea" },
-  { value: "PROMOTE", label: "PROMOTE: Find people to market your idea" },
+  { value: "ENHANCE", label: "ENHANCE: Find people to improve your Idea" },
+  { value: "PRODUCTIONIZE", label: "PRODUCTIONIZE: Find people to implement your Idea" },
+  { value: "FINANCE", label: "FINANCE: Find people to fund your Idea" },
+  { value: "PROMOTE", label: "PROMOTE: Find people to market your Idea" },
  
 ];
 

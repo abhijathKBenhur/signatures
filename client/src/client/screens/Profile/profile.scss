@@ -50,6 +50,8 @@
         }
       }
       .profile-details{
+        overflow: scroll;
+        max-height: calc(100vh - 100px);
         padding-top: 20px;
         .following{
           background-color: $secondary;
@@ -74,6 +76,7 @@
   }
 
   .userPane {
+    height: calc(100vh - 120px);
     padding: 0px;
     padding-top: 50px;
     display: flex;

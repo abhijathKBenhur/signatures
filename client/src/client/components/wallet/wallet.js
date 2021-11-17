@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import BlockchainInterface from "../../interface/BlockchainInterface";
 import "./wallet.scss";
 import Web3Utils from "web3-utils";
-
+import coin from  "../../../assets/logo/tribeGoldCoin.png"
+import polygon from  "../../../assets/logo/polygon.png"
 
 const Wallet = (props) => {
   const [goldBalance, setGoldBalance] = useState(0);
@@ -29,16 +30,16 @@ const Wallet = (props) => {
           window.open("https://mumbai.polygonscan.com")
         }
       >
-      <div className="wallet-type">
-        <p className="father-grey color-primary"> {goldBalance} TRIBE GOLD</p>
+      <div className="wallet-type d-flex justify-content-between">
+        <div className="father-grey color-primary"> {goldBalance} TRIBEGOLD</div>
+        <img height={40} width={40} src={coin}></img>
+
       </div>
       <div className="coin-amount">
-        {/* <p className="master-grey"> TRIBE GOLD </p> */}
       </div>
         <div className="next-step">
           <p className="second-header"> You can earn TribeGold by building and nurturing the community. </p>
         </div>
-        
       </div>
       <div
         className="wallet-container"
@@ -46,11 +47,12 @@ const Wallet = (props) => {
           window.open("https://mumbai.polygonscan.com")
         }
       >
-        <div className="wallet-type">
-          <p className="father-grey color-secondary"> {maticBalance} MATIC</p>
+        <div className="wallet-type d-flex justify-content-between">
+          <div className="father-grey color-secondary"> {parseFloat(maticBalance).toFixed(4)} MATIC</div>
+          <img height={40} width={40}  src={polygon}></img>
         </div>
         <div className="coin-amount">
-          {/* <p className="master-grey"> MATIC </p> */}
+        
         </div>
         <div className="next-step">
           <p className="second-header "> You can load MATIC from other wallets. </p>

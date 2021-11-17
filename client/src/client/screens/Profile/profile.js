@@ -474,6 +474,10 @@ function Profile(props) {
                         </span>
                       )}
                     </div>
+                    {/* <div className="d-flex justify-self-end logout align-content-center cursor-pointer" style={{position:"absolute", bottom:"10px"}}>
+                      <i className="fa fa-power-off second-grey"></i>
+                      <span className="second-grey ml-1">logout</span>
+                    </div> */}
                   </Col>
 
                   <Col
