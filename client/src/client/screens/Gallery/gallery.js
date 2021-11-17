@@ -84,7 +84,7 @@ function gallery(props) {
 
   const getThreeNotifications = () => {
     let array = [
-      <div className="activity-entry d-flex flex-row">
+      <div className="activity-entry d-flex flex-row mt-3">
         <div className="activity-content  d-flex flex-column">
           <div className="activity-title master-grey">
             Partnership announcement

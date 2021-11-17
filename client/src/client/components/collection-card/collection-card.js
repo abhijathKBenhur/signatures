@@ -212,7 +212,7 @@ const CollectionCard = (props) => {
                
               </div>
             </div>
-            <div className="card__foot">
+            <div className="card__foot text-center">
               <span className="card__link"> {getEngageText(signature)} </span>
 
             </div>

@@ -569,7 +569,7 @@ const CreateIdeaModal = ({
               </Col>
             </Row>
             <Row className="view-close-btn">
-              <i className="fa fa-close" onClick={closeBtn}></i>
+              <i className="fa fa-close" onClick={() => {closeBtn(props.isView)}}></i>
             </Row>
             <Row className="button-section d-flex view-only">
               <Col xs="10" className="button-bar justify-content-start">

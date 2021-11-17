@@ -166,8 +166,12 @@ const CreateNew = () => {
     fr.readAsDataURL(file[0]);
   };
 
-  const closeBtnFn = () => {
-    setModalShow(!modalShow);
+  const closeBtnFn = (isView) => {
+    if(isView){
+      setModalShow(!modalShow);
+    }else{
+      history.push("/home")
+    }
   }
 
   useEffect(() => {
