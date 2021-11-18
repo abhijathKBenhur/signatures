@@ -278,7 +278,7 @@ const SignatureNew = (props) => {
         CONSTANTS.ACTION_STATUS.COMPLETED,
         "Upvoting.",
         {
-          creditorAddress: loggedInUserDetails.metamaskId
+          creditorDbId: signature.creator
         }
       ).then((success) => {
         const upVotesClone = _.cloneDeep(upvotes);

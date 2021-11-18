@@ -23,7 +23,6 @@ const authorizer = (req, res, next) => {
 
   
   if (authRoutes.indexOf(req.path) > -1 && req.method != "OPTIONS") {
-    console.log("Authorizing api " + req.path)
     const token = req.headers["x-access-token"];
     if (!token) {
       return res.status(403).json({
@@ -44,8 +43,8 @@ const authorizer = (req, res, next) => {
             },
           });
         }
-        console.log("C", user.nonce == decoded.nonce)
-        console.log("D", conditionalAuthCheck(user, req))
+        console.log("AUTHORIZATION NONCE CHECK STATUS FOR " +req.path , user.nonce == decoded.nonce ," -- " + user.nonce + " vs " +decoded.nonce)
+        console.log("AUTHORIZATION CONDITION CHECK STATUS FOR " + req.path + " -- " + conditionalAuthCheck(user, req))
 
         if (user.nonce == decoded.nonce && conditionalAuthCheck(user, req)) {
           console.log("valid user request")
@@ -105,18 +104,16 @@ const conditionalAuthCheck = (tokenOwner, req) => {
       return tokenOwner.metamaskId == req.body.creator;
       break;
     case "/api/removeIdeaEntry":
-      return tokenOwner.metamaskId == req.body.owner;
+      return tokenOwner.metamaskId == req.body.ownerId;
       break;
     case "/api/updatePurpose":
-      console.log("tokenOwner",tokenOwner)
-      console.log("req.body.owner",req.body.owner)
       return tokenOwner._id == req.body.owner;
       break;
     case "/api/postTransaction":
       return tokenOwner._id == req.body.user;
       break;
     case "/api/setTransactionState":
-      return tokenOwner.userName == "";
+      return tokenOwner._id == req.body.user;
       break;
   }
 };

@@ -1,44 +1,54 @@
 const Web3Utils = require("web3-utils");
 const _ = require("lodash");
 
-
 const BlockchainUtils = require("../BlockchainAPIs/BlockChainUtils");
 const TransactionSchema = require("../../db-config/transaction.schema");
-const web3Instance = BlockchainUtils.web3Instance
-const publicKey = BlockchainUtils.publicKey
-const tribeGoldContract = BlockchainUtils.tribeGoldContract
+const web3Instance = BlockchainUtils.web3Instance;
+const publicKey = BlockchainUtils.publicKey;
+const tribeGoldContract = BlockchainUtils.tribeGoldContract;
 
-depositGold = (newUserAddress, ethValue, db_id) => {
-  console.log("Depositing to new user in"+ newUserAddress +" " + ethValue);
+depositGold = (receiverUserObject, ethValue, action) => {
+  console.log("INITIATING GOLD DEPOSITS TO " + receiverUserObject.metamaskId);
   const promise = new Promise((resolve, reject) => {
     tribeGoldContract.methods
-      .transfer(newUserAddress, ethValue)
+      .transfer(receiverUserObject.metamaskId, ethValue)
       .send({
         from: publicKey,
       })
-      .on("receipt", function (receipt) {
-        console.log("Deposited to new user in TBGApi");
+      .on("transactionHash", function (hash) {
+        console.log(
+          "transaction to new user " + receiverUserObject._id + " " + ethValue
+        );
         new TransactionSchema({
-          transactionID: db_id,
+          transactionID: hash,
           Status: "COMPLETED",
-          type: "GOLD_INCENTIVICED",
-          user: props.currentUser._id,
-          value: ethValue
-        }).save()
+          type: action,
+          user: receiverUserObject._id,
+          value: ethValue,
+        }).save();
+      })
+      .once("receipt", function (receipt) {
+        TransactionSchema.findOneAndUpdate(
+          { transactionID: receipt.transactionHash },
+          { status: "COMPLETED" }
+        );
         resolve(receipt.transactionHash);
       })
-      .on("error", function (error) {
-        TransactionSchema.findOneAndUpdate({transactionID:db_id},{status:"FAILED"})
+      .once("error", function (error) {
+        let transactionHash = _.get(error, "receipt.transactionHash");
+        TransactionSchema.findOneAndUpdate(
+          { transactionID: transactionHash },
+          { status: "FAILED" }
+        );
         console.log("Deposit feiled to new user in TBGApi");
         console.log("error ", error);
-        let transactionHash = _.get(error, "receipt.transactionHash");
         web3Instance.eth
           .getTransaction(transactionHash)
           .then((tx) => {
             web3Instance.eth
               .call(tx, tx.blockNumber)
               .then((result) => {
-                resolve(result)
+                resolve(result);
               })
               .catch((err) => {
                 console.log("err.message ", err.message);
@@ -54,5 +64,5 @@ depositGold = (newUserAddress, ethValue, db_id) => {
 };
 
 module.exports = {
-  depositGold
+  depositGold,
 };

@@ -5,26 +5,28 @@ const web3Instance = BlockchainUtils.web3Instance
 const publicKey = BlockchainUtils.publicKey
 const TransactionSchema = require("../../db-config/transaction.schema");
 
-depositMatic = (newUserAddress, ethValue, db_id) => {
-  console.log("Depositing to new user in MaticAPI");
+depositMatic = (receiverUserObject, ethValue) => {
+  console.log("INITIATING MATIC DEPOSITS TO " + receiverUserObject.metamaskId)
   const promise = new Promise((resolve, reject) => {
-    web3Instance.eth.sendTransaction({to:newUserAddress, from:publicKey, value:ethValue})
-    .on("receipt", function (receipt) {
-      console.log("Deposited Matic to new user");
+    web3Instance.eth.sendTransaction({to:receiverUserObject.metamaskId, from:publicKey, value:ethValue})
+    .on("transactionHash", function(hash) {
       new TransactionSchema({
-        transactionID: db_id,
+        transactionID: hash ,
         Status: "COMPLETED",
         type: "MATIC_INCENTIVICED",
-        user: props.currentUser._id,
+        user: receiverUserObject._id,
         value: ethValue
       }).save()
+    })
+    .once("receipt", function (receipt) {
+      TransactionSchema.findOneAndUpdate({transactionID:receipt.transactionHash},{status:"COMPLETED"})
       resolve(receipt.transactionHash);
     })
-    .on("error", function (error) {
-      TransactionSchema.findOneAndUpdate({transactionID:db_id},{status:"FAILED"})
+    .once("error", function (error) {
+      let transactionHash = _.get(error, "receipt.transactionHash");
+      TransactionSchema.findOneAndUpdate({transactionID:transactionHash},{status:"FAILED"})
       console.log("failed depostto new user in MaticAPI");
       console.log("error ", error);
-      let transactionHash = _.get(error, "receipt.transactionHash");
       web3Instance.eth
         .getTransaction(transactionHash)
         .then((tx) => {

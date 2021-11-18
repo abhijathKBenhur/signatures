@@ -214,13 +214,13 @@ function Profile(props) {
         CONSTANTS.ACTION_STATUS.PENDING,
         "I would like to follow you.",
         {
-          creditorAddress: loggedInUserDetails.metamaskId,
+          creditorDbId: loggedInUserDetails
         }
       ).then((success) => {
         let newFollowlist = _.concat(followers, [userDetails.userName]);
         setFollowers(newFollowlist);
         NotificationInterface.postNotification(
-          loggedInUserDetails._id,
+          userDetails._id,
           viewUser,
           CONSTANTS.ACTIONS.FOLLOW,
           CONSTANTS.ACTION_STATUS.PENDING,
