@@ -31,13 +31,13 @@ const ShareModal = (props) => {
             <div className="wrapper">
             <div className="share-txt">
                   <h3>
-                  Share this with your social Community
+                  Share this with your community
                   </h3>
                 </div>
             <div className="sharables d-flex">
                   <reactShare.FacebookShareButton
                     url={window.location.href}
-                    quote={"Hey! Check out this idea."}
+                    quote={"Hey! I minted an Idea on IdeaTribe.io!"}
                   >
                     <div className="social-icon-wrapper fb">
                       <i class="fa fa-facebook" aria-hidden="true"></i>
@@ -46,7 +46,7 @@ const ShareModal = (props) => {
                   </reactShare.FacebookShareButton>
                   <reactShare.TwitterShareButton
                     url={window.location.href}
-                    title={"Hey! Check out this idea."}
+                    title={"Hey! I minted an Idea on IdeaTribe.io!"}
                   >
                      <div className="social-icon-wrapper twitter">
                      <i class="fa fa-twitter" aria-hidden="true"></i>
@@ -55,7 +55,7 @@ const ShareModal = (props) => {
                   </reactShare.TwitterShareButton>
                   <reactShare.WhatsappShareButton
                     url={window.location.href}
-                    title={"Hey! Check out this idea."}
+                    title={"Hey! I minted an Idea on IdeaTribe.io!"}
                     separator=":: "
                   >
                     <div className="social-icon-wrapper whatsapp">

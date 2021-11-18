@@ -86,7 +86,7 @@ const CommentsPanel = (props) => {
 
   const handleChange = (event) => {
     const { value } = event.target;
-    if (event.key == "Enter") {
+    if (event.key == "Enter" || event.keyCode == 13) {
       event.target.blur();
       if (_.isUndefined(loggedInUserDetails.userName)) {
         history.push("/profile");
