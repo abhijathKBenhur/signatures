@@ -2,6 +2,11 @@ const Web3Utils = require("web3-utils");
 const MaticAPIs = require("../BlockchainAPIs/MaticAPIs");
 const TribeGoldAPIs = require("../BlockchainAPIs/TribeGoldAPIs");
 const StatsAPI = require("../statsAPI");
+
+const UserSchema = require("../../db-config/user.schema");
+const SignatureSchema = require("../../db-config/Signature.schema");
+const TransactionSchema = require("../../db-config/transaction.schema");
+
 const GOLD_DEPOSIT_VALUES = {
   REGISTER: Web3Utils.toWei("1", "ether"),
   IDEA_POST: {
@@ -11,46 +16,108 @@ const GOLD_DEPOSIT_VALUES = {
     4: Web3Utils.toWei("2", "ether"),
     5: Web3Utils.toWei("2", "ether"),
   },
+  UPVOTES:{
+    1: Web3Utils.toWei("2", "ether"),
+    10: Web3Utils.toWei("3", "ether"),
+    100: Web3Utils.toWei("5", "ether"),
+    1000: Web3Utils.toWei("10", "ether"),
+  },
+  FOLLOWS:{
+    1: Web3Utils.toWei("2", "ether"),
+    10: Web3Utils.toWei("3", "ether"),
+    100: Web3Utils.toWei("5", "ether"),
+    1000: Web3Utils.toWei("10", "ether"),
+  }
 };
 
 const MATIC_DEPOSIT_VALUES = {
   REGISTER: Web3Utils.toWei("0.01", "ether"),
 };
 
-const depostToNewUser = (newUserAddress) => {
+const depostToNewUser = (receiverUserObject) => {
+  console.log("INITIATING DEPOSITS")
   return Promise.all([
-    TribeGoldAPIs.depositGold(newUserAddress, GOLD_DEPOSIT_VALUES.REGISTER),
-    MaticAPIs.depositMatic(newUserAddress, MATIC_DEPOSIT_VALUES.REGISTER),
+    TribeGoldAPIs.depositGold(receiverUserObject, GOLD_DEPOSIT_VALUES.REGISTER,"GOLD_INCENTIVICED_REGISTER"),
+    MaticAPIs.depositMatic(receiverUserObject, MATIC_DEPOSIT_VALUES.REGISTER,"REGISTER"),
   ]);
 };
 
 
-const depostForFollow = (newUserAddress) => {
-  console.log("depositing for follow  - " + newUserAddress)
-  return TribeGoldAPIs.depositGold(newUserAddress, Web3Utils.toWei("1", "ether"))
+const depostForFollow = (ownerUserObject) => {
+  console.log("INITIATING FOLLOW DEPOSIT",ownerUserObject)
+  try{
+    StatsAPI.getFollowCountForUser(ownerUserObject.userName).then(result =>{
+      console.log("CURRENT FOLLOW COUNT ",result)
+      if (Object.keys(GOLD_DEPOSIT_VALUES.FOLLOWS).indexOf(""+result) > -1) {
+        console.log("CHECKING USER - " + ownerUserObject._id + " && GOLD_INCENTIVICED_FOLLOW_" + result)
+        TransactionSchema.find({user:ownerUserObject._id,type:"GOLD_INCENTIVICED_FOLLOW_"+result}).then(transaction => {
+          if(!transaction || transaction.length == 0){
+            console.log(" FOLLOW DEPOSITED")
+            return TribeGoldAPIs.depositGold(ownerUserObject,GOLD_DEPOSIT_VALUES.FOLLOWS[Number(result)],"GOLD_INCENTIVICED_FOLLOW_"+result)
+          }
+          else{
+            console.log("ALREADY INCENTIVISED")
+          }
+        })
+      }else{
+        console.log("UNINDEXED COUNTS")
+      }
+    })
+  
+  }catch(error){
+    console.log("error ", error)
+  }
 };
 
-const depostForUpvote = (newUserAddress) => {
-  console.log("depositing for upvote - " + newUserAddress)
-  return TribeGoldAPIs.depositGold(newUserAddress, Web3Utils.toWei("1", "ether"))
+const depostForUpvote = (ownerUserObject,ideaId) => {
+  console.log("INITIATING UPVOTE DEPOSIT")
+  try{
+    StatsAPI.getUpvoteCountForIdeas(ideaId).then(result =>{
+      console.log("CURRENT UPVOTE COUNT ",result)
+      if (Object.keys(GOLD_DEPOSIT_VALUES.UPVOTES).indexOf(""+result) > -1) {
+        console.log("CHECKING USER - " + ownerUserObject._id + " && GOLD_INCENTIVICED_UPVOTE_" + result)
+        TransactionSchema.find({user:ownerUserObject._id,type:"GOLD_INCENTIVICED_UPVOTE_"+result}).then(transaction => {
+          if(!transaction || transaction.length == 0){
+            console.log(" UPVOTE DEPOSITED")
+            return TribeGoldAPIs.depositGold(ownerUserObject,GOLD_DEPOSIT_VALUES.UPVOTES[Number(result)],"GOLD_INCENTIVICED_UPVOTE_"+result)
+          }else{
+            console.log("ALREADY INCENTIVISED")
+          }
+        })
+      }else{
+        console.log("UNINDEXED COUNTS")
+      }
+    })
+  
+  }catch(error){
+    console.log("error ", error)
+  }
 };
 
 
-function depositForNthIdea(creator) {
-  return StatsAPI.getIdeasCountFromUser(creator._id).then((result) => {
-    console.log("incetivicing for  ", result + " th idea")
+function depositForNthIdea(ownerUserObject) {
+  return StatsAPI.getIdeasCountFromUser(ownerUserObject._id).then((result) => {
+    console.log("incetivicing for  ", result + " th idea", Object.keys(GOLD_DEPOSIT_VALUES.IDEA_POST))
+    console.log("incetivicing for  ", Object.keys(GOLD_DEPOSIT_VALUES.IDEA_POST).indexOf(""+result))
     if (Object.keys(GOLD_DEPOSIT_VALUES.IDEA_POST).indexOf(""+result) > -1) {
       if(Number(result) > 5){
+        console.log("here")
         TribeGoldAPIs.depositGold(
-          creator.metamaskId,
-          Web3Utils.toWei("1", "ether")
+          ownerUserObject,
+          Web3Utils.toWei("1", "ether"),
+          "IDEAPOST"
         );
       }else{
+        console.log("here 2")
         TribeGoldAPIs.depositGold(
-          creator.metamaskId,
-          GOLD_DEPOSIT_VALUES.IDEA_POST[Number(result)]
+          ownerUserObject,
+          GOLD_DEPOSIT_VALUES.IDEA_POST[Number(result)],
+          "IDEAPOST"
         );
       }
+    }else{
+      console.log("here 3")
+
     }
   });
 }

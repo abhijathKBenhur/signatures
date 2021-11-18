@@ -13,7 +13,7 @@ postRelation = (req, res) => {
     });
   }
   const newRelation = new RelationSchema(body);
-
+  let creditorDbId = body.options.creditorDbId
   if (!newRelation) {
     return res.status(400).json({ success: false, error: err });
   }
@@ -22,12 +22,12 @@ postRelation = (req, res) => {
     .save()
     .then((result, b) => {
         if(result.relation == "FOLLOW"){
-          // let creditorAddress = JSON.parse(result).creditorAddress
-          // depositEvaluator.depostForFollow(creditorAddress)
+          depositEvaluator.depostForFollow(creditorDbId)
         }
         if(result.relation == "UPVOTE"){
-          // let creditorAddress = JSON.parse(result).creditorAddress
-          // depositEvaluator.depostForUpvote(creditorAddress)
+          let creditorIdeaId = result.to
+          console.log("raa")
+          depositEvaluator.depostForUpvote(creditorDbId,creditorIdeaId)
         }
       return res.status(201).json({
         success: true,

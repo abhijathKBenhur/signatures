@@ -66,9 +66,9 @@ function gallery(props) {
 
   const getStats = () => {
     let statsList = [
-      StatsInterface.getTotalIdeasOnTribe(),
-      StatsInterface.getTotalUsersOnTribe(),
-      StatsInterface.getTotalSalesHeld(),
+      // StatsInterface.getTotalIdeasOnTribe(),
+      // StatsInterface.getTotalUsersOnTribe(),
+      // StatsInterface.getTotalSalesHeld(),
       // StatsInterface.getTotalTribeGoldDistributed()
     ];
     Promise.all(statsList).then((values) => {

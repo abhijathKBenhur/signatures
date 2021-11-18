@@ -37,7 +37,7 @@ addSignature = async (req, res) => {
     .save()
     .then(() => {
       console.log("depositing to user")
-      depositEvaluator.depositForNthIdea(creatorId)
+      
       return res.status(201).json({
         success: true,
         tokenId: newIdea.tokenId,
@@ -167,9 +167,9 @@ buySignature = async (req, res) => {
 };
 
 updateIdeaID = async (req, res) => {
-  const creatorId = await UserSchema.findOne({ metamaskId: req.body.creator });
+  const creatorObject = await UserSchema.findOne({ metamaskId: req.body.creator });
   await IdeaSchema.findOneAndUpdate(
-    { transactionID: req.body.transactionID,  creator: creatorId },
+    { transactionID: req.body.transactionID,  creator: creatorObject },
     { ideaID: req.body.ideaID, status: "COMPLETED" },
     (err, token) => {
       if (err) {
@@ -179,6 +179,7 @@ updateIdeaID = async (req, res) => {
       if (!token) {
         return res.status(404).json({ success: true, data: [] });
       }
+      depositEvaluator.depositForNthIdea(creatorObject)
       return res.status(200).json({ success: true, data: token });
     }
   ).catch((err) => {
