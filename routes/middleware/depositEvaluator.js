@@ -17,16 +17,14 @@ const GOLD_DEPOSIT_VALUES = {
     5: Web3Utils.toWei("2", "ether"),
   },
   UPVOTES:{
-    1: Web3Utils.toWei("2", "ether"),
-    10: Web3Utils.toWei("3", "ether"),
+    1: Web3Utils.toWei("1", "ether"),
+    10: Web3Utils.toWei("2", "ether"),
     100: Web3Utils.toWei("5", "ether"),
-    1000: Web3Utils.toWei("10", "ether"),
   },
   FOLLOWS:{
-    1: Web3Utils.toWei("2", "ether"),
-    10: Web3Utils.toWei("3", "ether"),
+    1: Web3Utils.toWei("1", "ether"),
+    10: Web3Utils.toWei("2", "ether"),
     100: Web3Utils.toWei("5", "ether"),
-    1000: Web3Utils.toWei("10", "ether"),
   }
 };
 
