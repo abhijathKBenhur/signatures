@@ -61,7 +61,20 @@ const CHAIN_CONFIGS = {
     },
     rpcUrls: ["https://rpc-mumbai.maticvigil.com/"],
     blockExplorerUrls: ["https://explorer-mumbai.maticvigil.com/"],
-  }
+  },
+  "0x89": {
+    chainId: "0x89",
+    chainName: "Polygon mainnet",
+    nativeCurrency: {
+      name: "MATIC",
+      symbol: "MATIC",
+      decimals: 18,
+    },
+    rpcUrls: [
+      "https://polygon-rpc.com",
+    ],
+    blockExplorerUrls: ["https://polygonscan.com/"],
+  },
 };
 
 
