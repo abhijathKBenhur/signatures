@@ -73,7 +73,7 @@ function Clan(props) {
     // {
     //   coinType: "Tribe Coin",
     //   coinBalance: "23 TBC",
-    //   description: "You can create 23 ideas",
+    //   description: "You can create 23 Ideas",
     // },
     {
       coinType: "Tribe Gold",
@@ -83,7 +83,7 @@ function Clan(props) {
     // {
     //   coinType: "GAS",
     //   coinBalance: "0.0003 POLYGON",
-    //   description: "You can post 20 ideas with the remaining gas",
+    //   description: "You can post 20 Ideas with the remaining gas",
     // },
   ];
 

@@ -105,7 +105,7 @@ function gallery(props) {
             It’s raining TribeGold!
           </div>
           <div className="activity-description second-grey">
-            Earn TribeGold for publishing ideas and inviting friends.
+            Earn TribeGold for publishing Ideas and inviting friends.
           </div>
         </div>
         <div className="activity-thumbnail">
@@ -119,7 +119,7 @@ function gallery(props) {
       Versioning Feature coming soon
     </div>
     <div className="activity-description second-grey">
-      You can soon update & re-tokenize your ideas. That way you don’t
+      You can soon update & re-tokenize your Ideas. That way you don’t
       have to wait for your idea to be perfect to mint.
     </div>
   </div>
@@ -131,10 +131,10 @@ function gallery(props) {
 <div className="activity-entry d-flex flex-row mt-3">
   <div className="activity-content  d-flex flex-column">
     <div className="activity-title master-grey">
-      First ideas are on us!
+      First Ideas are on us!
     </div>
     <div className="activity-description second-grey">
-      We are payiing your gas fee to post your first 5 ideas!
+      We are paying Gas fee to mint your first 5 Ideas!
     </div>
   </div>
   <div className="activity-thumbnail">

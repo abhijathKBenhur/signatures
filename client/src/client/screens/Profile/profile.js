@@ -451,7 +451,6 @@ function Profile(props) {
                       {_.isEmpty(loggedInUserDetails.bio) && isMyPage() ? (
                         <div className="d-flex justify-content-center text-center">
                           <span className="second-grey">
-                            Your profile might need more information. Please try
                             <span
                               className="cursor-pointer color-primary"
                               onClick={() => {
@@ -462,7 +461,7 @@ function Profile(props) {
                               }}
                             >
                               {" "}
-                              adding{" "}
+                              Add{" "}
                             </span>
                             more info.
                           </span>

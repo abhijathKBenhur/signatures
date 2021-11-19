@@ -632,7 +632,7 @@ const CreateNew = () => {
       user: userDetails._id
     })
     const alertProperty = {
-      content: "Congratulations! Your idea has been published to the blockchain. We will be depositing TribeGold in your wallet shortly!",
+      content: "Congratulations! Your Idea has been published on the blockchain. We will be depositing TribeGold in your wallet shortly!",
     }
     ReactDOM.render(<AlertBanner {...alertProperty}></AlertBanner>, document.querySelector('.aleartHeader'))
   }

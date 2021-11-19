@@ -21,7 +21,7 @@ const Help = () => {
       <span className="father-grey color-secondary">Tokenomics Whitepaper</span>
       <>
         <p className="page-container text-center cursor-pointer">
-          <ChevronLeft
+          {pdfPages.currentPage != 1 && <ChevronLeft
             className={pdfPages.currentPage === 1 ? "disable" : ""}
             onClick={() =>
               setPdfPages({
@@ -29,9 +29,9 @@ const Help = () => {
                 currentPage: pdfPages.currentPage - 1,
               })
             }
-          />
+          />}
           Page {pdfPages.currentPage} of {pdfPages.totalPages}
-          <ChevronRight
+          {pdfPages.currentPage != pdfPages.totalPages && <ChevronRight
             className={
               pdfPages.currentPage === pdfPages.totalPages ? "disable" : ""
             }
@@ -41,7 +41,7 @@ const Help = () => {
                 currentPage: pdfPages.currentPage + 1,
               })
             }
-          />
+          />}
         </p>
         <Document
           file={PDFFile}

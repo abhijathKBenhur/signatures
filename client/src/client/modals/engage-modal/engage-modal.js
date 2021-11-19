@@ -101,19 +101,19 @@ const EngageModal = (props) => {
   const getEngageText = (form, isVerb) => {
     switch (_.get(form,'purpose.purposeType')) {
       case CONSTANTS.PURPOSES.SELL:
-        return isVerb ? "buy this idea for" + form.price + " MATIC" : "Buy";
+        return isVerb ? " Buy this idea for " + form.price + " MATIC" : "Buy";
 
       case CONSTANTS.PURPOSES.LICENSE:
-        return isVerb ? "licensing this idea for " + form.price + " MATIC": "Buy";
+        return isVerb ? " License this idea for " + form.price + " MATIC": "Buy";
 
       case CONSTANTS.PURPOSES.AUCTION:
-        return isVerb ? "Bid for this idea" : "Bid";
+        return isVerb ? " Bid for this idea " : "Bid";
 
       case CONSTANTS.PURPOSES.COLLAB:
-        return isVerb ? "Collaborate with this idea" : "Connect";
+        return isVerb ? " Collaborate with this idea " : "Connect";
 
       case CONSTANTS.PURPOSES.KEEP:
-        return isVerb ? "not open for any engagement." : "Okay";
+        return isVerb ? "This idea is not open for any engagement. " : "Okay";
       default:
         return null;
     }
@@ -188,7 +188,7 @@ const EngageModal = (props) => {
             <Col md="12" className="">
               <div className="purpose-label master-grey">
                 <Form.Label>
-                  This idea is {getEngageText(form, true)}
+                  {getEngageText(form, true)}
                 </Form.Label>
               </div>
               <div className="purpose-message second-grey">

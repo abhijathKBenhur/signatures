@@ -34,7 +34,7 @@ const Banner = (props) => {
               <Row className="banner_header">What is IdeaTribe?</Row>
               <Row>
                 <div className="content text-banner">
-                  IdeaTribe is first and foremost, a registry of original ideas, on blockchain.
+                  IdeaTribe is first and foremost, a registry of original Ideas, on blockchain.
                   Like a provisional patent, registering your idea with us helps you
                   claim priority - as the creator. <br></br> <br></br>
                   Then you can sell your idea or find collaborators and investors for it.

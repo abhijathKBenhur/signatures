@@ -38,7 +38,7 @@ const Wallet = (props) => {
       <div className="coin-amount">
       </div>
         <div className="next-step">
-          <p className="second-header"> You can earn TribeGold by building and nurturing the community. </p>
+          <p className="second-header"> You can earn TRBG by minting Ideas and helping the community</p>
         </div>
       </div>
       <div
