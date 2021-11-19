@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
 import { ChevronRight, ChevronLeft } from "react-feather";
 import PDFFile from "../../../assets/documents/whitepaper.pdf";
-import src from "../../../assets/images/terms.png";
 import { Image } from "react-bootstrap";
 import "./terms.scss"
 const Help = () => {
@@ -16,111 +15,286 @@ const Help = () => {
   };
 
 
-  const tableContent = ["Abstract", "The Inspiration", "What is an Idea?", "The Product", "TribeGold [TRBG]", "TribeGold Minting Policy", "Earning TribeGold", "Spending TribeGold", "Conclusion"]
-  const terms = [
-    {
-      title: "Abstract",
-      content: ["To imagine new worlds and to profit from that imagination, is a uniquely human quality. We callthese imagined worlds, Ideas.", "History is after all, a series of Ideas being realized in the real world. But while everyone has them,few are able to craft and market Ideas to a wider audience - perhaps because most of us are our ownworst critics and because many of us do not have the resources to carry an Idea from inspiration tomarket. Even among Ideas that have found a market, many are orphaned because nobodyremembers their creator.", "All this is set to change. With blockchain, it is possible to capture the genesis of an Idea, that momentof inspiration and save it for eternity. Ideators will be remembered forever.", "Blockchain also enables smart contract-based collaboration between various people who arerequired to improve, produce, finance and market an Idea. Since these transactions are automated,decentralized and executed without human agency, the speed, efficiency and transparency withwhich Ideas can be realized is unprecedented.", "IdeaTribe.io is a blockchain-based community of ideators and collaborators, where Ideas are minted,nurtured, developed and taken to market."],
-      note: ["This whitepaper is provided for informational purposes only and does not and will not createany legally binding obligation on the authors or on any third party. For specific legal terms governingthe use of the IdeaTribe.io website, please view the Terms of Use here: <Link to T&C>"]
-    },
-    {
-      title: "The Inspiration",
-      content: ["The story of humanity is the story of Ideas. We are a prolific species when it comes to inventing newways of doing things. From inventing the wheel and painting on cave walls to sending satellites intodeep space; from yodelling to creating symphonies; from bartering goods to creating sophisticatedbusiness models; from imagining Universes built on turtles to theorizing about space-time continuaand quantum particles – we have progressed, an idea at a time.",
-                "Ideating is a creative process. Ideators know the thrill of inspiration and the ecstasy of creation. But itis also rewarding in material ways. There is money to be made with Ideas – not just for the ideatorbut also for people who help make them real. Every community in history has had a marketplacewhere people can collaborate on Ideas - enhance, productionize, finance and market them - forprofit. This is the Idea Supply Chain. It starts with the ideator and ends with the consumer, theultimate beneficiary of the value of an Idea. Over time however, the Idea Supply Chain has becomemore sophisticated and as with many large complex systems, less equitable.",
-                "Today, the Idea Supply Chain is a ruthless place for ideators without patrons, pedigree or deeppockets. Those with such privileges find it easy to turn their inspiration into products that are eagerlysought by millions of consumers. They have ecosystems of collaborators who help them fine-tunetheir Idea, sign partnerships, get multi-million dollar deals heavily influenced by the weight of theiridentity. This is a compounding game – for ideators with privilege, the route to success becomesshorter and smoother with every new Idea.",
-                "Yet – as it always happens in the story of human ingenuity – we have a solution to set things right; tocorrect these inequities and make the Idea Supply Chain fairer. The solution is Blockchain.",
-                "With blockchain, every ideator has equal opportunity and is bound to operate by the same hardrules. The rules cannot be tinkered with, adapted or ignored to favor any specific group of people.There are no middle-people who can influence policy to privilege one person over another. If therules are specific, simple and immutable, the Idea Supply Chain built on blockchain will reward truemerit: People whose ideas add value and people who help them realize that value, will profit.",
-                "IdeaTribe has been inspired by the possibilities of blockchain. We realized that blockchain willaddress the chinks in the Idea Supply Chain; every Idea and ideator will get their due, without beingcompromised by the politics of influence. Ideas will reach their audiences faster and benefit from thesupport of global collaborators. People will be paid fairly and on time, for their creativity and effort.",
-                "Thus, we decided to create IdeaTribe on blockchain to build an equitable Idea Supply Chain."]
-    },
-    {
-      title: "What is an Idea?", 
-      content: ["At IdeaTribe, an Idea is any thought that - if realized properly - may be valued by the world. It neednot be developed into its final form, nor even defined in fine details. The first spark of inspiration,where an Idea originates, is the genesis of the Idea Supply Chain. Therefore, an Idea could be thegerm of a story that will eventually become a blockbuster movie; a ditty that will evolve into asymphony; a doodle that may be a world-changing invention; or a perspective that may become anew theory of how things work.", 
-                "We believe that this first spark of inspiration is precious. Before it dies in a miasma of self-doubt,cynicism and detracting advice, it must be recorded with due credit to the ideator.Ideas develop continually and often with help from collaborators. This is the natural process of anIdea finding its true potential. At IdeaTribe, we recognize that making this as smooth, simple andnon-judgmental as possible is the healthy way to build a truly meritocratic Idea Supply Chain."]
-    },
-    {
-      title: "The Product", 
-      content: ["IdeaTribe.io is built on the MATIC blockchain. IdeaTribe.io will provide 3 essential services of the Idea", "Supply Chain:"],
-      item: ["Create and maintain an immutable record of who originally conceived an Idea. When an Idea isminted on IdeaTribe, the creator is issued a Billet – a digital certificate that forever marks thetime and location of when and where the Idea was minted.", "Enable refinement and enhancement of an Idea to make it ready-for-market. This will be donethrough version upgrades of Ideas and smart contract-based collaborations between communitymembers.", "Enable commercialization of Ideas and services associated with the Idea Supply Chain. This willbe done through smart contract-based sale and auction of Ideas and purchase of services."]
-    },
-    {
-      title: "TribeGold [TRBG]",
-      content: ["The meritocratic Idea Supply Chain works on 2 key principles:"],
-      item: ["That an Idea’s journey, from inspiration to market, is based on hard rules, common to everyone.", "That the Community will engage to support an Idea’s journey and individual members [calledTribers] will be rewarded – automatically and without manual influence – for the support theylend."],
-      afterContent: ["IdeaTribe has designed an ERC-20 utility token called TribeGold to realize these principles.", "TribeGold is an asset of IdeaTribe to reward Tribers for building the community, bringing Ideas toIdeaTribe and realizing a fast, efficient and meritocratic Idea Supply Chain.", "IdeaTribe intends to mint 27,182,818 TribeGold coins. We believe that by the time these coins aredistributed, there will be a thriving community of Tribers who are regularly publishing Ideas,improving them, collaborating with each other and taking Ideas to market. In this way, not onlyideators and the IdeaTribe community, but also society will benefit from the value unlocked by theseIdeas.", "We want to have enough coins in circulation at maturity to ensure robust trade, collaboration andrealization of Ideas. We also want to ensure that the coins are a representation of the collective valueof all Ideas published, improved and realized on IdeaTribe. Hence we are limiting the number ofTribeGold coins. As the community matures, the true value of TribeGold (as represented in fiat) willincrease.", "We have chosen to mint 27,182,818 coins which is e*10^7. This is a hat-tip to the power ofcompounding and our belief that the value of Ideas compound when the community gets together."]
-    },
-    {
-      title:  "TribeGold Minting Policy", 
-      content: ["To achieve 27,182,818 coins that compound at a rate of e [Euler’s Constant = 2.7182818], we startwith 744 coins. Over 9 compounding cycles, the total number of TribeGold coins will become27,182,818.", "In each cycle, 75% of the TribeGold coins minted will be available for distribution to the community.25% will be allotted to IdeaTribe.io, towards maintenance and enhancement of the platform.", "Each minting cycle will start when 70% of the coins available in the previous cycle are distributed.", "Therefore, the minting cycles will be:"],
-      table: undefined
-    },
-    {
-      title: "Earning TribeGold", 
-      content: ["Tribers can earn TribeGold by participating in and contributing to the community. IdeaTribe willperiodically revise the policy on activities that earn TribeGold. Broadly, TribeGold can be earned for:"],
-      bullet: ["Joining the community", "Enabling friends to join the community", "Minting Ideas", "Actively developing an Idea and taking it to market", "Helping Tribers to enhance and market their Idea"],
-      afterContent: ["IdeaTribe will also do periodic airdrops of TribeGold to reward Tribers who contribute most to the community."]
-    },
-    {
-      title: "Spending TribeGold", 
-      content: ["Tribers will be able to spend TribeGold in 2 ways:"],
-      item: ["Use TribeGold to pay for high quality collaborations and services. Both seekers and providers ofcollaboration and services may advertise the amount of TribeGold they are willing to give foreffecting these transactions.", "Invest TribeGold in Ideas that they believe have high potential of success and impact. Owners ofIdeas may advertise the amount of stake they are willing to share in their Idea. They may alsoshare their plans for marketing the Idea. Based on the proposition, other Tribers will be able toinvest TribeGold in these Ideas. Upon realization of the plan, investors can get their share ofreturns from the investment."]
-    },
-    {
-      title: "Conclusion",
-      content: ["We believe that a new world is unfolding before us. This is a glorious place, full of opportunities foreveryone and it is being made possible by wonderful technology. We are excited to harness thepower of blockchain and re-imagine the uniquely human quality of profiting from our imaginations."],
-      afterContent: ["If we silence our inner critic,", "If we let hope overpower our fears,", "If we help fulfil each other’s true self,", "If we let Ideas triumph over patronage and pedigree,", "We’re All Gonna Make It."],
-      author: true
-    }
-  ]
+  
 
   useEffect(() => {
     pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
   }, []);
   return (
-    <div className="main-content-component container terms d-flex">
+    <div className="main-content-component container privacy">
       <>
         <div className="terms-body">
-        <span className="father-grey color-secondary">Terms & Conditions</span>
-        <div>
-        <Image src={src} className="w-100"></Image>
+        <div className="father-grey color-secondary mb-3">IDEATRIBE TERMS AND CONDITIONS</div>
+        <div> Date of Initial Publication: 20 September 2021 </div>
+        <div> Last Updated: 20 September 2021 </div>
+        <div> PLEASE FIND BELOW THE TERMS AND CONDITIONS GOVERNING THE IDEATRIBE OFFERINGS, INCLUDING: </div>
+        <ul>
+          <li> ACCESSING, DOWNLOADING OR USING ANY IDEATRIBE APP; </li>
+          <li> CREATING/ PUBLISHING ANY IDEA ON THE IDEATRIBE APP OR TRADING, BUYING, SELLING, TRANSFERRING, COLLABORATING ON OR RECEIVING ANY IDEA THAT WAS CREATED ON AN IDEATRIBE APP; </li>
+          <li>  USING, SENDING TOKENS TO, RECEIVING TOKENS FROM, SENDING MESSAGES TO OR OTHERWISE TRANSACTING ON OR WITH IDEATRIBE; </li>
+          <li> USING, TRANSFERRING, BUYING, SELLING OR RECEIVING THE TRIBEGOLD TOKEN; OR </li>
+        </ul>
+        <div> These terms and conditions (these “Terms”) have been established by IdeaTribe Inc. to govern the Offerings. By engaging in or undertaking any of the aforementioned activities, you will be deemed to be a “User” who is legally bound by these Terms. Please contact us at <a onClick={(e) => window.location.href = "mailto:"+"contact@ideatribe.io"+'?subject='+"Query"+'&body='+""} > contact@IdeaTribe.io </a> for any questions or issues. </div>
+        <div className="bold">AGREEMENT</div>
+        <div className="aggrement">
+          <ol className="ol-reset">
+            <li> CERTAIN DEFINED TERMS AND RELATED INFORMATION 
+              <ol>
+                <li> NFTs and Ideas. 
+                  <ul className="alphabet-list">
+                    <li> “NFTs” means ERC-721 standard compliant tokens or other similar “non-fungible” tokens deployed on Polygon Network Blockchain. NFTs are intended to be “non-fungible” tokens representing a unique Idea;. </li>
+                    <li> Ideas: 
+                      <ul className="roman-lower-list">
+                        <li>“Idea” means the association on of an NFT with a Uniform Resource Identifier (“URI”) identifying an appropriately configured JSON file conforming to the ERC-721 Metadata JSON Schema or a similar JSON schema, as applicable (such JSON file, the “Idea ID”).</li>
+                        <li> The Idea ID of an Idea specifies the properties of the Idea, including the name and description of the Idea (the “Idea Descriptors”), a URI identifying any image, PDF or multi-media file associated with the Idea (the “Idea File”), the time stamp of writing the contract on Polygon and potentially other “metadata” associated with the Idea (the Idea Descriptors, Idea File, time stamp and such other metadata, collectively, the “Idea Metadata”). The Idea Metadata for Ideas created through the IdeaTribe Applications are through an IPFS node operated by Infura Inc., or in secure. The Idea Metadata for Ideas created outside the be fungible with one another (i.e., all such NFTs are associated with the same Idea however, certain NFTs may Metadata) while being non-fungible with other NFTs (i.e., such NFTs are associated with different Idea Metadata) Polygon typically stored on IPFS private storage by IdeaTribe Inc. IdeaTribe Applications may be stored in other ways, depending on how such Ideas were created. </li>
+                        <li> There can be no guarantee or assurance of the uniqueness, originality or quality of any Idea or Idea Metadata. In the absence of an express legal agreement between the creator of a Idea and purchasers of the Idea, there cannot be any guarantee or assurance that the purchase or holding of the Idea confers any license to or ownership of the Idea Metadata or other intellectual property associated with the Idea or any other right or entitlement, notwithstanding that User may rightfully own or possess the NFT associated with the Idea. </li>
+                        <li> IdeaTribe Inc. may from time to time remove certain Ideas from the IdeaTribe Apps or restrict the creation of Ideas on the IdeaTribe Apps in IdeaTribe Inc.’s sole and absolute discretion, including in connection with any belief by IdeaTribe Inc. that such Idea violates these Terms or the terms and conditions or privacy policy of the IdeaTribe Apps. IdeaTribe Inc. does not commit and shall not be liable for any failure to support, display or offer or continue to support, display or offer any Idea for trading through the IdeaTribe Apps. </li>
+                        </ul>
+                    </li>
+                  </ul>
+                </li>
+                <li> Offerings. 
+                  <ul className="alphabet-list">
+                    <li> “Offerings” means the IdeaTribe Platform and all uses thereof, the IdeaTribe Apps, IdeaTribe DEX and TribeGold </li>
+                    <li> “TribeGold” means the tokens with string constant public name “IdeaTribe” and string constant public symbol “ TRBG”, the supply and balances of which are tracked by the smart contract deployed to address 0xfca59cd816ab1ead66534d82bc21e7515ce441cf on Polygon. </li>
+                    <li>  “IdeaTribe Apps” means the consumer software applications created, operated and made publicly available by IdeaTribe Inc. for transactions involving Ideas. On the date these Terms were first published, the IdeaTribe Apps consisted of the world wide web application hosted at https://IdeaTribe.io/ (the “IdeaTribe Website”). In the future, IdeaTribe Inc. may release one or more mobile applications (the “IdeaTribe Mobile Apps”). </li>
+                    <li> “IdeaTribe Inc.” means IdeaTribe Inc.., an SVG company. </li>
+                    <li> “IdeaTribe DEX” means the bytecodes (aka “smart contracts”) for creating, buying, selling and transferring NFTs and Ideas that are officially supported in the IdeaTribe Apps, as they may be modified or supplemented from time to time pursuant to Section 3.4. On the date these Terms were first published, the IdeaTribe DEX comprised the bytecodes deployed to the following Polygon network addresses listed here: <a href="https://polygonscan.com/address/0x5e092920686736B81221EAAEc33D44ed4D52270">https://polygonscan.com/address/0x5e092920686736B81221EAAEc33D44ed4D52270 </a></li>
+                  </ul>
+                </li>
+                <li> “Polygon” means the Polygon Network blockchain mainnet and the consensus blockchain for such mainnet (networkID:1, chainID:1) as recognized by the official Go Polygon Network blockchain Client, or, if applicable, the network and blockchain generally recognized as the legitimate successor thereto. </li>
+              </ol>
+            </li>
+            <li>CERTAIN GENERAL TERMS
+              <ol>
+                <li>User Responsible for Accounts / Addresses. Users are responsible for all matters relating to their accounts (if any) on the IdeaTribe Apps or the blockchain accounts or addresses through which they interact with the Offerings, and for ensuring that all uses thereof comply fully with these Terms. Users are responsible for protecting the confidentiality of their login information and passwords (if applicable) for the IdeaTribe Apps or the private keys controlling the relevant blockchain accounts or addresses through which they interact with the Offerings.</li>
+                <li> IdeaTribe Inc. m ay Discontinue the Offerings and shall have the right at any time to change or discontinue any or all aspects or features of the Offerings. </li>
+                <li> IdeaTribe Inc. m ay d eny a user Access to or Use of the Offerings. IdeaTribe Inc. reserves the right to terminate a User’s access to or use of any or all of the Offerings at any time, without or without notice, for violation of these Terms or for any other reason, or based on the discretion of IdeaTribe Inc.. IdeaTribe Inc. reserves the right at all times to disclose any information as it deems necessary to satisfy any applicable law, regulation, legal process or governmental request, or to edit, refuse to post or to remove any information or materials, in whole or in part, in IdeaTribe Inc.’s sole discretion. Ideas or other materials uploaded to the Offerings may be subject to limitations on usage, reproduction and/or dissemination; Users are responsible for adhering to such limitations if you acquire an Idea. Users must always use caution when giving out any personally identifiable information through any of the Offerings. IdeaTribe Inc. does not control or endorse the content, messages or information found in any Offerings and IdeaTribe Inc. specifically disclaims any liability with regard to the Offerings and any actions resulting from any User’s participation in any Offerings. </li>
+                <li> IdeaTribe Inc. shall have the right, but not the obligation, to monitor the content of the Offerings, to determine compliance with this TOU and any operating rules established by IdeaTribe Inc. and to satisfy any law, regulation or authorized government request. IdeaTribe Inc. shall have the right in its sole discretion to edit, refuse to post or remove any material submitted to or posted through the Offerings. Without limiting the foregoing, IdeaTribe Inc. shall have the right to remove any material that IdeaTribe Inc., in its sole discretion, finds to be in violation of the provisions hereof or otherwise objectionable </li>
+                <li> Copyright Notice. “IdeaTribe” and its logos are trademark pending properties of IdeaTribe Inc.. All rights reserved. All other trademarks appearing in the Offerings are the property of their respective owners. </li>
+                <li> Privacy Policy. To access the Offerings, a User must explicitly consent to IdeaTribe Inc.’s privacy and data security practices, which can be found by visiting our privacy policy at <a href="https://IdeaTribe.io/privacy">https://IdeaTribe.io/privacy. </a> </li>
+              </ol>
+            </li>
+            <li> THE IdeaTribe DEX AND IdeaTribe APPS
+              <ol>
+                <li> Nature of IdeaTribe DEX: The IdeaTribe DEX is a public software utility deployed on Polygon, which is accessible directly through any Polygon node or indirectly through any compatible Polygon “wallet” application which interacts with such a node. Through the IdeaTribe DEX, any person may create, buy, sell and transfer Ideas. </li>
+                <li>Relationship of IdeaTribe DEX and IdeaTribe Apps: Interacting with the IdeaTribe DEX does not require use of the IdeaTribe Apps, but the IdeaTribe Apps provide a potentially more convenient and user-friendly method of reading and displaying data (including Idea Metadata) from the IdeaTribe DEX and generating standard transaction messages compatible with the IdeaTribe DEX. Interacting with the IdeaTribe DEX through the IdeaTribe Apps requires use of an independent, User-operated Polygon wallet application through which the user may broadcast the transaction message to the Polygon Network for processing by Polygon blockchain nodes. The IdeaTribe Apps may be used to generate standard transaction messages for interacting with the IdeaTribe DEX and transmitting those messages to the wallet application. Through the wallet application, a User may broadcast the transaction message to the Polygon Network for processing by Polygon Network nodes. Assuming normal operation of the wallet and the relevant Polygon Network nodes, the Polygon Network nodes should utilize such transaction messages to make function calls against the relevant bytecode and ultimately include the results of such computations in an Polygon transaction block, thus effectuating an interaction with the IdeaTribe DEX. </li>
+                <li> License to Use the IdeaTribe Platform: Each User, subject to and conditioned upon such User’s acceptance of and adherence to these Terms, is hereby granted a non-transferable, personal, non-sublicensable license to use the IdeaTribe DEX and IdeaTribe Apps for their intended purposes. </li>
+                <li> Alterations to IdeaTribe DEX : IdeaTribe Inc. may from time to time alter the list of smart contracts which are included in the IdeaTribe DEX by adding or removing bytecode addresses from the official list of smart contracts supported by the IdeaTribe Apps, including pursuant to upgrades, forks, security incident responses or chain migrations. In the event any bytecode is removed from the IdeaTribe DEX, users would no longer be able to interact with or read the data that is associated such bytecode through the IdeaTribe Apps. It is intended (though cannot be guaranteed) that Users would continue to be able to interact with such bytecode directly through any Polygon blockchain node or indirectly through any compatible Polygon blockchain wallet application, but such interactions may require technical expertise beyond those of most Users. </li>
+                <li> Content. All content on the IdeaTribe Platform is created by Users. IdeaTribe Inc. makes no representations or warranties as to the quality, origin, or ownership of any content found in the Offerings. IdeaTribe Inc. shall not be liable for any errors, misrepresentations, or omissions in, of, and about, the content, nor for the availability of the content. IdeaTribe Inc. shall not be liable for any losses, injuries, or damages from the purchase, inability to purchase, display, or use of content. </li>
+                <li> DMCA Notices for Claims of Copyright Infringement:   
+                  <ul className="alphabet-list">
+                    <li>Takedown Requests. IdeaTribe Inc. will respond to notices of alleged copyright infringement under the United States Digital Millennium Copyright Act. If a User or other person believes that their intellectual property rights have been infringed, please notify us immediately. For IdeaTribe Inc. to respond, the complaint must provide the following information: </li>
+                      <ul className="roman-lower-list">
+                        <li> a physical or electronic signature of the copyright owner or of a person authorized to act on behalf of the copyright owner; </li>
+                        <li> a clear identification of the copyrighted work that is claimed to be infringing; </li>
+                        <li>identification of the online material that is claimed to be infringing, including, if possible, a URL representing a link to the material on the IdeaTribe website; </li>
+                        <li>information sufficient to permit IdeaTribe Inc. to contact the complainant, such as email address, physical address, and/or telephone number; </li>
+                        <li>a statement that the complainant has a good-faith belief that the relevant material is being used in a way that is not authorized by the copyright owner, its agent, or under the law; and </li>
+                        <li> a statement, made under penalty of perjury, that the above information is accurate, and the complainant is the copyright owner or is authorized to act on behalf of the copyright owner. </li>
+                      </ul>
+                      <li> Submission of Takedown Requests. Users may submit their takedown requests using the following contact information: </li>
+                      <li> DMCA Counter-Notices. If a User believes that a User’s material has been removed by mistake or misidentification, the User may provide IdeaTribe Inc. with a written counternotification containing the following information:
+                        <ul className="roman-lower-list"> 
+                          <li>the User’s name, address, telephone number, and email address; </li>
+                          <li> a description of the material that was removed, along with the URL where the content was posted in the Offerings prior to its removal; </li>
+                          <li> the following statement: “I swear, UNDER PENALTY OF PERJURY, that I have a good-faith belief that the material was removed or disabled due to a mistake or misidentification of the material to be removed or disabled”; </li>
+                          <li> a statement that the User consents to the jurisdiction of the Federal District Court for the judicial district in which your address is located, or if the User’s address is outside of the United States, any jurisdiction in which the User may be properly served, and that the User will accept service of process from the person (or their agent) who filed the original DMCA notice; and </li>
+                          <li> the User’s electronic or physical signature. Upon receipt of a valid counter notification, IdeaTribe Inc. will forward it to the party who submitted the original DMCA notification. The original party (or their representative) will then have ten (10) days to notify us that he or she has filed legal action relating to the allegedly infringing material. If IdeaTribe Inc. does not receive any such notification within 10 days, may restore the material to the Offerings. </li>
+                        </ul>
+                      </li>
+                      <li> Repeat Infringers. reserves the right to terminate the accounts or block usage of the Offerings of any party who is a repeat infringer or who is repeatedly charged with infringement. </li>
+                    </ul>
+                </li>
+              </ol>
+            </li>
+            <li>FEES, COMMISSIONS, ROYALTIES AND OTHER CHARGES]
+              <ol>
+                <li>  Fees. Creating, buying, selling, collaborating or transferring Ideas may be subject to fees, commissions, royalties and other charges (“Fees”) established from time to time at the sole discretion of IdeaTribe Inc. . On the date of initial publication of these Terms, Fees include: 
+                  <ul className="alphabet-list"> 
+                    <li> service fees established by and payable to IdeaTribe Inc.; </li>
+                    <li> commissions on secondary sales of Ideas, established by and payable to the creators of such Ideas; and </li>
+                    <li> “gas” (fees paid to blockchain miners such as Polygon Network miners in MATIC or any other Blockchain that IdeaTribe Inc. may consider in the future through Users’ independent wallet applications as consideration for mining the Users’ transactions). Service fees may be adjusted from time to time in the sole discretion of IdeaTribe Inc.. , the IdeaTribe, Inc. Attn. DMCA Notice 16192 Coastal Highway, Lewes, Delaware 19958 Email: contact@IdeaTribe.io IdeaTribe Inc. IdeaTribe Inc. Commissions are set in the sole discretion of the Idea creator and may range from 0% to 100%; in the event that a User acquires an Idea with a 100% commission User will be unable to collect any proceeds of a sale of that Idea on the IdeaTribe Platform. “Gas” fees are set by the User through the User’s independent Polygon blockchain wallet application, based on the market conditions on Polygon blockchain. </li>
+                  </ul>
+                </li>
+                <li>  Forms of Payment. Fees may be paid or payable solely in the manner determined in the sole discretion of IdeaTribe Inc.. On the date of initial publication of these Terms, all Fees must be paid in MATIC. </li>
+                <li> Finality; No Refunds. All transactions involving the Offering are final. All Fees relating are non-refundable except at the sole discretion of IdeaTribe Inc. (for service fees and other fees within its control) or applicable third parties (Ideas creators, Polygon Network blockchain miners, etc.). </li>
+              </ol>
+            </li>
+            <li> ACCEPTABLE & PROHIBITED USES OF THE OFFERINGS 
+              <ol> 
+                <li> Acceptable Uses. The IdeaTribe Platform and other Offerings are reserved exclusively for lawful consumer entertainment, commercial and artistic purposes (the “Permitted Uses”).</li>
+                <li>  Prohibited Uses. Users must not, directly or indirectly: 
+                  <ul className="alphabet-list">
+                  <li> employ any device, scheme or artifice to defraud, or otherwise materially mislead, IdeaTribe Inc., or any member of the IdeaTribe Community, including by impersonating or assuming any false identity; </li>
+                  <li> engage in any act, practice or course of business that operates or would operate as a fraud or deceit upon IdeaTribe Inc. or any member of the IdeaTribe Community; </li>
+                  <li> violate, breach or fail to comply with any applicable provision of these Terms or any other terms of service, privacy policy, trading policy or other contract governing the use of any the Offerings or any relevant NFTs or Ideas; </li>
+                  <li> use the Offerings by or on behalf of a competitor of IdeaTribe Inc. or competing platform or service for the purpose of interfering with the Offerings to obtain a competitive advantage; </li>
+                  <li> engage or attempt to engage in or assist any hack of or attack on the IdeaTribe Apps, IdeaTribe DEX, or any member of the IdeaTribe Community, including any “sybil attack”, “DoS attack” or “griefing attack” or theft of Ideas, TribeGold or funds, or upload files that contain viruses, Trojan horses, worms, time bombs, cancelbots, corrupted files, or any other similar software or programs that may damage the operation of another’s computer or property or interfere with the Offerings; </li>
+                  <li> create, buy, sell or use any Idea that infringes or in a manner infringing the copyright, trademark, patent, trade secret or other intellectual property or other proprietary rights of others, or upload, or otherwise make available, files that contain images, photographs, software or other material protected by intellectual property laws (including, copyright or trademark laws) or rights of privacy or publicity unless the applicable User owns or controls the rights thereto or has received all necessary consent to do the same; </li>
+                  <li> commit any violation of applicable laws, rules or regulations; </li>
+                  <li> use the Offerings in connection with surveys, contests, pyramid schemes, chain letters, junk email, spamming, or any duplicative or unsolicited messages (commercial or otherwise); </li>
+                  <li> defame, abuse, harass, stalk, threaten or otherwise violate the legal rights (such as rights of privacy and publicity) of other; </li>
+                  <li> publish, post, distribute or disseminate any profane, obscene, pornographic indecent or unlawful content, pictures, topic, name, material or information; </li>
+                  <li> engage in or knowingly facilitate any “front-running,” “wash trading,” “pump and dump trading,” “ramping,” “cornering” or fraudulent, deceptive or manipulative trading activities, including: 
+                    <ul className="roman-lower-list"> 
+                      <li>trading an Idea at successively lower or higher prices for the purpose of creating or inducing a false, misleading or artificial appearance of activity in such Idea, unduly or improperly influencing the market price for such Idea or establishing a price which does not reflect the true state of the market in such Idea; </li>
+                      <li> for the purpose of creating or inducing a false or misleading appearance of activity in an Idea or creating or inducing a false or misleading appearance with respect to the market in an Idea: </li>
+                      <ul className="alphabet-upper-list">
+                        <li> executing or causing the execution of any transaction in an Idea which involves no material change in the beneficial ownership thereof; or  </li>
+                        <li> entering any order for the purchase or sale of an Idea with the knowledge that an order of substantially the same size, and at substantially the same price, for the sale of such Idea, has been or will be entered by or for the same or different parties; or  </li>
+                      </ul>
+                      <li> participating in, facilitating, assisting or knowingly transacting with any pool, syndicate or joint account organized for the purpose of unfairly or deceptively influencing the market price of a Idea; </li>
+                    </ul>
+                    </li>
+                    <li> utilize the Offerings to transact in securities, commodities futures, trading of commodities on a leveraged, margined or financed basis, binary options (including prediction-market transactions), real estate or real estate leases, equipment leases, debt financings, equity financings or other similar transactions; </li>
+                    <li> utilize the Offerings to engage in token-based initiatives, including ICOs, DAICOs, IEOs, “yield farming” or other token-based fundraising events; . The foregoing matters are referred to herein as “Prohibited Uses”. </li>
+                  </ul>
+                </li>
+              </ol>
+            </li>
+            <li>  IdeaTribe TribeGold 
+              <ol> 
+                <li> Purposes of TribeGold. TribeGold are intended to be utilized by the IdeaTribe Community to participate in the IdeaTribe Project, including by voting on proposed Governance Decisions (“Governance Proposals”). TribeGold may from time to time be given additional uses as determined by IdeaTribe Inc. </li>
+              </ol>
+            </li>
+            <li> SUPPLY, ALLOCATION AND DISTRIBUTION OF TribeGold 
+              <ol>
+                <li> TribeGold Supply. The total number of TribeGold is fixed at 27,182,818 TribeGold (the “TotalSupply”). </li>
+                <li> Certain Eligibility Requirements of TribeGold Recipients: Notwithstanding anything to the contrary set forth in Section 7.2(a), and without limiting the generality of Section 7.2(b), IdeaTribe Inc. shall not be required or obligated to distribute any TribeGold (out of the AirDropSupply, MiningSupply, or otherwise) to any person who, as determined in the sole and absolute discretion of IdeaTribe Inc., directly or indirectly, in connection with the use of the IdeaTribe Platform, IdeaTribe Apps, IdeaTribe DEX, TribeGold or any transactions involving NFTs or Ideas, has violated these Terms, including any use of the Offerings set forth in Section 5.2. Examples of disqualifying events include engaging in frontrunning,” “wash trading,” “pump and dump trading,” “ramping,” “cornering” or other fraudulent, deceptive or manipulative trading activities, or engaging in or facilitating ICOs or other financing transactions, for the purpose of increasing such user’s TribeGold rewards or otherwise.</li>
+              </ol>
+            </li>
+            <li> REPRESENTATIONS AND WARRANTIES OF TribeGold RECIPIENTS: Each User hereby represents and warrants to IdeaTribe Inc. that the following statements and information are accurate and complete at all relevant times. In the event that any such statement or information becomes untrue as to a User, User shall immediately divest and cease using all TribeGold and cease accessing and using all other Offerings. 
+              <ol> 
+                <li>  Status. If User is an individual, User is of legal age in the jurisdiction in which User resides (and in any event is older than thirteen years of age) and is of sound mind. If User is a business entity, User is duly organized, validly existing and in good standing under the laws of the jurisdiction in which it is organized, and has all requisite power and authority for a business entity of its type to carry on its business as now conducted. </li>
+                <li> Power and Authority. User has all requisite capacity, power and authority to accept the terms and conditions of these Terms and to carry out and perform its obligations under these Terms. These Terms constitute a legal, valid and binding obligation of User enforceable against User in accordance with its terms. </li>
+                <li> No Conflict; Compliance with law. User agreeing to these Term and buying, selling holding, using or receiving TribeGold does not constitute, and would not reasonably be expected to result in (with or without notice, lapse of time, or both) a breach, default, contravention or violation of any law applicable to User, or contract or agreement to which User is a party or by which User is bound. </li>
+                <li>  Absence of Sanctions. User is not, (and, if User is an entity, User is not owned or controlled by any other person who is), and is not acting on behalf of any other person who is, identified on any list of prohibited parties under any law or by any nation or government, state or other political subdivision thereof, any entity exercising legislative, judicial or administrative functions of or pertaining to government such as the lists maintained by the United Nations Security Council, the U.S. government (including the U.S. Treasury Department’s Specially Designated Nationals list and Foreign Sanctions Evaders list), the European Union (EU) or its member states, and the government of a User home country. User is not, (and, if User is an entity, User is not owned or controlled by any other person who is), and is not acting on behalf of any other person who is, located, ordinarily resident, organized, established, or domiciled in Cuba, Iran, North Korea, Sudan, Syria, the Crimea region (including Sevastopol) or any other country or jurisdiction against which the U.S. maintains economic sanctions or an arms embargo. The tokens or other funds a User uses to participate in the IdeaTribe Platform or acquire Ideas or TribeGold are not derived from, and do not otherwise represent the proceeds of, any activities done in violation or contravention of any law. </li>
+                <li> No Claim, Loan, Ownership Interest or Investment Purpose: User understands and agrees that the User’s purchase, sale, holding, receipt and use of TribeGold and the other Offerings does not: 
+                  <ul className="alphabet-list"> 
+                    <li>represent or constitute a loan or a contribution of capital to, or other investment in IdeaTribe Inc. or any business or venture; </li>
+                    <li> provide User with any ownership interest, equity, security, or right to or interest in the assets, rights, properties, revenues or profits of, or voting rights whatsoever in, IdeaTribe Inc. or any other business or venture; and </li>
+                    <li> create or imply or entitle User to the benefits of any fiduciary or other agency relationship between IdeaTribe Inc. or any of its directors, officers, employees, agents or affiliates, on the on hand, and User, on the other hand. User is not entering into these Terms or buying, selling, holding receiving or using TribeGold for the purpose of making an investment with respect to IdeaTribe Inc. or its securities, but solely wishes to use the IdeaTribe Platform for its intended purposes in order to participate in the use and enjoyment of the IdeaTribe Platform for such purposes. User understands and agrees that IdeaTribe Inc. will not accept or take custody over any Ideas, TribeGold, cryptocurrencies or other assets of User and has no responsibility or control over the foregoing. </li>
+                  </ul>
+                </li>
+                <li> Non-Reliance. User is knowledgeable, experienced and sophisticated in using and evaluating blockchain and related technologies and assets, including Polygon Network blockchain, NFTs, Ideas and “smart contracts” (bytecode deployed to Polygon Network blockchain or another blockchain). User has conducted their own thorough independent investigation and analysis of the IdeaTribe Platform, TribeGold and the other matters contemplated by these Terms, and has not relied upon any information, statement, omission, representation or warranty, express or implied, written or oral, made by or on behalf of IdeaTribe Inc. in connection therewith, except as expressly set forth by IdeaTribe Inc. in these Terms. </li>
+              </ol>
+            </li>
+            <li> RISKS, DISCLAIMERS AND LIMITATIONS OF LIABILITY. 
+              <ol> 
+                <li> No Consequential, Incidental or Punitive Damages. Notwithstanding anything to the contrary contained in these Terms, IdeaTribe Inc. shall not be liable to any person, whether in contract, tort (including pursuant to any cause of action alleging negligence), warranty or otherwise, for special, incidental, consequential, indirect, punitive or exemplary damages (including but not limited to lost data, lost profits or savings, loss of business or other economic loss) arising out of or related to these Terms, whether or not IdeaTribe Inc. has been advised or knew of the possibility of such damages, and regardless of the nature of the cause of action or theory asserted. </li>
+                <li> Limitation of Liability. IdeaTribe Inc.’s liability for damages to each User shall in all cases be limited to, and under no circumstances shall exceed, IdeaTribe Inc.’s service fees actually received by IdeaTribe Inc. from such User. </li>
+                <li> Disclaimer of Representations. The Offerings are being provided on an “AS IS” and “AS AVAILABLE” basis. To the fullest extent permitted by law, IdeaTribe Inc. is not making, and hereby disclaims, any and all information, statements, omissions, representations and warranties, express or implied, written or oral, equitable, legal or statutory, in connection with the Offerings and the other matters contemplated by these Terms, including any representations or warranties of title, non-infringement, merchantability, usage, security, uptime, reliability, suitability or fitness for any particular purpose, workmanship or technical quality of any code or software used in or relating to the Offerings. User acknowledges and agrees that use of the Offerings is at the User’s own risk. </li>
+                <li> No Responsibility for Ideas; No Guarantee of Uniqueness or IP: IdeaTribe Inc. has no responsibility for the Ideas created or traded by Users on the IdeaTribe Platform. IdeaTribe Inc. does not investigate and cannot guarantee or warrant the authenticity, originality, uniqueness, marketability, legality or value of any Idea created or traded by Users on the IdeaTribe Platform. </li>
+                <li> No Professional Advice or Liability. All information provided by or on behalf of IdeaTribe Inc. is for informational purposes only and should not be construed as professional, accounting or legal advice. Users should not take or refrain from taking any action in reliance on any information contained in these Terms or provided by or on behalf of IdeaTribe Inc.. Before Users make any financial, legal, or other decisions involving the Offerings, Users should seek independent professional advice from persons licensed and qualified in the area for which such advice would be appropriate. </li>
+                <li> Limited Survival Period for Claims. Any claim or cause of action a User may have or acquire in connection with the Offerings or any of the other matters contemplated by these Terms shall survive for the shorter of, and may be brought against IdeaTribe Inc. solely prior to: 
+                  <ul className="alphabet-list"> 
+                    <li>the expiration of the statute of limitations applicable thereto; and </li>
+                    <li> the date that is six months after the date on which the facts and circumstances giving rise to such claim or cause of action first arose. </li>
+                  </ul>
+                </li>
+                <li> Third-Party Offerings and Content. References, links or referrals to or connections with or reliance on third-party resources, products, services or content, including smart contracts developed or operated by third parties, may be provided to Users in connection with the Offerings. In addition, third parties may offer promotions related to the Offerings. IdeaTribe Inc. does not endorse or assume any responsibility for any activities of or resources, products, services, content or promotions owned, controlled, operated or sponsored by third parties. If Users access any such resources, products, services or content or participate in any such promotions, Users do so solely at their own risk. Each User hereby expressly waives and releases IdeaTribe Inc. from all liability arising from User’s use of any such resources, products, services or content or participation in any such promotions. User further acknowledges and agrees that IdeaTribe Inc. shall not be responsible or liable, directly or indirectly, for any damage or loss caused or alleged to be caused by or in connection with use of or reliance on any such resources, products, services, content or promotions from third parties. </li>
+                <li> Certain Uses and Risks of Blockchain Technology: 
+                  <ul className="alphabet-list">
+                    <li>Use of Blockchain Technology. IdeaTribe Inc. utilizes experimental cryptographic technologies and blockchain technologies, including tokens, cryptocurrencies, stablecoins, “smart contracts,” consensus algorithms, voting systems and distributed, decentralized or peer-to-peer networks or systems in performing the Offerings. Each User acknowledges and agrees that such technologies are novel, experimental, and speculative, and that therefore there is significant uncertainty regarding the operation and effects and risks thereof and the application of existing law thereto. </li>
+                    <li> Certain Risks of Blockchain Technology: The technology utilized in delivering the Offerings depends on public peer-to-peer networks such as Polygon Network blockchain that are not under the control or influence of IdeaTribe Inc. and are subject to many risks and uncertainties. Such technologies include the IdeaTribe DEX, which IdeaTribe Inc. may have limited or no ability to change, other than ceasing to support certain “smart contracts” and adding support for new “smart contracts”. Users are solely responsible for the safekeeping of the private key associated with the blockchain address used to participate in the Offerings. IdeaTribe Inc. will not be able to restore or issue any refund in respect of any Ideas or TribeGold due to lost private keys. If a User is not able to spend or use an Idea or TribeGold due to loss or theft of the corresponding private key or otherwise, a User will be unable to exercise their rights with respect to such Idea or TribeGold. </li>
+                    <li> Certain Risks of Smart Contract Technology. Ideas, TribeGold and other digital assets relevant to the IdeaTribe Platform depend on the IdeaTribe DEX or other smart contracts deployed to Polygon Network blockchain, some of which may be coded or deployed by persons other than IdeaTribe Inc.. Once deployed to Polygon Network blockchain, the code of smart contracts, including the IdeaTribe DEX, cannot be modified. In the event that the IdeaTribe DEX or other smart contracts are adversely affected by malfunctions, bugs, defects, malfunctions, hacking, theft, attacks, negligent coding or design choices, or changes to the protocol rules of Polygon Network blockchain, Users may be exposed to a risk of total loss and forfeiture of all Ideas, TribeGold and other relevant digital assets. IdeaTribe Inc. assumes no liability or responsibility for any of the foregoing matters, except as otherwise expressly provided by these Terms or required by applicable law. </li>
+                    <li> Asset Prices. The fiat-denominated prices and value in public markets of assets such as ETH, NFTs, Ideas and TribeGold have historically been subject to dramatic fluctuations and are highly volatile. As relatively new products and technologies, blockchain-based assets are not widely accepted as a means of payment for goods and services. A significant portion of demand for these assets is generated by speculators and investors seeking to profit from the short- or long-term holding of blockchain assets. The market value of any ETH, NFT, Idea or TribeGold may decline below the price for which a User acquires such asset through the IdeaTribe Platform or on any other platform. User acknowledges and agrees that the costs and speeds of transacting with cryptographic and blockchain-based systems such as Polygon Network blockchain are variable and may increase or decrease dra ally at any time, resulting in prolonged inability to access or use any ETH, NFTs, Ideas, TribeGold or other digital assets associated with the IdeaTribe Platform. </li>
+                    <li> Regulatory Uncertainty. Blockchain technologies and digital assets are subject to many legal and regulatory uncertainties, and the IdeaTribe Platform, NFTs, Ideas and TribeGold could be adversely impacted by one or more regulatory or legal inquiries, actions, suits, investigations, claims, fines or judgments, which could impede or limit the ability of User to continue the use and enjoyment of such assets and technologies. </li>
+                    <li> Cryptography Risks. Cryptography is a progressing field. Advances in code cracking or technical advances such as the development of quantum computers may present risks to Polygon Network blockchain, the IdeaTribe Platform, NFTs, Ideas and TribeGold, including the theft, loss or inaccessibility thereof. </li>
+                    <li> Fork Handling. Polygon Network blockchain, the IdeaTribe DEX, the NFTs, the Ideas and TribeGold may be subject to “forks.” Forks occur when some or all persons running the software clients for a particular blockchain system adopt a new client or a new version of an existing client that: 
+                      <ul>
+                        <li>changes the protocol rules in backwards-compatible or backwards-incompatible manner that affects which transactions can be added into later blocks, how later blocks are added to the blockchain, or other matters relating to the future operation of the protocol; or </li>
+                        <li> reorganizes or changes past blocks to alter the history of the blockchain. Some forks are “contentious” and thus may result in two or more persistent alternative versions of the protocol or blockchain, either of which may be viewed as or claimed to be the legitimate or genuine continuation of the original. IdeaTribe Inc. may not be able to anticipate, control or influence the occurrence or outcome of forks, and does not assume any risk, liability or obligation in connection therewith. Without limiting the generality of the foregoing, IdeaTribe Inc. does not assume any responsibility to notify a User of pending, threatened or completed forks. IdeaTribe Inc. will respond to any forks as IdeaTribe Inc. determines in its sole and absolute discretion, and IdeaTribe Inc. shall not have any duty or obligation or liability to a User if such response (or lack of such response) acts to a User detriment. Without limiting the generality of the foregoing, IdeaTribe Inc.’s possible and permissible responses to a fork may include: </li>
+                        <li> honoring the IdeaTribe DEX, Ideas, NFTs and TribeGold on both chains; </li>
+                        <li> honoring the IdeaTribe DEX, Ideas, NFTs and TribeGold on only one of the chains; honoring the IdeaTribe DEX, Ideas, NFTs and TribeGold in different respects or to a different extent on both chains; or </li>
+                        <li> any other response or policy or procedure, as determined by IdeaTribe Inc. in its sole and absolute discretion. IdeaTribe Inc. reserves the right to only allow one NFT to be associated with the relevant metadata forming the Idea, notwithstanding that copies of such NFT may exist on both chains following a fork. A User assumes full responsibility to independently remain apprised of and informed about possible forks, and to manage a User own interests in connection therewith. </li>
+                      </ul>
+                    </li>
+                    <li>Essential Third-Party Software Dependencies. The IdeaTribe DEX and other smart contracts deployed to are public software utilities which are accessible directly through any node (such as Infura) or indirectly through any compatible “wallet” application (such as the web browser plugin Metamask) which interacts with such a node. Interacting with the IdeaTribe DEX does not require use of the IdeaTribe Apps, but the IdeaTribe Apps provide a convenient and user-friendly method of reading and displaying data (including Idea Metadata) from the and generating standard transaction messages compatible with the . Because Polygon Network blockchain Polygon Network blockchain blockchain Polygon Network IdeaTribe DEX IdeaTribe DEX the IdeaTribe Platform does not provide Polygon Network blockchain wallet software or Polygon Network blockchain nodes, such software constitutes an essential third-party or user dependency without which the IdeaTribe Platform cannot be utilized and NFTs, Ideas, TribeGold and other relevant digital assets cannot be traded or used. Furthermore, Idea Descriptors defining the art and text associated with an Idea must be stored off of Polygon Network blockchain. Ideas created on IdeaTribe may have their Idea Descriptors stored on the IPFS system through an IPFS node operated by Infura Inc., but IdeaTribe Inc. cannot guarantee continued operation of such IPFS node or the integrity and persistence of data on IPFS. </li>
+                  </ul>
+                </li>
+                <li> Legal Limitations on Disclaimers. Some jurisdictions do not allow the exclusion of certain warranties or the limitation or exclusion of certain liabilities and damages. Accordingly, some of the disclaimers and limitations set forth in these Terms may not apply in full to specific Users. The disclaimers and limitations of liability provided in these terms shall apply to the fullest extent permitted by applicable law. </li>
+                <li> Officers, Directors, Etc. All provisions of these Terms which disclaim or limit obligations or liabilities of IdeaTribe Inc. shall also apply, mutatis mutandis, to the officers, directors, members, employees, independent contractors, agents, stockholders, debtholders and affiliates of IdeaTribe Inc.. </li>
+                <li> Indemnification. Each User shall defend, indemnify, compensate, reimburse and hold harmless IdeaTribe Inc. (and each of its officers, directors, members, employees, agents and affiliates) from any claim, demand, action, damage, loss, cost or expense, including without limitation reasonable attorneys’ fees, arising out or relating to 
+                  <ul className="alphabet-list">
+                    <li>User’s use of, or conduct in connection with, the Offerings; </li>
+                    <li>User’s violation of these Terms or any other applicable policy or contract of IdeaTribe Inc.; or </li>
+                    <li>your violation of any rights of any other person or entity. </li>
+                    </ul>
+                </li>
+              </ol>
+            </li>
+            <li> GOVERNING LAW; DISPUTE RESOLUTION. 
+              <ol> 
+                <li> Governing law. These Terms shall be governed by and construed and interpreted in accordance with the laws of the state of Delaware irrespective of the choice of laws principles of the state of Delaware, as to all matters, including matters of validity, construction, effect, enforceability, performance and remedies. Although the Offerings may be available in other jurisdictions, each User hereby acknowledges and agrees that such availability shall not be deemed to give rise to general or specific personal jurisdiction over IdeaTribe Inc. in any forum outside the State of Delaware. </li>
+                <li> Settlement Negotiations. If a User has a potential legal dispute, claim or cause of action against IdeaTribe Inc., the User shall first (prior to initiating any litigation proceedings)s contact IdeaTribe Inc. by sending an email to <a onClick={(e) => window.location.href = "mailto:"+"contact@ideatribe.io"+'?subject='+"Query"+'&body='+""} > contact@IdeaTribe.io </a> describing the nature of the potential dispute, claim or cause of action and providing all relevant documentation and evidence thereof. If so elected by IdeaTribe Inc., User shall use commercially reasonable efforts to negotiate a settlement of any such legal dispute, claim or cause of action within 60 days of the delivery of such email. Any such dispute, claim or 16 cause of action that is not finally resolved by a binding, written settlement agreement within such 60 days shall be brought and resolved exclusively in accordance with the following provisions of this Section 10. </li>
+                <li> Agreement to Binding, Exclusive Arbitration. 
+                  <ul className="alphabet-list">
+                    <li> Mandatory Binding Arbitration. Except as set forth in Section 10.2, all claims, disputes and controversies directly or indirectly arising out of or in connection with or directly or indirectly relating to these Terms or any of the matters or transactions contemplated by these Terms (for the avoidance of doubt, including any claim seeking to invalidate, or alleging that, all or any part of these Terms is unenforceable, void or voidable) (such claims, disputes and controversies, collectively, “Disputes”) shall be finally settled by binding arbitration, rather than in court. The arbitrator, and not any federal, state or local court, agency or other governmental authority, shall have exclusive authority to resolve all Disputes. </li>
+                    <li>Waiver of Jury Trial. The parties hereby acknowledge, represent and warrant that they understand that: 
+                      <ul className="roman-lower-list"> 
+                        <li>there is no judge or jury in arbitration, and, absent this mandatory provision, the parties would have the right to sue in court and have a jury trial concerning Disputes; </li>
+                        <li> in some instances, the costs of arbitration could exceed the costs of litigation; </li>
+                        <li> the right to discovery may be more limited in arbitration than in court; and </li>
+                        <li> court review of an arbitration award is limited. The Federal Arbitration Act and federal arbitration law apply to these Terms. Each of the parties hereto hereby irrevocably waives any and all right to trial by jury in any action, suit or other legal proceeding arising out of or related to these Terms or the transactions contemplated hereby. </li>
+                      </ul>
+                    </li>
+                  </ul>
+                </li>
+                <li> Arbitration Procedures. IdeaTribe Inc. or any User may initiate an arbitration proceeding by delivering written notice to the other, whereupon the parties shall reasonably cooperate to select an arbitrator and submit the relevant Dispute to such arbitrator. In the event the parties are unable to agree on the selection of an arbitrator within 15 days from the filing of a demand for arbitration, the American Arbitration Association (the “AAA”) shall appoint the arbitrator. Any such arbitration shall be administered by the AAA in accordance with the provisions of its Commercial Arbitration Rules and the supplementary procedures for consumer related disputes of the AAA excluding any rules or procedures governing or permitting class actions. IdeaTribe Inc. will not seek attorneys’ fees and costs in arbitration unless the arbitrator determines the claims are frivolous. The arbitrator shall be empowered to grant whatever relief would be available in a court under law or in equity. The arbitrator’s award shall be written and reasoned, and binding on the parties, and may be entered by any party as a judgment in any court of competent jurisdiction. </li>
+                <li> Seat of Arbitration. The seat of arbitration shall be Lewes, Delaware. The arbitrator may choose to have the arbitration of any Dispute conducted by telephone, based on written submissions, or at a mutually agreed location; provided, however, that IdeaTribe Inc. may opt to transfer the venue of any arbitration hearing to Lewes, Delaware in the event that it agrees to pay any additional fees or costs a User may reasonably incur as a result of the change in venue, as determined by the arbitrator, and, subject to the foregoing, a User hereby agree to submit to the personal jurisdiction of any federal or state court in Lewes, Delaware, in order to compel arbitration, to stay proceedings pending arbitration, or to confirm, modify, vacate or enter judgment on the award entered by the arbitrator.</li>
+                <li>  Confidentiality of Arbitration. Except to the extent necessary to enforce their respective rights under these Terms or as otherwise required by applicable law, the parties undertake to maintain confidentiality as to the existence and events of the arbitration proceedings and as to all submissions, correspondence and evidence relating to the arbitration proceedings. This provision shall survive the termination of the arbitral proceedings. </li>
+                <li> Class Action Waiver. 
+                  <ul className="alphabet-list"> 
+                    <li>No Class Actions Permitted. All Users hereby agree that any arbitration or other permitted action with respect to any Dispute shall be conducted in their individual capacities only and not as a class action or other representative action, and the Users expressly waive their right to file a class action or seek relief on a class basis. USERS SHALL BRING CLAIMS AGAINST IdeaTribe Inc. OTHER ONLY IN THEIR INDIVIDUAL CAPACITY, AND NOT AS A PLAINTIFF OR CLASS MEMBER IN ANY PURPORTED CLASS OR REPRESENTATIVE PROCEEDING. </li>
+                    <li> Agreements if Class Action Waiver Unenforceable. If any court or arbitrator makes a final, binding and non-appealable determination that the class action waiver set forth in this Section 10.7 is void or unenforceable for any reason or that an arbitration can proceed on a class basis, then the arbitration provision set forth above shall be deemed null and void with respect to any Dispute that would thus be required to be resolved by arbitration on a class basis, and the parties shall be deemed to have not agreed to arbitrate such Dispute. In the event that, as a result of the application of the immediately preceding sentence or otherwise, any Dispute is not subject to arbitration, the parties hereby agree to submit to the personal and exclusive jurisdiction of and venue in the federal and state courts located in Lewes, Delaware and to accept service of process by mail with respect to such Dispute, and hereby waive any and all jurisdictional and venue defenses otherwise available with respect to such Dispute. </li>
+                  </ul>
+                </li>
+                <li> California End-User Consumer Rights. In accordance with Cal. Civ. Code Sec. 1789.3, if a User is a California State resident, the User may file grievances and complaints regarding the Offerings with the California Department of Consumer Affairs, Consumer Information Division; 1625 North Market Blvd., Suite N 112, 1625 North Market Blvd., Suite N 112, Sacramento, CA 95834 or by phone at 800- 952-5210; or by email to: dca@dca.ca.gov. </li>
+              </ol>
+            </li>
+            <li> MISCELLANEOUS 
+              <ol>
+                <li> Headings. The headings and captions contained in these Terms are for convenience of reference only, shall not be deemed to be a part of these Terms and shall not be referred to in connection with the construction or interpretation of these Terms. </li>
+                <li> Successors and Assigns. These Terms shall inure to the benefit of IdeaTribe Inc., the Users, and their respective permitted successors, permitted assigns, permitted transferees and permitted delegates and shall be binding upon all of the foregoing persons and any person who may otherwise succeed to any right, obligation or liability under these Terms by operation of law or otherwise. A User shall not share or provide a copy of, or transfer to, any person any TribeGold or the private key associated with any TribeGold without notifying such person that such person shall be bound by and become a party to these Terms by virtue of thereof (or if the transferor has a reasonable belief that the transferee is aware of these Terms). A User shall not assign any of a User rights or delegate any of a User liabilities or obligations under these Terms to any other person without IdeaTribe Inc.’s advance written consent. IdeaTribe Inc. may freely assign, transfer or delegate its rights, obligations and liabilities under these Terms to the maximum extent permitted by applicable law. </li>
+                <li> Severability. In the event that any provision of these Terms, or the application of any such provision to any person or set of circumstances, shall be determined by an arbitrator or court of competent jurisdiction to be invalid, unlawful, void or unenforceable to any extent: 
+                  <ul className="alphabet-list"> 
+                      <li>the remainder of these Terms, and the application of such provision to persons or circumstances other than those as to which it is 18 determined to be invalid, unlawful, void or unenforceable, shall not be impaired or otherwise affected and shall continue to be valid and enforceable to the fullest extent permitted by law; and </li>
+                      <li> IdeaTribe Inc. shall have the right to modify these Terms so as to effect the original intent of the parties as closely as possible in an acceptable manner in order that the transactions contemplated hereby be consumed as originally contemplated to the fullest extent possible. </li>
+                    </ul>
+                  </li>
+                <li> Force Majeure. IdeaTribe Inc. shall not incur any liability or penalty for not performing any act or fulfilling any duty or obligation hereunder or in connection with the matters contemplated hereby by reason of any occurrence that is not within its control (including any provision of any present or future law or regulation or any act of any governmental authority, any act of God or war or terrorism, any epidemic or pandemic, or the unavailability, disruption or malfunction of the Internet, the World Wide Web or any other electronic network, the Polygon Network blockchain network or blockchain or IdeaTribe DEX or any aspect thereof, or any consensus attack, or hack, or denial-of-service or other attack on the foregoing or any aspect thereof, or on the other software, networks and infrastructure that enables IdeaTribe Inc. to provide the Offerings.), it being understood that IdeaTribe Inc. shall use commercially reasonable efforts, consistent with accepted practices in the industries in which IdeaTribe Inc. operates, as applicable, to resume performance as soon as reasonably practicable under the circumstances. </li>
+                <li> Amendments and Modifications. These Terms may only be amended, modified, altered or supplemented by or with the written consent of IdeaTribe Inc.. IdeaTribe Inc. reserves the right, in its sole and absolute discretion, to amend, modify, alter or supplement these Terms from time to time. The most current version of these Terms will be posted on IdeaTribe Inc.’s website. Any changes or modifications will be effective immediately upon the modified Agreement being posted to IdeaTribe Inc.’s website. A User shall be responsible for reviewing and becoming familiar with any such modifications. A User hereby waive any right a User may have to receive specific notice of such changes or modifications. Use of the Offerings by a User after any modification of these Terms constitutes a User acceptance of the modified terms and conditions. If a User do not agree to any such modifications, a User must immediately stop using the Offerings. </li>
+                <li> No Implied Waivers. No failure or delay on the part of IdeaTribe Inc. in the exercise of any power, right, privilege or remedy under these Terms shall operate as a waiver of such power, right, privilege or remedy; and no single or partial exercise of any such power, right, privilege or remedy shall preclude any other or further exercise thereof or of any other power, right, privilege or remedy. IdeaTribe Inc. shall not be deemed to have waived any claim arising out of these Terms, or any power, right, privilege or remedy under these Terms, unless the waiver of such claim, power, right, privilege or remedy is expressly set forth in a written instrument duly executed and delivered on behalf of IdeaTribe Inc., and any such waiver shall not be applicable or have any effect except in the specific instance in which it is given. </li>
+                <li> Entire Agreement. These Terms constitute the entire agreement between the parties relating to the subject matter hereof and supersede all prior or contemporaneous agreements and understandings, both written and oral, between the parties with respect to the subject matter hereof. </li>
+                <li> Rules of Interpretation. 
+                  <ul className="alphabet-list"> 
+                    <li> “hereof,” “herein,” “hereunder,” “hereby” and words of similar import will, unless otherwise stated, be construed to refer to these Terms as a whole and not to any particular provision of these Terms; </li>
+                    <li> “include(s)” and “including” shall be construed to be followed by the words “without limitation”;19 </li>
+                    <li> “or” shall be construed to be the “inclusive or” rather than “exclusive or” unless the context requires otherwise; </li>
+                    <li> any rule of construction to the effect that ambiguities are to be resolved against the drafting party shall not be applied in the construction or interpretation of these Terms; </li>
+                    <li> section titles, captions and headings are for convenience of reference only and have no legal or contractual effect.; </li>
+                    <li> whenever the context requires: the singular number shall include the plural, and vice versa; the masculine gender shall include the feminine and neuter genders; the feminine gender shall include the masculine and neuter genders; and the neuter gender shall include the masculine and feminine genders; and </li>
+                    <li> except as otherwise indicated, all references in these Terms to “Sections,” “clauses,” etc., are intended to refer to Sections of Sections, clauses, etc. of these Terms </li>
+                  </ul>
+                </li>
+              </ol>
+            </li>
+          </ol>
         </div>
-        <div className="mb-4">Table of Contents</div>
-        {tableContent.map((item, index) => (
-          <div>
-            <div className="faq-title"> 
-              <span className="mr-2"> {index + 1} . </span>
-              <span> {item} </span>
-            </div>
-          </div>
-        ))}
-        <br/>
-        {terms.map((item, index) => (
-          <div label={`items-` + index}>
-          <div>
-            <div className="faq-title"> 
-              <span className="mr-2"> {index + 1} . </span>
-              <span> {item.title} </span>
-            </div>
-            {item.content && item.content.map(res=> (<div className="faq-content ml-4"> {res} </div>))}
-            {item.item && item.item.map((sub, index) => (<div className="faq-content ml-4"> {index + 1}. {sub} </div>))}
-            {item.bullet && item.bullet.map((sub, index) => (<div className="faq-content ml-4"> {(index + 10).toString(36).toUpperCase()}. {sub} </div>))}
-            {item.afterContent && item.afterContent.map(after => (<div className="faq-content ml-4"> {after} </div>))}
-            {item.note && <div className="faq-content ml-4"> Note: {item.note} </div>}
-            {item.author && <div className="author"> IdeaTribe.io </div>}
-          </div>
-          </div>
-        ))}
-        </div>
-
-        {/* <Document
-          file={PDFFile}
-          className="pdf-document"
-          onLoadSuccess={onDocumentLoadSuccess}
-        >
-          <Page pageNumber={pdfPages.currentPage} />
-        </Document> */}
-      </>
+        </div>  
+       </>
     </div>
+    // <>
+    // <Document
+    //       file={PDFFile}
+    //       className="pdf-document"
+    //       onLoadSuccess={onDocumentLoadSuccess}
+    //     >
+    //       <Page pageNumber={pdfPages.currentPage} />
+    //     </Document>
+    // </>
   );
 };
 

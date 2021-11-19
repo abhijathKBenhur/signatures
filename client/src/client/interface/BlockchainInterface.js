@@ -218,7 +218,7 @@ class BlockchainInterface {
                 actionText: "Switch Network",
                 actionFunction: CalledFunction
               }
-              ReactDOM.render(<AlertBanner {...alertProperty}></AlertBanner>, document.querySelector('.appHeader'))
+              ReactDOM.render(<AlertBanner {...alertProperty}></AlertBanner>, document.querySelector('.aleartHeader'))
             store.dispatch(setReduxMetaMaskID(undefined));
             store.dispatch(setReduxUserDetails({}));
             // window.alert(
@@ -298,7 +298,7 @@ class BlockchainInterface {
             actionFunction: redirectToMetaMask,
             actionText: 'MetaMask!'
           }
-          ReactDOM.render(<AlertBanner {...alertProperty}></AlertBanner>, document.querySelector('.appHeader'))
+          ReactDOM.render(<AlertBanner {...alertProperty}></AlertBanner>, document.querySelector('.aleartHeader'))
         reject(
           "Non-Ethereum browser detected. You should consider trying MetaMask!"
         );

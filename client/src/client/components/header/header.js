@@ -159,7 +159,7 @@ const Header = (props) => {
               actionText: "Sign",
               actionFunction: manageCookies
             }
-            ReactDOM.render(<AlertBanner {...alertProperty}></AlertBanner>, document.querySelector('.appHeader'))
+            ReactDOM.render(<AlertBanner {...alertProperty}></AlertBanner>, document.querySelector('.aleartHeader'))
           });
         })
         
@@ -282,6 +282,7 @@ const Header = (props) => {
 
   return (
     <div>
+      <nav className="aleartHeader"></nav>
       <nav className="navbar navbar-light bg-light flex-md-nowrap shadow appHeader justify-content-center">
         <Container fluid>
           <div className="left-section">

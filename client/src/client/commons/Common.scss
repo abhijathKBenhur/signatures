@@ -174,3 +174,12 @@ $secondary-button-shadow:inset .2rem .2rem 1rem $secondary,
   .mt-14{
     margin-top: -14px;
   }
+  .mt-6 {
+    margin-top: 6rem;
+  }
+  .word-break {
+    word-break: break-all;
+  }
+  .pointer-events{
+    pointer-events: none;
+  }

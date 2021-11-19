@@ -8,9 +8,10 @@
     background: white;
     color: black;
     padding: 30px;
-    margin: 0 13rem;
+    margin: 6rem;
+    font-family: "system-ui";
     .faq-title {
-        font-size: 11px;
+        font-size: 14px;
         pointer-events: all;
         font-weight: bold;
         margin-bottom: 20px;
@@ -19,7 +20,7 @@
         }
     }
     .faq-content {
-        font-size: 11px;
+        font-size: 14px;
         pointer-events: all;
         margin-bottom: 20px;
     }
@@ -33,4 +34,43 @@
         pointer-events: all;
         transform: scaleX(0.94052) translateY(25%);
     }
+    .numbered-list {
+        list-style: auto;
+    }
+    .alphabet-list { 
+        list-style: lower-alpha;
+    }
+    .alphabet-upper-list { 
+        list-style: upper-alpha;
+    }
+    .roman-list { 
+        list-style: upper-roman;
+    }
+    .roman-lower-list { 
+        list-style: lower-roman;
+    }
+    .aggrement{
+        ol {
+            counter-reset: item;
+            li {
+                display: block
+            }
+            li:before {
+                content: counters(item, ".") ".";
+                counter-increment: item
+            }
+            ul{ 
+                li {
+                display: list-item;
+                }
+            }
+            ul{
+                li:before {
+                content: normal;
+                }
+            }
+        }
+        
+    }
+      
 }

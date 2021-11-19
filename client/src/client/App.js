@@ -16,6 +16,7 @@ import { ToastContainer } from "react-toastify";
 
 
 import About from "./screens/about/about";
+import Contactus from "./screens/contactus/contactus";
 import FAQ from "./screens/FAQ/FAQ";
 import Tokenomics from "./screens/Tokenomics/Tokenomics";
 import Terms from "./screens/terms/terms"
@@ -37,6 +38,7 @@ const App = () =>  {
             <Route path="/clan/:clanID" component={Clan} />
             <Route path="/profile" component={Profile} />
             <Route path="/about" component={About} />
+            <Route path="/contactus" component={Contactus} />
             <Route path="/FAQ" component={FAQ} />
             <Route path="/terms" component={Terms} />
             <Route path="/privacy" component={Privacy} />

@@ -1,6 +1,41 @@
 .react-pdf__Page__canvas{
     margin: auto;
 }
-.privacy{
-    height: calc(100vh + 100px);
+.privacy {
+    height: 100%;
+}
+
+.privacy-body {
+    background: white;
+    color: black;
+    padding: 30px;
+    width: 70%;
+    margin: 3rem 11rem;
+    font-family: "system-ui";
+    .privacy-title {
+        font-size: 11px;
+        pointer-events: all;
+        font-weight: bold;
+        margin-bottom: 20px;
+        &:hover {
+            cursor: pointer;
+        }
+    }
+    .privacy-content {
+        font-size: 11px;
+        pointer-events: all;
+        margin-bottom: 20px;
+    }
+    .numbered-list {
+        list-style: auto;
+    }
+    .alphabet-list { 
+        list-style: lower-alpha;
+    }
+    .roman-list { 
+        list-style: upper-roman;
+    }
+    .underline{
+        text-decoration: underline;
+    }
 }
