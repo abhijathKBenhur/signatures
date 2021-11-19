@@ -23,7 +23,7 @@ const Footer = (props) => {
               <span className="secondary-grey cursor-pointer" onClick={() => redirectTo("/FAQ")}>FAQs</span>
               <span className="secondary-grey cursor-pointer" onClick={() => redirectTo("/terms")}>Terms</span>
               <span className="secondary-grey cursor-pointer" onClick={() => redirectTo("/privacy")}>Privacy</span>
-              <span className="secondary-grey cursor-pointer" onClick={() => redirectTo("/about")}>Contact Us</span>
+              <span className="secondary-grey cursor-pointer" onClick={() => redirectTo("/contactus")}>Contact Us</span>
 
 
               {/* <div className="products">

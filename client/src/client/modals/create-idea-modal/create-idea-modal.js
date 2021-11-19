@@ -125,7 +125,7 @@ const CreateIdeaModal = ({
         ></img>
       </div>
     ) : (
-      <Form.Row className="empty-image-row">
+      <Form.Row className={`empty-image-row ${publishState == 'PROGRESS' ? 'pointer-events': ''}`}>
         <Dropzone
           onDrop={onImageDrop}
           acceptedFiles={".jpeg"}

@@ -23,12 +23,12 @@ const About = () => {
             at the right time.
           </span> */}
           <div className="mt-3 color-primary readable-text">
-            IdeaTribe, Inc. Attn. DMCA Notice 16192 Coastal Highway, Lewes, Delaware 19958 Email: contact@IdeaTribe.io
+          We’ve noticed the best ideas come when you least expect them. We’re here to store them for posterity and help you change the world. Ideatribe was born out of a desire by the founding team to harness the creativity of the everyman. You. Us. Everyone!
           </div>
           <div>
             <Button variabt="secondary" className="mt-5" onClick={() => {
               history.push("/home");
-            }}><span className="master-grey color-white" onClick={(e) => window.location.href = "mailto:"+"contact@ideatribe.io"+'?subject='+"Query"+'&body='+""}>Send us an Email</span></Button>
+            }}><span className="master-grey color-white" onClick={(e) => window.location.href = "mailto:"+"contact@ideatribe.io"+'?subject='+"Query"+'&body='+""}> Take me to the tribe </span></Button>
           </div>
         </Col>
         <Col className="right desktop-view" xs={12} sm={4}>
