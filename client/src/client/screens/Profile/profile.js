@@ -214,13 +214,13 @@ function Profile(props) {
         CONSTANTS.ACTION_STATUS.PENDING,
         "I would like to follow you.",
         {
-          creditorAddress: loggedInUserDetails.metamaskId,
+          creditorDbId: loggedInUserDetails
         }
       ).then((success) => {
         let newFollowlist = _.concat(followers, [userDetails.userName]);
         setFollowers(newFollowlist);
         NotificationInterface.postNotification(
-          loggedInUserDetails._id,
+          userDetails._id,
           viewUser,
           CONSTANTS.ACTIONS.FOLLOW,
           CONSTANTS.ACTION_STATUS.PENDING,
@@ -362,7 +362,7 @@ function Profile(props) {
                         {userDetails.facebookUrl && (
                           <reactShare.FacebookShareButton
                             url={userDetails.facebookUrl}
-                            quote={"Hey! Check out this idea."}
+                            quote={"Hey! I minted an Idea on IdeaTribe.io!"}
                           >
                             <div className="social-icon-wrapper fb">
                               <i class="fa fa-facebook" aria-hidden="true"></i>
@@ -373,7 +373,7 @@ function Profile(props) {
                         {userDetails.twitterUrl && (
                           <reactShare.TwitterShareButton
                             url={userDetails.twitterUrl}
-                            title={"Hey! Check out this idea."}
+                            title={"Hey! I minted an Idea on IdeaTribe.io!"}
                           >
                             <div className="social-icon-wrapper twitter ml-2">
                               <i class="fa fa-twitter" aria-hidden="true"></i>
@@ -384,7 +384,7 @@ function Profile(props) {
                         {userDetails.instaUrl && (
                           <reactShare.WhatsappShareButton
                             url={userDetails.instaUrl}
-                            title={"Hey! Check out this idea."}
+                            title={"Hey! I minted an Idea on IdeaTribe.io!"}
                             separator=":: "
                           >
                             <div className="social-icon-wrapper whatsapp ml-2">
@@ -641,7 +641,7 @@ function Profile(props) {
                         mobileView ? "col-md-12" : "col-md-2"
                       }`}
                     >
-                      <span className="second-grey notification-title pl-2">
+                      <span className="second-header pl-2 color-primary">
                         Notifications
                       </span>
                       <hr></hr>

@@ -64,6 +64,7 @@ const ViewNotification = ({ ...props }) => {
         return "View idea"
         break;
       case CONSTANTS.ACTIONS.PERSONAL_MESSAGE:
+        case CONSTANTS.ACTIONS.FOLLOW:
         return "View profile"
         break;
     }

@@ -278,7 +278,7 @@ const SignatureNew = (props) => {
         CONSTANTS.ACTION_STATUS.COMPLETED,
         "Upvoting.",
         {
-          creditorAddress: loggedInUserDetails.metamaskId
+          creditorDbId: signature.creator
         }
       ).then((success) => {
         const upVotesClone = _.cloneDeep(upvotes);
@@ -570,7 +570,7 @@ const SignatureNew = (props) => {
               }`}
             >
               <div>
-                <span className="conversation-title second-header  color-primary">
+                <span className="conversation-title second-header color-primary">
                   Comments
                 </span>
                 <hr></hr>

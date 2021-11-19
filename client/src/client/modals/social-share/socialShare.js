@@ -12,7 +12,7 @@ class SocialShare extends Component {
     this.state = {
       shareUrl:
         window.location.href,
-        title: "Hey! Checkout this token",
+        title: "Hey! I minted an Idea on IdeaTribe.io!",
     };
   }
 

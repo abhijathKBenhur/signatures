@@ -54,7 +54,7 @@ register_user = (req, res) => {
         .registerUser(metamaskAddress, userName)
         .send(transactionObject)
         .on("receipt", function (receipt) {
-          console.log("receipt ", receipt)
+          console.log("CONTRACT REGISTRATION SUCCESS")
           return res.status(200).json({ success: true, data: receipt });
         })
         .on("error", function (error) {

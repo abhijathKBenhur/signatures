@@ -27,7 +27,7 @@ const Wallet = (props) => {
       <div
         className="wallet-container"
         onClick={() => 
-          window.open("https://mumbai.polygonscan.com")
+          window.open("https://polygonscan.com/address/0x2E56AeBAb0Ba3a5904fB1fA424eaae89e5147187")
         }
       >
       <div className="wallet-type d-flex justify-content-between">
@@ -44,7 +44,7 @@ const Wallet = (props) => {
       <div
         className="wallet-container"
         onClick={() => 
-          window.open("https://mumbai.polygonscan.com")
+          window.open("https://polygonscan.com/address/0xebB129c1d9ed956e9D1A4F342a5166b06A153475")
         }
       >
         <div className="wallet-type d-flex justify-content-between">

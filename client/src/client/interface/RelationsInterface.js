@@ -4,9 +4,9 @@ import ENDPOINTS from '../commons/Endpoints';
 
 import AxiosInstance from "../wrapper/apiWrapper"
 
-export const postRelation = (from,to,relation,status,message) => {
+export const postRelation = (from,to,relation,status,message, options) => {
     let payload = {
-        from, to, relation, status, message
+        from, to, relation, status, message, options
     }
     return AxiosInstance.post(`/postRelation`,payload)
 }

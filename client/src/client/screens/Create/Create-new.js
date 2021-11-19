@@ -578,7 +578,7 @@ const CreateNew = () => {
       fullName: userDetails.firstName + " " + userDetails.lastName,
       title: successResponse.title,
       time: new Date(),
-      tokenID: successResponse.ideaID,
+      ideaID: successResponse.ideaID,
       transactionID: successResponse.transactionID,
       PDFHash: successResponse.PDFHash,
       location: successResponse.location,

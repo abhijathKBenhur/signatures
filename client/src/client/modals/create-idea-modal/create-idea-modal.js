@@ -597,7 +597,7 @@ const CreateIdeaModal = ({
                       window.location.origin + "/signature/" + billet.PDFHash
                     }
                     quote={
-                      "Hey! I registered an original idea on blockchain!"
+                      "Hey! I minted an Idea on IdeaTribe.io!"
                     }
                   >
                       <div className="social-icon-wrapper fb">
@@ -613,7 +613,7 @@ const CreateIdeaModal = ({
                       window.location.origin + "/signature/" + billet.PDFHash
                     }
                     title={
-                      "Hey! I registered an original idea on blockchain!"
+                      "Hey! I minted an Idea on IdeaTribe.io!"
                     }
                     separator=" "
                   >

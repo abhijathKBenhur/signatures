@@ -61,10 +61,11 @@ getNonceAndRegister = (req, res) => {
       return res.status(400).json({ success: false, error: err });
     }
     if (!user) {
+      console.log("NEW USER CREATION")
       newUser
         .save()
         .then((user, b) => {
-          console.log(user);
+          console.log("NEW USER CREATED" , user)
           return res.status(201).json({
             success: true,
             data: user.nonce,
@@ -79,6 +80,7 @@ getNonceAndRegister = (req, res) => {
           });
         });
     } else {
+      console.log("EXISTING USER RETURNED" , user)
       return res.status(200).json({ success: true, data: user.nonce });
     }
   }).catch((err) => {
@@ -119,12 +121,13 @@ registerUser = (req, res) => {
     metamaskId: newUser.metamaskId ,
     nonce: body.nonce
   }, process.env.TOKEN_KEY);
-
+  console.log("ADDING COMPLETE USER DETAILS")
   User
     .findOneAndUpdate({metamaskId:newUser.metamaskId},updateParams, {new:true,upsert:true})
     .then((user, b) => {
       responseMap.created = true
-      depositEvaluator.depostToNewUser(newUser.metamaskId).then(response =>{
+      console.log("ADDED COMPLETE USER DETAILS", user)
+      depositEvaluator.depostToNewUser(newUser).then(response =>{
         console.log("response",response)
         return res.status(201).json({
           success: true,
@@ -135,7 +138,6 @@ registerUser = (req, res) => {
           message: "New user created!",
         });
       })
-      
     })
     .catch((error) => {
       return res.status(400).json({
@@ -160,7 +162,6 @@ getUserInfo = async (req, res) => {
     console.log("myReferralCode," + req.body.myReferralCode);
     findCriteria.myReferralCode = req.body.myReferralCode;
   }
-  console.log("findCriteria" + JSON.stringify(findCriteria))
   // await User.findOne(findCriteria,{email:0}, (err, user) => {
     await User.findOne(findCriteria, (err, user) => {
     if (err) {
