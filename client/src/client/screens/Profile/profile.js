@@ -43,7 +43,7 @@ function Profile(props) {
   const {
     metamaskID = undefined,
     userDetails = {},
-    collectionList = [],
+    reduxChain = [],
   } = reduxState;
 
   const [profileCollection, setProfileCOllection] = useState([]);
@@ -293,10 +293,7 @@ function Profile(props) {
                           <i
                             className="fa fa-external-link ml-2"
                             onClick={() => {
-                              window.open(
-                                "https://mumbai.polygonscan.com/address/" +
-                                  _.get(loggedInUserDetails, "userName")
-                              );
+                              window.open(reduxChain+"/address/" +_.get(loggedInUserDetails, "userName"));
                             }}
                           ></i>
                         </Col>

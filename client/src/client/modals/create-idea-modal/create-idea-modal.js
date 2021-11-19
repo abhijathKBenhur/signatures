@@ -55,6 +55,7 @@ const CreateIdeaModal = ({
   ...props
 }) => {
   const reduxState = useSelector((state) => state, shallowEqual);
+  const {  reduxChain = undefined } = reduxState;
   const [userClans, setUserClans] = useState([]);
   const [metaMastConfirmed, setMetaMastConfirmed] = useState(false);
   const [imgHolder, setImgHolder] = useState(artPlaceHolder);
@@ -156,12 +157,12 @@ const CreateIdeaModal = ({
     );
   };
   function showInChainExplorer() {
-    window.open("https://mumbai.polygonscan.com/tx/" + billet.transactionID);
+    window.open(reduxChain+"/tx/" + billet.transactionID);
   }
   const getQrcode = () => {
     QRCode.toCanvas(
-      document.getElementById("canvas"),
-      "https://mumbai.polygonscan.com/address/" +
+      document.getElementById("canvas"),reduxChain+
+      "/address/" +
         _.get(billet, "transactionID"),
       {
         color: {
@@ -459,9 +460,7 @@ const CreateIdeaModal = ({
       
     }
   }
-  function openInPolygon() {
-    window.open("https://mumbai.polygonscan.com/tx/" + billet.transactionID);
-  }
+ 
 
   const getElement = () => {
     let pusposeList = [
@@ -576,7 +575,7 @@ const CreateIdeaModal = ({
                   <i className="fa fa-crosshairs cursor-pointer signature-icons mr-2"
                     color="#F39422"
                     onClick={() => {
-                      openInPolygon();
+                      window.open(reduxChain+"/tx/" + billet.transactionID);
                     }}
                   ></i>
                   <i

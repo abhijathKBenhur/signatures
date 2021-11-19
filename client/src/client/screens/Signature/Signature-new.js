@@ -39,7 +39,6 @@ import EmitInterface from "../../interface/emitInterface";
 const SignatureNew = (props) => {
   const { hashId } = useParams();
   const [upvotes, setUpvotes] = useState([]);
-  const reduxState = useSelector((state) => state, shallowEqual);
   const [loggedInUserDetails, setLoggedInUserDetails] = useState({});
   const location = useLocation();
   const audioRef = useRef(null);
@@ -52,6 +51,12 @@ const SignatureNew = (props) => {
     currentPage: 1,
     totalPages: 1,
   });
+  const reduxState = useSelector((state) => state, shallowEqual);
+  const {
+    metamaskID = undefined,
+    userDetails = {},
+    reduxChain = [],
+  } = reduxState;
   const history = useHistory();
   const [modalShow, setModalShow] = useState({
     shareModal: false,
@@ -388,10 +393,7 @@ const SignatureNew = (props) => {
 
                             <Dropdown.Menu>
                               <Dropdown.Item onClick={() => {
-                              window.open(
-                                "https://mumbai.polygonscan.com/address/" +
-                                  _.get(signature, "PDFHash")
-                              );
+                              window.open(reduxChain+"/address/" +_.get(signature, "PDFHash"));
                             }}>
                               View on chain
                             </Dropdown.Item>

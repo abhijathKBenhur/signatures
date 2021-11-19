@@ -1,17 +1,17 @@
 import _, { defer, has } from "lodash";
 import React from "react";
 import Web3 from "web3";
-import contractJSON from "../../contracts/ideaTribe.json";
+import contractMainNetJSON from "../../contracts/ideaTribe.json";
+import contractTestNetJSON from "../../contracts/ideaTribe_test.json";
 import tribeGoldContractJSON from "../../contracts/tribeGold.json";
 import store from "../redux/store";
-import { setReduxMetaMaskID,setReduxUserDetails } from "../redux/actions";
+import { setReduxMetaMaskID,setReduxUserDetails,setReduxChain } from "../redux/actions";
 import ENDPOINTS from "../commons/Endpoints";
 import { useHistory } from "react-router-dom";
 import ReactDOM from 'react-dom';
 import AlertBanner from "../components/alert/alert"
 import AxiosInstance from "../wrapper/apiWrapper"
 import { Subject } from 'rxjs';
-
 
 import axios from "axios";
 import CONSTANTS from "../commons/Constants";
@@ -71,7 +71,6 @@ class BlockchainInterface {
   constructor() {
     this.web3 = undefined;
     this.metamaskAccount = undefined;
-    this.contractJSON = contractJSON;
     this.tribeGoldContractJSON = tribeGoldContractJSON;
     this.contract = undefined;
     this.tokens = [];
@@ -190,8 +189,11 @@ class BlockchainInterface {
 
   async getAccountDetails() {
     const promise = new Promise((resolve, reject) => {
-      console.log("returning loadWeb3");
-      this.loadWeb3()
+      console.log("this.contractJSONthis.contractJSON")
+      AxiosInstance.get(`/getContractENV`).then(result =>{
+        store.dispatch(setReduxChain(_.get(result,"data.data") == "mainnet"? CONSTANTS.SCANNER_MAINNET_URL : CONSTANTS.SCANNER_TESTNET_URL));
+        this.contractJSON = _.get(result,"data.data") == "mainnet" ? contractMainNetJSON : contractTestNetJSON;
+        this.loadWeb3()
         .then((success) => {
           this.metamaskAccount = success.accountId[0];
           let metamaskNetwork = success.networkId;
@@ -231,6 +233,7 @@ class BlockchainInterface {
           console.log("catch loadWeb3", err);
           reject(err);
         });
+      })
     });
 
     return promise;
@@ -432,6 +435,8 @@ class BlockchainInterface {
   retrieveWeb3 () {
     return this.web3;
   }
+
+   
   
 }
 

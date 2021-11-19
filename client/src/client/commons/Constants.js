@@ -77,6 +77,9 @@ const COLLAB_TYPE = [
  
 ];
 
+const SCANNER_TESTNET_URL = "https://mumbai.polygonscan.com"
+const SCANNER_MAINNET_URL = "https://polygonscan.com"
+
 const CONSTANTS = {
   CATEGORIES,
   PURPOSES,
@@ -89,7 +92,9 @@ const CONSTANTS = {
   CURRENCY,
   FILTERS_TYPES,
   COOKIE_TOKEN_PHRASE,
-  SIGNATURE_MESSAGE
+  SIGNATURE_MESSAGE,
+  SCANNER_MAINNET_URL,
+  SCANNER_TESTNET_URL
 };
 
 export default CONSTANTS;

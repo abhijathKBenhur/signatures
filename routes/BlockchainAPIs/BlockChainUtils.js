@@ -1,5 +1,6 @@
 const Web3 = require("web3");
 const contractJSON = require("../../client/src/contracts/ideaTribe.json");
+const contractJTestSON = require("../../client/src/contracts/ideaTribe_test.json");
 const tribeGoldJSON = require("../../client/src/contracts/tribeGold.json");
 const privateKey = process.env.TRIBE_GOLD_TREASURER;
 const HDWalletProvider = require("@truffle/hdwallet-provider");
@@ -15,8 +16,8 @@ const publicKey =
   web3Instance.eth.accounts.privateKeyToAccount(privateKey).address;
 
   const ideaTribeContract = new web3Instance.eth.Contract(
-    contractJSON.abi,
-    contractJSON.address,
+    process.env.CHAIN_ENV == "mainnet" ? contractJSON.abi : contractJTestSON.abi,
+    process.env.CHAIN_ENV == "mainnet" ? contractJSON.address : contractJTestSON.address,
     {
       gas: 3000000,
     }

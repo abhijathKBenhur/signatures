@@ -77,7 +77,16 @@ register_user = (req, res) => {
   })
 };
 
+getContractENV = async (req, res) => {
+  try{
+    return res.status(200).json({ success: true, data: process.env.CHAIN_ENV });
+  }catch(err){
+    return res.status(404).json({ success: true, data: [] });
+  }
+};
 
+
+router.get("/getContractENV", getContractENV);
 router.post("/register_user", register_user);
 router.post("/verifySignature", verifySignature);
 

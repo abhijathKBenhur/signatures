@@ -4,12 +4,12 @@ import "./wallet.scss";
 import Web3Utils from "web3-utils";
 import coin from  "../../../assets/logo/tribeGoldCoin.png"
 import polygon from  "../../../assets/logo/polygon.png"
-
+import { shallowEqual, useSelector } from "react-redux";
 const Wallet = (props) => {
   const [goldBalance, setGoldBalance] = useState(0);
   const [maticBalance, setMaticBalance] = useState(0);
-
-
+  const reduxState = useSelector((state) => state, shallowEqual);
+  const {  reduxChain = undefined } = reduxState;
   useEffect(() => {
     BlockchainInterface.getGoldBalance()
     .then((success) => {
@@ -27,7 +27,7 @@ const Wallet = (props) => {
       <div
         className="wallet-container"
         onClick={() => 
-          window.open("https://polygonscan.com/address/0x2E56AeBAb0Ba3a5904fB1fA424eaae89e5147187")
+          window.open(reduxChain+"/address/0x2E56AeBAb0Ba3a5904fB1fA424eaae89e5147187")
         }
       >
       <div className="wallet-type d-flex justify-content-between">
@@ -44,7 +44,7 @@ const Wallet = (props) => {
       <div
         className="wallet-container"
         onClick={() => 
-          window.open("https://polygonscan.com/address/0xebB129c1d9ed956e9D1A4F342a5166b06A153475")
+          window.open(reduxChain+"/address/0xebB129c1d9ed956e9D1A4F342a5166b06A153475")
         }
       >
         <div className="wallet-type d-flex justify-content-between">

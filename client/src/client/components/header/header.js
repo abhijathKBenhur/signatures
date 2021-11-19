@@ -34,7 +34,7 @@ const Header = (props) => {
   const appConstants = CONSTANTS
   let history = useHistory();
   const reduxState = useSelector((state) => state, shallowEqual);
-  const { metamaskID = undefined, userDetails = {} } = reduxState;
+  const { metamaskID = undefined, userDetails = {}, reduxChain = undefined } = reduxState;
   const [currentMetamaskAccount, setCurrentMetamaskAccount] = useState(
     metamaskID
   );
@@ -336,10 +336,7 @@ const Header = (props) => {
                 className="loggedinaccount secondary-grey color-white"
                 title={currentMetamaskAccount}
                 onClick={() => {
-                  window.open(
-                    "https://mumbai.polygonscan.com/address/" +
-                      currentMetamaskAccount
-                  );
+                  window.open(reduxChain+"/address/" +currentMetamaskAccount);
                 }}
               >
                 {getShortAddress(currentMetamaskAccount, 4)}

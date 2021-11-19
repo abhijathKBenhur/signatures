@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const baseUrl = "mongodb://127.0.0.1:27017/Signatures";
+const baseUrl = "mongodb+srv://sauabhi:Mongodb@10@cluster0.buaag.mongodb.net/ideatribe?retryWrites=true&w=majority";
 
 mongoose.connect(process.env.NODE_ENV == "production" ? process.env.MONGODB_URL : baseUrl, {
   useNewUrlParser: true,
