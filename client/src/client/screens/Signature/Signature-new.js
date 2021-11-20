@@ -597,6 +597,7 @@ const SignatureNew = (props) => {
       </div>
       {modalShow.shareModal && (
         <ShareModal
+          type="idea"
           show={modalShow.shareModal}
           thumbnail={signature.thumbnail}
           PDFHash={signature.PDFHash}

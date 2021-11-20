@@ -9,6 +9,7 @@ const TransactionSchema = require("../../db-config/transaction.schema");
 
 const GOLD_DEPOSIT_VALUES = {
   REGISTER: Web3Utils.toWei("1", "ether"),
+  REFERAL: Web3Utils.toWei("1", "ether"),
   IDEA_POST: {
     1: Web3Utils.toWei("3", "ether"),
     2: Web3Utils.toWei("2", "ether"),
@@ -34,6 +35,9 @@ const MATIC_DEPOSIT_VALUES = {
 
 const depostToNewUser = (receiverUserObject) => {
   console.log("INITIATING DEPOSITS")
+  UserSchema.findOne({myReferralCode:receiverUserObject.referredBy}).then(result =>{
+    TribeGoldAPIs.depositGold(result.data, GOLD_DEPOSIT_VALUES.REFERAL,"GOLD_INCENTIVICED_REFERAL")
+  })
   return Promise.all([
     TribeGoldAPIs.depositGold(receiverUserObject, GOLD_DEPOSIT_VALUES.REGISTER,"GOLD_INCENTIVICED_REGISTER"),
     MaticAPIs.depositMatic(receiverUserObject, MATIC_DEPOSIT_VALUES.REGISTER,"REGISTER"),

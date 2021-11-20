@@ -1,7 +1,8 @@
 import _ from "lodash";
-import React, { Component } from "react";
+import React, { useEffect } from "react";
 import "./App.scss";
 import "./commons/Common.scss";
+import queryString from 'query-string'
 
 import CreateNew from "./screens/Create/Create-new";
 import Signature from "./screens/Signature/Signature-new";
@@ -22,7 +23,14 @@ import Tokenomics from "./screens/Tokenomics/Tokenomics";
 import Terms from "./screens/terms/terms"
 import Privacy from "./screens/privacy/privacy";
 
-const App = () =>  {
+const App = (props) =>  {
+  useEffect(() => {
+    let queryParams = queryString.parse(props.location.search);
+    if(!_.isEmpty(queryParams) && !_.isEmpty(queryParams.inviteCode) ){
+      sessionStorage.setItem("inviteCode", queryParams.inviteCode);
+    }
+  }, []);
+
 
     return (
       <Router>  

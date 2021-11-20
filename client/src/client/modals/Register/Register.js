@@ -79,7 +79,7 @@ const Register = (props) => {
     metamaskId: _.get(reduxState, "metamaskID"),
     userName: _.get(reduxState, "userName"),
     loginMode: _.get(reduxState, "loginMode"),
-    referredBy: undefined,
+    referredBy: sessionStorage.getItem("inviteCode"),
     myReferralCode: (Math.random() + 1).toString(36).substring(7),
     googleJWTToken: "",
   });
@@ -410,7 +410,7 @@ const Register = (props) => {
                       />
                     </div>
 
-                    <div>
+                    {/* <div>
                       <span className="second-grey">Referral Code</span>
                       {referralError && (
                         <span className="error-message ml-2">
@@ -432,7 +432,7 @@ const Register = (props) => {
                         className={"userName referral"}
                         onChange={handleChange}
                       />
-                    </div>
+                    </div> */}
                   </div>
                 </Form.Group>
               </>

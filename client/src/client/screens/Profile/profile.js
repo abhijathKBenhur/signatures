@@ -38,6 +38,8 @@ import RelationsInterface from "../../interface/RelationsInterface";
 import CONSTANTS from "../../commons/Constants";
 import { showToaster } from "../../commons/common.utils";
 import EmitInterface from "../../interface/emitInterface";
+import tribeLogo from "../../../assets/logo/logo_blue_inverse.png";
+
 function Profile(props) {
   const reduxState = useSelector((state) => state, shallowEqual);
   const {
@@ -66,7 +68,7 @@ function Profile(props) {
     sendMessage: false,
     shareProfile: false,
     showPeopleList: false,
-    showFollowers: false
+    showFollowers: false,
   });
 
   useEffect(() => {
@@ -214,7 +216,7 @@ function Profile(props) {
         CONSTANTS.ACTION_STATUS.PENDING,
         "I would like to follow you.",
         {
-          creditorDbId: loggedInUserDetails
+          creditorDbId: loggedInUserDetails,
         }
       ).then((success) => {
         let newFollowlist = _.concat(followers, [userDetails.userName]);
@@ -278,7 +280,7 @@ function Profile(props) {
                     </div>
                     <div className="profile-info">
                       <Row className="d-flex justify-content-center align-items-center">
-                        <span className="master-header userName">
+                        <span className="master-header userName text-center">
                           {_.get(loggedInUserDetails, "userName")}
                         </span>
                       </Row>
@@ -293,7 +295,11 @@ function Profile(props) {
                           <i
                             className="fa fa-external-link ml-2"
                             onClick={() => {
-                              window.open(reduxChain+"/address/" +_.get(loggedInUserDetails, "userName"));
+                              window.open(
+                                reduxChain +
+                                  "/address/" +
+                                  _.get(loggedInUserDetails, "userName")
+                              );
                             }}
                           ></i>
                         </Col>
@@ -301,12 +307,15 @@ function Profile(props) {
                       <Row>
                         <Col>
                           {followers && (
-                            <span className="address-value third-header justify-content-center d-flex mt-2 cursor-pointer" onClick={() =>{
-                              setShowModal({
-                                ...modalShow,
-                                showFollowers: true,
-                              });
-                            }}>
+                            <span
+                              className="address-value third-header justify-content-center d-flex mt-2 cursor-pointer"
+                              onClick={() => {
+                                setShowModal({
+                                  ...modalShow,
+                                  showFollowers: true,
+                                });
+                              }}
+                            >
                               {followers.length} followers.
                             </span>
                           )}
@@ -419,14 +428,17 @@ function Profile(props) {
                         md="6"
                         className="d-flex flex-column align-items-center stats-entry"
                       >
-                        <span className="stats-title master-grey cursor-pointer" onClick={() => {
+                        <span
+                          className="stats-title master-grey cursor-pointer"
+                          onClick={() => {
                             if (upvotesCount > 0) {
                               setShowModal({
                                 ...modalShow,
                                 showPeopleList: true,
                               });
                             }
-                          }}>
+                          }}
+                        >
                           {upvotesCount}
                         </span>
                         <span
@@ -595,6 +607,29 @@ function Profile(props) {
                               <i className="fa fa-share"></i>
                             </Button>
                           </OverlayTrigger>
+
+                          <OverlayTrigger
+                            key={"invite"}
+                            placement="top"
+                            overlay={
+                              <Tooltip id={`tooltip-top`}>
+                                Invite friends
+                              </Tooltip>
+                            }
+                          >
+                            <Button
+                              variant="action"
+                              className="mt-1"
+                              onClick={() => {
+                                setShowModal({
+                                  ...modalShow,
+                                  invitefriends: true,
+                                });
+                              }}
+                            >
+                              <i className="fa fa-user-plus"></i>
+                            </Button>
+                          </OverlayTrigger>
                         </Row>
                         {!_.isUndefined(followers) &&
                           userDetails.userName &&
@@ -699,9 +734,20 @@ function Profile(props) {
       )}
       {modalShow.shareProfile && (
         <ShareModal
+          type="profile"
           thumbnail={loggedInUserDetails.imageUrl}
           show={modalShow.shareProfile}
+          userName={userDetails.userName}
           onHide={() => setShowModal({ ...modalShow, shareProfile: false })}
+        />
+      )}
+      {modalShow.invitefriends && (
+        <ShareModal
+          type="invite"
+          thumbnail={tribeLogo}
+          show={modalShow.invitefriends}
+          referral={userDetails.myReferralCode}
+          onHide={() => setShowModal({ ...modalShow, invitefriends: false })}
         />
       )}
     </Container>
