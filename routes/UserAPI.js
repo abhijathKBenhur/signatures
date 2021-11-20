@@ -150,11 +150,17 @@ registerUser = (req, res) => {
 
 getUserInfo = async (req, res) => {
   let findCriteria = {};
+  if (req.body.email) {
+    findCriteria.email =  req.body.email;
+  }
   if (req.body.userName) {
     findCriteria.userName =  req.body.userName;
   }
   // findCriteria.userName = "$regex: " + req.body.userName +" , $options: 'i'";
 
+  if (req.body.metamaskId) {
+    findCriteria.metamaskId = req.body.metamaskId;
+  }
   if (req.body.metamaskId) {
     findCriteria.metamaskId = req.body.metamaskId;
   }

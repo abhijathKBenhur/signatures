@@ -63,6 +63,7 @@ const Register = (props) => {
 
   const [referralError, setReferralError] = useState(false);
   const [userNameError, setuserNameError] = useState(false);
+  const [userEmailError, setuserEmailError] = useState(false);
   const [loggedInUserDetails, setLoggedInUserDetails] = useState({});
 
   useEffect(() => {
@@ -212,16 +213,24 @@ const Register = (props) => {
   }, [reduxState]);
 
   function googleLogIn(googleFormResponseObject) {
-    setUserDetails({
-      ...userDetails,
-      firstName: _.get(googleFormResponseObject.profileObj, "givenName"),
-      lastName: _.get(googleFormResponseObject.profileObj, "familyName"),
-      email: _.get(googleFormResponseObject.profileObj, "email"),
-      imageUrl: _.get(googleFormResponseObject.profileObj, "imageUrl"),
-      loginMode: "google",
-      userName: "",
-      googleJWTToken: _.get(googleFormResponseObject.tokenObj, "id_token"),
-    });
+    UserInterface.getUserInfo({ email: _.get(googleFormResponseObject.profileObj, "email") })
+      .then((userDetails) => {
+        setuserEmailError(true);
+      })
+      .catch((error) => {
+        setUserDetails({
+          ...userDetails,
+          firstName: _.get(googleFormResponseObject.profileObj, "givenName"),
+          lastName: _.get(googleFormResponseObject.profileObj, "familyName"),
+          email: _.get(googleFormResponseObject.profileObj, "email"),
+          imageUrl: _.get(googleFormResponseObject.profileObj, "imageUrl"),
+          loginMode: "google",
+          userName: "",
+          googleJWTToken: _.get(googleFormResponseObject.tokenObj, "id_token"),
+        });
+        setuserEmailError(false);
+      });
+ 
   }
 
   function metamaskGuide() {
@@ -239,7 +248,7 @@ const Register = (props) => {
     switch (stepKey) {
       case "socialLogin":
         return (
-          <div className="w-100 align-self-center d-flex justify-content-center">
+          <div className="align-self-center d-flex justify-content-center flex-column">
             {_.isEmpty(userDetails.email) ? (
               <GoogleLogin
                 //secretKey:I0YMKAriMhc6dB7bN44fHuKj
@@ -264,6 +273,10 @@ const Register = (props) => {
                 <span> {userDetails.email} </span>
               </div>
             )}
+            <br/>
+            {userEmailError  && 
+             <div className="error-message ml-2">  User with this email already registerd </div>
+            }
           </div>
         );
         break;
@@ -348,8 +361,8 @@ const Register = (props) => {
             ) : registration == FAILED ? (
               <div>
                 {" "}
-                Hi {userDetails.firstName}, We were unable to onboard you to the
-                tribe this time.
+                Hi {userDetails.firstName}, we were unable to onboard you to the
+                Tribe this time.
                 <br></br>
                 {registrationErrorMessage}
               </div>
@@ -517,7 +530,7 @@ const Register = (props) => {
       <Modal.Body>
         <Row>
           <Col md="12" className="box">
-            <div className="step-component">
+            <div className="step-component d-flex justify-content-center">
               {getConditionalView(activeStep.key)}
             </div>
           </Col>
@@ -543,7 +556,7 @@ const Register = (props) => {
           )}
           <Button
             disabled={
-              ((userNameError ||
+              ((userNameError || userEmailError ||
                 !userDetails.userName ||
                 userDetails.userName.length == 0 ||
                 referralError) &&
