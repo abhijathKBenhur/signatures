@@ -19,7 +19,7 @@ const ShareModal = (props) => {
         return window.location.href + "/profile/" + props.userName;
         break;
       case "invite":
-        return window.location.href + "?invite=" + props.referral;
+        return window.location.origin + "?inviteCode=" + props.referral;
         break;
     }
   };
