@@ -16,7 +16,7 @@ const About = () => {
       <ProgressBar></ProgressBar>
       <Row className="about-item about-first second-grey">
         <Col className="left mt-6 text-center" xs={12}>
-          <span className="master-header color-primary-light">
+          <span className="father-grey color-secondary mb-4 uppercase">
             Contact Us
           </span>
           {/* <span className="master-header color-primary">
