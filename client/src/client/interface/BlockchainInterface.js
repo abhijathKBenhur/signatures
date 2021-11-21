@@ -24,7 +24,9 @@ const api = axios.create({
       : ENDPOINTS.LOCAL_ENDPOINTS,
 });
 
-const chain_id = "0x13881";
+// const chain_id = "0x13881";
+const chain_id = "0x89";
+
 let isConfirmed = false;
 
 const CHAIN_CONFIGS = {
@@ -316,7 +318,7 @@ class BlockchainInterface {
           }
           ReactDOM.render(<AlertBanner {...alertProperty}></AlertBanner>, document.querySelector('.aleartHeader'))
         reject(
-          "Non-Ethereum browser detected. Please install MetaMask!"
+          "Non-Ethereum browser detected. Please install MetaMask and reload the page!"
         );
       }
     });

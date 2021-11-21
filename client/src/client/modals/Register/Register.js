@@ -385,7 +385,7 @@ const Register = (props) => {
                   />
                   <div className="inputs d-flex flex-column justify-content-around h-100 ml-5 w-100">
                     <div className="userID">
-                      <span className="second-grey">User name</span>
+                      <span className="second-grey">Enter username</span>
                       {userNameError && (
                         <span className="error-message ml-2">
                           *{userNameError}

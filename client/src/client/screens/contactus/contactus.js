@@ -23,9 +23,9 @@ const About = () => {
             at the right time.
           </span> */}
           <div className="mt-3 color-primary readable-text">
-            <span> IdeaTribe, </span>
+            <span> IdeaTribe, Inc. </span>
             <br/>
-            <span>Inc. Attn. DMCA Notice 16192 Coastal Highway,  </span>
+            <span>Attn. DMCA Notice 16192 Coastal Highway,  </span>
             <br/>
             <span>Lewes, Delaware 19958 </span>
             <br/>Email: contact@IdeaTribe.io

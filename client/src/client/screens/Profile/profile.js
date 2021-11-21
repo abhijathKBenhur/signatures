@@ -368,7 +368,7 @@ function Profile(props) {
                         {userDetails.facebookUrl && (
                           <reactShare.FacebookShareButton
                             url={userDetails.facebookUrl}
-                            quote={"Hey! I minted an Idea on IdeaTribe.io!"}
+                            quote={"Hey! I am inviting you to IdeaTribe.io!"}
                           >
                             <div className="social-icon-wrapper fb">
                               <i class="fa fa-facebook" aria-hidden="true"></i>
@@ -379,7 +379,7 @@ function Profile(props) {
                         {userDetails.twitterUrl && (
                           <reactShare.TwitterShareButton
                             url={userDetails.twitterUrl}
-                            title={"Hey! I minted an Idea on IdeaTribe.io!"}
+                            title={"Hey! I am inviting you to IdeaTribe.io!"}
                           >
                             <div className="social-icon-wrapper twitter ml-2">
                               <i class="fa fa-twitter" aria-hidden="true"></i>
@@ -390,8 +390,8 @@ function Profile(props) {
                         {userDetails.instaUrl && (
                           <reactShare.WhatsappShareButton
                             url={userDetails.instaUrl}
-                            title={"Hey! I minted an Idea on IdeaTribe.io!"}
-                            separator=":: "
+                            title={"Hey! I am inviting you to IdeaTribe.io!"}
+                            separator=" "
                           >
                             <div className="social-icon-wrapper whatsapp ml-2">
                               <i class="fa fa-instagram" aria-hidden="true"></i>
@@ -588,7 +588,7 @@ function Profile(props) {
                         )}
 
                         <Row className="justify-content-end pr-3 cursor-pointer color-primary mb-1">
-                          <OverlayTrigger
+                          {/* <OverlayTrigger
                             key={"share"}
                             placement="top"
                             overlay={
@@ -606,7 +606,7 @@ function Profile(props) {
                             >
                               <i className="fa fa-share"></i>
                             </Button>
-                          </OverlayTrigger>
+                          </OverlayTrigger> */}
 
                           <OverlayTrigger
                             key={"invite"}
