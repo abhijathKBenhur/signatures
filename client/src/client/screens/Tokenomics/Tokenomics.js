@@ -17,8 +17,8 @@ const Help = () => {
     pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
   }, []);
   return (
-    <div className="main-content-component container tokenomics ">
-      <span className="father-grey color-secondary">Tokenomics Whitepaper</span>
+    <div className="main-content-component container tokenomics text-center">
+      <span className="father-grey color-secondary uppercase">Tokenomics Whitepaper</span>
       <>
         <p className="page-container text-center cursor-pointer">
           {pdfPages.currentPage != 1 && <ChevronLeft

@@ -22,6 +22,7 @@ const Help = () => {
   }, []);
   return (
     <div className="main-content-component container privacy">
+      <div className="father-grey color-secondary mb-3 text-center">IDEATRIBE TERMS AND CONDITIONS</div>
       <>
         <div className="terms-body">
         <div className="father-grey color-secondary mb-3">IDEATRIBE TERMS AND CONDITIONS</div>

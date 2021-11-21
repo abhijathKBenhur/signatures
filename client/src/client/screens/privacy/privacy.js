@@ -19,7 +19,7 @@ const Help = () => {
   }, []);
   return (
     <div className="main-content-component container privacy">
-      <span className="father-grey color-secondary">Privacy document</span>
+      <div className="father-grey color-secondary uppercase text-center">Privacy document</div>
       <>
         <div className="privacy-body">
           {/* <div className="father-grey color-secondary mb-4">FAQs</div> */}

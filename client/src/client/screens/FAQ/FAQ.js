@@ -86,8 +86,9 @@ const FAQ = () => {
     pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
   }, []);
   return (
-    <div className="main-content-component container faq d-flex">
-      <>
+    <div className="main-content-component container faq text-center">
+
+      <div className="d-flex">
         {/* <p className="page-container text-center cursor-pointer">
           <ChevronLeft
             className={pdfPages.currentPage === 1 ? "disable" : ""}
@@ -113,18 +114,20 @@ const FAQ = () => {
         </p> */}
 
         <div className="faq-body">
-        <div className="father-grey color-secondary mb-4">FAQs</div>
-        {faqs.map(item => (
-          <div>
-            <div className="faq-title" onClick={(e) => changeAccordianState(item)}> 
-              <span className="mr-2"> {item.no} . </span>
-              <span> {item.title} </span>
+        <span className="father-grey color-secondary mb-4 uppercase">FAQs</span>
+        <div className="faq-body-content">
+          {faqs.map(item => (
+            <div>
+              <div className="faq-title" onClick={(e) => changeAccordianState(item)}> 
+                <span className="mr-2"> {item.no} . </span>
+                <span> {item.title} </span>
+              </div>
+              {!accordianState[item.no] && item.content && item.content.map(res=> (<div className="faq-content ml-4"> {res} </div>))}
+              {!accordianState[item.no] && item.item && item.item.map((sub, index) => (<div className="faq-content ml-4"> {index + 1}. {sub} </div>))}
+              {!accordianState[item.no] && <div className="faq-content ml-4"> {item.afterItem} </div>}
             </div>
-            {!accordianState[item.no] && item.content && item.content.map(res=> (<div className="faq-content ml-4"> {res} </div>))}
-            {!accordianState[item.no] && item.item && item.item.map((sub, index) => (<div className="faq-content ml-4"> {index + 1}. {sub} </div>))}
-            {!accordianState[item.no] && <div className="faq-content ml-4"> {item.afterItem} </div>}
-          </div>
-        ))}
+          ))}
+        </div>
         </div>
         {/* <Document
           file={PDFFile}
@@ -133,7 +136,7 @@ const FAQ = () => {
         >
           <Page pageNumber={pdfPages.currentPage} />
         </Document> */}
-      </>
+      </div>
     </div>
   );
 };

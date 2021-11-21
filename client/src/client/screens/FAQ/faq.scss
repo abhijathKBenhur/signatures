@@ -6,23 +6,24 @@
 }
 
 .faq-body {
-    background: white;
-    color: black;
-    padding: 30px;
-    width: 80%;
-    margin: 5rem;
-    .faq-title {
-        font-size: 14px;
-        pointer-events: all;
-        font-weight: bold;
-        margin-bottom: 20px;
-        &:hover {
-            cursor: pointer;
+    .faq-body-content{
+        background: white;
+        color: black;
+        padding: 30px;
+        margin: 3rem 5rem;
+        .faq-title {
+            font-size: 14px;
+            pointer-events: all;
+            font-weight: bold;
+            margin-bottom: 20px;
+            &:hover {
+                cursor: pointer;
+            }
         }
-    }
-    .faq-content {
-        font-size: 14px;
-        pointer-events: all;
-        margin-bottom: 20px;
+        .faq-content {
+            font-size: 14px;
+            pointer-events: all;
+            margin-bottom: 20px;
+        }
     }
 }
