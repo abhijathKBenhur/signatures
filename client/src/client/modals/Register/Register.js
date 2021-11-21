@@ -471,7 +471,9 @@ const Register = (props) => {
     }
   }
   const closePopup = () => {
-    props.onHide();
+    if(registration != PASSED){
+      props.onHide();
+    }
   };
 
   return (
@@ -482,6 +484,7 @@ const Register = (props) => {
       size="lg"
       fullscreen={true}
       onHide={props.onHide}
+      backdrop={registration == PASSED ? "static" : true}
     >
       {registration == PENDING && <ProgressBar></ProgressBar>}
       <Modal.Header className="d-flex flex-column">
