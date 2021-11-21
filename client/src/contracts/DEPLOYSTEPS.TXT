@@ -1,0 +1,3 @@
+Change environment variables
+Change network ID in proper ideatribe.json file based on chainENV
+Change network ID in proper tribegold.json file based on chainENV

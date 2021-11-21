@@ -35,7 +35,7 @@ const Help = () => {
                 <ul className="alphabet-list">
                   <li>
                     <div>
-                      <div> InformationYouProvideUs. </div>
+                      <div> Information You Provide Us. </div>
                       <ul className="roman-list">
                         <li> We may collect Personal Data from you, such as your first and last name, e-mail and mailing addresses, Ethereum address, and IdeaTribe password when you create an account to log in to our network (“Account”). </li>
                         <li> If you use our Services on your mobile device, we may collect your phone number and the unique device id number. </li>
@@ -50,7 +50,7 @@ const Help = () => {
                   </li>
                   <li> 
                     <div>
-                      <div> InformationCollectedviaTechnology.Asyounavigatethroughand interact with our Service, we may use automatic data collection technologies to collect certain information about your equipment, browsing actions and patterns, including: </div>
+                      <div> Information Collected via Technology.As you navigate through and interact with our Service, we may use automatic data collection technologies to collect certain information about your equipment, browsing actions and patterns, including: </div>
                       <ul className="roman-list">
                         <li> <p><span className="underline">Information Collected by Our Servers.</span> To make our Service more useful to you, our servers (which may be hosted by a third party service provider) collect information from you, including your browser type, operating system, Internet Protocol (“IP”) address (a number that is automatically assigned to your computer when you use the Internet, which may vary from session to session), domain name, Polygon Network address, wallet type, and/or a date/time stamp for your visit. </p></li>
                         <li> <p><span className="underline">Log Files.</span> As is true of most websites, we may gather certain information automatically and store it in log files. This information includes IP addresses, browser type, Internet service provider (“ISP”), referring/exit pages, operating system, date/time stamp, and clickstream data. We use this information to analyze trends, administer the Service, track users’ movements around the Service, gather demographic information about our user base as a whole, and better tailor our Services to our users’ needs. For example, some of the information may be collected so that when you visit the Service, it will recognize you and the information could then be used to serve advertisements and other information appropriate to your interests. </p></li>
@@ -69,7 +69,7 @@ const Help = () => {
                 <ul className="alphabet-list"> 
                   <li> 
                     <div> 
-                      <div> GeneralUse.Ingeneral,PersonalDatayousubmittousisusedeither to respond to requests that you make, or to aid us in serving you better. We may use your Personal Data in the following ways: </div>
+                      <div> GeneralUse. In general,Personal Data you submit to us isused either to respond to requests that you make, or to aid us in serving you better. We may use your Personal Data in the following ways: </div>
                       <ul className="roman-list"> 
                         <li> facilitate the creation of and secure your Account on our network; </li>
                         <li> identify you as a user in our system; </li>
@@ -89,7 +89,7 @@ const Help = () => {
                       <div> We may use your Personal Data to contact you about our own and third parties’ goods and services that may be of interest to you. </div>
                     </div>
                   </li>
-                  <li> AnonymousData.WemaycreateAnonymousDatarecordsfrom Personal Data by excluding information (such as your name) that makes the data personally identifiable to you. We use this Anonymous Data to analyze request and usage patterns so that we may enhance the content of our Services and improve Service navigation. We reserve the right to use Anonymous Data for any purpose and to disclose Anonymous Data to third parties without restriction. </li>
+                  <li> AnonymousData. We may create Anonymous Datarecords from Personal Data by excluding information (such as your name) that makes the data personally identifiable to you. We use this Anonymous Data to analyze request and usage patterns so that we may enhance the content of our Services and improve Service navigation. We reserve the right to use Anonymous Data for any purpose and to disclose Anonymous Data to third parties without restriction. </li>
                 </ul>
               </div>
             </li>
@@ -97,10 +97,10 @@ const Help = () => {
               <div> 
                 <div> Disclosure of Your Personal Data. We disclose your Personal Data as described below and as described elsewhere in this Privacy Policy. </div>
                 <ul className="alphabet-list">
-                  <li> ThirdPartyServiceProviders.WemayshareyourPersonalDatawith third party service providers to: provide you with the Services that we offer you through our Service; to conduct quality assurance testing; to facilitate creation of accounts; to provide technical support; and/or to provide other services to the IdeaTribe. </li>
+                  <li> Third Party Service Providers. We may share your Personal Data with third party service providers to: provide you with the Services that we offer you through our Service; to conduct quality assurance testing; to facilitate creation of accounts; to provide technical support; and/or to provide other services to the IdeaTribe. </li>
                   <li> Affiliates.WemaysharesomeorallofyourPersonalDatawithour parent company, subsidiaries, joint ventures, or other companies under a common control (“Affiliates”), in which case we will require our Affiliates to honor this Privacy Policy. </li>
                   <li> Corporate Restructuring. We may share some or all of your Personal Data in connection with or during negotiation of any merger, financing, acquisition or dissolution transaction or proceeding involving sale, transfer, divestiture, or disclosure of all or a portion of our business or assets. In the event of an insolvency, bankruptcy, or receivership, Personal Data may also be transferred as a business asset. If another company acquires our company, business, or assets, that company will possess the Personal Data collected by us and will assume the rights and obligations regarding your Personal Data as described in this Privacy Policy. </li>
-                  <li> AsLegallyRequired.Regardlessofanychoicesyoumakeregarding your Personal Data (as described below), IdeaTribe may disclose Personal Data if it believes in good faith that such disclosure is necessary (a) in connection with any legal investigation; (b) to comply with relevant laws or to respond to subpoenas or warrants served on IdeaTribe; (c) to protect or defend the rights or property of IdeaTribe or users of the Service; and/or (d) to investigate or assist in preventing any violation or potential violation of the law, this Privacy Policy, or our Terms of Use. </li>
+                  <li> As Legally Required.Regardless of any choices you make regarding your Personal Data (as described below), IdeaTribe may disclose Personal Data if it believes in good faith that such disclosure is necessary (a) in connection with any legal investigation; (b) to comply with relevant laws or to respond to subpoenas or warrants served on IdeaTribe; (c) to protect or defend the rights or property of IdeaTribe or users of the Service; and/or (d) to investigate or assist in preventing any violation or potential violation of the law, this Privacy Policy, or our Terms of Use. </li>
                   <li> Other Disclosures. We may also disclose your Personal Data, to fulfill the purpose for which you provide it; for any other purpose disclosed by us when you provide it; or with your consent. We do not sell your Personal Data. </li>
                 </ul>
               </div>
@@ -111,8 +111,8 @@ const Help = () => {
               <div> 
                 <div> Your Choices Regarding Information. You have several choices regarding the use of information on our Services: </div>
                 <ul className="alphabet-list"> 
-                  <li> EmailCommunications.Wewillperiodicallysendyoufree,opt-in newsletters and e-mails that directly promote the use of our Service. We may send you occasional service related communications, including notices of updates to our Terms of Use or Privacy Policy. </li>
-                  <li> IfyoudecideatanytimethatyounolongerwishtoacceptCookies from our Service for any of the purposes described above, then you can instruct your browser, by changing its settings, to stop accepting Cookies or to prompt you before accepting a Cookie from the websites you visit. Consult your browser’s technical information. If you do not accept Cookies, however, you may not be able to use all portions of the Service or all functionality of the Service. If you have any questions about how to disable or modify Cookies, please let us know at the address given in paragraph (1). </li>
+                  <li> Email Communications. We will periodically send you free,opt-in newsletters and e-mails that directly promote the use of our Service. We may send you occasional service related communications, including notices of updates to our Terms of Use or Privacy Policy. </li>
+                  <li> If you decide at any time that you no longer wish to accept Cookies from our Service for any of the purposes described above, then you can instruct your browser, by changing its settings, to stop accepting Cookies or to prompt you before accepting a Cookie from the websites you visit. Consult your browser’s technical information. If you do not accept Cookies, however, you may not be able to use all portions of the Service or all functionality of the Service. If you have any questions about how to disable or modify Cookies, please let us know at the address given in paragraph (1). </li>
                 </ul>
               </div>
             </li>
