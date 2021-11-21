@@ -310,13 +310,13 @@ class BlockchainInterface {
         const alertProperty = {
             isDismissible: false,
             variant: "danger",
-            content: "Non-Ethereum browser detected. You should consider trying ",
+            content: "Non-Ethereum browser detected. Please install ",
             actionFunction: redirectToMetaMask,
             actionText: 'MetaMask!'
           }
           ReactDOM.render(<AlertBanner {...alertProperty}></AlertBanner>, document.querySelector('.aleartHeader'))
         reject(
-          "Non-Ethereum browser detected. You should consider trying MetaMask!"
+          "Non-Ethereum browser detected. Please install MetaMask!"
         );
       }
     });

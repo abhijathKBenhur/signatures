@@ -16,17 +16,23 @@ const About = () => {
       <ProgressBar></ProgressBar>
       <Row className="about-item about-first second-grey">
         <Col className="left" xs={12} sm={8}>
-          <span className="master-header color-primary-light">
-            Contact Us
+          <span className="mt-3 master-header color-primary-light">
+            Immortalize your Inspiration
           </span>
           {/* <span className="master-header color-primary">
             at the right time.
           </span> */}
-          <div className="mt-3 color-primary readable-text">
-          We’ve noticed the best Ideas come when you least expect them. We’re here to store them for posterity and help you change the world. Ideatribe was born out of a desire by the founding team to harness the creativity of the everyman. You. Us. Everyone!
+          <div className="mt-1 readable-text second-grey">
+          Have you noticed that the best ideas come to you when you least expect them?  <br/> <br/>
+
+          Those are precious moments of inspiration and originality. We are here to save them for posterity and help you change the world! <br/> <br/>
+
+          IdeaTribe was born out of the founding team’s desire to harness the creativity of the everyman. <br/> <br/>
+
+          <span className="color-primary">You. Us. Everyone! </span>
           </div>
           <div>
-            <Button variabt="secondary" className="mt-5" onClick={() => {
+            <Button variabt="secondary" className="mt-2" onClick={() => {
               history.push("/home");
             }}><span className="master-grey color-white" onClick={(e) => window.location.href = "mailto:"+"contact@ideatribe.io"+'?subject='+"Query"+'&body='+""}> Take me to the tribe </span></Button>
           </div>
@@ -35,7 +41,7 @@ const About = () => {
           <img src={girl_idea} />
         </Col>
       </Row>
-      <Row className="about-item about-second">
+      <Row className="about-item mt-3 about-second align-items-start">
       <Col className="left">
           <img src={creativity} />
         </Col>
@@ -43,25 +49,16 @@ const About = () => {
           <span className="father-grey mt-3">All your best Ideas. On the blockchain. </span>
           
           <span className="master-header color-primary">
-          Immutable forever. 
+          Forever. 
            </span>
           <br/>
-          <div className="mt-3 readable-text color-grey">
-          Ideatribe knows that the best Ideas are truly democratic and
-          decentralized. That’s why we make it easy to register your idea with us
-          instantly and protect you from those who will want to claim it as theirs
-          and profit from it.
+          <div className="mt-3 mb-1 readable-text second-grey">
+          IdeaTribe recognizes that the best ideas are truly democratic and decentralized. That is why you can mint your Idea with us instantly and record it as yours forever. <br/> <br/>
 
-          We also believe the best Ideas come from Global
-          collaboration. Not only will you be able to stake claim to your Ideas,
-          you’ll also be able to collaborate with others!
-          <br></br>
-
-          The founding team of
-          Ideatribe are artists, musicians, writers, businesspeople, product
-          specialists & brilliant engineering talent who have come together for
-          one common purpose...to illuminate your Ideas and help bring them to
-          reality.
+          We know that Ideas become real with the support of great collaborators. That is why, at IdeaTribe, you can collaborate with others in the safety of smart contracts! <br/> <br/>
+          
+          The founding team of IdeaTribe are artists, musicians, writers, businesspeople, product specialists & brilliant engineering talent who have come together for one common purpose: To shine light on your ideas and help bring them to reality.
+          
           </div>
           {/* <br></br><br></br>
         
