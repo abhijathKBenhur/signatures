@@ -65,7 +65,6 @@
 
                 .pdfUploaded{
                     flex-flow: column;
-                    pointer-events: none;
                     .pdf-document{
                         width: 100%;
                         .react-pdf__Page__canvas{
