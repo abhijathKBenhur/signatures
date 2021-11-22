@@ -31,7 +31,7 @@ getTotalUsersOnTribe = async (req, res) => {
 
 
 getTotalUpvotesForUser = async (req, res) => {
-  IdeaSchema.find(req.body.owner).then( ideas => {
+  IdeaSchema.find({owner:req.body.owner}).then( ideas => {
     if (!ideas) {
       return res.status(404).json({ success: true, data: 0 });
     }

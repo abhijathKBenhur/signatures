@@ -4,17 +4,19 @@ const _ = require("lodash");
 const BlockchainUtils = require("../BlockchainAPIs/BlockChainUtils");
 const TransactionSchema = require("../../db-config/transaction.schema");
 const web3Instance = BlockchainUtils.web3Instance;
-const publicKey = BlockchainUtils.publicKey;
 const tribeGoldContract = BlockchainUtils.tribeGoldContract;
+const transactionObject = {};
+
+web3Instance.eth.getAccounts().then(result => {
+  transactionObject.from = result[1];
+})
 
 depositGold = (receiverUserObject, ethValue, action) => {
   console.log("INITIATING GOLD DEPOSITS TO " + receiverUserObject.metamaskId);
   const promise = new Promise((resolve, reject) => {
     tribeGoldContract.methods
       .transfer(receiverUserObject.metamaskId, ethValue)
-      .send({
-        from: publicKey,
-      })
+      .send(transactionObject)
       .on("transactionHash", function (hash) {
         console.log(
           "transaction to new user " + receiverUserObject._id + " " + ethValue

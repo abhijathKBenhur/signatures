@@ -3,7 +3,8 @@ import React from "react";
 import Web3 from "web3";
 import contractMainNetJSON from "../../contracts/ideaTribe.json";
 import contractTestNetJSON from "../../contracts/ideaTribe_test.json";
-import tribeGoldContractJSON from "../../contracts/tribeGold.json";
+import tribeGoldContractMainNetJSON from "../../contracts/tribeGold.json";
+import tribeGoldContractTestNetJSON from "../../contracts/tribeGold.json";
 import store from "../redux/store";
 import { setReduxMetaMaskID,setReduxUserDetails,setReduxChain } from "../redux/actions";
 import ENDPOINTS from "../commons/Endpoints";
@@ -23,9 +24,6 @@ const api = axios.create({
       ? ENDPOINTS.REMOTE_ENDPOINTS
       : ENDPOINTS.LOCAL_ENDPOINTS,
 });
-
-// const chain_id = "0x13881";
-const chain_id = "0x89";
 
 let isConfirmed = false;
 
@@ -86,7 +84,6 @@ class BlockchainInterface {
   constructor() {
     this.web3 = undefined;
     this.metamaskAccount = undefined;
-    this.tribeGoldContractJSON = tribeGoldContractJSON;
     this.contract = undefined;
     this.tokens = [];
     let parentThis = this;
@@ -108,11 +105,11 @@ class BlockchainInterface {
 
 
 
-  addNetwork(chain_id) {
+  addNetwork(newChainId) {
     window.ethereum
       .request({
         method: "wallet_addEthereumChain",
-        params: [CHAIN_CONFIGS[chain_id]],
+        params: [CHAIN_CONFIGS[newChainId]],
       })
       .then((success) => {
         console.log("success", success);
@@ -122,12 +119,12 @@ class BlockchainInterface {
       });
   }
 
-  switchNetwork() {
+  switchNetwork(newChainId) {
     try {
       window.ethereum
         .request({
           method: "wallet_switchEthereumChain",
-          params: [{ chainId: chain_id }],
+          params: [{ chainId: newChainId }],
         })
         .then((success) => {
           console.log("success", success);
@@ -135,7 +132,7 @@ class BlockchainInterface {
         .catch((switchError) => {
           if (switchError.code === 4902) {
             try {
-              this.addNetwork(chain_id);
+              this.addNetwork(newChainId);
             } catch (addError) {
               // handle "add" error
             }
@@ -145,7 +142,7 @@ class BlockchainInterface {
       // This error code indicates that the chain has not been added to MetaMask.
       if (switchError.code === 4902) {
         try {
-          this.addNetwork(chain_id);
+          this.addNetwork(newChainId);
         } catch (addError) {
           // handle "add" error
         }
@@ -208,6 +205,9 @@ class BlockchainInterface {
       AxiosInstance.get(`/getContractENV`).then(result =>{
         store.dispatch(setReduxChain(_.get(result,"data.data") == "mainnet"? CONSTANTS.SCANNER_MAINNET_URL : CONSTANTS.SCANNER_TESTNET_URL));
         this.contractJSON = _.get(result,"data.data") == "mainnet" ? contractMainNetJSON : contractTestNetJSON;
+        this.tribeGoldContractJSON = _.get(result,"data.data") == "mainnet" ? tribeGoldContractMainNetJSON : tribeGoldContractTestNetJSON;
+        this.chain_id = _.get(result,"data.data") == "mainnet" ? "0x89" : "0x13881";
+
         this.loadWeb3()
         .then((success) => {
           this.metamaskAccount = success.accountId[0];
@@ -225,7 +225,7 @@ class BlockchainInterface {
             this.contract = contract;
           } else {
             const CalledFunction = () => {
-              this.switchNetwork()
+              this.switchNetwork(this.chain_id)
             }
             const alertProperty = {
                 isDismissible: false,

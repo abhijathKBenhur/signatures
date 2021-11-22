@@ -7,13 +7,15 @@ const UserSchema = require("../../db-config/user.schema");
 
 const BlockchainUtils = require("./BlockChainUtils");
 const web3Instance = BlockchainUtils.web3Instance
-const publicKey = BlockchainUtils.publicKey
 const ideaTribeContract = BlockchainUtils.ideaTribeContract
 
+const transactionObject = {};
 
-const transactionObject = {
-  from: publicKey,
-};
+web3Instance.eth.getAccounts().then(result => {
+  transactionObject.from = result[0];
+})
+
+
 const SIGNATURE_MESSAGE = "Welcome to IdeaTribe! Click 'Sign' to sign in. No password needed! This request will not trigger a blockchain transaction or cost any gas fees. Your authentication status will be reset after 24 hours. I accept the IdeaTribe Terms of Service: https://ideatribe.io. Nonce: ";
 
 verifySignature =  (req, res) => {

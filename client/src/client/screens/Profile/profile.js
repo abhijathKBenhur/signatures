@@ -122,7 +122,7 @@ function Profile(props) {
 
   const getStats = () => {
     StatsInterface.getTotalUpvotesForUser({
-      userName: loggedInUserDetails._id,
+      owner: loggedInUserDetails._id,
     }).then((success) => {
       let upvotedUsers = [];
       _.forEach(_.get(success, "data.data"), (item) => {
