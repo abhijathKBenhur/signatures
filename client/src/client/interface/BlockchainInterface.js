@@ -219,7 +219,6 @@ class BlockchainInterface {
             const abi = this.contractJSON.abi;
             const contractAddress = this.contractJSON.address;
             let contractOptions = {
-              gasPrice : "3000000000",
               gas : 1000000
             }
             const contract = this.web3.eth.Contract(abi, contractAddress,contractOptions);
