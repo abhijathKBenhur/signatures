@@ -478,7 +478,7 @@ const SignatureNew = (props) => {
                                     <Dropdown.Item onClick={() => {
                                         showModal("info")
                                   }}>
-                                    Edit Engagement
+                                    Edit engagement
                                   </Dropdown.Item>
                                       <Dropdown.Item onClick={() => { showModal("details")}}>
                                       Edit details
@@ -642,7 +642,7 @@ const SignatureNew = (props) => {
       )}
       {showUpvotes && (
        <PeopleList
-        action="Upvoted By"
+        action="Upvoted by"
         list={upvotes}
         show={showUpvotes}
         onHide={() => setShowUpvotes(false)}

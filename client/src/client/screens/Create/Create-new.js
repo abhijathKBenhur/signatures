@@ -613,7 +613,7 @@ const CreateNew = () => {
   function addIdeaRecordToMongo(form) {
     SignatureInterface.addSignature({ ...form })
     .then((success) => {
-      showToaster("Your idea is being submitted on the blockchain! Please wait for the confirmation billet.", {
+      showToaster("Your idea is being submitted on the Blockchain! Please wait for the confirmation billet.", {
         type: "dark",
       });
     })
@@ -632,7 +632,7 @@ const CreateNew = () => {
       user: userDetails._id
     })
     const alertProperty = {
-      content: "Congratulations! Your Idea has been published on the blockchain. We will be depositing TribeGold in your wallet shortly!",
+      content: "Congratulations! Your Idea has been published on the Blockchain. We will be depositing TribeGold in your wallet shortly!",
     }
     ReactDOM.render(<AlertBanner {...alertProperty}></AlertBanner>, document.querySelector('.aleartHeader'))
   }

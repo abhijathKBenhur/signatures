@@ -105,7 +105,7 @@ function gallery(props) {
             It’s raining TribeGold!
           </div>
           <div className="activity-description second-grey">
-            Earn TribeGold for publishing Ideas and inviting friends.
+            Earn TribeGold for minting Ideas and inviting friends.
           </div>
         </div>
         <div className="activity-thumbnail">
@@ -120,7 +120,7 @@ function gallery(props) {
     </div>
     <div className="activity-description second-grey">
       You can soon update & re-tokenize your Ideas. That way you don’t
-      have to wait for your idea to be perfect to mint.
+      have to wait for your Idea to be perfect to mint.
     </div>
   </div>
   <div className="activity-thumbnail">

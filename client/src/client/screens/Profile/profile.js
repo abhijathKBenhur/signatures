@@ -421,6 +421,7 @@ function Profile(props) {
                           {billetList.length}
                         </span>
                         <span className="stats-value second-grey  text-center">
+                        {billetList.length > 1 ?  "Ideas" :"Idea"}
                           Ideas
                         </span>
                       </Col>
@@ -452,7 +453,7 @@ function Profile(props) {
                             }
                           }}
                         >
-                          Upvotes
+                          {upvotesCount > 1 ?  "Upvotes" :"Upvote"}
                         </span>
                       </Col>
                     </Row>
@@ -708,7 +709,7 @@ function Profile(props) {
       )}
       {modalShow.showPeopleList && (
         <PeopleList
-          action="Upvoted By"
+          action="Upvoted by"
           userDetails={loggedInUserDetails}
           list={upvottedList}
           show={modalShow.showPeopleList}

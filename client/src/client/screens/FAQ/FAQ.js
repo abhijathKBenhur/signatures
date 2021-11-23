@@ -20,7 +20,7 @@ const FAQ = () => {
     {
       no: 1,
       title: "What is IdeaTribe?",
-      content: ["IdeaTribe is a blockchain-based platform to mint Ideas and make them real. Users can capture their inspiration and store it on the blockchain as proof of original thought. Then, they can collaborate with others in the community to enhance, produce, finance and market the final product resulting from that moment of inspiration."]
+      content: ["IdeaTribe is a blockchain-based platform to mint Ideas and make them real. Users can capture their inspiration and store it on the Blockchain as proof of original thought. Then, they can collaborate with others in the community to enhance, produce, finance and market the final product resulting from that moment of inspiration."]
     },
     {
       no: 2,
@@ -50,7 +50,7 @@ const FAQ = () => {
     {
       no: 6,
       title: "Does minting an Idea on IdeaTribe mean that it is legally protected?",
-      content: ["No. Minting an Idea on IdeaTribe does not imply that it is legally protected.", "However, the record of having minted an Idea on the blockchain at a certain time isadmissible in a court of law."]
+      content: ["No. Minting an Idea on IdeaTribe does not imply that it is legally protected.", "However, the record of having minted an Idea on the Blockchain at a certain time isadmissible in a court of law."]
     },
     {
       no: 7,
