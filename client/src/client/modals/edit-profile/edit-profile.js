@@ -71,7 +71,7 @@ const EditProfile = ({ ...props }) => {
         console.log('edit profile success  = ', response)
         props.onupdate({
             update:true,
-            profileData : response.data
+            profileData : _.get(response,'data')
         })
         props.onHide();
         }).catch(err => {

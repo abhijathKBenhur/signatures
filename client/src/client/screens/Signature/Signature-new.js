@@ -508,14 +508,16 @@ const SignatureNew = (props) => {
                                     />
                                   )}
                                 </div>
-                                <Button
+                                {loggedInUserDetails.userName &&
+                            loggedInUserDetails.userName !=
+                              _.get(signature, "owner.userName") && <Button
                                   variant="secondary"
                                   onClick={() => showModal("engage")}
                                 >
                                   {
                                     getIdeaStatus(signature)
                                   }
-                                </Button>
+                                </Button>}
                               </div>
                             )}
                         </div>
@@ -529,8 +531,8 @@ const SignatureNew = (props) => {
                   md="12"
                   className="meta mb-2 justify-content-between d-flex flex-row"
                 >
-                  <div className="tags second-grey mr-2 d-flex align-content-center">
-                    <Button disabled variant="pill">
+                  <div className="tags second-grey mr-2 d-flex align-content-center ">
+                    <Button disabled variant="pill" className="cursor-normal">
                       {signature.category &&
                         JSON.parse(signature.category) &&
                         JSON.parse(signature.category).label}

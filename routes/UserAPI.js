@@ -161,15 +161,14 @@ getUserInfo = async (req, res) => {
   if (req.body.metamaskId) {
     findCriteria.metamaskId = req.body.metamaskId;
   }
-  if (req.body.metamaskId) {
-    findCriteria.metamaskId = req.body.metamaskId;
-  }
+ 
   if (req.body.myReferralCode) {
     console.log("myReferralCode," + req.body.myReferralCode);
     findCriteria.myReferralCode = req.body.myReferralCode;
   }
   // await User.findOne(findCriteria,{email:0}, (err, user) => {
     await User.findOne(findCriteria, (err, user) => {
+      console.log(user)
     if (err) {
       return res.status(400).json({ success: false, error: err });
     }
@@ -195,7 +194,7 @@ updateUser = async (req, res) => {
     bio: newUser.bio,
   };
   console.log("testing")
-  User.findOneAndUpdate({ id: req.body._id }, updates, { new: true })
+  User.findByIdAndUpdate(req.body.id, updates, { upsert: true })
     .then((user, b) => {
       console.log("user updated", user, b);
       return res.status(201).json({

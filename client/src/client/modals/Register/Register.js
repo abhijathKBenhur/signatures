@@ -23,7 +23,6 @@ import { Check, RefreshCcw, X } from "react-feather";
 import { useHistory } from "react-router-dom";
 import store from "../../redux/store";
 import UserInterface from "../../interface/UserInterface";
-import Cookies from "universal-cookie";
 import ProgressBar from "../../components/progressbar/progress";
 import NotificationInterface from "../../interface/NotificationInterface";
 import reactGA from "react-ga";
@@ -36,7 +35,7 @@ const Register = (props) => {
   const PASSED = "PASSED";
   const FAILED = "FAILED";
   const PENDING = "PENDING";
-
+  const appConstants = CONSTANTS
   const [steps, setSteps] = useState([
     {
       key: "socialLogin",
@@ -115,7 +114,7 @@ const Register = (props) => {
           let response = success.data;
           UserInterface.registerUser({ ...userDetails, secret, nonce })
             .then((mongoSuccess) => {
-              setCookie(mongoSuccess.token);
+              setTokenInSession(mongoSuccess.token);
               publishUserToApp();
               setRegistration(PASSED);
               reactGA.event({
@@ -154,9 +153,8 @@ const Register = (props) => {
     store.dispatch(setReduxUserDetails(userDetails.metamaskId));
   }
 
-  const setCookie = (token) => {
-    const cookies = new Cookies();
-    cookies.set(CONSTANTS.COOKIE_TOKEN_PHRASE, token);
+  const setTokenInSession = (token) => {
+    sessionStorage.setItem(appConstants.COOKIE_TOKEN_PHRASE, token);
   };
 
   const handleNext = () => {

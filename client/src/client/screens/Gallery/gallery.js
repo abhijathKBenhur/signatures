@@ -8,7 +8,6 @@ import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import SignatureInterface from "../../interface/SignatureInterface";
 import StatsInterface from "../../interface/StatsInterface";
 import { useHistory } from "react-router-dom";
-import Cookies from "universal-cookie";
 import DiscoverMore from "../../components/discover-more/discover-more";
 import SearchBar from "../../components/searchBar/SearchBar";
 import berklee from "../../../assets/images/announcements/berklee.png";
@@ -19,10 +18,8 @@ import cover from "../../../assets/images/cover.png";
 import CommentsPanel from "../../components/comments/CommentsPanel";
 function gallery(props) {
   let history = useHistory();
-  const cookies = new Cookies();
   const reduxState = useSelector((state) => state, shallowEqual);
   const [collectionList, setCollectionList] = useState([]);
-  const [visitedUser, setIsVisitedUser] = useState(cookies.get("visitedUser"));
 
   const [galleryFilters, setGalleryFilters] = useState({
     searchString: "",
@@ -37,7 +34,6 @@ function gallery(props) {
   });
 
   useEffect(() => {
-    cookies.set("visitedUser", true);
     getStats();
   }, []);
 

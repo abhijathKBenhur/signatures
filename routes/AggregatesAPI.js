@@ -32,8 +32,8 @@ getTotalUsersOnTribe = async (req, res) => {
 
 getTotalUpvotesForUser = async (req, res) => {
   IdeaSchema.find({owner:req.body.owner}).then( ideas => {
-    if (!ideas) {
-      return res.status(404).json({ success: true, data: 0 });
+    if (!ideas || ideas.length == 0) {
+      return res.status(200).json({ success: true, data: [] });
     }
     let count = [];
 
@@ -43,7 +43,7 @@ getTotalUpvotesForUser = async (req, res) => {
         to: ideas[i].ideaID
       };
       RelationSchema.find(findCriteria).then( user => {
-
+        console.log("Ideas of user", ideas)
         if (user.length) {
           count.push(user)
         }

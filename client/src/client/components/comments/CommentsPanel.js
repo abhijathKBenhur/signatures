@@ -38,7 +38,6 @@ const CommentsPanel = (props) => {
     UserInterface.getUsers().then((succes) => {
       let res = [];
       _.forEach(succes.data.data, (item) => {
-        console.log(item);
         res.push({
           id: item.userName,
           display: item.userName,

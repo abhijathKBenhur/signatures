@@ -13,8 +13,10 @@ const Wallet = (props) => {
   useEffect(() => {
     BlockchainInterface.getGoldBalance()
     .then((success) => {
-      let balance = Web3Utils.fromWei(success.toString(), "ether")
-      setGoldBalance(balance)
+      if(success){
+        let balance = Web3Utils.fromWei(success.toString(), "ether")
+        setGoldBalance(balance)
+      }
     });
     
     BlockchainInterface.getMaticBalance().then((success) => {

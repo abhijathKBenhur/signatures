@@ -4,7 +4,7 @@ import Web3 from "web3";
 import contractMainNetJSON from "../../contracts/ideaTribe.json";
 import contractTestNetJSON from "../../contracts/ideaTribe_test.json";
 import tribeGoldContractMainNetJSON from "../../contracts/tribeGold.json";
-import tribeGoldContractTestNetJSON from "../../contracts/tribeGold.json";
+import tribeGoldContractTestNetJSON from "../../contracts/tribeGold_test.json";
 import store from "../redux/store";
 import { setReduxMetaMaskID,setReduxUserDetails,setReduxChain } from "../redux/actions";
 import ENDPOINTS from "../commons/Endpoints";
@@ -188,7 +188,6 @@ class BlockchainInterface {
     const abi = this.tribeGoldContractJSON.abi;
     const contractAddress = this.tribeGoldContractJSON.address;
     let contractOptions = {
-      gasPrice : "3000000000",
       gas : 1000000
     }
     const contract = this.web3.eth.Contract(abi, contractAddress,contractOptions);
@@ -212,7 +211,6 @@ class BlockchainInterface {
         .then((success) => {
           this.metamaskAccount = success.accountId[0];
           let metamaskNetwork = success.networkId;
-          console.log("setting in redux user info");
           store.dispatch(setReduxMetaMaskID(this.metamaskAccount));
           const contractNetworkID = this.contractJSON.network;
           if (contractNetworkID == metamaskNetwork) {

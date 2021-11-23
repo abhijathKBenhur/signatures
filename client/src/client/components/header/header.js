@@ -17,7 +17,6 @@ import { setReduxUserDetails } from "../../redux/actions";
 import { showToaster } from "../../commons/common.utils";
 import Register from "../../modals/Register/Register";
 import { getShortAddress } from "../../commons/common.utils";
-import Cookies from "universal-cookie";
 import jwt_decode from "jwt-decode";
 import CONSTANTS from "../../commons/Constants";
 import AlertBanner from "../alert/alert";
@@ -30,7 +29,6 @@ import reactGA from "react-ga";
 import TransactionsInterface from "../../interface/TransactionInterface";
 const Header = (props) => {
   const decoder = jwt_decode;
-  const cookies = new Cookies();
   const appConstants = CONSTANTS
   let history = useHistory();
   const reduxState = useSelector((state) => state, shallowEqual);
@@ -114,8 +112,9 @@ const Header = (props) => {
       console.log(result)
     })
   }
-  function manageCookies(userData) {
-    let authToken = cookies.get(appConstants.COOKIE_TOKEN_PHRASE);
+  function setTokenCookies(userData) {
+    
+    let authToken = sessionStorage.getItem(appConstants.COOKIE_TOKEN_PHRASE)
     let decoded = {};
     let reRequestSignature = false;
     if (!_.isEmpty(authToken) || authToken != "undefined") {
@@ -146,10 +145,7 @@ const Header = (props) => {
               secret,
             }).then((success) => {
               let token = _.get(success, "data.data.token");
-              const cookies = new Cookies();
-              console.log("setting token :: " +  token)
-              cookies.set(appConstants.COOKIE_TOKEN_PHRASE, token);
-              console.log("verified cookies token")
+              sessionStorage.setItem(appConstants.COOKIE_TOKEN_PHRASE, token);
             });
           }).catch((err) => {
             const alertProperty = {
@@ -157,7 +153,7 @@ const Header = (props) => {
               variant: "danger",
               content: "Your account is not signed with metamask.",
               actionText: "Sign",
-              actionFunction: manageCookies
+              actionFunction: setTokenCookies
             }
             ReactDOM.render(<AlertBanner {...alertProperty}></AlertBanner>, document.querySelector('.aleartHeader'))
           });
@@ -173,7 +169,7 @@ const Header = (props) => {
           let userData = _.get(userDetails, "data.data");
           store.dispatch(setReduxUserDetails(userData));
           setLoggedInUserDetails(userData);
-          manageCookies(userData);
+          setTokenCookies(userData);
         })
         .catch((success) => {
           setLoggedInUserDetails({});
