@@ -30,7 +30,7 @@ const GOLD_DEPOSIT_VALUES = {
 };
 
 const MATIC_DEPOSIT_VALUES = {
-  REGISTER: Web3Utils.toWei("0.1", "ether"),
+  REGISTER: Web3Utils.toWei("0.001", "ether"),
 };
 
 const depostToNewUser = (receiverUserObject) => {
