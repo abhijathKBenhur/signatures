@@ -422,7 +422,6 @@ function Profile(props) {
                         </span>
                         <span className="stats-value second-grey  text-center">
                         {billetList.length > 1 ?  "Ideas" :"Idea"}
-                          Ideas
                         </span>
                       </Col>
                       <Col
@@ -609,7 +608,7 @@ function Profile(props) {
                             </Button>
                           </OverlayTrigger> */}
 
-                          <OverlayTrigger
+                          {isMyPage() && <OverlayTrigger
                             key={"invite"}
                             placement="top"
                             overlay={
@@ -630,7 +629,7 @@ function Profile(props) {
                             >
                               <i className="fa fa-user-plus"></i>
                             </Button>
-                          </OverlayTrigger>
+                          </OverlayTrigger>}
                         </Row>
                         {!_.isUndefined(followers) &&
                           userDetails.userName &&

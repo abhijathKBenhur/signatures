@@ -772,7 +772,7 @@ const CreateNew = () => {
               </>
             ) : (
               <>
-                <h2 className="master-header col">Mint your idea</h2>
+                <h2 className="master-header col">Mint Idea</h2>
               </>
             )}
             <Col md="12" sm="12" lg="12" xs="12">

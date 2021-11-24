@@ -317,12 +317,12 @@ const EditProfile = ({ ...props }) => {
                 <Col md="12" className="">
                   <div className="bio-label second-grey">
                     <Form.Label>
-                     Bio
+                     Bio 
                     </Form.Label>
                   </div>
                   <Form.Control
                     as="textarea"
-                    rows={7}
+                    rows={5}
                     name="bio"
                     style={{ resize: "none" }}
                     value={editProfile.bio}
