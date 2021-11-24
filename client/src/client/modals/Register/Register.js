@@ -453,7 +453,7 @@ const Register = (props) => {
       ...returnObj,
     });
     if (event.target.name == "userName") {
-      if (/^[A-Z0-9]+$/i.test(value)) {
+      if (/^[A-Z0-9_]+$/i.test(value)) {
         setuserNameError(false);
         UserInterface.getUserInfo({ userName: value })
           .then((userDetails) => {
