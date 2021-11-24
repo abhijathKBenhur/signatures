@@ -127,17 +127,12 @@ registerUser = (req, res) => {
     .then((user, b) => {
       responseMap.created = true
       console.log("ADDED COMPLETE USER DETAILS", user)
-      depositEvaluator.depostToNewUser(newUser).then(response =>{
-        console.log("response",response)
-        return res.status(201).json({
-          success: true,
-          data: {...user,token:token, ...{
-            goldDeposit: !_.isEmpty(response[0]),
-            maticDeposit: !_.isEmpty(response[1])
-          }},
-          message: "New user created!",
-        });
-      })
+      depositEvaluator.depostToNewUser(newUser);
+      return res.status(201).json({
+        success: true,
+        data: {...user,token:token},
+        message: "New user created!",
+      });
     })
     .catch((error) => {
       return res.status(400).json({

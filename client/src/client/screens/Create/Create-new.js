@@ -543,7 +543,13 @@ const CreateNew = () => {
         saveToBlockChain(params);
       },
       "jsonp"
-    );
+    ).fail(function(err) {
+      console.log("LOCATION SERVICES FAILED WITH", err)
+      let region = "Unknown"
+        setFormData({ ...form, location: region });
+        params.location = region
+        saveToBlockChain(params);
+    });
         
         
       })

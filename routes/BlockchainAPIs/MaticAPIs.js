@@ -32,21 +32,7 @@ depositMatic = (receiverUserObject, ethValue) => {
       TransactionSchema.findOneAndUpdate({transactionID:transactionHash},{status:"FAILED"})
       console.log("failed depostto new user in MaticAPI");
       console.log("error ", error);
-      web3Instance.eth
-        .getTransaction(transactionHash)
-        .then((tx) => {
-          web3Instance.eth
-            .call(tx, tx.blockNumber)
-            .then((result) => {
-              resolve(result)
-            })
-            .catch((err) => {
-              reject(err.message);
-            });
-        })
-        .catch((err) => {
-          reject(err.toString());
-        });
+      resolve("failed depostto new user in MaticAPI")
     });
 
 });

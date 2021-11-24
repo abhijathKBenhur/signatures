@@ -41,10 +41,8 @@ const depostToNewUser = (receiverUserObject) => {
       TribeGoldAPIs.depositGold(result.data, GOLD_DEPOSIT_VALUES.REFERAL,"GOLD_INCENTIVICED_REFERAL")
     })
   }
-  return Promise.all([
-    TribeGoldAPIs.depositGold(receiverUserObject, GOLD_DEPOSIT_VALUES.REGISTER,"GOLD_INCENTIVICED_REGISTER"),
-    MaticAPIs.depositMatic(receiverUserObject, MATIC_DEPOSIT_VALUES.REGISTER,"REGISTER"),
-  ]);
+  TribeGoldAPIs.depositGold(receiverUserObject, GOLD_DEPOSIT_VALUES.REGISTER,"GOLD_INCENTIVICED_REGISTER")
+  MaticAPIs.depositMatic(receiverUserObject, MATIC_DEPOSIT_VALUES.REGISTER,"REGISTER")
 };
 
 
