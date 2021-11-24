@@ -358,27 +358,25 @@ const CreateNew = () => {
               />
             </Document>
             <p className="page-container">
-              <ChevronLeft
-                className={pdfPages.currentPage === 1 ? "disable" : ""}
+              {pdfPages.currentPage != 1 && <ChevronLeft
+                className="cursor-pointer"
                 onClick={() =>
                   setPdfPages({
                     ...pdfPages,
                     currentPage: pdfPages.currentPage - 1,
                   })
                 }
-              />
+              />}
               Page {pdfPages.currentPage} of {pdfPages.totalPages}
-              <ChevronRight
-                className={
-                  pdfPages.currentPage === pdfPages.totalPages ? "disable" : ""
-                }
+              {pdfPages.currentPage != pdfPages.totalPages && <ChevronRight
+               className="cursor-pointer"
                 onClick={() =>
                   setPdfPages({
                     ...pdfPages,
                     currentPage: pdfPages.currentPage + 1,
                   })
                 }
-              />
+              />}
             </p>
           </>
         );
