@@ -544,7 +544,7 @@ const SignatureNew = (props) => {
                       {upvotes && upvotes.length} {upvotes && upvotes.length > 1 ?  "Upvotes" :"Upvote"}</span>)}
                   </div>
                   <div className="time second-grey">
-                    <span className="color-primary">{moment(signature.createdAt).format("YYYY-MM-DD HH:mm:ss")},{" "}</span>
+                    <span className="color-primary">{new Date(signature.createdAt).toUTCString()},{" "}</span>
                     <span className="color-secondary"> <i className="fa fa-globe ml-1"></i> {signature.location || "Global"} </span>
                     
                   </div>

@@ -1,8 +1,9 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Button, Modal } from "react-bootstrap";
 import _ from "lodash";
 import { Row, Col, Form, InputGroup, Dropdown, Image } from "react-bootstrap";
 import { useHistory, useLocation } from "react-router-dom";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import CONSTANTS from "../../commons/Constants";
 import minions from "../../../assets/images/minions.png";
 import loadingGif from "../../../assets/images/loader_blocks.gif";
@@ -15,15 +16,21 @@ import SignatureInterface from "../../interface/SignatureInterface";
 import BlockchainInterface from "../../interface/BlockchainInterface";
 import Web3 from "web3";
 import TransactionsInterface from "../../interface/TransactionInterface";
+import NotificationInterface from "../../interface/NotificationInterface";
+
 const EngageModal = (props) => {
   let history = useHistory();
+  const reduxState = useSelector((state) => state, shallowEqual);
+
   const isSelectedPurpose = (purpose) => {
     return form.purpose.purposeType === purpose;
   };
   const app_constants = CONSTANTS;
   const [engaging, setEngaging] = useState(CONSTANTS.ACTION_STATUS.INIT);
   const [statusMessage, setStatusMessage] = useState("");
+  const [message, setMessage] = useState("")
 
+  const [loggedInUserDetails, setLoggedInUserDetails] = useState({});
   const [form, setFormData] = useState({
     owner: props.idea.owner,
     creator: props.idea.creator,
@@ -53,6 +60,12 @@ const EngageModal = (props) => {
     CONSTANTS.PURPOSES.COLLAB,
     CONSTANTS.PURPOSES.KEEP
   ];
+
+
+  useEffect(() => {
+    const { userDetails = {} } = reduxState;
+    setLoggedInUserDetails(userDetails);
+  }, [reduxState.userDetails]);
 
   function transactionInitiated(transactionInititationRequest) {
     console.log("transactionInititationRequest");
@@ -141,7 +154,16 @@ const EngageModal = (props) => {
         return "Bid";
 
       case CONSTANTS.PURPOSES.COLLAB:
-        
+      NotificationInterface.postNotification(
+        loggedInUserDetails._id,
+        _.get(props, "idea.owner.userName"),
+        CONSTANTS.ACTIONS.COMMENT,
+        CONSTANTS.ACTION_STATUS.PENDING,
+        message,
+        JSON.stringify({
+          ideaID: _.get(props.idea, "PDFHash"),
+        })
+      );
         history.push( "/profile/" + form.owner.userName)
 
       case CONSTANTS.PURPOSES.KEEP:
@@ -200,7 +222,9 @@ const EngageModal = (props) => {
               
               <div className="image-placeholder mt-1">
                 <Image className="img-fluid" src={getPlaceholder()} width="300px"></Image>
-                
+              </div>
+              <div>
+                <textarea className="w-100 message-area" placeholder="Type message here.." onChange={(e)=> setMessage(e.target.value)}/> 
               </div>
               <span className={"status_message " + engaging}>{statusMessage}</span>
             </Col>

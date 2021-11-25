@@ -422,22 +422,7 @@ const CreateIdeaModal = ({
   };
 
   const timeFormatted = (time) => {
-    return (
-      "on " +
-      time.getDate() +
-      nth(time.getDate()) +
-      " " +
-      months[time.getMonth()] +
-      " " +
-      time.getFullYear() +
-      " " +
-      (time.getHours() > 12 ? time.getHours() - 12 : time.getHours()) +
-      ":" +
-      time.getMinutes() +
-      (time.getHours() > 12 ? "PM" : "AM")
-      + ""
-      // getTimeZonsShort() || ""
-    );
+    return new Date(time).toUTCString()
   };
 
   function getTimeZonsShort() {
