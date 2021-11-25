@@ -102,6 +102,13 @@
                 }
             }
             .description-section{
+                .description-content{
+                    line-height: 22px;
+                    font-size: 16px;
+                    .tag{
+                        color:  $secondary;
+                    }
+                }
                 margin-top: 30px;
                 p {
                     // text-transform: capitalize;
