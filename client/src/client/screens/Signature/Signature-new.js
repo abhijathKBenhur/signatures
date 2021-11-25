@@ -349,6 +349,8 @@ const SignatureNew = (props) => {
     setModalShowBillet(false);
   }
 
+ 
+
   return (
     <div className="signature-new">
       <div className="wrapper">
@@ -537,7 +539,9 @@ const SignatureNew = (props) => {
                     </Button>
                     {upvotes && upvotes.length > 0 && (<span className="second-header color-secondary ml-2 cursor-pointer" onClick={() =>{
                       setShowUpvotes(true)
-                    }}>{upvotes && upvotes.length} upvotes</span>)}
+                    }}>
+                      
+                      {upvotes && upvotes.length} {upvotes && upvotes.length > 1 ?  "Upvotes" :"Upvote"}</span>)}
                   </div>
                   <div className="time second-grey">
                     <span className="color-primary">{moment(signature.createdAt).format("YYYY-MM-DD HH:mm:ss")},{" "}</span>
@@ -547,7 +551,14 @@ const SignatureNew = (props) => {
                 </Col>
                 <Col md="12">
                   <div className="description-section">
-                    <p className="second-grey">{_.get(signature, "description")}</p>
+                    <p className="second-grey description-content"> 
+                    {signature && signature.description && 
+                      signature.description.split(" ").map(word => {
+                        return (
+                          <span className={word.startsWith("#")? "tag": ""}>{word} </span>
+                        )
+                      })
+                      }</p>
                   </div>
                   <div oncontextmenu="return false;">
                     <section className="doc-section" >

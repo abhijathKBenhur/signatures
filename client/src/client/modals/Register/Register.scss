@@ -81,6 +81,7 @@
             input {
               // text-transform: lowercase;
               height: 30px;
+              border-bottom: 1px solid $secondary;
               &.username-error{
                 border-bottom: 1px solid $danger;
               }
