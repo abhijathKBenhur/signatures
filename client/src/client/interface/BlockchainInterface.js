@@ -304,7 +304,7 @@ class BlockchainInterface {
           </div>
         );
         const redirectToMetaMask = () => {
-          window.open("https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn?hl=en", "_blank")
+          window.open("https://metamask.io/download.html", "_blank")
         }
         const alertProperty = {
             isDismissible: false,
