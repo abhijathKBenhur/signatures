@@ -30,6 +30,8 @@ import TransactionsInterface from "../../interface/TransactionInterface";
 const Header = (props) => {
   const decoder = jwt_decode;
   const appConstants = CONSTANTS
+  const location = useLocation();
+
   let history = useHistory();
   const reduxState = useSelector((state) => state, shallowEqual);
   const { metamaskID = undefined, userDetails = {}, reduxChain = undefined } = reduxState;
@@ -228,7 +230,7 @@ const Header = (props) => {
   ));
 
   const isUserAuthForPublish = () => {
-    if (!window.location.href.includes("create")) {
+    if (window.pathname != "create") {
       return (
         <Button
           variant="ternary"
@@ -290,13 +292,18 @@ const Header = (props) => {
               rel="noopener noreferrer"
               onClick={() => gotoGallery()}
             >
-              <img
+              {location.pathname == "/home" && <img
                 src={logo}
                 width="45"
                 height="45"
                 alt=""
                 className=""
-              ></img>
+              ></img>}
+              {location.pathname != "/home" && 
+                <div className="home-container d-flex align-items-center justify-content-center">
+                  <i className="fa fa-home home-icon color-white"> </i>
+                </div>
+              }
               <span class="second-header logo_text color-white ml-2">IdeaTribe</span>
             </a>
             {/* <SearchBar /> */}

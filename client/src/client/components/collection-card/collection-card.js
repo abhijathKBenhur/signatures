@@ -141,7 +141,7 @@ const CollectionCard = (props) => {
     <div className="card-container">
       <div className="card-float-header">
         <div className="user-logo">
-          <Image src={_.get(signature,'owner.imageUrl')} color="F3F3F3" onClick={() => {
+          <Image className="cursor-pointer" src={_.get(signature,'owner.imageUrl')} color="F3F3F3" onClick={() => {
             goToUserProfile(_.get(signature,'owner.userName'));
           }}/>
           <div className="user-popup-outer">
