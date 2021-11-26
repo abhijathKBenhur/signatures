@@ -152,10 +152,10 @@ function gallery(props) {
   const openGuide = (index) =>{
     switch(index){
       case 1:
-          window.open()
+          window.open("https://drive.google.com/file/d/15eNG6BF0MI5xKo33nRHGqUJlJyoDtZpV/view?usp=sharing")
         break;
       case 2:
-          window.open()
+          window.open("https://drive.google.com/file/d/1wgRa-sRkl1jPibhRHkWCNJOfk0S3sdxP/view?usp=sharing")
         break;
       case 3:
           window.open()
@@ -232,7 +232,7 @@ function gallery(props) {
              {showGuides && <div >
               <div className="guide-bookmark guide-bookmark1" onClick={() => {openGuide(1)}}> How to sign up </div>
               <div className="guide-bookmark guide-bookmark2" onClick={() => {openGuide(2)}}> How to mint an Idea </div>
-              <div className="guide-bookmark guide-bookmark3" onClick={() => {openGuide(3)}}> How to think of an Idea</div>
+              {/* <div className="guide-bookmark guide-bookmark3" onClick={() => {openGuide(3)}}> How to think of an Idea</div> */}
             </div>}
             <SearchBar searchTextChanged={refreshCollection} />
             <DiscoverMore categorySelected={refreshCollection}></DiscoverMore>

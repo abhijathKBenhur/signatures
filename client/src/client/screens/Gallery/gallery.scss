@@ -14,7 +14,7 @@
         height: 0;
         border-bottom: 20px solid $primary;
         border-top: 20px solid $primary;
-        border-right: 15px solid transparent;
+        // border-right: 15px solid transparent;
         float: right;
         margin-bottom: 20px;
         font-size: 17px;
@@ -28,11 +28,12 @@
         padding: 0 10px;
         cursor: pointer;
         width: 240px;
+        border-radius: 0 4px 4px 0;
         &.guide-bookmark1{
-          top: 70px;
+          top: 100px;
         }
         &.guide-bookmark2{
-          top: 140px;
+          top: 180px;
         }
         &.guide-bookmark3{
           top: 210px;
