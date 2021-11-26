@@ -474,10 +474,10 @@ const CreateIdeaModal = ({
                   <Row className="row1">
                     <Col md="12">
                       <div className="billet-item">
-                        <div className="user second-grey">@{billet.creator}</div>
+                        <div className="user second-grey">Minted by <span className="color-primary"> @{billet.creator}</span> </div>
                         {/* <div className="name">{billet.fullName}</div> */}
                         <div className="link">
-                          IdeaTribe.com | Your Ideas on blockchain{" "}
+                          IdeaTribe.io | Your Ideas on blockchain{" "}
                         </div>
                       </div>
                     </Col>

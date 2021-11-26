@@ -240,7 +240,7 @@ const Header = (props) => {
             createnew();
           }}
         >
-          Mint your Idea
+          Mint Idea
         </Button>
       );
     }

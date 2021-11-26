@@ -23,6 +23,21 @@ const ShareModal = (props) => {
         break;
     }
   };
+
+  const getQuote = () => {
+    switch (props.type) {
+      case "idea":
+        return "Hey! Checkout this Idea on IdeaTribe.io!";
+        break;
+      case "profile":
+        return "Hey! Checkout this profile on IdeaTribe.io!";
+        break;
+      case "invite":
+        return "Hey! I am inviting you to IdeaTribe.io!";
+        break;
+    }
+  };
+
   return (
     <Modal
       show={true}
@@ -50,7 +65,7 @@ const ShareModal = (props) => {
           <div className="sharables d-flex">
             <reactShare.FacebookShareButton
               url={window.location.href}
-              quote={"Hey! I minted an Idea on IdeaTribe.io!"}
+              quote={getQuote()}
             >
               <div className="social-icon-wrapper fb">
                 <i class="fa fa-facebook" aria-hidden="true"></i>
@@ -59,7 +74,7 @@ const ShareModal = (props) => {
             </reactShare.FacebookShareButton>
             <reactShare.TwitterShareButton
               url={window.location.href}
-              title={"Hey! I minted an Idea on IdeaTribe.io!"}
+              title={getQuote()}
             >
               <div className="social-icon-wrapper twitter">
                 <i class="fa fa-twitter" aria-hidden="true"></i>
@@ -68,8 +83,8 @@ const ShareModal = (props) => {
             </reactShare.TwitterShareButton>
             <reactShare.WhatsappShareButton
               url={window.location.href}
-              title={"Hey! I minted an Idea on IdeaTribe.io!"}
-              separator=":: "
+              title={getQuote()}
+              separator=" "
             >
               <div className="social-icon-wrapper whatsapp">
                 <i class="fa fa-whatsapp" aria-hidden="true"></i>
