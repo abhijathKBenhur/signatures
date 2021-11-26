@@ -10,6 +10,67 @@
     .search-container{
       border-bottom: 2px solid #e6e6e6;
       padding-top: 3rem; 
+      .guide-bookmark{
+        height: 0;
+        border-bottom: 20px solid $primary;
+        border-top: 20px solid $primary;
+        // border-right: 15px solid transparent;
+        float: right;
+        margin-bottom: 20px;
+        font-size: 17px;
+        font-weight:700;
+        position: absolute;
+        left: 0px;
+        color: white;
+        white-space: nowrap;
+        display: flex;
+        align-items: center;
+        padding: 0 10px;
+        cursor: pointer;
+        width: 240px;
+        border-radius: 0 4px 4px 0;
+        &.guide-bookmark1{
+          top: 100px;
+        }
+        &.guide-bookmark2{
+          top: 180px;
+        }
+        &.guide-bookmark3{
+          top: 210px;
+        }
+        bottom: 15%;
+        animation-iteration-count: 1;
+        -webkit-animation: linear;
+        -webkit-animation-name: run;
+        -webkit-animation-duration: 0.1s;
+      }
+      @-webkit-keyframes run {
+        0% {
+          width: 0;
+        }
+        100% {
+          width: 240px;    
+        }
+      }
+
+      .top-help{
+        width: 200px;
+        height: 1.7rem;
+        font-size: 17px;
+        font-weight: 700;
+        position: absolute;
+        white-space: nowrap;
+        display: flex;
+        padding: 0 10px;
+        cursor: pointer;
+        top: 10px;
+        border: 1px solid #78589f;
+        border-radius: 0 0 15px 15px;
+        background: #d0e2eb;
+        font-weight: 500;
+        color: $primary;
+        justify-content: center;
+      }
     }
   }
   .latest-news{

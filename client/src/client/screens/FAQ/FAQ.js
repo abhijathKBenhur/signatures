@@ -30,12 +30,12 @@ const FAQ = () => {
     {
       no: 3,
       title: "What is an Idea in IdeaTribe?",
-      content: ["In IdeaTribe, an Idea can be an original thought, not yet fully formed but holds thepromise of something more substantial. So, an Idea can be the seed of a story, aninvention, a meme, a song or a perspective. It can also be a work in progress or afinished product - like a unique artwork, business plan, blueprint of an invention or aresearch paper.", "An Idea can be minted on IdeaTribe at any stage of its maturity. We enable users toupdate their Idea as it evolves and mint afresh, maintaining the history of the Idea."]
+      content: ["In IdeaTribe, an Idea can be an original thought, not yet fully formed but holds thepromise of something more substantial. So, an Idea can be the seed of a story, aninvention, a meme, a song or a perspective. It can also be a work in progress or a finished product - like a unique artwork, business plan, blueprint of an invention or aresearch paper.", "An Idea can be minted on IdeaTribe at any stage of its maturity. We enable users toupdate their Idea as it evolves and mint afresh, maintaining the history of the Idea."]
     },
     {
       no: 4,
       title: "What is Gas fee?",
-      content: ["Gas is the name of the transaction amount paid to the blockchain to register a record onthe blockchain. It is paid in the currency of each particular blockchain. In the case ofIdeaTribe, Gas fee is paid is Matic.", "Matic can be bought on any crypto-exchange like Coinbase, <Other names> andtransferred to your Metamask wallet. You will need Matic in your Metamask account tomint Ideas and enter into smart contracts in IdeaTribe."]
+      content: ["Gas is the name of the transaction amount paid to the blockchain to register a record onthe blockchain. It is paid in the currency of each particular blockchain. In the case ofIdeaTribe, Gas fee is paid is Matic.", "Matic can be bought on any crypto-exchange and transferred to your Metamask wallet. You will need Matic in your Metamask account tomint Ideas and enter into smart contracts in IdeaTribe."]
     },
     {
       no: 5,
@@ -43,7 +43,7 @@ const FAQ = () => {
       content: ["We had 3 reasons to choose Polygon blockchain for IdeaTribe."],
       item: [
         "We wanted a blockchain whose Gas fees were affordable. Polygon has some of thelowest Gas fees among all blockchains.",
-        "We wanted a credible blockchain with a large number of users. With blockchaintechnology becoming increasingly popular, the market is replete with blockchains thatare untested or expensive. Polygon is one of the most popular blockchains withhundreds of millions of users and yet, inexpensive Gas fees.",
+        "We wanted a credible blockchain with a large number of users. With blockchaintechnology becoming increasingly popular, the market is replete with blockchains thatare untested or expensive. Polygon is one of the most popular blockchains with hundreds of millions of users and yet, inexpensive Gas fees.",
         "We wanted a blockchain that operates on Proof-of-Stake not Proof-of-Work.Blockchains use a consensus mechanism to ensure that data is not hacked.Proof-of-Stake and Proof-of-Work are 2 consensus mechanisms that are popularlyused. Proof-of-Work is significantly more energy intensive than Proof-of-Stake.Polygon fits this requirement well."
       ]
     },
@@ -65,6 +65,12 @@ const FAQ = () => {
     {
       no: 9,
       title: "What is the value of TribeGold?",
+      content: ["TribeGold is the token of IdeaTribe. Tribers earn it for minting Ideas and engaging with the community."],
+      afterItem: "Over time, we expect TribeGold to represent the value of all Ideas in the community."
+    },
+    {
+      no: 10,
+      title: "How can I earn TribeGold?",
       content: ["Tribers can earn TribeGold for at least the following:"],
       item: ["Minting Ideas", "Referring friends who mint Ideas", "Getting upvotes for their Ideas"],
       afterItem: "The specific amount of TribeGold for these will vary with time. IdeaTribe will also addmore activities for which Tribers can earn TribeGold."

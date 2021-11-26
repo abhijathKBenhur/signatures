@@ -18,6 +18,13 @@
             .logo_text{
                 font-size: 25px;
             }
+            .home-container{
+                height: 45px;
+                width: 45px;
+                .home-icon{
+                    font-size: 36px;
+                }
+            }
         }
         .nav-link {
             color: $primary !important;

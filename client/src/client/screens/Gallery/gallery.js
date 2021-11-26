@@ -18,9 +18,10 @@ import cover from "../../../assets/images/cover.png";
 import CommentsPanel from "../../components/comments/CommentsPanel";
 function gallery(props) {
   let history = useHistory();
-  const reduxState = useSelector((state) => state, shallowEqual);
   const [collectionList, setCollectionList] = useState([]);
-
+  const [showGuides, setShowGuides] = useState(false);
+  const reduxState = useSelector((state) => state, shallowEqual);
+  const { metamaskID = undefined, userDetails = {}, reduxChain = undefined } = reduxState;
   const [galleryFilters, setGalleryFilters] = useState({
     searchString: "",
     categories: "",
@@ -144,8 +145,26 @@ function gallery(props) {
     return shuffled.slice(0, 3);
   }
 
+  const toggleShowGuide = () =>{
+    setShowGuides(!showGuides)
+  }
+
+  const openGuide = (index) =>{
+    switch(index){
+      case 1:
+          window.open("https://drive.google.com/file/d/15eNG6BF0MI5xKo33nRHGqUJlJyoDtZpV/view?usp=sharing")
+        break;
+      case 2:
+          window.open("https://drive.google.com/file/d/1wgRa-sRkl1jPibhRHkWCNJOfk0S3sdxP/view?usp=sharing")
+        break;
+      case 3:
+          window.open()
+        break;
+    }
+  }
+
   return (
-    <Container fluid>
+    <Container fluid className="p-0">
       <div className="gallery d-flex flex-row">
         <Col md="9" className="galler-area">
           {/* <Row
@@ -207,6 +226,14 @@ function gallery(props) {
               height: "300px",
             }}
           >
+            <div className="top-help" onClick={() => {toggleShowGuide()}}> 
+              <span >{showGuides ?"Got it!" :"Need help?" } </span>
+             </div>
+             {showGuides && <div >
+              <div className="guide-bookmark guide-bookmark1" onClick={() => {openGuide(1)}}> How to sign up </div>
+              <div className="guide-bookmark guide-bookmark2" onClick={() => {openGuide(2)}}> How to mint an Idea </div>
+              {/* <div className="guide-bookmark guide-bookmark3" onClick={() => {openGuide(3)}}> How to think of an Idea</div> */}
+            </div>}
             <SearchBar searchTextChanged={refreshCollection} />
             <DiscoverMore categorySelected={refreshCollection}></DiscoverMore>
           </Row>
