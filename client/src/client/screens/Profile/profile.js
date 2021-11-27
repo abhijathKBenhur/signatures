@@ -703,6 +703,7 @@ function Profile(props) {
           show={modalShow.editProfile}
           onupdate={(params) => {
             setLoggedInUserDetails(_.get(params, "profileData.data"));
+            window.location.reload()
           }}
           onHide={() => setShowModal({ ...modalShow, editProfile: false })}
         />

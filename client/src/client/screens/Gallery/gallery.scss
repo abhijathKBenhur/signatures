@@ -11,9 +11,8 @@
       border-bottom: 2px solid #e6e6e6;
       padding-top: 3rem; 
       .guide-bookmark{
-        height: 0;
-        border-bottom: 20px solid $primary;
-        border-top: 20px solid $primary;
+        height: 40px;
+        background-color:  $primary;
         // border-right: 15px solid transparent;
         float: right;
         margin-bottom: 20px;

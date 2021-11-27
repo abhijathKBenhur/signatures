@@ -221,6 +221,18 @@ const CreateNew = () => {
     }
   }, [form.category]);
 
+
+  // useEffect(() => {
+  //   const { metamaskID = undefined } = reduxState;
+  //   if (!_.isEmpty(form.price)) {
+  //     setFormErrors({ ...formErrors, price: false });
+  //   } else {
+  //     if(form.purpose.purposeType != "SELL"){
+  //       setFormErrors({ ...formErrors, price: true });  
+  //     }
+  //   }
+  // }, [form.price]);
+
   useEffect(() => {
     const { metamaskID = undefined } = reduxState;
     if (metamaskID) {
