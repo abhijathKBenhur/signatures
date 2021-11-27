@@ -14,6 +14,8 @@ import {
 import _ from 'lodash';
   import './edit-profile.scss';
 import UserInterface from '../../interface/UserInterface';
+import Dropzone from "react-dropzone";
+
 const EditProfile = ({ ...props }) => {
 
     const [editProfile, setEditProfile] = useState({
@@ -65,6 +67,17 @@ const EditProfile = ({ ...props }) => {
         const { name, value } = event.target;
         setEditProfile({...editProfile, [name]: value});
     }
+
+    const onImageDrop = (acceptedFiles) => {
+      // setFormData({
+      //   ...form,
+      //   thumbnail: Object.assign(acceptedFiles[0], {
+      //     preview: URL.createObjectURL(acceptedFiles[0]),
+      //     updated: true
+      //   }),
+      // });
+      setEditProfile({...editProfile, imageUrl:URL.createObjectURL(acceptedFiles[0])})
+    };
 
     const editProfileHandler = () => {
         UserInterface.updateUser(editProfile).then(response => {
@@ -218,7 +231,24 @@ const EditProfile = ({ ...props }) => {
             <h4>Edit Profile </h4>
             <hr></hr>
               <div className="image-placeholder d-flex align-items-center flex-column mb-3">
-                <img src={editProfile.imageUrl} height={100} width={100} style={{borderRadius:"100px"}}></img>
+              <Dropzone
+                onDrop={onImageDrop}
+                acceptedFiles={".jpeg"}
+                className="dropzoneContainer"
+              >
+                {({ getRootProps, getInputProps }) => (
+                  <section className="container h-100 ">
+                    <div
+                      {...getRootProps()}
+                      className="emptyImage dropZone h-100 d-flex flex-column align-items-center"
+                    >
+                      <input {...getInputProps()} />
+                      <img src={editProfile.imageUrl} height={100} width={100} style={{borderRadius:"100px"}}></img>
+                      <p className="dropfile-text">Edit thumbnail</p>
+                    </div>
+                  </section>
+                )}
+              </Dropzone>
                 <span>{editProfile.userName}</span>
               </div>
             </div>
@@ -326,6 +356,7 @@ const EditProfile = ({ ...props }) => {
                     name="bio"
                     style={{ resize: "none" }}
                     value={editProfile.bio}
+                    maxLength="160"
                     onChange={(e) => handleChange(e)}
                   />
                   </Col>
