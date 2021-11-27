@@ -31,6 +31,19 @@
                   display: flex;
                   justify-content: center;
                 }
+                .message-area {
+                  background-color: #fff !important;
+                  background-clip: padding-box;
+                  border: 1px solid #ced4da;
+                  border-radius: 0.25rem;
+                  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+                  overflow-y: scroll !important;
+                  height: 65px;
+                  resize: none;
+                  &:focus{
+                    outline: none;
+                  }
+                }
                 .status_message{
                   &.SUCCESS{
                     

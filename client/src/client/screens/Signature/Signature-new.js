@@ -5,7 +5,7 @@ import moment from "moment";
 import CONSTANTS from "../../commons/Constants";
 import { showToaster } from "../../commons/common.utils";
 import NotificationInterface from "../../interface/NotificationInterface";
-import PeopleList from "../../modals/people-list/people-list"
+import PeopleList from "../../modals/people-list/people-list";
 import {
   Container,
   Row,
@@ -14,7 +14,7 @@ import {
   Spinner,
   OverlayTrigger,
   Tooltip,
-  Dropdown
+  Dropdown,
 } from "react-bootstrap";
 import StorageInterface from "../../interface/StorageInterface";
 import { ChevronRight, ChevronLeft } from "react-feather";
@@ -62,7 +62,7 @@ const SignatureNew = (props) => {
     shareModal: false,
     infoModal: false,
     engageModal: false,
-    detailsModal: false
+    detailsModal: false,
   });
 
   const [audioState, setAudioState] = useState({
@@ -179,27 +179,29 @@ const SignatureNew = (props) => {
               <Page pageNumber={pdfPages.currentPage} />
             </Document>
             <p className="page-container">
-              <ChevronLeft
-                className={pdfPages.currentPage === 1 ? "disable" : ""}
-                onClick={() =>
-                  setPdfPages({
-                    ...pdfPages,
-                    currentPage: pdfPages.currentPage - 1,
-                  })
-                }
-              />
+              {pdfPages.currentPage != 1 && (
+                <ChevronLeft
+                  className="cursor-pointer"
+                  onClick={() =>
+                    setPdfPages({
+                      ...pdfPages,
+                      currentPage: pdfPages.currentPage - 1,
+                    })
+                  }
+                />
+              )}
               Page {pdfPages.currentPage} of {pdfPages.totalPages}
-              <ChevronRight
-                className={
-                  pdfPages.currentPage === pdfPages.totalPages ? "disable" : ""
-                }
-                onClick={() =>
-                  setPdfPages({
-                    ...pdfPages,
-                    currentPage: pdfPages.currentPage + 1,
-                  })
-                }
-              />
+              {pdfPages.currentPage != pdfPages.totalPages && (
+                <ChevronRight
+                  className="cursor-pointer"
+                  onClick={() =>
+                    setPdfPages({
+                      ...pdfPages,
+                      currentPage: pdfPages.currentPage + 1,
+                    })
+                  }
+                />
+              )}
             </p>
           </>
         );
@@ -283,7 +285,7 @@ const SignatureNew = (props) => {
         CONSTANTS.ACTION_STATUS.COMPLETED,
         "Upvoting.",
         {
-          creditorDbId: signature.creator
+          creditorDbId: signature.creator,
         }
       ).then((success) => {
         const upVotesClone = _.cloneDeep(upvotes);
@@ -315,11 +317,12 @@ const SignatureNew = (props) => {
   };
 
   const getIdeaStatus = (signature) => {
-    switch (_.get(signature,"purpose.purposeType")) {
+    switch (_.get(signature, "purpose.purposeType")) {
       case CONSTANTS.PURPOSES.SELL:
       case CONSTANTS.PURPOSES.LICENSE:
-        return "Buy for " + Web3Utils.fromWei(signature.price, "ether") +" MATIC"
-
+        return (
+          "Buy for " + Web3Utils.fromWei(signature.price, "ether") + " MATIC"
+        );
 
       case CONSTANTS.PURPOSES.AUCTION:
         return "Bid";
@@ -335,21 +338,24 @@ const SignatureNew = (props) => {
   };
 
   const viewBillet = () => {
-    setModalShowBillet(true)
-  }
+    setModalShowBillet(true);
+  };
 
   const getSignature = () => {
     return {
       ...signature,
-      creator: _.get(signature, 'creator.userName'),
-      fullName: _.get(signature, 'creator.firstName') + " " + _.get(signature, 'creator.lastName'),
-      time: new Date(_.get(signature, 'createdAt'))
-    }
-  }
+      creator: _.get(signature, "creator.userName"),
+      fullName:
+        _.get(signature, "creator.firstName") +
+        " " +
+        _.get(signature, "creator.lastName"),
+      time: new Date(_.get(signature, "createdAt")),
+    };
+  };
 
   const closeBtnFn = () => {
     setModalShowBillet(false);
-  }
+  };
 
   return (
     <div className="signature-new">
@@ -363,45 +369,83 @@ const SignatureNew = (props) => {
               }`}
             >
               <Row className="justify-content-between align-items-center mb-1 signature-mobile-view">
-                <Col
-                  md="6"
-                  className="d-flex flex-row justify-content-between"
-                >
+                <Col md="6" className="d-flex flex-row justify-content-between">
                   <div className="user-details">
                     <div className="user-metadata">
-                      <span className="master-header justify-content-left color-primary mb-1">
+                      <span className="master-header justify-content-left color-primary mb-1 d-flex align-items-center">
+                        <div className="avatar cursor-pointer">
+                          {signature.owner && (
+                            <img
+                              className="mr-3"
+                              src={_.get(signature, "owner.imageUrl")}
+                              alt={_.get(signature, "owner.userName")}
+                              onClick={() =>
+                                history.push(
+                                  `/profile/${_.get(
+                                    signature,
+                                    "owner.userName"
+                                  )}`
+                                )
+                              }
+                            />
+                          )}
+                        </div>
                         {signature.title}
                       </span>
                     </div>
                   </div>
-                  </Col>
-                  <Col md="6"
-                  className="d-flex flex-row justify-content-between justify-content-lg-end">
+                </Col>
+                <Col
+                  md="6"
+                  className="d-flex flex-row justify-content-between justify-content-lg-end"
+                >
                   <div className="action-section">
                     <div className="justify-content-center">
                       <div className="sidebar">
                         <div className="action-btns align-items-center">
                           {/* <span className="second-grey">{upvotes.length} upvotes</span> */}
-
-                         
-                          <Dropdown>
-                            <Dropdown.Toggle variant="success" id="dropdown-link">
-                            <Button variant="action">
-                              <i className="fa fa-link" aria-hidden="true"></i>
+                          <OverlayTrigger
+                            placement="left"
+                            overlay={<Tooltip>View on chain</Tooltip>}
+                          >
+                            <Button
+                              variant="action"
+                              onClick={() => {
+                                window.open(
+                                  reduxChain +
+                                    "/address/" +
+                                    _.get(signature, "PDFHash")
+                                );
+                              }}>
+                              <i
+                                className="fa fa-link"
+                                aria-hidden="true"
+                              ></i>
                             </Button>
-                            </Dropdown.Toggle>
+                          </OverlayTrigger>
 
-                            <Dropdown.Menu>
-                              <Dropdown.Item onClick={() => {
-                              window.open(reduxChain+"/address/" +_.get(signature, "PDFHash"));
-                            }}>
-                              View on chain
-                            </Dropdown.Item>
-                                <Dropdown.Item onClick={() => { viewBillet()}}>
-                                View Billet
-                            </Dropdown.Item>
-                              </Dropdown.Menu>
-                          </Dropdown>
+
+
+                          <OverlayTrigger
+                            placement="left"
+                            overlay={<Tooltip>View Billet</Tooltip>}
+                          >
+                            <Button
+                              variant="action"
+                              onClick={() => {
+                                viewBillet();
+                              }}
+                            >
+                              <i
+                                className="fa fa-vcard-o"
+                                aria-hidden="true"
+                              ></i>
+                            </Button>
+                          </OverlayTrigger>
+
+
+
+
                           <OverlayTrigger
                             placement="left"
                             overlay={<Tooltip>Share</Tooltip>}
@@ -417,73 +461,82 @@ const SignatureNew = (props) => {
                             </Button>
                           </OverlayTrigger>
 
-                          {loggedInUserDetails.userName &&  signature.owner &&
+                          {loggedInUserDetails.userName &&
+                            signature.owner &&
                             loggedInUserDetails.userName !=
                               _.get(signature, "owner.userName") && (
-                            <OverlayTrigger
-                              placement="left"
-                              overlay={
-                                <Tooltip>
-                                  {" "}
-                                  {upvotes.indexOf(
-                                    loggedInUserDetails.userName
-                                  ) > -1
-                                    ? "unvote"
-                                    : "upvote"}
-                                </Tooltip>
-                              }
-                            >
-                              <Button
-                                variant="action"
-                                onClick={() => setVoting()}
-                                className={
-                                  upvotes.indexOf(
-                                    loggedInUserDetails.userName
-                                  ) > -1
-                                    ? "upvoted small"
-                                    : "small"
+                              <OverlayTrigger
+                                placement="left"
+                                overlay={
+                                  <Tooltip>
+                                    {" "}
+                                    {upvotes.indexOf(
+                                      loggedInUserDetails.userName
+                                    ) > -1
+                                      ? "unvote"
+                                      : "upvote"}
+                                  </Tooltip>
                                 }
                               >
-                                <i
-                                  aria-hidden="true"
+                                <Button
+                                  variant="action"
+                                  onClick={() => setVoting()}
                                   className={
                                     upvotes.indexOf(
                                       loggedInUserDetails.userName
                                     ) > -1
-                                      ? "fa fa-thumbs-o-up upvoted"
-                                      : "fa fa-thumbs-o-up"
+                                      ? "upvoted small"
+                                      : "small"
                                   }
-                                ></i>
-                              </Button>
-                            </OverlayTrigger>
-                          )}
+                                >
+                                  <i
+                                    aria-hidden="true"
+                                    className={
+                                      upvotes.indexOf(
+                                        loggedInUserDetails.userName
+                                      ) > -1
+                                        ? "fa fa-thumbs-o-up upvoted"
+                                        : "fa fa-thumbs-o-up"
+                                    }
+                                  ></i>
+                                </Button>
+                              </OverlayTrigger>
+                            )}
 
                           {signature.owner &&
                             loggedInUserDetails.userName ==
                               _.get(signature, "owner.userName") && (
                               <div className="action-btns">
-                                
                                 <Dropdown>
-                                  <Dropdown.Toggle variant="success" id="dropdown-settings">
-                                  <Button
-                                        variant="action"
-                                        className="small ml-1"
-                                      >
-                                        {" "}
-                                        <i className="fa fa-cog"></i>
-                                      </Button>
+                                  <Dropdown.Toggle
+                                    variant="success"
+                                    id="dropdown-settings"
+                                  >
+                                    <Button
+                                      variant="action"
+                                      className="small ml-1"
+                                    >
+                                      {" "}
+                                      <i className="fa fa-cog"></i>
+                                    </Button>
                                   </Dropdown.Toggle>
 
                                   <Dropdown.Menu>
-                                    <Dropdown.Item onClick={() => {
-                                        showModal("info")
-                                  }}>
-                                    Edit Engagement
-                                  </Dropdown.Item>
-                                      <Dropdown.Item onClick={() => { showModal("details")}}>
+                                    <Dropdown.Item
+                                      onClick={() => {
+                                        showModal("info");
+                                      }}
+                                    >
+                                      Edit engagement
+                                    </Dropdown.Item>
+                                    <Dropdown.Item
+                                      onClick={() => {
+                                        showModal("details");
+                                      }}
+                                    >
                                       Edit details
-                                  </Dropdown.Item>
-                                    </Dropdown.Menu>
+                                    </Dropdown.Item>
+                                  </Dropdown.Menu>
                                 </Dropdown>
                               </div>
                             )}
@@ -491,31 +544,16 @@ const SignatureNew = (props) => {
                             loggedInUserDetails.userName !=
                               _.get(signature, "owner.userName") && (
                               <div className="row m-0 align-items-center">
-                               
-                                <div className="avatar cursor-pointer">
-                                  {signature.owner && (
-                                    <img className="mr-3" 
-                                      src={_.get(signature, "owner.imageUrl")}
-                                      alt={_.get(signature, "owner.userName")}
-                                      onClick={() =>
-                                        history.push(
-                                          `/profile/${_.get(
-                                            signature,
-                                            "owner.userName"
-                                          )}`
-                                        )
-                                      }
-                                    />
+                                {loggedInUserDetails.userName &&
+                                  loggedInUserDetails.userName !=
+                                    _.get(signature, "owner.userName") && (
+                                    <Button
+                                      variant="secondary"
+                                      onClick={() => showModal("engage")}
+                                    >
+                                      {getIdeaStatus(signature)}
+                                    </Button>
                                   )}
-                                </div>
-                                <Button
-                                  variant="secondary"
-                                  onClick={() => showModal("engage")}
-                                >
-                                  {
-                                    getIdeaStatus(signature)
-                                  }
-                                </Button>
                               </div>
                             )}
                         </div>
@@ -529,27 +567,51 @@ const SignatureNew = (props) => {
                   md="12"
                   className="meta mb-2 justify-content-between d-flex flex-row"
                 >
-                  <div className="tags second-grey mr-2 d-flex align-content-center">
-                    <Button disabled variant="pill">
+                  <div className="tags second-grey mr-2 d-flex align-content-center ">
+                    <Button disabled variant="pill" className="cursor-normal">
                       {signature.category &&
                         JSON.parse(signature.category) &&
                         JSON.parse(signature.category).label}
                     </Button>
-                    {upvotes && upvotes.length > 0 && (<span className="second-header color-secondary ml-2 cursor-pointer" onClick={() =>{
-                      setShowUpvotes(true)
-                    }}>{upvotes && upvotes.length} upvotes</span>)}
+                    {upvotes && upvotes.length > 0 && (
+                      <span
+                        className="second-header color-secondary ml-2 cursor-pointer"
+                        onClick={() => {
+                          setShowUpvotes(true);
+                        }}
+                      >
+                        {upvotes && upvotes.length}{" "}
+                        {upvotes && upvotes.length > 1 ? "Upvotes" : "Upvote"}
+                      </span>
+                    )}
                   </div>
                   <div className="time second-grey">
-                    {moment(signature.createdAt).format("YYYY-MM-DD HH:mm:ss")},{" "}
-                    {signature.location || "Global"}
+                    <span className="color-primary">
+                      {new Date(signature.createdAt).toUTCString()},{" "}
+                    </span>
+                    <span className="color-secondary">
+                      {" "}
+                      <i className="fa fa-globe ml-1"></i>{" "}
+                      {signature.location || "Global"}{" "}
+                    </span>
                   </div>
                 </Col>
                 <Col md="12">
                   <div className="description-section">
-                    <p className="second-grey">{_.get(signature, "description")}</p>
+                    <p className="second-grey description-content">
+                      {signature &&
+                        signature.description &&
+                        signature.description.split(" ").map((word) => {
+                          return (
+                            <span className={word.startsWith("#") ? "tag" : ""}>
+                              {word}{" "}
+                            </span>
+                          );
+                        })}
+                    </p>
                   </div>
                   <div oncontextmenu="return false;">
-                    <section className="doc-section" >
+                    <section className="doc-section">
                       {PDFFile ? (
                         <div className="pdfUploaded h-100 overflow-auto align-items-center justify-content-center d-flex">
                           {/* <Document file={PDFFile} className="pdf-document">
@@ -641,12 +703,12 @@ const SignatureNew = (props) => {
         />
       )}
       {showUpvotes && (
-       <PeopleList
-        action="Upvoted By"
-        list={upvotes}
-        show={showUpvotes}
-        onHide={() => setShowUpvotes(false)}
-     />
+        <PeopleList
+          action="Upvoted by"
+          list={upvotes}
+          show={showUpvotes}
+          onHide={() => setShowUpvotes(false)}
+        />
       )}
     </div>
   );

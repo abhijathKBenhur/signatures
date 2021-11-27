@@ -127,17 +127,12 @@ registerUser = (req, res) => {
     .then((user, b) => {
       responseMap.created = true
       console.log("ADDED COMPLETE USER DETAILS", user)
-      depositEvaluator.depostToNewUser(newUser).then(response =>{
-        console.log("response",response)
-        return res.status(201).json({
-          success: true,
-          data: {...user,token:token, ...{
-            goldDeposit: !_.isEmpty(response[0]),
-            maticDeposit: !_.isEmpty(response[1])
-          }},
-          message: "New user created!",
-        });
-      })
+      depositEvaluator.depostToNewUser(newUser);
+      return res.status(201).json({
+        success: true,
+        data: {...user,token:token},
+        message: "New user created!",
+      });
     })
     .catch((error) => {
       return res.status(400).json({
@@ -161,15 +156,14 @@ getUserInfo = async (req, res) => {
   if (req.body.metamaskId) {
     findCriteria.metamaskId = req.body.metamaskId;
   }
-  if (req.body.metamaskId) {
-    findCriteria.metamaskId = req.body.metamaskId;
-  }
+ 
   if (req.body.myReferralCode) {
     console.log("myReferralCode," + req.body.myReferralCode);
     findCriteria.myReferralCode = req.body.myReferralCode;
   }
   // await User.findOne(findCriteria,{email:0}, (err, user) => {
     await User.findOne(findCriteria, (err, user) => {
+      console.log(user)
     if (err) {
       return res.status(400).json({ success: false, error: err });
     }
@@ -195,7 +189,7 @@ updateUser = async (req, res) => {
     bio: newUser.bio,
   };
   console.log("testing")
-  User.findOneAndUpdate({ id: req.body._id }, updates, { new: true })
+  User.findByIdAndUpdate(req.body.id, updates, { upsert: true })
     .then((user, b) => {
       console.log("user updated", user, b);
       return res.status(201).json({

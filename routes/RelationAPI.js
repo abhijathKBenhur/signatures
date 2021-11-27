@@ -21,6 +21,7 @@ postRelation = (req, res) => {
   newRelation
     .save()
     .then((result, b) => {
+      try{
         if(result.relation == "FOLLOW"){
           depositEvaluator.depostForFollow(creditorDbId)
         }
@@ -29,6 +30,10 @@ postRelation = (req, res) => {
           console.log("raa")
           depositEvaluator.depostForUpvote(creditorDbId,creditorIdeaId)
         }
+      }catch(err){
+        console.log("MATIC DEPOSTI FAILED", err)
+      }
+        
       return res.status(201).json({
         success: true,
         data: result,

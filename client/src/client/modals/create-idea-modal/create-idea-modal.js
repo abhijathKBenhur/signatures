@@ -422,22 +422,7 @@ const CreateIdeaModal = ({
   };
 
   const timeFormatted = (time) => {
-    return (
-      "on " +
-      time.getDate() +
-      nth(time.getDate()) +
-      " " +
-      months[time.getMonth()] +
-      " " +
-      time.getFullYear() +
-      " " +
-      (time.getHours() > 12 ? time.getHours() - 12 : time.getHours()) +
-      ":" +
-      time.getMinutes() +
-      (time.getHours() > 12 ? "PM" : "AM")
-      + ""
-      // getTimeZonsShort() || ""
-    );
+    return new Date(time).toUTCString()
   };
 
   function getTimeZonsShort() {
@@ -489,10 +474,10 @@ const CreateIdeaModal = ({
                   <Row className="row1">
                     <Col md="12">
                       <div className="billet-item">
-                        <div className="user second-grey">@{billet.creator}</div>
+                        <div className="user second-grey">Minted by <span className="color-primary"> @{billet.creator}</span> </div>
                         {/* <div className="name">{billet.fullName}</div> */}
                         <div className="link">
-                          IdeaTribe.com | Your Ideas on blockchain{" "}
+                          IdeaTribe.io | Your Ideas on blockchain{" "}
                         </div>
                       </div>
                     </Col>
@@ -717,7 +702,7 @@ const CreateIdeaModal = ({
                     </span>
                   )}
                   {metaMastConfirmed && (
-                    <span className="word">Sending your transaction to the Pool</span>
+                    <span className="word">Sending your transaction to the pool</span>
                   )}
                   {metaMastConfirmed && (
                     <span className="word">Waiting for blocks to be mined</span>
@@ -890,11 +875,11 @@ const CreateIdeaModal = ({
                   Cancel
                 </Button>
                 <Button
-                  className="submit-btn"
+                  className={`submit-btn`}
                   onClick={checkValidationBeforeSubmit}
                 >
                   Submit
-                </Button>
+                </Button> 
               </Col>
             </Row>
           </>

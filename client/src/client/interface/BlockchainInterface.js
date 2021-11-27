@@ -3,7 +3,8 @@ import React from "react";
 import Web3 from "web3";
 import contractMainNetJSON from "../../contracts/ideaTribe.json";
 import contractTestNetJSON from "../../contracts/ideaTribe_test.json";
-import tribeGoldContractJSON from "../../contracts/tribeGold.json";
+import tribeGoldContractMainNetJSON from "../../contracts/tribeGold.json";
+import tribeGoldContractTestNetJSON from "../../contracts/tribeGold_test.json";
 import store from "../redux/store";
 import { setReduxMetaMaskID,setReduxUserDetails,setReduxChain } from "../redux/actions";
 import ENDPOINTS from "../commons/Endpoints";
@@ -23,9 +24,6 @@ const api = axios.create({
       ? ENDPOINTS.REMOTE_ENDPOINTS
       : ENDPOINTS.LOCAL_ENDPOINTS,
 });
-
-// const chain_id = "0x13881";
-const chain_id = "0x89";
 
 let isConfirmed = false;
 
@@ -86,7 +84,6 @@ class BlockchainInterface {
   constructor() {
     this.web3 = undefined;
     this.metamaskAccount = undefined;
-    this.tribeGoldContractJSON = tribeGoldContractJSON;
     this.contract = undefined;
     this.tokens = [];
     let parentThis = this;
@@ -108,11 +105,11 @@ class BlockchainInterface {
 
 
 
-  addNetwork(chain_id) {
+  addNetwork(newChainId) {
     window.ethereum
       .request({
         method: "wallet_addEthereumChain",
-        params: [CHAIN_CONFIGS[chain_id]],
+        params: [CHAIN_CONFIGS[newChainId]],
       })
       .then((success) => {
         console.log("success", success);
@@ -122,12 +119,12 @@ class BlockchainInterface {
       });
   }
 
-  switchNetwork() {
+  switchNetwork(newChainId) {
     try {
       window.ethereum
         .request({
           method: "wallet_switchEthereumChain",
-          params: [{ chainId: chain_id }],
+          params: [{ chainId: newChainId }],
         })
         .then((success) => {
           console.log("success", success);
@@ -135,7 +132,7 @@ class BlockchainInterface {
         .catch((switchError) => {
           if (switchError.code === 4902) {
             try {
-              this.addNetwork(chain_id);
+              this.addNetwork(newChainId);
             } catch (addError) {
               // handle "add" error
             }
@@ -145,7 +142,7 @@ class BlockchainInterface {
       // This error code indicates that the chain has not been added to MetaMask.
       if (switchError.code === 4902) {
         try {
-          this.addNetwork(chain_id);
+          this.addNetwork(newChainId);
         } catch (addError) {
           // handle "add" error
         }
@@ -191,7 +188,6 @@ class BlockchainInterface {
     const abi = this.tribeGoldContractJSON.abi;
     const contractAddress = this.tribeGoldContractJSON.address;
     let contractOptions = {
-      gasPrice : "3000000000",
       gas : 1000000
     }
     const contract = this.web3.eth.Contract(abi, contractAddress,contractOptions);
@@ -208,11 +204,13 @@ class BlockchainInterface {
       AxiosInstance.get(`/getContractENV`).then(result =>{
         store.dispatch(setReduxChain(_.get(result,"data.data") == "mainnet"? CONSTANTS.SCANNER_MAINNET_URL : CONSTANTS.SCANNER_TESTNET_URL));
         this.contractJSON = _.get(result,"data.data") == "mainnet" ? contractMainNetJSON : contractTestNetJSON;
+        this.tribeGoldContractJSON = _.get(result,"data.data") == "mainnet" ? tribeGoldContractMainNetJSON : tribeGoldContractTestNetJSON;
+        this.chain_id = _.get(result,"data.data") == "mainnet" ? "0x89" : "0x13881";
+
         this.loadWeb3()
         .then((success) => {
           this.metamaskAccount = success.accountId[0];
           let metamaskNetwork = success.networkId;
-          console.log("setting in redux user info");
           store.dispatch(setReduxMetaMaskID(this.metamaskAccount));
           const contractNetworkID = this.contractJSON.network;
           if (contractNetworkID == metamaskNetwork) {
@@ -225,7 +223,7 @@ class BlockchainInterface {
             this.contract = contract;
           } else {
             const CalledFunction = () => {
-              this.switchNetwork()
+              this.switchNetwork(this.chain_id)
             }
             const alertProperty = {
                 isDismissible: false,
@@ -306,7 +304,42 @@ class BlockchainInterface {
           </div>
         );
         const redirectToMetaMask = () => {
-          window.open("https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn?hl=en", "_blank")
+          var nAgt = navigator.userAgent;
+          var browserName;
+          var verOffset;
+          var nameOffset;
+          if ((verOffset=nAgt.indexOf("Opera"))!=-1) {
+            browserName = "Opera";
+           }
+           else if ((verOffset=nAgt.indexOf("MSIE"))!=-1) {
+            browserName = "Microsoft Internet Explorer";
+           }
+           else if ((verOffset=nAgt.indexOf("Chrome"))!=-1) {
+            browserName = "Chrome";
+           }
+           else if ((verOffset=nAgt.indexOf("Safari"))!=-1) {
+            browserName = "Safari";
+           }
+           else if ((verOffset=nAgt.indexOf("Firefox"))!=-1) {
+            browserName = "Firefox";
+           }
+           else if ( (nameOffset=nAgt.lastIndexOf(' ')+1) < 
+                     (verOffset=nAgt.lastIndexOf('/')) ) 
+           {
+            browserName = nAgt.substring(nameOffset,verOffset);
+            if (browserName.toLowerCase()==browserName.toUpperCase()) {
+             browserName = navigator.appName;
+            }
+           }
+          switch(browserName) {
+            // case "Opera": window.open("https://addons.mozilla.org/en-US/firefox/addon/ether-metamask/", "_blank"); break;
+            case "Microsoft Internet Explorer": window.open("https://microsoftedge.microsoft.com/addons/detail/metamask/ejbalbakoplchlghecdalmeeeajnimhm?hl=en-US", "_blank"); break;
+            case "Chrome": window.open("https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn?hl=en", "_blank"); break;
+            case "Safari": window.open("https://addons.mozilla.org/en-US/firefox/addon/ether-metamask/", "_blank"); break;
+            case "Firefox": window.open("https://addons.mozilla.org/en-US/firefox/addon/ether-metamask/", "_blank"); break;
+            default: window.open("https://metamask.io/download.html", "_blank"); break;
+          }
+          
         }
         const alertProperty = {
             isDismissible: false,

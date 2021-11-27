@@ -23,7 +23,6 @@ import { Check, RefreshCcw, X } from "react-feather";
 import { useHistory } from "react-router-dom";
 import store from "../../redux/store";
 import UserInterface from "../../interface/UserInterface";
-import Cookies from "universal-cookie";
 import ProgressBar from "../../components/progressbar/progress";
 import NotificationInterface from "../../interface/NotificationInterface";
 import reactGA from "react-ga";
@@ -36,7 +35,7 @@ const Register = (props) => {
   const PASSED = "PASSED";
   const FAILED = "FAILED";
   const PENDING = "PENDING";
-
+  const appConstants = CONSTANTS
   const [steps, setSteps] = useState([
     {
       key: "socialLogin",
@@ -60,7 +59,6 @@ const Register = (props) => {
   const [activeStep, setActiveStep] = useState(steps[0]);
   const [registration, setRegistration] = useState("");
   const [registrationErrorMessage, setregistrationErrorMessage] = useState("");
-
   const [referralError, setReferralError] = useState(false);
   const [userNameError, setuserNameError] = useState(false);
   const [userEmailError, setuserEmailError] = useState(false);
@@ -115,7 +113,7 @@ const Register = (props) => {
           let response = success.data;
           UserInterface.registerUser({ ...userDetails, secret, nonce })
             .then((mongoSuccess) => {
-              setCookie(mongoSuccess.token);
+              setTokenInSession(mongoSuccess.token);
               publishUserToApp();
               setRegistration(PASSED);
               reactGA.event({
@@ -154,12 +152,12 @@ const Register = (props) => {
     store.dispatch(setReduxUserDetails(userDetails.metamaskId));
   }
 
-  const setCookie = (token) => {
-    const cookies = new Cookies();
-    cookies.set(CONSTANTS.COOKIE_TOKEN_PHRASE, token);
+  const setTokenInSession = (token) => {
+    sessionStorage.setItem(appConstants.COOKIE_TOKEN_PHRASE, token);
   };
 
   const handleNext = () => {
+    
     if (steps[steps.length - 1].key == activeStep.key) {
       if (registration == PASSED) {
         publishUserToApp();
@@ -181,6 +179,7 @@ const Register = (props) => {
         return x;
       })
     );
+   
     setActiveStep(steps[index + 1]);
   };
 
@@ -346,6 +345,7 @@ const Register = (props) => {
         );
         break;
       case "userName":
+        
         return (
           <div className="w-100 d-flex flex-row align-items-center justify-content-center">
             {registration == PASSED ? (
@@ -385,7 +385,7 @@ const Register = (props) => {
                   />
                   <div className="inputs d-flex flex-column justify-content-around h-100 ml-5 w-100">
                     <div className="userID">
-                      <span className="second-grey">Enter username</span>
+                      <span className="second-grey color-primary">Enter username</span>
                       {userNameError && (
                         <span className="error-message ml-2">
                           *{userNameError}
@@ -406,6 +406,7 @@ const Register = (props) => {
                         className={
                           userNameError ? "username-error userName" : "userName"
                         }
+                        autoFocus={true}
                         onChange={handleChange}
                       />
                     </div>
@@ -455,7 +456,7 @@ const Register = (props) => {
       ...returnObj,
     });
     if (event.target.name == "userName") {
-      if (/^[A-Z0-9]+$/i.test(value)) {
+      if (/^[A-Z0-9_]+$/i.test(value)) {
         setuserNameError(false);
         UserInterface.getUserInfo({ userName: value })
           .then((userDetails) => {

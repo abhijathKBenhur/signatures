@@ -57,10 +57,10 @@ function Profile(props) {
   const [billetList, setBilletList] = useState([]);
   const [mobileView, setMobileView] = useState([]);
   const [upvottedList, setUpvottedList] = useState([]);
+  const [userURL, setUserURL] = useState(_.get(window.location, "pathname").split("profile/")[1]);
 
   let history = useHistory();
   const [key, setKey] = useState("collections");
-  const viewUser = _.get(window.location, "pathname").split("profile/")[1];
   const dispatch = useDispatch();
   const [modalShow, setShowModal] = useState({
     editProfile: false,
@@ -70,6 +70,11 @@ function Profile(props) {
     showPeopleList: false,
     showFollowers: false,
   });
+
+
+  useEffect(() => {
+    setUserURL(_.get(window.location, "pathname").split("profile/")[1])
+  }, [history.location.pathname]);
 
   useEffect(() => {
     if (_.get(history, "location.state.showCollections")) {
@@ -91,18 +96,14 @@ function Profile(props) {
 
   useEffect(() => {
     const { userDetails = {} } = reduxState;
-
-    if (viewUser && !isMyPage()) {
+    if (userURL) {
       let payLoad = {};
-      payLoad.userName = viewUser;
+      payLoad.userName = userURL;
       getUserDetails(payLoad);
-    } else if (userDetails && (!viewUser || isMyPage())) {
-      //own profile page
-      setLoggedInUserDetails(userDetails);
     }
     setMobileView(_.get(history, "location.state.mobileView"));
     console.log("userDetails = ", userDetails);
-  }, [reduxState.userDetails]);
+  }, [reduxState.userDetails,userURL]);
 
   useEffect(() => {
     fetchSignatures(loggedInUserDetails.userName);
@@ -122,7 +123,7 @@ function Profile(props) {
 
   const getStats = () => {
     StatsInterface.getTotalUpvotesForUser({
-      userName: loggedInUserDetails._id,
+      owner: loggedInUserDetails._id,
     }).then((success) => {
       let upvotedUsers = [];
       _.forEach(_.get(success, "data.data"), (item) => {
@@ -145,7 +146,7 @@ function Profile(props) {
   };
 
   function isMyPage() {
-    return viewUser === userDetails.userName;
+    return userURL === userDetails.userName;
   }
 
   function fetchSignatures(userName) {
@@ -172,7 +173,7 @@ function Profile(props) {
 
   function loadFollowers() {
     RelationsInterface.getRelations({
-      to: viewUser,
+      to: userURL,
     })
       .then((success) => {
         setFollowers(_.map(success.data.data, "from"));
@@ -211,7 +212,7 @@ function Profile(props) {
     if (followers.indexOf(userDetails.userName) < 0) {
       RelationsInterface.postRelation(
         userDetails.userName,
-        viewUser,
+        userURL,
         CONSTANTS.ACTIONS.FOLLOW,
         CONSTANTS.ACTION_STATUS.PENDING,
         "I would like to follow you.",
@@ -223,7 +224,7 @@ function Profile(props) {
         setFollowers(newFollowlist);
         NotificationInterface.postNotification(
           userDetails._id,
-          viewUser,
+          userURL,
           CONSTANTS.ACTIONS.FOLLOW,
           CONSTANTS.ACTION_STATUS.PENDING,
           userDetails.userName + " followed you."
@@ -232,7 +233,7 @@ function Profile(props) {
     } else {
       RelationsInterface.removeRelation(
         userDetails.userName,
-        viewUser,
+        userURL,
         CONSTANTS.ACTIONS.FOLLOW
       ).then((success) => {
         let followeIndex = followers.indexOf(userDetails.userName);
@@ -421,7 +422,7 @@ function Profile(props) {
                           {billetList.length}
                         </span>
                         <span className="stats-value second-grey  text-center">
-                          Ideas
+                        {billetList.length > 1 ?  "Ideas" :"Idea"}
                         </span>
                       </Col>
                       <Col
@@ -452,7 +453,7 @@ function Profile(props) {
                             }
                           }}
                         >
-                          Upvotes
+                          {upvotesCount > 1 ?  "Upvotes" :"Upvote"}
                         </span>
                       </Col>
                     </Row>
@@ -476,7 +477,7 @@ function Profile(props) {
                           </span>
                         </div>
                       ) : (
-                        <span className="second-grey">
+                        <span className="second-grey text-left">
                           {" "}
                           {loggedInUserDetails.bio}{" "}
                         </span>
@@ -608,7 +609,7 @@ function Profile(props) {
                             </Button>
                           </OverlayTrigger> */}
 
-                          <OverlayTrigger
+                          {isMyPage() && <OverlayTrigger
                             key={"invite"}
                             placement="top"
                             overlay={
@@ -629,7 +630,7 @@ function Profile(props) {
                             >
                               <i className="fa fa-user-plus"></i>
                             </Button>
-                          </OverlayTrigger>
+                          </OverlayTrigger>}
                         </Row>
                         {!_.isUndefined(followers) &&
                           userDetails.userName &&
@@ -702,13 +703,14 @@ function Profile(props) {
           show={modalShow.editProfile}
           onupdate={(params) => {
             setLoggedInUserDetails(_.get(params, "profileData.data"));
+            window.location.reload()
           }}
           onHide={() => setShowModal({ ...modalShow, editProfile: false })}
         />
       )}
       {modalShow.showPeopleList && (
         <PeopleList
-          action="Upvoted By"
+          action="Upvoted by"
           userDetails={loggedInUserDetails}
           list={upvottedList}
           show={modalShow.showPeopleList}

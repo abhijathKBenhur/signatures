@@ -8,22 +8,22 @@ import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import SignatureInterface from "../../interface/SignatureInterface";
 import StatsInterface from "../../interface/StatsInterface";
 import { useHistory } from "react-router-dom";
-import Cookies from "universal-cookie";
 import DiscoverMore from "../../components/discover-more/discover-more";
 import SearchBar from "../../components/searchBar/SearchBar";
 import berklee from "../../../assets/images/announcements/berklee.png";
 import TRBG from "../../../assets/images/announcements/TRBG.png";
 import brand from "../../../assets/images/announcements/logo_blue.png";
 import cover from "../../../assets/images/cover.png";
+import HowToSignUp from "../../../assets/documents/HowToSignUp.pdf";
+import HowToMint from "../../../assets/documents/HowToMint.pdf";
 
 import CommentsPanel from "../../components/comments/CommentsPanel";
 function gallery(props) {
   let history = useHistory();
-  const cookies = new Cookies();
-  const reduxState = useSelector((state) => state, shallowEqual);
   const [collectionList, setCollectionList] = useState([]);
-  const [visitedUser, setIsVisitedUser] = useState(cookies.get("visitedUser"));
-
+  const [showGuides, setShowGuides] = useState(false);
+  const reduxState = useSelector((state) => state, shallowEqual);
+  const { metamaskID = undefined, userDetails = {}, reduxChain = undefined } = reduxState;
   const [galleryFilters, setGalleryFilters] = useState({
     searchString: "",
     categories: "",
@@ -37,7 +37,6 @@ function gallery(props) {
   });
 
   useEffect(() => {
-    cookies.set("visitedUser", true);
     getStats();
   }, []);
 
@@ -105,7 +104,7 @@ function gallery(props) {
             It’s raining TribeGold!
           </div>
           <div className="activity-description second-grey">
-            Earn TribeGold for publishing Ideas and inviting friends.
+            Earn TribeGold for minting Ideas and inviting friends.
           </div>
         </div>
         <div className="activity-thumbnail">
@@ -120,7 +119,7 @@ function gallery(props) {
     </div>
     <div className="activity-description second-grey">
       You can soon update & re-tokenize your Ideas. That way you don’t
-      have to wait for your idea to be perfect to mint.
+      have to wait for your Idea to be perfect to mint.
     </div>
   </div>
   <div className="activity-thumbnail">
@@ -131,7 +130,7 @@ function gallery(props) {
 <div className="activity-entry d-flex flex-row mt-3">
   <div className="activity-content  d-flex flex-column">
     <div className="activity-title master-grey">
-      First Ideas are on us!
+      Your first Ideas are on us!
     </div>
     <div className="activity-description second-grey">
       We are paying Gas fee to mint your first 5 Ideas!
@@ -148,8 +147,26 @@ function gallery(props) {
     return shuffled.slice(0, 3);
   }
 
+  const toggleShowGuide = () =>{
+    setShowGuides(!showGuides)
+  }
+
+  const openGuide = (index) =>{
+    switch(index){
+      case 1:
+          window.open(HowToSignUp)
+        break;
+      case 2:
+        window.open(HowToMint)
+        break;
+      case 3:
+          window.open()
+        break;
+    }
+  }
+
   return (
-    <Container fluid>
+    <Container fluid className="p-0">
       <div className="gallery d-flex flex-row">
         <Col md="9" className="galler-area">
           {/* <Row
@@ -211,6 +228,14 @@ function gallery(props) {
               height: "300px",
             }}
           >
+            <div className="top-help" onClick={() => {toggleShowGuide()}}> 
+              <span >{showGuides ?"Got it!" :"Need help?" } </span>
+             </div>
+             {showGuides && <div >
+              <div className="guide-bookmark guide-bookmark1" onClick={() => {openGuide(1)}}> How to sign up </div>
+              <div className="guide-bookmark guide-bookmark2" onClick={() => {openGuide(2)}}> How to mint an Idea </div>
+              {/* <div className="guide-bookmark guide-bookmark3" onClick={() => {openGuide(3)}}> How to think of an Idea</div> */}
+            </div>}
             <SearchBar searchTextChanged={refreshCollection} />
             <DiscoverMore categorySelected={refreshCollection}></DiscoverMore>
           </Row>

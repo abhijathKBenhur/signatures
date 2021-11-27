@@ -43,7 +43,7 @@ const authorizer = (req, res, next) => {
             },
           });
         }
-        console.log("AUTHORIZATION NONCE CHECK STATUS FOR " +req.path , user.nonce == decoded.nonce ," -- " + user.nonce + " vs " +decoded.nonce)
+        console.log("AUTHORIZATION NONCE CHECK STATUS FOR " +req.path , user.nonce == decoded.nonce ," -- Target nonce - " + user.nonce + " vs requested nonce - " +decoded.nonce)
         console.log("AUTHORIZATION CONDITION CHECK STATUS FOR " + req.path + " -- " + conditionalAuthCheck(user, req))
 
         if (user.nonce == decoded.nonce && conditionalAuthCheck(user, req)) {

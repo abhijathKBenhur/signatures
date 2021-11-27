@@ -179,7 +179,12 @@ updateIdeaID = async (req, res) => {
       if (!token) {
         return res.status(404).json({ success: true, data: [] });
       }
-      depositEvaluator.depositForNthIdea(creatorObject)
+      try{
+        depositEvaluator.depositForNthIdea(creatorObject)
+      }
+      catch(err){
+        console.log("MATIC DEPOSTI FAILED", err)
+      }
       return res.status(200).json({ success: true, data: token });
     }
   ).catch((err) => {

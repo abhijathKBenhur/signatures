@@ -221,6 +221,18 @@ const CreateNew = () => {
     }
   }, [form.category]);
 
+
+  // useEffect(() => {
+  //   const { metamaskID = undefined } = reduxState;
+  //   if (!_.isEmpty(form.price)) {
+  //     setFormErrors({ ...formErrors, price: false });
+  //   } else {
+  //     if(form.purpose.purposeType != "SELL"){
+  //       setFormErrors({ ...formErrors, price: true });  
+  //     }
+  //   }
+  // }, [form.price]);
+
   useEffect(() => {
     const { metamaskID = undefined } = reduxState;
     if (metamaskID) {
@@ -358,27 +370,25 @@ const CreateNew = () => {
               />
             </Document>
             <p className="page-container">
-              <ChevronLeft
-                className={pdfPages.currentPage === 1 ? "disable" : ""}
+              {pdfPages.currentPage != 1 && <ChevronLeft
+                className="cursor-pointer"
                 onClick={() =>
                   setPdfPages({
                     ...pdfPages,
                     currentPage: pdfPages.currentPage - 1,
                   })
                 }
-              />
+              />}
               Page {pdfPages.currentPage} of {pdfPages.totalPages}
-              <ChevronRight
-                className={
-                  pdfPages.currentPage === pdfPages.totalPages ? "disable" : ""
-                }
+              {pdfPages.currentPage != pdfPages.totalPages && <ChevronRight
+               className="cursor-pointer"
                 onClick={() =>
                   setPdfPages({
                     ...pdfPages,
                     currentPage: pdfPages.currentPage + 1,
                   })
                 }
-              />
+              />}
             </p>
           </>
         );
@@ -543,7 +553,13 @@ const CreateNew = () => {
         saveToBlockChain(params);
       },
       "jsonp"
-    );
+    ).fail(function(err) {
+      console.log("LOCATION SERVICES FAILED WITH", err)
+      let region = "Unknown"
+        setFormData({ ...form, location: region });
+        params.location = region
+        saveToBlockChain(params);
+    });
         
         
       })
@@ -613,7 +629,7 @@ const CreateNew = () => {
   function addIdeaRecordToMongo(form) {
     SignatureInterface.addSignature({ ...form })
     .then((success) => {
-      showToaster("Your idea is being submitted on the blockchain! Please wait for the confirmation billet.", {
+      showToaster("Your idea is being submitted on the Blockchain! Please wait for the confirmation billet.", {
         type: "dark",
       });
     })
@@ -632,7 +648,7 @@ const CreateNew = () => {
       user: userDetails._id
     })
     const alertProperty = {
-      content: "Congratulations! Your Idea has been published on the blockchain. We will be depositing TribeGold in your wallet shortly!",
+      content: "Congratulations! Your Idea has been published on the Blockchain. We will be depositing TribeGold in your wallet shortly!",
     }
     ReactDOM.render(<AlertBanner {...alertProperty}></AlertBanner>, document.querySelector('.aleartHeader'))
   }
@@ -766,7 +782,7 @@ const CreateNew = () => {
               </>
             ) : (
               <>
-                <h2 className="master-header col">Mint your idea</h2>
+                <h2 className="master-header col">Mint your Idea</h2>
               </>
             )}
             <Col md="12" sm="12" lg="12" xs="12">

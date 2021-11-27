@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
 import { ChevronRight, ChevronLeft } from "react-feather";
-import PDFFile from "../../../assets/documents/whitepaper.pdf";
 import { Image } from "react-bootstrap";
 import "./terms.scss"
 const Help = () => {
@@ -25,7 +24,6 @@ const Help = () => {
       <div className="father-grey color-secondary mb-3 text-center">IDEATRIBE TERMS AND CONDITIONS</div>
       <>
         <div className="terms-body">
-        <div className="father-grey color-secondary mb-3">IDEATRIBE TERMS AND CONDITIONS</div>
         <div> Date of Initial Publication: 20 November 2021 </div>
         <div> Last Updated: 20 November 2021 </div>
         <div> PLEASE FIND BELOW THE TERMS AND CONDITIONS GOVERNING THE IDEATRIBE OFFERINGS, INCLUDING: </div>

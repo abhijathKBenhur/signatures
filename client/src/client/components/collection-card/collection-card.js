@@ -141,7 +141,7 @@ const CollectionCard = (props) => {
     <div className="card-container">
       <div className="card-float-header">
         <div className="user-logo">
-          <Image src={_.get(signature,'owner.imageUrl')} color="F3F3F3" onClick={() => {
+          <Image className="cursor-pointer" src={_.get(signature,'owner.imageUrl')} color="F3F3F3" onClick={() => {
             goToUserProfile(_.get(signature,'owner.userName'));
           }}/>
           <div className="user-popup-outer">
@@ -187,7 +187,7 @@ const CollectionCard = (props) => {
                 <div className="card__author">
                 <div className="tag-n-location">
                   <div className=" timestamp second-header">
-                    {moment(signature.createdAt).format("YYYY-MM-DD HH:mm:ss")}
+                    {new Date(signature.createdAt).toUTCString()}
                   </div>
                 </div>
                   <div className="like-bar align-items-sm-baseline third-header row justify-content-between color-primary">

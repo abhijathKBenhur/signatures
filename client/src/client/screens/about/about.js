@@ -46,10 +46,12 @@ const About = () => {
           <img src={creativity} />
         </Col>
         <Col className="right">
-          <span className="father-grey mt-3">All your best Ideas. On the blockchain. </span>
-          
+          <span className="father-grey mt-3">All your best Ideas. </span>
+          <span className="father-grey color-primary-light">
+            On the blockchain.
+           </span>
           <span className="master-header color-primary">
-          Forever. 
+            Forever. 
            </span>
           <br/>
           <div className="mt-3 mb-1 readable-text second-grey">
