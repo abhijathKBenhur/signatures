@@ -67,7 +67,7 @@ const Wallet = (props) => {
 
 
         {/* </Tooltip>}> */}
-              <i data-html="true" className="second-grey fa fa-question-circle-o" title="Ways to earn TribeGold [TRBG] -  Mint Ideas , Get upvotes for your Ideas,  Get followers, Get your friends to sign up in IdeaTribe, Visit IdeaTribe often and engage with the community!<br/>"></i>
+              <i data-html="true" className="second-grey fa fa-question-circle-o" title="Ways to earn TribeGold [TRBG] -  Mint Ideas , Get upvotes for your Ideas,  Get followers, Get your friends to sign up in IdeaTribe, Visit IdeaTribe often and engage with the community!"></i>
         {/* </OverlayTrigger> */}
         
 
