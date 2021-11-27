@@ -875,11 +875,11 @@ const CreateIdeaModal = ({
                   Cancel
                 </Button>
                 <Button
-                  className="submit-btn"
+                  className={`submit-btn ${(_.get(form, 'purpose.purposeType') == "SELL" && !_.get(form, 'price')) ? 'disabled': ''}`}
                   onClick={checkValidationBeforeSubmit}
                 >
                   Submit
-                </Button>
+                </Button> 
               </Col>
             </Row>
           </>
