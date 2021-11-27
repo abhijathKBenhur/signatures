@@ -14,6 +14,8 @@ import berklee from "../../../assets/images/announcements/berklee.png";
 import TRBG from "../../../assets/images/announcements/TRBG.png";
 import brand from "../../../assets/images/announcements/logo_blue.png";
 import cover from "../../../assets/images/cover.png";
+import HowToSignUp from "../../../assets/documents/HowToSignUp.pdf";
+import HowToMint from "../../../assets/documents/HowToMint.pdf";
 
 import CommentsPanel from "../../components/comments/CommentsPanel";
 function gallery(props) {
@@ -128,7 +130,7 @@ function gallery(props) {
 <div className="activity-entry d-flex flex-row mt-3">
   <div className="activity-content  d-flex flex-column">
     <div className="activity-title master-grey">
-      First Ideas are on us!
+      Your first Ideas are on us!
     </div>
     <div className="activity-description second-grey">
       We are paying Gas fee to mint your first 5 Ideas!
@@ -152,10 +154,10 @@ function gallery(props) {
   const openGuide = (index) =>{
     switch(index){
       case 1:
-          window.open("https://drive.google.com/file/d/15eNG6BF0MI5xKo33nRHGqUJlJyoDtZpV/view?usp=sharing")
+          window.open(HowToSignUp)
         break;
       case 2:
-          window.open("https://drive.google.com/file/d/1wgRa-sRkl1jPibhRHkWCNJOfk0S3sdxP/view?usp=sharing")
+        window.open(HowToMint)
         break;
       case 3:
           window.open()
