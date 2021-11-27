@@ -243,7 +243,6 @@ const EditProfile = ({ ...props }) => {
                     >
                       <input {...getInputProps()} />
                       <img src={editProfile.imageUrl} height={100} width={100} style={{borderRadius:"100px"}}></img>
-                      <p className="dropfile-text">Edit thumbnail</p>
                     </div>
                   </section>
                 )}
