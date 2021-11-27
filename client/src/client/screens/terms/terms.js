@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
 import { ChevronRight, ChevronLeft } from "react-feather";
-import PDFFile from "../../../assets/documents/whitepaper.pdf";
 import { Image } from "react-bootstrap";
 import "./terms.scss"
 const Help = () => {

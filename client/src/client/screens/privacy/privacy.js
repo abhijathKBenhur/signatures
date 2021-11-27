@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
 import { ChevronRight, ChevronLeft } from "react-feather";
-import PDFFile from "../../../assets/documents/privacy.pdf";
 import { ListGroup } from "react-bootstrap";
 import "./privacy.scss"
 const Help = () => {

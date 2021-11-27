@@ -477,7 +477,7 @@ function Profile(props) {
                           </span>
                         </div>
                       ) : (
-                        <span className="second-grey">
+                        <span className="second-grey text-left">
                           {" "}
                           {loggedInUserDetails.bio}{" "}
                         </span>
