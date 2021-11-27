@@ -15,6 +15,7 @@ import _ from 'lodash';
   import './edit-profile.scss';
 import UserInterface from '../../interface/UserInterface';
 import Dropzone from "react-dropzone";
+import StorageInterface from "../../interface/StorageInterface";
 
 const EditProfile = ({ ...props }) => {
 
@@ -69,14 +70,12 @@ const EditProfile = ({ ...props }) => {
     }
 
     const onImageDrop = (acceptedFiles) => {
-      // setFormData({
-      //   ...form,
-      //   thumbnail: Object.assign(acceptedFiles[0], {
-      //     preview: URL.createObjectURL(acceptedFiles[0]),
-      //     updated: true
-      //   }),
-      // });
-      setEditProfile({...editProfile, imageUrl:URL.createObjectURL(acceptedFiles[0])})
+      StorageInterface.getImagePath({thumbnail: Object.assign(acceptedFiles[0], {
+        preview: URL.createObjectURL(acceptedFiles[0]),
+        updated: true
+      })}).then(data=>{
+        setEditProfile({...editProfile, imageUrl: _.get(data, "data.path")})
+      })
     };
 
     const editProfileHandler = () => {
