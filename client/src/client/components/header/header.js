@@ -27,6 +27,7 @@ import CommentsInterface from "../../interface/CommentsInterface";
 import reactGA from "react-ga";
 
 import TransactionsInterface from "../../interface/TransactionInterface";
+import WhitelistInterface from "../../interface/WhitelistInterface";
 const Header = (props) => {
   const decoder = jwt_decode;
   const appConstants = CONSTANTS
@@ -98,6 +99,17 @@ const Header = (props) => {
     })
   }
 
+  function addDefaultHashtags() {
+    WhitelistInterface.getWhitelists().then((res) => {
+      if(_.isEmpty(_.get(res, 'data.data'))){
+        let defaultValues = ["Apparel", "App", "Art", "Book", "Business", "Research", "Craft", "Design", "Discovery", "DIY", "Engineering", "Equipment", "Fashion", "Fitness", "Home", "Invention", "Jewelry", "Logo", "Lyrics", "Material", "Meme", "Method", "Music", "Painting", "Photo", "Phrase", "Poem", "Process", "Product", "Recipe", "Science", "Screenplay", "Script", "Society", "Song", "Sound", "Story", "System", "Technology", "Theme", "Thesis", "Thought", "Tune", "Video", "Word"];
+        _.forEach(defaultValues, item=>{
+          WhitelistInterface.postWhitelist({code: item})
+        })
+      }
+    })
+  }
+
   function updatePendingTransactions() {
     console.log("inside pending")
     TransactionsInterface.getTransactions({
@@ -128,7 +140,6 @@ const Header = (props) => {
     })
   }
   function setTokenCookies(userData) {
-    
     let authToken = sessionStorage.getItem(appConstants.COOKIE_TOKEN_PHRASE)
     let decoded = {};
     let reRequestSignature = false;
