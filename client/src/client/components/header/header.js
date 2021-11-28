@@ -61,7 +61,7 @@ const Header = (props) => {
       // actionText: "Switch Network",
     }
     if (_.isEmpty(currentMetamaskAccount)) {
-      if(/Androixd|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)){
+      if(Number(screen.width) < 760 ){
         console.log("Mobile application")
         ReactDOM.render(<AlertBanner {...alertProperty}></AlertBanner>, document.querySelector('.aleartHeader'))        
       }else {
