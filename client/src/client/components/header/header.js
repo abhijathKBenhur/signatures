@@ -54,16 +54,18 @@ const Header = (props) => {
   }, [reduxState]);
 
   useEffect(() => {
+    const alertProperty = {
+      isDismissible: false,
+      variant: "danger",
+      content: "Smart contract not deployed to detected network. Please change the network in metamask.",
+      // actionText: "Switch Network",
+    }
     if (_.isEmpty(currentMetamaskAccount)) {
       if(/Androixd|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)){
-        const alertProperty = {
-          isDismissible: false,
-          variant: "danger",
-          content: "Smart contract not deployed to detected network. Please change the network in metamask.",
-          // actionText: "Switch Network",
-        }
-        ReactDOM.render(<AlertBanner {...alertProperty}></AlertBanner>, document.querySelector('.aleartHeader'))
-      }else{
+        ReactDOM.render(<AlertBanner {...alertProperty}></AlertBanner>, document.querySelector('.aleartHeader'))        
+      }else if(/Chrome/i.test(navigator.userAgent)){
+        ReactDOM.render(<AlertBanner {...alertProperty}></AlertBanner>, document.querySelector('.aleartHeader'))        
+      }else {
         connectWallet();
       }
     }
