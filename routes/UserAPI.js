@@ -97,6 +97,7 @@ registerUser = (req, res) => {
       error: "You must provide a user",
     });
   }
+  console.log("DECODING TOKEN")
   let tokenDecoded = jwt_decode(body.googleJWTToken);
 
   const newUser = new User(body);
@@ -127,6 +128,7 @@ registerUser = (req, res) => {
     .then((user, b) => {
       responseMap.created = true
       console.log("ADDED COMPLETE USER DETAILS", user)
+      
       depositEvaluator.depostToNewUser(newUser);
       return res.status(201).json({
         success: true,
@@ -135,6 +137,7 @@ registerUser = (req, res) => {
       });
     })
     .catch((error) => {
+      console.log("USER DETAILS UPLOAD FAILED", error)
       return res.status(400).json({
         error,
         data: responseMap,

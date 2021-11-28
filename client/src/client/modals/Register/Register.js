@@ -26,6 +26,7 @@ import UserInterface from "../../interface/UserInterface";
 import ProgressBar from "../../components/progressbar/progress";
 import NotificationInterface from "../../interface/NotificationInterface";
 import reactGA from "react-ga";
+import WhitelistInterface from "../../interface/WhitelistInterface";
 // MetamaskID and userDetails are stored in separate redux stores
 // userDetails are stored as state
 
@@ -59,7 +60,8 @@ const Register = (props) => {
   const [activeStep, setActiveStep] = useState(steps[0]);
   const [registration, setRegistration] = useState("");
   const [registrationErrorMessage, setregistrationErrorMessage] = useState("");
-  const [referralError, setReferralError] = useState(false);
+  const [whiteListError, setWhiteListError] = useState(false);
+  const [whiteListCode, setWhiteListCode] = useState("");
   const [userNameError, setuserNameError] = useState(false);
   const [userEmailError, setuserEmailError] = useState(false);
   const [loggedInUserDetails, setLoggedInUserDetails] = useState({});
@@ -80,6 +82,7 @@ const Register = (props) => {
     referredBy: sessionStorage.getItem("inviteCode"),
     myReferralCode: (Math.random() + 1).toString(36).substring(7),
     googleJWTToken: "",
+    // isWhitelisted = false
   });
 
   function getNonceAndRegister() {
@@ -102,6 +105,7 @@ const Register = (props) => {
     try {
       BlockchainInterface.register_user({ ...userDetails, secret, nonce })
         .then((success) => {
+          console.log("POSTING SIGN UP NOTIFICATION")
           NotificationInterface.postNotification(
             CONSTANTS.ENTITIES.PUBLIC,
             _.get(loggedInUserDetails, "_id"),
@@ -113,6 +117,7 @@ const Register = (props) => {
           let response = success.data;
           UserInterface.registerUser({ ...userDetails, secret, nonce })
             .then((mongoSuccess) => {
+              console.log("REGISTER USER SUCCESS")
               setTokenInSession(mongoSuccess.token);
               publishUserToApp();
               setRegistration(PASSED);
@@ -124,10 +129,12 @@ const Register = (props) => {
               BlockchainInterface.addToken("ERC20", "TRBG", 18);
             })
             .catch((err) => {
+              console.log("REGISTER USER FAILURE",err)
               registrationFailure(err.data, userDetails);
             });
         })
         .catch((error) => {
+          console.log("REGISTER USER FAILURE IN CATCH", error)
           registrationFailure(error.data, userDetails);
         });
     } catch (e) {
@@ -412,16 +419,16 @@ const Register = (props) => {
                     </div>
 
                     {/* <div>
-                      <span className="second-grey">Referral Code</span>
-                      {referralError && (
+                      <span className="second-grey">Whitelist Code</span>
+                      {whiteListError && (
                         <span className="error-message ml-2">
-                          *Invalid referral code
+                          *Invalid whitelist code
                         </span>
                       )}
                       <i className="fa fa-circle-notch fa-spin"></i>
-                      {!referralError &&
-                      userDetails.referredBy &&
-                      userDetails.referredBy.length > 0 ? (
+                      {!whiteListError &&
+                      whitelistCode &&
+                      whitelistCode.length > 0 ? (
                         <i className="icon fa fa-check ml-1"></i>
                       ) : (
                         <div></div>
@@ -429,9 +436,9 @@ const Register = (props) => {
                       <Form.Control
                         type="text"
                         name="referredBy"
-                        value={userDetails.referredBy}
+                        value={whitelistCode}
                         className={"userName referral"}
-                        onChange={handleChange}
+                        onChange={changeWhitelistCode}
                       />
                     </div> */}
                   </div>
@@ -443,6 +450,20 @@ const Register = (props) => {
 
       default:
         return null;
+    }
+  }
+
+  function changeWhitelistCode(event){
+    if (event.target.name == "whitelistCode") {
+      WhitelistInterface.checkWhiteList({whitelistCode :event.target.value }).then(success =>{
+        setWhiteListError(true)
+      }).catch(err =>{
+        setWhiteListError(false)
+        setUserDetails({
+          ...userDetails,
+          isWhitelisted: true,
+        });
+      })
     }
   }
 
@@ -469,18 +490,18 @@ const Register = (props) => {
         setuserNameError("Username invalid");
       }
     }
-    if (event.target.name == "referredBy") {
+    if (event.target.name == "whitelistCode") {
       if (/^[A-Z0-9]+$/i.test(value)) {
         setuserNameError(false);
         UserInterface.getUserInfo({ myReferralCode: value })
           .then((userDetails) => {
-            setReferralError(false);
+            setWhiteListError(false);
           })
           .catch((error) => {
-            setReferralError(false);
+            setWhiteListError(false);
           });
       } else {
-        setReferralError(false);
+        setWhiteListError(false);
       }
     }
   }
@@ -562,9 +583,7 @@ const Register = (props) => {
             disabled={
               ((userNameError || userEmailError ||
                 !userDetails.userName ||
-                userDetails.userName.length == 0 ||
-                referralError) &&
-                //  || !userDetails.referredBy || userDetails.referredBy.length == 0
+                userDetails.userName.length == 0) &&
                 activeStep.index == 2) ||
               registration == PENDING ||
               (_.isEmpty(userDetails.metamaskId) && activeStep.index == 1) ||

@@ -6,6 +6,8 @@ const tokenAPI = require("./routes/TokenAPIs");
 const userAPI = require("./routes/UserAPI");
 const AggregatesAPI = require("./routes/AggregatesAPI");
 const HashAPI = require("./routes/hashAPI");
+const WhitelistAPI = require("./routes/WhitelistAPI");
+
 const cookieParser = require("cookie-parser");
 
 const notificationAPI = require("./routes/NotificationAPIs");
@@ -60,6 +62,8 @@ app.use("/api", ClanAPI);
 app.use("/api", TransactionAPI);
 app.use("/api", AggregatesAPI);
 app.use("/api", HashAPI);
+app.use("/api", WhitelistAPI);
+
 console.log("Deploying full application")
 console.log("Checking node environment ::" + process.env.NODE_ENV);
 if (process.env.NODE_ENV == "production") {
