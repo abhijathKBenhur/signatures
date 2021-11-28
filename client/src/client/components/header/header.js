@@ -55,7 +55,17 @@ const Header = (props) => {
 
   useEffect(() => {
     if (_.isEmpty(currentMetamaskAccount)) {
-      connectWallet();
+      if(navigator.userAgentData.mobile){
+        const alertProperty = {
+          isDismissible: false,
+          variant: "danger",
+          content: "Smart contract not deployed to detected network. Please change the network in metamask.",
+          // actionText: "Switch Network",
+        }
+        ReactDOM.render(<AlertBanner {...alertProperty}></AlertBanner>, document.querySelector('.aleartHeader'))
+      }else{
+        connectWallet();
+      }
     }
     updatePendingTransactions()
     setPathName(window.location.pathname)
