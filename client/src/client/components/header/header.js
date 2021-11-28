@@ -55,7 +55,7 @@ const Header = (props) => {
 
   useEffect(() => {
     if (_.isEmpty(currentMetamaskAccount)) {
-      if(navigator.userAgentData.mobile){
+      if(/Androixd|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)){
         const alertProperty = {
           isDismissible: false,
           variant: "danger",
