@@ -612,7 +612,7 @@ const CreateNew = () => {
     setPublishError(
       "The idea couldnt be published to blockchain. " + errorMessage
     );
-    console.log("transactionID", failedTransactionId)
+    console.log("FAILED transactionID ", failedTransactionId)
     SignatureInterface.removeIdeaEntry({transactionID: failedTransactionId, ownerId: form.owner})
     TransactionsInterface.setTransactionState({
       transactionID:failedTransactionId,

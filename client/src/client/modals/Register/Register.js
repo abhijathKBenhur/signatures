@@ -105,6 +105,7 @@ const Register = (props) => {
     try {
       BlockchainInterface.register_user({ ...userDetails, secret, nonce })
         .then((success) => {
+          console.log("POSTING SIGN UP NOTIFICATION")
           NotificationInterface.postNotification(
             CONSTANTS.ENTITIES.PUBLIC,
             _.get(loggedInUserDetails, "_id"),
@@ -116,6 +117,7 @@ const Register = (props) => {
           let response = success.data;
           UserInterface.registerUser({ ...userDetails, secret, nonce })
             .then((mongoSuccess) => {
+              console.log("REGISTER USER SUCCESS")
               setTokenInSession(mongoSuccess.token);
               publishUserToApp();
               setRegistration(PASSED);
@@ -127,10 +129,12 @@ const Register = (props) => {
               BlockchainInterface.addToken("ERC20", "TRBG", 18);
             })
             .catch((err) => {
+              console.log("REGISTER USER FAILURE",err)
               registrationFailure(err.data, userDetails);
             });
         })
         .catch((error) => {
+          console.log("REGISTER USER FAILURE IN CATCH", error)
           registrationFailure(error.data, userDetails);
         });
     } catch (e) {
