@@ -58,7 +58,7 @@ checkWhiteList = async (req, res) => {
 getWhitelists = async (req, res) => {
   let findCriteria = {};
 
-  await HashtagSchema.find(findCriteria)
+  await WhitelistSchema.find(findCriteria)
     .exec((err, tags) => {
       if (err) {
         return res.status(400).json({ success: false, error: err });

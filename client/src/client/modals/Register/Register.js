@@ -82,7 +82,7 @@ const Register = (props) => {
     referredBy: sessionStorage.getItem("inviteCode"),
     myReferralCode: (Math.random() + 1).toString(36).substring(7),
     googleJWTToken: "",
-    isWhitelisted = false
+    // isWhitelisted = false
   });
 
   function getNonceAndRegister() {
