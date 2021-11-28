@@ -62,10 +62,10 @@ const Header = (props) => {
     }
     if (_.isEmpty(currentMetamaskAccount)) {
       if(/Androixd|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)){
-        ReactDOM.render(<AlertBanner {...alertProperty}></AlertBanner>, document.querySelector('.aleartHeader'))        
-      }else if(/Chrome/i.test(navigator.userAgent)){
+        console.log("Mobile application")
         ReactDOM.render(<AlertBanner {...alertProperty}></AlertBanner>, document.querySelector('.aleartHeader'))        
       }else {
+        console.log("Desktop application")
         connectWallet();
       }
     }
