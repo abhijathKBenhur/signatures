@@ -57,7 +57,7 @@ const Header = (props) => {
     const alertProperty = {
       isDismissible: false,
       variant: "danger",
-      content: "Smart contract not deployed to detected network. Please change the network in metamask.",
+      content: "Sorry, the application is supported only on a desktop website!",
       // actionText: "Switch Network",
     }
     if (_.isEmpty(currentMetamaskAccount)) {
