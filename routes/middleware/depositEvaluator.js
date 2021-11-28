@@ -61,7 +61,7 @@ const depostToNewUser = (receiverUserObject) => {
  
   
   TribeGoldAPIs.depositGold(receiverUserObject, 
-    getGoldToDeposit(receiverUserObject),
+    GOLD_DEPOSIT_VALUES.REGISTER,
     "GOLD_INCENTIVICED_REGISTER")
   MaticAPIs.depositMatic(receiverUserObject, MATIC_DEPOSIT_VALUES.REGISTER,"REGISTER")
 };

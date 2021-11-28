@@ -418,7 +418,7 @@ const Register = (props) => {
                       />
                     </div>
 
-                    <div>
+                    {/* <div>
                       <span className="second-grey">Whitelist Code</span>
                       {whiteListError && (
                         <span className="error-message ml-2">
@@ -440,7 +440,7 @@ const Register = (props) => {
                         className={"userName referral"}
                         onChange={changeWhitelistCode}
                       />
-                    </div>
+                    </div> */}
                   </div>
                 </Form.Group>
               </>
