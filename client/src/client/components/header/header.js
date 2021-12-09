@@ -61,15 +61,20 @@ const Header = (props) => {
       content: "Sorry, the application is supported only on a desktop website!",
       // actionText: "Switch Network",
     }
-    if(Number(window.screen.width) < 760 ){
-      console.log("Mobile application")
-      ReactDOM.render(<AlertBanner {...alertProperty}></AlertBanner>, document.querySelector('.aleartHeader'))        
-    }else {
-      console.log("Desktop application")
+    // if(Number(window.screen.width) < 760 ){
+    //   console.log("Mobile application")
+    //   ReactDOM.render(<AlertBanner {...alertProperty}></AlertBanner>, document.querySelector('.aleartHeader'))        
+    // }else {
+    //   console.log("Desktop application")
+    //   if (_.isEmpty(currentMetamaskAccount)) {
+    //     connectWallet();
+    //   }
+    // }
+
+    console.log("Desktop application")
       if (_.isEmpty(currentMetamaskAccount)) {
         connectWallet();
       }
-    }
     
     updatePendingTransactions()
     setPathName(window.location.pathname)
