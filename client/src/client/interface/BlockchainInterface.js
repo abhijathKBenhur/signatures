@@ -13,6 +13,7 @@ import ReactDOM from 'react-dom';
 import AlertBanner from "../components/alert/alert"
 import AxiosInstance from "../wrapper/apiWrapper"
 import { Subject } from 'rxjs';
+import WalletConnectProvider from "@walletconnect/web3-provider";
 
 import axios from "axios";
 import CONSTANTS from "../commons/Constants";
@@ -23,6 +24,23 @@ const api = axios.create({
     process.env.NODE_ENV == "production"
       ? ENDPOINTS.REMOTE_ENDPOINTS
       : ENDPOINTS.LOCAL_ENDPOINTS,
+});
+
+const provider = new WalletConnectProvider({
+  infuraId: "27e484dcd9e3efcfd25a83a78777cdf1", // Required
+  qrcodeModalOptions: {
+    mobileLinks: [
+      "rainbow",
+      "metamask",
+      "argent",
+      "trust",
+      "imtoken",
+      "pillar",
+    ],
+    desktopLinks: [
+      "encrypted ink",
+    ]
+  }
 });
 
 let isConfirmed = false;
@@ -262,97 +280,101 @@ class BlockchainInterface {
     let parentThis = window;
     let transactionConfirmationBlocks = 8
     const promise = new Promise((resolve, reject) => {
-      if (window.ethereum) {
-        this.web3 = new Web3(window.ethereum);
-        this.web3.eth.handleRevert = true
-        this.web3.eth.transactionConfirmationBlocks = transactionConfirmationBlocks
-        window.web3 = this.web3;
-        window.ethereum
-          .enable()
-          .then((accountId) => {
-            window.web3.eth.net.getId().then((networkId) => {
-              resolve({
-                accountId,
-                networkId,
-              });
-            });
-          })
-          .catch((err) => {
-            reject(err);
-          });
-      } else if (window.web3) {
-        this.web3 = new Web3(this.web3.currentProvider);
-        this.web3.eth.handleRevert = true
-        this.web3.eth.transactionConfirmationBlocks = transactionConfirmationBlocks
+      provider.enable().then(success =>{
+          console.log("provider enabled")
+          this.web3 = new Web3(provider);
+      })
+      // if (window.ethereum) {
+      //   this.web3 = new Web3(window.ethereum);
+      //   this.web3.eth.handleRevert = true
+      //   this.web3.eth.transactionConfirmationBlocks = transactionConfirmationBlocks
+      //   window.web3 = this.web3;
+      //   window.ethereum
+      //     .enable()
+      //     .then((accountId) => {
+      //       window.web3.eth.net.getId().then((networkId) => {
+      //         resolve({
+      //           accountId,
+      //           networkId,
+      //         });
+      //       });
+      //     })
+      //     .catch((err) => {
+      //       reject(err);
+      //     });
+      // } else if (window.web3) {
+      //   this.web3 = new Web3(this.web3.currentProvider);
+      //   this.web3.eth.handleRevert = true
+      //   this.web3.eth.transactionConfirmationBlocks = transactionConfirmationBlocks
 
 
 
-        window.web3 = this.web3;
-        resolve(this.web3);
-      } else {
-        store.dispatch(setReduxMetaMaskID());
-        let errorMessage = (
-          <div>
-            <br />
-            <a
-              style={{ textDecoration: "underline", color: "white" }}
-              target="blank"
-              href="https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn?hl=en"
-            >
-              Add Metamask from here
-            </a>
-          </div>
-        );
-        const redirectToMetaMask = () => {
-          var nAgt = navigator.userAgent;
-          var browserName;
-          var verOffset;
-          var nameOffset;
-          if ((verOffset=nAgt.indexOf("Opera"))!=-1) {
-            browserName = "Opera";
-           }
-           else if ((verOffset=nAgt.indexOf("MSIE"))!=-1) {
-            browserName = "Microsoft Internet Explorer";
-           }
-           else if ((verOffset=nAgt.indexOf("Chrome"))!=-1) {
-            browserName = "Chrome";
-           }
-           else if ((verOffset=nAgt.indexOf("Safari"))!=-1) {
-            browserName = "Safari";
-           }
-           else if ((verOffset=nAgt.indexOf("Firefox"))!=-1) {
-            browserName = "Firefox";
-           }
-           else if ( (nameOffset=nAgt.lastIndexOf(' ')+1) < 
-                     (verOffset=nAgt.lastIndexOf('/')) ) 
-           {
-            browserName = nAgt.substring(nameOffset,verOffset);
-            if (browserName.toLowerCase()==browserName.toUpperCase()) {
-             browserName = navigator.appName;
-            }
-           }
-          switch(browserName) {
-            // case "Opera": window.open("https://addons.mozilla.org/en-US/firefox/addon/ether-metamask/", "_blank"); break;
-            case "Microsoft Internet Explorer": window.open("https://microsoftedge.microsoft.com/addons/detail/metamask/ejbalbakoplchlghecdalmeeeajnimhm?hl=en-US", "_blank"); break;
-            case "Chrome": window.open("https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn?hl=en", "_blank"); break;
-            case "Safari": window.open("https://addons.mozilla.org/en-US/firefox/addon/ether-metamask/", "_blank"); break;
-            case "Firefox": window.open("https://addons.mozilla.org/en-US/firefox/addon/ether-metamask/", "_blank"); break;
-            default: window.open("https://metamask.io/download.html", "_blank"); break;
-          }
+      //   window.web3 = this.web3;
+      //   resolve(this.web3);
+      // } else {
+      //   store.dispatch(setReduxMetaMaskID());
+      //   let errorMessage = (
+      //     <div>
+      //       <br />
+      //       <a
+      //         style={{ textDecoration: "underline", color: "white" }}
+      //         target="blank"
+      //         href="https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn?hl=en"
+      //       >
+      //         Add Metamask from here
+      //       </a>
+      //     </div>
+      //   );
+      //   const redirectToMetaMask = () => {
+      //     var nAgt = navigator.userAgent;
+      //     var browserName;
+      //     var verOffset;
+      //     var nameOffset;
+      //     if ((verOffset=nAgt.indexOf("Opera"))!=-1) {
+      //       browserName = "Opera";
+      //      }
+      //      else if ((verOffset=nAgt.indexOf("MSIE"))!=-1) {
+      //       browserName = "Microsoft Internet Explorer";
+      //      }
+      //      else if ((verOffset=nAgt.indexOf("Chrome"))!=-1) {
+      //       browserName = "Chrome";
+      //      }
+      //      else if ((verOffset=nAgt.indexOf("Safari"))!=-1) {
+      //       browserName = "Safari";
+      //      }
+      //      else if ((verOffset=nAgt.indexOf("Firefox"))!=-1) {
+      //       browserName = "Firefox";
+      //      }
+      //      else if ( (nameOffset=nAgt.lastIndexOf(' ')+1) < 
+      //                (verOffset=nAgt.lastIndexOf('/')) ) 
+      //      {
+      //       browserName = nAgt.substring(nameOffset,verOffset);
+      //       if (browserName.toLowerCase()==browserName.toUpperCase()) {
+      //        browserName = navigator.appName;
+      //       }
+      //      }
+      //     switch(browserName) {
+      //       // case "Opera": window.open("https://addons.mozilla.org/en-US/firefox/addon/ether-metamask/", "_blank"); break;
+      //       case "Microsoft Internet Explorer": window.open("https://microsoftedge.microsoft.com/addons/detail/metamask/ejbalbakoplchlghecdalmeeeajnimhm?hl=en-US", "_blank"); break;
+      //       case "Chrome": window.open("https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn?hl=en", "_blank"); break;
+      //       case "Safari": window.open("https://addons.mozilla.org/en-US/firefox/addon/ether-metamask/", "_blank"); break;
+      //       case "Firefox": window.open("https://addons.mozilla.org/en-US/firefox/addon/ether-metamask/", "_blank"); break;
+      //       default: window.open("https://metamask.io/download.html", "_blank"); break;
+      //     }
           
-        }
-        const alertProperty = {
-            isDismissible: false,
-            variant: "danger",
-            content: "Non-Ethereum browser detected. Please install ",
-            actionFunction: redirectToMetaMask,
-            actionText: 'MetaMask!'
-          }
-          ReactDOM.render(<AlertBanner {...alertProperty}></AlertBanner>, document.querySelector('.aleartHeader'))
-        reject(
-          "Non-Ethereum browser detected. Please install MetaMask and reload the page!"
-        );
-      }
+      //   }
+      //   const alertProperty = {
+      //       isDismissible: false,
+      //       variant: "danger",
+      //       content: "Non-Ethereum browser detected. Please install ",
+      //       actionFunction: redirectToMetaMask,
+      //       actionText: 'MetaMask!'
+      //     }
+      //     ReactDOM.render(<AlertBanner {...alertProperty}></AlertBanner>, document.querySelector('.aleartHeader'))
+      //   reject(
+      //     "Non-Ethereum browser detected. Please install MetaMask and reload the page!"
+      //   );
+      // }
     });
     return promise;
   }
