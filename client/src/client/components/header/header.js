@@ -55,12 +55,31 @@ const Header = (props) => {
   }, [reduxState]);
 
   useEffect(() => {
+    const alertProperty = {
+      isDismissible: false,
+      variant: "danger",
+      content: "Sorry, the application is supported only on a desktop website!",
+      // actionText: "Switch Network",
+    }
+    // if(Number(window.screen.width) < 760 ){
+    //   console.log("Mobile application")
+    //   ReactDOM.render(<AlertBanner {...alertProperty}></AlertBanner>, document.querySelector('.aleartHeader'))        
+    // }else {
+    //   console.log("Desktop application")
+    //   if (_.isEmpty(currentMetamaskAccount)) {
+    //     connectWallet();
+    //   }
+    // }
+
+    console.log("Desktop application")
+      if (_.isEmpty(currentMetamaskAccount)) {
+        connectWallet();
+      }
+    
     updatePendingTransactions()
     setPathName(window.location.pathname)
     addDefaultHashtags();
-    BlockchainInterface.getAccountDetails()
-      .then((succ) => {})
-      .catch((err) => {});
+
     reactGA.initialize("UA-207963115-1");
     reactGA.pageview("Subscribe Page");
   }, []);
@@ -213,6 +232,12 @@ const Header = (props) => {
       : setShowRegisterPopup(true);
   }
 
+  function connectWallet() {
+    BlockchainInterface.getAccountDetails()
+      .then((succ) => {})
+      .catch((err) => {});
+  }
+
   function openOption(e) {
     setMenu({ ...menu, showMenu: !menu.showMenu});
   }
@@ -336,7 +361,7 @@ const Header = (props) => {
             {/* <Form.Control size="sm" type="text" placeholder="Normal text" /> */}
           </div>
 
-          {(
+          {!_.isEmpty(currentMetamaskAccount) && (
             <div className="right-section">
               <span
                 className="loggedinaccount secondary-grey color-white"
@@ -347,9 +372,36 @@ const Header = (props) => {
               >
                 {getShortAddress(currentMetamaskAccount, 4)}
               </span>
-            
-              {isUserAuthForPublish()}
-              {(
+              {/* <Button
+              variant="secondary"
+              className="button"
+              bsstyle="primary"
+              onClick={() => {
+                connectWallet();
+              }}
+            >
+              Connect
+            </Button> */}
+              {_.isEmpty(loggedInUserDetails) ? (
+                <Button
+                  variant="ternary"
+                  className="button"
+                  bsstyle="primary"
+                  onClick={() => {
+                    reactGA.event({
+                      category: "Button",
+                      action: "REGISTER_BUTTON",
+                      label: "Clicked register button",
+                    });
+                    gotoPortfolio();
+                  }}
+                >
+                  Sign Up
+                </Button>
+              ) : (
+                isUserAuthForPublish()
+              )}
+              {!_.isEmpty(loggedInUserDetails.imageUrl) && (
                 <Image
                   className="cursor-pointer header-icons desktop-view"
                   src={loggedInUserDetails.imageUrl}
@@ -362,6 +414,41 @@ const Header = (props) => {
               )
             }
             <i className="fa fa-bars responsive-icons mobile-view" onClick={(e) => openOption()}></i>
+
+              {/* <Dropdown>
+              <Dropdown.Toggle
+                as={ProfileDropDown}
+                id="dropdown-custom-components"
+              />
+
+              <Dropdown.Menu>
+                <Dropdown.Item
+                  eventKey="1"
+                  onClick={() => {
+                    createnew();
+                  }}
+                >
+                  Publish
+                </Dropdown.Item>
+                <Dropdown.Item
+                  eventKey="2"
+                  onClick={() => {
+                    gotoPortfolio();
+                  }}
+                >
+                  Profile
+                </Dropdown.Item>
+
+                <Dropdown.Item
+                  eventKey="2"
+                  onClick={() => {
+                    gotoPortfolio();
+                  }}
+                >
+                  Settings
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown> */}
             </div>
           )}
         </Container>
