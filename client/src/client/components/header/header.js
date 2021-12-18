@@ -72,9 +72,9 @@ const Header = (props) => {
     // }
 
     console.log("Desktop application")
-      if (_.isEmpty(currentMetamaskAccount)) {
-        connectWallet();
-      }
+    if (_.isEmpty(currentMetamaskAccount)) {
+      connectWallet();
+    }
     
     updatePendingTransactions()
     setPathName(window.location.pathname)
