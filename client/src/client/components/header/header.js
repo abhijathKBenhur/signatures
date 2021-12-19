@@ -55,20 +55,8 @@ const Header = (props) => {
   }, [reduxState]);
 
   useEffect(() => {
-    const alertProperty = {
-      isDismissible: false,
-      variant: "danger",
-      content: "Sorry, the application is supported only on a desktop website!",
-      // actionText: "Switch Network",
-    }
-    if(Number(window.screen.width) < 760 ){
-      console.log("Mobile application")
-      ReactDOM.render(<AlertBanner {...alertProperty}></AlertBanner>, document.querySelector('.aleartHeader'))        
-    }else {
-      console.log("Desktop application")
-      if (_.isEmpty(currentMetamaskAccount)) {
-        connectWallet();
-      }
+    if (_.isEmpty(currentMetamaskAccount)) {
+      connectWallet();
     }
     
     updatePendingTransactions()
