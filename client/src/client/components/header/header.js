@@ -55,9 +55,13 @@ const Header = (props) => {
   }, [reduxState]);
 
   useEffect(() => {
-    if (_.isEmpty(currentMetamaskAccount)) {
-      connectWallet();
+    if(Number(window.screen.width) < 760  ){
+    }else{
+      if (_.isEmpty(currentMetamaskAccount)) {
+        connectWallet();
+      }
     }
+    
     
     updatePendingTransactions()
     setPathName(window.location.pathname)

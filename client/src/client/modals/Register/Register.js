@@ -27,6 +27,8 @@ import ProgressBar from "../../components/progressbar/progress";
 import NotificationInterface from "../../interface/NotificationInterface";
 import reactGA from "react-ga";
 import WhitelistInterface from "../../interface/WhitelistInterface";
+import AlertBanner from "../../components/alert/alert";
+import ReactDOM from 'react-dom';
 // MetamaskID and userDetails are stored in separate redux stores
 // userDetails are stored as state
 
@@ -69,6 +71,15 @@ const Register = (props) => {
   useEffect(() => {
     const { userDetails = {} } = reduxState;
     setLoggedInUserDetails(userDetails);
+    const alertProperty = {
+      isDismissible: false,
+      variant: "danger",
+      content: "Sorry, the application is supported only on a desktop website!",
+      // actionText: "Switch Network",
+    }
+    if(Number(window.screen.width) < 760 && props.show ){
+      ReactDOM.render(<AlertBanner {...alertProperty}></AlertBanner>, document.querySelector('.appHeader'))  
+    }
   }, [reduxState.userDetails]);
 
   const [userDetails, setUserDetails] = useState({
@@ -522,7 +533,7 @@ const Register = (props) => {
       backdrop={registration == PASSED ? "static" : true}
     >
       {registration == PENDING && <ProgressBar></ProgressBar>}
-      <Modal.Header className="d-flex flex-column">
+      <Modal.Header className="d-flex flex-column signupHeader" id="signupHeader">
         <Modal.Title>
           <span className="master-grey color-primary">
             Sign up
