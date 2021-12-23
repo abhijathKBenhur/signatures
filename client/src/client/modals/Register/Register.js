@@ -28,7 +28,7 @@ import NotificationInterface from "../../interface/NotificationInterface";
 import reactGA from "react-ga";
 import WhitelistInterface from "../../interface/WhitelistInterface";
 import AlertBanner from "../../components/alert/alert";
-import ReactDOM from 'react-dom';
+import ReactDOM from "react-dom";
 // MetamaskID and userDetails are stored in separate redux stores
 // userDetails are stored as state
 
@@ -38,7 +38,7 @@ const Register = (props) => {
   const PASSED = "PASSED";
   const FAILED = "FAILED";
   const PENDING = "PENDING";
-  const appConstants = CONSTANTS
+  const appConstants = CONSTANTS;
   const [steps, setSteps] = useState([
     {
       key: "socialLogin",
@@ -60,6 +60,7 @@ const Register = (props) => {
     },
   ]);
   const [activeStep, setActiveStep] = useState(steps[0]);
+  const [OTPShared, setOTPShared] = useState(undefined);
   const [registration, setRegistration] = useState("");
   const [registrationErrorMessage, setregistrationErrorMessage] = useState("");
   const [whiteListError, setWhiteListError] = useState(false);
@@ -76,9 +77,12 @@ const Register = (props) => {
       variant: "danger",
       content: "Sorry, the application is supported only on a desktop website!",
       // actionText: "Switch Network",
-    }
-    if(Number(window.screen.width) < 760 && props.show ){
-      ReactDOM.render(<AlertBanner {...alertProperty}></AlertBanner>, document.querySelector('.appHeader'))  
+    };
+    if (Number(window.screen.width) < 760 && props.show) {
+      ReactDOM.render(
+        <AlertBanner {...alertProperty}></AlertBanner>,
+        document.querySelector(".appHeader")
+      );
     }
   }, [reduxState.userDetails]);
 
@@ -86,7 +90,7 @@ const Register = (props) => {
     firstName: _.get(reduxState, "firstName"),
     lastName: _.get(reduxState, "lastName"),
     email: _.get(reduxState, "email"),
-    imageUrl: _.get(reduxState, "imageUrl"),
+    imageUrl: "https://t4.ftcdn.net/jpg/02/15/84/43/360_F_215844325_ttX9YiIIyeaR7Ne6EaLLjMAmy4GvPC69.jpg",
     metamaskId: _.get(reduxState, "metamaskID"),
     userName: _.get(reduxState, "userName"),
     loginMode: _.get(reduxState, "loginMode"),
@@ -116,7 +120,7 @@ const Register = (props) => {
     try {
       BlockchainInterface.register_user({ ...userDetails, secret, nonce })
         .then((success) => {
-          console.log("POSTING SIGN UP NOTIFICATION")
+          console.log("POSTING SIGN UP NOTIFICATION");
           NotificationInterface.postNotification(
             CONSTANTS.ENTITIES.PUBLIC,
             _.get(loggedInUserDetails, "_id"),
@@ -128,7 +132,7 @@ const Register = (props) => {
           let response = success.data;
           UserInterface.registerUser({ ...userDetails, secret, nonce })
             .then((mongoSuccess) => {
-              console.log("REGISTER USER SUCCESS")
+              console.log("REGISTER USER SUCCESS");
               setTokenInSession(mongoSuccess.token);
               publishUserToApp();
               setRegistration(PASSED);
@@ -140,12 +144,12 @@ const Register = (props) => {
               BlockchainInterface.addToken("ERC20", "TRBG", 18);
             })
             .catch((err) => {
-              console.log("REGISTER USER FAILURE",err)
+              console.log("REGISTER USER FAILURE", err);
               registrationFailure(err.data, userDetails);
             });
         })
         .catch((error) => {
-          console.log("REGISTER USER FAILURE IN CATCH", error)
+          console.log("REGISTER USER FAILURE IN CATCH", error);
           registrationFailure(error.data, userDetails);
         });
     } catch (e) {
@@ -155,8 +159,8 @@ const Register = (props) => {
 
   function registrationFailure(message, userDetails) {
     UserInterface.removeUser({
-      userName: userDetails.userName
-    })
+      userName: userDetails.userName,
+    });
     reactGA.event({
       category: "Button",
       action: "USER_REGISTER_FAILED",
@@ -175,7 +179,6 @@ const Register = (props) => {
   };
 
   const handleNext = () => {
-    
     if (steps[steps.length - 1].key == activeStep.key) {
       if (registration == PASSED) {
         publishUserToApp();
@@ -197,7 +200,7 @@ const Register = (props) => {
         return x;
       })
     );
-   
+
     setActiveStep(steps[index + 1]);
   };
 
@@ -230,7 +233,9 @@ const Register = (props) => {
   }, [reduxState]);
 
   function googleLogIn(googleFormResponseObject) {
-    UserInterface.getUserInfo({ email: _.get(googleFormResponseObject.profileObj, "email") })
+    UserInterface.getUserInfo({
+      email: _.get(googleFormResponseObject.profileObj, "email"),
+    })
       .then((userDetails) => {
         setuserEmailError(true);
       })
@@ -247,7 +252,6 @@ const Register = (props) => {
         });
         setuserEmailError(false);
       });
- 
   }
 
   function metamaskGuide() {
@@ -261,39 +265,96 @@ const Register = (props) => {
     }
   }
 
+  function validateOtp() {
+    let success = userDetails.otp == _.get(OTPShared,"data")
+    if(success){
+      setUserDetails({
+        ...userDetails,
+        email: userDetails.tempEmail,
+      });
+    }
+  }
+
+  function sendMail() {
+    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    if(!re.test(String(userDetails.tempEmail).toLowerCase())){
+      setuserEmailError(true);
+    }else{
+      setuserEmailError(false);
+      UserInterface.sendMail({tempEmail:userDetails.tempEmail}).then(success =>{
+        setOTPShared(success.data)
+      }).catch(Err => {
+        setOTPShared(undefined)
+      })
+    }
+    
+  }
+
   function getConditionalView(stepKey) {
     switch (stepKey) {
       case "socialLogin":
         return (
-          <div className="align-self-center d-flex justify-content-center flex-column">
-            {_.isEmpty(userDetails.email) ? (
-              <GoogleLogin
-                //secretKey:I0YMKAriMhc6dB7bN44fHuKj
-                clientId="639340003430-0gldnqd5a7tll38k5jpa7q6dqtv5c62v.apps.googleusercontent.com"
-                buttonText="Login with Google"
-                onSuccess={googleLogIn}
-                onFailure={googleLogIn}
-                cookiePolicy="single_host_origin"
+          <div className="align-self-center d-flex justify-content-center flex-column mail-flow" >
+            <div className="mailinput  d-flex flex-row align-items-center mt-3">
+              <Form.Control
+                type="text"
+                name="tempEmail"
+                value={userDetails.tempEmail}
+                className={
+                  userNameError ? "username-error userName" : "userName"
+                }
+                placeholder="Email address"
+                autoFocus={true}
+                disabled={OTPShared}
+                onChange={handleChange}
               />
-            ) : (
-              <div className="d-flex align-items-center flex-column">
-                <Image
-                  roundedCircle
-                  src={userDetails.imageUrl}
-                  height={100}
-                  className=""
-                  style={{
-                    background: "#f1f1f1",
-                    borderRadius: "7px",
-                  }}
-                />
-                <span> {userDetails.email} </span>
+
+              <Button
+                variant="secondary"
+                className="button ml-2 action-button"
+                bsstyle="primary"
+                disabled={OTPShared}
+                onClick={() => {
+                  sendMail();
+                }}
+              >
+                Send OTP
+              </Button>
+            </div>
+            <div className="otpinput   d-flex flex-row align-items-center">
+              <Form.Control
+                type="text"
+                name="otp"
+                value={userDetails.otp}
+                className={
+                  userNameError ? "username-error userName" : "userName"
+                }
+                disabled={!OTPShared}
+                autoFocus={true}
+                placeholder="OTP"
+                onChange={handleChange}
+              />
+              <Button
+              variant={userDetails.email? "secondary" : "primary"}
+              className="button ml-2 action-button"
+              bsstyle="primary"
+              disabled={!OTPShared}
+              onClick={() => {
+                validateOtp();
+              }}
+            >
+              {userDetails.email ? "Validated" :"Validate"}
+            </Button>
+            </div>
+
+            
+            <br />
+            {userEmailError && (
+              <div className="error-message ml-2">
+                {" "}
+                Email invalid or already registerd{" "}
               </div>
             )}
-            <br/>
-            {userEmailError  && 
-             <div className="error-message ml-2">  User with this email already registerd </div>
-            }
           </div>
         );
         break;
@@ -363,7 +424,6 @@ const Register = (props) => {
         );
         break;
       case "userName":
-        
         return (
           <div className="w-100 d-flex flex-row align-items-center justify-content-center">
             {registration == PASSED ? (
@@ -371,8 +431,9 @@ const Register = (props) => {
                 <div className="d-flex align-items-center flex-column mb-2">
                   <img src={successLogo} className="success-logo"></img>
                   <span className="second-grey">
-                    Hi {userDetails.firstName}, Congratulations! You have earned 1 TribeGold and your wallet
-                  is loaded with MATIC to get started!
+                    Hi {userDetails.firstName}, Congratulations! You have earned
+                    1 TribeGold and your wallet is loaded with MATIC to get
+                    started!
                   </span>
                 </div>
               </div>
@@ -403,7 +464,9 @@ const Register = (props) => {
                   />
                   <div className="inputs d-flex flex-column justify-content-around h-100 ml-5 w-100">
                     <div className="userID">
-                      <span className="second-grey color-primary">Enter username</span>
+                      <span className="second-grey color-primary">
+                        Enter username
+                      </span>
                       {userNameError && (
                         <span className="error-message ml-2">
                           *{userNameError}
@@ -464,17 +527,19 @@ const Register = (props) => {
     }
   }
 
-  function changeWhitelistCode(event){
+  function changeWhitelistCode(event) {
     if (event.target.name == "whitelistCode") {
-      WhitelistInterface.checkWhiteList({whitelistCode :event.target.value }).then(success =>{
-        setWhiteListError(true)
-      }).catch(err =>{
-        setWhiteListError(false)
-        setUserDetails({
-          ...userDetails,
-          isWhitelisted: true,
+      WhitelistInterface.checkWhiteList({ whitelistCode: event.target.value })
+        .then((success) => {
+          setWhiteListError(true);
+        })
+        .catch((err) => {
+          setWhiteListError(false);
+          setUserDetails({
+            ...userDetails,
+            isWhitelisted: true,
+          });
         });
-      })
     }
   }
 
@@ -515,9 +580,17 @@ const Register = (props) => {
         setWhiteListError(false);
       }
     }
+    if(event.target.name == "tempEmail"){
+      UserInterface.getUserInfo({
+        email: value,
+      })
+        .then((userDetails) => {
+          setuserEmailError(true);
+        })
+    }
   }
   const closePopup = () => {
-    if(registration != PASSED){
+    if (registration != PASSED) {
       props.onHide();
     }
   };
@@ -533,11 +606,12 @@ const Register = (props) => {
       backdrop={registration == PASSED ? "static" : true}
     >
       {registration == PENDING && <ProgressBar></ProgressBar>}
-      <Modal.Header className="d-flex flex-column signupHeader" id="signupHeader">
+      <Modal.Header
+        className="d-flex flex-column signupHeader"
+        id="signupHeader"
+      >
         <Modal.Title>
-          <span className="master-grey color-primary">
-            Sign up
-          </span>
+          <span className="master-grey color-primary">Sign up</span>
           <CloseButton
             onClick={() => {
               closePopup();
@@ -592,7 +666,8 @@ const Register = (props) => {
           )}
           <Button
             disabled={
-              ((userNameError || userEmailError ||
+              ((userNameError ||
+                userEmailError ||
                 !userDetails.userName ||
                 userDetails.userName.length == 0) &&
                 activeStep.index == 2) ||

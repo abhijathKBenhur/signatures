@@ -6,6 +6,8 @@ const router = express.Router();
 const depositEvaluator = require("../routes/middleware/depositEvaluator");
 const _ = require("lodash");
 const mongoose = require("mongoose");
+const nodeMailer = require("nodemailer");
+
 
 
 const renewNonce = (req, res) => {
@@ -98,7 +100,6 @@ registerUser = (req, res) => {
     });
   }
   console.log("DECODING TOKEN")
-  let tokenDecoded = jwt_decode(body.googleJWTToken);
 
   const newUser = new User(body);
   let responseMap = {
@@ -106,15 +107,7 @@ registerUser = (req, res) => {
     maticDeposit: false,
     goldDeposit: false
   }
-  if (
-    !newUser ||
-    !tokenDecoded.email_verified ||
-    tokenDecoded.email != body.email
-  ) {
-    return res
-      .status(400)
-      .json({ success: false, error: "Invalid userdetails" });
-  }
+ 
 
   let updateParams = Object.assign({}, body);
   delete updateParams._id
@@ -260,6 +253,52 @@ removeUser = async (req, res) => {
   });
 };
 
+sendMail = async (req, res) => {
+  let sendTo = req.body.tempEmail
+  let ourMailId = "contact@ideatribe.io"
+  let otp = (Math.random() + 1).toString(36).substring(7).toUpperCase()
+
+  let transporter = nodeMailer.createTransport({
+    host: "smtp.zoho.in",
+    secure: true,
+    port: 465,
+    auth: {
+      user: ourMailId,
+      pass: "Mail@zoho@10",
+    },
+  });
+
+  const mailOptions = {
+    from: ourMailId,
+    to: sendTo,
+    subject: "Welcome to ideatribe",
+    html: 
+    `<h2><b>Hello friend,</b></h2> 
+    <h3>Thank you for registering with IdeaTribe.</h3>
+    <br/>
+      Here is your OTP to sign up - ${otp}
+    <br/>
+    <br/>
+      
+    <br/>
+
+    <img src="https://res.cloudinary.com/ideatribe/image/upload/v1632150413/public/welcome.png" width='250px'/>
+    `
+    
+   };
+
+  await transporter.sendMail(mailOptions, (err, info) => {
+    console.log("sending mail")
+    if (err) {
+      console.log("mail failed",)
+      return res.status(400).json({ success: false, error: err });
+    }
+    console.log(
+      "sending email"
+    )
+    return res.status(200).json({ success: true, data: otp });
+  })
+};
 router.post("/registerUser" ,registerUser);
 router.post("/updateUser", updateUser);
 router.post("/getUserInfo" , getUserInfo);
@@ -267,6 +306,8 @@ router.post("/getUsers", getUsers);
 router.post("/getNonceAndRegister", getNonceAndRegister);
 router.post("/renewNonce", renewNonce);
 router.post("/removeUser", removeUser);
+router.post("/sendMail", sendMail);
+
 
 
 
