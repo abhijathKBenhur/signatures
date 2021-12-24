@@ -176,6 +176,11 @@ const CollectionCard = (props) => {
           <a href="#" className={`card ${(_.get(JSON.parse(signature.category), 'value'))}`}>
             <div className="card__head" >
               <div className="card__image" style={{ backgroundImage: `url(${signature.thumbnail}` }}></div>
+              <Button disabled variant="pill" className="cursor-normal">
+                {signature.category &&
+                  JSON.parse(signature.category) &&
+                  JSON.parse(signature.category).label}
+              </Button>
               <div className="author card__title">
                   <div className="author__content">
                     <p className="author__header">{signature.title}</p>

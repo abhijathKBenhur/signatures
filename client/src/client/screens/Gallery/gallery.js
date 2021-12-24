@@ -29,6 +29,7 @@ function gallery(props) {
     categories: "",
   });
 
+  const [mobileView, setMobileView] = useState(false);
   const [stats, setStats] = useState({
     totalIdeas: 0,
     totalusers: 0,
@@ -38,6 +39,9 @@ function gallery(props) {
 
   useEffect(() => {
     getStats();
+    if(Number(window.screen.width) < 760  ){
+      setMobileView(true);
+    }
   }, []);
 
   function refreshCollection(type, filter) {
@@ -168,7 +172,7 @@ function gallery(props) {
   return (
     <Container fluid className="p-0">
       <div className="gallery d-flex flex-row">
-        <Col md="9" className="galler-area">
+        <Col md="9" className={`galler-area ${showGuides ? 'active-guides': ''}`}>
           {/* <Row
             className="search-discover d-flex flex-column justify-content-center"
             style={{
@@ -222,7 +226,7 @@ function gallery(props) {
             </div>
           </Row> */}
           <Row
-            className="d-flex flex-column align-content-center position-relative justify-content-center search-container"
+            className={`search-container ${mobileView? '' : 'd-flex flex-column align-content-center position-relative justify-content-center'}`}
             style={{
               background: `url(${cover})`,
               height: "300px",
@@ -231,7 +235,7 @@ function gallery(props) {
             <div className="top-help" onClick={() => {toggleShowGuide()}}> 
               <span >{showGuides ?"Got it!" :"Need help?" } </span>
              </div>
-             {showGuides && <div >
+             {showGuides && <div className="d-flex flex-column">
               <div className="guide-bookmark guide-bookmark1" onClick={() => {openGuide(1)}}> How to sign up </div>
               <div className="guide-bookmark guide-bookmark2" onClick={() => {openGuide(2)}}> How to mint an Idea </div>
               {/* <div className="guide-bookmark guide-bookmark3" onClick={() => {openGuide(3)}}> How to think of an Idea</div> */}
