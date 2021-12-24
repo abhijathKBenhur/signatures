@@ -8,8 +8,6 @@ const _ = require("lodash");
 const mongoose = require("mongoose");
 const nodeMailer = require("nodemailer");
 
-
-
 const renewNonce = (req, res) => {
   const body = req.body;
   if (!body) {
@@ -20,13 +18,18 @@ const renewNonce = (req, res) => {
   }
 
   let targetMetamaskAddress = body.metamaskId;
-  let newNonce =  (Math.random() + 1).toString(36).substring(2);
-  console.log("Generating new nonce " + newNonce + " for " + targetMetamaskAddress)
+  let newNonce = (Math.random() + 1).toString(36).substring(2);
+  console.log(
+    "Generating new nonce " + newNonce + " for " + targetMetamaskAddress
+  );
 
-  User
-    .findOneAndUpdate({metamaskId:targetMetamaskAddress},{
-      nonce: newNonce
-    }, {new:true,upsert:true})
+  User.findOneAndUpdate(
+    { metamaskId: targetMetamaskAddress },
+    {
+      nonce: newNonce,
+    },
+    { new: true, upsert: true }
+  )
     .then((user, b) => {
       return res.status(201).json({
         success: true,
@@ -42,8 +45,6 @@ const renewNonce = (req, res) => {
     });
 };
 
-
-
 getNonceAndRegister = (req, res) => {
   const body = req.body;
   if (!body) {
@@ -55,7 +56,7 @@ getNonceAndRegister = (req, res) => {
 
   const newUser = new User({
     metamaskId: body.metamaskId,
-    nonce : (Math.random() + 1).toString(36).substring(7),
+    nonce: (Math.random() + 1).toString(36).substring(7),
   });
 
   User.findOne({ metamaskId: body.metamaskId }, (err, user) => {
@@ -63,11 +64,11 @@ getNonceAndRegister = (req, res) => {
       return res.status(400).json({ success: false, error: err });
     }
     if (!user) {
-      console.log("NEW USER CREATION")
+      console.log("NEW USER CREATION");
       newUser
         .save()
         .then((user, b) => {
-          console.log("NEW USER CREATED" , user)
+          console.log("NEW USER CREATED", user);
           return res.status(201).json({
             success: true,
             data: user.nonce,
@@ -75,14 +76,14 @@ getNonceAndRegister = (req, res) => {
           });
         })
         .catch((error) => {
-          console.log(error)
+          console.log(error);
           return res.status(400).json({
             error,
             message: "New nonce not created!",
           });
         });
     } else {
-      console.log("EXISTING USER RETURNED" , user)
+      console.log("EXISTING USER RETURNED", user);
       return res.status(200).json({ success: true, data: user.nonce });
     }
   }).catch((err) => {
@@ -99,38 +100,42 @@ registerUser = (req, res) => {
       error: "You must provide a user",
     });
   }
-  console.log("DECODING TOKEN")
+  console.log("DECODING TOKEN");
 
   const newUser = new User(body);
   let responseMap = {
-    created : false,
+    created: false,
     maticDeposit: false,
-    goldDeposit: false
-  }
- 
+    goldDeposit: false,
+  };
 
   let updateParams = Object.assign({}, body);
-  delete updateParams._id
-  var token = jwt.sign({ 
-    metamaskId: newUser.metamaskId ,
-    nonce: body.nonce
-  }, process.env.TOKEN_KEY);
-  console.log("ADDING COMPLETE USER DETAILS")
-  User
-    .findOneAndUpdate({metamaskId:newUser.metamaskId},updateParams, {new:true,upsert:true})
+  delete updateParams._id;
+  var token = jwt.sign(
+    {
+      metamaskId: newUser.metamaskId,
+      nonce: body.nonce,
+    },
+    process.env.TOKEN_KEY
+  );
+  console.log("ADDING COMPLETE USER DETAILS");
+  User.findOneAndUpdate({ metamaskId: newUser.metamaskId }, updateParams, {
+    new: true,
+    upsert: true,
+  })
     .then((user, b) => {
-      responseMap.created = true
-      console.log("ADDED COMPLETE USER DETAILS", user)
-      
+      responseMap.created = true;
+      console.log("ADDED COMPLETE USER DETAILS", user);
+
       depositEvaluator.depostToNewUser(newUser);
       return res.status(201).json({
         success: true,
-        data: {...user,token:token},
+        data: { ...user, token: token },
         message: "New user created!",
       });
     })
     .catch((error) => {
-      console.log("USER DETAILS UPLOAD FAILED", error)
+      console.log("USER DETAILS UPLOAD FAILED", error);
       return res.status(400).json({
         error,
         data: responseMap,
@@ -142,24 +147,24 @@ registerUser = (req, res) => {
 getUserInfo = async (req, res) => {
   let findCriteria = {};
   if (req.body.email) {
-    findCriteria.email =  req.body.email;
+    findCriteria.email = req.body.email;
   }
   if (req.body.userName) {
-    findCriteria.userName =  req.body.userName;
+    findCriteria.userName = req.body.userName;
   }
   // findCriteria.userName = "$regex: " + req.body.userName +" , $options: 'i'";
 
   if (req.body.metamaskId) {
     findCriteria.metamaskId = req.body.metamaskId;
   }
- 
+
   if (req.body.myReferralCode) {
     console.log("myReferralCode," + req.body.myReferralCode);
     findCriteria.myReferralCode = req.body.myReferralCode;
   }
   // await User.findOne(findCriteria,{email:0}, (err, user) => {
-    await User.findOne(findCriteria, (err, user) => {
-      console.log(user)
+  await User.findOne(findCriteria, (err, user) => {
+    console.log(user);
     if (err) {
       return res.status(400).json({ success: false, error: err });
     }
@@ -184,7 +189,7 @@ updateUser = async (req, res) => {
     instaUrl: newUser.instaUrl,
     bio: newUser.bio,
   };
-  console.log("testing")
+  console.log("testing");
   User.findByIdAndUpdate(req.body.id, updates, { upsert: true })
     .then((user, b) => {
       console.log("user updated", user, b);
@@ -233,10 +238,9 @@ getUsers = async (req, res) => {
   });
 };
 
-
 removeUser = async (req, res) => {
   let findCriteria = {
-    userName: req.body.userName
+    userName: req.body.userName,
   };
   await User.remove(findCriteria, (err, user) => {
     if (err) {
@@ -254,9 +258,9 @@ removeUser = async (req, res) => {
 };
 
 sendMail = async (req, res) => {
-  let sendTo = req.body.tempEmail
-  let ourMailId = "contact@ideatribe.io"
-  let otp = (Math.random() + 1).toString(36).substring(7).toUpperCase()
+  let sendTo = req.body.tempEmail;
+  let ourMailId = "contact@ideatribe.io";
+  let otp = (Math.random() + 1).toString(36).substring(7).toUpperCase();
 
   let transporter = nodeMailer.createTransport({
     host: "smtp.zoho.in",
@@ -271,44 +275,39 @@ sendMail = async (req, res) => {
   const mailOptions = {
     from: ourMailId,
     to: sendTo,
-    subject: "Welcome to ideatribe",
-    html: 
-    `<h2><b>Hello friend,</b></h2> 
+    subject: "Welcome to IdeaTribe",
+    html: `<h2><b>Hello friend,</b></h2> 
     <h3>Thank you for registering with IdeaTribe.</h3>
     <br/>
       Here is your OTP to sign up - ${otp}
     <br/>
     <br/>
       
+Welcome to the Tribe 
+<br/>
+- Founding Tribers
     <br/>
 
-    <img src="https://res.cloudinary.com/ideatribe/image/upload/v1632150413/public/welcome.png" width='250px'/>
-    `
-    
-   };
+    `,
+  };
 
   await transporter.sendMail(mailOptions, (err, info) => {
-    console.log("sending mail")
+    console.log("sending mail");
     if (err) {
-      console.log("mail failed",)
+      console.log("mail failed");
       return res.status(400).json({ success: false, error: err });
     }
-    console.log(
-      "sending email"
-    )
+    console.log("sending email");
     return res.status(200).json({ success: true, data: otp });
-  })
+  });
 };
-router.post("/registerUser" ,registerUser);
+router.post("/registerUser", registerUser);
 router.post("/updateUser", updateUser);
-router.post("/getUserInfo" , getUserInfo);
+router.post("/getUserInfo", getUserInfo);
 router.post("/getUsers", getUsers);
 router.post("/getNonceAndRegister", getNonceAndRegister);
 router.post("/renewNonce", renewNonce);
 router.post("/removeUser", removeUser);
 router.post("/sendMail", sendMail);
-
-
-
 
 module.exports = router;
