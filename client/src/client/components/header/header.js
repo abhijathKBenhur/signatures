@@ -41,6 +41,7 @@ const Header = (props) => {
   );
   const [loggedInUserDetails, setLoggedInUserDetails] = useState(userDetails);
   const [showRegisterPopup, setShowRegisterPopup] = useState(false);
+  const [showSigningWaning, setShowSigningWaning] = useState(false);
   const [menu, setMenu] = useState({
     showMenu: false,
     showNotification: false
@@ -272,6 +273,16 @@ const Header = (props) => {
       : setShowRegisterPopup(true);
   }
 
+  const showAlert = () => {
+    setShowSigningWaning(true)
+    const alertProperty = {
+      isDismissible: false,
+      variant: "danger",
+      content: "Please use a deasktop browser to continue.",
+    }
+    ReactDOM.render(<AlertBanner {...alertProperty}></AlertBanner>, document.querySelector('.aleartHeader'))
+  }
+
   const gotoHome = () => {
     gotoGallery(true); 
     setMenu({...menu, showMenu: false, showNotification: false})
@@ -400,7 +411,6 @@ const Header = (props) => {
                 ></Image>
               )
             }
-            <i className="fa fa-bars responsive-icons mobile-view" onClick={(e) => openOption()}></i>
 
               {/* <Dropdown>
               <Dropdown.Toggle
@@ -438,15 +448,17 @@ const Header = (props) => {
             </Dropdown> */}
             </div>
           )}
+          <i className="fa fa-bars responsive-icons mobile-view" onClick={(e) => openOption()}></i>          
         </Container>
       </nav>
       <Register show={showRegisterPopup} onHide={() => hideModal()}></Register>
-      {menu.showMenu && <div className="mobile-menu"> 
-          {appLocation == "home" && <div className="items" onClick={(e) => gotoProfile(false)}> <i className="fa fa-user"></i>Profile </div>} 
-          {appLocation == "home" && <div className="items" onClick={(e) => gotoProfile(true)}> <i className="fa fa-bell"></i>Notification </div>} 
-          {(appLocation == "profile" && !menu.showNotification) && <div className="items" onClick={(e) => gotoNotification()}> <i className="fa fa-bell"></i> Notification </div>}
-          {(appLocation == "profile" && menu.showNotification) && <div className="items" onClick={(e) => gotoHome(true)}>  Home </div>}
-          {(appLocation == "profile" && menu.showNotification) && <div className="items " onClick={(e) => gotoProfile()}><i className="fa fa-user"></i>Profile </div>}
+      {menu.showMenu && !showSigningWaning && <div className="mobile-menu"> 
+          {!_.isEmpty(loggedInUserDetails) && appLocation == "home" && <div className="items" onClick={(e) => gotoProfile(false)}> <i className="fa fa-user"></i>Profile </div>} 
+          {!_.isEmpty(loggedInUserDetails) && appLocation == "home" && <div className="items" onClick={(e) => gotoProfile(true)}> <i className="fa fa-bell"></i>Notification </div>} 
+          {(!_.isEmpty(loggedInUserDetails) && appLocation == "profile" && !menu.showNotification) && <div className="items" onClick={(e) => gotoNotification()}> <i className="fa fa-bell"></i> Notification </div>}
+          {(!_.isEmpty(loggedInUserDetails) && appLocation == "profile" && menu.showNotification) && <div className="items" onClick={(e) => gotoHome(true)}>  Home </div>}
+          {(!_.isEmpty(loggedInUserDetails) && appLocation == "profile" && menu.showNotification) && <div className="items " onClick={(e) => gotoProfile()}><i className="fa fa-user"></i>Profile </div>}
+          {_.isEmpty(loggedInUserDetails) && <div className="items " onClick={(e) => showAlert()}><i className="fa fa-user"></i> Sign Up </div>}
 
           {isIdeaPage() && <div className="items" onClick={(e) => gotoComments()}> <i className="fa fa-comment"></i> Comments </div>}
           {isIdeaPage() && <div className="items" onClick={(e) => gotoHome(true)}><i className="fa fa-home"></i> Home </div>}

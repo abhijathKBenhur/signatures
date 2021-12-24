@@ -61,9 +61,19 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 .cursor-pointer {
   cursor: pointer;
 }
+.card__head{
+  .cursor-normal {
+    position: absolute;
+    bottom: 12px;
+    right: 10px;
+    opacity: 0.90 !important;
+    cursor: default !important;
+  }
+}
 .cursor-normal {
   cursor: default !important;
 }
+
 .white {
   color: white;
 }
@@ -349,8 +359,26 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
         }
       }
     }
+    .user-details{
+      margin: auto;
+    }
+    .uploadButton {
+      margin-right: 5px;
+    }
+    
   }
-  
+  .active-guides {
+    .guide-bookmark{
+      position: relative !important;
+    }
+    .guide-bookmark1, .guide-bookmark2 {
+      top: 0px !important;
+      float: left !important;
+    }
+    .racks-container {
+      margin-top: 100px;
+    }
+  }
   .mobile-view {
     display: block !important;
   }
@@ -388,7 +416,6 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
     margin-top: 80px !important;
   }
 }
-
 
 .text-center {
   text-align: center;

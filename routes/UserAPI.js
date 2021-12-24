@@ -190,6 +190,7 @@ updateUser = async (req, res) => {
     twitterUrl: newUser.twitterUrl,
     instaUrl: newUser.instaUrl,
     bio: newUser.bio,
+    imageUrl: newUser.imageUrl
   };
   console.log("testing")
   User.findByIdAndUpdate(req.body.id, updates, { upsert: true })
