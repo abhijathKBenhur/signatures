@@ -192,7 +192,7 @@ const CollectionCard = (props) => {
                 <div className="card__author">
                 <div className="tag-n-location">
                   <div className=" timestamp second-header">
-                    {new Date(signature.createdAt).toUTCString()}
+                    {new Date(signature.createdAt).toUTCString().split(' ').slice(1).join(' ')}
                   </div>
                 </div>
                   <div className="like-bar align-items-sm-baseline third-header row justify-content-between color-primary">

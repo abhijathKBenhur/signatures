@@ -654,24 +654,13 @@ const CreateNew = () => {
   }
 
   const checkValidationBeforeSubmit = () => {
-    const { category, price, thumbnail } = form;
-    if (_.isEmpty(category)) {
-      if (!checkDisablePrice()) {
-        setFormErrors({
-          ...formErrors,
-          price: price <= 0,
-          category: _.isEmpty(category),
-          // thumbnail: _.isEmpty(thumbnail),
-        });
-      } else {
-        setFormErrors({
-          ...formErrors,
-          price: false,
-          category: _.isEmpty(category),
-          // thumbnail: _.isEmpty(thumbnail),
-        });
-      }
-    } else {
+    const {  price } = form;
+    if(!checkDisablePrice() && ( _.isEmpty(price) || isNaN(price) ))  {
+      setFormErrors({
+        ...formErrors,
+        price: true,
+      });
+    }else{
       handleSubmit();
     }
   };

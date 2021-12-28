@@ -32,8 +32,8 @@ const GOLD_DEPOSIT_VALUES = {
   }
 };
 
-let whiteList1MemberGold = Web3Utils.toWei("1", "ether");
-let whiteList2MemberGold = Web3Utils.toWei("1", "ether");
+let whiteList1MemberGold = Web3Utils.toWei("10", "ether");
+let whiteList2MemberGold = Web3Utils.toWei("5", "ether");
 
 const getGoldToDeposit =(userObject) =>{
   if(whitelistMailList1.indexOf(userObject.email) > -1 ){
@@ -63,7 +63,7 @@ const depostToNewUser = (receiverUserObject) => {
   TribeGoldAPIs.depositGold(receiverUserObject, 
     GOLD_DEPOSIT_VALUES.REGISTER,
     "GOLD_INCENTIVICED_REGISTER")
-  MaticAPIs.depositMatic(receiverUserObject, MATIC_DEPOSIT_VALUES.REGISTER,"REGISTER")
+  MaticAPIs.depositMatic(receiverUserObject, getGoldToDeposit(receiverUserObject),"REGISTER")
 };
 
 
