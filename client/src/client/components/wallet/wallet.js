@@ -51,9 +51,9 @@ const Wallet = (props) => {
   );
 
   return (
-    <div className="wallet-wrapper mb-3">
+    <div className="wallet-wrapper mb-3 row justify-content-center">
       <div
-        className="wallet-container"
+        className="wallet-container col-md-6  col-lg-6 col-sm-12"
         // onClick={() => 
         //   window.open(reduxChain+"/address/0x2E56AeBAb0Ba3a5904fB1fA424eaae89e5147187")
         // }

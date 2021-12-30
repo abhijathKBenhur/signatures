@@ -46,7 +46,7 @@ const Header = (props) => {
     showMenu: false,
     showNotification: false
   });
-  const [pathName, setPathName] = useState(false);
+  const [isMobileView, setIsMobileView] = useState(false);
 
   useEffect(() => {
     const { metamaskID = undefined } = reduxState;
@@ -57,6 +57,8 @@ const Header = (props) => {
 
   useEffect(() => {
     if(Number(window.screen.width) < 760  ){
+      setIsMobileView(true)
+      connectWallet();
     }else{
       if (_.isEmpty(currentMetamaskAccount)) {
         connectWallet();
@@ -65,7 +67,6 @@ const Header = (props) => {
     
     
     updatePendingTransactions()
-    setPathName(window.location.pathname)
     addDefaultHashtags();
 
     reactGA.initialize("UA-207963115-1");
@@ -73,7 +74,6 @@ const Header = (props) => {
   }, []);
 
   useEffect(() => {
-    setPathName(window.location.pathname)
   }, [appLocation]);
 
   useEffect(() => {
@@ -278,7 +278,7 @@ const Header = (props) => {
     const alertProperty = {
       isDismissible: false,
       variant: "danger",
-      content: "Please use a deasktop browser to continue.",
+      content: "Please use a desktop browser to continue.",
     }
     ReactDOM.render(<AlertBanner {...alertProperty}></AlertBanner>, document.querySelector('.aleartHeader'))
   }
@@ -321,8 +321,8 @@ const Header = (props) => {
             >
               {location.pathname == "/home" && <img
                 src={logo}
-                width="45"
-                height="45"
+                width={isMobileView? "35" : "45"}
+                height={isMobileView? "35" : "45"}
                 alt=""
                 className=""
               ></img>}
@@ -356,7 +356,6 @@ const Header = (props) => {
             </Nav.Item> */}
           </div>
           <div className="middle-section">
-            {/* <Form.Control size="sm" type="text" placeholder="Normal text" /> */}
           </div>
 
           {!_.isEmpty(currentMetamaskAccount) && (
@@ -448,17 +447,17 @@ const Header = (props) => {
             </Dropdown> */}
             </div>
           )}
-          <i className="fa fa-bars responsive-icons mobile-view" onClick={(e) => openOption()}></i>          
+          {!_.isEmpty(loggedInUserDetails) && isMobileView && <i className="fa fa-bars responsive-icons mobile-view ml-1 p-1" onClick={(e) => openOption()}></i> }
         </Container>
       </nav>
       <Register show={showRegisterPopup} onHide={() => hideModal()}></Register>
-      {menu.showMenu && !showSigningWaning && <div className="mobile-menu"> 
+      {menu.showMenu && <div className="mobile-menu"> 
           {!_.isEmpty(loggedInUserDetails) && appLocation == "home" && <div className="items" onClick={(e) => gotoProfile(false)}> <i className="fa fa-user"></i>Profile </div>} 
           {!_.isEmpty(loggedInUserDetails) && appLocation == "home" && <div className="items" onClick={(e) => gotoProfile(true)}> <i className="fa fa-bell"></i>Notification </div>} 
+
           {(!_.isEmpty(loggedInUserDetails) && appLocation == "profile" && !menu.showNotification) && <div className="items" onClick={(e) => gotoNotification()}> <i className="fa fa-bell"></i> Notification </div>}
           {(!_.isEmpty(loggedInUserDetails) && appLocation == "profile" && menu.showNotification) && <div className="items" onClick={(e) => gotoHome(true)}>  Home </div>}
           {(!_.isEmpty(loggedInUserDetails) && appLocation == "profile" && menu.showNotification) && <div className="items " onClick={(e) => gotoProfile()}><i className="fa fa-user"></i>Profile </div>}
-          {_.isEmpty(loggedInUserDetails) && <div className="items " onClick={(e) => showAlert()}><i className="fa fa-user"></i> Sign Up </div>}
 
           {isIdeaPage() && <div className="items" onClick={(e) => gotoComments()}> <i className="fa fa-comment"></i> Comments </div>}
           {isIdeaPage() && <div className="items" onClick={(e) => gotoHome(true)}><i className="fa fa-home"></i> Home </div>}
