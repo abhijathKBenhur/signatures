@@ -72,18 +72,6 @@ const Register = (props) => {
   useEffect(() => {
     const { userDetails = {} } = reduxState;
     setLoggedInUserDetails(userDetails);
-    const alertProperty = {
-      isDismissible: false,
-      variant: "danger",
-      content: "Sorry, the application is supported only on a desktop website!",
-      // actionText: "Switch Network",
-    };
-    if (Number(window.screen.width) < 760 && props.show) {
-      ReactDOM.render(
-        <AlertBanner {...alertProperty}></AlertBanner>,
-        document.querySelector(".appHeader")
-      );
-    }
   }, [reduxState.userDetails]);
 
   const [userDetails, setUserDetails] = useState({
@@ -295,7 +283,7 @@ const Register = (props) => {
       case "socialLogin":
         return (
           <div className="align-self-center d-flex justify-content-center flex-column mail-flow" >
-            <div className="mailinput  d-flex flex-row align-items-center mt-3">
+            {!OTPShared && <Row className="mailinput  d-flex flex-row align-items-center mt-3">
               <Form.Control
                 type="text"
                 name="tempEmail"
@@ -305,23 +293,21 @@ const Register = (props) => {
                 }
                 placeholder="Email address"
                 autoFocus={true}
-                disabled={OTPShared}
                 onChange={handleChange}
               />
 
               <Button
                 variant="secondary"
-                className="button ml-2 action-button"
+                className="button mt-2 action-button w-100"
                 bsstyle="primary"
-                disabled={OTPShared}
                 onClick={() => {
                   sendMail();
                 }}
               >
                 Send OTP
               </Button>
-            </div>
-            <div className="otpinput   d-flex flex-row align-items-center">
+            </Row>}
+            {OTPShared && <div className="otpinput flex-column d-flex align-items-center">
               <Form.Control
                 type="text"
                 name="otp"
@@ -329,23 +315,23 @@ const Register = (props) => {
                 className={
                   userNameError ? "username-error userName" : "userName"
                 }
-                disabled={!OTPShared}
+                
                 autoFocus={true}
                 placeholder="OTP"
                 onChange={handleChange}
               />
               <Button
               variant={userDetails.email? "secondary" : "primary"}
-              className="button ml-2 action-button"
+              className="button mt-2 action-button w-100"
               bsstyle="primary"
-              disabled={!OTPShared}
+              
               onClick={() => {
                 validateOtp();
               }}
             >
               {userDetails.email ? "Validated" :"Validate"}
             </Button>
-            </div>
+            </div>}
 
             
             <br />
