@@ -67,6 +67,14 @@
       }
       .modal-body {
         .step-component {
+          .mail-flow{
+              width: 50%;
+              gap: 10px;
+          }
+          .action-button{
+            width: 150px;
+          }
+
           height: 200px;
           display: flex;
           .loginMode{

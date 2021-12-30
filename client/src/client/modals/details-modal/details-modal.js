@@ -195,11 +195,12 @@ const DetailsModal = (props) => {
                     <Form.Label>Description </Form.Label>
                   </div> */}
                   <Form.Control
-                    type="text"
+                    as="textarea"
                     name="title"
+                    style={{border:"1px solid #ced4da"}}
                     value={form.description}
                     placeholder="Description*"
-                    maxLength={50}
+                    maxLength={250}
                     onChange={handleChanges}
                   />
                 {/* </Form.Group> */}

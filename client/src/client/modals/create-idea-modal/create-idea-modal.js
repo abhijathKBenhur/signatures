@@ -231,11 +231,17 @@ const CreateIdeaModal = ({
               is a buyer.
             </span>
             <div className="price-section">
-              <div className="price-label second-grey">
+              <div 
+              className={
+                formErrors.title
+                  ? "input-err price-label second-grey"
+                  : "price-label second-grey"
+              }>
                 <Form.Label>
                   {CONSTANTS.PURPOSES.AUCTION === form.purpose
                     ? "Base price"
-                    : "Price"}
+                    : "Price "}
+                    
                 </Form.Label>
               </div>
               <InputGroup className="price-input-group">

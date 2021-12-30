@@ -30,6 +30,11 @@ export const removeUser = payload => {
     return AxiosInstance.post(`/removeUser`,payload) 
 }
 
+export const sendMail = payload => { 
+    return AxiosInstance.post(`/sendMail`,payload) 
+}
+
+
 
 const UserInterface = {
     registerUser,
@@ -38,7 +43,8 @@ const UserInterface = {
     getUsers,
     getNonceAndRegister,
     renewNonce,
-    removeUser
+    removeUser,
+    sendMail
 }
 
 export default UserInterface
