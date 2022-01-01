@@ -655,7 +655,7 @@ const CreateNew = () => {
 
   const checkValidationBeforeSubmit = () => {
     const {  price } = form;
-    if(!checkDisablePrice() && ( _.isEmpty(price) || isNaN(price) ))  {
+    if(!checkDisablePrice() && ( price == 0 || isNaN(price) ))  {
       setFormErrors({
         ...formErrors,
         price: true,

@@ -54,6 +54,7 @@ const CreateIdeaModal = ({
   isView,
   ...props
 }) => {
+  const [isMobileView, setIsMobileView] = useState(false);
   const reduxState = useSelector((state) => state, shallowEqual);
   const {  reduxChain = undefined } = reduxState;
   const [userClans, setUserClans] = useState([]);
@@ -76,6 +77,11 @@ const CreateIdeaModal = ({
   const history = useHistory();
 
   useEffect(() => {
+
+    if(Number(window.screen.width) < 760  ){
+      setIsMobileView(true)
+    }
+
     let subscription = EmitInterface.getMessage().subscribe((event) => {
       switch (event.id) {
         case "METAMAST_CONFIRMATION":
@@ -450,6 +456,21 @@ const CreateIdeaModal = ({
       )[1];
       
     }
+  }
+
+  const getPurposeEntryClass = (entry) =>{
+    let className = "purpose-entry "
+    if(isSelectedPurpose(entry)){
+      className += "selected "
+    }
+    if(isDisabled(entry)){
+      className += "disabled "
+    }
+   
+    if(isMobileView){
+      className += "mobile-view "
+    }
+    return className
   }
  
 
@@ -840,18 +861,12 @@ const CreateIdeaModal = ({
                       What would you like to do with the idea ?{" "}
                     </Form.Label>
                   </div>
-                  <div className="purpose-tabs">
+                  <div className="purpose-tabs row col-md-12">
                     {pusposeList.map((entry, entryIndex) => {
                       return (
                         <div
                           key={entryIndex}
-                          className={
-                            isSelectedPurpose(entry)
-                              ? "purpose-entry selected"
-                              : isDisabled(entry)
-                              ? "purpose-entry disabled"
-                              : "purpose-entry"
-                          }
+                          className={ getPurposeEntryClass(entry) }
                           onClick={() => {
                             !isDisabled(entry) && setPurpose(entry);
                           }}
