@@ -58,13 +58,10 @@ const Header = (props) => {
   useEffect(() => {
     if(Number(window.screen.width) < 760  ){
       setIsMobileView(true)
-      connectWallet();
-      window.location.replace("https://link.trustwallet.com/open_url?coin_id=966&url="+ "https://ideatribe.io/")
-    }else{
-      if (_.isEmpty(currentMetamaskAccount)) {
-        connectWallet();
-      }
     }
+    connectWallet();
+      
+    
     
     
     updatePendingTransactions()

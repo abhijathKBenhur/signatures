@@ -291,6 +291,9 @@ class BlockchainInterface {
         resolve(this.web3);
       } else {
         store.dispatch(setReduxMetaMaskID());
+        if(Number(window.screen.width) < 760  ){
+          window.location.replace("https://link.trustwallet.com/open_url?coin_id=966&url="+ "https://www.ideatribe.io/")
+        }
         let errorMessage = (
           <div>
             <br />
