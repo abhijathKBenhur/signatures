@@ -47,37 +47,45 @@ register_user = (req, res) => {
   let metamaskAddress = req.body.metamaskId;
   let userName = req.body.userName;
   let messageHash = web3Instance.utils.fromUtf8(SIGNATURE_MESSAGE+ req.body.nonce)
-  web3Instance.eth.personal.ecRecover(messageHash, req.body.secret).then(success => {
-    console.log("recover success  " + success)
-    UserSchema.findOne({ metamaskId: success }).then(user =>{
-      console.log(user)
-      if(user.nonce == req.body.nonce){
-        ideaTribeContract.methods
-        .registerUser(metamaskAddress, userName)
-        .send(transactionObject)
-        .on("receipt", function (receipt) {
-          console.log("CONTRACT REGISTRATION SUCCESS")
-          return res.status(200).json({ success: true, data: receipt });
-        })
-        .on("error", function (error) {
-          console.log("error ", error)
-          console.log("CONTRACT REGISTRATION FAILED")
-          let transactionHash = _.get(error,'receipt.transactionHash');
-            web3Instance.eth.getTransaction(transactionHash).then(tx =>{
-                web3Instance.eth.call(tx, tx.blockNumber).then(result => {
-                  return res.status(400).json({ success: false, data: result });
-              }).catch(err =>{
-                console.log("********",err)
-                return res.status(400).json({ success: false, data: err.message.toString() });
-              })
-          }).catch(err =>{
-            console.log("********",err)
-            return res.status(400).json({ success: false, data: "Transaction invalid" });
+  try{
+    web3Instance.eth.personal.ecRecover(messageHash, req.body.secret).then(success => {
+      console.log("recover success  " + success)
+      UserSchema.findOne({ metamaskId: success }).then(user =>{
+        console.log(user)
+        if(user.nonce == req.body.nonce){
+          ideaTribeContract.methods
+          .registerUser(metamaskAddress, userName)
+          .send(transactionObject)
+          .on("receipt", function (receipt) {
+            console.log("CONTRACT REGISTRATION SUCCESS")
+            return res.status(200).json({ success: true, data: receipt });
           })
-        });
-      }
+          .on("error", function (error) {
+            console.log("error ", error)
+            console.log("CONTRACT REGISTRATION FAILED")
+            let transactionHash = _.get(error,'receipt.transactionHash');
+              web3Instance.eth.getTransaction(transactionHash).then(tx =>{
+                  web3Instance.eth.call(tx, tx.blockNumber).then(result => {
+                    return res.status(400).json({ success: false, data: result });
+                }).catch(err =>{
+                  console.log("********",err)
+                  return res.status(400).json({ success: false, data: err.message.toString() });
+                })
+            }).catch(err =>{
+              console.log("********",err)
+              return res.status(400).json({ success: false, data: "Transaction invalid" });
+            })
+          });
+        }else{
+          console.log("nonce check failed - user nonce " + user.nonce + " req.body.nonce " + req.body.nonce)
+          return res.status(400).json({ success: false, data: "Failed user registration for nonce mismatch" });
+        }
+      })
     })
-  })
+  }catch{
+    return res.status(400).json({ success: false, data: "Failed at catch user registration" });
+  }
+  
 };
 
 getContractENV = async (req, res) => {
