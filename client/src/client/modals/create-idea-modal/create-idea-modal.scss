@@ -134,9 +134,15 @@
           flex-direction: column;
           justify-content: center;
           align-items: center;
+          &.mobile-view{
+            display: flex !important;
+            height: 50px;
+            width: 150px !important;
+            flex-direction: inherit;
+            gap: 10px;
+          }
           .purpose-icon{
             font-size: 20px;
-            margin-bottom: 10px;
             color: $primary;
           }
           .purpose-text{
