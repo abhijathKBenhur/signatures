@@ -47,7 +47,7 @@ const getGoldToDeposit =(userObject) =>{
 }
 
 const MATIC_DEPOSIT_VALUES = {
-  REGISTER: Web3Utils.toWei(process.env.REGISTER_MATIC_DEPOSIT || "0.1", "ether"),
+  REGISTER: Web3Utils.toWei(process.env.REGISTER_MATIC_DEPOSIT || "0.001", "ether"),
 };
 
 const depostToNewUser = (receiverUserObject) => {
@@ -63,7 +63,7 @@ const depostToNewUser = (receiverUserObject) => {
   TribeGoldAPIs.depositGold(receiverUserObject, 
     GOLD_DEPOSIT_VALUES.REGISTER,
     "GOLD_INCENTIVICED_REGISTER")
-  MaticAPIs.depositMatic(receiverUserObject, getGoldToDeposit(receiverUserObject),"REGISTER")
+  MaticAPIs.depositMatic(receiverUserObject, MATIC_DEPOSIT_VALUES.REGISTER,"REGISTER")
 };
 
 
