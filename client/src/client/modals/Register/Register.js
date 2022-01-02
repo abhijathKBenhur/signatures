@@ -15,7 +15,7 @@ import "react-step-progress-bar/styles.css";
 import { shallowEqual, useSelector } from "react-redux";
 import CONSTANTS from "../../commons/Constants";
 import { setReduxUserDetails } from "../../redux/actions";
-import metamaskLogo from "../../../assets/images/metamask.png";
+import polygonLogo from  "../../../assets/logo/polygon.png"
 import successLogo from "../../../assets/images/success.png";
 import SignatureInterface from "../../interface/SignatureInterface";
 import BlockchainInterface from "../../interface/BlockchainInterface";
@@ -61,9 +61,10 @@ const Register = (props) => {
   ]);
   const [activeStep, setActiveStep] = useState(steps[0]);
   const [OTPShared, setOTPShared] = useState(undefined);
+  const [OTPInitiated, setOTPInitiated] = useState(false);
   const [registration, setRegistration] = useState("");
   const [registrationErrorMessage, setregistrationErrorMessage] = useState("");
-  const [whiteListError, setWhiteListError] = useState(false);
+  const [isMobileView, setIsMobileView] = useState(false);
   const [whiteListCode, setWhiteListCode] = useState("");
   const [userNameError, setuserNameError] = useState(false);
   const [userEmailError, setuserEmailError] = useState(false);
@@ -73,6 +74,12 @@ const Register = (props) => {
     const { userDetails = {} } = reduxState;
     setLoggedInUserDetails(userDetails);
   }, [reduxState.userDetails]);
+
+  useEffect(() => {
+    if(Number(window.screen.width) < 760  ){
+      setIsMobileView(true)
+    }
+  }, []);
 
   const [userDetails, setUserDetails] = useState({
     firstName: _.get(reduxState, "firstName"),
@@ -269,6 +276,7 @@ const Register = (props) => {
       setuserEmailError(true);
     }else{
       setuserEmailError(false);
+      setOTPInitiated(true)
       UserInterface.sendMail({tempEmail:userDetails.tempEmail}).then(success =>{
         setOTPShared(success.data)
       }).catch(Err => {
@@ -289,7 +297,7 @@ const Register = (props) => {
                 name="tempEmail"
                 value={userDetails.tempEmail}
                 className={
-                  userNameError ? "username-error userName" : "userName"
+                  userEmailError ? "username-error userName" : "userName"
                 }
                 placeholder="Email address"
                 autoFocus={true}
@@ -300,11 +308,12 @@ const Register = (props) => {
                 variant="secondary"
                 className="button mt-2 action-button w-100"
                 bsstyle="primary"
+                disabled={userEmailError || OTPInitiated}
                 onClick={() => {
                   sendMail();
                 }}
               >
-                Send OTP
+                {OTPInitiated ? "Please wait" : "Send OTP"}
               </Button>
             </Row>}
             {OTPShared && <div className="otpinput flex-column d-flex align-items-center">
@@ -312,10 +321,7 @@ const Register = (props) => {
                 type="text"
                 name="otp"
                 value={userDetails.otp}
-                className={
-                  userNameError ? "username-error userName" : "userName"
-                }
-                
+                className= "userName"
                 autoFocus={true}
                 placeholder="OTP"
                 onChange={handleChange}
@@ -354,7 +360,7 @@ const Register = (props) => {
                     We could not recognize any connected wallet on this app.
                     Please connect metamask to ideaTribe to continue.
                   </span>
-                  <img src={metamaskLogo} width="70"></img>
+                  <img src={polygonLogo} width="70"></img>
                   <div className="metamask_integration">
                     <Button
                       variant="secondary"
@@ -401,7 +407,7 @@ const Register = (props) => {
               </div>
             ) : (
               <div className="d-flex align-items-center flex-column">
-                <img src={metamaskLogo} width="70"></img>
+                <img src={polygonLogo} width="70"></img>
                 <div className="connected">Connected</div>
                 <div> {userDetails.metamaskId}</div>
               </div>
@@ -435,13 +441,13 @@ const Register = (props) => {
               <>
                 <Form.Group
                   as={Col}
-                  className="formEntry userIDSection h-100"
+                  className={isMobileView?"formEntry userIDSection h-100 flex-column": "formEntry userIDSection h-100" }
                   controlId="userName"
                 >
                   <Image
                     src={userDetails.imageUrl}
-                    height={200}
-                    width={200}
+                    height={isMobileView ? 100 : 200}
+                    width={isMobileView ? 100 : 200}
                     className=""
                     style={{
                       background: "#f1f1f1",

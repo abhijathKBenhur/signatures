@@ -17,18 +17,12 @@ const web3Instance = new Web3(hdWallet);
 
   const ideaTribeContract = new web3Instance.eth.Contract(
     process.env.CHAIN_ENV == "mainnet" ? contractJSON.abi : contractJTestSON.abi,
-    process.env.CHAIN_ENV == "mainnet" ? contractJSON.address : contractJTestSON.address,
-    {
-      gas: 3000000,
-    }
+    process.env.CHAIN_ENV == "mainnet" ? contractJSON.address : contractJTestSON.address
   );
 
   const tribeGoldContract = new web3Instance.eth.Contract(
     tribeGoldJSON.abi,
-    tribeGoldJSON.address,
-    {
-      gas: 3000000,
-    }
+    tribeGoldJSON.address
   );
 
 module.exports = {
