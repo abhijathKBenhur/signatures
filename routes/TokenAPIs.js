@@ -275,7 +275,7 @@ getImagePathFromCloudinary = (req, res) => {
         return res.status(400).json({ success: false, error: result.error.message });
       }else{
         res.status(200).json({
-          path: result.url,
+          path: result.secure_url,
           type: "thumbnail",
         });
       }
