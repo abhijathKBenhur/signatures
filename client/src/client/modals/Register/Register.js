@@ -66,6 +66,7 @@ const Register = (props) => {
   const [registrationErrorMessage, setregistrationErrorMessage] = useState("");
   const [isMobileView, setIsMobileView] = useState(false);
   const [whiteListCode, setWhiteListCode] = useState("");
+  const [whiteListError, setWhiteListError] = useState(false);
   const [userNameError, setuserNameError] = useState(false);
   const [userEmailError, setuserEmailError] = useState(false);
   const [loggedInUserDetails, setLoggedInUserDetails] = useState({});
