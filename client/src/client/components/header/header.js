@@ -168,7 +168,7 @@ const Header = (props) => {
             const alertProperty = {
               isDismissible: false,
               variant: "danger",
-              content: "Your account is not signed with metamask.",
+              content: "Your account is not signed with a crypto wallet.",
               actionText: "Sign",
               actionFunction: setTokenCookies
             }

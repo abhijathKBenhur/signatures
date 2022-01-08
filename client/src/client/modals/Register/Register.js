@@ -359,7 +359,7 @@ const Register = (props) => {
                 <div className="metamaskLogin loginMode d-flex flex-column align-items-center cursor-pointer">
                   <span className="readable-text second-grey">
                     We could not recognize any connected wallet on this app.
-                    Please connect metamask to ideaTribe to continue.
+                    Please connect a crypto wallet to ideaTribe to continue.
                   </span>
                   <img src={polygonLogo} width="70"></img>
                   <div className="metamask_integration">

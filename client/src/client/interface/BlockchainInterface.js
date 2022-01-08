@@ -228,7 +228,7 @@ class BlockchainInterface {
             const alertProperty = {
                 isDismissible: false,
                 variant: "danger",
-                content: "Smart contract not deployed to detected network. Please change the network in metamask.",
+                content: "Smart contract not deployed to detected network. Please change the network in the crypto wallet.",
                 actionText: "Switch Network",
                 actionFunction: CalledFunction
               }
