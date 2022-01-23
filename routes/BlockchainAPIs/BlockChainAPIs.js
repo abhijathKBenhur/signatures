@@ -3,13 +3,14 @@ const router = express.Router();
 const jwt = require("jsonwebtoken");
 const _ = require("lodash");
 const UserSchema = require("../../db-config/user.schema");
-
-
+const webSocket = require('ws')
+const server = require("../../index")
 const BlockchainUtils = require("./BlockChainUtils");
 const web3Instance = BlockchainUtils.web3Instance
 const ideaTribeContract = BlockchainUtils.ideaTribeContract
 
 const transactionObject = {};
+let wss = undefined
 
 web3Instance.eth.getAccounts().then(result => {
   transactionObject.from = result[0];
@@ -18,8 +19,20 @@ web3Instance.eth.getAccounts().then(result => {
 
 const SIGNATURE_MESSAGE = "Welcome to IdeaTribe! Click 'Sign' to sign in. No password needed! This request will not trigger a blockchain transaction or cost any gas fees. Your authentication status will be reset after 24 hours. I accept the IdeaTribe Terms of Service: https://ideatribe.io. Nonce: ";
 
-verifySignature =  (req, res) => {
+
+createWSInstance= (req, res) => {
+  wss = new webSocket.Server({server: server })
+  console.log("Web socket server started");
+  wss.on('connection', function connection(ws) {
+    console.log(JSON.stringify(ws));
+    ws.clientId = "asdasd11111"
+    ws.send('Welcome New Client!');
+  });
   
+}
+
+
+verifySignature =  (req, res) => {
   let nonce = req.body.nonce;
   let messageHash = web3Instance.utils.fromUtf8(SIGNATURE_MESSAGE+ nonce)
   console.log("recovering hash")
@@ -43,6 +56,8 @@ verifySignature =  (req, res) => {
   })
 }
 
+
+
 register_user = (req, res) => {
   let metamaskAddress = req.body.metamaskId;
   let userName = req.body.userName;
@@ -57,23 +72,21 @@ register_user = (req, res) => {
           .registerUser(metamaskAddress, userName)
           .send(transactionObject)
           .on("receipt", function (receipt) {
-            console.log("CONTRACT REGISTRATION SUCCESS")
-            return res.status(200).json({ success: true, data: receipt });
+            sendWebSocketResponse(success,"CONTRACT REGISTRATION SUCCESS", true)
           })
           .on("error", function (error) {
-            console.log("error ", error)
             console.log("CONTRACT REGISTRATION FAILED")
             let transactionHash = _.get(error,'receipt.transactionHash');
               web3Instance.eth.getTransaction(transactionHash).then(tx =>{
                   web3Instance.eth.call(tx, tx.blockNumber).then(result => {
-                    return res.status(400).json({ success: false, data: result });
+                    sendWebSocketResponse(success,result, false)
                 }).catch(err =>{
                   console.log("********",err)
-                  return res.status(400).json({ success: false, data: err.message.toString() });
+                  sendWebSocketResponse(success,err.message, false)
                 })
             }).catch(err =>{
               console.log("********",err)
-              return res.status(400).json({ success: false, data: "Transaction invalid" });
+              sendWebSocketResponse(success,"Transaction invalid", false)
             })
           });
         }else{
@@ -88,6 +101,20 @@ register_user = (req, res) => {
   
 };
 
+sendWebSocketResponse = (success, metamaskId, message) =>{
+  wss.clients.forEach(function each(client) {
+    console.log(JSON.stringify(client));
+    if (client !== ws && client.readyState === WebSocket.OPEN) {
+      console.log(client.id)
+      client.send({
+        success,
+        metamaskId,
+        message
+      });
+    }
+  });
+}
+
 getContractENV = async (req, res) => {
   try{
     return res.status(200).json({ success: true, data: process.env.CHAIN_ENV });
@@ -100,6 +127,7 @@ getContractENV = async (req, res) => {
 router.get("/getContractENV", getContractENV);
 router.post("/register_user", register_user);
 router.post("/verifySignature", verifySignature);
+router.post("/createWSInstance", createWSInstance);
 
 
 module.exports = router;

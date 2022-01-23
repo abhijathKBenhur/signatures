@@ -78,4 +78,7 @@ var server = app.listen(PORT, function () {
   console.log("Server is running on Port: " + PORT);
 });
 
-server.setTimeout(500000);
+module.exports = server
+
+
+

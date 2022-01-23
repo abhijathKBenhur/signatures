@@ -25,10 +25,13 @@ import store from "../../redux/store";
 import UserInterface from "../../interface/UserInterface";
 import ProgressBar from "../../components/progressbar/progress";
 import NotificationInterface from "../../interface/NotificationInterface";
-import reactGA from "react-ga";
+import reactGA, { initialize } from "react-ga";
 import WhitelistInterface from "../../interface/WhitelistInterface";
 import AlertBanner from "../../components/alert/alert";
 import ReactDOM from "react-dom";
+import ENDPOINTS from "../../commons/Endpoints";
+import SocketInstance from "../../wrapper/socketWrapper";
+
 // MetamaskID and userDetails are stored in separate redux stores
 // userDetails are stored as state
 
@@ -96,11 +99,24 @@ const Register = (props) => {
     // isWhitelisted = false
   });
 
+  function initializeWebSocketConnection() {
+    const socketConnection = SocketInstance.getNewConnection(userDetails.metamaskID)
+    socketConnection.addEventListener('open', function (event) {
+      console.log('Connected to WS Server')
+    });
+  
+    // Listen for messages
+    socketConnection.addEventListener('message', function (event) {
+        console.log('Message from server ', event.data);
+    });
+  }
+
   function getNonceAndRegister() {
     UserInterface.getNonceAndRegister({
       metamaskId: userDetails.metamaskId,
     }).then((nonceValue) => {
       let nonceString = _.get(nonceValue, "data.data");
+      initializeWebSocketConnection()
       BlockchainInterface.signToken(nonceString)
         .then((secret) => {
           registerUser(nonceString, secret);
@@ -111,6 +127,8 @@ const Register = (props) => {
         });
     });
   }
+
+
 
   function registerUser(nonce, secret) {
     try {
@@ -187,6 +205,10 @@ const Register = (props) => {
         getNonceAndRegister();
       }
       return;
+    }
+
+    if(activeStep.key == "socialLogin"){
+      BlockchainInterface.createWSInstance()
     }
 
     const index = steps.findIndex((x) => x.key === activeStep.key);

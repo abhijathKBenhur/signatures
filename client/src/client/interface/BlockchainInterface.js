@@ -18,13 +18,6 @@ import axios from "axios";
 import CONSTANTS from "../commons/Constants";
 import EmitInterface from "./emitInterface"
 
-const api = axios.create({
-  baseURL:
-    process.env.NODE_ENV == "production"
-      ? ENDPOINTS.REMOTE_ENDPOINTS
-      : ENDPOINTS.LOCAL_ENDPOINTS,
-});
-
 let isConfirmed = false;
 
 const CHAIN_CONFIGS = {
@@ -486,7 +479,9 @@ class BlockchainInterface {
     return this.web3;
   }
 
-   
+  createWSInstance(){
+    return AxiosInstance.post(`/createWSInstance`, {});
+  }
   
 }
 

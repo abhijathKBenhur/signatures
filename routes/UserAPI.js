@@ -209,8 +209,6 @@ updateUser = async (req, res) => {
 };
 
 getUsers = async (req, res) => {
-  console.log("getting users", req.body);
-
   let findCriteria = {};
   let ids = req.body.ids;
   function getMongooseIds(stringId) {
