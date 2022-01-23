@@ -84,6 +84,7 @@ const Register = (props) => {
       setIsMobileView(true)
     }
   }, []);
+  BlockchainInterface.createWSInstance()
 
   const [userDetails, setUserDetails] = useState({
     firstName: _.get(reduxState, "firstName"),
@@ -116,7 +117,6 @@ const Register = (props) => {
       metamaskId: userDetails.metamaskId,
     }).then((nonceValue) => {
       let nonceString = _.get(nonceValue, "data.data");
-      initializeWebSocketConnection()
       BlockchainInterface.signToken(nonceString)
         .then((secret) => {
           registerUser(nonceString, secret);
@@ -193,6 +193,8 @@ const Register = (props) => {
   };
 
   const handleNext = () => {
+    initializeWebSocketConnection()
+
     if (steps[steps.length - 1].key == activeStep.key) {
       if (registration == PASSED) {
         publishUserToApp();
@@ -208,7 +210,6 @@ const Register = (props) => {
     }
 
     if(activeStep.key == "socialLogin"){
-      BlockchainInterface.createWSInstance()
     }
 
     const index = steps.findIndex((x) => x.key === activeStep.key);
@@ -680,17 +681,17 @@ const Register = (props) => {
             </Button>
           )}
           <Button
-            disabled={
-              ((userNameError ||
-                userEmailError ||
-                !userDetails.userName ||
-                userDetails.userName.length == 0) &&
-                activeStep.index == 2) ||
-              registration == PENDING ||
-              (_.isEmpty(userDetails.metamaskId) && activeStep.index == 1) ||
-              (_.isEmpty(userDetails.email) && activeStep.index == 0) ||
-              userNameError
-            }
+            // disabled={
+            //   ((userNameError ||
+            //     userEmailError ||
+            //     !userDetails.userName ||
+            //     userDetails.userName.length == 0) &&
+            //     activeStep.index == 2) ||
+            //   registration == PENDING ||
+            //   (_.isEmpty(userDetails.metamaskId) && activeStep.index == 1) ||
+            //   (_.isEmpty(userDetails.email) && activeStep.index == 0) ||
+            //   userNameError
+            // }
             variant="ternary"
             className="button"
             bsstyle="primary"

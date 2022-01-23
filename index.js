@@ -77,8 +77,8 @@ if (process.env.NODE_ENV == "production") {
 var server = app.listen(PORT, function () {
   console.log("Server is running on Port: " + PORT);
 });
-
-module.exports = server
+console.log("here")
+module.exports = ({server})
 
 
 

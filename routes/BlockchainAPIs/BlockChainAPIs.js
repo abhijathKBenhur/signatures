@@ -8,6 +8,7 @@ const server = require("../../index")
 const BlockchainUtils = require("./BlockChainUtils");
 const web3Instance = BlockchainUtils.web3Instance
 const ideaTribeContract = BlockchainUtils.ideaTribeContract
+console.log("88888888888",server)
 
 const transactionObject = {};
 let wss = undefined
@@ -21,6 +22,7 @@ const SIGNATURE_MESSAGE = "Welcome to IdeaTribe! Click 'Sign' to sign in. No pas
 
 
 createWSInstance= (req, res) => {
+  console.log(server)
   wss = new webSocket.Server({server: server })
   console.log("Web socket server started");
   wss.on('connection', function connection(ws) {
