@@ -84,7 +84,6 @@ const Register = (props) => {
       setIsMobileView(true)
     }
   }, []);
-  BlockchainInterface.createWSInstance()
 
   const [userDetails, setUserDetails] = useState({
     firstName: _.get(reduxState, "firstName"),
@@ -101,7 +100,7 @@ const Register = (props) => {
   });
 
   function initializeWebSocketConnection() {
-    const socketConnection = SocketInstance.getNewConnection(userDetails.metamaskID)
+    const socketConnection = SocketInstance.getNewConnection(userDetails.metamaskId)
     socketConnection.addEventListener('open', function (event) {
       console.log('Connected to WS Server')
     });
@@ -193,7 +192,6 @@ const Register = (props) => {
   };
 
   const handleNext = () => {
-    initializeWebSocketConnection()
 
     if (steps[steps.length - 1].key == activeStep.key) {
       if (registration == PASSED) {
@@ -210,6 +208,11 @@ const Register = (props) => {
     }
 
     if(activeStep.key == "socialLogin"){
+      BlockchainInterface.createWSInstance()
+    }
+
+    if(activeStep.key == "chainAddress"){
+      initializeWebSocketConnection()
     }
 
     const index = steps.findIndex((x) => x.key === activeStep.key);

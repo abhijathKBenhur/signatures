@@ -4,11 +4,11 @@ const jwt = require("jsonwebtoken");
 const _ = require("lodash");
 const UserSchema = require("../../db-config/user.schema");
 const webSocket = require('ws')
-const server = require("../../index")
+const url = require('url')
+
 const BlockchainUtils = require("./BlockChainUtils");
 const web3Instance = BlockchainUtils.web3Instance
 const ideaTribeContract = BlockchainUtils.ideaTribeContract
-console.log("88888888888",server)
 
 const transactionObject = {};
 let wss = undefined
@@ -22,13 +22,14 @@ const SIGNATURE_MESSAGE = "Welcome to IdeaTribe! Click 'Sign' to sign in. No pas
 
 
 createWSInstance= (req, res) => {
-  console.log(server)
-  wss = new webSocket.Server({server: server })
+  wss = new webSocket.Server({server: req.connection.server})
   console.log("Web socket server started");
-  wss.on('connection', function connection(ws) {
-    console.log(JSON.stringify(ws));
-    ws.clientId = "asdasd11111"
-    ws.send('Welcome New Client!');
+  
+  wss.on('connection', function connection(ws, req) {
+    console.log("incoming connecgion with URL" + req.url)
+    const parameters = url.parse(req.url, true);
+    ws.metamaskId = parameters.query.metamaskId;
+    ws.send('Welcome New Client! with metamaskId = ' + parameters.query.metamaskId);
   });
   
 }
