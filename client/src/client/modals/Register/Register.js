@@ -684,17 +684,17 @@ const Register = (props) => {
             </Button>
           )}
           <Button
-            // disabled={
-            //   ((userNameError ||
-            //     userEmailError ||
-            //     !userDetails.userName ||
-            //     userDetails.userName.length == 0) &&
-            //     activeStep.index == 2) ||
-            //   registration == PENDING ||
-            //   (_.isEmpty(userDetails.metamaskId) && activeStep.index == 1) ||
-            //   (_.isEmpty(userDetails.email) && activeStep.index == 0) ||
-            //   userNameError
-            // }
+              // disabled={
+              //   ((userNameError ||
+              //     userEmailError ||
+              //     !userDetails.userName ||
+              //     userDetails.userName.length == 0) &&
+              //     activeStep.index == 2) ||
+              //   registration == PENDING ||
+              //   (_.isEmpty(userDetails.metamaskId) && activeStep.index == 1) ||
+              //   (_.isEmpty(userDetails.email) && activeStep.index == 0) ||
+              //   userNameError
+              // }
             variant="ternary"
             className="button"
             bsstyle="primary"

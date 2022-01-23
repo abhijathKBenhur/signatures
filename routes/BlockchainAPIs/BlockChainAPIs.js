@@ -24,7 +24,7 @@ const SIGNATURE_MESSAGE = "Welcome to IdeaTribe! Click 'Sign' to sign in. No pas
 createWSInstance= (req, res) => {
   wss = new webSocket.Server({server: req.connection.server})
   console.log("Web socket server started");
-  
+
   wss.on('connection', function connection(ws, req) {
     console.log("incoming connecgion with URL" + req.url)
     const parameters = url.parse(req.url, true);
@@ -106,14 +106,13 @@ register_user = (req, res) => {
 
 sendWebSocketResponse = (success, metamaskId, message) =>{
   wss.clients.forEach(function each(client) {
-    console.log(JSON.stringify(client));
-    if (client !== ws && client.readyState === WebSocket.OPEN) {
-      console.log(client.id)
-      client.send({
+    if (client.metamaskId == metamaskId) {
+      console.log("sending to client :: " + client.metamaskId)
+      client.send(JSON.stringify({
         success,
         metamaskId,
         message
-      });
+      }));
     }
   });
 }
