@@ -105,6 +105,7 @@ register_user = (req, res) => {
 };
 
 sendWebSocketResponse = (success, metamaskId, message) =>{
+  console.log("Sending socket success - " + success+  " response to " + metamaskId + " :: " + message)
   wss.clients.forEach(function each(client) {
     if (client.metamaskId == metamaskId) {
       console.log("sending to client :: " + client.metamaskId)
