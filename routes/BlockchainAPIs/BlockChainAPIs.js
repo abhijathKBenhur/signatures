@@ -22,9 +22,14 @@ const SIGNATURE_MESSAGE = "Welcome to IdeaTribe! Click 'Sign' to sign in. No pas
 
 
 createWSInstance= (req, res) => {
-  wss = new webSocket.Server({server: req.connection.server})
+  let server = req.connection.server
+  wss = new webSocket.Server({server:server })
   console.log("Web socket server started");
-
+  // server.on('upgrade', function (request, socket, head) {
+  //   wss.handleUpgrade(request, socket, head, function (ws) {
+  //      wss.emit('connection', ws, request);
+  //   })
+  // })
   wss.on('connection', function connection(ws, req) {
     console.log("incoming connecgion with URL" + req.url)
     const parameters = url.parse(req.url, true);
@@ -84,11 +89,12 @@ register_user = (req, res) => {
                   web3Instance.eth.call(tx, tx.blockNumber).then(result => {
                     sendWebSocketResponse(success,result, false)
                 }).catch(err =>{
-                  console.log("********",err)
+                  console.log("** :: " , err);
+                  console.log("** :: " , err.message);
                   sendWebSocketResponse(success,err.message, false)
                 })
             }).catch(err =>{
-              console.log("********",err)
+              console.log("**** --- " ,err.message);
               sendWebSocketResponse(success,"Transaction invalid", false)
             })
           });
@@ -104,17 +110,18 @@ register_user = (req, res) => {
   
 };
 
-sendWebSocketResponse = (success, metamaskId, message) =>{
+sendWebSocketResponse = (metamaskId,  message,success) =>{
   console.log("Sending socket success - " + success+  " response to " + metamaskId + " :: " + message)
   wss.clients.forEach(function each(client) {
-    if (client.metamaskId == metamaskId) {
+    console.log("client.metamaskId" , client.metamaskId)
+    // if (_.get(client,'metamaskId') == metamaskId) {
       console.log("sending to client :: " + client.metamaskId)
       client.send(JSON.stringify({
         success,
         metamaskId,
         message
       }));
-    }
+    // }
   });
 }
 

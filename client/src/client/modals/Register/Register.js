@@ -107,7 +107,21 @@ const Register = (props) => {
   
     // Listen for messages
     socketConnection.addEventListener('message', function (event) {
-        console.log('Message from server ', event.data);
+      console.log("SOCKET RESPONSE ", event);
+      
+        let response = JSON.parse(event.data)
+        let status = response.success
+        let metamaskId = response.metamaskId
+        let message = response.message
+        if(userDetails.metamaskId == metamaskId){
+          if(status){
+            console.log("Adding user to DB")
+            addUserToDB()
+          }else{
+            console.log("REGISTER USER FAILURE IN ELSE", message);
+            registrationFailure(message, userDetails);
+          }
+        }
     });
   }
 
@@ -115,10 +129,11 @@ const Register = (props) => {
     UserInterface.getNonceAndRegister({
       metamaskId: userDetails.metamaskId,
     }).then((nonceValue) => {
-      let nonceString = _.get(nonceValue, "data.data");
-      BlockchainInterface.signToken(nonceString)
+      let nonce = _.get(nonceValue, "data.data");
+      BlockchainInterface.signToken(nonce)
         .then((secret) => {
-          registerUser(nonceString, secret);
+          setUserDetails({...userDetails, nonce, secret})
+          registerUser(nonce, secret);
         })
         .catch((err) => {
           console.log(err);
@@ -127,39 +142,43 @@ const Register = (props) => {
     });
   }
 
-
+  function addUserToDB(){
+    let nonce = userDetails.nonce
+    let secret = userDetails.secret
+    console.log("POSTING SIGN UP NOTIFICATION");
+    NotificationInterface.postNotification(
+      CONSTANTS.ENTITIES.PUBLIC,
+      _.get(loggedInUserDetails, "_id"),
+      CONSTANTS.ACTIONS.UPVOTE,
+      CONSTANTS.ACTION_STATUS.PENDING,
+      "Invite 10 friends and this is your referral code: " +
+        userDetails.myReferralCode
+    );
+    console.log("POSTED SIGN UP NOTIFICATION");
+    UserInterface.registerUser({ ...userDetails, secret, nonce })
+      .then((mongoSuccess) => {
+        console.log("REGISTER USER SUCCESS");
+        setTokenInSession(mongoSuccess.token);
+        publishUserToApp();
+        setRegistration(PASSED);
+        reactGA.event({
+          category: "Button",
+          action: "USER_REGISTERED",
+          label: "User registered",
+        });
+        BlockchainInterface.addToken("ERC20", "TRBG", 18);
+      })
+      .catch((err) => {
+        console.log("REGISTER USER FAILURE", err);
+        registrationFailure(err.data, userDetails);
+      });
+  }
 
   function registerUser(nonce, secret) {
     try {
       BlockchainInterface.register_user({ ...userDetails, secret, nonce })
         .then((success) => {
-          console.log("POSTING SIGN UP NOTIFICATION");
-          NotificationInterface.postNotification(
-            CONSTANTS.ENTITIES.PUBLIC,
-            _.get(loggedInUserDetails, "_id"),
-            CONSTANTS.ACTIONS.UPVOTE,
-            CONSTANTS.ACTION_STATUS.PENDING,
-            "Invite 10 friends and this is your referral code: " +
-              userDetails.myReferralCode
-          );
-          let response = success.data;
-          UserInterface.registerUser({ ...userDetails, secret, nonce })
-            .then((mongoSuccess) => {
-              console.log("REGISTER USER SUCCESS");
-              setTokenInSession(mongoSuccess.token);
-              publishUserToApp();
-              setRegistration(PASSED);
-              reactGA.event({
-                category: "Button",
-                action: "USER_REGISTERED",
-                label: "User registered",
-              });
-              BlockchainInterface.addToken("ERC20", "TRBG", 18);
-            })
-            .catch((err) => {
-              console.log("REGISTER USER FAILURE", err);
-              registrationFailure(err.data, userDetails);
-            });
+          console.log("Register transaction submitted.")
         })
         .catch((error) => {
           console.log("REGISTER USER FAILURE IN CATCH", error);
