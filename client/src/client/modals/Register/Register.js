@@ -416,7 +416,7 @@ const Register = (props) => {
             {userEmailError && (
               <div className="error-message ml-2">
                 {" "}
-                Email invalid or already registerd{" "}
+                Email invalid or already registered{" "}
               </div>
             )}
           </div>
