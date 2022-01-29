@@ -120,7 +120,6 @@ const Register = (props) => {
     socketConnection.current = SocketInstance.getNewConnection(userDetails.metamaskId)
     socketConnection.current.addEventListener('open', function (event) {
       console.log('Connected to WS Server')
-      socketConnection.current.close()
     });
 
     // Listen for messages

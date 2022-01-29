@@ -33,7 +33,7 @@ createWSInstance = (req, res) => {
   wss.on("connection", function connection(ws, req) {
     const parameters = url.parse(req.url, true);
     console.log("incoming connection with ID" + parameters.query.metamaskId);
-
+    let clientSocketInstance = ws
     ws.metamaskId = parameters.query.metamaskId;
     liveSocketClients[parameters.query.metamaskId] = ws;
     ws.send(
@@ -50,11 +50,9 @@ createWSInstance = (req, res) => {
     });
 
     ws.on('close', function connection(ws, req) {
-      console.log("closed" + req.url)
-      delete liveSocketClients[ws.metamaskId]
+      console.log("closedqwe" + clientSocketInstance.metamaskId  )
+      delete liveSocketClients[clientSocketInstance.metamaskId]
     });
-
-
   });
 };
 
