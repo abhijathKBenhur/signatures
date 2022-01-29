@@ -223,7 +223,7 @@ function Clan(props) {
       <Row className="profile">
         {_.isEmpty(loggedInUserDetails.userName) ? (
           <Row className="clan-modal">
-            <Register ></Register>
+            {/* <Register ></Register> */}
           </Row>
         ) : (
           <div className="separator w-100">

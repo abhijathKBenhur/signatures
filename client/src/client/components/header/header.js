@@ -448,7 +448,7 @@ const Header = (props) => {
           {!_.isEmpty(loggedInUserDetails) && isMobileView && <i className="fa fa-bars responsive-icons mobile-view ml-1 p-1" onClick={(e) => openOption()}></i> }
         </Container>
       </nav>
-      <Register show={showRegisterPopup} onHide={() => hideModal()}></Register>
+      {showRegisterPopup && <Register show={showRegisterPopup} onHide={() => hideModal()}></Register>}
       {menu.showMenu && <div className="mobile-menu"> 
           {!_.isEmpty(loggedInUserDetails) && appLocation == "home" && <div className="items" onClick={(e) => gotoProfile(false)}> <i className="fa fa-user"></i>Profile </div>} 
           {!_.isEmpty(loggedInUserDetails) && appLocation == "home" && <div className="items" onClick={(e) => gotoProfile(true)}> <i className="fa fa-bell"></i>Notification </div>} 

@@ -1,5 +1,5 @@
 import _ from "lodash";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { GoogleLogin } from "react-google-login";
 import {
   Row,
@@ -73,6 +73,8 @@ const Register = (props) => {
   const [userNameError, setuserNameError] = useState(false);
   const [userEmailError, setuserEmailError] = useState(false);
   const [loggedInUserDetails, setLoggedInUserDetails] = useState({});
+  const userDetailsReferenceObject = useRef({})
+  const socketConnection =  useRef({})
 
   useEffect(() => {
     const { userDetails = {} } = reduxState;
@@ -80,10 +82,23 @@ const Register = (props) => {
   }, [reduxState.userDetails]);
 
   useEffect(() => {
+    console.log("mounting")
+
     if(Number(window.screen.width) < 760  ){
       setIsMobileView(true)
     }
+    return function(){
+      if(!_.isEmpty(socketConnection.current)){
+        socketConnection.current.close()
+      }
+    }
   }, []);
+
+  window.addEventListener('beforeunload', function(event) {
+    if(!_.isEmpty(socketConnection.current)){
+      socketConnection.current.close()
+    }
+  });
 
   const [userDetails, setUserDetails] = useState({
     firstName: _.get(reduxState, "firstName"),
@@ -99,33 +114,44 @@ const Register = (props) => {
     // isWhitelisted = false
   });
 
+
+
   function initializeWebSocketConnection() {
-    const socketConnection = SocketInstance.getNewConnection(userDetails.metamaskId)
-    socketConnection.addEventListener('open', function (event) {
+    socketConnection.current = SocketInstance.getNewConnection(userDetails.metamaskId)
+    socketConnection.current.addEventListener('open', function (event) {
       console.log('Connected to WS Server')
+      socketConnection.current.close()
     });
-  
+
     // Listen for messages
-    socketConnection.addEventListener('message', function (event) {
+    socketConnection.current.addEventListener('message', function (event) {
       console.log("SOCKET RESPONSE ", event);
-      
-        let response = JSON.parse(event.data)
+      let response = JSON.parse(event.data)
+      if(response.type == "contractresponse"){
         let status = response.success
         let metamaskId = response.metamaskId
         let message = response.message
-        if(userDetails.metamaskId == metamaskId){
+        console.log("checking metamsk from socket :: " + userDetailsReferenceObject.current.metamaskId + " vs " + metamaskId)
           if(status){
-            console.log("Adding user to DB")
+            console.log("Adding user to DB :: " , userDetailsReferenceObject.current)
             addUserToDB()
           }else{
             console.log("REGISTER USER FAILURE IN ELSE", message);
             registrationFailure(message, userDetails);
           }
-        }
+          if(!_.isEmpty(socketConnection.current)){
+            socketConnection.current.close()
+          }
+      }
+      else if(response.type == "connectionInit"){
+        console.log("Connection inititalized");
+      }
+      else if(response.type == "message"){}
     });
   }
 
   function getNonceAndRegister() {
+
     UserInterface.getNonceAndRegister({
       metamaskId: userDetails.metamaskId,
     }).then((nonceValue) => {
@@ -143,19 +169,17 @@ const Register = (props) => {
   }
 
   function addUserToDB(){
-    let nonce = userDetails.nonce
-    let secret = userDetails.secret
     console.log("POSTING SIGN UP NOTIFICATION");
     NotificationInterface.postNotification(
       CONSTANTS.ENTITIES.PUBLIC,
       _.get(loggedInUserDetails, "_id"),
-      CONSTANTS.ACTIONS.UPVOTE,
+      CONSTANTS.ACTIONS.PERSONAL_MESSAGE,
       CONSTANTS.ACTION_STATUS.PENDING,
       "Invite 10 friends and this is your referral code: " +
-        userDetails.myReferralCode
+      userDetailsReferenceObject.current.myReferralCode
     );
-    console.log("POSTED SIGN UP NOTIFICATION");
-    UserInterface.registerUser({ ...userDetails, secret, nonce })
+    console.log("Complete DB userdetails ", userDetailsReferenceObject.current);
+    UserInterface.registerUser(userDetailsReferenceObject.current)
       .then((mongoSuccess) => {
         console.log("REGISTER USER SUCCESS");
         setTokenInSession(mongoSuccess.token);
@@ -170,12 +194,13 @@ const Register = (props) => {
       })
       .catch((err) => {
         console.log("REGISTER USER FAILURE", err);
-        registrationFailure(err.data, userDetails);
+        registrationFailure(err.data, userDetailsReferenceObject.current);
       });
   }
 
   function registerUser(nonce, secret) {
     try {
+      console.log("registering to blockchain  " , userDetails)
       BlockchainInterface.register_user({ ...userDetails, secret, nonce })
         .then((success) => {
           console.log("Register transaction submitted.")
@@ -213,6 +238,7 @@ const Register = (props) => {
   const handleNext = () => {
 
     if (steps[steps.length - 1].key == activeStep.key) {
+      userDetailsReferenceObject.current = userDetails
       if (registration == PASSED) {
         publishUserToApp();
         history.push("/profile/" + userDetails.userName);
@@ -221,6 +247,7 @@ const Register = (props) => {
         setRegistration("");
       } else {
         setRegistration(PENDING);
+        console.log("inititaing for", userDetails)
         getNonceAndRegister();
       }
       return;
@@ -618,14 +645,14 @@ const Register = (props) => {
         setWhiteListError(false);
       }
     }
-    // if(event.target.name == "tempEmail"){
-    //   UserInterface.getUserInfo({
-    //     email: value,
-    //   })
-    //     .then((userDetails) => {
-    //       setuserEmailError(true);
-    //     })
-    // }
+    if(event.target.name == "tempEmail"){
+      UserInterface.getUserInfo({
+        email: value,
+      })
+        .then((userDetails) => {
+          setuserEmailError(true);
+        })
+    }
   }
   const closePopup = () => {
     if (registration != PASSED) {
