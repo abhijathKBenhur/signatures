@@ -33,6 +33,8 @@ createWSInstance = (req, res) => {
     let clientSocketInstance = ws
     ws.metamaskId = parameters.query.metamaskId;
     liveSocketClients[parameters.query.metamaskId] = ws;
+    console.log("Client added")
+    console.log(liveSocketClients)
     ws.send(
       JSON.stringify({
         type: "connetionInit",
@@ -114,7 +116,6 @@ register_user = (req, res) => {
                 .json({ success: true, data: {message: "Registration submitted to chain", hash:hash }});
               })
               .once("receipt", function (receipt) {
-                console.log(receipt)
                 sendWebSocketResponse(
                   success,
                   "CONTRACT REGISTRATION SUCCESS",
@@ -187,6 +188,7 @@ sendWebSocketResponse = (metamaskId, message, success) => {
       " :: " +
       message
   );
+  console.log("liveSocketClients ", liveSocketClients)
   let client = liveSocketClients[metamaskId];
   console.log("target client ", client)
   client.send(
