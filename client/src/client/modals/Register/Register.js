@@ -644,14 +644,14 @@ const Register = (props) => {
         setWhiteListError(false);
       }
     }
-    if(event.target.name == "tempEmail"){
-      UserInterface.getUserInfo({
-        email: value,
-      })
-        .then((userDetails) => {
-          setuserEmailError(true);
-        })
-    }
+    // if(event.target.name == "tempEmail"){
+    //   UserInterface.getUserInfo({
+    //     email: value,
+    //   })
+    //     .then((userDetails) => {
+    //       setuserEmailError(true);
+    //     })
+    // }
   }
   const closePopup = () => {
     if (registration != PASSED) {
