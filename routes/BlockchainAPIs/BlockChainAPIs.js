@@ -23,6 +23,7 @@ const SIGNATURE_MESSAGE =
 
 createWSInstance = (req, res) => {
   let server = req.connection.server;
+  console.log("Server request on :: " + server)
   wss = new webSocket.Server({ server: server });
   console.log("Web socket server started");
   // server.on('upgrade', function (request, socket, head) {
@@ -107,6 +108,7 @@ register_user = (req, res) => {
               .registerUser(metamaskAddress, userName)
               .send(transactionObject)
               .on("receipt", function (receipt) {
+                console.log(receipt)
                 sendWebSocketResponse(
                   success,
                   "CONTRACT REGISTRATION SUCCESS",
