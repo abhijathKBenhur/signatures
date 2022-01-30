@@ -37,9 +37,11 @@ let whiteList2MemberGold = Web3Utils.toWei("5", "ether");
 
 const getGoldToDeposit =(userObject) =>{
   if(whitelistMailList1.indexOf(userObject.email) > -1 ){
+    console.log("User is a part of whitelist 1 and depositing " + whiteList1MemberGold)
     return whiteList1MemberGold;
   }
   else if(whitelistMailList2.indexOf(userObject.email) > -1 ){
+    console.log("User is a part of whitelist 2 and depositing " + whiteList1MemberGold)
     return whiteList2MemberGold;
   }else{
     return GOLD_DEPOSIT_VALUES.REGISTER;
@@ -61,8 +63,9 @@ const depostToNewUser = (receiverUserObject) => {
  
   
   TribeGoldAPIs.depositGold(receiverUserObject, 
-    GOLD_DEPOSIT_VALUES.REGISTER,
+    getGoldToDeposit(receiverUserObject),
     "GOLD_INCENTIVICED_REGISTER")
+
   MaticAPIs.depositMatic(receiverUserObject, MATIC_DEPOSIT_VALUES.REGISTER,"REGISTER")
 };
 
