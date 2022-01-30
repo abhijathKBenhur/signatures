@@ -208,8 +208,8 @@ const Register = (props) => {
             console.log("Register transaction submitted.", data)
           }
           else{
-            console.log("registration failure block in FE")
-            if(!_.isEmpty(socketConnection.current)){
+            console.log("registration failure block in FE", socketConnection.current)
+            if(socketConnection.current){
               console.log("Closing websocekt connection")
               socketConnection.current.close()
             }
@@ -226,6 +226,7 @@ const Register = (props) => {
   }
 
   function registrationFailure(message, userDetails) {
+    console.log("removing " + userDetails.userName)
     UserInterface.removeUser({
       userName: userDetails.userName,
     });

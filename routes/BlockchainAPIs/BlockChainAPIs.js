@@ -47,7 +47,7 @@ createWSInstance = (req, res) => {
     });
 
     ws.on('close', function connection(ws, req) {
-      console.log("closedqwe" + clientSocketInstance.metamaskId  )
+      console.log("closed socket with ID - " + clientSocketInstance.metamaskId  )
       delete liveSocketClients[clientSocketInstance.metamaskId]
     });
   });
