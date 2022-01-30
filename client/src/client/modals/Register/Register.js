@@ -88,14 +88,14 @@ const Register = (props) => {
       setIsMobileView(true)
     }
     return function(){
-      if(!_.isEmpty(socketConnection.current)){
+      if(socketConnection.current){
         socketConnection.current.close()
       }
     }
   }, []);
 
   window.addEventListener('beforeunload', function(event) {
-    if(!_.isEmpty(socketConnection.current)){
+    if(socketConnection.current){
       socketConnection.current.close()
     }
   });
@@ -139,7 +139,7 @@ const Register = (props) => {
             registrationFailure(message, userDetails);
           }
           console.log("checking if socket empty")
-          if(!_.isEmpty(socketConnection.current)){
+          if(socketConnection.current){
             console.log("closing socket")
             socketConnection.current.close()
           }
