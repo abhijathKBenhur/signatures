@@ -272,6 +272,7 @@ const Register = (props) => {
     }
 
     if(activeStep.key == "chainAddress"){
+      console.log("chainAddress")
       initializeWebSocketConnection()
     }
 
