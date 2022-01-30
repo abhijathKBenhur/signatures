@@ -113,7 +113,7 @@ register_user = (req, res) => {
                 .status(200)
                 .json({ success: true, data: {message: "Registration submitted to chain", hash:hash }});
               })
-              .on("receipt", function (receipt) {
+              .once("receipt", function (receipt) {
                 console.log(receipt)
                 sendWebSocketResponse(
                   success,
@@ -188,6 +188,7 @@ sendWebSocketResponse = (metamaskId, message, success) => {
       message
   );
   let client = liveSocketClients[metamaskId];
+  console.log("target client ", client)
   client.send(
     JSON.stringify({
       success,
