@@ -26,11 +26,7 @@ createWSInstance = (req, res) => {
   console.log("Server request on :: " + server)
   wss = new webSocket.Server({ server: server });
   console.log("Web socket server started");
-  // server.on('upgrade', function (request, socket, head) {
-  //   wss.handleUpgrade(request, socket, head, function (ws) {
-  //      wss.emit('connection', ws, request);
-  //   })
-  // })
+  
   wss.on("connection", function connection(ws, req) {
     const parameters = url.parse(req.url, true);
     console.log("incoming connection with ID" + parameters.query.metamaskId);
@@ -55,6 +51,10 @@ createWSInstance = (req, res) => {
       delete liveSocketClients[clientSocketInstance.metamaskId]
     });
   });
+
+  return res
+      .status(200)
+      .json({ success: true });
 };
 
 verifySignature = (req, res) => {

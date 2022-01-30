@@ -138,7 +138,9 @@ const Register = (props) => {
             console.log("REGISTER USER FAILURE IN ELSE", message);
             registrationFailure(message, userDetails);
           }
+          console.log("checking if socket empty")
           if(!_.isEmpty(socketConnection.current)){
+            console.log("closing socket")
             socketConnection.current.close()
           }
       }
@@ -206,7 +208,9 @@ const Register = (props) => {
             console.log("Register transaction submitted.", data)
           }
           else{
+            console.log("registration failure block in FE")
             if(!_.isEmpty(socketConnection.current)){
+              console.log("Closing websocekt connection")
               socketConnection.current.close()
             }
             registrationFailure(_.get(data,"data.message"), userDetails);
@@ -512,7 +516,7 @@ const Register = (props) => {
             ) : registration == FAILED ? (
               <div>
                 {" "}
-                Hi {userDetails.firstName}, {_.isEmpty(registrationErrorMessage) ? "we were unable to onboard you to the Tribe this time.":  registrationErrorMessage} 
+                Hi {userDetails.firstName}, {_.isEmpty(registrationErrorMessage) ? "we were unable to onboard you to the Tribe this time.":  registrationErrorMessage.substring(0,100)} 
                 <br></br>
               </div>
             ) : (
@@ -682,11 +686,11 @@ const Register = (props) => {
       >
         <Modal.Title>
           <span className="master-grey color-primary">Sign up</span>
-          <CloseButton
+          {registration != PASSED && <CloseButton
             onClick={() => {
               closePopup();
             }}
-          ></CloseButton>
+          ></CloseButton>}
         </Modal.Title>
         <div className="steps">
           <ul className="nav">
