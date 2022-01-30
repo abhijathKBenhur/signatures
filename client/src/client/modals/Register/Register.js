@@ -201,8 +201,16 @@ const Register = (props) => {
     try {
       console.log("registering to blockchain  " , userDetails)
       BlockchainInterface.register_user({ ...userDetails, secret, nonce })
-        .then((success) => {
-          console.log("Register transaction submitted.")
+        .then((data) => {
+          if(_.get(data,"data.success")){
+            console.log("Register transaction submitted.", data)
+          }
+          else{
+            if(!_.isEmpty(socketConnection.current)){
+              socketConnection.current.close()
+            }
+            registrationFailure(_.get(data,"data.message"), userDetails);
+          }
         })
         .catch((error) => {
           console.log("REGISTER USER FAILURE IN CATCH", error);
@@ -504,10 +512,8 @@ const Register = (props) => {
             ) : registration == FAILED ? (
               <div>
                 {" "}
-                Hi {userDetails.firstName}, we were unable to onboard you to the
-                Tribe this time.
+                Hi {userDetails.firstName}, {_.isEmpty(registrationErrorMessage) ? "we were unable to onboard you to the Tribe this time.":  registrationErrorMessage} 
                 <br></br>
-                {registrationErrorMessage}
               </div>
             ) : (
               <>

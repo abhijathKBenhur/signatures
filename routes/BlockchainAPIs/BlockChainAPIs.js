@@ -107,6 +107,12 @@ register_user = (req, res) => {
             ideaTribeContract.methods
               .registerUser(metamaskAddress, userName)
               .send(transactionObject)
+              .on('transactionHash', function(hash){  
+                console.log("on transactionHash :: ", hash)
+                return res
+                .status(200)
+                .json({ success: true, data: {message: "Registration submitted to chain", hash:hash }});
+              })
               .on("receipt", function (receipt) {
                 console.log(receipt)
                 sendWebSocketResponse(
@@ -115,9 +121,16 @@ register_user = (req, res) => {
                   true
                 );
               })
-              .on("error", function (error) {
-                console.log("CONTRACT REGISTRATION FAILED");
+              .on("error", function (error, receipt) {
+                console.log(error.message)
                 let transactionHash = _.get(error, "receipt.transactionHash");
+                if(_.isEmpty(transactionHash)){
+                  console.log("Registration failed without transaction ID")
+                  return res
+                  .status(200)
+                  .json({ success: false, message: error.message });
+                }
+                console.log("CONTRACT REGISTRATION FAILED :: ",transactionHash)
                 web3Instance.eth
                   .getTransaction(transactionHash)
                   .then((tx) => {
@@ -141,9 +154,7 @@ register_user = (req, res) => {
                     );
                   });
               });
-            return res
-              .status(200)
-              .json({ success: true, data: "Registration submitted to chain" });
+            
           } else {
             console.log(
               "nonce check failed - user nonce " +
