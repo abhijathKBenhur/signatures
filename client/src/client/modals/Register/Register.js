@@ -117,7 +117,9 @@ const Register = (props) => {
 
 
   function initializeWebSocketConnection() {
+    console.log('initializeWebSocketConnection with ', userDetails.metamaskId)
     socketConnection.current = SocketInstance.getNewConnection(userDetails.metamaskId)
+    console.log("Created socket connection ")
     socketConnection.current.addEventListener('open', function (event) {
       console.log('Connected to WS Server')
     });
