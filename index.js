@@ -1,7 +1,8 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const mongotConnection = require("./db-config/mongodb");
+const WebSocket = require("ws");
+const url = require("url");
 const tokenAPI = require("./routes/TokenAPIs");
 const userAPI = require("./routes/UserAPI");
 const AggregatesAPI = require("./routes/AggregatesAPI");
@@ -24,7 +25,7 @@ const app = express();
 const PORT = process.env.PORT || 4000;
 
 dotenv.config();
-
+let liveSocketClients = {};
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(authorizer)
@@ -77,8 +78,54 @@ if (process.env.NODE_ENV == "production") {
 var server = app.listen(PORT, function () {
   console.log("Server is running on Port: " + PORT);
 });
-console.log("here")
-module.exports = server
 
+
+let expressServer = server;
+  console.log("Server request on :: " + expressServer)
+
+  var wss = new WebSocket.Server({
+    noServer: true,
+    path: "/websockets",
+  });
+
+  expressServer.on("upgrade", (request, socket, head) => {
+    wss.handleUpgrade(request, socket, head, (websocket) => {
+      wss.emit("connection", websocket, request);
+    });
+  });
+
+  console.log("Web socket server started");
+  
+  wss.on("connection", function connection(ws, req) {
+    const parameters = url.parse(req.url, true);
+    console.log("incoming connection with ID" + parameters.query.metamaskId);
+    let clientSocketInstance = ws
+    ws.metamaskId = parameters.query.metamaskId;
+    liveSocketClients[parameters.query.metamaskId] = ws;
+    console.log("Client added")
+    console.log(liveSocketClients)
+    ws.send(
+      JSON.stringify({
+        type: "connetionInit",
+        message:
+          "Welcome New Client! with metamaskId = " +
+          parameters.query.metamaskId,
+      })
+    );
+
+    ws.on("message", (message) => {
+      console.log("received: ", message);
+      if(message = "ping"){
+        ws.send("pong")
+      }
+    });
+
+    ws.on('close', function connection(ws, req) {
+      console.log("closed socket with ID - " + clientSocketInstance.metamaskId  )
+      liveSocketClients[clientSocketInstance.metamaskId].close()
+      delete liveSocketClients[clientSocketInstance.metamaskId]
+      console.log("closed socket with ID - " + clientSocketInstance.metamaskId  )
+    });
+  });
 
 

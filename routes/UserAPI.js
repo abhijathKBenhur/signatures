@@ -164,7 +164,6 @@ getUserInfo = async (req, res) => {
   }
   // await User.findOne(findCriteria,{email:0}, (err, user) => {
   await User.findOne(findCriteria, (err, user) => {
-    console.log(user);
     if (err) {
       return res.status(400).json({ success: false, error: err });
     }
@@ -173,6 +172,7 @@ getUserInfo = async (req, res) => {
     }
     return res.status(200).json({ success: true, data: user });
   }).catch((err) => {
+    console.log(err)
     return res.status(400).json({ success: false, data: err });
   });
 };

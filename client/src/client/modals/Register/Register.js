@@ -1,6 +1,7 @@
 import _ from "lodash";
 import React, { useState, useEffect, useRef } from "react";
-import { GoogleLogin } from "react-google-login";
+
+
 import {
   Row,
   Col,
@@ -264,17 +265,19 @@ const Register = (props) => {
         history.push("/profile/" + userDetails.userName);
         window.location.reload();
       } else if (registration == FAILED) {
-        setRegistration("");
+        setSteps((prevStep) =>
+          prevStep.map((x) => {
+             x.isDone = false;
+            return x;
+          })
+        );
+        setActiveStep(steps[0]);
       } else {
         setRegistration(PENDING);
         console.log("inititaing for", userDetails);
         getNonceAndRegister();
       }
       return;
-    }
-
-    if (activeStep.key == "socialLogin") {
-      BlockchainInterface.createWSInstance();
     }
 
     if (activeStep.key == "chainAddress") {
@@ -298,15 +301,6 @@ const Register = (props) => {
     if (index === 0 ) {
       props.onHide();
     } 
-    else if(registration == FAILED){
-      setSteps((prevStep) =>
-        prevStep.map((x) => {
-          if (x.key != 0) x.isDone = false;
-          return x;
-        })
-      );
-      setActiveStep(0);
-    }
     else {
       setSteps((prevStep) =>
         prevStep.map((x) => {
@@ -750,7 +744,7 @@ const Register = (props) => {
           md="12"
           className="d-flex justify-content-between align-items-center "
         >
-          {registration == PASSED ? (
+          {registration == PASSED || registration == FAILED  ? (
             <div></div>
           ) : (
             <Button

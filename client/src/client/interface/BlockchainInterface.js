@@ -479,10 +479,6 @@ class BlockchainInterface {
     return this.web3;
   }
 
-  createWSInstance(){
-    return AxiosInstance.post(`/createWSInstance`, {});
-  }
-
 }
 
 export default new BlockchainInterface();

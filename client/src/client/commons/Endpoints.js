@@ -1,7 +1,7 @@
 const REMOTE_ENDPOINTS = "/api";
 const LOCAL_ENDPOINTS = "http://localhost:4000/api";
-const WEBSOCKET_ENDPOINT = "ws://localhost:4000/api";
-const WEBSOCKET_REMOTE_ENDPOINT = "wss://"+window.location.host
+const WEBSOCKET_ENDPOINT = "ws://localhost:4000/websockets";
+const WEBSOCKET_REMOTE_ENDPOINT = "wss://"+window.location.host+"/websockets"
 
 
 const ENDPOINTS = {
