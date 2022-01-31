@@ -53,7 +53,7 @@ const MATIC_DEPOSIT_VALUES = {
 };
 
 const depostToNewUser = (receiverUserObject) => {
-  console.log("INITIATING DEPOSITS")
+  console.log("INITIATING DEPOSITS FOR :: ", receiverUserObject)
   if(receiverUserObject.referredBy){
     UserSchema.findOne({myReferralCode:receiverUserObject.referredBy}).then(result =>{
       console.log("Referer", result.data)

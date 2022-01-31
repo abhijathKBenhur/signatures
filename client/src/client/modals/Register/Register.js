@@ -531,7 +531,7 @@ const Register = (props) => {
                   <img src={successLogo} className="success-logo"></img>
                   <span className="second-grey">
                     Hi {userDetails.firstName}, Congratulations! You have earned
-                    1 TribeGold and your wallet is loaded with MATIC to get
+                    TribeGold and your wallet is loaded with MATIC to get
                     started!
                   </span>
                 </div>
