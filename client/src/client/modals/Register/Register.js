@@ -15,7 +15,7 @@ import "react-step-progress-bar/styles.css";
 import { shallowEqual, useSelector } from "react-redux";
 import CONSTANTS from "../../commons/Constants";
 import { setReduxUserDetails } from "../../redux/actions";
-import polygonLogo from  "../../../assets/logo/polygon.png"
+import polygonLogo from "../../../assets/logo/polygon.png";
 import successLogo from "../../../assets/images/success.png";
 import SignatureInterface from "../../interface/SignatureInterface";
 import BlockchainInterface from "../../interface/BlockchainInterface";
@@ -73,8 +73,8 @@ const Register = (props) => {
   const [userNameError, setuserNameError] = useState(false);
   const [userEmailError, setuserEmailError] = useState(false);
   const [loggedInUserDetails, setLoggedInUserDetails] = useState({});
-  const userDetailsReferenceObject = useRef({})
-  const socketConnection =  useRef({})
+  const userDetailsReferenceObject = useRef({});
+  const socketConnection = useRef({});
 
   useEffect(() => {
     const { userDetails = {} } = reduxState;
@@ -82,29 +82,33 @@ const Register = (props) => {
   }, [reduxState.userDetails]);
 
   useEffect(() => {
-    console.log("mounting")
+    console.log("mounting");
 
-    if(Number(window.screen.width) < 760  ){
-      setIsMobileView(true)
+    if (Number(window.screen.width) < 760) {
+      setIsMobileView(true);
     }
-    return function(){
-      if(socketConnection.current){
-        socketConnection.current.close()
-      }
-    }
+    return function() {
+      console.log("unmounting", socketConnection.current);
+      safeCloseSocket()
+    };
   }, []);
 
-  window.addEventListener('beforeunload', function(event) {
-    if(socketConnection.current){
-      socketConnection.current.close()
+  window.onbeforeunload = function(event) { 
+    safeCloseSocket()
+   };
+
+  const safeCloseSocket = () => {
+    if (!_.isEmpty(_.get(socketConnection,"current.url"))) {
+      socketConnection.current.close();
     }
-  });
+  }
 
   const [userDetails, setUserDetails] = useState({
     firstName: _.get(reduxState, "firstName"),
     lastName: _.get(reduxState, "lastName"),
     email: _.get(reduxState, "email"),
-    imageUrl: "https://t4.ftcdn.net/jpg/02/15/84/43/360_F_215844325_ttX9YiIIyeaR7Ne6EaLLjMAmy4GvPC69.jpg",
+    imageUrl:
+      "https://t4.ftcdn.net/jpg/02/15/84/43/360_F_215844325_ttX9YiIIyeaR7Ne6EaLLjMAmy4GvPC69.jpg",
     metamaskId: _.get(reduxState, "metamaskID"),
     userName: _.get(reduxState, "userName"),
     loginMode: _.get(reduxState, "loginMode"),
@@ -114,54 +118,57 @@ const Register = (props) => {
     // isWhitelisted = false
   });
 
-
-
   function initializeWebSocketConnection() {
-    console.log('initializeWebSocketConnection with ', userDetails.metamaskId)
-    socketConnection.current = SocketInstance.getNewConnection(userDetails.metamaskId)
-    console.log("Created socket connection ")
-    socketConnection.current.addEventListener('open', function (event) {
-      console.log('Connected to WS Server')
+    console.log("initializeWebSocketConnection with ", userDetails.metamaskId);
+    socketConnection.current = SocketInstance.getNewConnection(
+      userDetails.metamaskId
+    );
+    console.log("Created socket connection ");
+    socketConnection.current.addEventListener("open", function(event) {
+      console.log("Connected to WS Server");
     });
 
     // Listen for messages
-    socketConnection.current.addEventListener('message', function (event) {
+    socketConnection.current.addEventListener("message", function(event) {
       console.log("SOCKET RESPONSE ", event);
-      let response = JSON.parse(event.data)
-      if(response.type == "contractresponse"){
-        let status = response.success
-        let metamaskId = response.metamaskId
-        let message = response.message
-        console.log("checking metamsk from socket :: " + userDetailsReferenceObject.current.metamaskId + " vs " + metamaskId)
-          if(status){
-            console.log("Adding user to DB :: " , userDetailsReferenceObject.current)
-            addUserToDB()
-          }else{
-            console.log("REGISTER USER FAILURE IN ELSE", message);
-            registrationFailure(message, userDetails);
-          }
-          console.log("checking if socket empty")
-          if(socketConnection.current){
-            console.log("closing socket")
-            socketConnection.current.close()
-          }
-      }
-      else if(response.type == "connectionInit"){
+      let response = JSON.parse(event.data);
+      if (response.type == "contractresponse") {
+        let status = response.success;
+        let metamaskId = response.metamaskId;
+        let message = response.message;
+        console.log(
+          "checking metamsk from socket :: " +
+            userDetailsReferenceObject.current.metamaskId +
+            " vs " +
+            metamaskId
+        );
+        if (status) {
+          console.log(
+            "Adding user to DB :: ",
+            userDetailsReferenceObject.current
+          );
+          safeCloseSocket()
+          addUserToDB();
+        } else {
+          console.log("REGISTER USER FAILURE IN ELSE", message);
+          registrationFailure(message, userDetails);
+        }
+        console.log("checking if socket empty");
+      } else if (response.type == "connectionInit") {
         console.log("Connection inititalized");
+      } else if (response.type == "message") {
       }
-      else if(response.type == "message"){}
     });
   }
 
   function getNonceAndRegister() {
-
     UserInterface.getNonceAndRegister({
       metamaskId: userDetails.metamaskId,
     }).then((nonceValue) => {
       let nonce = _.get(nonceValue, "data.data");
       BlockchainInterface.signToken(nonce)
         .then((secret) => {
-          setUserDetails({...userDetails, nonce, secret})
+          setUserDetails({ ...userDetails, nonce, secret });
           registerUser(nonce, secret);
         })
         .catch((err) => {
@@ -171,7 +178,7 @@ const Register = (props) => {
     });
   }
 
-  function addUserToDB(){
+  function addUserToDB() {
     console.log("POSTING SIGN UP NOTIFICATION");
     NotificationInterface.postNotification(
       CONSTANTS.ENTITIES.PUBLIC,
@@ -179,7 +186,7 @@ const Register = (props) => {
       CONSTANTS.ACTIONS.PERSONAL_MESSAGE,
       CONSTANTS.ACTION_STATUS.PENDING,
       "Invite 10 friends and this is your referral code: " +
-      userDetailsReferenceObject.current.myReferralCode
+        userDetailsReferenceObject.current.myReferralCode
     );
     console.log("Complete DB userdetails ", userDetailsReferenceObject.current);
     UserInterface.registerUser(userDetailsReferenceObject.current)
@@ -203,19 +210,18 @@ const Register = (props) => {
 
   function registerUser(nonce, secret) {
     try {
-      console.log("registering to blockchain  " , userDetails)
+      console.log("registering to blockchain  ", userDetails);
       BlockchainInterface.register_user({ ...userDetails, secret, nonce })
         .then((data) => {
-          if(_.get(data,"data.success")){
-            console.log("Register transaction submitted.", data)
-          }
-          else{
-            console.log("registration failure block in FE", socketConnection.current)
-            if(socketConnection.current){
-              console.log("Closing websocekt connection")
-              socketConnection.current.close()
-            }
-            registrationFailure(_.get(data,"data.message"), userDetails);
+          if (_.get(data, "data.success")) {
+            console.log("Register transaction submitted.", data);
+          } else {
+            console.log(
+              "registration failure block in FE",
+              socketConnection.current
+            );
+            safeCloseSocket();
+            registrationFailure(_.get(data, "data.message"), userDetails);
           }
         })
         .catch((error) => {
@@ -228,7 +234,7 @@ const Register = (props) => {
   }
 
   function registrationFailure(message, userDetails) {
-    console.log("removing " + userDetails.userName)
+    console.log("removing " + userDetails.userName);
     UserInterface.removeUser({
       userName: userDetails.userName,
     });
@@ -250,9 +256,8 @@ const Register = (props) => {
   };
 
   const handleNext = () => {
-
     if (steps[steps.length - 1].key == activeStep.key) {
-      userDetailsReferenceObject.current = userDetails
+      userDetailsReferenceObject.current = userDetails;
       if (registration == PASSED) {
         publishUserToApp();
         history.push("/profile/" + userDetails.userName);
@@ -261,19 +266,19 @@ const Register = (props) => {
         setRegistration("");
       } else {
         setRegistration(PENDING);
-        console.log("inititaing for", userDetails)
+        console.log("inititaing for", userDetails);
         getNonceAndRegister();
       }
       return;
     }
 
-    if(activeStep.key == "socialLogin"){
-      BlockchainInterface.createWSInstance()
+    if (activeStep.key == "socialLogin") {
+      BlockchainInterface.createWSInstance();
     }
 
-    if(activeStep.key == "chainAddress"){
-      console.log("chainAddress")
-      initializeWebSocketConnection()
+    if (activeStep.key == "chainAddress") {
+      console.log("chainAddress");
+      initializeWebSocketConnection();
     }
 
     const index = steps.findIndex((x) => x.key === activeStep.key);
@@ -289,7 +294,7 @@ const Register = (props) => {
 
   const handleBack = () => {
     const index = steps.findIndex((x) => x.key === activeStep.key);
-    if (index === 0) {
+    if (index === 0 || registration == FAILED ) {
       props.onHide();
     } else {
       setSteps((prevStep) =>
@@ -349,8 +354,8 @@ const Register = (props) => {
   }
 
   function validateOtp() {
-    let success = userDetails.otp == _.get(OTPShared,"data")
-    if(success){
+    let success = userDetails.otp == _.get(OTPShared, "data");
+    if (success) {
       setUserDetails({
         ...userDetails,
         email: userDetails.tempEmail,
@@ -360,74 +365,77 @@ const Register = (props) => {
 
   function sendMail() {
     const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    if(!re.test(String(userDetails.tempEmail).toLowerCase())){
+    if (!re.test(String(userDetails.tempEmail).toLowerCase())) {
       setuserEmailError(true);
-    }else{
+    } else {
       setuserEmailError(false);
-      setOTPInitiated(true)
-      UserInterface.sendMail({tempEmail:userDetails.tempEmail}).then(success =>{
-        setOTPShared(success.data)
-      }).catch(Err => {
-        setOTPShared(undefined)
-      })
+      setOTPInitiated(true);
+      UserInterface.sendMail({ tempEmail: userDetails.tempEmail })
+        .then((success) => {
+          setOTPShared(success.data);
+        })
+        .catch((Err) => {
+          setOTPShared(undefined);
+        });
     }
-    
   }
 
   function getConditionalView(stepKey) {
     switch (stepKey) {
       case "socialLogin":
         return (
-          <div className="align-self-center d-flex justify-content-center flex-column mail-flow" >
-            {!OTPShared && <Row className="mailinput  d-flex flex-row align-items-center mt-3">
-              <Form.Control
-                type="text"
-                name="tempEmail"
-                value={userDetails.tempEmail}
-                className={
-                  userEmailError ? "username-error userName" : "userName"
-                }
-                placeholder="Email address"
-                autoFocus={true}
-                onChange={handleChange}
-              />
+          <div className="align-self-center d-flex justify-content-center flex-column mail-flow">
+            {!OTPShared && (
+              <Row className="mailinput  d-flex flex-row align-items-center mt-3">
+                <Form.Control
+                  type="text"
+                  name="tempEmail"
+                  value={userDetails.tempEmail}
+                  className={
+                    userEmailError ? "username-error userName" : "userName"
+                  }
+                  placeholder="Email address"
+                  autoFocus={true}
+                  onChange={handleChange}
+                />
 
-              <Button
-                variant="secondary"
-                className="button mt-2 action-button w-100"
-                bsstyle="primary"
-                disabled={userEmailError || OTPInitiated}
-                onClick={() => {
-                  sendMail();
-                }}
-              >
-                {OTPInitiated ? "Please wait" : "Send OTP"}
-              </Button>
-            </Row>}
-            {OTPShared && <div className="otpinput flex-column d-flex align-items-center">
-              <Form.Control
-                type="text"
-                name="otp"
-                value={userDetails.otp}
-                className= "userName"
-                autoFocus={true}
-                placeholder="OTP"
-                onChange={handleChange}
-              />
-              <Button
-              variant={userDetails.email? "secondary" : "primary"}
-              className="button mt-2 action-button w-100"
-              bsstyle="primary"
-              
-              onClick={() => {
-                validateOtp();
-              }}
-            >
-              {userDetails.email ? "Validated" :"Validate"}
-            </Button>
-            </div>}
+                <Button
+                  variant="secondary"
+                  className="button mt-2 action-button w-100"
+                  bsstyle="primary"
+                  disabled={userEmailError || OTPInitiated}
+                  onClick={() => {
+                    sendMail();
+                  }}
+                >
+                  {OTPInitiated ? "Please wait" : "Send OTP"}
+                </Button>
+              </Row>
+            )}
+            {OTPShared && (
+              <div className="otpinput flex-column d-flex align-items-center">
+                <Form.Control
+                  type="text"
+                  name="otp"
+                  value={userDetails.otp}
+                  className="userName"
+                  autoFocus={true}
+                  placeholder="OTP"
+                  onChange={handleChange}
+                />
+                <Button
+                  variant={userDetails.email ? "secondary" : "primary"}
+                  className="button mt-2 action-button w-100"
+                  bsstyle="primary"
+                  onClick={() => {
+                    validateOtp();
+                  }}
+                >
+                  {userDetails.email ? "Validated" : "Validate"}
+                </Button>
+              </div>
+            )}
 
-            
             <br />
             {userEmailError && (
               <div className="error-message ml-2">
@@ -520,14 +528,21 @@ const Register = (props) => {
             ) : registration == FAILED ? (
               <div>
                 {" "}
-                Hi {userDetails.firstName}, {_.isEmpty(registrationErrorMessage) ? "we were unable to onboard you to the Tribe this time.":  registrationErrorMessage.substring(0,100)} 
+                Hi {userDetails.firstName},{" "}
+                {_.isEmpty(registrationErrorMessage)
+                  ? "we were unable to onboard you to the Tribe this time."
+                  : registrationErrorMessage.substring(0, 100)}
                 <br></br>
               </div>
             ) : (
               <>
                 <Form.Group
                   as={Col}
-                  className={isMobileView?"formEntry userIDSection h-100 flex-column": "formEntry userIDSection h-100" }
+                  className={
+                    isMobileView
+                      ? "formEntry userIDSection h-100 flex-column"
+                      : "formEntry userIDSection h-100"
+                  }
                   controlId="userName"
                 >
                   <Image
@@ -690,11 +705,6 @@ const Register = (props) => {
       >
         <Modal.Title>
           <span className="master-grey color-primary">Sign up</span>
-          {registration != PASSED && <CloseButton
-            onClick={() => {
-              closePopup();
-            }}
-          ></CloseButton>}
         </Modal.Title>
         <div className="steps">
           <ul className="nav">
@@ -729,7 +739,7 @@ const Register = (props) => {
           md="12"
           className="d-flex justify-content-between align-items-center "
         >
-          {registration == PASSED || registration == FAILED ? (
+          {registration == PASSED ? (
             <div></div>
           ) : (
             <Button
@@ -739,10 +749,10 @@ const Register = (props) => {
                 handleBack();
               }}
             >
-              {activeStep.index == 0 ? "Cancel" : "Back"}
+              {activeStep.index == 0 || registration == FAILED ? "Cancel" : "Back"}
             </Button>
           )}
-          <Button
+            <Button
               // disabled={
               //   ((userNameError ||
               //     userEmailError ||
@@ -754,23 +764,23 @@ const Register = (props) => {
               //   (_.isEmpty(userDetails.email) && activeStep.index == 0) ||
               //   userNameError
               // }
-            variant="ternary"
-            className="button"
-            bsstyle="primary"
-            onClick={() => {
-              handleNext();
-            }}
-          >
-            {activeStep.index == steps.length - 1
-              ? registration == PASSED
-                ? "Get Started"
-                : registration == PENDING
-                ? "Registering"
-                : registration == FAILED
-                ? "Retry"
-                : "Register"
-              : "Next"}
-          </Button>
+              variant="ternary"
+              className="button"
+              bsstyle="primary"
+              onClick={() => {
+                handleNext();
+              }}
+            >
+              {activeStep.index == steps.length - 1
+                ? registration == PASSED
+                  ? "Get Started"
+                  : registration == PENDING
+                  ? "Registering"
+                  : registration == FAILED
+                  ? "Retry"
+                  : "Register"
+                : "Next"}
+            </Button>
         </Col>
       </Modal.Footer>
     </Modal>
