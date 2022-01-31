@@ -142,6 +142,7 @@ const Register = (props) => {
             " vs " +
             metamaskId
         );
+        safeCloseSocket()
         if (status) {
           console.log(
             "Adding user to DB :: ",
@@ -294,9 +295,19 @@ const Register = (props) => {
 
   const handleBack = () => {
     const index = steps.findIndex((x) => x.key === activeStep.key);
-    if (index === 0 || registration == FAILED ) {
+    if (index === 0 ) {
       props.onHide();
-    } else {
+    } 
+    else if(registration == FAILED){
+      setSteps((prevStep) =>
+        prevStep.map((x) => {
+          if (x.key != 0) x.isDone = false;
+          return x;
+        })
+      );
+      setActiveStep(0);
+    }
+    else {
       setSteps((prevStep) =>
         prevStep.map((x) => {
           if (x.key === activeStep.key) x.isDone = false;
