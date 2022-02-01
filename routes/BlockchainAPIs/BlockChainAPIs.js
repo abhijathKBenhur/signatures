@@ -3,16 +3,14 @@ const router = express.Router();
 const jwt = require("jsonwebtoken");
 const _ = require("lodash");
 const UserSchema = require("../../db-config/user.schema");
-const webSocket = require("ws");
-const url = require("url");
+
 
 const BlockchainUtils = require("./BlockChainUtils");
 const web3Instance = BlockchainUtils.web3Instance;
 const ideaTribeContract = BlockchainUtils.ideaTribeContract;
 
 const transactionObject = {};
-let wss = undefined;
-let liveSocketClients = {};
+
 
 web3Instance.eth.getAccounts().then((result) => {
   transactionObject.from = result[0];
@@ -20,44 +18,6 @@ web3Instance.eth.getAccounts().then((result) => {
 
 const SIGNATURE_MESSAGE =
   "Welcome to IdeaTribe! Click 'Sign' to sign in. No password needed! This request will not trigger a blockchain transaction or cost any gas fees. Your authentication status will be reset after 24 hours. I accept the IdeaTribe Terms of Service: https://ideatribe.io. Nonce: ";
-
-createWSInstance = (req, res) => {
-  let server = req.connection.server;
-  console.log("Server request on :: " + server)
-  wss = new webSocket.Server({ server: server });
-  console.log("Web socket server started");
-  
-  wss.on("connection", function connection(ws, req) {
-    const parameters = url.parse(req.url, true);
-    console.log("incoming connection with ID" + parameters.query.metamaskId);
-    let clientSocketInstance = ws
-    ws.metamaskId = parameters.query.metamaskId;
-    liveSocketClients[parameters.query.metamaskId] = ws;
-    console.log("Client added")
-    console.log(liveSocketClients)
-    ws.send(
-      JSON.stringify({
-        type: "connetionInit",
-        message:
-          "Welcome New Client! with metamaskId = " +
-          parameters.query.metamaskId,
-      })
-    );
-
-    ws.on("message", (message) => {
-      console.log("received: %s", message);
-    });
-
-    ws.on('close', function connection(ws, req) {
-      console.log("closed socket with ID - " + clientSocketInstance.metamaskId  )
-      delete liveSocketClients[clientSocketInstance.metamaskId]
-    });
-  });
-
-  return res
-      .status(200)
-      .json({ success: true });
-};
 
 verifySignature = (req, res) => {
   let nonce = req.body.nonce;
@@ -116,7 +76,8 @@ register_user = (req, res) => {
                 .json({ success: true, data: {message: "Registration submitted to chain", hash:hash }});
               })
               .once("receipt", function (receipt) {
-                sendWebSocketResponse(
+                console.log("Contract response is success")
+                req.app.sendWebSocketResponse(
                   success,
                   "CONTRACT REGISTRATION SUCCESS",
                   true
@@ -138,17 +99,17 @@ register_user = (req, res) => {
                     web3Instance.eth
                       .call(tx, tx.blockNumber)
                       .then((result) => {
-                        sendWebSocketResponse(success, result, false);
+                        req.app.sendWebSocketResponse(success, result, false);
                       })
                       .catch((err) => {
                         console.log("** :: ", err);
                         console.log("** :: ", err.message);
-                        sendWebSocketResponse(success, err.message, false);
+                        req.app.sendWebSocketResponse(success, err.message, false);
                       });
                   })
                   .catch((err) => {
                     console.log("**** --- ", err.message);
-                    sendWebSocketResponse(
+                    req.app.sendWebSocketResponse(
                       success,
                       "Transaction invalid",
                       false
@@ -179,27 +140,6 @@ register_user = (req, res) => {
   }
 };
 
-sendWebSocketResponse = (metamaskId, message, success) => {
-  console.log(
-    "Sending socket success - " +
-      success +
-      " response to " +
-      metamaskId +
-      " :: " +
-      message
-  );
-  console.log("liveSocketClients ", liveSocketClients)
-  let client = liveSocketClients[metamaskId];
-  console.log("target client ", client)
-  client.send(
-    JSON.stringify({
-      success,
-      metamaskId,
-      message,
-      type: "contractresponse",
-    })
-  );
-};
 
 getContractENV = async (req, res) => {
   try {
@@ -212,6 +152,5 @@ getContractENV = async (req, res) => {
 router.get("/getContractENV", getContractENV);
 router.post("/register_user", register_user);
 router.post("/verifySignature", verifySignature);
-router.post("/createWSInstance", createWSInstance);
 
 module.exports = router;

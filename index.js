@@ -78,7 +78,61 @@ var server = app.listen(PORT, function () {
   console.log("Server is running on Port: " + PORT);
 });
 console.log("here")
-module.exports = server
+  const webSocket = require("ws");
+  const url = require("url");
+  let wss = undefined;
+  let liveSocketClients = {};
+  console.log("Server request on :: " + server)
+  wss = new webSocket.Server({ server: server });
+  console.log("Web socket server started");
+  
+  wss.on("connection", function connection(ws, req) {
+    const parameters = url.parse(req.url, true);
+    console.log("incoming connection with ID" + parameters.query.metamaskId);
+    let clientSocketInstance = ws
+    ws.metamaskId = parameters.query.metamaskId;
+    liveSocketClients[parameters.query.metamaskId] = ws;
+    console.log("Client added")
+    ws.send(
+      JSON.stringify({
+        type: "connetionInit",
+        message:
+          "Welcome New Client! with metamaskId = " +
+          parameters.query.metamaskId,
+      })
+    );
 
+    ws.on("message", (message) => {
+      console.log("received: %s", message);
+    });
 
+    ws.on('close', function connection(ws, req) {
+      console.log("closed socket with ID - " + clientSocketInstance.metamaskId  )
+      delete liveSocketClients[clientSocketInstance.metamaskId]
+    });
+  });
 
+  const sendWebSocketResponse = (metamaskId, message, success) => {
+    console.log(
+      "Sending socket success - " +
+        success +
+        " response to " +
+        metamaskId +
+        " :: " +
+        message
+    );
+    console.log("liveSocketClients ", liveSocketClients)
+    let client = liveSocketClients[metamaskId];
+    client.send(
+      JSON.stringify({
+        success,
+        metamaskId,
+        message,
+        type: "contractresponse",
+      })
+    );
+  };
+
+  app.sendWebSocketResponse = sendWebSocketResponse
+
+  module.exports = app
