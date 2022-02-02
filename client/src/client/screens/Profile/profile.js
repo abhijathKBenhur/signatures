@@ -299,7 +299,7 @@ function Profile(props) {
                               window.open(
                                 reduxChain +
                                   "/address/" +
-                                  _.get(loggedInUserDetails, "userName")
+                                  _.get(loggedInUserDetails, "metamaskId")
                               );
                             }}
                           ></i>

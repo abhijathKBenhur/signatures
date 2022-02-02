@@ -413,8 +413,8 @@ const SignatureNew = (props) => {
                               onClick={() => {
                                 window.open(
                                   reduxChain +
-                                    "/address/" +
-                                    _.get(signature, "PDFHash")
+                                    "/tx/" +
+                                    _.get(signature, "transactionID")
                                 );
                               }}>
                               <i

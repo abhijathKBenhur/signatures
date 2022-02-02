@@ -51,6 +51,7 @@ const EngageModal = (props) => {
     },
     storage: props.idea.storage,
     units: props.idea.units,
+    engagemessage:""
   });
 
   let pusposeList = [
@@ -159,7 +160,7 @@ const EngageModal = (props) => {
         _.get(props, "idea.owner.userName"),
         CONSTANTS.ACTIONS.COMMENT,
         CONSTANTS.ACTION_STATUS.PENDING,
-        message,
+        form.engagemessage,
         JSON.stringify({
           ideaID: _.get(props.idea, "PDFHash"),
         })
@@ -202,7 +203,7 @@ const EngageModal = (props) => {
       <Modal.Body className="info-modal-body">
         <div className="modal-header-wrapper">
           <Col md="12" className="">
-            <span className="father-grey color-primary">Engage</span>
+            <span className="father-grey color-primary">{getEngageText(form)}</span>
           </Col>
         </div>
         <div className="purpose-selection">
@@ -224,7 +225,7 @@ const EngageModal = (props) => {
                 <Image className="img-fluid" src={getPlaceholder()} width="300px"></Image>
               </div>
               <div>
-                <textarea className="w-100 message-area" placeholder="Type message here.." onChange={(e)=> setMessage(e.target.value)}/> 
+                { _.get(form,'purpose.purposeType') == CONSTANTS.PURPOSES.COLLAB &&  <textarea className="w-100 message-area" placeholder="Type message here.." name="engagemessage" onChange={(e)=> setMessage(e.target.value)}/> }
               </div>
               <span className={"status_message " + engaging}>{statusMessage}</span>
             </Col>
