@@ -2,6 +2,7 @@ const Web3 = require("web3");
 const contractJSON = require("../../client/src/contracts/ideaTribe.json");
 const contractJTestSON = require("../../client/src/contracts/ideaTribe_test.json");
 const tribeGoldJSON = require("../../client/src/contracts/tribeGold.json");
+const tribeGoldTestJSON = require("../../client/src/contracts/tribeGold_test.json");
 const goldTreasurerKey = process.env.TRIBE_GOLD_TREASURER;
 const maticTreasurerKey = process.env.MATIC_TREASURER;
 const programmerKey = process.env.PROGRAMMER_KEY;
@@ -21,8 +22,8 @@ const web3Instance = new Web3(hdWallet);
   );
 
   const tribeGoldContract = new web3Instance.eth.Contract(
-    tribeGoldJSON.abi,
-    tribeGoldJSON.address
+    process.env.CHAIN_ENV == "mainnet" ? tribeGoldJSON.abi : tribeGoldTestJSON.abi,
+    process.env.CHAIN_ENV == "mainnet" ? tribeGoldJSON.address : tribeGoldTestJSON.address
   );
 
 module.exports = {
