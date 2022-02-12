@@ -11,7 +11,7 @@ const whitelistMailList1 = ["Lathababu6771@gmail.com","sudhirdipti4@gmail.com","
 const whitelistMailList2 = ["Joteacher03@gmail.com","Saihariharan2002@gmail.com","Bryanangwhcrypto@gmail.com","nicolas.haughn@gmail.com","24x7sumant@gmail.com","arun.mitteam@gmail.com","kpsssrinivas@gmail.com","shilpasrinath@hotmail.com","knudson.j907@gmail.com","johnsolomonfernandez@gmail.com","davidlaumiami@icloud.com","athidiii02@gmail.com","vegetakrish@gmail.com","tylerkivelson@gmail.com","prabhakaran.rishie@gmail.com","ashuujadhav123@gmail.com","N_pareek@yahoo.com","Shabiravirani@hotmail.com","pai.hareesh@gmail.com","kirankmk24@gmail.com","kbpavan1101@gmail.com","abhilash.wasekar.2021@iimu.ac.in","jinish9122@gmail.com","vinnivarghese007@gmail.com","chirag0gulecha@gmail.com","Bossrockers1@gmail.com","pushpakhardrocker@gmail.com","hriteshshetty523@gmail.com","omichugh14@gmail.com","sh.jodvp@slmail.me","ujwaluthappa32@gmail.com","jairockstar1@gmail.com","trishasimbajon22@yahoo.com","johniversheen22@gmail.com","jose.simbajon11@gmail.com","princetoncaidrick6@gmail.com","Zeus6799@gmail.com","surajpatil2398@gmail.com","arthas0402@gmail.com","bakkubaku@gmail.com","kr1998275@gmail.com","namit.venu@gmail.com","homestar5377@yahoo.com","rohitf@gmail.com","arbit.rambler@gmail.com","Sureshr05@gmail.com","ramnath.shenoy@gmail.com","mukundaniyengar@icloud.com","amiyo.chatterjee@gmail.com","Ranjeev@hotmail.co.in","abhijathkbenhur@gmail.com","saurabhsanthosh@gmail.com"];
 
 const GOLD_DEPOSIT_VALUES = {
-  REGISTER: Web3Utils.toWei("1", "ether"),
+  REGISTER: Web3Utils.toWei("20", "ether"),
   REFERAL: Web3Utils.toWei("1", "ether"),
   IDEA_POST: {
     1: Web3Utils.toWei("3", "ether"),

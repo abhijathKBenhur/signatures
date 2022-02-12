@@ -369,15 +369,27 @@ const Register = (props) => {
   }
 
   function sendMail() {
-    setuserEmailError(false);
-    setOTPInitiated(true);
-    UserInterface.sendMail({ tempEmail: userDetails.tempEmail })
-      .then((success) => {
-        setOTPShared(success.data);
-      })
-      .catch((Err) => {
-        setOTPShared(undefined);
-      });
+      const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      if (!re.test(String(userDetails.tempEmail).toLowerCase())) {
+        setuserEmailError("invalid");
+      }else{
+        UserInterface.getUserInfo({
+          email: userDetails.tempEmail,
+        })
+          .then((userDetails) => {
+            setuserEmailError("exists");
+          }).catch(err =>{
+            setuserEmailError(false);
+            setOTPInitiated(true);
+            UserInterface.sendMail({ tempEmail: userDetails.tempEmail })
+              .then((success) => {
+                setOTPShared(success.data);
+              })
+              .catch((Err) => {
+                setOTPShared(undefined);
+              });
+          })
+      }
   }
 
   function getConditionalView(stepKey) {
@@ -387,10 +399,16 @@ const Register = (props) => {
           <div className="align-self-center d-flex justify-content-center flex-column mail-flow">
             {!OTPShared && (
               <Row className="mailinput  d-flex flex-row align-items-center mt-3">
-                {userEmailError && (
+                {userEmailError == "exists"&& (
                   <div className="error-message">
                     {" "}
-                    Email invalid or already registered{" "}
+                    Email already registered{" "}
+                  </div>
+                )}
+                {userEmailError == "invalid" && (
+                  <div className="error-message">
+                    {" "}
+                    Please enter a valid email id{" "}
                   </div>
                 )}
                 <Form.Control
@@ -676,19 +694,7 @@ const Register = (props) => {
       }
     }
     if(event.target.name == "tempEmail"){
-      const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-      if (!re.test(String(userDetails.tempEmail).toLowerCase())) {
-        setuserEmailError(true);
-      }else{
-        UserInterface.getUserInfo({
-          email: value,
-        })
-          .then((userDetails) => {
-            setuserEmailError(true);
-          }).catch(err =>{
-            setuserEmailError(false);
-          })
-      }
+    setuserEmailError(false);
     }
   }
   const closePopup = () => {

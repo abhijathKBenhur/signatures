@@ -17,6 +17,7 @@ const CATEGORIES = [
     { value: "Creative_art", label: "Creative art" },
     { value: "Business_idea", label: "Business idea" },
     { value: "Technical_inventions", label: "Technical inventions" },
+    { value: "Social_Policy", label: "Social policy" },
 ];
 
 const PURPOSES = {
