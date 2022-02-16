@@ -234,6 +234,12 @@ $card-height: 200px;
         transform: none;
       }
     }
+    &.Social_Policy{
+      .card__border {
+        background: linear-gradient(to right, #ffffff, #000000);
+        transform: none;
+      }
+    }
     .purpose-icons {
       background: #79579f;
       border-radius: 50%;

@@ -268,6 +268,8 @@ class BlockchainInterface {
                 accountId,
                 networkId,
               });
+            }).catch(err =>{
+              console.log("Error in chain", err)
             });
           })
           .catch((err) => {
@@ -340,13 +342,13 @@ class BlockchainInterface {
         const alertProperty = {
             isDismissible: false,
             variant: "danger",
-            content: "Non-Ethereum browser detected. Please install ",
+            content: "Non-Ethereum browser detected. Please install a",
             actionFunction: redirectToMetaMask,
-            actionText: 'MetaMask!'
+            actionText: 'crypto wallet!'
           }
           ReactDOM.render(<AlertBanner {...alertProperty}></AlertBanner>, document.querySelector('.aleartHeader'))
         reject(
-          "Non-Ethereum browser detected. Please install MetaMask and reload the page!"
+          "Non-Ethereum browser detected. Please install a crypto wallet and reload the page!"
         );
       }
     });
