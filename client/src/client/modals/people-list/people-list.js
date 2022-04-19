@@ -41,7 +41,7 @@ const PeopleList = ({ ...props }) => {
           <hr></hr>
          
         </div>
-        <div className="mt-2 mb-3">
+        <div className="mt-2 mb-3 scroll-div">
           {props.list.map((userName) => (
             <div className="cursor-pointer mt-2">
               <Button variant="action">
