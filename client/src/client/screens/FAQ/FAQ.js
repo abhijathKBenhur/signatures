@@ -119,7 +119,7 @@ const FAQ = () => {
         </p> */}
 
         <div className="faq-body">
-        <span className="father-grey color-secondary mb-4 uppercase">FAQs</span>
+        <span className="father-grey color-secondary mb-4 ">FAQs</span>
         <div className="faq-body-content">
           {faqs.map(item => (
             <div>
