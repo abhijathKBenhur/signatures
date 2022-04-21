@@ -78,10 +78,10 @@ const getIfMaskedFile = (form) => {
   if(form.masked){
     switch(form.fileType){
       case "pdf":
-        let outputImages = pdf2img.convert(form.PDFFile);
-        outputImages.then(function(outputImages) {
-          let firstPage = outputImages[0]
-        })
+        // let outputImages = pdf2img.convert(form.PDFFile);
+        // outputImages.then(function(outputImages) {
+        //   let firstPage = outputImages[0]
+        // })
       break;
       case "mp3":
         break;

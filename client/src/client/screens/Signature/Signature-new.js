@@ -536,6 +536,13 @@ const SignatureNew = (props) => {
                                     >
                                       Edit details
                                     </Dropdown.Item>
+                                    <Dropdown.Item
+                                      onClick={() => {
+                                        showModal("details");
+                                      }}
+                                    >
+                                      Add version
+                                    </Dropdown.Item>
                                   </Dropdown.Menu>
                                 </Dropdown>
                               </div>
