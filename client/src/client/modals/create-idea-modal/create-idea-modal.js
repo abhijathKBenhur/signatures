@@ -760,9 +760,10 @@ const CreateIdeaModal = ({
       default:
         return (
           <>
+          <div className="category-masked">
             <Row>
-              <Col md="12" lg="12" sm="12" xs="12">
-                <Form.Group as={Col} className="formEntry" md="12">
+              <Col md="6" lg="6" sm="6" xs="6">
+                <Form.Group as={Col} className="formEntry">
                   <div className="tags-label master-grey">
                     <Form.Label>Category </Form.Label>
                   </div>
@@ -777,6 +778,23 @@ const CreateIdeaModal = ({
                     onChange={(e) => handleCategoryChange(e)}
                     placeholder=""
                   />
+                </Form.Group>
+              </Col>
+              <Col md="6" lg="6" sm="6" xs="6" className="d-flex">
+                <Form.Group as={Col} className="formEntry">
+                <div className="tags-label master-grey">
+                    <Form.Label>Masking </Form.Label>
+                  </div>
+                <Form.Check 
+                  type="switch"
+                  label="Show only preview"
+                  id="masked"
+                  name="masked"
+                  checked={form.masked}
+                  onChange={() => {
+                    setFormData({...form,...{masked: !form.masked}})
+                  }}
+                />
                 </Form.Group>
               </Col>
               {/* <Col md="6" lg="6" sm="6" xs="6">
@@ -852,7 +870,7 @@ const CreateIdeaModal = ({
                 </Form.Group>
               </Col> */}
             </Row>
-
+            </div>
             <div className="purpose-selection">
               <Row className="purpose-selector-row">
                 <Col md="12" className="">

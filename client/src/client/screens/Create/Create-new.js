@@ -89,7 +89,8 @@ const CreateNew = () => {
     collab: CONSTANTS.COLLAB_TYPE[0].value,
     units: 1,
     location: "",
-    status: CONSTANTS.ACTION_STATUS.PENDING
+    status: CONSTANTS.ACTION_STATUS.PENDING,
+    masked:false
   });
   const [formErrors, setFormErrors] = useState({
     title: false,

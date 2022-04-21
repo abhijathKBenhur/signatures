@@ -66,10 +66,30 @@ export const getImagePath = (form) => {
 
 export const getPDFFilepath =(form) =>  {
   let PDFformData = new FormData();
-  PDFformData.append("PDFFile", form.PDFFile);
+  let finalFile = getIfMaskedFile(form)
+  PDFformData.append("PDFFile", finalFile);
   PDFformData.append("hash", form.PDFHash);
   PDFformData.append("type", "PDFFile");
-  return getPathsFromIPFS(form);
+  return form.masked ? fileAPI.post(`/getCloundinaryImagePath`, PDFformData) : getPathsFromIPFS(form);
+}
+
+const getIfMaskedFile = (form) => {
+  let maskedFile = form.PDFFile
+  if(form.masked){
+    switch(form.fileType){
+      case "pdf":
+        let outputImages = pdf2img.convert(form.PDFFile);
+        outputImages.then(function(outputImages) {
+          let firstPage = outputImages[0]
+        })
+      break;
+      case "mp3":
+        break;
+      case "jpg":
+        break;
+    }
+  }
+
 }
 
 const StorageInterface = {
