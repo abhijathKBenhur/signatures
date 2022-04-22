@@ -23,6 +23,7 @@ import countryJSON from "../../../assets/data/countries.json"
 import "./Create-new.scss";
 import reactGA from "react-ga";
 import AlertBanner from "../../components/alert/alert"
+import { useLocation } from "react-router-dom";
 
 import {
   X,
@@ -59,6 +60,8 @@ import CommentsInterface from "../../interface/CommentsInterface";
 
 const CreateNew = () => {
   const history = useHistory();
+  const location = useLocation();
+
   const reduxState = useSelector((state) => state, shallowEqual);
   const [fileData, setFileData] = useState({
     fileType: "",
@@ -311,7 +314,7 @@ const CreateNew = () => {
         // Check for already existing PDF Hashes
         setFormData({
           ...form,
-          PDFFile: acceptedFiles[0],
+          fileUploaded: acceptedFiles[0],
           PDFHash: PDFHashValue,
         });
       });
@@ -360,7 +363,7 @@ const CreateNew = () => {
           <>
             <Document
               fillWidth
-              file={form.PDFFile}
+              file={form.fileUploaded}
               onLoadError={PDFLoadError}
               onLoadSuccess={onDocumentLoadSuccess}
             >
@@ -447,7 +450,7 @@ const CreateNew = () => {
   });
 
   const checkUplloadedFile = () => {
-    if (form.PDFFile && !formErrors.maxFileError) {
+    if (form.fileUploaded && !formErrors.maxFileError) {
       return (
         <div className="pdfUploaded w-100 h-100">
           {fileData.fileData && getFileViewer()}
@@ -491,7 +494,7 @@ const CreateNew = () => {
 
   const checkValidationOnButtonClick = () => {
     form.description = _.get(desc, 'mentionData.newPlainTextValue')
-    const { title, description, PDFFile, category, price, thumbnail } = form;
+    const { title, description, fileUploaded, category, price, thumbnail } = form;
     _.forEach(_.get(desc, 'mentionData.mentions'), (display, id) => {
       let obj = _.find(hashList, item => {
         return item.display == display.display
@@ -501,12 +504,12 @@ const CreateNew = () => {
       }
     })
     addHashTags(desc.value);
-    if (_.isEmpty(title) || _.isEmpty(_.get(desc, 'value')) || _.isEmpty(PDFFile)) {
+    if (_.isEmpty(title) || _.isEmpty(_.get(desc, 'value')) || _.isEmpty(fileUploaded)) {
       setFormErrors({
         ...formErrors,
         title: _.isEmpty(title),
         description: _.isEmpty(_.get(desc, 'mentionData.newPlainTextValue')),
-        pdf: _.isEmpty(PDFFile),
+        pdf: _.isEmpty(fileUploaded),
       });
     } else {
       setModalShow(true);
@@ -518,6 +521,41 @@ const CreateNew = () => {
       });
     }
   };
+
+  const addVersion = () => {
+    let originalIdea = location.state.signature;
+    let updatedPath = undefined
+    let versionList = []
+
+    try{
+      versionList = JSON.parse(originalIdea.PDFFile)
+    }catch(err){
+      versionList.push({
+        time: originalIdea.createdAt,
+        PDFFile:originalIdea.PDFFile
+      })
+    }
+
+    StorageInterface.getFilePaths(form).then((success) => {
+      updatedPath = _.get(
+        _.find(success, { type: "PDFFile" }),
+        "path"
+      );
+      // updatedPath = _.get(_.find(success, { type: "PDFFile" }), "path");
+      versionList.push({
+        time: new Date(),
+        PDFFile:updatedPath
+      })
+      SignatureInterface.updateSignature({
+        id: originalIdea._id,
+        update: {
+          PDFFile:JSON.stringify(versionList),
+          PDFHash:updatedPath
+        },
+      })
+    })
+  }
+
   function handleSubmit() {
     const params = _.clone({ ...form });
     let defaultPlaceHolder = getThumbnailForCategory(params.category)
@@ -535,7 +573,10 @@ const CreateNew = () => {
     setPublishState(PROGRESS);
     StorageInterface.getFilePaths(params, _.get(form.thumbnail,'updated'))
       .then((success) => {
-        params.PDFFile = _.get(_.find(success, { type: "PDFFile" }), "path");
+        params.PDFFile = JSON.stringify([{time:new Date,PDFFile :_.get(
+          _.find(success, { type: "PDFFile" }),
+          "path"
+        )}]);
         if(_.get(form.thumbnail,'updated')){
           params.thumbnail = _.get(
             _.find(_.map(success, "data"), { type: "thumbnail" }),
@@ -704,7 +745,7 @@ const CreateNew = () => {
       <Row className="createform  d-flex">
         <Col md="11" sm="11" lg="11" xs="12" className="page-content mb-3">
           <div className="step-container">
-            {form.PDFFile ? (
+            {form.fileUploaded && !_.get(location,'state.version')? (
               <>
                 <Form.Group
                   as={Col}
@@ -726,7 +767,7 @@ const CreateNew = () => {
                     onChange={handleChange}
                   />
                 </Form.Group>
-                {form.PDFFile && (
+                {form.fileUploaded  && !_.get(location,'state.version') && (
                   <Form.Group
                     as={Col}
                     className="formEntry desc-group"
@@ -772,7 +813,10 @@ const CreateNew = () => {
               </>
             ) : (
               <>
-                <h2 className="master-header col">Mint your Idea</h2>
+                <h2 className="master-header col">{_.get(location,'state.version') ? "Add new version": "Mint your Idea"}</h2>
+                {_.get(location,'state.version') ? 
+                <h3 className="second-grey col">{_.get(location,'state.signature.title')}</h3>
+                :<div></div> }
               </>
             )}
             <Col md="12" sm="12" lg="12" xs="12">
@@ -784,12 +828,20 @@ const CreateNew = () => {
         </Col>
         <Col xs="12" className="top-bar">
           <div/>
+          {_.get(location,'state.version') ? <Button
+            className="submit-btn"
+            onClick={() => addVersion()}
+          >
+            Submit
+          </Button>
+          :
           <Button
             className="submit-btn"
             onClick={() => checkValidationOnButtonClick()}
           >
             Continue
-          </Button>
+          </Button>}
+
         </Col>
       </Row>
       {modalShow && (

@@ -538,7 +538,7 @@ const SignatureNew = (props) => {
                                     </Dropdown.Item>
                                     <Dropdown.Item
                                       onClick={() => {
-                                        showModal("details");
+                                        history.push("/create",{version:true, signature });
                                       }}
                                     >
                                       Add version

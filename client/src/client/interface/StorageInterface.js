@@ -29,7 +29,7 @@ export const getFileFromIPFS = (hash) => {
 const getPathsFromIPFS = (form) => {
   return new Promise((resolve, reject) => {
     const reader = new window.FileReader();
-    reader.readAsArrayBuffer(form.PDFFile);
+    reader.readAsArrayBuffer(form.fileUploaded);
     reader.onloadend = () => {
       IPFS.files.add(Buffer(reader.result), (error, result) => {
         if (error || _.isUndefined(result) ||  _.isUndefined(result[0])) {
@@ -47,7 +47,7 @@ const getPathsFromIPFS = (form) => {
 
 export const getFilePaths = (form, addThumbnail) => {
   let promiseList = [];
-  if(form.PDFFile){
+  if(form.fileUploaded){
     promiseList.push(getPDFFilepath(form));
   }
   if(addThumbnail){
@@ -58,7 +58,7 @@ export const getFilePaths = (form, addThumbnail) => {
 
 export const getImagePath = (form) => {
   const IMGformData = new FormData();
-  IMGformData.append("thumbnail", form.thumbnail);
+  IMGformData.append("fileUploaded", form.thumbnail);
   IMGformData.append("hash", form.PDFHash);
   IMGformData.append("type", "thumbnail");
   return fileAPI.post(`/getCloundinaryImagePath`, IMGformData);
@@ -67,14 +67,16 @@ export const getImagePath = (form) => {
 export const getPDFFilepath =(form) =>  {
   let PDFformData = new FormData();
   let finalFile = getIfMaskedFile(form)
-  PDFformData.append("PDFFile", finalFile);
+  PDFformData.append("fileUploaded", finalFile);
   PDFformData.append("hash", form.PDFHash);
   PDFformData.append("type", "PDFFile");
-  return form.masked ? fileAPI.post(`/getCloundinaryImagePath`, PDFformData) : getPathsFromIPFS(form);
+  // return form.masked ? fileAPI.post(`/getCloundinaryImagePath`, PDFformData) : getPathsFromIPFS(form);
+  return getPathsFromIPFS(form);
 }
 
 const getIfMaskedFile = (form) => {
-  let maskedFile = form.PDFFile
+  return form.fileUploaded
+  let maskedFile = form.fileUploaded
   if(form.masked){
     switch(form.fileType){
       case "pdf":

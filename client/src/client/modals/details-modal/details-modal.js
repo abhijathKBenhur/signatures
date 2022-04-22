@@ -107,7 +107,6 @@ const DetailsModal = (props) => {
       if(form.thumbnail != props.idea.thumbnail){
         StorageInterface.getFilePaths(form, _.get(form.thumbnail,'updated'))
         .then((success) => {
-          form.PDFFile = _.get(_.find(success, { type: "PDFFile" }), "path");
           if(_.get(form.thumbnail,'updated')){
             form.thumbnail = _.get(
               _.find(_.map(success, "data"), { type: "thumbnail" }),
