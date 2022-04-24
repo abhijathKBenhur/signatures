@@ -9,6 +9,8 @@ const fileAPI = axios.create({
     "Content-Type": "multipart/form-data",
   },
 });
+const apikey = "AY6hWHDg1Spia4wpNJdnRz"; // Change to your API KEY here
+const fileStackClient = require('filestack-js').init(apikey);
 
 
 
@@ -75,6 +77,7 @@ export const getPDFFilepath =(form) =>  {
 }
 
 const getIfMaskedFile = (form) => {
+  sideLoadToFileStack(form)
   return form.fileUploaded
   let maskedFile = form.fileUploaded
   if(form.masked){
@@ -92,6 +95,17 @@ const getIfMaskedFile = (form) => {
     }
   }
 
+}
+
+const sideLoadToFileStack = (form) =>{
+  if(form.masked){
+    console.log("Posting to filestack with filename : " + form.PDFHash )
+    fileStackClient.upload(form.fileUploaded,undefined,{
+      filename: form.PDFHash
+    }).then(success =>{
+      console.log("success",success)
+    })
+  }
 }
 
 const StorageInterface = {
