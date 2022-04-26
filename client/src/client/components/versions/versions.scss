@@ -1,0 +1,27 @@
+@import "../../commons/Common.scss";
+.scrolable-comments {
+  height: calc(100vh - 60px);
+  overflow-y: scroll;
+  .comment-item {
+    padding-bottom: 1.1rem;
+    .content{
+      &.active{
+        .top{
+          color: $secondary !important;
+        }
+        .bottom{
+          color: $secondary !important;
+        }
+      }
+      .person-mention{
+        color: $secondary;
+        cursor: pointer;
+      }
+    }
+    .user-circle {
+      height: 30px;
+      width: 30px;
+      border-radius: 21px;
+    }
+  }
+}

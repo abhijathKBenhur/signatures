@@ -15,6 +15,8 @@ import {
   OverlayTrigger,
   Tooltip,
   Dropdown,
+  Tabs,
+  Tab
 } from "react-bootstrap";
 import StorageInterface from "../../interface/StorageInterface";
 import { ChevronRight, ChevronLeft } from "react-feather";
@@ -36,6 +38,7 @@ import "./Signature-new.scss";
 import InfoModal from "../../modals/info-modal/info.modal";
 import RelationsInterface from "../../interface/RelationsInterface";
 import EmitInterface from "../../interface/emitInterface";
+import Versions from "../../components/versions/versions";
 const SignatureNew = (props) => {
   const { hashId } = useParams();
   const [upvotes, setUpvotes] = useState([]);
@@ -58,6 +61,7 @@ const SignatureNew = (props) => {
     reduxChain = [],
   } = reduxState;
   const history = useHistory();
+  const [key, setKey] = useState("comments");
   const [modalShow, setModalShow] = useState({
     shareModal: false,
     infoModal: false,
@@ -641,17 +645,43 @@ const SignatureNew = (props) => {
               }`}
             >
               <div>
-                <span className="conversation-title second-header color-primary">
-                  Comments
-                </span>
-                <hr></hr>
-
-                {!_.isEmpty(signature) && (
+              <Tabs
+                id="comments-version-tab"
+                activeKey={key}
+                onSelect={(k) => setKey(k)}
+                className=""
+              >
+                <Tab
+                  eventKey="comments"
+                  title="Comments"
+                  tabClassName="tab_category"
+                >
+                   {!_.isEmpty(signature) && (
                   <CommentsPanel
                     idea={signature}
                     entity={CONSTANTS.ENTITIES.IDEA}
                   ></CommentsPanel>
                 )}
+                </Tab>
+
+                <Tab
+                  eventKey="versions"
+                  title="Versions"
+                  tabClassName="tab_category"
+                >
+                   {!_.isEmpty(signature) && (
+                  <Versions
+                    idea={signature}
+                    entity={CONSTANTS.ENTITIES.IDEA}
+                    onLoad={getIPSPDFFile}
+                  ></Versions>
+                )}
+                </Tab>
+              </Tabs>
+               
+                <hr></hr>
+
+               
               </div>
             </Col>
             <Col md="1" className="options-container  pt-2">
