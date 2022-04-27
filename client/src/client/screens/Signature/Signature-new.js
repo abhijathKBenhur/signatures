@@ -79,16 +79,30 @@ const SignatureNew = (props) => {
     if (signatureFromParent) {
       setSignature({ ...signature, ...signatureFromParent });
       loadUpvotes(signatureFromParent.ideaID);
+      try{
+        let versions = JSON.parse(signatureFromParent.PDFFile)
+        let publicHashID = _.last(versions).PDFFile
+        getIPSPDFFile(publicHashID);
+      }catch(err){
+        getIPSPDFFile(signatureFromParent.PDFFile);
+      }
     } else {
       SignatureInterface.getSignatureByHash(hashId).then((response) => {
         let signatureObject = _.get(response, "data.data");
         setSignature({ ...signature, ...signatureObject });
         loadUpvotes(signatureObject.ideaID);
+        try{
+          let versions = JSON.parse(signatureObject.PDFFile)
+          let publicHashID = _.last(versions).PDFFile
+          getIPSPDFFile(publicHashID);
+        }catch(err){
+          getIPSPDFFile(signatureFromParent.PDFFile);
+        }
       });
     }
 
     // setSignature({...signature, ...dummmySignature});
-    getIPSPDFFile(hashId);
+    
   }, []);
 
   const getIPSPDFFile = (hash) => {

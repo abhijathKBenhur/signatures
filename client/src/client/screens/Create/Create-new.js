@@ -546,13 +546,32 @@ const CreateNew = () => {
         time: new Date(),
         PDFFile:updatedPath
       })
-      SignatureInterface.updateSignature({
-        id: originalIdea._id,
-        update: {
-          PDFFile:JSON.stringify(versionList),
-          PDFHash:updatedPath
-        },
-      })
+
+      BlockChainInterface.addVersion(form, 
+        versionInitiated,
+        SignatureInterface.updateSignature({
+          id: originalIdea._id,
+          update: {
+            PDFFile:JSON.stringify(versionList),
+            PDFHash:form.PDFHash
+          },
+        })
+        , versionFailed)
+     })
+  }
+
+  const versionInitiated = (transactionInititationRequest) =>{
+    TransactionsInterface.postTransaction({
+      transactionID:transactionInititationRequest.transactionID,
+      status: CONSTANTS.ACTION_STATUS.PENDING,
+      user: userDetails._id
+    })
+  }
+  const versionFailed = (message, failedTransactionId) =>{
+    TransactionsInterface.setTransactionState({
+      transactionID:failedTransactionId,
+      status: CONSTANTS.ACTION_STATUS.FAILED,
+      user: userDetails._id
     })
   }
 
@@ -826,7 +845,21 @@ const CreateNew = () => {
             </Col>
           </div>
         </Col>
-        <Col xs="12" className="top-bar">
+        {_.get(location,'state.version') &&  <Col md="5" lg="5" sm="5" xs="5" className="d-flex">
+          <Form.Group as={Col} className="formEntry">
+            <Form.Check 
+              type="switch"
+              label="Show only preview"
+              id="masked"
+              name="masked"
+              checked={form.masked}
+              onChange={() => {
+                setFormData({...form,...{masked: !form.masked}})
+              }}
+            />
+          </Form.Group>
+        </Col>}
+        <Col xs={_.get(location,'state.version')? "6" : "12"} className="top-bar">
           <div/>
           {_.get(location,'state.version') ? <Button
             className="submit-btn"
