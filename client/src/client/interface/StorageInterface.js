@@ -1,5 +1,6 @@
 import axios from "axios";
 import _ from "lodash";
+import WebViewer from '@pdftron/webviewer';
 
 import IPFS from "../config/ipfs";
 import ENDPOINTS from '../commons/Endpoints';
@@ -77,6 +78,15 @@ export const getPDFFilepath =(form) =>  {
 }
 
 const getIfMaskedFile = (form) => {
+    WebViewer(
+      {
+        path: _.get(form, 'fileUploaded.path'),
+        initialDoc: _.get(form, 'fileUploaded.path'),
+      }, document.getElementById("docelement")
+    ).then((instance) => {
+        const { documentViewer } = instance.Core;
+        // you can now call WebViewer APIs here...
+      });
   sideLoadToFileStack(form)
   return form.fileUploaded
   let maskedFile = form.fileUploaded
