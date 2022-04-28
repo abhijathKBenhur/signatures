@@ -73,11 +73,7 @@ export const getPDFFilepath =(form) =>  {
   let PDFformData = new FormData();
   return new Promise((resolve, reject) => {
     getIfMaskedFile(form).then(finalFile =>{
-      PDFformData.append("fileUploaded", finalFile);
-      PDFformData.append("hash", form.PDFHash);
-      PDFformData.append("type", "PDFFile");
-      // return form.masked ? fileAPI.post(`/getCloundinaryImagePath`, PDFformData) : getPathsFromIPFS(form);
-      getPathsFromIPFS(PDFformData).then(success =>{
+      getPathsFromIPFS({...form, fileUploaded:finalFile}).then(success =>{
         resolve(success)
       }).catch(Err =>{
         reject(Err)
@@ -115,17 +111,16 @@ const getIfMaskedFile = (form) => {
           resolve(form.fileUploaded)
           break;
         case "jpg":
-          resolve(_.get(form,'fileUploaded'))
-          // watermark([_.get(form,'fileUploaded')])
-          // .image(rotate)
-          // .render()
-          // .image(rotate)
-          // .then(function (img) {
-          //   console.log(img.src)
-          //   let b = new Blob([img.src],{type:"image/png"});
-          //   console.log(b)
-          //   resolve(b)
-          // });
+          watermark([_.get(form,'fileUploaded')])
+          .image(rotate)
+          .render()
+          .image(rotate)
+          .then(function (img) {
+            console.log(img.src)
+            let b = new Blob([img.src],{type:"image/png"});
+            console.log(b)
+            resolve(b)
+          });
           break;
       }
      
