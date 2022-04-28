@@ -1,7 +1,7 @@
 import axios from "axios";
 import _ from "lodash";
-import WebViewer from '@pdftron/webviewer';
-
+import watermark from 'watermarkjs'
+import Hash from "ipfs-only-hash";
 import IPFS from "../config/ipfs";
 import ENDPOINTS from '../commons/Endpoints';
 const fileAPI = axios.create({
@@ -12,8 +12,6 @@ const fileAPI = axios.create({
 });
 const apikey = "AY6hWHDg1Spia4wpNJdnRz"; // Change to your API KEY here
 const fileStackClient = require('filestack-js').init(apikey);
-
-
 
 export const getFileFromIPFS = (hash) => {
   return new Promise((resolve, reject) => {
@@ -69,53 +67,83 @@ export const getImagePath = (form) => {
 
 export const getPDFFilepath =(form) =>  {
   let PDFformData = new FormData();
-  let finalFile = getIfMaskedFile(form)
-  PDFformData.append("fileUploaded", finalFile);
-  PDFformData.append("hash", form.PDFHash);
-  PDFformData.append("type", "PDFFile");
-  // return form.masked ? fileAPI.post(`/getCloundinaryImagePath`, PDFformData) : getPathsFromIPFS(form);
-  return getPathsFromIPFS(form);
+  return new Promise((resolve, reject) => {
+    getIfMaskedFile(form).then(finalFile =>{
+      PDFformData.append("fileUploaded", finalFile);
+      PDFformData.append("hash", form.PDFHash);
+      PDFformData.append("type", "PDFFile");
+      // return form.masked ? fileAPI.post(`/getCloundinaryImagePath`, PDFformData) : getPathsFromIPFS(form);
+      getPathsFromIPFS(form).then(success =>{
+        resolve(success)
+      }).catch(Err =>{
+        reject(Err)
+      })
+    })
+  });
+ 
+ 
 }
 
 const getIfMaskedFile = (form) => {
-    WebViewer(
-      {
-        path: _.get(form, 'fileUploaded.path'),
-        initialDoc: _.get(form, 'fileUploaded.path'),
-      }, document.getElementById("docelement")
-    ).then((instance) => {
-        const { documentViewer } = instance.Core;
-        // you can now call WebViewer APIs here...
-      });
-  sideLoadToFileStack(form)
-  return form.fileUploaded
-  let maskedFile = form.fileUploaded
-  if(form.masked){
-    switch(form.fileType){
-      case "pdf":
-        // let outputImages = pdf2img.convert(form.PDFFile);
-        // outputImages.then(function(outputImages) {
-        //   let firstPage = outputImages[0]
-        // })
-      break;
-      case "mp3":
+  var rotate = function(target) {
+    var context = target.getContext('2d');
+    var text = 'IdeaTribe';
+    var metrics = context.measureText(text);
+    var x = (target.width / 2) - (metrics.width + 24);
+    var y = (target.height / 2) + 48 * 2;
+  
+    context.translate(x, y);
+    context.globalAlpha = 0.5;
+    context.fillStyle = '#79579F';
+    context.font = '48px Josefin Slab';
+    context.rotate(-45 * Math.PI / 180);
+    context.fillText(text, 0, 0);
+    return target;
+  };
+  const promise = new Promise((resolve, reject) => {
+    if(form.masked){
+      sideLoadToFileStack(form)
+      switch(form.fileType){
+        case "pdf":
+          resolve(form.fileUploaded)
         break;
-      case "jpg":
-        break;
+        case "mp3":
+          resolve(form.fileUploaded)
+          break;
+        case "jpg":
+          watermark([_.get(form,'fileUploaded')])
+          .image(rotate)
+          .render()
+          .image(rotate)
+          .then(function (img) {
+            // const reader = new window.FileReader();
+            console.log(new URL(img.src).pathname)
+            // console.log(img)
+            // reader.readAsArrayBuffer(img);
+            // reader.onloadend = () => {
+            //   Hash.of(Buffer(reader.result)).then((PDFHashValue) => {
+            //     console.log("Calculated hash of the uploaded file is : " + PDFHashValue)
+            //   });
+            // };
+            resolve(img)
+          });
+          break;
+      }
+     
+    }else{
+      resolve(form.fileUploaded)
     }
-  }
-
+  });
+  return promise
 }
 
 const sideLoadToFileStack = (form) =>{
-  if(form.masked){
     console.log("Posting to filestack with filename : " + form.PDFHash )
     fileStackClient.upload(form.fileUploaded,undefined,{
       filename: form.PDFHash
     }).then(success =>{
       console.log("success",success)
     })
-  }
 }
 
 const StorageInterface = {

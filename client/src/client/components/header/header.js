@@ -358,7 +358,6 @@ const Header = (props) => {
 
           {!_.isEmpty(currentMetamaskAccount) && (
             <div className="right-section">
-              <div id="docelement"></div>
               <span
                 className="loggedinaccount secondary-grey color-white"
                 title={currentMetamaskAccount}

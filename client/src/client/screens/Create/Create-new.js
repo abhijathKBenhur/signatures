@@ -311,12 +311,17 @@ const CreateNew = () => {
     reader.readAsArrayBuffer(acceptedFiles[0]);
     reader.onloadend = () => {
       Hash.of(Buffer(reader.result)).then((PDFHashValue) => {
-        // Check for already existing PDF Hashes
+        console.log("Calculated hash of the uploaded file is : " + PDFHashValue)
         setFormData({
           ...form,
           fileUploaded: acceptedFiles[0],
           PDFHash: PDFHashValue,
         });
+        // StorageInterface.getFilePaths({
+        //   ...form,
+        //   fileUploaded: acceptedFiles[0],
+        //   PDFHash: PDFHashValue,
+        // })
       });
     };
   };
