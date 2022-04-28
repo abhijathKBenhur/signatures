@@ -555,6 +555,11 @@ const CreateNew = () => {
             PDFFile:JSON.stringify(versionList),
             PDFHash:form.PDFHash
           },
+        }).then(signature =>{
+          history.push({
+            pathname: "/signature/" + signature.data.PDFHash,
+            state: signature.data,
+          });
         })
         , versionFailed)
      })

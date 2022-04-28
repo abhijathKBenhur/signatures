@@ -23,9 +23,8 @@ const Versions = (props) => {
 
   function loadVersions() {
     try{
-      let versions = JSON.parse(props.idea.PDFFile)
-      setVersions(versions)
-      setViewingVersion(versions[0])
+      let versionList = JSON.parse(props.idea.PDFFile)
+      setVersions(_.reverse(versionList))
     }catch(err){
       setVersions([{
         PDFFile:props.idea.PDFFile,

@@ -364,7 +364,7 @@ class BlockchainInterface {
     console.log("versioning contract", this.web3.eth.transactionConfirmationBlocks );
 
     this.contract.methods
-      .publish(payLoad.PDFHash, payLoad.price)
+      .extend(payLoad.ideaID, payLoad.PDFHash)
       .send(transactionObject)
       .on("transactionHash", function(hash) {
         payLoad.transactionID = hash;

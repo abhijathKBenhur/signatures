@@ -10,7 +10,7 @@ const fileAPI = axios.create({
     "Content-Type": "multipart/form-data",
   },
 });
-const apikey = "AY6hWHDg1Spia4wpNJdnRz"; // Change to your API KEY here
+const apikey = process.env.NODE_ENV == "production" ? "ASCHmMKFXTsmn9KFuk92Yz": "AY6hWHDg1Spia4wpNJdnRz"; // Change to your API KEY here
 const fileStackClient = require('filestack-js').init(apikey);
 
 export const getFileFromIPFS = (hash) => {
@@ -110,16 +110,19 @@ const getIfMaskedFile = (form) => {
         case "mp3":
           resolve(form.fileUploaded)
           break;
-        case "jpg":
+        default:
           watermark([_.get(form,'fileUploaded')])
           .image(rotate)
           .render()
           .image(rotate)
           .then(function (img) {
-            console.log(img.src)
-            let b = new Blob([img.src],{type:"image/png"});
-            console.log(b)
-            resolve(b)
+            fetch(img.src)
+            .then(res => res.blob())
+            .then(blob => {
+              const file = new File([blob], 'masked.png', blob)
+              console.log(file)
+              resolve(file)
+            })
           });
           break;
       }
