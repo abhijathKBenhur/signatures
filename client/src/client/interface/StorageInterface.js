@@ -30,6 +30,7 @@ export const getFileFromIPFS = (hash) => {
 const getPathsFromIPFS = (form) => {
   return new Promise((resolve, reject) => {
     const reader = new window.FileReader();
+    try{
     reader.readAsArrayBuffer(form.fileUploaded);
     reader.onloadend = () => {
       IPFS.files.add(Buffer(reader.result), (error, result) => {
@@ -40,19 +41,22 @@ const getPathsFromIPFS = (form) => {
           console.log("PDF uploaded to IPFS ::" + result[0].path)
           resolve({ path: result[0].path, type: "PDFFile" });
         }
-        
       });
     };
+  }catch(err){
+    console.log(err)
+    reject(err)
+  }
   });
 };
 
 export const getFilePaths = (form, addThumbnail) => {
   let promiseList = [];
-  if(form.fileUploaded){
-    promiseList.push(getPDFFilepath(form));
-  }
   if(addThumbnail){
     promiseList.push(getImagePath(form));
+  }
+  if(form.fileUploaded){
+    promiseList.push(getPDFFilepath(form));
   }
   return Promise.all(promiseList);
 };
@@ -73,7 +77,7 @@ export const getPDFFilepath =(form) =>  {
       PDFformData.append("hash", form.PDFHash);
       PDFformData.append("type", "PDFFile");
       // return form.masked ? fileAPI.post(`/getCloundinaryImagePath`, PDFformData) : getPathsFromIPFS(form);
-      getPathsFromIPFS(form).then(success =>{
+      getPathsFromIPFS(PDFformData).then(success =>{
         resolve(success)
       }).catch(Err =>{
         reject(Err)
@@ -111,22 +115,17 @@ const getIfMaskedFile = (form) => {
           resolve(form.fileUploaded)
           break;
         case "jpg":
-          watermark([_.get(form,'fileUploaded')])
-          .image(rotate)
-          .render()
-          .image(rotate)
-          .then(function (img) {
-            // const reader = new window.FileReader();
-            console.log(new URL(img.src).pathname)
-            // console.log(img)
-            // reader.readAsArrayBuffer(img);
-            // reader.onloadend = () => {
-            //   Hash.of(Buffer(reader.result)).then((PDFHashValue) => {
-            //     console.log("Calculated hash of the uploaded file is : " + PDFHashValue)
-            //   });
-            // };
-            resolve(img)
-          });
+          resolve(_.get(form,'fileUploaded'))
+          // watermark([_.get(form,'fileUploaded')])
+          // .image(rotate)
+          // .render()
+          // .image(rotate)
+          // .then(function (img) {
+          //   console.log(img.src)
+          //   let b = new Blob([img.src],{type:"image/png"});
+          //   console.log(b)
+          //   resolve(b)
+          // });
           break;
       }
      

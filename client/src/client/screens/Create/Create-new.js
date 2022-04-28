@@ -317,11 +317,6 @@ const CreateNew = () => {
           fileUploaded: acceptedFiles[0],
           PDFHash: PDFHashValue,
         });
-        // StorageInterface.getFilePaths({
-        //   ...form,
-        //   fileUploaded: acceptedFiles[0],
-        //   PDFHash: PDFHashValue,
-        // })
       });
     };
   };
