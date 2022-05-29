@@ -161,7 +161,7 @@ const CreateNew = () => {
     fr.onloadend = (e) => {
       setFileData({
         ...fileData,
-        fileType: String(getFileName(_.get(file, "[0].name"))).toLowerCase(),
+        fileType: String(getFileName(_.get(file, "[0].name"))).toLowerCase() == "wav" ? "mp3" : String(getFileName(_.get(file, "[0].name"))).toLowerCase(),
         fileData: e.target.result,
       });
       setFormErrors({ ...formErrors, maxFileError: false });
@@ -396,6 +396,7 @@ const CreateNew = () => {
             </p>
           </>
         );
+      case "mp3":
       case "mp3":
         return (
           <div className="audio-wrapper">

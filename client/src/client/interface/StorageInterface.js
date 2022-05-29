@@ -4,6 +4,12 @@ import watermark from 'watermarkjs'
 import Hash from "ipfs-only-hash";
 import IPFS from "../config/ipfs";
 import ENDPOINTS from '../commons/Endpoints';
+import mp3Slice from "mp3-slice";
+import {readFileSync} from 'fs';
+import {convert} from 'imagemagick-convert';
+
+
+
 const fileAPI = axios.create({
   baseURL: process.env.NODE_ENV == "production" ? ENDPOINTS.REMOTE_ENDPOINTS: ENDPOINTS.LOCAL_ENDPOINTS,
   headers: {
@@ -105,10 +111,27 @@ const getIfMaskedFile = (form) => {
       sideLoadToFileStack(form)
       switch(form.fileType){
         case "pdf":
-          resolve(form.fileUploaded)
+          const reader = new window.FileReader();
+          reader.readAsArrayBuffer(form.fileUploaded);
+          reader.onloadend = () => {
+            convert({
+              srcData: Buffer(reader.result),
+              srcFormat: 'pdf',
+              format: 'PNG'
+            }).then(file =>{
+              resolve(file)
+            })
+          };
         break;
         case "mp3":
-          resolve(form.fileUploaded)
+          const mp3File = form.fileUploaded;
+          const trimFrom = 0; // seconds
+          const trimTo = 10; // seconds
+          mp3Slice.trim(mp3File, trimFrom, trimTo).then(blob =>{
+            const file = new File([blob], 'trimmed.wav', blob)
+            resolve(file)
+
+          })
           break;
         default:
           watermark([_.get(form,'fileUploaded')])
