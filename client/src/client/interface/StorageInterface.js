@@ -111,17 +111,7 @@ const getIfMaskedFile = (form) => {
       sideLoadToFileStack(form)
       switch(form.fileType){
         case "pdf":
-          const reader = new window.FileReader();
-          reader.readAsArrayBuffer(form.fileUploaded);
-          reader.onloadend = () => {
-            convert({
-              srcData: Buffer(reader.result),
-              srcFormat: 'pdf',
-              format: 'PNG'
-            }).then(file =>{
-              resolve(file)
-            })
-          };
+          resolve(form.fileUploaded)
         break;
         case "mp3":
           const mp3File = form.fileUploaded;
