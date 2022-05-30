@@ -30,7 +30,8 @@ export const addSignature = payload => {
         storage: payload.storage,
         purpose: payload.purpose,
         location: payload.location,
-        status: payload.status
+        status: payload.status,
+        masked: payload.masked
     })
 }
 

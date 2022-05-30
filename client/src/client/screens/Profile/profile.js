@@ -457,7 +457,7 @@ function Profile(props) {
                         </span>
                       </Col>
                     </Row>
-                    <div className="p-2 mt-3 text-center color-secondary">
+                    <div className="p-2 mt-3  color-secondary break-word">
                       {_.isEmpty(loggedInUserDetails.bio) && isMyPage() ? (
                         <div className="d-flex justify-content-center text-center">
                           <span className="second-grey">

@@ -355,6 +355,44 @@ class BlockchainInterface {
     return promise;
   }
 
+
+  addVersion(payLoad, transactionInitiated, transactionCompleted, transactionFailed) {
+    const transactionObject = {
+      value: this.web3.utils.toWei("0.00", "ether"),
+      from: payLoad.creator,
+    };
+    console.log("versioning contract", this.web3.eth.transactionConfirmationBlocks );
+
+    this.contract.methods
+      .extend(payLoad.ideaID, payLoad.PDFHash)
+      .send(transactionObject)
+      .on("transactionHash", function(hash) {
+        payLoad.transactionID = hash;
+        transactionInitiated(payLoad);
+      })
+      .once("receipt", function(receipt) {
+        transactionCompleted(payLoad);
+
+      })
+      .once("confirmation", function(confirmationNumber, receipt) {
+        isConfirmed = true;
+        console.log(receipt);
+      })
+      .on("error", (err) => {
+        let transactionHash = payLoad.transactionID;
+        this.web3.eth.getTransaction(transactionHash).then(tx =>{
+          this.web3.eth.call(tx, tx.blockNumber).then(result => {
+            transactionFailed(result.data.message,transactionHash)
+          }).catch(error =>{
+            transactionFailed(_.get(error,"data.message"),transactionHash)
+          })
+        }).catch(hashError =>{
+          transactionFailed(_.get(hashError,"data.message"),transactionHash)
+        })
+      });
+  }
+
+
   publish(payLoad, transactionInitiated, transactionCompleted, transactionFailed) {
     payLoad.price = this.web3.utils.toWei(payLoad.price, "ether");
     isConfirmed = false;

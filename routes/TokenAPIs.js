@@ -268,13 +268,16 @@ getImagePathFromCloudinary = (req, res) => {
     folderPath = folderPath + "/ideas/" +req.hash+"/"
   }
   console.log("Image uploading to folderPath: ", folderPath);
+  console.log("req payload: ", req.type);
   cloudinary.uploader
     .upload(req.file.path,(result) => {
       console.log("Image uplaoded to: ", result);
       if(result.error){
+        console.log("errror")
         return res.status(400).json({ success: false, error: result.error.message });
       }else{
-        res.status(200).json({
+        console.log("pass", req.type)
+        return res.status(200).json({
           path: result.secure_url,
           type: "thumbnail",
         });
@@ -290,6 +293,7 @@ getImagePathFromCloudinary = (req, res) => {
 };
 
 updateSignature = async (req, res) => {
+  console.log("find by ID" , req.body.id)
   IdeaSchema.findOneAndUpdate({_id: req.body.id}, req.body.update)
     .then((user, b) => {
       return res.status(201).json({
@@ -318,7 +322,7 @@ router.post("/removeIdeaEntry", removeIdeaEntry);
 
 router.post(
   "/getCloundinaryImagePath",
-  upload.single("thumbnail"),
+  upload.single("fileUploaded"),
   getImagePathFromCloudinary
 );
 
