@@ -41,6 +41,7 @@
     "nodemailer": "^6.7.2",
     "nodemon": "^2.0.7",
     "notenv": "^2.0.3",
+    "pdf-lib": "^1.17.1",
     "rc-mentions": "^1.6.1",
     "react-mentions": "^4.3.0",
     "react-redux": "^7.2.4",
