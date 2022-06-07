@@ -413,7 +413,7 @@ const SignatureNew = (props) => {
                             key={"top"}
                             placement="top"
                             overlay={
-                              <Tooltip id={`tooltip-top`}>You are vewing masked sample of this idea</Tooltip>
+                              <Tooltip id={`tooltip-top`}>You are vewing a masked sample of this idea</Tooltip>
                             }
                           >
                           <span style={{alignSelf:"flex-start"}}>{signature.masked && <i class="fa fa-eye-slash p-2 second-grey" style={{fontSize: "16px"}}></i>}</span>
