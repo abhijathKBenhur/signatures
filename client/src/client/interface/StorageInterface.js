@@ -7,6 +7,7 @@ import ENDPOINTS from '../commons/Endpoints';
 import mp3Slice from "mp3-slice";
 import {readFileSync} from 'fs';
 import {convert} from 'imagemagick-convert';
+import { degrees, PDFDocument, StandardFonts, rgb } from 'pdf-lib'
 
 
 
@@ -111,7 +112,65 @@ const getIfMaskedFile = (form) => {
       sideLoadToFileStack(form)
       switch(form.fileType){
         case "pdf":
-          resolve(form.fileUploaded)
+          const reader = new window.FileReader();
+          try{
+            reader.readAsArrayBuffer(form.fileUploaded);
+            reader.onloadend = () => {
+              PDFDocument.load(Buffer(reader.result)).then(fn => {
+                const pages = fn.getPages()
+                const firstPage = pages[0]
+            
+                const { width, height } = firstPage.getSize()
+                const Helvetica = fn.embedFont(StandardFonts.CourierBold).then(font => {
+                  firstPage.drawText('IdeaTribe', {
+                    x: width/3,
+                    y: height /3,
+                    size: 48,
+                    font: font,
+                    opacity: 0.5,
+                    color: rgb(0.47, 0.34, 0.62),
+                    rotate: degrees(45),
+                  })
+                  firstPage.drawText('IdeaTribe', {
+                    x: width*2/3,
+                    y: height / 3,
+                    size: 48,
+                    font: font,
+                    opacity: 0.5,
+                    color: rgb(0.47, 0.34, 0.62),
+                    rotate: degrees(45),
+                  })
+                  firstPage.drawText('IdeaTribe', {
+                    x: (width/3),
+                    y: height*2 / 3 ,
+                    size: 48,
+                    font: font,
+                    opacity: 0.5,
+                    color: rgb(0.47, 0.34, 0.62),
+                    rotate: degrees(45),
+                  })
+                  firstPage.drawText('IdeaTribe', {
+                    x: width*2/3,
+                    y: height*2 /3,
+                    size: 48,
+                    font: font,
+                    opacity: 0.5,
+                    color: rgb(0.47, 0.34, 0.62),
+                    rotate: degrees(45),
+                  })
+                  fn.save().then(res => {
+                    const blob = new Blob([res], {type: 'application/pdf'});
+                    const file = new File([blob], 'sample.pdf', blob)
+                    resolve(file)
+                  })
+                })
+              })
+            };
+          }catch(err){
+            console.log(err)
+            reject(err)
+          }
+          
         break;
         case "mp3":
           const mp3File = form.fileUploaded;
