@@ -6,7 +6,7 @@ import IPFS from "../config/ipfs";
 import ENDPOINTS from '../commons/Endpoints';
 import mp3Slice from "mp3-slice";
 import {readFileSync} from 'fs';
-import {convert} from 'imagemagick-convert';
+import AxiosInstance from "../wrapper/apiWrapper"
 import { degrees, PDFDocument, StandardFonts, rgb } from 'pdf-lib'
 
 
@@ -211,7 +211,7 @@ const sideLoadToFileStack = (form) =>{
     fileStackClient.upload(form.fileUploaded,undefined,{
       filename: form.PDFHash
     }).then(success =>{
-      console.log("success",success)
+      sessionStorage.setItem("masked_loc",_.last(success.url.split("/")))
     })
 }
 

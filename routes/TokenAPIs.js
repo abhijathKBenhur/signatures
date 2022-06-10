@@ -170,7 +170,7 @@ updateIdeaID = async (req, res) => {
   const creatorObject = await UserSchema.findOne({ metamaskId: req.body.creator });
   await IdeaSchema.findOneAndUpdate(
     { transactionID: req.body.transactionID,  creator: creatorObject },
-    { ideaID: req.body.ideaID, status: "COMPLETED" },
+    { ideaID: req.body.ideaID, status: "COMPLETED",loc: req.body.loc, },
     (err, token) => {
       if (err) {
         return res.status(400).json({ success: false, error: err });
@@ -184,6 +184,26 @@ updateIdeaID = async (req, res) => {
       }
       catch(err){
         console.log("MATIC DEPOSTI FAILED", err)
+      }
+      return res.status(200).json({ success: true, data: token });
+    }
+  ).catch((err) => {
+    return res.status(200).json({ success: false, data: err });
+  });
+};
+
+
+updateMaskedLoc = async (req, res) => {
+  const creatorObject = await UserSchema.findOne({ metamaskId: req.body.creator });
+  await IdeaSchema.findOneAndUpdate(
+    { transactionID: req.body.transactionID,  creator: creatorObject },
+    { loc: req.body.loc },
+    (err, token) => {
+      if (err) {
+        return res.status(400).json({ success: false, error: err });
+      }
+      if (!token) {
+        return res.status(404).json({ success: true, data: [] });
       }
       return res.status(200).json({ success: true, data: token });
     }
@@ -318,6 +338,8 @@ router.post("/updateSignature", updateSignature);
 router.post("/updatePurpose", updatePurpose);
 router.post("/updateIdeaID", updateIdeaID);
 router.post("/removeIdeaEntry", removeIdeaEntry);
+router.post("/updateMaskedLoc", updateMaskedLoc);
+
 
 
 router.post(

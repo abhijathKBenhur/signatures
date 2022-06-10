@@ -36,7 +36,7 @@ const Versions = (props) => {
   }
 
   const copyright = () =>{
-    let shareURL = ""
+    let shareURL = `https://cdn.filestackcontent.com/${props.idea.loc}`
     navigator.clipboard.writeText(shareURL);
     const alertProperty = {
       isDismissible: true,
@@ -63,7 +63,7 @@ const Versions = (props) => {
                   {new Date(version.time).toUTCString()}
                 </div>
               </div>
-              <div className={viewingVersion.PDFFile == version.PDFFile ? "active content" : "content"}>
+              {loggedInUserDetails.metamaskId == props.idea.creator.metamaskId  && <div className={viewingVersion.PDFFile == version.PDFFile ? "active content" : "content"}>
                 <OverlayTrigger
                   placement="left"
                   overlay={<Tooltip>Copy link to original content</Tooltip>}
@@ -80,7 +80,7 @@ const Versions = (props) => {
                     ></i>
                   </Button>
                 </OverlayTrigger>
-              </div>
+              </div> }
             </div>
           );
         })}

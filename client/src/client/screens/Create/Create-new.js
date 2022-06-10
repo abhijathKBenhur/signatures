@@ -708,7 +708,7 @@ const CreateNew = () => {
   }
 
   const updateCompletion = (successResponse) =>{
-    SignatureInterface.updateIdeaID(successResponse)
+    SignatureInterface.updateIdeaID({...successResponse,loc:sessionStorage.getItem("masked_loc")})
     TransactionsInterface.setTransactionState({
       transactionID:successResponse.transactionID,
       status: CONSTANTS.ACTION_STATUS.COMPLETED,

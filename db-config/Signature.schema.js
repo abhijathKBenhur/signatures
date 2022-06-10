@@ -26,7 +26,8 @@ const Signature = new Schema(
         price: { type: String , required: true},
         units: { type: String },
         status: { type: String },
-        masked: {type: Boolean}
+        masked: {type: Boolean},
+        loc: { type: String }
         
     },
     { timestamps: true },
