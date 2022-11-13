@@ -62,7 +62,6 @@ function gallery(props) {
   const reloadGallery = (constraints) => {
     SignatureInterface.getSignatures(constraints).then((signatures) => {
       let response = _.get(signatures, "data.data");
-      console.log(response);
       setCollectionList(response);
     });
   };

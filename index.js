@@ -16,6 +16,7 @@ const relationAPI = require("./routes/RelationAPI");
 const blockChainAPI = require("./routes/BlockchainAPIs/BlockChainAPIs");
 const ClanAPI = require("./routes/ClanAPI");
 const TransactionAPI = require("./routes/TransactionAPIs");
+const CustomerAPI = require("./routes/CustomerAPI");
 const dotenv = require("dotenv");
 const path = require("path");
 const authorizer = require("./routes/middleware/authorizer");
@@ -63,6 +64,7 @@ app.use("/api", TransactionAPI);
 app.use("/api", AggregatesAPI);
 app.use("/api", HashAPI);
 app.use("/api", WhitelistAPI);
+app.use("/api", CustomerAPI);
 
 console.log("Deploying full application")
 console.log("Checking node environment ::" + process.env.NODE_ENV);

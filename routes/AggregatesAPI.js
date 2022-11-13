@@ -43,7 +43,6 @@ getTotalUpvotesForUser = async (req, res) => {
         to: ideas[i].ideaID
       };
       RelationSchema.find(findCriteria).then( user => {
-        console.log("Ideas of user", ideas)
         if (user.length) {
           count.push(user)
         }

@@ -12,7 +12,7 @@ web3Instance.eth.getAccounts().then(result => {
 })
 
 depositGold = (receiverUserObject, ethValue, action) => {
-  console.log("INITIATING GOLD DEPOSITS TO " + receiverUserObject.metamaskId);
+  console.log("INITIATING" + ethValue + "GOLD DEPOSITS TO"  + receiverUserObject.metamaskId);
   const promise = new Promise((resolve, reject) => {
     tribeGoldContract.methods
       .transfer(receiverUserObject.metamaskId, ethValue)

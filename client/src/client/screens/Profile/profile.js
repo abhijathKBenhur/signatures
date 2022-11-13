@@ -344,6 +344,28 @@ function Profile(props) {
                             <span class=" ">Edit Profile</span>
                           </Button>
                         </OverlayTrigger>
+                        {isMyPage() && <OverlayTrigger
+                            key={"invite"}
+                            placement="top"
+                            overlay={
+                              <Tooltip id={`tooltip-top`}>
+                                Invite friends
+                              </Tooltip>
+                            }
+                          >
+                            <Button
+                              variant="action"
+                              className="mt-1"
+                              onClick={() => {
+                                setShowModal({
+                                  ...modalShow,
+                                  invitefriends: true,
+                                });
+                              }}
+                            >
+                              <i className="fa fa-user-plus"></i>
+                            </Button>
+                          </OverlayTrigger>}
 
                         {/* <OverlayTrigger
                           key={"top"}
@@ -500,7 +522,7 @@ function Profile(props) {
                     `}
                   >
                     <Row className="profile-details">
-                      <Col md="11">
+                      <Col md="12">
                         {isMyPage() ? (
                           <Wallet className=""></Wallet>
                         ) : (
@@ -609,28 +631,7 @@ function Profile(props) {
                             </Button>
                           </OverlayTrigger> */}
 
-                          {isMyPage() && <OverlayTrigger
-                            key={"invite"}
-                            placement="top"
-                            overlay={
-                              <Tooltip id={`tooltip-top`}>
-                                Invite friends
-                              </Tooltip>
-                            }
-                          >
-                            <Button
-                              variant="action"
-                              className="mt-1"
-                              onClick={() => {
-                                setShowModal({
-                                  ...modalShow,
-                                  invitefriends: true,
-                                });
-                              }}
-                            >
-                              <i className="fa fa-user-plus"></i>
-                            </Button>
-                          </OverlayTrigger>}
+                          
                         </Row>
                         {!_.isUndefined(followers) &&
                           userDetails.userName &&

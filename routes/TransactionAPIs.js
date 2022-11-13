@@ -12,7 +12,6 @@ setTransactionState = (req, res) => {
     });
   }
 
-  console.log("body.status", body.status)
   const updatedTransaction = {
     status: body.status
   }

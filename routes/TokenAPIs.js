@@ -84,7 +84,6 @@ getSignatures = async (req, res) => {
 
   if (categories) {
     let tag = categories;
-    console.log(tag);
     searchOrArray.push({ category: { $regex: new RegExp(tag, "i") } });
     
   }
@@ -313,7 +312,6 @@ getImagePathFromCloudinary = (req, res) => {
 };
 
 updateSignature = async (req, res) => {
-  console.log("find by ID" , req.body.id)
   IdeaSchema.findOneAndUpdate({_id: req.body.id}, req.body.update)
     .then((user, b) => {
       return res.status(201).json({

@@ -96,7 +96,6 @@ getClanMembers = async (req, res) => {
     let members = clan.members.map(member => {
       return member.memberId
     })
-    console.log(JSON.stringify(members))
 
     UserSchema.find().where('_id').in(members).exec((err, members) => {
       if (err) {
