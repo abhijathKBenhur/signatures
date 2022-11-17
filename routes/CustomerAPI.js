@@ -41,20 +41,25 @@ redeemGold = async (req, res) => {
       return res.status(404).json({ success: true, data: [] });
     }
     console.log("redeeming",user)
-    TribeGoldAPIs.depositGold(
-      req.body,
-      Web3Utils.toWei(String(user.balance), "ether"),
-      "REDEEM"
-    ).then(success =>{
-      console.log("deposited", success)
-      return res.status(200).json({ success: true, data: user });
-    }).catch(err =>{
-      console.log("error", err)
-      return res.status(400).json({ success: false, data: err });
-    })
+    if(user.balance > 0){
+      TribeGoldAPIs.depositGold(
+        req.body,
+        Web3Utils.toWei(String(user.balance), "ether"),
+        "REDEEM"
+      ).then(success =>{
+        console.log("deposited", success)
+        return res.status(200).json({ success: true, data: user });
+      }).catch(err =>{
+        console.log("error", err)
+        return res.status(400).json({ success: false, data: err });
+      })
+    }
+    else{
+      return res.status(400).json({ success: false, data: {msg:"Insuficient balance"} });
+    }
   }).catch((err) => {
     console.log("err", err)
-    return res.status(200).json({ success: false, data: err });
+    return res.status(400).json({ success: false, data: err });
   });
 };
 

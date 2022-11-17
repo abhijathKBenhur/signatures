@@ -8,6 +8,8 @@ import polygon from "../../../assets/logo/polygon.png";
 import { shallowEqual, useSelector } from "react-redux";
 import { Popover, OverlayTrigger, Tooltip } from "react-bootstrap";
 import CustomerInterface from "../../interface/CustomerInterface";
+import ReactDOM from 'react-dom';
+import AlertBanner from "../alert/alert"
 
 const Wallet = (props) => {
   const [goldBalance, setGoldBalance] = useState(0);
@@ -37,8 +39,21 @@ const Wallet = (props) => {
   }, []);
 
   const redeem = () => {
+    const alertProperty = {
+      isDismissible: true,
+      variant: "success",
+      content: "Deposit has been initiated. Please check the wallet in sometime.",
+    }
+    ReactDOM.render(<AlertBanner {...alertProperty}></AlertBanner>, document.querySelector('.aleartHeader'))
     CustomerInterface.redeemGold(userDetails).then(success =>{
       window.location.reload();
+    }).catch(err =>{
+      const alertPropertyError = {
+        isDismissible: true,
+        variant: "danger",
+        content: "Deposit has been failed. Please reach out to the customer team.",
+      }
+      ReactDOM.render(<AlertBanner {...alertPropertyError}></AlertBanner>, document.querySelector('.aleartHeader'))
     })
   }
 
@@ -128,7 +143,16 @@ const Wallet = (props) => {
       <div
         className="wallet-container flex"
         onClick={() => {
-          redeem()
+          if(passportBalance > 0){
+            redeem()
+          }else{
+            const alertPropertyError = {
+              isDismissible: true,
+              variant: "danger",
+              content: "Insufficient balance.",
+            }
+            ReactDOM.render(<AlertBanner {...alertPropertyError}></AlertBanner>, document.querySelector('.aleartHeader'))
+          }
         }}
       >
         <div className="wallet-type d-flex justify-content-between">
