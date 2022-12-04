@@ -143,16 +143,16 @@ const Wallet = (props) => {
       <div
         className="wallet-container flex"
         onClick={() => {
-          if(passportBalance > 0){
-            redeem()
-          }else{
-            const alertPropertyError = {
-              isDismissible: true,
-              variant: "danger",
-              content: "Insufficient balance.",
-            }
-            ReactDOM.render(<AlertBanner {...alertPropertyError}></AlertBanner>, document.querySelector('.aleartHeader'))
-          }
+          // if(passportBalance > 0){
+          //   redeem()
+          // }else{
+          //   const alertPropertyError = {
+          //     isDismissible: true,
+          //     variant: "danger",
+          //     content: "Insufficient balance.",
+          //   }
+          //   ReactDOM.render(<AlertBanner {...alertPropertyError}></AlertBanner>, document.querySelector('.aleartHeader'))
+          // }
         }}
       >
         <div className="wallet-type d-flex justify-content-between">

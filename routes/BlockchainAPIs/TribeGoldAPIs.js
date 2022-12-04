@@ -5,22 +5,29 @@ const BlockchainUtils = require("../BlockchainAPIs/BlockChainUtils");
 const TransactionSchema = require("../../db-config/transaction.schema");
 const web3Instance = BlockchainUtils.web3Instance;
 const tribeGoldContract = BlockchainUtils.tribeGoldContract;
+const getDedicatedGoldContract = BlockchainUtils.getDedicatedGoldContract;
 const transactionObject = {};
 
 web3Instance.eth.getAccounts().then(result => {
   transactionObject.from = result[1];
 })
 
-depositGold = (receiverUserObject, ethValue, action) => {
-  console.log("INITIATING" + ethValue + "GOLD DEPOSITS TO"  + receiverUserObject.metamaskId);
+depositGold = (receiverUserObject, ethValue, action, fromAddress) => {
+  console.log("INITIATING GOLD DEPOSITS TO");
   const promise = new Promise((resolve, reject) => {
-    tribeGoldContract.methods
+    if(fromAddress){
+      transactionObject.from = fromAddress.contractAddress;
+    }
+    
+    let senderContract = fromAddress ? getDedicatedGoldContract(fromAddress) : tribeGoldContract
+    senderContract.methods
       .transfer(receiverUserObject.metamaskId, ethValue)
       .send(transactionObject)
       .on("transactionHash", function (hash) {
         console.log(
-          "transaction to new user " + receiverUserObject._id + " " + ethValue
+          "transaction to new user " + receiverUserObject.metamaskId + " " + ethValue +" froom : " + fromAddress.contractAddress
         );
+        
         new TransactionSchema({
           transactionID: hash,
           Status: "COMPLETED",

@@ -8,9 +8,14 @@ export const redeemGold = (payload) =>  {
     return AxiosInstance.post("/redeemGold",payload) 
 }
 
+export const redeemGoldFromTribe = (payload) =>  { 
+    return AxiosInstance.post("/redeemGoldFromTribe",payload) 
+}
+
 const CustomerInterface = {
     getPassportBalance,
-    redeemGold
+    redeemGold,
+    redeemGoldFromTribe
 }
 
 export default CustomerInterface

@@ -33,7 +33,7 @@ import CreateClan from "../../modals/create-clan/create-clan";
 import UserInterface from "../../interface/UserInterface";
 import * as reactShare from "react-share";
 import Wallet from "../../components/wallet/wallet";
-import Transactions from "../../components/transactions/transaction";
+import IncentiveTable from "../../components/IncentiveTable/IncentiveTable"
 import RelationsInterface from "../../interface/RelationsInterface";
 import CONSTANTS from "../../commons/Constants";
 import { showToaster } from "../../commons/common.utils";
@@ -578,6 +578,22 @@ function Profile(props) {
                                 )}
                               </div>
                             </div>
+                          </Tab>
+                          {/* <Tab
+                            eventKey="balance"
+                            title="Balance"
+                            tabClassName="tab_category"
+                          >
+                            
+                            <IncentiveTable type="grouped"></IncentiveTable>
+                            
+                          </Tab> */}
+                          <Tab
+                            eventKey="earnings"
+                            title="Earnings"
+                            tabClassName="tab_category"
+                          >
+                            <IncentiveTable type="list"></IncentiveTable>
                           </Tab>
                         </Tabs>
                       </Col>
