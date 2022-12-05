@@ -1,4 +1,4 @@
-const IncentiveSchema = require("../db-config/rewards.Schema");
+const IncentiveSchema = require("../db-config/incentive.Schema");
 const CustomerSchema = require("../db-config/Customer.Schema");
 const CompanySchema = require("../db-config/Company.Schema");
 

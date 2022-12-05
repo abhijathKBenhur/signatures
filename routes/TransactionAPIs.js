@@ -1,7 +1,7 @@
 const TransactionSchema = require("../db-config/transaction.schema");
 
 
-const IncentiveSchema = require("../db-config/rewards.Schema");
+const IncentiveSchema = require("../db-config/incentive.Schema");
 const express = require("express");
 const router = express.Router();
 
