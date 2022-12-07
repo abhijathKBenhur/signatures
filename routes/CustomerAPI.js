@@ -1,6 +1,6 @@
-const IncentiveSchema = require("../db-config/incentive.Schema");
-const CustomerSchema = require("../db-config/Customer.Schema");
-const CompanySchema = require("../db-config/Company.Schema");
+const IncentiveSchema = require("../db-config/incentive.schema");
+const CustomerSchema = require("../db-config/Customer.schema");
+const CompanySchema = require("../db-config/Company.schema");
 
 const express = require("express");
 const router = express.Router();
